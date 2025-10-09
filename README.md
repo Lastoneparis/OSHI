@@ -36,3 +36,56 @@ KeyRotation.swift - Automated key management MediaManager.swift - Encrypted medi
 📄 License MIT License with additional disclaimers - See LICENSE
 
 Built for a world without central control
+
+**Double Ratchet works PERFECTLY through cloud/IPFS!** ✅
+
+The transport method (mesh vs cloud) **does NOT affect** the encryption!
+
+---
+
+## 🔍 How It Works
+
+### Message Flow (Cloud/IPFS):
+
+```
+SENDER (You)
+    ↓
+1. Plaintext: "Hello"
+    ↓
+2. Double Ratchet Encrypt
+    → Creates: DoubleRatchetMessage
+    → Contains: ciphertext, header, chain info
+    ↓
+3. JSON Encode
+    → Converts to JSON bytes
+    ↓
+4. ECIES Wrap (wrapRatchetMessage)
+    → Outer encryption layer
+    ↓
+5. Upload to IPFS via VPS
+    → Store encrypted blob on IPFS
+    → Get IPFS hash: QmXYZ...
+    ↓
+6. VPS queues hash for recipient
+    ↓
+    
+RECIPIENT (Other Person)
+    ↓
+1. Poll VPS for pending messages
+    → VPS returns: [QmXYZ...]
+    ↓
+2. Fetch from IPFS (multiple gateways)
+    → Download encrypted blob
+    ↓
+3. ECIES Unwrap (unwrapRatchetMessage)
+    → Remove outer layer
+    ↓
+4. JSON Decode
+    → Get DoubleRatchetMessage
+    ↓
+5. Double Ratchet Decrypt
+    → Verify chain state
+    → Decrypt ciphertext
+    ↓
+6. Plaintext: "Hello" ✅
+```
