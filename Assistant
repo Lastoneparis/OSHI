@@ -1,0 +1,289 @@
+OSHI Support & Documentation
+Welcome to OSHI - Truly Private Messaging
+This page provides support information and documentation for the OSHI messaging app.
+
+📱 About OSHI
+OSHI is a revolutionary private messaging app that combines military-grade encryption with decentralized networks. Your conversations stay private, secure, and accessible even offline.
+Key Features
+
+End-to-End Encryption: Double Ratchet protocol (Signal protocol)
+Three Delivery Modes: Local mesh, IPFS cloud, Tor network
+No Registration: No phone number or email required
+Truly Private: No data collection, no metadata, no surveillance
+Offline Capable: Communicate via local mesh network without Internet
+Open Source: Transparent and auditable code
+
+
+🚀 Getting Started
+First Time Setup
+
+Download OSHI from the App Store
+Open the app - No registration required!
+Your identity is created automatically using cryptographic keys
+Start messaging by scanning a contact's QR code
+
+Adding Contacts
+
+Tap the "Add Contact" button
+Scan their QR code with your camera
+Start chatting securely!
+
+To share your QR code:
+
+Go to Settings
+Tap "My QR Code"
+Let others scan it
+
+
+🔐 Security & Privacy
+Encryption Technology
+OSHI uses the Double Ratchet protocol (the same protocol used by Signal) which provides:
+
+Forward Secrecy: Past messages remain secure even if current keys are compromised
+Post-Compromise Security: Automatic recovery if keys are stolen
+Unique Keys: Each message encrypted with its own unique key
+
+Cryptographic Algorithms
+
+Key Exchange: Curve25519 (ECDH)
+Message Encryption: AES-256-GCM
+Key Derivation: HKDF-SHA256
+Signatures: Ed25519
+
+All cryptography is implemented using Apple's CryptoKit framework.
+Privacy Guarantees
+✅ No phone number required
+✅ No email required
+✅ No personal data collected
+✅ No metadata stored
+✅ No message analysis
+✅ No server access to your messages
+✅ No backdoors
+
+📡 Delivery Methods
+1. Local Mesh (Direct) 🔵
+
+Direct iPhone-to-iPhone communication
+No Internet needed
+Range: Up to 100 meters
+Perfect for: Events, protests, areas without network
+Uses: Apple's Multipeer Connectivity
+
+2. IPFS Cloud (Decentralized) ☁️
+
+Distributed storage on IPFS network
+Censorship-resistant
+No central server
+Available worldwide
+Automatic fallback when mesh is unavailable
+
+3. Tor Network (Anonymous) 🧅
+
+Complete anonymity
+Protection against surveillance
+No location tracking
+Routes through Tor network
+
+Messages automatically switch between delivery methods based on availability.
+
+❓ Frequently Asked Questions
+General Questions
+Q: Do I need to create an account?
+A: No! OSHI generates a cryptographic identity automatically. No registration required.
+Q: Can OSHI read my messages?
+A: No! All messages are end-to-end encrypted. Only you and your recipient can read them.
+Q: Do you collect my data?
+A: No! We collect zero personal data. No phone number, no email, no tracking.
+Q: Is OSHI really open source?
+A: Yes! Our code is available on GitHub for anyone to audit.
+Q: Can I use OSHI without Internet?
+A: Yes! The local mesh mode works directly between iPhones without any network.
+Technical Questions
+Q: What encryption does OSHI use?
+A: Double Ratchet protocol (Signal protocol) with AES-256-GCM and Curve25519.
+Q: Is OSHI compatible with Signal/WhatsApp?
+A: No, OSHI is a separate network. You need OSHI on both devices.
+Q: How long are messages stored?
+A: Messages are stored locally on your device. Cloud messages on IPFS are available for 30 days, then automatically deleted.
+Q: Can I export my messages?
+A: Currently messages are stored only on your device. Backup features coming soon.
+Q: What is IPFS?
+A: InterPlanetary File System - a decentralized storage network. No single company controls it.
+
+🐛 Troubleshooting
+Messages Not Sending
+Problem: Messages stuck in "Sending..." status
+Solutions:
+
+Check your Internet connection (for IPFS mode)
+Make sure you're within range (for mesh mode - 100m)
+Try force-closing and reopening the app
+Check if recipient is online
+
+Can't Scan QR Code
+Problem: Camera won't scan contact's QR code
+Solutions:
+
+Grant camera permission in Settings → OSHI → Camera
+Ensure good lighting
+Hold phone steady and centered on the QR code
+Make sure QR code is fully visible on screen
+
+Messages Showing as Encrypted
+Problem: Messages appear as encrypted text instead of plaintext
+Solutions:
+
+This is a temporary sync issue
+Both users should:
+
+Go to Settings → Advanced
+Tap "Clear Session Keys"
+Send a fresh message
+
+
+The issue should resolve automatically after a few messages
+
+App Crashes or Freezes
+Solutions:
+
+Force close the app and reopen
+Restart your iPhone
+Check for app updates in the App Store
+If problem persists, contact support (see below)
+
+
+🔧 Advanced Features
+Session Management
+OSHI maintains cryptographic sessions with each contact. If you experience decryption issues:
+
+Go to Settings → Advanced
+Tap "Clear Session Keys"
+Send a new message to re-establish the session
+
+Note: Clearing sessions does not delete your message history.
+Mesh Network Settings
+Customize your mesh network experience:
+
+Discovery: Enable/disable automatic peer discovery
+Range: Adjust Bluetooth range (affects battery life)
+Auto-connect: Automatically connect when peers are nearby
+
+IPFS Gateway Selection
+OSHI uses multiple IPFS gateways for redundancy:
+
+ipfs.io
+cloudflare-ipfs.com
+gateway.pinata.cloud
+dweb.link
+
+The app automatically tries different gateways if one is unavailable.
+
+🆘 Support
+Contact Us
+Email: support@oshi-messenger.io
+GitHub Issues: github.com/oshi-messenger/support
+Response Time: We aim to respond within 24-48 hours.
+Reporting Bugs
+When reporting bugs, please include:
+
+Device model (e.g., iPhone 14 Pro)
+iOS version (e.g., iOS 17.1)
+OSHI version (Settings → About)
+Steps to reproduce the issue
+Screenshots if applicable
+
+Security Issues
+If you discover a security vulnerability:
+🔒 DO NOT post publicly
+📧 Email: security@oshi-messenger.io
+🔑 Use our PGP key if possible (see GitHub)
+We take security seriously and will respond promptly.
+
+📖 Additional Resources
+Documentation
+
+Technical Whitepaper: github.com/oshi-messenger/whitepaper
+API Documentation: docs.oshi-messenger.io
+Source Code: github.com/oshi-messenger/ios
+
+Community
+
+Discussions: github.com/oshi-messenger/discussions
+Twitter: @oshi_messenger
+Reddit: r/oshi_messenger
+
+Privacy & Legal
+
+Privacy Policy: oshi-messenger.io/privacy
+Terms of Service: oshi-messenger.io/terms
+Export Compliance: See below
+
+
+🌍 Export Compliance
+OSHI uses standard cryptographic algorithms:
+
+AES-256-GCM for symmetric encryption
+Curve25519 for key exchange
+HKDF-SHA256 for key derivation
+Ed25519 for signatures
+
+All algorithms are:
+
+✅ Publicly available
+✅ Standards-compliant
+✅ Implemented via Apple CryptoKit
+✅ No proprietary encryption
+
+Export Classification: Category 5D002 (Information Security Software)
+OSHI qualifies for export under publicly available encryption exceptions and does not require an export license for distribution.
+
+💖 Credits
+OSHI is built with:
+
+CryptoKit - Apple's cryptography framework
+Multipeer Connectivity - Apple's mesh networking
+IPFS - Decentralized storage protocol
+Tor - Anonymous communication network
+
+Special thanks to:
+
+Signal Foundation (Double Ratchet protocol)
+The IPFS community
+The Tor Project
+All our contributors and beta testers
+
+
+📄 License
+OSHI is open source software licensed under the MIT License.
+See LICENSE for details.
+
+🔄 Version History
+Version 1.0.0 (Current)
+Initial Release - January 2025
+Features:
+
+End-to-end Double Ratchet encryption
+Local mesh networking
+IPFS decentralized storage
+Tor network support
+QR code contact sharing
+Media messages (photos, videos)
+Public groups
+Dark mode support
+
+
+📞 Quick Links
+
+📱 Download: App Store
+🌐 Website: oshi-messenger.io
+💬 Support: support@oshi-messenger.io
+🐛 Bug Reports: GitHub Issues
+📚 Documentation: docs.oshi-messenger.io
+🔐 Security: security@oshi-messenger.io
+
+
+Last Updated: January 2025
+Version: 1.0.0
+
+© 2025 OSHI. All rights reserved.
+Your privacy is our priority. Always.
