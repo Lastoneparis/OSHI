@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSHI - Add Contact</title>
+    
+    <!-- App Store Smart Banner -->
+    <meta name="apple-itunes-app" content="app-id=6753926350">
+    
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="Add me on OSHI">
+    <meta property="og:description" content="Send me encrypted messages on OSHI - Private, Decentralized, Secure">
+    <meta property="og:image" content="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/xx/xx/xx/icon.png/1200x630.png">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Add me on OSHI">
+    <meta name="twitter:description" content="Send me encrypted messages on OSHI">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        }
+        
+        .logo svg {
+            width: 60px;
+            height: 60px;
+            fill: white;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .status-text {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .status-subtext {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .public-key {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 12px;
+            word-break: break-all;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+        }
+        
+        .public-key-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 16px 32px;
+            font-size: 17px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .btn-appstore {
+            background: #000;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-appstore svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .feature-icon {
+            font-size: 16px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .copy-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 200, 83, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .copy-toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.4 0 2.8 1.1 2.8 2.5V11c.6.3 1 .9 1 1.5v3c0 1-.8 1.5-1.8 1.5h-4c-1 0-1.8-.5-1.8-1.5v-3c0-.6.4-1.2 1-1.5V9.5C9.2 8.1 10.6 7 12 7zm0 1.2c-.8 0-1.5.7-1.5 1.3V11h3V9.5c0-.6-.7-1.3-1.5-1.3z"/>
+            </svg>
+        </div>
+        
+        <h1>OSHI Messenger</h1>
+        <p class="tagline">Private • Decentralized • Secure</p>
+        
+        <!-- Status: Opening App -->
+        <div id="status-opening" class="status">
+            <div class="spinner"></div>
+            <div class="status-text">Opening OSHI...</div>
+            <div class="status-subtext">Please wait</div>
+        </div>
+        
+        <!-- Status: App Not Installed -->
+        <div id="status-not-installed" class="status hidden">
+            <div class="status-icon">📱</div>
+            <div class="status-text">OSHI is not installed</div>
+            <div class="status-subtext">Download it free from the App Store</div>
+        </div>
+        
+        <!-- Public Key Display -->
+        <div id="key-display" class="hidden">
+            <div class="public-key-label">🔑 Public Key to add</div>
+            <div class="public-key" id="public-key"></div>
+        </div>
+        
+        <!-- Buttons -->
+        <div id="buttons" class="hidden">
+            <a href="#" id="btn-open" class="btn btn-primary">Open in OSHI</a>
+            <a href="https://apps.apple.com/app/oshi-mesh/id6753926350" class="btn btn-appstore">
+                <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                Download on App Store
+            </a>
+            <button class="btn btn-secondary" onclick="copyKey()">📋 Copy Public Key</button>
+        </div>
+        
+        <!-- Features -->
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">🔒</span>
+                <span>End-to-End Encrypted</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">📡</span>
+                <span>Works Offline</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🕵️</span>
+                <span>Anonymous</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast notification -->
+    <div id="copy-toast" class="copy-toast">✓ Public key copied!</div>
+    
+    <script>
+        // Configuration
+        const APP_STORE_URL = 'https://apps.apple.com/app/oshi-mesh/id6753926350';
+        const URL_SCHEME = 'oshi://';
+        const TIMEOUT_MS = 2500;
+        
+        // Get public key from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const publicKey = urlParams.get('key') || urlParams.get('k');
+        
+        // Elements
+        const statusOpening = document.getElementById('status-opening');
+        const statusNotInstalled = document.getElementById('status-not-installed');
+        const keyDisplay = document.getElementById('key-display');
+        const publicKeyEl = document.getElementById('public-key');
+        const buttons = document.getElementById('buttons');
+        const btnOpen = document.getElementById('btn-open');
+        
+        // Display key if present
+        if (publicKey) {
+            publicKeyEl.textContent = publicKey;
+            
+            // Build deep link URL
+            const deepLink = `${URL_SCHEME}add?key=${encodeURIComponent(publicKey)}`;
+            btnOpen.href = deepLink;
+            
+            // Try to open the app
+            tryOpenApp(deepLink);
+        } else {
+            // No key provided - show error
+            showNotInstalled();
+            statusNotInstalled.querySelector('.status-text').textContent = 'Invalid Link';
+            statusNotInstalled.querySelector('.status-subtext').textContent = 'No public key provided';
+        }
+        
+        function tryOpenApp(deepLink) {
+            const startTime = Date.now();
+            let didOpenApp = false;
+            
+            // Listen for visibility change (app opened)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    didOpenApp = true;
+                }
+            });
+            
+            // Try to open via iframe (works better on some devices)
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = deepLink;
+            document.body.appendChild(iframe);
+            
+            // Also try direct location change
+            setTimeout(() => {
+                window.location.href = deepLink;
+            }, 100);
+            
+            // Check if app opened after timeout
+            setTimeout(() => {
+                if (!didOpenApp && !document.hidden) {
+                    // App didn't open - show fallback
+                    showNotInstalled();
+                }
+                // Clean up iframe
+                document.body.removeChild(iframe);
+            }, TIMEOUT_MS);
+        }
+        
+        function showNotInstalled() {
+            statusOpening.classList.add('hidden');
+            statusNotInstalled.classList.remove('hidden');
+            keyDisplay.classList.remove('hidden');
+            buttons.classList.remove('hidden');
+        }
+        
+        function copyKey() {
+            if (publicKey) {
+                navigator.clipboard.writeText(publicKey).then(() => {
+                    const toast = document.getElementById('copy-toast');
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 2000);
+                });
+            }
+        }
+        
+        // iOS detection for smart banner
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        if (!isIOS) {
+            // On non-iOS, show buttons immediately since app won't open
+            setTimeout(showNotInstalled, 500);
+        }
+    </script>
+</body>
+</html>
