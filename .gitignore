@@ -1,0 +1,36 @@
+# Sensitive files
+*.p8
+*.pem
+*.key
+*.csv
+*.env
+.env.*
+
+# Archives
+*.tar.gz
+*.zip
+Archive*
+
+# Build artifacts
+build/
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+*.ipa
+*.dSYM.zip
+
+# System
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+Pods/
+.build/
+
+# IDE
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
