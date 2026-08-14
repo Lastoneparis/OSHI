@@ -15,8 +15,8 @@
   <a href="https://apps.apple.com/app/oshi-mesh/id6753926350">
     <img src="https://img.shields.io/badge/iOS-17%2B-000000?style=for-the-badge&logo=apple&logoColor=white" alt="iOS 17+"/>
   </a>
-  <a href="LICENSE">
-    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License"/>
+  <a href="https://oshi-messenger.com/privacy">
+    <img src="https://img.shields.io/badge/Privacy%20Policy-oshi--messenger.com-8B5CF6?style=for-the-badge" alt="Privacy Policy"/>
   </a>
   <a href="https://github.com/Lastoneparis/OSHI">
     <img src="https://img.shields.io/badge/Open%20Source-%E2%9C%93-brightgreen?style=for-the-badge" alt="Open Source"/>
