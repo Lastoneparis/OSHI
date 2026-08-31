@@ -1,0 +1,18 @@
+name: Feature request
+description: Something OSHI should be able to do
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve
+      description: >
+        Describe the situation you are in, not the feature you imagine. The
+        problem usually has more than one solution, and yours may not be the
+        best one — but it cannot be found without the problem.
+    validations: {required: true}
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you had in mind
+    validations: {required: false}

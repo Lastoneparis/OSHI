@@ -1,0 +1,41 @@
+name: Bug report
+description: Something behaves differently from what it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Do not report security vulnerabilities here.** Write to
+        security@oshi-messenger.com instead — a public issue tells an attacker
+        before it tells me.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you got instead.
+      placeholder: |
+        1. Opened a conversation with a contact
+        2. Turned on airplane mode
+        3. Sent a message
+        Expected: it queues and relays over mesh
+        Got: it stayed on "sending" forever
+    validations: {required: true}
+  - type: input
+    id: version
+    attributes:
+      label: OSHI version
+      description: Settings → About. "Latest" is not a version.
+      placeholder: "1.0.41 (111)"
+    validations: {required: true}
+  - type: input
+    id: device
+    attributes:
+      label: Device and OS
+      placeholder: "iPhone 14, iOS 18.2"
+    validations: {required: true}
+  - type: dropdown
+    id: reproducible
+    attributes:
+      label: Does it happen every time?
+      options: ["Every time", "Sometimes", "Once, and I cannot reproduce it"]
+    validations: {required: true}

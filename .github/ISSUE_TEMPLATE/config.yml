@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: mailto:security@oshi-messenger.com
+    about: Report privately. A public issue tells an attacker before it tells me.
+  - name: Protocol documentation
+    url: https://github.com/Lastoneparis/OSHI/blob/main/docs/protocol.md
+    about: The wire format, key agreement and message flow, in full.
