@@ -1,5 +1,59 @@
 # OSHI Messenger - Security Architecture
 
+## Reporting a vulnerability
+
+Report privately, not in a public issue. We would rather hear it from you than
+read it in a paper.
+
+**Email:** contact@oshi-messenger.com
+**Encrypt to our OpenPGP key** — [`oshi-public-key.asc`](oshi-public-key.asc)
+
+```
+Fingerprint  CC57 EFDF DD66 DF95 1F9C  8108 025F 383C DCCA 2600
+Key ID       025F383CDCCA2600
+Type         Ed25519 (sign) + Cv25519 (encrypt)
+Created      2026-09-08      Expires  2029-09-07
+UID          OSHI (OSHI Messenger project key) <contact@oshi-messenger.com>
+```
+
+Verify the fingerprint against this file over a second channel before you trust it.
+
+### What we want looked at
+
+The transport and the cryptography are published here and are identical to the
+shipping build. The areas where a finding would matter most, in order:
+
+1. `src/OSHICryptoV2.swift` and `src/DoubleRatchet.swift` — X3DH, the ratchet
+   state machine, AEAD and header binding, the post-quantum KEM layer.
+2. `src/MeshNetworkManager.swift` and `src/CrossPlatformMesh.swift` — peer
+   identity binding, session establishment, and active attacks by a node in
+   radio range. This is the attack class that broke comparable products.
+3. `src/MeshRelay.swift` — replay, amplification, and what a relayed packet
+   discloses to a passive observer.
+
+### What we will do
+
+- Acknowledge within 72 hours.
+- Agree a disclosure date with you. We do not ask for indefinite embargoes and we
+  do not sign NDAs.
+- Credit you as you wish, including not at all.
+- Publish the finding and the fix, including anything we decide not to fix and
+  why.
+
+### Bug bounty
+
+USD 500 critical, 250 high, 100 medium, paid from a solo developer's own pocket.
+Small, and honest about being small.
+
+### Out of scope
+
+Anything requiring a jailbroken device, physical access to an unlocked phone, or
+a debugger attached to the process. Denial of service against a single device by
+an attacker already in Bluetooth range is in scope only where it is remote and
+unauthenticated.
+
+---
+
 ## 🔐 Cryptographic Overview
 
 OSHI uses military-grade encryption to protect your communications.
