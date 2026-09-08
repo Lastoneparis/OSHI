@@ -576,6 +576,12 @@ class DoubleRatchetSession: Codable {
         let needsDHRatchet: Bool
     }
     
+    #if DEBUG
+    /// Test-only: reproduce the state an older build left on disk. Never called
+    /// by the app. [Audit 2026-09-08]
+    func forceSendingChainForTesting(_ chain: Data) { sendingChainKey = chain }
+    #endif
+
     private func saveState() -> SessionState {
         SessionState(
             rootKey: rootKey,
