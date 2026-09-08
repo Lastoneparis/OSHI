@@ -103,6 +103,40 @@ enum OSHICryptoV2 {
             self.CKs = CKs
             self.CKr = CKr
         }
+
+        // __RATCHET_STATE_IS_TRANSACTIONAL_2026_08_18__
+        //
+        // `RatchetState` is a CLASS, so every mutation `ratchetDecrypt` makes is
+        // committed to the caller's object the instant it happens — including the
+        // mutations it makes BEFORE the AEAD tag is verified. That breaks the
+        // invariant an AEAD exists to provide: unauthenticated input must not
+        // commit protocol state.
+        //
+        // Concretely, one forged or corrupted packet was enough to break a
+        // conversation for good, with no key material and no MITM position:
+        // `dhRatchet` swapped the chains, `skipMessageKeys` advanced them, the
+        // receive counter moved — and then `openWithMk` threw, leaving all of it
+        // in place. Every later legitimate message then failed too.
+        //
+        // The older `DoubleRatchet.swift` already did this correctly
+        // (`saveState()` / `restoreState()` around its decrypt); the protection
+        // was lost in the v2 port. Restored here, at the state itself, so no
+        // future decrypt path can forget it.
+        struct Snapshot {
+            let DHs: X25519Pair, DHr: Data?, RK: Data, CKs: Data?, CKr: Data?
+            let Ns: UInt32, Nr: UInt32, PN: UInt32
+            let MKSKIPPED: [String: Data]
+        }
+
+        func snapshot() -> Snapshot {
+            Snapshot(DHs: DHs, DHr: DHr, RK: RK, CKs: CKs, CKr: CKr,
+                     Ns: Ns, Nr: Nr, PN: PN, MKSKIPPED: MKSKIPPED)
+        }
+
+        func restore(_ s: Snapshot) {
+            DHs = s.DHs; DHr = s.DHr; RK = s.RK; CKs = s.CKs; CKr = s.CKr
+            Ns = s.Ns; Nr = s.Nr; PN = s.PN; MKSKIPPED = s.MKSKIPPED
+        }
     }
 
     /// Result of `encryptFile`.
@@ -419,8 +453,15 @@ enum OSHICryptoV2 {
                                    _ associatedData: Data) throws -> Data? {
         let k = skKey(header.dh, header.n)
         guard let mk = state.MKSKIPPED[k] else { return nil }
+        // __RATCHET_STATE_IS_TRANSACTIONAL_2026_08_18__ Authentifier D'ABORD.
+        //
+        // La clé était retirée avant la vérification du tag. Un paquet corrompu
+        // portant l'en-tête public — donc devinable — d'un message retardé
+        // détruisait la SEULE clé capable de déchiffrer ce message légitime.
+        // L'attaquant n'a besoin d'aucun secret: l'en-tête voyage en clair.
+        let plaintext = try openWithMk(mk, header, ciphertext, associatedData)
         state.MKSKIPPED.removeValue(forKey: k)
-        return try openWithMk(mk, header, ciphertext, associatedData)
+        return plaintext
     }
 
     private static func openWithMk(_ mk: Data,
@@ -466,20 +507,29 @@ enum OSHICryptoV2 {
                                associatedData: Data) throws -> Data {
         let hdr = Header(dh: Data(header.dh), pn: header.pn, n: header.n)
 
-        if let fromSkipped = try trySkipped(state, hdr, ciphertext, associatedData) {
-            return fromSkipped
-        }
+        // __RATCHET_STATE_IS_TRANSACTIONAL_2026_08_18__
+        // Rien de ce qui suit ne doit survivre à un échec d'authentification.
+        // Voir la note sur `RatchetState.Snapshot`.
+        let saved = state.snapshot()
+        do {
+            if let fromSkipped = try trySkipped(state, hdr, ciphertext, associatedData) {
+                return fromSkipped
+            }
 
-        if state.DHr == nil || !ctEqual(hdr.dh, state.DHr!) {
-            try skipMessageKeys(state, until: hdr.pn) // finish the previous chain
-            try dhRatchet(state, hdr)
+            if state.DHr == nil || !ctEqual(hdr.dh, state.DHr!) {
+                try skipMessageKeys(state, until: hdr.pn) // finish the previous chain
+                try dhRatchet(state, hdr)
+            }
+            try skipMessageKeys(state, until: hdr.n)       // catch up on current chain
+            guard let ckr = state.CKr else { throw CryptoError.badState }
+            let (ck, mk) = kdfCK(ckr)
+            state.CKr = ck
+            state.Nr += 1
+            return try openWithMk(mk, hdr, ciphertext, associatedData)
+        } catch {
+            state.restore(saved)
+            throw error
         }
-        try skipMessageKeys(state, until: hdr.n)       // catch up on current chain
-        guard let ckr = state.CKr else { throw CryptoError.badState }
-        let (ck, mk) = kdfCK(ckr)
-        state.CKr = ck
-        state.Nr += 1
-        return try openWithMk(mk, hdr, ciphertext, associatedData)
     }
 
     // ==========================================================================
