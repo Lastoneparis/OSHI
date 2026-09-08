@@ -84,7 +84,48 @@ class MeshNetworkManager: NSObject, ObservableObject {
     private var pendingInvitations: Set<MCPeerID> = []
     
     private var seenMessageIDs: Set<String> = []
+    
+    /// Insertion order for `seenMessageIDs`. A `Set` has no order, so the old
+    
+    /// `Array(seenMessageIDs).suffix(5000)` kept 5000 ARBITRARY ids and discarded
+    
+    /// 5000 arbitrary ones — including live, in-flight messages. An attacker who
+    
+    /// emitted >10k junk ids forced the halving and flushed genuine ids out of the
+    
+    /// cache, making previously-seen packets relayable again. Loop suppression has
+    
+    /// to evict oldest-first to be a ceiling rather than a cache. [Audit 2026-09-08]
+    
+    private var seenMessageOrder: [String] = []
+    
+    private let seenMessageIDsCap = 10_000
+    
+    private let seenMessageIDsKeep = 5_000
+
+    
+    /// Single entry point so no call site can insert without recording order.
+    
+    private func noteSeenMessageID(_ id: String) {
+    
+        guard seenMessageIDs.insert(id).inserted else { return }
+    
+        seenMessageOrder.append(id)
+    
+        guard seenMessageOrder.count > seenMessageIDsCap else { return }
+    
+        let drop = seenMessageOrder.count - seenMessageIDsKeep
+    
+        for old in seenMessageOrder.prefix(drop) { seenMessageIDs.remove(old) }
+    
+        seenMessageOrder.removeFirst(drop)
+    
+    }
+
     private let maxHops = 500
+    /// Ceiling applied to signalling we FORWARD. `RelayCallSignal.maxHops` is a wire
+    /// field, so it is the attacker's number, not ours. [Audit 2026-09-08]
+    private static let maxCallSignalHops = 3
     
     // Audio packet counter for debugging
     private var meshAudioPacketsReceived: Int = 0
@@ -153,7 +194,7 @@ class MeshNetworkManager: NSObject, ObservableObject {
                 CallFileLogger.shared.log("DIAG_XMESH_RX | dup | id=\(message.id.prefix(8))")
                 return
             }
-            self.seenMessageIDs.insert(message.id)
+            self.noteSeenMessageID(message.id)
 
             // Route based on message type
             switch message.type {
@@ -1114,7 +1155,7 @@ class MeshNetworkManager: NSObject, ObservableObject {
                 seenBy: [peerID.displayName]
             )
 
-            seenMessageIDs.insert(message.id)
+            noteSeenMessageID(message.id)
 
             let messageData = try JSONEncoder().encode(relayMessage)
             OshiLog.mesh.info("📦 Encoded message size: \(messageData.count) bytes")
@@ -1211,10 +1252,16 @@ class MeshNetworkManager: NSObject, ObservableObject {
             return
         }
         
-        seenMessageIDs.insert(relayMsg.message.id)
+        noteSeenMessageID(relayMsg.message.id)
         
-        guard relayMsg.hopCount < relayMsg.maxHops else {
-            OshiLog.mesh.info("\(String(format: NSLocalizedString("mesh.log.max_hops_reached", comment: "Log: Max hops reached"), relayMsg.maxHops))")
+        // `maxHops` is a field of the wire struct `RelayMessage`, so comparing the
+        // packet's hopCount against the packet's own maxHops let a hostile peer send
+        // `maxHops: Int.max` and buy its packet unlimited life in the mesh. The ceiling
+        // must be OURS. Honest peers originate with `maxHops` == this constant, so
+        // clamping changes nothing for them. [Audit 2026-09-08]
+        let hopCeiling = min(relayMsg.maxHops, maxHops)
+        guard relayMsg.hopCount < hopCeiling else {
+            OshiLog.mesh.info("\(String(format: NSLocalizedString("mesh.log.max_hops_reached", comment: "Log: Max hops reached"), hopCeiling))")
             return
         }
         
@@ -1259,11 +1306,7 @@ class MeshNetworkManager: NSObject, ObservableObject {
             }
         }
         
-        if seenMessageIDs.count > 10000 {
-            let sortedIDs = Array(seenMessageIDs)
-            let idsToKeep = Set(sortedIDs.suffix(5000))
-            seenMessageIDs = idsToKeep
-        }
+        // Trimming now happens in `noteSeenMessageID`, oldest-first. [Audit 2026-09-08]
     }
     
     private func queueMessage(_ message: SecureMessage, recipientAddress: String) {
@@ -1702,14 +1745,15 @@ extension MeshNetworkManager: MCSessionDelegate {
             
             if isForMe {
                 // Mark as seen BEFORE processing to prevent duplicates
-                seenMessageIDs.insert(message.id)
+                noteSeenMessageID(message.id)
                 OshiLog.mesh.info("\(String(format: NSLocalizedString("mesh.log.message_for_us", comment: "Log: Message for us"), String(message.id.prefix(8))))")
                 OshiLog.mesh.info("   ✅ Recipient matches our public key")
                 handleReceivedMessage(message, from: peerID)
             } else {
                 OshiLog.mesh.info("   📤 Message not for us (recipient: \(message.recipientPublicKey.prefix(16))..., me: \(myPublicKey.prefix(16))...)")
                 // 🔧 FIX: Only forward if NOT for us AND under hop limit
-                if relayMessage.hopCount < relayMessage.maxHops {
+                // Clamp to OUR ceiling, not the sender's. [Audit 2026-09-08]
+                if relayMessage.hopCount < min(relayMessage.maxHops, maxHops) {
                     forwardRelayMessage(relayMessage, from: peerID)
                 }
             }
@@ -1787,7 +1831,7 @@ extension MeshNetworkManager: MCSessionDelegate {
             
             if isForMe {
                 // Mark as seen BEFORE processing to prevent duplicates
-                seenMessageIDs.insert(message.id)
+                noteSeenMessageID(message.id)
                 OshiLog.mesh.info("\(String(format: NSLocalizedString("mesh.log.message_from", comment: "Log: Message from"), peerID.displayName))")
                 OshiLog.mesh.info("   ✅ Direct message recipient matches our public key")
                 handleReceivedMessage(message, from: peerID)
@@ -2057,6 +2101,23 @@ extension MeshNetworkManager {
     
     // Track seen call signal IDs to prevent duplicates
     private static var seenCallSignalIDs: Set<String> = []
+    /// `signalId` is an attacker-chosen String off the wire and this Set was never
+    /// trimmed anywhere — a peer streaming fresh ids grew it until the app was
+    /// jetsammed. Silently killing the app on a phone someone is relying on during a
+    /// shutdown is as good as breaking the crypto. Bounded, oldest-first.
+    /// [Audit 2026-09-08]
+    private static var seenCallSignalOrder: [String] = []
+    private static let seenCallSignalCap = 2_000
+    private static let seenCallSignalKeep = 1_000
+
+    private static func noteSeenCallSignalID(_ id: String) {
+        guard seenCallSignalIDs.insert(id).inserted else { return }
+        seenCallSignalOrder.append(id)
+        guard seenCallSignalOrder.count > seenCallSignalCap else { return }
+        let drop = seenCallSignalOrder.count - seenCallSignalKeep
+        for old in seenCallSignalOrder.prefix(drop) { seenCallSignalIDs.remove(old) }
+        seenCallSignalOrder.removeFirst(drop)
+    }
     
     /// Send call signaling data (call request, accept, decline, end)
     /// Tries direct connection first, then relay through other peers
@@ -2201,7 +2262,7 @@ extension MeshNetworkManager {
         )
         
         // Mark as seen
-        MeshNetworkManager.seenCallSignalIDs.insert(signalId)
+        MeshNetworkManager.noteSeenCallSignalID(signalId)
         
         // Send to all connected peers except the excluded one
         guard let relayData = try? JSONEncoder().encode(relaySignal) else {
@@ -2238,10 +2299,12 @@ extension MeshNetworkManager {
         guard !MeshNetworkManager.seenCallSignalIDs.contains(relaySignal.signalId) else {
             return
         }
-        MeshNetworkManager.seenCallSignalIDs.insert(relaySignal.signalId)
+        MeshNetworkManager.noteSeenCallSignalID(relaySignal.signalId)
         
         // Check hop count
-        guard relaySignal.hopCount < relaySignal.maxHops else {
+        // Same defect as the message path: the ceiling came off the wire. We originate
+        // with 3, so clamp forwarding to 3. [Audit 2026-09-08]
+        guard relaySignal.hopCount < min(relaySignal.maxHops, MeshNetworkManager.maxCallSignalHops) else {
             OshiLog.mesh.info("📡 MeshNetwork: Relay call signal max hops reached")
             return
         }
@@ -2445,7 +2508,7 @@ extension MeshNetworkManager {
         guard !MeshNetworkManager.seenCallSignalIDs.contains(relaySignal.signalId) else {
             return
         }
-        MeshNetworkManager.seenCallSignalIDs.insert(relaySignal.signalId)
+        MeshNetworkManager.noteSeenCallSignalID(relaySignal.signalId)
         
         // Get my public key
         guard let myPublicKey = UserDefaults.standard.string(forKey: "publicKey") else { return }

@@ -242,6 +242,31 @@ class DoubleRatchetSession: Codable {
             ?? Curve25519.KeyAgreement.PrivateKey()
     }
 
+    /// The chain that carries the RESPONDER's messages until its first DH ratchet.
+    ///
+    /// It replaces 32 zero bytes. That constant was a matched pair — the
+    /// responder's sending chain and the initiator's receiving chain — so a
+    /// responder that spoke before it had received anything encrypted every
+    /// message under HKDF(00x32, "MessageKey"), a value with no secret input at
+    /// all: d663c614…4562, identical on every device and every conversation.
+    ///
+    /// Stated plainly, because it matters: this chain is derivable by anyone who
+    /// holds BOTH identity private keys, exactly like the initiator's own first
+    /// chain. It stops being derivable at the first real ratchet. That is a
+    /// strict improvement on a public constant, not a claim of forward secrecy
+    /// for the opening messages.
+    ///
+    /// The info string is the cross-platform contract: Kotlin must derive the
+    /// same bytes or the two sides fail the AEAD in silence. [Audit 2026-09-08]
+    static func responderInitialChain(sharedSecret: Data) -> Data {
+        HKDF<SHA256>.deriveKey(
+            inputKeyMaterial: SymmetricKey(data: sharedSecret),
+            salt: Data(),
+            info: Data("ResponderInitialChain-v3".utf8),
+            outputByteCount: 32
+        ).withUnsafeBytes { Data($0) }
+    }
+
     /// Build a v3 session, initialised the way the Double Ratchet actually
     /// specifies rather than with both sides holding an un-rotating key.
     ///
@@ -261,6 +286,7 @@ class DoubleRatchetSession: Codable {
                                pqCiphertext: Data?) -> DoubleRatchetSession {
         let zero = Data(repeating: 0, count: 32)
         let responderPair = derivedResponderRatchetKey(sharedSecret: sharedSecret)
+        let responderChain = responderInitialChain(sharedSecret: sharedSecret)
 
         let session = DoubleRatchetSession(rootKey: rootSeed,
                                            sendingChainKey: zero,
@@ -281,10 +307,14 @@ class DoubleRatchetSession: Codable {
             }
             session.ourRatchetKeyPair = ours
             session.theirRatchetPublicKey = theirPub.rawRepresentation
+            // Matches the responder's sending chain below. Was `zero`. [Audit 2026-09-08]
+            session.receivingChainKey = responderChain
         } else {
             // Root stays the seed; the first receive ratchets it forward.
             session.ourRatchetKeyPair = responderPair
             session.theirRatchetPublicKey = nil
+            // Was `zero`, a public constant. [Audit 2026-09-08]
+            session.sendingChainKey = responderChain
         }
         return session
     }
@@ -311,6 +341,33 @@ class DoubleRatchetSession: Codable {
         OshiLog.crypto.info("   Role: \(isInitiator ? "INITIATOR" : "RESPONDER")")
         OshiLog.crypto.info("   send#\(sendingMessageNumber)")
         
+        // A sending chain of 32 zero bytes is a PUBLIC CONSTANT, not a secret.
+        // `makeRatcheting` leaves the RESPONDER's sending chain at zero and only
+        // replaces it on that peer's first RECEIVE, so a responder that speaks
+        // before it has heard anything encrypts under
+        //   HKDF(00×32, salt: "", info: "MessageKey", 32)
+        //   = d663c61441ce56f9d25db8149a2d3867b92aaaa9cf2ff7025649801d6fe34562
+        // — the same AES-256-GCM key on every device, in every conversation, for
+        // every message on that chain until the first ratchet. Nobody noticed
+        // because the initiator's receiving chain is zero too, so it decrypts
+        // fine, and because no test ever has the responder speak first: the role
+        // rule is `ourKey < theirKey` and "ALICE…" always sorts before "BOB…".
+        //
+        // Refusing is not the whole fix — the real repair is a derived initial
+        // chain for the responder, and that changes the key schedule invisibly on
+        // the wire, so it cannot ship on one platform alone. This guard is the
+        // half that IS safe alone: it turns a silent loss of confidentiality into
+        // a visible send failure the caller's heal path already handles.
+        //
+        // Scoped to v3 deliberately. v2 has the identical defect and a larger
+        // installed base; an unscoped guard would break every live v2 responder's
+        // first send. v2 needs its own coordinated fix. [Audit 2026-09-08]
+        if sessionVersion >= DoubleRatchetSession.ratchetingSessionVersion,
+           sendingChainKey == Data(repeating: 0, count: 32) {
+            OshiLog.crypto.error("🚨 Refusing to encrypt on an all-zero sending chain (v\(self.sessionVersion), \(self.isInitiator ? "INITIATOR" : "RESPONDER"))")
+            throw DoubleRatchetError.uninitializedSendingChain
+        }
+
         let messageKey = deriveMessageKey(from: sendingChainKey)
         
         let header = DoubleRatchetMessage.MessageHeader(
@@ -509,6 +566,14 @@ class DoubleRatchetSession: Codable {
         let ourRatchetKeyPair: Curve25519.KeyAgreement.PrivateKey
         let theirRatchetPublicKey: Data?
         let skippedKeys: [String: SkippedKey]
+        // __RATCHET_STATE_IS_TRANSACTIONAL_2026_08_18__ (completed 2026-09-08)
+        // `needsDHRatchet` is protocol state like any other: `performDHRatchet`
+        // sets it BEFORE the AEAD tag is checked. Leaving it out of the snapshot
+        // meant one forged packet flipped it permanently — the victim's next
+        // legitimate message then went out stamped `isDHRatchet: true`, the peer
+        // ratcheted a second time on a key it had already consumed, and BOTH
+        // directions died with no key material and no MITM position required.
+        let needsDHRatchet: Bool
     }
     
     private func saveState() -> SessionState {
@@ -521,7 +586,8 @@ class DoubleRatchetSession: Codable {
             receivingMessageNumber: receivingMessageNumber,
             ourRatchetKeyPair: ourRatchetKeyPair,
             theirRatchetPublicKey: theirRatchetPublicKey,
-            skippedKeys: skippedMessageKeys
+            skippedKeys: skippedMessageKeys,
+            needsDHRatchet: needsDHRatchet
         )
     }
     
@@ -534,6 +600,7 @@ class DoubleRatchetSession: Codable {
         receivingMessageNumber = state.receivingMessageNumber
         ourRatchetKeyPair = state.ourRatchetKeyPair
         theirRatchetPublicKey = state.theirRatchetPublicKey
+        needsDHRatchet = state.needsDHRatchet
         replaceSkipped(state.skippedKeys)
     }
     
@@ -742,6 +809,9 @@ enum DoubleRatchetError: Error {
     case versionMismatch
     case staleSession
     case sessionMismatch  // ✅ NEW
+    /// The sending chain is still the all-zero placeholder, so any message
+    /// encrypted on it would be readable by anyone. [Audit 2026-09-08]
+    case uninitializedSendingChain
     case invalidMessageNumber  // ✅ NEW
 }
 
@@ -1000,6 +1070,22 @@ class DoubleRatchetSessionManager {
             let count = sessions.count
             OshiLog.crypto.info("🔥 Resetting ALL sessions...")
             sessions.removeAll()
+
+            // The Keychain is the PRIMARY store — `loadSessions()` reads it first and
+            // `saveSessions()` writes it. Clearing memory and the legacy UserDefaults
+            // copy left every root key, both chain keys per session, every skipped
+            // message key and every ratchet private key on disk, and the next launch
+            // restored all of it. This is the "burn it" gesture someone uses at a
+            // checkpoint; it has to actually burn. [Audit 2026-09-08]
+            do {
+                try KeychainHelper.delete(key: storageKey)
+                OshiLog.crypto.info("🔥 Ratchet session Keychain item deleted")
+            } catch {
+                // Deleting something that is not there is success, not failure.
+                OshiLog.crypto.warning("⚠️ Ratchet Keychain delete: \(error.localizedDescription)")
+            }
+            KeychainHelper.deletePrivateCopy(key: storageKey)
+
             UserDefaults.standard.removeObject(forKey: storageKey)
             UserDefaults.standard.synchronize()
             OshiLog.crypto.info("✅ Cleared \(count) session(s)")
