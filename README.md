@@ -65,6 +65,8 @@ The implementation is in this repository and you can read it:
 | [`src/DoubleRatchet.swift`](src/DoubleRatchet.swift) | The ratchet: chain keys, skipped-message keys, DH steps |
 | [`src/OSHICryptoV2.swift`](src/OSHICryptoV2.swift) | X3DH, AEAD, the header format |
 | [`src/MeshNetworkManager.swift`](src/MeshNetworkManager.swift) | Peer discovery, routing, store-and-forward |
+| [`src/CrossPlatformMesh.swift`](src/CrossPlatformMesh.swift) | The iOS ↔ Android bridge: BLE presence, Bonjour discovery, TCP transport |
+| [`src/MeshRelay.swift`](src/MeshRelay.swift) | Multi-hop relay: hop ceiling, loop suppression, dedup cache |
 | [`docs/protocol.md`](docs/protocol.md) | The wire protocol, in full |
 | [`docs/encryption.md`](docs/encryption.md) | Threat model and key lifecycle |
 
