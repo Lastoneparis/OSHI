@@ -161,17 +161,28 @@ jobs:
         working-directory: src/OSHI-Desktop/build/jpackage/out
         run: |
           set -euo pipefail
+          # NULLGLOB. Without it an unmatched `*.exe` survives as the literal string and
+          # sha256sum fails on it, which under `set -e` kills the step — on the platform
+          # that has just built everything it owes. That is exactly what happened on the
+          # first run: Linux produced its .deb and .rpm and then failed here, on a glob for
+          # a Windows file it was never going to have.
+          shopt -s nullglob
           case "${{ runner.os }}" in
             Windows) want="exe msi" ;;
             Linux)   want="deb rpm" ;;
           esac
           missing=0
           for ext in $want; do
-            compgen -G "*.$ext" > /dev/null || { echo "::error::no .$ext was produced"; missing=1; continue; }
-            for f in *."$ext"; do echo "  $f  $(du -h "$f" | cut -f1)"; done
+            files=( *."$ext" )
+            if [ ${#files[@]} -eq 0 ]; then
+              echo "::error::no .$ext was produced on ${{ runner.os }}"; missing=1; continue
+            fi
+            for f in "${files[@]}"; do echo "  $f  $(du -h "$f" | cut -f1)"; done
           done
           [ "$missing" -eq 0 ]
-          sha256sum *.exe *.msi *.deb *.rpm 2>/dev/null | tee "SHA256SUMS-${{ runner.os }}.txt"
+          # Checksum ONLY what this platform actually built.
+          all=( *.exe *.msi *.deb *.rpm )
+          sha256sum "${all[@]}" | tee "SHA256SUMS-${{ runner.os }}.txt"
 
       - uses: actions/upload-artifact@v4
         with:
