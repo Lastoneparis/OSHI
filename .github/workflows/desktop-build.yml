@@ -1,0 +1,186 @@
+# ==============================================================================
+# OSHI desktop — build the Windows and Linux installers
+# ==============================================================================
+#
+# WHY THIS WORKFLOW LIVES IN THE PUBLIC REPOSITORY AND THE CODE DOES NOT
+#
+# GitHub Actions is free and unmetered on public repositories and metered on
+# private ones. On 2026-09-11 the account's spending limit stopped every job in
+# `OSHI-private` from starting — "recent account payments have failed or your
+# spending limit needs to be increased" — which took the installer pipeline down
+# with it. A job triggered here is not subject to that limit. Verified the same
+# day: a three-job run including `macos-latest`, the most expensive runner,
+# completed normally while the private repository could not start anything.
+#
+# So this repository is the BUILD MACHINE. It is not the distribution point and
+# it is not where the source lives:
+#
+#   * the source is cloned at build time from `Lastoneparis/OSHI-private` over a
+#     READ-ONLY DEPLOY KEY, which reaches that one repository and nothing else in
+#     the account, and is revocable in one click;
+#   * the finished installers are published on oshi-messenger.com, beside the
+#     Android APK, exactly as the Android build already is. No release is cut
+#     here and no binary is attached to this repository.
+#
+# WHAT A READER OF THIS FILE LEARNS, since this file is public: that a private
+# repository exists and that a desktop client is built from it. Both are already
+# public — oshi-messenger.com/desktop announces the client, and the private
+# repository's existence is not a secret. The deploy key's private half is a
+# repository secret, masked in logs, and is never echoed by any step below.
+#
+# NOTHING HERE IS SIGNED. Authenticode needs a certificate whose private key
+# lives on dedicated hardware and cannot be a repository secret. Every artifact
+# this produces triggers Windows SmartScreen, the download page says so in nine
+# languages, and the SHA-256 sums are published beside the files because that is
+# what an unsigned distribution can honestly offer.
+
+name: desktop-build
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version for the installers, e.g. 1.0.0 (MSI needs MAJOR/MINOR 0..255, BUILD 0..65535)'
+        required: true
+        default: '1.0.0'
+      ref:
+        description: 'Branch or tag of OSHI-private to build'
+        required: true
+        default: 'fix/call-alias-media-startchat'
+
+jobs:
+  build:
+    name: build / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            tasks: packageExe packageMsi
+          - os: ubuntu-latest
+            tasks: packageDeb packageRpm
+
+    steps:
+      # The deploy key reaches ONE repository, read-only. `ssh-agent` rather than
+      # a file on disk so the key never lands in the workspace, where a later
+      # step or an artifact upload could carry it out.
+      - name: Check out the private source over the read-only deploy key
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+          printf '%s\n' "${{ secrets.OSHI_PRIVATE_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          git clone --depth 1 --branch "${{ github.event.inputs.ref }}" \
+            git@github.com:Lastoneparis/OSHI-private.git src
+          # The key has done its only job. Removing it here means no later step,
+          # and no uploaded artifact, can carry it off the runner.
+          rm -f ~/.ssh/id_ed25519
+          echo "cloned $(git -C src rev-parse --short HEAD)"
+
+      - name: Refuse to build without the shared crypto core
+        shell: bash
+        working-directory: src
+        run: |
+          set -euo pipefail
+          # The desktop client compiles its crypto straight out of the Android
+          # tree with no copy step. A build that silently lost those files would
+          # not fail — it would fail to compile in a way that reads as unrelated.
+          v2="OSHI-Android/app/src/main/java/com/oshi/messenger/network/v2"
+          for f in OSHICryptoV2.kt OSHIRatchetV2.kt V2Session.kt OSHICryptoV2Streaming.kt V2FileKeyMessage.kt V2RetryBudget.kt; do
+            [ -f "$v2/$f" ] || { echo "::error::missing shared source: $v2/$f"; exit 1; }
+          done
+          echo "the six shared crypto files are present"
+
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      - name: Windows — WiX v3, which jpackage 17 needs and never names
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $candle = Get-ChildItem -Path 'C:\Program Files (x86)','C:\Program Files' -Filter candle.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $candle) {
+            choco install wixtoolset --version=3.14.0 -y --no-progress
+            $candle = Get-ChildItem -Path 'C:\Program Files (x86)','C:\Program Files' -Filter candle.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          }
+          if (-not $candle) { Write-Error "WiX v3 (candle.exe) not found — jpackage cannot build an .msi"; exit 1 }
+          echo $candle.DirectoryName >> $env:GITHUB_PATH
+
+      - name: Linux — the tools jpackage drives
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y fakeroot rpm
+
+      - name: Build
+        shell: bash
+        working-directory: src/OSHI-Desktop
+        run: ./gradlew ${{ matrix.tasks }} -PappVersion=${{ github.event.inputs.version }} --no-daemon
+
+      # THE STEP THAT MAKES THIS A PRODUCT RATHER THAN A FILE. Everything above
+      # proves an installer was produced; this proves one installs, runs what it
+      # installed, and uninstalls without leaving anything behind.
+      - name: Windows — install the .msi for real, run it, remove it
+        if: runner.os == 'Windows'
+        working-directory: src/OSHI-Desktop
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $msi = Get-ChildItem build/jpackage/out/*.msi | Select-Object -First 1
+          Write-Host "installing $($msi.Name) ($([math]::Round($msi.Length/1MB,1)) MB)"
+          $p = Start-Process msiexec.exe -Wait -PassThru -ArgumentList @('/i', "`"$($msi.FullName)`"", '/qn', '/norestart')
+          if ($p.ExitCode -ne 0) { Write-Error "msiexec /i exited $($p.ExitCode)"; exit 1 }
+
+          # Where WINDOWS put it, not where the build left it. Assuming the path
+          # is how this step would quietly go back to testing the build output.
+          $exe = Get-ChildItem -Path $env:LOCALAPPDATA -Filter OSHI.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $exe) { Write-Error "the .msi installed no OSHI.exe"; exit 1 }
+          Write-Host "installed at $($exe.FullName)"
+
+          if (-not (Test-Path (Join-Path $exe.DirectoryName 'OSHI-Console.exe'))) {
+            Write-Error "OSHI-Console.exe is missing — the terminal half shipped as a Start-menu entry that does not exist"
+            exit 1
+          }
+
+          $out = & $exe.FullName --probe 2>&1 | Out-String
+          Write-Host $out
+          if ($out -notmatch 'known-answer vectors') {
+            Write-Error "the INSTALLED binary did not reproduce iOS's crypto vectors — the packaged classpath is wrong"
+            exit 1
+          }
+
+          $dir = $exe.DirectoryName
+          $u = Start-Process msiexec.exe -Wait -PassThru -ArgumentList @('/x', "`"$($msi.FullName)`"", '/qn', '/norestart')
+          if ($u.ExitCode -ne 0) { Write-Error "msiexec /x exited $($u.ExitCode)"; exit 1 }
+          if (Test-Path (Join-Path $dir 'OSHI.exe')) { Write-Error "uninstall left the application behind"; exit 1 }
+          Write-Host "installed, ran, and uninstalled cleanly."
+
+      - name: Every installer this platform owes exists
+        shell: bash
+        working-directory: src/OSHI-Desktop/build/jpackage/out
+        run: |
+          set -euo pipefail
+          case "${{ runner.os }}" in
+            Windows) want="exe msi" ;;
+            Linux)   want="deb rpm" ;;
+          esac
+          missing=0
+          for ext in $want; do
+            compgen -G "*.$ext" > /dev/null || { echo "::error::no .$ext was produced"; missing=1; continue; }
+            for f in *."$ext"; do echo "  $f  $(du -h "$f" | cut -f1)"; done
+          done
+          [ "$missing" -eq 0 ]
+          sha256sum *.exe *.msi *.deb *.rpm 2>/dev/null | tee "SHA256SUMS-${{ runner.os }}.txt"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ matrix.os }}
+          path: |
+            src/OSHI-Desktop/build/jpackage/out/*.exe
+            src/OSHI-Desktop/build/jpackage/out/*.msi
+            src/OSHI-Desktop/build/jpackage/out/*.deb
+            src/OSHI-Desktop/build/jpackage/out/*.rpm
+            src/OSHI-Desktop/build/jpackage/out/SHA256SUMS-*.txt
+          if-no-files-found: error
+          retention-days: 5
