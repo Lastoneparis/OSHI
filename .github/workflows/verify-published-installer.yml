@@ -1,0 +1,159 @@
+# ==============================================================================
+# Install the installer people actually download.
+# ==============================================================================
+#
+# `desktop-build` proves that a Windows host can BUILD an installer and that the
+# resulting .msi installs. It does not prove anything about the file on the website,
+# and the website's main button serves the .exe, not the .msi. Those are different
+# artifacts produced by different jpackage invocations, and only one of them had ever
+# been installed anywhere.
+#
+# So this workflow starts where a user starts: it downloads
+# https://oshi-messenger.com/downloads/OSHI-Desktop-Setup.exe, checks the bytes against
+# the SHA-256 the download page itself publishes, installs it silently, runs the binary
+# Windows put on disk, and removes it. Nothing here builds anything — the point is that
+# the thing under test is the shipped file, not a rebuild of it.
+#
+# It also ASSERTS that the installer is unsigned. That is not a gap in the test; the
+# download page tells every visitor SmartScreen will fire, and a page that says so while
+# the file is signed would be wrong in the other direction. When a certificate finally
+# exists, this check is the one that has to be flipped, deliberately.
+
+name: verify-published-installer
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Installer URL to download and install'
+        required: true
+        default: 'https://oshi-messenger.com/downloads/OSHI-Desktop-Setup.exe'
+      page:
+        description: 'Page whose published SHA-256 sums must contain the file hash'
+        required: true
+        default: 'https://oshi-messenger.com/desktop'
+  schedule:
+    # Weekly. A published installer can rot without anyone touching it: a truncated
+    # re-upload, a web server that starts transcoding, an expired dependency in the page.
+    - cron: '17 6 * * 1'
+
+jobs:
+  install:
+    name: download, install, run, uninstall
+    runs-on: windows-latest
+    steps:
+      - name: Download exactly what a visitor downloads
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $url = '${{ github.event.inputs.url }}'
+          if (-not $url) { $url = 'https://oshi-messenger.com/downloads/OSHI-Desktop-Setup.exe' }
+          Write-Host "GET $url"
+          Invoke-WebRequest -Uri $url -OutFile installer.exe -UseBasicParsing
+          $f = Get-Item installer.exe
+          Write-Host "got $([math]::Round($f.Length/1MB,1)) MB"
+          if ($f.Length -lt 20MB) { Write-Error "that is too small to be the installer"; exit 1 }
+          "SIZE=$($f.Length)" >> $env:GITHUB_ENV
+
+      - name: The bytes match a SHA-256 the download page publishes
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $hash = (Get-FileHash installer.exe -Algorithm SHA256).Hash.ToLower()
+          Write-Host "downloaded sha256 : $hash"
+          $page = '${{ github.event.inputs.page }}'
+          if (-not $page) { $page = 'https://oshi-messenger.com/desktop' }
+          $html = (Invoke-WebRequest -Uri $page -UseBasicParsing).Content
+          # Every 64-hex run on the page, rather than a positional parse: the page lists
+          # sums for four installers and its layout is not this workflow's business.
+          $published = [regex]::Matches($html, '(?i)\b[0-9a-f]{64}\b') | ForEach-Object { $_.Value.ToLower() } | Sort-Object -Unique
+          Write-Host "page publishes $($published.Count) sha256 value(s)"
+          if ($published -notcontains $hash) {
+            Write-Error "the downloaded file's hash is NOT among the sums the page publishes"
+            $published | ForEach-Object { Write-Host "  page: $_" }
+            exit 1
+          }
+          Write-Host "the served bytes match what the page claims."
+
+      - name: It is a 64-bit Windows GUI binary, and it is NOT signed
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $b = [System.IO.File]::ReadAllBytes("$PWD\installer.exe")
+          if ($b[0] -ne 0x4D -or $b[1] -ne 0x5A) { Write-Error "no MZ header"; exit 1 }
+          $pe  = [BitConverter]::ToInt32($b, 0x3c)
+          $opt = $pe + 4 + 20
+          $magic = [BitConverter]::ToUInt16($b, $opt)
+          # A parenthesised `if` is not a PowerShell sub-expression — the data
+          # directories sit 112 bytes into a PE32+ optional header, 96 into a PE32.
+          $ddOffset = 96
+          if ($magic -eq 0x20b) { $ddOffset = 112 }
+          $dd = $opt + $ddOffset
+          $certSize = [BitConverter]::ToUInt32($b, $dd + 4*8 + 4)
+          Write-Host ("format : {0}" -f $(if ($magic -eq 0x20b) { 'PE32+ (64-bit)' } else { 'PE32' }))
+          Write-Host "certificate table size : $certSize"
+          # Authenticode, checked as a fact rather than trusted as a sentence on a web page.
+          $sig = Get-AuthenticodeSignature .\installer.exe
+          Write-Host "Authenticode status : $($sig.Status)"
+          if ($certSize -ne 0 -or $sig.Status -eq 'Valid') {
+            Write-Error "this build is SIGNED, and the download page tells visitors it is not — one of the two must change"
+            exit 1
+          }
+          Write-Host "unsigned, exactly as the download page says. SmartScreen will fire."
+
+      - name: Install it silently
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          # jpackage's .exe is a WiX bootstrapper, so it takes /quiet. Bounded wait rather
+          # than -Wait: if a future build stops accepting /quiet it would sit on an
+          # invisible dialog until the job times out, and a timeout reads as "flaky".
+          $p = Start-Process .\installer.exe -ArgumentList '/quiet' -PassThru
+          if (-not $p.WaitForExit(300000)) {
+            $p.Kill()
+            Write-Error "the installer did not finish in 5 minutes — it likely wants a UI, so /quiet is no longer honoured"
+            exit 1
+          }
+          Write-Host "installer exit code : $($p.ExitCode)"
+          if ($p.ExitCode -ne 0) { Write-Error "silent install failed"; exit 1 }
+
+      - name: Run what Windows put on disk
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          # Search where WINDOWS installed it (--win-per-user-install => LOCALAPPDATA),
+          # never the path the build used. Assuming the path is how this step would go
+          # back to testing something other than the installation.
+          $exe = Get-ChildItem -Path $env:LOCALAPPDATA -Filter OSHI.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $exe) { Write-Error "the installer put no OSHI.exe under LOCALAPPDATA"; exit 1 }
+          Write-Host "installed at $($exe.FullName)"
+          "INSTALLDIR=$($exe.DirectoryName)" >> $env:GITHUB_ENV
+
+          if (-not (Test-Path (Join-Path $exe.DirectoryName 'OSHI-Console.exe'))) {
+            Write-Error "OSHI-Console.exe is missing — the terminal half is a Start-menu entry pointing at nothing"
+            exit 1
+          }
+
+          # The strongest thing a five-minute job can assert: the INSTALLED binary
+          # reproduces iOS's published known-answer vectors. That exercises the packaged
+          # classpath, the bundled JRE and the shared crypto core in one call.
+          $out = & $exe.FullName --probe 2>&1 | Out-String
+          Write-Host $out
+          if ($out -notmatch 'known-answer vectors') {
+            Write-Error "the installed binary did not reproduce iOS's crypto vectors"
+            exit 1
+          }
+
+      - name: Uninstall, and leave nothing behind
+        if: always()
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Continue'
+          $p = Start-Process .\installer.exe -ArgumentList '/uninstall','/quiet' -PassThru
+          if (-not $p.WaitForExit(300000)) { $p.Kill(); Write-Error "uninstall hung"; exit 1 }
+          Write-Host "uninstaller exit code : $($p.ExitCode)"
+          if ($env:INSTALLDIR -and (Test-Path (Join-Path $env:INSTALLDIR 'OSHI.exe'))) {
+            Write-Error "uninstall left the application behind at $env:INSTALLDIR"
+            exit 1
+          }
+          Write-Host "downloaded, installed, ran and removed cleanly."
