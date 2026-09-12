@@ -144,16 +144,57 @@ jobs:
             exit 1
           }
 
-      - name: Uninstall, and leave nothing behind
+      # WHAT THIS STEP LEARNED THE HARD WAY: `installer.exe /uninstall /quiet` HANGS.
+      # jpackage's .exe wraps an MSI, so the file that installed the app is not the thing
+      # that removes it — the product registers an UninstallString, and that is the path
+      # Windows' own "Uninstall" button takes. Testing the invocation I assumed, rather
+      # than the one a person uses, left a 5-minute hang and an orphan msiexec.
+      - name: It is listed in Add/Remove Programs, and that entry removes it
         if: always()
         shell: pwsh
         run: |
-          $ErrorActionPreference = 'Continue'
-          $p = Start-Process .\installer.exe -ArgumentList '/uninstall','/quiet' -PassThru
+          $ErrorActionPreference = 'Stop'
+          # Per-user install (--win-per-user-install) lands under HKCU; HKLM is searched
+          # too so this keeps working if the install mode ever changes.
+          $roots = @(
+            'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*',
+            'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*',
+            'HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
+          )
+          $entry = Get-ItemProperty $roots -ErrorAction SilentlyContinue |
+                   Where-Object { $_.DisplayName -like '*OSHI*' } | Select-Object -First 1
+          if (-not $entry) {
+            Write-Error "the app is not listed in Add/Remove Programs — a user would have no supported way to remove it"
+            exit 1
+          }
+          Write-Host "listed as : $($entry.DisplayName) $($entry.DisplayVersion)"
+          Write-Host "publisher : $($entry.Publisher)"
+
+          # QuietUninstallString when the product offers one, else UninstallString with the
+          # MSI quiet flags appended. Both are what the Settings app invokes.
+          $cmd = $entry.QuietUninstallString
+          if (-not $cmd) {
+            $cmd = $entry.UninstallString
+            if ($cmd -match 'msiexec' -and $cmd -notmatch '/q') { $cmd = "$cmd /qn /norestart" }
+          }
+          Write-Host "uninstalling via : $cmd"
+          # MsiExec.exe /X{GUID} — split the executable from its arguments rather than
+          # handing the whole string to cmd, so a path with spaces cannot re-split.
+          if ($cmd -match '^\s*"?([^"]*msiexec[^"\s]*)"?\s*(.*)$') {
+            $exe = $Matches[1]; $argline = $Matches[2]
+          } else {
+            $exe = ($cmd -split '\s+', 2)[0]; $argline = ($cmd -split '\s+', 2)[1]
+          }
+          $p = Start-Process $exe -ArgumentList $argline -PassThru
           if (-not $p.WaitForExit(300000)) { $p.Kill(); Write-Error "uninstall hung"; exit 1 }
           Write-Host "uninstaller exit code : $($p.ExitCode)"
+          if ($p.ExitCode -ne 0) { Write-Error "uninstall failed"; exit 1 }
+
           if ($env:INSTALLDIR -and (Test-Path (Join-Path $env:INSTALLDIR 'OSHI.exe'))) {
             Write-Error "uninstall left the application behind at $env:INSTALLDIR"
             exit 1
           }
+          $still = Get-ItemProperty $roots -ErrorAction SilentlyContinue |
+                   Where-Object { $_.DisplayName -like '*OSHI*' }
+          if ($still) { Write-Error "still listed in Add/Remove Programs after uninstalling"; exit 1 }
           Write-Host "downloaded, installed, ran and removed cleanly."
