@@ -192,12 +192,29 @@ jobs:
             echo "::error::the installed binary did not reproduce iOS's crypto vectors"; exit 1; }
           echo "the .rpm installs and runs with no menu directory at all."
 
-      - name: And it can still be removed
+      # MEASURED, not assumed. The first run of this job showed rpm calls a failing %post
+      # "Non-critical" and lets the install complete, but calls a failing %preun an
+      # "Error" and makes dnf exit non-zero. Those are two different products for a user:
+      # "removal complains" is an annoyance, "removal is impossible" is a defect. This
+      # step distinguishes them instead of letting `set -e` collapse both into red.
+      - name: Removal — does it complain, or actually fail?
         if: always()
         shell: bash
         run: |
-          set -euo pipefail
+          set -uo pipefail
           bin="$(rpm -ql oshi-desktop 2>/dev/null | grep -E '/bin/[A-Za-z-]*OSHI[A-Za-z-]*$' | head -1 || true)"
-          dnf -y remove oshi-desktop
-          if [ -n "$bin" ] && [ -e "$bin" ]; then echo "::error::removal left $bin behind"; exit 1; fi
-          echo "removed cleanly."
+          dnf -y remove oshi-desktop; rc=$?
+          echo "dnf remove exit code : $rc"
+          if rpm -q oshi-desktop >/dev/null 2>&1; then
+            echo "::error::the package is STILL INSTALLED after removal — a user cannot get rid of it"
+            exit 1
+          fi
+          if [ -n "$bin" ] && [ -e "$bin" ]; then
+            echo "::error::removal left $bin behind"; exit 1
+          fi
+          if [ "$rc" -ne 0 ]; then
+            echo "::warning::the package WAS removed, but dnf exited $rc because the %preun"
+            echo "::warning::scriptlet failed on a host with no menu directory. Cosmetic for a"
+            echo "::warning::person, but any script gating on the exit code sees a failure."
+          fi
+          echo "the package is gone."
