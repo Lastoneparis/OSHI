@@ -1,0 +1,100 @@
+# ==============================================================================
+# Android — the tests that were already written, finally run
+# ==============================================================================
+#
+# WHAT THIS FIXES: on 2026-09-13 an audit of the whole tree found that Android carried
+# every defect the other platforms had, and one they did not — **no CI at all**. The only
+# workflows in the repository built the desktop. Meanwhile the Android tree already had
+# **1451 unit tests across 104 files**, none of which ran unless a person remembered to
+# type the command.
+#
+# That is the expensive kind of gap: the tests exist, so the cost was already paid; what
+# was missing was anything that made a red one stop a change. Three of the defects that
+# audit found had been sitting in Android for weeks precisely because nothing looked.
+#
+# WHY IT LIVES IN THE PUBLIC REPOSITORY, like `desktop-build`: GitHub Actions is metered
+# on private repositories and free on public ones, and the account's spending limit stops
+# jobs in `OSHI-private` from starting. The source is cloned at build time over a
+# READ-ONLY deploy key that reaches that one repository and is revocable in one click.
+# Nothing is published from here; this workflow only reports.
+
+name: android-ci
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or tag of OSHI-private to test'
+        required: true
+        default: 'fix/call-alias-media-startchat'
+  schedule:
+    # Nightly. A branch that nobody dispatches is a branch nobody is checking, and the
+    # whole point of this file is to stop relying on somebody remembering.
+    - cron: '43 2 * * *'
+
+jobs:
+  test:
+    name: unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the private source over the read-only deploy key
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+          printf '%s\n' "${{ secrets.OSHI_PRIVATE_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          git clone --depth 1 --branch "${{ github.event.inputs.ref || 'fix/call-alias-media-startchat' }}" \
+            git@github.com:Lastoneparis/OSHI-private.git src
+          # The key has done its only job. Removing it here means no later step can carry
+          # it off the runner.
+          rm -f ~/.ssh/id_ed25519
+          echo "cloned $(git -C src rev-parse --short HEAD)"
+
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      # No local.properties and no keystore.properties are written, deliberately. The
+      # build reads both behind `if (file.exists())` and falls back to env vars or empty
+      # strings, and `sdk.dir` is unnecessary when ANDROID_HOME is set — which it is on
+      # this image. If a future change makes either mandatory, this job goes red, which is
+      # the correct outcome: a build that only works on one laptop is the thing to catch.
+      - name: Unit tests
+        working-directory: src/OSHI-Android
+        shell: bash
+        run: ./gradlew testDebugUnitTest --no-daemon
+
+      # A SKIPPED TEST LOOKS LIKE A PASSING ONE in a summary line. This prints the split
+      # and names what did not run, the same way the desktop workflow does — a lesson from
+      # a green run that turned out to be skipping the tests that mattered.
+      - name: Say how many tests actually ran
+        if: always()
+        working-directory: src/OSHI-Android
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import glob, xml.etree.ElementTree as ET
+          t = f = s = 0
+          names = []
+          for x in glob.glob("app/build/test-results/**/*.xml", recursive=True):
+              r = ET.parse(x).getroot()
+              t += int(r.get("tests", 0)); s += int(r.get("skipped", 0))
+              f += int(r.get("failures", 0)) + int(r.get("errors", 0))
+              for c in r.iter("testcase"):
+                  if c.find("skipped") is not None:
+                      names.append("%s.%s" % (c.get("classname","?").split(".")[-1], c.get("name")))
+          print("tests %d  ran %d  skipped %d  failed %d" % (t, t - s, s, f))
+          for n in sorted(names):
+              print("  skipped: %s" % n)
+          if t == 0:
+              raise SystemExit("::error::no test results were produced — the suite did not run")
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-test-results
+          path: src/OSHI-Android/app/build/reports/tests/
+          if-no-files-found: warn
+          retention-days: 5
