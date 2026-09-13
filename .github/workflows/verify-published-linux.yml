@@ -145,3 +145,59 @@ jobs:
           dnf -y remove oshi-desktop
           if [ -n "$bin" ] && [ -e "$bin" ]; then echo "::error::removal left $bin behind"; exit 1; fi
           echo "downloaded, installed, ran and removed cleanly."
+
+  rpm-hostile:
+    name: .rpm on a host with no menu directory
+    runs-on: ubuntu-latest
+    container: fedora:41
+    steps:
+      # WHY THIS JOB EXISTS SEPARATELY FROM `rpm`.
+      #
+      # The .deb was found to fail its INSTALL on any host where `xdg-desktop-menu` has no
+      # writable menu directory — a server, a container, WSL without a desktop — because
+      # jpackage's postinst runs it under `set -e`. The .rpm carries the identical two
+      # calls in its scriptlets, but rpm and dpkg do not treat a failing scriptlet the
+      # same way: dpkg leaves the package half-configured, rpm usually only warns.
+      #
+      # "Usually" is not a thing to ship on. This job removes the menu directories and
+      # installs anyway, so the difference is MEASURED rather than reasoned about. If it
+      # passes, the .deb override was the whole fix and the .rpm needs none — which is
+      # worth knowing before writing a full template.spec override, since getting that
+      # wrong breaks the package outright.
+      - name: Install with the menu directories taken away
+        shell: bash
+        run: |
+          set -euo pipefail
+          dnf -y -q install curl coreutils findutils grep >/dev/null
+          base='${{ github.event.inputs.base }}'; base="${base:-https://oshi-messenger.com/downloads}"
+          curl -fsSL "$base/oshi-desktop.x86_64.rpm" -o oshi.rpm
+
+          # The hostile condition, made real: no writable menu directory anywhere
+          # xdg-desktop-menu would look, and XDG_DATA_DIRS pointing at a read-only path.
+          rm -rf /usr/share/applications /usr/local/share/applications ~/.local/share/applications
+          mkdir -p /ro/applications && chmod 555 /ro
+          export XDG_DATA_DIRS=/ro
+          echo "menu dirs removed; XDG_DATA_DIRS=$XDG_DATA_DIRS"
+          command -v xdg-desktop-menu >/dev/null && echo "xdg-desktop-menu IS installed" \
+            || echo "xdg-desktop-menu absent (the scriptlet will skip, not fail)"
+
+          dnf -y install ./oshi.rpm
+          rpm -q oshi-desktop
+          # `rpm -V` would report modified files; what matters here is that the package is
+          # INSTALLED and its launcher runs, which is what a user needs.
+          bin="$(rpm -ql oshi-desktop | grep -E '/bin/[A-Za-z-]*OSHI[A-Za-z-]*$' | head -1)"
+          [ -n "$bin" ] || { echo "::error::no launcher installed"; exit 1; }
+          out="$("$bin" --probe 2>&1 || true)"
+          echo "$out" | grep -q 'known-answer vectors' || {
+            echo "::error::the installed binary did not reproduce iOS's crypto vectors"; exit 1; }
+          echo "the .rpm installs and runs with no menu directory at all."
+
+      - name: And it can still be removed
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          bin="$(rpm -ql oshi-desktop 2>/dev/null | grep -E '/bin/[A-Za-z-]*OSHI[A-Za-z-]*$' | head -1 || true)"
+          dnf -y remove oshi-desktop
+          if [ -n "$bin" ] && [ -e "$bin" ]; then echo "::error::removal left $bin behind"; exit 1; fi
+          echo "removed cleanly."
