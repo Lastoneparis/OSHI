@@ -201,9 +201,15 @@ jobs:
         if: always()
         shell: bash
         run: |
+          # `set +e` EXPLICITLY. GitHub invokes `shell: bash` as `bash -e -o pipefail`,
+          # so a `set -uo pipefail` at the top does NOT clear the -e it was started with —
+          # dnf's non-zero exit killed the step before any of the diagnostics below could
+          # run, which is exactly the failure this step was written to distinguish.
+          set +e
           set -uo pipefail
           bin="$(rpm -ql oshi-desktop 2>/dev/null | grep -E '/bin/[A-Za-z-]*OSHI[A-Za-z-]*$' | head -1 || true)"
-          dnf -y remove oshi-desktop; rc=$?
+          dnf -y remove oshi-desktop
+          rc=$?
           echo "dnf remove exit code : $rc"
           if rpm -q oshi-desktop >/dev/null 2>&1; then
             echo "::error::the package is STILL INSTALLED after removal — a user cannot get rid of it"
