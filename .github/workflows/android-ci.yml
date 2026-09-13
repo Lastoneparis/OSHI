@@ -55,11 +55,26 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
 
-      # No local.properties and no keystore.properties are written, deliberately. The
-      # build reads both behind `if (file.exists())` and falls back to env vars or empty
-      # strings, and `sdk.dir` is unnecessary when ANDROID_HOME is set — which it is on
-      # this image. If a future change makes either mandatory, this job goes red, which is
-      # the correct outcome: a build that only works on one laptop is the thing to catch.
+      # THIS JOB'S FIRST RUN EARNED ITS KEEP HERE. `local.properties` was COMMITTED, with
+      # `sdk.dir=/Users/HUGOMORICEAU/Library/Android/sdk` — a path that exists on exactly
+      # one laptop — and Gradle failed with "Directory does not exist". The file's own
+      # first line says it must not be checked in. It has since been untracked; this step
+      # writes a correct one so the job never depends on whatever a checkout happens to
+      # carry.
+      #
+      # `keystore.properties` is still NOT written: the build reads it behind
+      # `if (file.exists())` and falls back to env vars or empty strings. If that ever
+      # becomes mandatory this job goes red, which is the right outcome — a build that
+      # only works on one machine is precisely what this exists to catch.
+      - name: Point Gradle at this runner's SDK
+        working-directory: src/OSHI-Android
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${ANDROID_HOME:?ANDROID_HOME is not set on this image}"
+          printf 'sdk.dir=%s\n' "$ANDROID_HOME" > local.properties
+          echo "sdk.dir=$ANDROID_HOME"
+
       - name: Unit tests
         working-directory: src/OSHI-Android
         shell: bash
