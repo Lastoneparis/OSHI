@@ -1,0 +1,147 @@
+# ==============================================================================
+# Install the Linux packages people actually download.
+# ==============================================================================
+#
+# The companion to `verify-published-installer`, which does this for Windows. Same
+# principle and the same reason: `desktop-build` proves a package can be BUILT, not that
+# the file on the website installs. Nothing here builds anything.
+#
+# Two jobs because .deb and .rpm are different package managers with different failure
+# modes, and a single job that installed only one of them would leave the other exactly as
+# unproven as the .exe was before this pair of workflows existed.
+#
+# The .rpm runs inside a Fedora container rather than on the Ubuntu runner: `rpm -i` on a
+# Debian host can appear to succeed while installing into a world that no user has.
+
+name: verify-published-linux
+
+on:
+  workflow_dispatch:
+    inputs:
+      base:
+        description: 'Base URL to download from'
+        required: true
+        default: 'https://oshi-messenger.com/downloads'
+      page:
+        description: 'Page whose published SHA-256 sums must contain each file hash'
+        required: true
+        default: 'https://oshi-messenger.com/desktop'
+  schedule:
+    - cron: '31 6 * * 1'
+
+jobs:
+  deb:
+    name: .deb on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download exactly what a visitor downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='${{ github.event.inputs.base }}'; base="${base:-https://oshi-messenger.com/downloads}"
+          curl -fsSL "$base/oshi-desktop-amd64.deb" -o oshi.deb
+          ls -l oshi.deb
+          [ "$(stat -c%s oshi.deb)" -gt 20000000 ] || { echo "::error::too small to be the package"; exit 1; }
+
+      - name: The bytes match a SHA-256 the download page publishes
+        shell: bash
+        run: |
+          set -euo pipefail
+          page='${{ github.event.inputs.page }}'; page="${page:-https://oshi-messenger.com/desktop}"
+          got="$(sha256sum oshi.deb | cut -d' ' -f1)"
+          echo "downloaded sha256 : $got"
+          # `|| true` on every grep whose empty result is a legitimate outcome: grep exits 1
+          # when it matches nothing and `pipefail` would abort the step on the clean path.
+          published="$(curl -fsSL "$page" | grep -oiE '\b[0-9a-f]{64}\b' | tr 'A-F' 'a-f' | sort -u || true)"
+          echo "page publishes $(printf '%s\n' "$published" | grep -c . || true) sha256 value(s)"
+          printf '%s\n' "$published" | grep -qx "$got" || {
+            echo "::error::the downloaded file's hash is NOT among the sums the page publishes"
+            printf '  page: %s\n' $published; exit 1; }
+          echo "the served bytes match what the page claims."
+
+      - name: Install it
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y ./oshi.deb
+          dpkg -s oshi-desktop 2>/dev/null | grep -E '^(Package|Version|Status|Installed-Size):' || true
+
+      - name: Run what the package manager put on disk
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Where the PACKAGE put it, not where the build did — `dpkg -L` is the only
+          # authority on that, and assuming /opt is how this step would quietly go back to
+          # testing an assumption instead of an installation.
+          bin="$(dpkg -L oshi-desktop | grep -E '/bin/[A-Za-z-]*OSHI[A-Za-z-]*$' | head -1 || true)"
+          if [ -z "$bin" ]; then
+            echo "files the package claims to have installed:"; dpkg -L oshi-desktop | head -40
+            echo "::error::the package installed no OSHI launcher"; exit 1
+          fi
+          echo "launcher : $bin"
+          # A desktop entry is what makes it appear in the applications menu; without one a
+          # user has an installed app they cannot start the way they start everything else.
+          dpkg -L oshi-desktop | grep -E '\.desktop$' || { echo "::error::no .desktop entry"; exit 1; }
+          out="$("$bin" --probe 2>&1 || true)"
+          echo "$out" | head -30
+          echo "$out" | grep -q 'known-answer vectors' || {
+            echo "::error::the installed binary did not reproduce iOS's crypto vectors"; exit 1; }
+
+      - name: Remove it, and leave nothing behind
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          bin="$(dpkg -L oshi-desktop 2>/dev/null | grep -E '/bin/[A-Za-z-]*OSHI[A-Za-z-]*$' | head -1 || true)"
+          sudo apt-get remove -y oshi-desktop
+          if [ -n "$bin" ] && [ -e "$bin" ]; then echo "::error::removal left $bin behind"; exit 1; fi
+          echo "downloaded, installed, ran and removed cleanly."
+
+  rpm:
+    name: .rpm in Fedora
+    runs-on: ubuntu-latest
+    container: fedora:41
+    steps:
+      - name: Download, check the published hash, install
+        shell: bash
+        run: |
+          set -euo pipefail
+          dnf -y -q install curl coreutils findutils grep >/dev/null
+          base='${{ github.event.inputs.base }}'; base="${base:-https://oshi-messenger.com/downloads}"
+          page='${{ github.event.inputs.page }}'; page="${page:-https://oshi-messenger.com/desktop}"
+          curl -fsSL "$base/oshi-desktop.x86_64.rpm" -o oshi.rpm
+          got="$(sha256sum oshi.rpm | cut -d' ' -f1)"
+          echo "downloaded sha256 : $got"
+          published="$(curl -fsSL "$page" | grep -oiE '\b[0-9a-f]{64}\b' | tr 'A-F' 'a-f' | sort -u || true)"
+          printf '%s\n' "$published" | grep -qx "$got" || {
+            echo "::error::the .rpm hash is NOT among the sums the page publishes"; exit 1; }
+          echo "the served bytes match what the page claims."
+          dnf -y install ./oshi.rpm
+          rpm -q oshi-desktop
+
+      - name: Run what the package manager put on disk
+        shell: bash
+        run: |
+          set -euo pipefail
+          bin="$(rpm -ql oshi-desktop | grep -E '/bin/[A-Za-z-]*OSHI[A-Za-z-]*$' | head -1 || true)"
+          if [ -z "$bin" ]; then
+            rpm -ql oshi-desktop | head -40
+            echo "::error::the package installed no OSHI launcher"; exit 1
+          fi
+          echo "launcher : $bin"
+          rpm -ql oshi-desktop | grep -E '\.desktop$' || { echo "::error::no .desktop entry"; exit 1; }
+          out="$("$bin" --probe 2>&1 || true)"
+          echo "$out" | head -30
+          echo "$out" | grep -q 'known-answer vectors' || {
+            echo "::error::the installed binary did not reproduce iOS's crypto vectors"; exit 1; }
+
+      - name: Remove it
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          bin="$(rpm -ql oshi-desktop 2>/dev/null | grep -E '/bin/[A-Za-z-]*OSHI[A-Za-z-]*$' | head -1 || true)"
+          dnf -y remove oshi-desktop
+          if [ -n "$bin" ] && [ -e "$bin" ]; then echo "::error::removal left $bin behind"; exit 1; fi
+          echo "downloaded, installed, ran and removed cleanly."
