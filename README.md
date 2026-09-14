@@ -38,10 +38,10 @@ Everything else — the encryption, the absence of a phone number, the disappear
 messages — exists in other apps too. This one does not.
 
 <p align="center">
-  <img src="assets/screenshots/mesh.png" width="200" alt="Mesh network view showing nearby peers"/>
-  <img src="assets/screenshots/chat.png" width="200" alt="An encrypted conversation"/>
-  <img src="assets/screenshots/voicecall.png" width="200" alt="Encrypted voice call"/>
-  <img src="assets/screenshots/qr.png" width="200" alt="Adding a contact by QR code"/>
+  <img src="assets/screenshots/messages.png" width="200" alt="The conversation list"/>
+  <img src="assets/screenshots/chat.png" width="200" alt="An end-to-end encrypted conversation"/>
+  <img src="assets/screenshots/mesh.png" width="200" alt="Public groups discovered over the Bluetooth and Wi-Fi mesh, with no internet"/>
+  <img src="assets/screenshots/map.png" width="200" alt="The offline map, usable with no network"/>
 </p>
 
 ---
