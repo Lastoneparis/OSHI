@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="OSHI" width="120"/>
+  <img src="assets/logo.png" alt="OSHI Mesh Messenger" width="120"/>
 </p>
 
 <h1 align="center">OSHI</h1>
