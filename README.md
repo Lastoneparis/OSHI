@@ -5,8 +5,8 @@
 <h1 align="center">OSHI</h1>
 
 <p align="center">
-  <b>Send a message with no internet, no SIM card, and no account.</b><br>
-  Phones relay for each other over Bluetooth. Everything is end-to-end encrypted.
+  <b>Send a message with or without internet, no SIM card, and no account.</b><br>
+  Phones relay for each other over Internet, Lora, wifi or Bluetooth. Everything is end-to-end encrypted.
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 
 Turn on airplane mode. Open OSHI. **Your messages still send.**
 
-Nearby phones running OSHI form a Bluetooth mesh and pass encrypted packets for
+Nearby phones running OSHI form a wifi or Bluetooth mesh and pass encrypted packets for
 each other, hop by hop, until one of them reaches the recipient — or reaches the
 internet. No cell tower, no Wi-Fi, no server in between.
 
