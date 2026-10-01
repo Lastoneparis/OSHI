@@ -20,8 +20,15 @@ Verify the fingerprint against this file over a second channel before you trust 
 
 ### What we want looked at
 
-The transport and the cryptography are published here and are identical to the
-shipping build. The areas where a finding would matter most, in order:
+This repository is a reference subset of the OSHI source, published for audit. It
+may lag the shipping build, and some components are not mirrored here — notably
+`VideoCallManager.swift`, which performs the AES-256-GCM encryption of every video
+frame before it is wrapped in the `0xF1` packet and handed to `VoiceCallManager`
+(so a reader of `VoiceCallManager.swift` alone will see already-encrypted bytes,
+not plaintext). Recent mesh hardening (cleartext-sidecar stripping on the
+cross-platform path) is also in the shipping build. Please report against the
+latest shipping version and we will confirm the exact code. The areas where a
+finding would matter most, in order:
 
 1. `src/OSHICryptoV2.swift` and `src/DoubleRatchet.swift` — X3DH, the ratchet
    state machine, AEAD and header binding, the post-quantum KEM layer.
@@ -42,8 +49,12 @@ shipping build. The areas where a finding would matter most, in order:
 
 ### Bug bounty
 
-USD 500 critical, 250 high, 100 medium, paid from a solo developer's own pocket.
-Small, and honest about being small.
+The bounty is currently **unfunded**. OSHI is built by one self-taught developer
+with no outside funding, so we cannot promise cash rewards right now, and we will
+not publish a reward schedule we cannot honour. What we do offer: a real technical
+answer, a fix with regression tests, and credit by name (or anonymity). If funding
+becomes available, rewards return and past reporters are paid retroactively,
+oldest first.
 
 ### Out of scope
 
@@ -178,10 +189,9 @@ If you find a vulnerability:
 
 ### Bug Bounty
 
-We offer rewards for critical vulnerabilities:
-- Critical (RCE, key extraction): Up to $5,000
-- High (encryption bypass): Up to $2,000
-- Medium (information leak): Up to $500
+The bounty is currently **unfunded** — see "Bug bounty" above. Earlier revisions of
+this document advertised cash tiers; those were a promise we could not keep and
+have been removed rather than left standing.
 
 ## 📜 Cryptographic Code Samples
 
