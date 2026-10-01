@@ -32,7 +32,16 @@ class MeshNetworkManager: NSObject, ObservableObject {
     // 🔧 NEW: Map peer public keys to MCPeerID for call routing
     private var peerPublicKeys: [String: MCPeerID] = [:]  // publicKey -> peerID
     private var peerIDToPublicKey: [MCPeerID: String] = [:]  // peerID -> publicKey
-    
+
+    // 🔐 PEER AUTH (proof-of-possession, additive/advisory — see MeshPeerAuth.swift).
+    // `verifiedPeerKeys` holds the public keys of peers that answered a DH
+    // challenge, proving they hold that key's private half. It is a SIGNAL only
+    // (a UI could show a "verified nearby peer" badge); delivery/routing never
+    // consult it, so an unverified peer is still served exactly as before.
+    @Published private(set) var verifiedPeerKeys: Set<String> = []
+    // Nonces we sent and are awaiting a response for, per peer. Cleared on match.
+    private var pendingChallengeNonces: [MCPeerID: Data] = [:]
+
     // 🔧 NEW: Connection retry management
     private var connectionRetries: [MCPeerID: Int] = [:]
     private let maxConnectionRetries = 5  // 🔧 Increased from 3 to 5
@@ -507,11 +516,17 @@ class MeshNetworkManager: NSObject, ObservableObject {
             mediaFileName: fileName,
             isViewOnce: isViewOnce
         )
+        // __VIDEO_NOTE_2026_09_24__ spec §2.E — Android mesh media payload.
+        var routed = secureMessage
+        if typeEnum == .video {
+            routed.applyVideoNote(VideoNoteMetadata.parse(mediaPayload, isVideo: true))
+        }
+        let deliveredMessage = routed
         DispatchQueue.main.async {
             NotificationCenter.default.post(
                 name: NSNotification.Name("MeshMessageReceived"),
                 object: nil,
-                userInfo: ["message": secureMessage]
+                userInfo: ["message": deliveredMessage]
             )
         }
         OshiLog.mesh.info("   ✅ Media (\(mediaTypeStr)) delivered to MessageManager: \(fileName) (\(fileSize) bytes)")
@@ -696,8 +711,15 @@ class MeshNetworkManager: NSObject, ObservableObject {
         lastHealthCheck = Date()
         
         let wasMeshAvailable = meshAvailable
-        meshAvailable = !connectedPeers.isEmpty
-        
+        // 🔴 FLICKER FIX: publish ONLY on an actual change (see the same note in
+        // MessageManager.checkMeshAvailability). This runs every 10s and
+        // `@Published` publishes on every assignment, so an unconditional write
+        // re-laid the observing nav bars (MessagesListView) on a timer.
+        let newMeshAvailable = !connectedPeers.isEmpty
+        if newMeshAvailable != wasMeshAvailable {
+            meshAvailable = newMeshAvailable
+        }
+
         if wasMeshAvailable && !meshAvailable {
             OshiLog.mesh.info("\(NSLocalizedString("mesh.log.network_lost", comment: "Log: Mesh network lost"))")
             NotificationCenter.default.post(name: .meshNetworkLost, object: nil)
@@ -1091,31 +1113,37 @@ class MeshNetworkManager: NSObject, ObservableObject {
         if CrossPlatformMesh.shared.isPeerLiveConnected(recipientAddress) {
             OshiLog.mesh.info("🌐 Recipient live via CrossPlatformMesh (iOS ↔ Android)")
 
-            // Check if this is a location message
-            if let content = message.plaintextContent, content.hasPrefix("📍LOCATION📍") {
-                OshiLog.mesh.info("   📍 Sending as LOCATION_MESSAGE")
-                if let locationData = content.dropFirst("📍LOCATION📍".count).data(using: .utf8),
-                   CrossPlatformMesh.shared.sendLocation(to: recipientAddress, locationData: locationData) {
-                    OshiLog.mesh.info("✅ Location delivered via CrossPlatformMesh")
-                    return
-                }
-            }
-            // Check if this is a media message
-            else if let mediaData = message.mediaAttachment, let mediaType = message.mediaType {
-                OshiLog.mesh.info("   🖼️ Sending as MEDIA_MESSAGE (type: \(mediaType.rawValue))")
-                let fileName = message.mediaFileName ?? "media_\(Date().timeIntervalSince1970)"
-                if CrossPlatformMesh.shared.sendMedia(
-                    to: recipientAddress,
-                    mediaData: mediaData,
-                    mediaType: mediaType.rawValue,
-                    fileName: fileName
-                ) {
-                    OshiLog.mesh.info("✅ Media delivered via CrossPlatformMesh")
-                    return
-                }
-            }
-            // Regular text message
-            else if let messageData = try? JSONEncoder().encode(message),
+            // [Audit F-mesh#1 2026-09-10] The location special-case that sent the
+            // raw GPS JSON in the clear (`sendLocation`) is REMOVED. A location is
+            // a normal ratchet-encrypted message whose plaintext is
+            // `📍LOCATION📍{json}`; it now falls through to the encrypted text
+            // branch below (`meshWireSafe()` → ciphertext), exactly like the online
+            // and MultipeerConnectivity paths, and the receiver renders it from the
+            // DECRYPTED prefix (iOS ChatView, Android MessageSanitizer). We still
+            // ACCEPT a raw LOCATION_MESSAGE on receive, so older peers are unaffected.
+            //
+            // [Audit F-mesh#1 2026-09-10, re-applied surgically] The raw `sendMedia`
+            // (base64 media in the clear) on this DIRECT-bridge path is removed.
+            // Media is already inline-encrypted in `encryptedContent`; it now rides
+            // the encrypted branch below (`meshWireSafe()` → ciphertext) and the
+            // receiver rebuilds it from the decrypted content into
+            // Documents/MediaMessages/ (validated on device). This affects ONLY the
+            // direct, live-connected bridge send — the `carriesMedia` guard on the
+            // Multipeer/broadcast path and the VPS→IPFS fallback are untouched, so an
+            // OFFLINE recipient still gets media via store-and-forward.
+            //
+            // Regular message (text, media, and location) — encrypted wire copy
+            //
+            // [Audit F-mesh#2 2026-09-10] `meshWireSafe()` — NOT the raw `message`.
+            // The cross-platform bridge encoded the FULL SecureMessage here, so
+            // `plaintextContent` (the cleartext body) rode the wire beside the
+            // ciphertext on the iOS→Android path — exactly the leak the MPC branch
+            // below already fixed. No receiver needs it: iOS decodes the
+            // SecureMessage and ratchet-decrypts `encryptedContent`
+            // (`handleCrossPlatformTextMessage`), and Android decrypts the payload
+            // via `decryptIOSMessage` with no plaintext fallback. Stripping it is a
+            // strict subset of what was sent, so delivery is unchanged.
+            if let messageData = try? JSONEncoder().encode(message.meshWireSafe()),
                     CrossPlatformMesh.shared.relayMessage(messageData, to: recipientAddress) {
                 OshiLog.mesh.info("✅ Message delivered via CrossPlatformMesh")
                 return
@@ -1203,17 +1231,9 @@ class MeshNetworkManager: NSObject, ObservableObject {
             OshiLog.mesh.info("🌐 Attempting CrossPlatformMesh broadcast to Android peers...")
 
             for androidPeer in CrossPlatformMesh.shared.getAndroidPeers() {
-                // Handle location messages
-                if let content = message.plaintextContent, content.hasPrefix("📍LOCATION📍") {
-                    if let locationData = content.dropFirst("📍LOCATION📍".count).data(using: .utf8) {
-                        if CrossPlatformMesh.shared.sendLocation(to: androidPeer.publicKey, locationData: locationData) {
-                            OshiLog.mesh.info("   → Location delivered to Android peer: \(androidPeer.displayName)")
-                            sentSuccessfully = true
-                        }
-                        continue
-                    }
-                }
-
+                // [Audit F-mesh#1 2026-09-10] Raw-location send removed here too;
+                // location now rides the encrypted "Regular message" branch below.
+                //
                 // Handle media messages
                 if let mediaData = message.mediaAttachment, let mediaType = message.mediaType {
                     let fileName = message.mediaFileName ?? "media_\(Date().timeIntervalSince1970)"
@@ -1229,8 +1249,11 @@ class MeshNetworkManager: NSObject, ObservableObject {
                     continue
                 }
 
-                // Regular message
-                if let messageData = try? JSONEncoder().encode(message),
+                // Regular message (text, and now location) — encrypted wire copy.
+                // [Audit F-mesh#2 2026-09-10] `meshWireSafe()`, not the raw message:
+                // this broadcast-to-Android loop leaked `plaintextContent` too. The
+                // peer decrypts `encryptedContent`, same as every other path.
+                if let messageData = try? JSONEncoder().encode(message.meshWireSafe()),
                    CrossPlatformMesh.shared.relayMessage(messageData, to: androidPeer.publicKey) {
                     OshiLog.mesh.info("   → Delivered to Android peer: \(androidPeer.displayName)")
                     sentSuccessfully = true
@@ -1403,9 +1426,12 @@ class MeshNetworkManager: NSObject, ObservableObject {
         // See NotificationCenter+MainThread in NotificationManager.swift.
         NotificationCenter.default.addMainThreadObserver(
             forName: NSNotification.Name("BroadcastGroupUpdate")
-        ) { [weak self] notification in
-            guard let groupData = notification.userInfo?["groupData"] as? Data else { return }
-            self?.broadcastGroupUpdate(groupData)
+        ) { notification in
+            // __GROUP_E2E_V2_2026_09_23__ Refused: group state is sent ONLY as v2 pairwise
+            // messages (docs/GROUP_E2E_V2_SPEC.md rule zero). This used to push the full group
+            // JSON to EVERY connected mesh peer, member or not (audit M3).
+            _ = notification
+            OshiLog.mesh.info("🛑 BroadcastGroupUpdate refused — group state is v2-only")
         }
         
         NotificationCenter.default.addMainThreadObserver(
@@ -1416,8 +1442,10 @@ class MeshNetworkManager: NSObject, ObservableObject {
             // roster, never to "whoever happens to be connected". Posters supply
             // `memberKeys`; a poster that omits it gets the old fan-out-to-all
             // behaviour, which `broadcastGroupMessage` logs as a warning.
-            let memberKeys = notification.userInfo?["memberKeys"] as? [String]
-            self?.broadcastGroupMessage(messageData, toMemberKeys: memberKeys)
+            // __GROUP_E2E_V2_2026_09_23__ Refused: group content is v2-only (spec rule zero);
+            // the MPC payload was the bare GroupMessage JSON. No app path posts this any more.
+            _ = (self, messageData)
+            OshiLog.mesh.info("🛑 BroadcastGroupMessage refused — group content is v2-only")
         }
         
         NotificationCenter.default.addMainThreadObserver(
@@ -1719,7 +1747,20 @@ extension MeshNetworkManager: MCSessionDelegate {
             handlePublicKeyExchange(data, from: peerID)
             return
         }
-        
+
+        // 🔐 PEER AUTH proof-of-possession packets (additive/advisory, see
+        // MeshPeerAuth.swift). Older iOS builds never emit these and, receiving
+        // one, fall through to the RelayMessage decode below which simply fails
+        // and drops it — so this is safe to add one-sided.
+        if isPeerChallengePacket(data) {
+            handlePeerChallenge(data, from: peerID)
+            return
+        }
+        if isPeerChallengeResponsePacket(data) {
+            handlePeerChallengeResponse(data, from: peerID)
+            return
+        }
+
         // Check for call packets (priority handling)
         if isCallPacket(data) {
             handleCallPacket(data, from: peerID)
@@ -2590,7 +2631,106 @@ extension MeshNetworkManager {
                     }
                 }
             }
+
+            // 🔐 PEER AUTH: now that we hold this peer's announced key, challenge
+            // them to prove possession of its private half (additive/advisory).
+            self?.sendPeerChallenge(to: peerID, announcedKey: publicKey)
         }
+    }
+
+    // MARK: - Peer authentication (proof-of-possession, see MeshPeerAuth.swift)
+
+    // Wire format (all binary MPC packets, mirroring the 0xEE 0xEE key-exchange frame):
+    //   CHALLENGE          [0xEE, 0xC0] ‖ nonce(32)
+    //   CHALLENGE RESPONSE [0xEE, 0xC1] ‖ nonce(32) ‖ tag(32)
+    // The nonce is echoed in the response so the challenger can match it to the
+    // pending challenge for that peer. The tag is HMAC-SHA256(DH(priv,pub), nonce).
+    private static let peerChallengeMagic: [UInt8] = [0xEE, 0xC0]
+    private static let peerChallengeResponseMagic: [UInt8] = [0xEE, 0xC1]
+
+    private func isPeerChallengePacket(_ data: Data) -> Bool {
+        return data.count == 2 + MeshPeerAuth.nonceLength &&
+               data[data.startIndex] == 0xEE && data[data.startIndex + 1] == 0xC0
+    }
+
+    private func isPeerChallengeResponsePacket(_ data: Data) -> Bool {
+        return data.count == 2 + MeshPeerAuth.nonceLength + MeshPeerAuth.tagLength &&
+               data[data.startIndex] == 0xEE && data[data.startIndex + 1] == 0xC1
+    }
+
+    /// Send a fresh DH challenge to a peer whose key we just learned.
+    private func sendPeerChallenge(to peerID: MCPeerID, announcedKey: String) {
+        guard let session = sessions.first(where: { $0.value.connectedPeers.contains(peerID) })?.value else {
+            return
+        }
+        let nonce = MeshPeerAuth.makeNonce()
+        pendingChallengeNonces[peerID] = nonce
+        var packet = Data(MeshNetworkManager.peerChallengeMagic)
+        packet.append(nonce)
+        do {
+            try session.send(packet, toPeers: [peerID], with: .reliable)
+            OshiLog.mesh.info("🔐 MeshNetwork: Sent peer-auth challenge to \(peerID.displayName)")
+        } catch {
+            // Advisory only — a failed challenge never blocks delivery.
+            OshiLog.mesh.info("🔐 MeshNetwork: Failed to send peer-auth challenge: \(error)")
+        }
+    }
+
+    /// A peer challenged us: prove we hold our private key by returning
+    /// HMAC(DH(our_private, their_announced_key), nonce). If we can't (no
+    /// identity, unknown peer key) we simply stay silent — never an error.
+    private func handlePeerChallenge(_ data: Data, from peerID: MCPeerID) {
+        let nonce = data.suffix(from: data.startIndex + 2)  // strip 2 magic bytes
+        guard nonce.count == MeshPeerAuth.nonceLength else { return }
+        guard let peerKey = peerIDToPublicKey[peerID],
+              let sharedSecret = try? MessageManager.sharedIdentityManager?.computeSharedSecret(with: peerKey),
+              let session = sessions.first(where: { $0.value.connectedPeers.contains(peerID) })?.value else {
+            OshiLog.mesh.info("🔐 MeshNetwork: Cannot answer peer-auth challenge from \(peerID.displayName) (no shared secret) — skipping (advisory)")
+            return
+        }
+        let tag = MeshPeerAuth.tag(sharedSecret: sharedSecret, nonce: Data(nonce))
+        var packet = Data(MeshNetworkManager.peerChallengeResponseMagic)
+        packet.append(Data(nonce))
+        packet.append(tag)
+        do {
+            try session.send(packet, toPeers: [peerID], with: .reliable)
+            OshiLog.mesh.info("🔐 MeshNetwork: Answered peer-auth challenge from \(peerID.displayName)")
+        } catch {
+            OshiLog.mesh.info("🔐 MeshNetwork: Failed to answer peer-auth challenge: \(error)")
+        }
+    }
+
+    /// A peer answered our challenge. Recompute the expected tag from
+    /// DH(our_private, their_announced_key) and, on a constant-time match, mark
+    /// the peer verified. On mismatch we do NOT drop the peer — verification is
+    /// advisory; the mismatch could just be an older/other-platform peer.
+    private func handlePeerChallengeResponse(_ data: Data, from peerID: MCPeerID) {
+        let body = data.suffix(from: data.startIndex + 2)  // strip 2 magic bytes
+        guard body.count == MeshPeerAuth.nonceLength + MeshPeerAuth.tagLength else { return }
+        let nonce = body.prefix(MeshPeerAuth.nonceLength)
+        let tag = body.suffix(MeshPeerAuth.tagLength)
+        guard let pending = pendingChallengeNonces[peerID], MeshPeerAuth.constantTimeEquals(Data(nonce), pending) else {
+            OshiLog.mesh.info("🔐 MeshNetwork: Peer-auth response nonce mismatch from \(peerID.displayName) — ignoring")
+            return
+        }
+        guard let peerKey = peerIDToPublicKey[peerID],
+              let sharedSecret = try? MessageManager.sharedIdentityManager?.computeSharedSecret(with: peerKey) else {
+            return
+        }
+        if MeshPeerAuth.verify(tag: Data(tag), sharedSecret: sharedSecret, nonce: Data(nonce)) {
+            pendingChallengeNonces.removeValue(forKey: peerID)
+            DispatchQueue.main.async { [weak self] in
+                self?.verifiedPeerKeys.insert(peerKey)
+                OshiLog.mesh.info("✅ MeshNetwork: Peer \(peerID.displayName) VERIFIED possession of \(peerKey.prefix(16))…")
+            }
+        } else {
+            OshiLog.mesh.info("🔐 MeshNetwork: Peer-auth tag mismatch from \(peerID.displayName) — staying unverified (advisory, delivery unaffected)")
+        }
+    }
+
+    /// Advisory: has this peer (by public key) proven possession of its key?
+    func isPeerVerified(_ publicKey: String) -> Bool {
+        return verifiedPeerKeys.contains(publicKey)
     }
     
     /// Check if data is a key exchange packet
