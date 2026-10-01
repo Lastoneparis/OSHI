@@ -74,7 +74,37 @@ class CrossPlatformMesh: NSObject, ObservableObject {
 
     // Relay settings
     private let maxHops = 50
-    private var seenMessageIds = Set<String>()
+    // `internal` (not `private`) only so `@testable import OSHI` can assert the
+    // eviction below — see OSHITests/MeshSeenSetTests.swift. No app code outside
+    // this file touches it.
+    var seenMessageIds = Set<String>()
+
+    /// __SEEN_SET_EVICTS_OLDEST_2026_09_12__ Insertion order for `seenMessageIds`.
+    ///
+    /// The cleanup here used to be `seenMessageIds = Set(seenMessageIds.suffix(2500))`.
+    /// `Set` is UNORDERED, so `suffix` kept 2500 ARBITRARY ids and discarded arbitrary
+    /// ones — including ids still actively in flight. Once a session had seen more than
+    /// 5000 ids (ordinary over a long session, and forceable by a peer emitting junk
+    /// ids), a genuinely re-arriving TEXT_MESSAGE/MEDIA_MESSAGE could pass the
+    /// `contains` check a second time and be delivered to the UI twice.
+    ///
+    /// MeshNetworkManager hit this exact defect and fixed it with `noteSeenMessageID`;
+    /// the fix was never ported to this file. Same shape, same reasoning.
+    var seenMessageOrder: [String] = []
+
+    let seenMessageIdsCap = 5_000
+    let seenMessageIdsKeep = 2_500
+
+    /// Single entry point so no call site can insert without recording order.
+    /// Callers must already be on `stateQueue` — every one of them is.
+    func noteSeenMessageId(_ id: String) {
+        guard seenMessageIds.insert(id).inserted else { return }
+        seenMessageOrder.append(id)
+        guard seenMessageOrder.count > seenMessageIdsCap else { return }
+        let drop = seenMessageOrder.count - seenMessageIdsKeep
+        for old in seenMessageOrder.prefix(drop) { seenMessageIds.remove(old) }
+        seenMessageOrder.removeFirst(drop)
+    }
     private var routingTable: [String: RouteInfo] = [:]  // publicKey -> route
     // FREEZE FIX: throttle the "No direct/routed path" log per recipient.
     private var lastNoRouteLogAt: [String: Date] = [:]
@@ -82,9 +112,19 @@ class CrossPlatformMesh: NSObject, ObservableObject {
     // Track connections we've already sent identity to (prevent infinite exchange loop)
     private var sentIdentityTo = Set<String>()  // publicKey set
 
+    // 🔐 PEER AUTH (proof-of-possession, additive/advisory — see MeshPeerAuth.swift).
+    // Cross-platform (iOS↔Android) DH challenge-response over the JSON/TCP wire.
+    // `verifiedPeerKeys` is a SIGNAL only; routing/delivery never consult it, so
+    // an unverified or older/Android peer is served exactly as before.
+    @Published private(set) var verifiedPeerKeys: Set<String> = []
+    // Nonces we sent and are awaiting a response for, keyed by peer public key.
+    private var pendingChallengeNonces: [String: Data] = [:]  // guarded by stateQueue
+
     // 🔧 FIX: Serial queue to protect mutable state from concurrent access
     // NWConnection/BLE callbacks run on background queues — all shared state mutations must be serialized
-    private let stateQueue = DispatchQueue(label: "com.oshi.mesh.state", qos: .userInitiated)
+    // `internal` so a test can hop onto the very queue that guards this state
+    // instead of racing it (the reset in `stop()` lands here asynchronously).
+    let stateQueue = DispatchQueue(label: "com.oshi.mesh.state", qos: .userInitiated)
 
     // Callbacks
     private var messageCallbacks: [(CrossPlatformMessage) -> Void] = []
@@ -142,7 +182,10 @@ class CrossPlatformMesh: NSObject, ObservableObject {
     // BLE managers are created lazily in start() to avoid triggering
     // the Bluetooth permission dialog at app launch.
 
-    override private init() {
+    // `internal` (like MeshNetworkManager's) so a test can hold an instance of
+    // its own rather than mutating `shared`. This init starts NOTHING: no BLE,
+    // no Bonjour, no socket — all of that happens in `start()`.
+    override init() {
         super.init()
         // Do NOT create CBCentralManager/CBPeripheralManager here.
         // Creating them triggers the Bluetooth permission dialog immediately.
@@ -255,6 +298,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
             self?.sentIdentityTo.removeAll()
             self?.routingTable.removeAll()
             self?.seenMessageIds.removeAll()
+            self?.seenMessageOrder.removeAll()   // keep the order log in step with the set
         }
 
         DispatchQueue.main.async {
@@ -682,8 +726,29 @@ class CrossPlatformMesh: NSObject, ObservableObject {
         case "IDENTITY_ANNOUNCE":
             handleIdentityAnnounce(message, from: connection)
 
+        // 🔐 PEER AUTH proof-of-possession (additive/advisory, see MeshPeerAuth.swift).
+        // Older peers on either platform never send these and, on the `default`
+        // branch below, simply log-and-ignore an unknown type — safe one-sided.
+        case "PEER_CHALLENGE":
+            handlePeerChallenge(message, connection: connection)
+
+        case "PEER_CHALLENGE_RESPONSE":
+            handlePeerChallengeResponse(message)
+
+        // 👥 GROUP_UPDATE / GROUP_MESSAGE / PUBLIC_GROUP_AD must be forwarded too.
+        // MeshNetworkManager.swift already has working handlers for all three
+        // (see its `case "PUBLIC_GROUP_AD"` / `"GROUP_UPDATE"` / `"GROUP_MESSAGE"`),
+        // but before this line they never reached it: this transport-level switch
+        // dropped them into `default:` as "Unknown message type". Android sends
+        // GROUP_UPDATE from ~10 call sites in GroupManager.kt and broadcasts
+        // PUBLIC_GROUP_AD (GroupManager.kt:1199), so every Android→iOS group join,
+        // member sync and public-group discovery was being silently discarded.
+        // Android↔Android and iOS↔iOS (MultipeerConnectivity) were never affected,
+        // which is why unit tests on either platform alone stayed green.
+        // Verify with a real cross-device test, not a unit test.
         case "TEXT_MESSAGE", "MEDIA_MESSAGE", "CALL_SIGNAL", "CALL_AUDIO", "RELAY",
-             "LOCATION_MESSAGE", "DOCUMENT_MESSAGE":
+             "LOCATION_MESSAGE", "DOCUMENT_MESSAGE",
+             "GROUP_UPDATE", "GROUP_MESSAGE", "PUBLIC_GROUP_AD":
             handleContentMessage(message, from: connection)
 
         default:
@@ -758,7 +823,112 @@ class CrossPlatformMesh: NSObject, ObservableObject {
 
             // 2-hop gossip: tell the new peer our identity (and let them re-broadcast)
             self.sendIdentityAnnounce(to: connection)
+
+            // 🔐 PEER AUTH: challenge the peer to prove possession of the key it
+            // announced (additive/advisory). Only reached for non-iOS peers here,
+            // since iOS↔iOS identity is handled by MultipeerConnectivity above.
+            self.sendPeerChallenge(to: message.senderPublicKey, connection: connection)
         }
+    }
+
+    // MARK: - Peer authentication (proof-of-possession, see MeshPeerAuth.swift)
+
+    // Wire format (JSON payload on the existing CrossPlatformMessage envelope):
+    //   PEER_CHALLENGE           payload = {"nonce":"<base64(32)>"}
+    //   PEER_CHALLENGE_RESPONSE  payload = {"nonce":"<base64(32)>","tag":"<base64(32)>"}
+    // The challenger's identity is message.senderPublicKey; the responder computes
+    // tag = HMAC-SHA256(DH(their_private, challenger_public), nonce). Symmetry lets
+    // the challenger verify with DH(challenger_private, responder_public).
+
+    /// Send a fresh DH challenge to a peer whose announced key we just learned.
+    /// Must be called on `stateQueue` (mutates `pendingChallengeNonces`).
+    private func sendPeerChallenge(to peerKey: String, connection: NWConnection) {
+        guard !peerKey.isEmpty else { return }
+        let nonce = MeshPeerAuth.makeNonce()
+        pendingChallengeNonces[peerKey] = nonce
+        let payload = "{\"nonce\":\"\(nonce.base64EncodedString())\"}"
+        let msg = CrossPlatformMessage(
+            id: UUID().uuidString,
+            type: "PEER_CHALLENGE",
+            senderPublicKey: myPublicKey,
+            senderName: myDisplayName,
+            recipientPublicKey: peerKey,
+            payload: payload,
+            timestamp: Date().timeIntervalSince1970 * 1000,
+            hopCount: 0,
+            maxHops: 1,
+            seenBy: [],
+            platform: "ios"
+        )
+        sendData(msg.toJSON(), to: connection)
+        OshiLog.mesh.info("[CrossPlatformMesh] 🔐 Sent peer-auth challenge to \(peerKey.prefix(16))…")
+    }
+
+    /// A peer challenged us: return HMAC(DH(our_private, their_public), nonce).
+    /// On any failure (no identity / bad payload) we stay silent — advisory only.
+    private func handlePeerChallenge(_ message: CrossPlatformMessage, connection: NWConnection) {
+        guard let payload = message.payload.data(using: .utf8),
+              let obj = try? JSONSerialization.jsonObject(with: payload) as? [String: Any],
+              let nonceB64 = obj["nonce"] as? String,
+              let nonce = Data(base64Encoded: nonceB64), nonce.count == MeshPeerAuth.nonceLength,
+              let sharedSecret = try? MessageManager.sharedIdentityManager?.computeSharedSecret(with: message.senderPublicKey) else {
+            OshiLog.mesh.info("[CrossPlatformMesh] 🔐 Cannot answer peer-auth challenge — skipping (advisory)")
+            return
+        }
+        let tag = MeshPeerAuth.tag(sharedSecret: sharedSecret, nonce: nonce)
+        let responsePayload = "{\"nonce\":\"\(nonce.base64EncodedString())\",\"tag\":\"\(tag.base64EncodedString())\"}"
+        let msg = CrossPlatformMessage(
+            id: UUID().uuidString,
+            type: "PEER_CHALLENGE_RESPONSE",
+            senderPublicKey: myPublicKey,
+            senderName: myDisplayName,
+            recipientPublicKey: message.senderPublicKey,
+            payload: responsePayload,
+            timestamp: Date().timeIntervalSince1970 * 1000,
+            hopCount: 0,
+            maxHops: 1,
+            seenBy: [],
+            platform: "ios"
+        )
+        sendData(msg.toJSON(), to: connection)
+        OshiLog.mesh.info("[CrossPlatformMesh] 🔐 Answered peer-auth challenge from \(message.senderPublicKey.prefix(16))…")
+    }
+
+    /// A peer answered our challenge. Verify the tag (constant-time) against the
+    /// nonce we sent and mark the peer verified on match. A mismatch never drops
+    /// the peer — verification is advisory.
+    private func handlePeerChallengeResponse(_ message: CrossPlatformMessage) {
+        stateQueue.async { [weak self] in
+            guard let self = self else { return }
+            guard let payload = message.payload.data(using: .utf8),
+                  let obj = try? JSONSerialization.jsonObject(with: payload) as? [String: Any],
+                  let nonceB64 = obj["nonce"] as? String, let nonce = Data(base64Encoded: nonceB64),
+                  let tagB64 = obj["tag"] as? String, let tag = Data(base64Encoded: tagB64) else {
+                return
+            }
+            guard let pending = self.pendingChallengeNonces[message.senderPublicKey],
+                  MeshPeerAuth.constantTimeEquals(nonce, pending) else {
+                OshiLog.mesh.info("[CrossPlatformMesh] 🔐 Peer-auth response nonce mismatch — ignoring")
+                return
+            }
+            guard let sharedSecret = try? MessageManager.sharedIdentityManager?.computeSharedSecret(with: message.senderPublicKey) else {
+                return
+            }
+            if MeshPeerAuth.verify(tag: tag, sharedSecret: sharedSecret, nonce: nonce) {
+                self.pendingChallengeNonces.removeValue(forKey: message.senderPublicKey)
+                DispatchQueue.main.async { [weak self] in
+                    self?.verifiedPeerKeys.insert(message.senderPublicKey)
+                    OshiLog.mesh.info("[CrossPlatformMesh] ✅ Peer VERIFIED possession of \(message.senderPublicKey.prefix(16))…")
+                }
+            } else {
+                OshiLog.mesh.info("[CrossPlatformMesh] 🔐 Peer-auth tag mismatch — staying unverified (advisory, delivery unaffected)")
+            }
+        }
+    }
+
+    /// Advisory: has this peer (by public key) proven possession of its key?
+    func isPeerVerified(_ publicKey: String) -> Bool {
+        return verifiedPeerKeys.contains(publicKey)
     }
 
     private func handleContentMessage(_ message: CrossPlatformMessage, from connection: NWConnection) {
@@ -770,12 +940,8 @@ class CrossPlatformMesh: NSObject, ObservableObject {
             if self.seenMessageIds.contains(message.id) {
                 return
             }
-            self.seenMessageIds.add(message.id)
-
-            // Cleanup old message IDs
-            if self.seenMessageIds.count > 5000 {
-                self.seenMessageIds = Set(self.seenMessageIds.suffix(2500))
-            }
+            // Records insertion order and evicts OLDEST-first; see noteSeenMessageId.
+            self.noteSeenMessageId(message.id)
 
             // Update routing table (learn route back to sender)
             self.routingTable[message.senderPublicKey] = RouteInfo(
@@ -874,8 +1040,16 @@ class CrossPlatformMesh: NSObject, ObservableObject {
     }
 
     private func relayToRecipient(_ message: CrossPlatformMessage) {
-        // Check hop count
-        guard message.hopCount < message.maxHops else {
+        // Check hop count.
+        //
+        // [Audit F-mesh#4 2026-09-10] Clamp the attacker-controlled `maxHops` to
+        // our LOCAL ceiling — `min(message.maxHops, maxHops)` — mirroring the MPC
+        // relay (MeshNetworkManager.swift:1766). Taking the ceiling straight from
+        // the wire let a hostile sender set it arbitrarily large and turn every
+        // node into a re-flooder (`seenMessageIds` bounds it to network size, but
+        // the intended cap was ignored). Legitimate traffic hops far below 50, so
+        // real delivery is unchanged.
+        guard message.hopCount < min(message.maxHops, maxHops) else {
             OshiLog.mesh.info("[CrossPlatformMesh] Max hops reached, dropping message")
             return
         }
@@ -1159,7 +1333,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
                 hopCount: 0,
                 ttl: 2
             )
-            self.seenMessageIds.add(msg.id)
+            self.noteSeenMessageId(msg.id)
             let data = msg.toJSON()
             for (_, connection) in self.tcpConnections {
                 self.sendData(data, to: connection)
@@ -1180,7 +1354,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
                 hopCount: 0,
                 ttl: 2
             )
-            self.seenMessageIds.add(msg.id)
+            self.noteSeenMessageId(msg.id)
             self.sendData(msg.toJSON(), to: connection)
         }
     }
@@ -1205,7 +1379,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
 
             // Dedupe by message id (also covers our own echoes)
             if self.seenMessageIds.contains(message.id) { return }
-            self.seenMessageIds.add(message.id)
+            self.noteSeenMessageId(message.id)
 
             // Parse payload
             guard let data = message.payload.data(using: .utf8),
