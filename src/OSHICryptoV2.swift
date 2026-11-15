@@ -58,6 +58,10 @@ enum OSHICryptoV2 {
         case chunkCountMismatch
         case sizeMismatch
         case badState
+        /// __MEDIA_PADDING_2026_11_10__ A manifest with `paddedSize` whose padding
+        /// is not what the spec allows (`paddedSize < size`, reassembled length ≠
+        /// `paddedSize`, or a non-zero byte in `[size, paddedSize)`). Never "repaired".
+        case mediaPaddingInvalid
     }
 
     // MARK: - Nested types
@@ -550,11 +554,79 @@ enum OSHICryptoV2 {
 
     /// Build the compact manifest JSON reproducing Node `JSON.stringify` key
     /// ordering + formatting: {"filename":..,"mime":..,"size":N,"chunkCount":N,"chunkSize":N}.
-    static func manifestJSON(filename: String, mime: String, size: Int, chunkCount: Int, chunkSize: Int) -> Data {
+    ///
+    /// __MEDIA_PADDING_2026_11_10__ `paddedSize` non-nil appends ONE key, LAST:
+    /// `…,"chunkSize":C,"paddedSize":P}` (docs/MEDIA_PADDING_AND_OHTTP_MEDIA_SPEC.md §2).
+    /// nil ⇒ byte-identical to the pre-padding manifest.
+    static func manifestJSON(filename: String, mime: String, size: Int, chunkCount: Int, chunkSize: Int,
+                             paddedSize: Int? = nil) -> Data {
         let f = jsonEscape(filename)
         let m = jsonEscape(mime)
-        let s = "{\"filename\":\"\(f)\",\"mime\":\"\(m)\",\"size\":\(size),\"chunkCount\":\(chunkCount),\"chunkSize\":\(chunkSize)}"
+        var s = "{\"filename\":\"\(f)\",\"mime\":\"\(m)\",\"size\":\(size),\"chunkCount\":\(chunkCount),\"chunkSize\":\(chunkSize)"
+        if let paddedSize { s += ",\"paddedSize\":\(paddedSize)" }
+        s += "}"
         return Data(s.utf8)
+    }
+
+    // MARK: - __MEDIA_PADDING_2026_11_10__ Media (v2 blob) padding
+    //
+    // A v2 blob used to reveal the exact plaintext size to the server (sum of
+    // chunk sizes − 16 B per chunk). A PADDED file feeds `original ‖ zeros(P − L)`
+    // to the UNCHANGED chunked AEAD and records `paddedSize: P` in the (sealed)
+    // manifest; `size` stays L. Readers strip the zeros after checking them.
+    // Same function, same bytes on Android and desktop — pinned by the vectors in
+    // the spec and in OSHITests/MediaPaddingTests.swift.
+
+    /// The chunk size every v2 sender uses (the `chunkSize` default below).
+    static let fileChunkSize = 2 * 1024 * 1024
+
+    /// 4 KiB floor: every small file (sticker, voice note, thumbnail) looks the same.
+    static let mediaPaddingMin = 4096
+    /// The 200 MiB plaintext ceiling (`V2.maxPlaintextBytes`): never pad past it.
+    static let mediaPaddingMax = 200 * 1024 * 1024
+
+    /// Padmé (PURBs paper) with the 4 KiB floor and the 200 MiB ceiling.
+    /// Leaks O(log log L) bits; overhead ≤ ~12 %, typically 1–6 %. Never shrinks.
+    static func mediaPaddedSize(_ length: Int) -> Int {
+        let l = max(0, length)
+        if l <= mediaPaddingMin { return mediaPaddingMin }
+        let e = (Int.bitWidth - 1) - l.leadingZeroBitCount           // floor(log2 L)
+        let s = Int.bitWidth - e.leadingZeroBitCount                  // floor(log2 E) + 1
+        let mask = (1 << (e - s)) - 1
+        let p = (l + mask) & ~mask
+        return l <= mediaPaddingMax ? min(p, mediaPaddingMax) : l
+    }
+
+    /// Chunks a v2 blob of `plaintextSize` bytes will have — computed from the
+    /// PADDED size when `padded`. Used to validate a resume record.
+    static func expectedChunkCount(plaintextSize: Int, chunkSize: Int, padded: Bool) -> Int {
+        guard chunkSize > 0 else { return 0 }
+        let n = padded ? mediaPaddedSize(plaintextSize) : plaintextSize
+        return (n + chunkSize - 1) / chunkSize
+    }
+
+    /// Parsed `(size, paddedSize?)` of a decrypted manifest. `paddedSize` present
+    /// but not an integer, or `< size`, is an error — never ignored.
+    private static func manifestSizes(_ info: [String: Any]) throws -> (size: Int, padded: Int?) {
+        guard let size = (info["size"] as? NSNumber)?.intValue, size >= 0 else { throw CryptoError.badState }
+        guard let raw = info["paddedSize"] else { return (size, nil) }
+        // A JSON `true` also bridges to NSNumber: reject booleans and fractions explicitly.
+        guard let n = raw as? NSNumber,
+              CFGetTypeID(n) != CFBooleanGetTypeID(),
+              n.doubleValue == Double(n.intValue) else { throw CryptoError.mediaPaddingInvalid }
+        let p = n.intValue
+        guard p >= size else { throw CryptoError.mediaPaddingInvalid }
+        return (size, p)
+    }
+
+    /// Does this sealed manifest describe a PADDED file? Cheap (one ~120 B AEAD
+    /// open); used by the receiver to learn that the sender's slot reads padded
+    /// media. Any failure ⇒ false.
+    static func manifestIsPadded(fileKey: Data, fileNonce: Data, manifest: Data) -> Bool {
+        guard let infoData = try? aesGcmOpen(key: fileKey, nonce: chunkNonce(fileNonce, manifestCounter),
+                                             ctAndTag: manifest, aad: Data()),
+              let info = (try? JSONSerialization.jsonObject(with: infoData)) as? [String: Any] else { return false }
+        return info["paddedSize"] != nil
     }
 
     /// Minimal JSON string escaping matching Node `JSON.stringify` for the common
@@ -596,20 +668,28 @@ enum OSHICryptoV2 {
                             chunkSize: Int = 2 * 1024 * 1024,
                             meta: FileMeta = FileMeta(),
                             reuseFileKey: Data? = nil,
-                            reuseFileNonce: Data? = nil) throws -> EncryptedFile {
+                            reuseFileNonce: Data? = nil,
+                            padMedia: Bool = false) throws -> EncryptedFile {
         // Both or neither: a reused key paired with a fresh nonce (or vice versa)
         // is a caller bug, and the half-reused case would silently produce a blob
         // the server's stored chunks no longer match.
         guard (reuseFileKey == nil) == (reuseFileNonce == nil) else { throw CryptoError.badState }
+        guard chunkSize > 0 else { throw CryptoError.badState }
         let fileKey = reuseFileKey ?? randomBytes(32)
         let fileNonce = reuseFileNonce ?? randomBytes(8)
+
+        // __MEDIA_PADDING_2026_11_10__ padded: `original ‖ zeros(P − L)` goes through
+        // the SAME chunking/nonces/key. Only the v2 blob senders ever pass true.
+        let paddedSize: Int? = padMedia ? mediaPaddedSize(bytes.count) : nil
+        var plain = bytes   // copy-on-write: unpadded ⇒ no copy
+        if let paddedSize, paddedSize > plain.count { plain.append(Data(count: paddedSize - plain.count)) }
 
         var chunks: [Data] = []
         var off = 0
         var i: UInt32 = 0
-        while off < bytes.count {
-            let end = min(off + chunkSize, bytes.count)
-            let slice = Data(bytes[bytes.startIndex.advanced(by: off)..<bytes.startIndex.advanced(by: end)])
+        while off < plain.count {
+            let end = min(off + chunkSize, plain.count)
+            let slice = Data(plain[plain.startIndex.advanced(by: off)..<plain.startIndex.advanced(by: end)])
             chunks.append(try aesGcmSeal(key: fileKey, nonce: chunkNonce(fileNonce, i), plaintext: slice, aad: Data()))
             off += chunkSize
             i += 1
@@ -620,7 +700,8 @@ enum OSHICryptoV2 {
             mime: meta.mime,
             size: bytes.count,
             chunkCount: chunks.count,
-            chunkSize: chunkSize
+            chunkSize: chunkSize,
+            paddedSize: paddedSize
         )
         let manifest = try aesGcmSeal(
             key: fileKey,
@@ -642,10 +723,11 @@ enum OSHICryptoV2 {
             aad: Data()
         )
         guard let info = try JSONSerialization.jsonObject(with: infoData) as? [String: Any],
-              let chunkCount = (info["chunkCount"] as? NSNumber)?.intValue,
-              let size = (info["size"] as? NSNumber)?.intValue else {
+              let chunkCount = (info["chunkCount"] as? NSNumber)?.intValue else {
             throw CryptoError.badState
         }
+        // __MEDIA_PADDING_2026_11_10__ `paddedSize` absent ⇒ exactly the old checks.
+        let (size, paddedSize) = try manifestSizes(info)
         guard chunkCount == chunks.count else { throw CryptoError.chunkCountMismatch }
         var out = Data()
         for (idx, c) in chunks.enumerated() {
@@ -655,6 +737,13 @@ enum OSHICryptoV2 {
                 ctAndTag: c,
                 aad: Data()
             ))
+        }
+        if let paddedSize {
+            guard out.count == paddedSize else { throw CryptoError.mediaPaddingInvalid }
+            guard out[out.startIndex.advanced(by: size)...].allSatisfy({ $0 == 0 }) else {
+                throw CryptoError.mediaPaddingInvalid
+            }
+            return (Data(out.prefix(size)), info)
         }
         guard out.count == size else { throw CryptoError.sizeMismatch }
         return (out, info)
@@ -698,7 +787,8 @@ enum OSHICryptoV2 {
                                      chunkSize: Int = 2 * 1024 * 1024,
                                      meta: FileMeta = FileMeta(),
                                      reuseFileKey: Data? = nil,
-                                     reuseFileNonce: Data? = nil) throws -> StreamingEncryptedFile {
+                                     reuseFileNonce: Data? = nil,
+                                     padMedia: Bool = false) throws -> StreamingEncryptedFile {
         guard chunkSize > 0 else { throw CryptoError.badState }
         guard (reuseFileKey == nil) == (reuseFileNonce == nil) else { throw CryptoError.badState }
         let fileKey = reuseFileKey ?? randomBytes(32)
@@ -708,15 +798,45 @@ enum OSHICryptoV2 {
         let input = try FileHandle(forReadingFrom: inputURL)
         defer { try? input.close() }
 
+        // __MEDIA_PADDING_2026_11_10__ Padded: the plaintext size L must be known
+        // BEFORE the last real chunk is sealed (that chunk is the one that gets the
+        // zeros), so it is read from the file's attributes and re-checked against
+        // the bytes actually read at the end — a file that changed underneath us is
+        // an error, never a silently mis-padded blob.
+        let paddedSize: Int?
+        let declaredSize: Int?
+        if padMedia {
+            let attrs = try FileManager.default.attributesOfItem(atPath: inputURL.path)
+            guard let n = (attrs[.size] as? NSNumber)?.intValue, n >= 0 else { throw CryptoError.badState }
+            declaredSize = n
+            paddedSize = mediaPaddedSize(n)
+        } else {
+            declaredSize = nil
+            paddedSize = nil
+        }
+
         var chunkURLs: [URL] = []
-        var total = 0
+        var total = 0          // REAL plaintext bytes read from the file
+        var emitted = 0        // plaintext bytes sealed, padding included
         var counter: UInt32 = 0
         while true {
             // autoreleasepool so each slice's buffers are reclaimed per iteration
             // rather than piling up until the loop ends — that pile-up is exactly
             // what the in-memory path does wrong.
-            let produced: Int = try autoreleasepool {
-                guard let slice = try input.read(upToCount: chunkSize), !slice.isEmpty else { return 0 }
+            let produced: (real: Int, sealed: Int) = try autoreleasepool {
+                var slice: Data
+                var real: Int
+                if let paddedSize {
+                    let want = min(chunkSize, paddedSize - emitted)
+                    guard want > 0 else { return (0, 0) }
+                    slice = (try input.read(upToCount: want)) ?? Data()
+                    real = slice.count
+                    if slice.count < want { slice.append(Data(count: want - slice.count)) }
+                } else {
+                    guard let s = try input.read(upToCount: chunkSize), !s.isEmpty else { return (0, 0) }
+                    slice = s
+                    real = s.count
+                }
                 let sealed = try aesGcmSeal(key: fileKey,
                                             nonce: chunkNonce(fileNonce, counter),
                                             plaintext: slice,
@@ -724,11 +844,17 @@ enum OSHICryptoV2 {
                 let url = outputDir.appendingPathComponent("\(counter).chunk")
                 try sealed.write(to: url, options: .atomic)
                 chunkURLs.append(url)
-                return slice.count
+                return (real, slice.count)
             }
-            if produced == 0 { break }   // EOF (an empty file yields 0 chunks, matching encryptFile)
-            total += produced
+            if produced.sealed == 0 { break }   // EOF (an empty unpadded file yields 0 chunks, matching encryptFile)
+            total += produced.real
+            emitted += produced.sealed
             counter += 1
+        }
+        if let declaredSize {
+            // Grew (bytes left past P) or shrank (fewer real bytes than declared).
+            let leftover = (try input.read(upToCount: 1)) ?? Data()
+            guard total == declaredSize, leftover.isEmpty else { throw CryptoError.sizeMismatch }
         }
 
         let infoJSON = manifestJSON(
@@ -736,7 +862,8 @@ enum OSHICryptoV2 {
             mime: meta.mime,
             size: total,
             chunkCount: chunkURLs.count,
-            chunkSize: chunkSize
+            chunkSize: chunkSize,
+            paddedSize: paddedSize
         )
         let manifest = try aesGcmSeal(
             key: fileKey,
@@ -769,10 +896,11 @@ enum OSHICryptoV2 {
             aad: Data()
         )
         guard let info = try JSONSerialization.jsonObject(with: infoData) as? [String: Any],
-              let chunkCount = (info["chunkCount"] as? NSNumber)?.intValue,
-              let size = (info["size"] as? NSNumber)?.intValue else {
+              let chunkCount = (info["chunkCount"] as? NSNumber)?.intValue else {
             throw CryptoError.badState
         }
+        // __MEDIA_PADDING_2026_11_10__ `paddedSize` absent ⇒ exactly the old checks.
+        let (size, paddedSize) = try manifestSizes(info)
         guard chunkCount == chunkURLs.count else { throw CryptoError.chunkCountMismatch }
 
         let fm = FileManager.default
@@ -780,7 +908,7 @@ enum OSHICryptoV2 {
         guard fm.createFile(atPath: outputURL.path, contents: nil) else { throw CryptoError.badState }
         let out = try FileHandle(forWritingTo: outputURL)
 
-        var written = 0
+        var written = 0        // plaintext bytes opened, padding included
         do {
             for (idx, url) in chunkURLs.enumerated() {
                 try autoreleasepool {
@@ -789,11 +917,22 @@ enum OSHICryptoV2 {
                                             nonce: chunkNonce(fileNonce, UInt32(idx)),
                                             ctAndTag: ct,
                                             aad: Data())
-                    try out.write(contentsOf: pt)
+                    if paddedSize != nil {
+                        // Write only up to L; everything past it must be zeros.
+                        let keep = max(0, min(pt.count, size - written))
+                        if keep > 0 { try out.write(contentsOf: pt.prefix(keep)) }
+                        guard pt.dropFirst(keep).allSatisfy({ $0 == 0 }) else { throw CryptoError.mediaPaddingInvalid }
+                    } else {
+                        try out.write(contentsOf: pt)
+                    }
                     written += pt.count
                 }
             }
-            guard written == size else { throw CryptoError.sizeMismatch }
+            if let paddedSize {
+                guard written == paddedSize else { throw CryptoError.mediaPaddingInvalid }
+            } else {
+                guard written == size else { throw CryptoError.sizeMismatch }
+            }
         } catch {
             try? out.close()
             try? fm.removeItem(at: outputURL)

@@ -9,6 +9,7 @@
 //
 
 import Foundation
+import CryptoKit
 import MultipeerConnectivity
 import Combine
 import UIKit
@@ -86,6 +87,24 @@ class MeshNetworkManager: NSObject, ObservableObject {
         guard !publicKey.isEmpty,
               let peerID = peerPublicKeys[publicKey] else { return false }
         return connectedPeers.contains(peerID)
+    }
+
+    /// __NEARBY_LISTED_EVERY_PHONE_TWICE_2026_11_02__ The OSHI identity behind a
+    /// MultipeerConnectivity peer, once the key exchange has named it.
+    ///
+    /// This exists so the Nearby screen can tell that the MPC peer it is about to
+    /// draw and the `CrossPlatformPeer` it already drew are the SAME phone. They
+    /// carry different names and always will: an `MCPeerID.displayName` is
+    /// `UIDevice.current.name` plus four hex digits ("iPhone de Lou-9F3A"), while
+    /// a `CrossPlatformPeer.displayName` is the OSHI profile name ("Lou"). The
+    /// screen matched the two lists on name, which can never agree, so every
+    /// phone discovered over both transports — the normal case, since both run at
+    /// once — appeared as two rows and was counted twice in the header.
+    ///
+    /// nil means "this peer has not completed the key exchange yet", which is a
+    /// real state and not an error: it is simply not yet known to be a duplicate.
+    func publicKey(for peerID: MCPeerID) -> String? {
+        peerIDToPublicKey[peerID]
     }
     
     @Published var autoConnectEnabled = true
@@ -335,6 +354,17 @@ class MeshNetworkManager: NSObject, ObservableObject {
     }
 
     /// Handle text/relay messages from CrossPlatformMesh
+    /// __STABLE_MESH_ID_2026_10_20__ A deterministic id for a mesh envelope, so
+    /// the same envelope arriving twice is the same message. The ciphertext
+    /// carries a fresh nonce per encryption, so sender+ciphertext is unique per
+    /// message and identical across re-deliveries. Local only — never put on the
+    /// wire, so no peer has to agree with us about it.
+    static func stableMeshId(sender: String, envelope: EncryptedMessage) -> String {
+        let key = "mesh:\(sender)|\(envelope.ciphertext)"
+        let digest = SHA256.hash(data: Data(key.utf8))
+        return digest.map { String(format: "%02x", $0) }.joined()
+    }
+
     private func handleCrossPlatformTextMessage(_ data: Data, from senderPublicKey: String) {
         let prefix = String(data: data.prefix(40), encoding: .utf8) ?? "<binary>"
         CallFileLogger.shared.log("DIAG_XTEXT_HANDLE | bytes=\(data.count) | from=\(senderPublicKey.prefix(12)) | prefix=\(prefix)")
@@ -374,12 +404,33 @@ class MeshNetworkManager: NSObject, ObservableObject {
 
             // Helper: wrap EncryptedMessage in SecureMessage and deliver it
             func deliver(_ encryptedMessage: EncryptedMessage) {
+                // __STABLE_MESH_ID_2026_10_20__ The id must be a FUNCTION of the
+                // envelope, never freshly minted — and the timestamp is the
+                // SENDER'S, not the moment we happened to receive it.
+                //
+                // `receiveMessage` is the single ingest funnel and it dedupes with
+                // `messages.contains { $0.id == message.id }`. With `UUID()` here
+                // that test can never fire: a mesh envelope delivered twice — which
+                // is normal, the mesh re-announces and a relayed copy can arrive by
+                // a second route — was stored AGAIN as a new unread message. The
+                // thread then goes unread seconds after being read, and the open
+                // chat answers each re-insert with a fresh 📖READ_RECEIPT📖.
+                //
+                // Measured 2026-10-20: 763 read receipts in 13 h, one every ~62 s,
+                // each with a new ratchet counter, from a Mac whose inbound relay
+                // queue was EMPTY — the whole cycle was local re-ingestion.
+                //
+                // The ciphertext is unique per message (fresh nonce per encryption),
+                // so hashing it with the sender identifies the envelope exactly and
+                // costs nothing. Same remedy as `parseCrossPlatformGroupMessage`.
+                let meshId = Self.stableMeshId(sender: senderPublicKey,
+                                               envelope: encryptedMessage)
                 let secureMessage = SecureMessage(
-                    id: UUID().uuidString,
+                    id: meshId,
                     senderAddress: senderPublicKey,
                     recipientAddress: MessageManager.sharedIdentityManager?.publicKey ?? "",
                     encryptedContent: encryptedMessage,
-                    timestamp: Date(),
+                    timestamp: encryptedMessage.timestamp,
                     isRead: false,
                     deliveryStatus: .delivered,
                     senderPublicKey: senderPublicKey,
@@ -727,6 +778,16 @@ class MeshNetworkManager: NSObject, ObservableObject {
             OshiLog.mesh.info("\(NSLocalizedString("mesh.log.network_restored", comment: "Log: Mesh network restored"))")
             NotificationCenter.default.post(name: .meshNetworkRestored, object: nil)
             processMessageQueue()
+            // __MESH_CUSTODY_2026_10_10__ The second flush trigger, and it is
+            // not redundant with the one on `.connected`.
+            //
+            // Custody survives a relaunch (it is on disk), and on a cold start
+            // the mesh can come up with a peer ALREADY connected — no
+            // `.connected` transition fires for a session that was established
+            // during startup, so nothing would drain the store until the next
+            // time a peer happened to join. This false→true availability flip
+            // is the event that always happens.
+            flushCustody()
         }
         
         if !isAdvertising || !isBrowsing {
@@ -1234,22 +1295,38 @@ class MeshNetworkManager: NSObject, ObservableObject {
                 // [Audit F-mesh#1 2026-09-10] Raw-location send removed here too;
                 // location now rides the encrypted "Regular message" branch below.
                 //
-                // Handle media messages
-                if let mediaData = message.mediaAttachment, let mediaType = message.mediaType {
-                    let fileName = message.mediaFileName ?? "media_\(Date().timeIntervalSince1970)"
-                    if CrossPlatformMesh.shared.sendMedia(
-                        to: androidPeer.publicKey,
-                        mediaData: mediaData,
-                        mediaType: mediaType.rawValue,
-                        fileName: fileName
-                    ) {
-                        OshiLog.mesh.info("   → Media delivered to Android peer: \(androidPeer.displayName)")
-                        sentSuccessfully = true
-                    }
-                    continue
-                }
+                // __MEDIA_IN_THE_CLEAR_ON_THE_LAN_2026_11_07__ …and so does MEDIA,
+                // finally. This loop used to call `CrossPlatformMesh.sendMedia`,
+                // which puts `{data: <base64 photo>, mediaType, fileName, fileSize}`
+                // in a JSON payload on an `NWParameters.tcp` connection with NO TLS.
+                // The photo, its name and its type were readable by anyone on the
+                // same Wi-Fi. Then it `continue`d, so the encrypted branch below was
+                // unreachable for any message carrying an attachment.
+                //
+                // WHY IT SURVIVED TWO AUDITS. Android deleted its own `sendMedia`
+                // on 25/09 (`__LEAK_FIX_2026_09_25__`) and wrote in the comment that
+                // this "mirrors iOS F-mesh#1 (2026-09-10)". It did not: on iOS only
+                // the LOCATION half had been rerouted. A comment asserting the state
+                // of the other platform is not a verification of it.
+                //
+                // AND WHY THIS *IS* A DELETION. The note that filed this as "not a
+                // one-line fix" reasoned that `meshWireSafe()` nils `mediaAttachment`,
+                // so dropping the cleartext branch would deliver a message with no
+                // photo — trading a leak for a broken feature. That is wrong, and
+                // `MessageManager.sendMessage` is where you can see it: for an
+                // attachment it builds `messageContent` as
+                // `{"type":"media","mediaType":…,"content":"<base64>",…}` and THAT
+                // string is what the ratchet encrypts. The bytes are inside
+                // `encryptedContent`; `mediaAttachment` is only the sender's local
+                // copy. The receiver decrypts, `isMediaMessage` recognises the
+                // envelope and rebuilds the file — which is exactly what the
+                // direct live-connected bridge above has done since 10/09, with no
+                // media branch of its own. This loop is the last one that differed.
+                //
+                // Receiving a legacy raw `MEDIA_MESSAGE` is untouched on both sides,
+                // so peers on older builds keep working.
 
-                // Regular message (text, and now location) — encrypted wire copy.
+                // Regular message (text, location, and now media) — encrypted wire copy.
                 // [Audit F-mesh#2 2026-09-10] `meshWireSafe()`, not the raw message:
                 // this broadcast-to-Android loop leaked `plaintextContent` too. The
                 // peer decrypts `encryptedContent`, same as every other path.
@@ -1270,6 +1347,12 @@ class MeshNetworkManager: NSObject, ObservableObject {
         OshiLog.mesh.info("✅ Message sent successfully")
     }
     
+    /// __MESH_CUSTODY_2026_10_10__ Messages this node could not pass on yet.
+    /// Distinct from `messageQueue`, which is OUR OWN outbox: that one
+    /// re-originates at hop 0 when the recipient turns up directly, this one
+    /// carries somebody else's packet onward with its hop count intact.
+    let custody = MeshCustodyStore()
+
     private func forwardRelayMessage(_ relayMsg: RelayMessage, from sourcePeer: MCPeerID) {
         guard !seenMessageIDs.contains(relayMsg.message.id) else {
             return
@@ -1314,6 +1397,23 @@ class MeshNetworkManager: NSObject, ObservableObject {
             }
         }
         
+        // __MESH_CUSTODY_2026_10_10__ Nowhere to send it RIGHT NOW is not the
+        // same as nowhere to send it.
+        //
+        // Every session above `continue`d because `relayPeers` was empty (this
+        // node is the current edge of the mesh), or the send threw. Until now
+        // that dropped the packet silently, which is why the off-grid chain
+        // only worked when every hop happened to be awake at once. Hold it and
+        // re-offer it when a peer appears — see `flushCustody()`.
+        //
+        // `updatedMessage`, not `relayMsg`: the hop count is already
+        // incremented and this node is already in `seenBy`, so what gets
+        // carried is exactly the relay that was attempted, not a fresh
+        // origination with a renewed hop budget.
+        if !didRelay {
+            custody.take(updatedMessage)
+        }
+
         // ✅ NEW: Notify gamification system of successful relay
         if didRelay {
             DispatchQueue.main.async {
@@ -1377,6 +1477,45 @@ class MeshNetworkManager: NSObject, ObservableObject {
         saveMessageQueue()
     }
     
+    /// __MESH_CUSTODY_2026_10_10__ Re-offer everything in custody to peers that
+    /// have not already handled it.
+    ///
+    /// Targets are filtered on `seenBy` rather than just "not the peer it came
+    /// from": a held message may have travelled several hops, and sending it
+    /// back to a node already in its path is guaranteed waste — that node's
+    /// own `seenMessageIDs` guard would drop it on arrival.
+    ///
+    /// Custody ends on the first successful hand-off. There is no app-level ack
+    /// on the mesh to wait for, so holding on past that would mean keeping
+    /// other people's data on the strength of a guess.
+    func flushCustody() {
+        let pending = custody.readyToForward()
+        guard !pending.isEmpty else { return }
+
+        var handedOn = 0
+        for relay in pending {
+            var delivered = false
+            for (network, session) in sessions {
+                let targets = session.connectedPeers.filter { !relay.seenBy.contains($0.displayName) }
+                guard !targets.isEmpty else { continue }
+                do {
+                    let data = try JSONEncoder().encode(relay)
+                    try session.send(data, toPeers: targets, with: .reliable)
+                    delivered = true
+                } catch {
+                    OshiLog.mesh.info("📦 custody forward failed on \(network): \(error.localizedDescription)")
+                }
+            }
+            if delivered {
+                custody.release(relay.message.id)
+                handedOn += 1
+            }
+        }
+        if handedOn > 0 {
+            OshiLog.mesh.info("📦 custody handed on \(handedOn) message(s); \(custody.count) still held")
+        }
+    }
+
     private func findPeerByAddress(_ address: String) -> MCPeerID? {
         // 🔧 FIX: First try to find by public key mapping (most reliable)
         if let peer = peerPublicKeys[address] {
@@ -1652,6 +1791,9 @@ extension MeshNetworkManager: MCSessionDelegate {
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                     self?.processMessageQueue()
+                    // __MESH_CUSTODY_2026_10_10__ A new peer is the only event
+                    // that can turn a held message into a deliverable one.
+                    self?.flushCustody()
                 }
 
             case .notConnected:
@@ -2775,6 +2917,12 @@ extension Notification.Name {
     static let didReceiveMessage = Notification.Name("mesh.notification.did_receive_message")
     static let meshNetworkLost = Notification.Name("mesh.notification.mesh_network_lost")
     static let meshNetworkRestored = Notification.Name("mesh.notification.mesh_network_restored")
+
+    /// __LORA_ACK_2026_10_10__ The Meshtastic mesh confirmed (or named a failure
+    /// for) a unicast OSHI message. `userInfo["messageId"]`, plus `["reason"]`
+    /// on the failure. Posted by `MeshtasticManager.handleRouting`.
+    static let loRaDeliveryConfirmed = Notification.Name("mesh.notification.lora_delivery_confirmed")
+    static let loRaDeliveryFailed = Notification.Name("mesh.notification.lora_delivery_failed")
     // didReceiveCallSignal and didReceiveCallAudio are defined in VoiceCallManager.swift
     static let publicGroupDiscovered = Notification.Name("PublicGroupDiscovered")
 }

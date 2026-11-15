@@ -1,20 +1,17 @@
 //
 //  SteganographyManager.swift
-//  OSHI - Military-Grade Image Steganography (v2.0)
+//  OSHI - Experimental image carrier codec (v2.0)
 //
 //  UPGRADES from v1.0:
-//  - Adaptive embedding: texture-aware distortion cost maps (HUGO-inspired)
-//    Embeds preferentially in high-texture/noise regions that resist detection
-//  - Content-aware capacity: adjusts embedding rate per-region
-//  - Improved statistical camouflage: matches natural noise profile of cover image
-//  - Better cover image generation: uses photo-realistic noise patterns
-//  - DCT awareness: avoids embedding in smooth frequency-domain regions
-//  - Syndrome coding approximation: minimizes actual pixel modifications
-//  - JPEG-resilient mode: embeds in features that survive recompression
+//  This is a manual, lossless-carrier experiment. Pixel LSB payloads are
+//  destroyed by JPEG/WebP recompression, resizing and image optimization. The
+//  AES-GCM tag makes those transformations fail closed; it does not make them
+//  resilient or undetectable. It is never used by the message transport.
 //
 //  Encryption: AES-256-GCM with HMAC-SHA256 key-derived PRNG
-//  Scattering: Fisher-Yates shuffle weighted by distortion cost map
-//  Capacity: 3-5% adaptive (lower in smooth areas, higher in textured)
+//  Scattering: keyed Fisher-Yates shuffle weighted by a distortion cost map
+//  Capacity: at most 1% of RGB slots. This is deliberately conservative; it
+//  reduces visual/statistical distortion but is not an undetectability claim.
 //
 
 import UIKit
@@ -72,25 +69,40 @@ private struct DistortionMap {
     }
 }
 
-// MARK: - Steganography Engine (v2.0 Military-Grade)
+// MARK: - Experimental image carrier engine
 
 final class SteganographyManager {
     static let shared = SteganographyManager()
     private init() {}
 
-    /// Base embedding rate (adaptive: actual rate varies per-region)
-    private let baseEmbeddingRate: Double = 0.04  // 4% base, up to 8% in textures
+    // The position generator intentionally works in memory. Bound its input so
+    // a maliciously large image cannot turn a local experiment into a memory or
+    // CPU denial of service. 1024×1024 generated carriers remain supported.
+    private let minimumCarrierSide = 64
+    private let maximumCarrierPixels = 1_500_000
+
+    /// Upper bound on modified candidate slots. With randomized ciphertext an
+    /// expected half of these slots change, so the expected whole-image LSB
+    /// modification rate is approximately 0.5% before texture selection.
+    private let baseEmbeddingRate: Double = 0.01
 
     /// Minimum distortion cost to embed (skip very smooth areas)
     private let minCostThreshold: Float = 0.15
 
-    // MARK: - Encode (Adaptive, Military-Grade)
+    /// A carrier must offer enough textured RGB slots that selection never needs
+    /// to fall back to broad smooth areas. The 2× reserve leaves the keyed
+    /// shuffle a meaningful choice instead of treating texture as a soft hint.
+    private let texturedCostCeiling: Float = 0.85
+    private let textureReserveMultiplier = 2
+
+    // MARK: - Encode
 
     func encode(data: Data, in carrierImage: UIImage, secretKey: Data) -> UIImage? {
         guard let cgImage = carrierImage.cgImage else { return nil }
 
         let width = cgImage.width
         let height = cgImage.height
+        guard isSupportedCarrier(width: width, height: height) else { return nil }
         let totalSlots = width * height * 3
         let baseCapacity = Int(Double(totalSlots) * baseEmbeddingRate) / 8
 
@@ -111,17 +123,7 @@ final class SteganographyManager {
         payload.append(sealed.ciphertext)
         payload.append(sealed.tag)
 
-        // Step 3: Pad to fixed size
-        let targetSize = baseCapacity
-        if payload.count < targetSize {
-            var rng = KeyPRNG(seed: secretKey + Data("PAD_V2".utf8))
-            let paddingSize = targetSize - payload.count
-            var padding = Data(count: paddingSize)
-            for i in 0..<paddingSize { padding[i] = rng.nextByte() }
-            payload.append(padding)
-        }
-
-        // Step 4: Get pixel buffer
+        // Step 3: Get a normalized pixel buffer.
         let bytesPerPixel = 4
         let bytesPerRow = bytesPerPixel * width
         var pixelData = [UInt8](repeating: 0, count: height * bytesPerRow)
@@ -134,11 +136,28 @@ final class SteganographyManager {
         ) else { return nil }
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
 
+        // The carrier fingerprint ignores LSBs, so it is identical when the
+        // recipient decodes the lossless stego image. It binds placement to this
+        // carrier instead of reusing one secret-derived coordinate sequence over
+        // every image exchanged by the same pair.
+        let carrierSeed = secretKey + carrierFingerprint(pixels: pixelData, bytesPerPixel: bytesPerPixel)
+
+        // Step 4: Pad to a carrier-specific fixed size.
+        let targetSize = baseCapacity
+        if payload.count < targetSize {
+            var rng = KeyPRNG(seed: carrierSeed + Data("PAD_V3".utf8))
+            let paddingSize = targetSize - payload.count
+            var padding = Data(count: paddingSize)
+            for i in 0..<paddingSize { padding[i] = rng.nextByte() }
+            payload.append(padding)
+        }
+
         // Step 5: Compute distortion cost map (HUGO-inspired)
         let costMap = computeDistortionMap(pixels: pixelData, width: width, height: height, bytesPerPixel: bytesPerPixel)
+        guard hasAdequateTexture(costMap: costMap, requiredSlots: baseCapacity * 8) else { return nil }
 
         // Step 6: Generate weighted shuffled positions (prefer low-cost slots)
-        var rng = KeyPRNG(seed: secretKey + Data("SCATTER_V2".utf8))
+        var rng = KeyPRNG(seed: carrierSeed + Data("SCATTER_V3".utf8))
         let positions = generateWeightedPositions(
             costMap: costMap,
             totalSlots: totalSlots,
@@ -147,7 +166,6 @@ final class SteganographyManager {
 
         // Step 7: Embed payload bits at cost-weighted positions
         let totalBits = payload.count * 8
-        var modifiedCount = 0
 
         for bitIdx in 0..<totalBits {
             let slot = positions[bitIdx]
@@ -163,22 +181,12 @@ final class SteganographyManager {
             // Syndrome coding approximation: only modify if needed
             if currentBit != targetBit {
                 pixelData[pixelOffset] = (pixelData[pixelOffset] & 0xFE) | targetBit
-                modifiedCount += 1
             }
         }
 
-        // Step 8: Adaptive statistical camouflage
-        applyCamouflage(
-            pixels: &pixelData,
-            costMap: costMap,
-            usedPositions: Set(positions.prefix(totalBits)),
-            totalSlots: totalSlots,
-            bytesPerPixel: bytesPerPixel,
-            actualModRate: Double(modifiedCount) / Double(totalBits),
-            secretKey: secretKey
-        )
-
-        // Step 9: Create output image
+        // Step 8: Create output image. Do not add unrelated LSB "camouflage":
+        // it increases the alteration footprint without improving recoverability
+        // or providing a sound claim against steganalysis.
         guard let outCtx = CGContext(
             data: &pixelData, width: width, height: height,
             bitsPerComponent: 8, bytesPerRow: bytesPerRow,
@@ -196,6 +204,7 @@ final class SteganographyManager {
 
         let width = cgImage.width
         let height = cgImage.height
+        guard isSupportedCarrier(width: width, height: height) else { return nil }
         let totalSlots = width * height * 3
         let baseCapacity = Int(Double(totalSlots) * baseEmbeddingRate) / 8
 
@@ -211,11 +220,14 @@ final class SteganographyManager {
         ) else { return nil }
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
 
-        // Recompute same cost map from pixel data
+        // Recompute same cost map and carrier-bound seed from pixel data. The
+        // fingerprint masks RGB LSBs, which are the only values embedding alters.
         let costMap = computeDistortionMap(pixels: pixelData, width: width, height: height, bytesPerPixel: bytesPerPixel)
+        guard hasAdequateTexture(costMap: costMap, requiredSlots: baseCapacity * 8) else { return nil }
+        let carrierSeed = secretKey + carrierFingerprint(pixels: pixelData, bytesPerPixel: bytesPerPixel)
 
         // Regenerate same weighted positions
-        var rng = KeyPRNG(seed: secretKey + Data("SCATTER_V2".utf8))
+        var rng = KeyPRNG(seed: carrierSeed + Data("SCATTER_V3".utf8))
         let positions = generateWeightedPositions(
             costMap: costMap,
             totalSlots: totalSlots,
@@ -358,7 +370,7 @@ final class SteganographyManager {
 
         // Fisher-Yates shuffle with cost-weighted swap probability
         var positions = weightedSlots.map { $0.slot }
-        let weights = weightedSlots.map { $0.weight }
+        var weights = weightedSlots.map { $0.weight }
 
         // Weighted shuffle: prefer moving high-weight items to front
         for i in 0..<min(positions.count, totalSlots) {
@@ -370,66 +382,16 @@ final class SteganographyManager {
             let j = i + Int(rng.nextUInt32()) % remaining
 
             // Bias: more likely to select higher-weight positions
-            let wi = weights[positions[i] < weightedSlots.count ? i : 0]
-            let wj = weights[positions[j] < weightedSlots.count ? j : 0]
+            let wi = weights[i]
+            let wj = weights[j]
 
             if wj > wi || rng.nextDouble() < 0.3 {
                 positions.swapAt(i, j)
+                weights.swapAt(i, j)
             }
         }
 
         return positions
-    }
-
-    // MARK: - Adaptive Camouflage
-
-    /// Match camouflage noise to the actual noise profile of the cover image
-    private func applyCamouflage(
-        pixels: inout [UInt8],
-        costMap: DistortionMap,
-        usedPositions: Set<Int>,
-        totalSlots: Int,
-        bytesPerPixel: Int,
-        actualModRate: Double,
-        secretKey: Data
-    ) {
-        var noiseRng = KeyPRNG(seed: secretKey + Data("CAMO_V2".utf8))
-
-        // Target noise rate should match actual modification rate per region
-        for slot in 0..<totalSlots {
-            guard !usedPositions.contains(slot) else { continue }
-
-            let pixelIdx = slot / 3
-            let channelIdx = slot % 3
-            let x = pixelIdx % costMap.width
-            let y = pixelIdx / costMap.width
-            let cost = costMap[x, y]
-
-            // Adaptive noise rate: more noise in textured areas, less in smooth
-            // This matches what the embedding does (concentrates in textures)
-            let localNoiseRate: Double
-            if cost < 0.3 {
-                // Textured area: match embedding rate
-                localNoiseRate = actualModRate * 0.5
-            } else if cost < 0.7 {
-                // Medium texture: lower noise
-                localNoiseRate = actualModRate * 0.2
-            } else {
-                // Smooth area: minimal noise (would be suspicious)
-                localNoiseRate = actualModRate * 0.05
-            }
-
-            // Apply noise with local rate
-            if noiseRng.nextDouble() < localNoiseRate {
-                let pixelOffset = pixelIdx * bytesPerPixel + channelIdx
-                pixelData_flipLSB(&pixels, at: pixelOffset)
-            }
-        }
-    }
-
-    private func pixelData_flipLSB(_ pixels: inout [UInt8], at offset: Int) {
-        guard offset < pixels.count else { return }
-        pixels[offset] ^= 1
     }
 
     // MARK: - Carrier Image Generation (v2.0 Photo-Realistic)
@@ -519,8 +481,38 @@ final class SteganographyManager {
 
     func maxCapacity(for image: UIImage) -> Int {
         guard let cg = image.cgImage else { return 0 }
+        guard isSupportedCarrier(width: cg.width, height: cg.height) else { return 0 }
         let totalSlots = cg.width * cg.height * 3
         return max(0, Int(Double(totalSlots) * baseEmbeddingRate) / 8 - 32)
+    }
+
+    private func isSupportedCarrier(width: Int, height: Int) -> Bool {
+        guard width >= minimumCarrierSide, height >= minimumCarrierSide else { return false }
+        // Divide rather than multiply before comparing to avoid integer overflow
+        // on malformed image metadata.
+        return width <= maximumCarrierPixels / height
+    }
+
+    private func hasAdequateTexture(costMap: DistortionMap, requiredSlots: Int) -> Bool {
+        guard requiredSlots > 0, requiredSlots <= Int.max / textureReserveMultiplier else { return false }
+        let texturedPixels = costMap.costs.reduce(into: 0) { count, cost in
+            if cost <= texturedCostCeiling { count += 1 }
+        }
+        // Each eligible pixel has three RGB candidate slots.
+        return texturedPixels >= (requiredSlots * textureReserveMultiplier + 2) / 3
+    }
+
+    /// Stable across this codec's RGB-LSB modifications, but different for
+    /// different covers. Hashing the normalized in-memory pixels avoids relying
+    /// on file metadata or a lossy image serialization.
+    private func carrierFingerprint(pixels: [UInt8], bytesPerPixel: Int) -> Data {
+        var normalized = pixels
+        for offset in stride(from: 0, to: normalized.count, by: bytesPerPixel) {
+            normalized[offset] &= 0xFE
+            normalized[offset + 1] &= 0xFE
+            normalized[offset + 2] &= 0xFE
+        }
+        return Data(SHA256.hash(data: Data(normalized)))
     }
 }
 
@@ -531,14 +523,13 @@ struct SteganographySettingsView: View {
     @AppStorage("steganographyAutoMode") private var autoMode = false
     @AppStorage("steganographyCarrierSource") private var carrierSource = "generated"
     @AppStorage("covertChannelEnabled") private var covertChannelEnabled = false
-    @AppStorage("covertPreferredChannel") private var preferredChannel = "auto"
     @State private var showDisclaimer = false
     @State private var disclaimerAccepted = false
     @AppStorage("steganographyDisclaimerAccepted") private var savedDisclaimerAccepted = false
     @State private var networkAssessment: NetworkAssessment?
     @State private var isAssessing = false
 
-    private let brandColor = Color(red: 0.337, green: 0.086, blue: 0.925)
+    private let brandColor = Theme.brand
 
     var body: some View {
         List {
@@ -579,20 +570,7 @@ struct SteganographySettingsView: View {
                 }
                 .tint(brandColor)
 
-                if steganographyEnabled {
-                    Toggle(isOn: $autoMode) {
-                        Label("steg.auto_mode".localized, systemImage: "arrow.triangle.2.circlepath")
-                    }
-                    .tint(brandColor)
 
-                    Picker(selection: $carrierSource) {
-                        Text("steg.carrier.generated".localized).tag("generated")
-                        Text("steg.carrier.camera".localized).tag("camera")
-                        Text("steg.carrier.gallery".localized).tag("gallery")
-                    } label: {
-                        Label("steg.carrier_source".localized, systemImage: "photo.fill")
-                    }
-                }
             } header: {
                 Text("steg.section.settings".localized)
             } footer: {
@@ -606,8 +584,8 @@ struct SteganographySettingsView: View {
                 Toggle(isOn: $covertChannelEnabled) {
                     Label {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Covert Channels")
-                            Text("Hide messages in web traffic")
+                            Text("steg.covert.title".localized)
+                            Text("steg.covert.subtitle".localized)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -618,77 +596,13 @@ struct SteganographySettingsView: View {
                 .tint(brandColor)
 
                 if covertChannelEnabled {
-                    Picker(selection: $preferredChannel) {
-                        Text("Auto (Recommended)").tag("auto")
-                        Text("HTTP Headers").tag("httpHeader")
-                        Text("DNS Tunnel").tag("dnsSubdomain")
-                        Text("Domain Front").tag("domainFront")
-                        Text("Web Mimicry").tag("webMimicry")
-                        Text("Text Stego").tag("textSteganography")
-                    } label: {
-                        Label("Channel", systemImage: "antenna.radiowaves.left.and.right")
-                    }
-
-                    // Network Assessment
-                    Button {
-                        isAssessing = true
-                        Task {
-                            let assessment = await CovertChannelManager.shared.assessNetwork()
-                            await MainActor.run {
-                                networkAssessment = assessment
-                                isAssessing = false
-                            }
-                        }
-                    } label: {
-                        HStack {
-                            Label("Assess Network", systemImage: "wifi.exclamationmark")
-                            Spacer()
-                            if isAssessing {
-                                ProgressView()
-                                    .scaleEffect(0.8)
-                            }
-                        }
-                    }
-                    .disabled(isAssessing)
-
-                    if let assessment = networkAssessment {
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack {
-                                Text("Restriction Level:")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Text(assessment.restrictionLevel.displayName)
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(restrictionColor(assessment.restrictionLevel))
-                            }
-                            HStack {
-                                Text("Accessible Sites:")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Text("\(assessment.accessibleDomains.count)")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                            }
-                            HStack {
-                                Text("DPI Detected:")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Image(systemName: assessment.dpiDetected ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")
-                                    .foregroundColor(assessment.dpiDetected ? .red : .green)
-                                    .font(.caption)
-                            }
-                            Text("Recommended: \(assessment.recommendedChannels.map { $0.displayName }.joined(separator: ", "))")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.vertical, 4)
-                    }
+                    Text("Authenticated and padded V2 requests. This reduces exact size correlation, but is not anonymity, censorship circumvention, or undetectable steganography.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             } header: {
-                Text("Network Bypass")
-            } footer: {
-                Text("Routes messages through covert channels that look like normal web browsing. Use in restrictive networks.")
+                Text("steg.section.network_bypass".localized)
             }
 
             // Capacity info
@@ -712,6 +626,9 @@ struct SteganographySettingsView: View {
                 }
             }
         }
+        .onAppear { _ = CoverTransport.mode }
+        .onChange(of: steganographyEnabled) { _, _ in _ = CoverTransport.mode }
+        .onChange(of: covertChannelEnabled) { _, _ in _ = CoverTransport.mode }
         .navigationTitle("steg.title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .alert("steg.disclaimer.alert_title".localized, isPresented: $showDisclaimer) {

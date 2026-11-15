@@ -207,6 +207,109 @@ final class OSHICryptoV2Tests: XCTestCase {
         )
     }
 
+    // MARK: - __RATCHET_STATE_IS_TRANSACTIONAL_2026_08_18__
+    //
+    // Signalé en divulgation privée par Turáni Gergely, vérifié dans le code.
+    //
+    // `ratchetDecrypt` mutait l'état AVANT que le tag AES-GCM soit vérifié, et
+    // `RatchetState` est une CLASSE: les mutations étaient donc déjà commises
+    // dans l'objet de l'appelant quand l'authentification échouait. Un seul
+    // paquet forgé ou corrompu — sans aucune clé, sans position d'interception —
+    // suffisait à casser une conversation DÉFINITIVEMENT.
+    //
+    // Les deux tests ci-dessous sont ceux du rapport, parce qu'ils décrivent
+    // exactement l'invariant: une entrée non authentifiée ne doit engager aucun
+    // état cryptographique.
+
+    /// Cas A — un message falsifié de la chaîne courante ne doit rien consommer.
+    func testTamperedRatchetMessageDoesNotCorruptState() throws {
+        let SK = OSHICryptoV2.randomBytes(32)
+        let bobPair = OSHICryptoV2.generateX25519()
+        let ad = Data("oshi-ad".utf8)
+
+        let alice = try OSHICryptoV2.ratchetInitAlice(SK: SK, bobRatchetPub: bobPair.pub)
+        let bob = OSHICryptoV2.ratchetInitBob(SK: SK, bobRatchetPair: bobPair)
+
+        let plaintext = Data("legitimate message".utf8)
+        let encrypted = try OSHICryptoV2.ratchetEncrypt(alice, plaintext: plaintext, associatedData: ad)
+
+        var tampered = encrypted.ciphertext
+        tampered[tampered.startIndex] ^= 0x01
+
+        XCTAssertThrowsError(
+            try OSHICryptoV2.ratchetDecrypt(bob, header: encrypted.header,
+                                            ciphertext: tampered, associatedData: ad),
+            "un paquet falsifié doit être rejeté")
+
+        // L'INVARIANT: le message légitime passe encore après l'échec.
+        let recovered = try OSHICryptoV2.ratchetDecrypt(bob, header: encrypted.header,
+                                                        ciphertext: encrypted.ciphertext,
+                                                        associatedData: ad)
+        XCTAssertEqual(recovered, plaintext, "l'échec a consommé l'état de la chaîne")
+    }
+
+    /// Cas B — le plus vicieux: détruire la clé d'un message retardé.
+    ///
+    /// Après avoir livré N+1 en premier, la clé de N vit dans MKSKIPPED. Son
+    /// en-tête voyage EN CLAIR, donc n'importe qui peut fabriquer un paquet
+    /// corrompu qui le porte. La clé était retirée avant la vérification du tag:
+    /// le message N authentique arrivait ensuite et n'était plus déchiffrable.
+    func testTamperedSkippedMessageDoesNotDestroyItsKey() throws {
+        let SK = OSHICryptoV2.randomBytes(32)
+        let bobPair = OSHICryptoV2.generateX25519()
+        let ad = Data("oshi-ad".utf8)
+
+        let alice = try OSHICryptoV2.ratchetInitAlice(SK: SK, bobRatchetPub: bobPair.pub)
+        let bob = OSHICryptoV2.ratchetInitBob(SK: SK, bobRatchetPair: bobPair)
+
+        let first = try OSHICryptoV2.ratchetEncrypt(alice, plaintext: Data("N".utf8), associatedData: ad)
+        let second = try OSHICryptoV2.ratchetEncrypt(alice, plaintext: Data("N+1".utf8), associatedData: ad)
+
+        // N+1 arrive en premier: la clé de N est mise de côté.
+        _ = try OSHICryptoV2.ratchetDecrypt(bob, header: second.header,
+                                            ciphertext: second.ciphertext, associatedData: ad)
+
+        // Paquet corrompu portant l'en-tête public de N.
+        var tampered = first.ciphertext
+        tampered[tampered.startIndex] ^= 0x01
+        XCTAssertThrowsError(
+            try OSHICryptoV2.ratchetDecrypt(bob, header: first.header,
+                                            ciphertext: tampered, associatedData: ad))
+
+        // Le vrai N doit encore s'ouvrir.
+        let recovered = try OSHICryptoV2.ratchetDecrypt(bob, header: first.header,
+                                                        ciphertext: first.ciphertext, associatedData: ad)
+        XCTAssertEqual(recovered, Data("N".utf8), "la clé du message retardé a été détruite par un faux")
+    }
+
+    /// Et l'échec ne doit RIEN changer, pas même les compteurs — la formulation
+    /// la plus littérale de l'invariant.
+    func testFailedAuthenticationLeavesEveryCounterUntouched() throws {
+        let SK = OSHICryptoV2.randomBytes(32)
+        let bobPair = OSHICryptoV2.generateX25519()
+        let ad = Data("oshi-ad".utf8)
+        let alice = try OSHICryptoV2.ratchetInitAlice(SK: SK, bobRatchetPub: bobPair.pub)
+        let bob = OSHICryptoV2.ratchetInitBob(SK: SK, bobRatchetPair: bobPair)
+
+        let msg = try OSHICryptoV2.ratchetEncrypt(alice, plaintext: Data("x".utf8), associatedData: ad)
+        var tampered = msg.ciphertext
+        tampered[tampered.startIndex] ^= 0x01
+
+        let before = (bob.Nr, bob.Ns, bob.PN, bob.RK, bob.CKr, bob.DHr, bob.MKSKIPPED.count)
+        XCTAssertThrowsError(
+            try OSHICryptoV2.ratchetDecrypt(bob, header: msg.header,
+                                            ciphertext: tampered, associatedData: ad))
+        let after = (bob.Nr, bob.Ns, bob.PN, bob.RK, bob.CKr, bob.DHr, bob.MKSKIPPED.count)
+
+        XCTAssertEqual(before.0, after.0, "Nr a bougé")
+        XCTAssertEqual(before.1, after.1, "Ns a bougé")
+        XCTAssertEqual(before.2, after.2, "PN a bougé")
+        XCTAssertEqual(before.3, after.3, "la clé racine a bougé")
+        XCTAssertEqual(before.4, after.4, "la chaîne de réception a bougé")
+        XCTAssertEqual(before.5, after.5, "la clé DH du pair a bougé")
+        XCTAssertEqual(before.6, after.6, "MKSKIPPED a bougé")
+    }
+
     func testFileEncryptDecrypt5MB() throws {
         let size = 5 * 1024 * 1024
         let original = OSHICryptoV2.randomBytes(size)

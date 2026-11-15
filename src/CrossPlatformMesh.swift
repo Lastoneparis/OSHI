@@ -16,6 +16,129 @@ import Foundation
 import CoreBluetooth
 import Network
 
+// MARK: - Reconnect Policy
+
+/// When a peer we can SEE but are not TALKING to should be dialled again.
+///
+/// The twin of `OSHI-Android/.../network/mesh/MeshReconnectPolicy.kt`, down to
+/// the numbers — `MeshReconnectParityTest` on the Android side reads both files
+/// and fails if they drift. Pure, so every branch is reachable from a unit test
+/// instead of needing two phones in one room.
+///
+/// ───────────────────── the defect this type exists for ─────────────────────
+///
+/// Found on Android on 2026-11-07 from a user screenshot (0 connected, 1
+/// nearby, a Connect button that did nothing) and then looked for here. iOS had
+/// the same hole and one more on top:
+///
+///   * `connectToPeer` is called from the BLE characteristic read and from
+///     `netServiceDidResolveAddress`, and from nowhere else. A `NetServiceBrowser`
+///     reports a service once; a peer already on the network when browsing
+///     starts is never reported again. So an `NWConnection` that goes `.failed`
+///     is that peer's only attempt, for the life of the process.
+///   * `.failed` calls `cleanupConnection(for:)`, which looks the connection up
+///     in `tcpConnections` — where it was never put, because that only happens
+///     on `.ready`. The failure path was therefore a complete no-op.
+///   * And the row had no button at all. On 2026-08-18 the Connect button was
+///     REMOVED from cross-platform peer rows, with the reasoning written into
+///     `CompactPeerRow`: "`connectToPeer` and `cleanupConnection` are private in
+///     `CrossPlatformMesh`, which connects by itself on discovery. There is no
+///     user action to offer on this transport." The premise was wrong — it
+///     connects by itself exactly once — and removing a dead control left the
+///     user with no control, which is the same mistake as relabelling one.
+///     PeersView has no Refresh either, and its three toggles all drive
+///     `MeshNetworkManager` (MultipeerConnectivity), not this class. An iPhone
+///     looking at a stranded Android peer had **zero** affordances.
+enum MeshReconnectPolicy {
+
+    /// What to do about one discovered-but-unconnected peer, right now.
+    enum Attempt {
+        /// There is a live connection for this key. Nothing to do.
+        case alreadyConnected
+        /// Open a TCP connection to the peer's announced ip/port.
+        case dial
+        /// We hold no address for this peer — only a fresh browse can supply one.
+        case rediscover
+        /// A dial is already in flight, or the backoff has not elapsed.
+        case wait
+    }
+
+    /// How often the automatic sweep runs.
+    static let sweepIntervalMs: Int = 15_000
+
+    /// Floor on automatic discovery restarts — a browse restart re-resolves
+    /// every service on the network.
+    static let rediscoverMinIntervalMs: Int = 60_000
+
+    /// Backoff ladder indexed by consecutive failures. The first retry is quick
+    /// on purpose: the common cause is a peer mid-handshake or briefly
+    /// backgrounded. It tops out rather than giving up — a peer still being
+    /// announced on the LAN is still worth a try.
+    static let backoffMs: [Int] = [0, 3_000, 10_000, 30_000, 60_000, 120_000]
+
+    /// Delay owed before the next dial after `failures` consecutive failures.
+    static func backoff(failures: Int) -> Int {
+        backoffMs[min(max(failures, 0), backoffMs.count - 1)]
+    }
+
+    /// - Parameters:
+    ///   - connected: a live connection already exists for this peer's key
+    ///   - hasAddress: the peer announced both an ip and a port
+    ///   - dialInFlight: a connect attempt for this key has not returned yet
+    ///   - failures: consecutive failed dials for this key
+    ///   - msSinceLastDial: elapsed time since the last dial was started
+    ///   - userAsked: the user pressed Connect on this very peer
+    static func decide(
+        connected: Bool,
+        hasAddress: Bool,
+        dialInFlight: Bool,
+        failures: Int,
+        msSinceLastDial: Int,
+        userAsked: Bool
+    ) -> Attempt {
+        if connected { return .alreadyConnected }
+        if dialInFlight { return .wait }
+        if !hasAddress { return .rediscover }
+        // A press is a fact the backoff does not have: the user is holding the
+        // phone next to the other one. Honouring a two-minute ladder at that
+        // moment is what makes a button feel dead.
+        if userAsked { return .dial }
+        return msSinceLastDial >= backoff(failures: failures) ? .dial : .wait
+    }
+
+    /// The address to dial when a resolve hands back several.
+    ///
+    /// Bonjour returns every address a peer published. The old code took the
+    /// first IPv4 and, when there was none, gave up without connecting at all.
+    /// Preference: a routable IPv4; then an IPv6 that is not loopback and not an
+    /// unscoped link-local; then a 169.254 IPv4, which is what two phones
+    /// self-assign on a Wi-Fi network with no DHCP server — a last resort, never
+    /// a choice, exactly as `lanIPv4Address()` treats it on the announce side.
+    static func pickDialAddress(_ candidates: [String]) -> String? {
+        let list = candidates.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+        let v4 = list.filter { !$0.contains(":") }
+            .filter { !$0.hasPrefix("127.") && $0 != "0.0.0.0" }
+        let v6 = list.filter { $0.contains(":") }
+            .filter { $0 != "::1" && $0 != "::" }
+            // A link-local v6 is dialable only with a zone index ("%en0").
+            .filter { !$0.lowercased().hasPrefix("fe80:") || $0.contains("%") }
+
+        return v4.first(where: { !$0.hasPrefix("169.254.") }) ?? v6.first ?? v4.first
+    }
+}
+
+/// The outcome of a user asking, in so many words, to connect to one peer.
+enum MeshConnectRequest {
+    /// A connection is already up — the UI should be showing this peer connected.
+    case alreadyConnected
+    /// A TCP connection to the peer's announced address is being opened.
+    case dialing
+    /// No address for this peer yet; browsing has been restarted to find one.
+    case searching
+    /// We have never seen this key. Browsing has been restarted anyway.
+    case notDiscovered
+}
+
 // MARK: - Cross-Platform Mesh Manager
 
 class CrossPlatformMesh: NSObject, ObservableObject {
@@ -37,6 +160,11 @@ class CrossPlatformMesh: NSObject, ObservableObject {
     private var discoveredPeripherals: [UUID: CBPeripheral] = [:]
 
     // Bonjour
+    /// __ONE_READ_MUST_SEE_ONE_DOCUMENT_2026_10_23__ The announce as it was when
+    /// the central asked for offset 0, so the rest of a long read is the rest of
+    /// THAT document. Mirrors Android's `gattPayloadSnapshot`.
+    private var gattPayloadSnapshot = Data()
+
     private var netService: NetService?
     private var netServiceBrowser: NetServiceBrowser?
     private var resolvedServices: [NetService] = []
@@ -45,6 +173,21 @@ class CrossPlatformMesh: NSObject, ObservableObject {
     // TCP Server
     private var tcpListener: NWListener?
     private var tcpConnections: [String: NWConnection] = [:]  // publicKey -> connection
+
+    // __NOTHING_EVER_DIALLED_A_PEER_TWICE_2026_11_07__ — see MeshReconnectPolicy.
+    // All four are owned by `stateQueue`, like `tcpConnections` above.
+
+    /// Consecutive failed dials per peer key. Cleared on a successful connect.
+    private var dialFailures: [String: Int] = [:]
+
+    /// When the last dial for a peer key was STARTED, not when it finished.
+    private var lastDialAt: [String: TimeInterval] = [:]
+
+    /// Peer keys with a connect attempt still in flight.
+    private var dialsInFlight = Set<String>()
+
+    /// Last Bonjour browse restart, for the sweep's floor.
+    private var lastDiscoveryRestartAt: TimeInterval = 0
 
     // Identity
     private var myPublicKey: String = ""
@@ -64,6 +207,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
 
     // Periodic scan restart
     private var scanRestartTimer: DispatchSourceTimer?
+    private var reconnectSweepTimer: DispatchSourceTimer?
     private var diagnosticsTimer: DispatchSourceTimer?
     private var bleRetryTimer: DispatchSourceTimer?
     private var routeCleanupTimer: DispatchSourceTimer?
@@ -94,6 +238,65 @@ class CrossPlatformMesh: NSObject, ObservableObject {
 
     let seenMessageIdsCap = 5_000
     let seenMessageIdsKeep = 2_500
+
+    // MARK: - Public-key spelling (__MESH_RECIPIENT_SPELLING_2026_10_12__)
+
+    /// Fold the two spellings an OSHI public key can arrive in into one:
+    /// base64url (`-`, `_`) to standard base64 (`+`, `/`), `=` padding dropped.
+    ///
+    /// `MessageManager.canonicalIdentity` does this for everything STORED on this
+    /// device. Nothing did it for the keys that arrive on a mesh frame, which is
+    /// where the two platforms meet.
+    static func normalizedMeshKey(_ key: String) -> String {
+        return key.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+            .replacingOccurrences(of: "=", with: "")
+    }
+
+    /// Do these two strings name the same OSHI identity?
+    ///
+    /// Compares the folded spellings, then falls back to the first-32-character
+    /// prefix match this file has always had, for any skew the fold misses.
+    static func meshKeysMatch(_ a: String, _ b: String) -> Bool {
+        let x = normalizedMeshKey(a)
+        let y = normalizedMeshKey(b)
+        guard !x.isEmpty, !y.isEmpty else { return false }
+        if x == y { return true }
+        let prefixLen = min(x.count, y.count, 32)
+        guard prefixLen >= 16 else { return false }
+        return x.prefix(prefixLen).lowercased() == y.prefix(prefixLen).lowercased()
+    }
+
+    /// Is a mesh frame carrying `recipientPublicKey` addressed to us?
+    ///
+    /// THIS IS THE BUG Anatole reported on 2026-10-12 ("mesh messaging works from
+    /// iOS to Android but not from Android to iOS"). Answering `false` does not
+    /// park the frame: `handleContentMessage` hands it to `relayToRecipient`,
+    /// which holds no route to a key that is in fact OUR OWN, and the message is
+    /// DROPPED IN SILENCE — one `OshiLog` line and nothing in the thread.
+    ///
+    /// The old test was `recipient.trimmed.lowercased() == mine.trimmed.lowercased()`
+    /// with the same prefix fallback, and neither half reconciles base64url with
+    /// standard base64: `lowercased()` leaves `-` as `-` and `_` as `_`. A 43-char
+    /// key carries a `+` or a `/` in its first 32 characters about two times in
+    /// three, so for most contacts BOTH halves failed.
+    ///
+    /// And it failed in one direction only, which is exactly how it was reported.
+    /// We address an Android peer with a key `canonicalIdentity` has already folded
+    /// to standard base64, and Android's own key is standard base64 — so iOS to
+    /// Android matched. Android has no equivalent funnel: its contact rows come
+    /// from a QR scan, the v2 relay and the VPS in either spelling (its own code
+    /// records contacts "stored under two slightly-different keys (whitespace,
+    /// base64 vs base64url)"), and whichever spelling the row held went out in the
+    /// frame. So every Android to iPhone mesh message met this check wearing the
+    /// wrong spelling and died here.
+    ///
+    /// An empty recipient is a broadcast and is for everyone (unchanged).
+    static func isAddressedToUs(_ recipientPublicKey: String, myPublicKey: String) -> Bool {
+        if recipientPublicKey.isEmpty { return true }
+        return meshKeysMatch(recipientPublicKey, myPublicKey)
+    }
 
     /// Single entry point so no call site can insert without recording order.
     /// Callers must already be on `stateQueue` — every one of them is.
@@ -128,6 +331,35 @@ class CrossPlatformMesh: NSObject, ObservableObject {
 
     // Callbacks
     private var messageCallbacks: [(CrossPlatformMessage) -> Void] = []
+
+    // MARK: - Tolerant state lookups
+    //
+    // Android hardened every one of ITS lookups for this skew long ago
+    // (`findStreamForRecipient`, `isPeerReachable`, `isPeerDiscovered`,
+    // `findConnectedPeer` — "without this, the sendTextMessage routing falls
+    // through to VPS even when the peer is connected"). iOS kept plain subscripts
+    // and `==`, so the mirror of the reported bug sat here waiting: an Android key
+    // spelled the other way is a live TCP connection we cannot find, and the send
+    // silently prefers the relay. Same rule, same place, both directions.
+
+    /// The live connection for `recipientPublicKey`, tolerant of key spelling.
+    /// MUST be called on `stateQueue`.
+    private func connectionForRecipient(_ recipientPublicKey: String) -> (key: String, connection: NWConnection)? {
+        if let direct = tcpConnections[recipientPublicKey] {
+            return (recipientPublicKey, direct)
+        }
+        if let hit = tcpConnections.first(where: { CrossPlatformMesh.meshKeysMatch($0.key, recipientPublicKey) }) {
+            return (hit.key, hit.value)
+        }
+        return nil
+    }
+
+    /// The route for `recipientPublicKey`, tolerant of key spelling.
+    /// MUST be called on `stateQueue`.
+    private func routeForRecipient(_ recipientPublicKey: String) -> RouteInfo? {
+        if let direct = routingTable[recipientPublicKey] { return direct }
+        return routingTable.first(where: { CrossPlatformMesh.meshKeysMatch($0.key, recipientPublicKey) })?.value
+    }
 
     // MARK: - Centralized Peer Dedup
 
@@ -250,6 +482,10 @@ class CrossPlatformMesh: NSObject, ObservableObject {
         // Periodic 2-hop identity gossip (every 30s)
         scheduleIdentityAnnounce()
 
+        // __NOTHING_EVER_DIALLED_A_PEER_TWICE_2026_11_07__ Retry peers that are
+        // discovered but not connected (every 15s).
+        scheduleReconnectSweep()
+
         DispatchQueue.main.async {
             self.isRunning = true
         }
@@ -287,6 +523,8 @@ class CrossPlatformMesh: NSObject, ObservableObject {
         routeCleanupTimer = nil
         identityAnnounceTimer?.cancel()
         identityAnnounceTimer = nil
+        reconnectSweepTimer?.cancel()
+        reconnectSweepTimer = nil
 
         stopBLEAdvertising()
         stopBLEScanning()
@@ -299,7 +537,13 @@ class CrossPlatformMesh: NSObject, ObservableObject {
             self?.routingTable.removeAll()
             self?.seenMessageIds.removeAll()
             self?.seenMessageOrder.removeAll()   // keep the order log in step with the set
+            // A peer that failed five times before the user toggled the mesh
+            // off must not come back owing two minutes of backoff.
+            self?.dialFailures.removeAll()
+            self?.lastDialAt.removeAll()
+            self?.dialsInFlight.removeAll()
         }
+        lastDiscoveryRestartAt = 0
 
         DispatchQueue.main.async {
             self.isRunning = false
@@ -368,12 +612,18 @@ class CrossPlatformMesh: NSObject, ObservableObject {
         messageCallbacks.append(callback)
     }
 
-    /// Check if peer is reachable
+    /// Check if peer is reachable.
+    ///
+    /// Thread-safety: the routing-table read now goes through `stateQueue.sync`,
+    /// matching `isPeerLiveConnected` below — the previous bare subscript raced
+    /// every mutation of `routingTable`. Same contract as that one: never call
+    /// this from inside a `stateQueue` block. Every caller today
+    /// (VoiceCallManager, MessageManager) is off-queue.
     func isPeerReachable(_ publicKey: String) -> Bool {
-        if connectedPeers.contains(where: { $0.publicKey == publicKey }) {
+        if connectedPeers.contains(where: { CrossPlatformMesh.meshKeysMatch($0.publicKey, publicKey) }) {
             return true
         }
-        if let route = routingTable[publicKey],
+        if let route = stateQueue.sync(execute: { routeForRecipient(publicKey) }),
            Date().timeIntervalSince(route.lastSeen) < 90 {
             return true
         }
@@ -391,8 +641,8 @@ class CrossPlatformMesh: NSObject, ObservableObject {
     /// send path) run OFF stateQueue. Never call this from inside a stateQueue block.
     func isPeerLiveConnected(_ publicKey: String) -> Bool {
         return stateQueue.sync {
-            if tcpConnections[publicKey] != nil { return true }
-            if let route = routingTable[publicKey], tcpConnections[route.nextHop] != nil {
+            if connectionForRecipient(publicKey) != nil { return true }
+            if let route = routeForRecipient(publicKey), connectionForRecipient(route.nextHop) != nil {
                 return true
             }
             return false
@@ -402,7 +652,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
     /// Check if peer is locally discoverable (BLE/Bonjour seen, TCP handshake may still be in progress).
     /// Used by the routing layer to wait briefly for a fresh connection before falling back to IPFS.
     func isPeerDiscovered(_ publicKey: String) -> Bool {
-        return crossPlatformPeers.contains { $0.publicKey == publicKey }
+        return crossPlatformPeers.contains { CrossPlatformMesh.meshKeysMatch($0.publicKey, publicKey) }
     }
 
     /// Get Android peers
@@ -422,45 +672,36 @@ class CrossPlatformMesh: NSObject, ObservableObject {
         sendMessage(to: recipientPublicKey, content: base64Audio, type: "CALL_AUDIO")
     }
 
-    /// Send location via cross-platform mesh (iOS ↔ Android)
-    @discardableResult
-    func sendLocation(to recipientPublicKey: String, locationData: Data) -> Bool {
-        let base64Location = locationData.base64EncodedString()
-        return sendMessage(to: recipientPublicKey, content: base64Location, type: "LOCATION_MESSAGE")
-    }
-
-    /// Send media (image/video/document) via cross-platform mesh
-    @discardableResult
-    func sendMedia(to recipientPublicKey: String, mediaData: Data, mediaType: String, fileName: String) -> Bool {
-        // Create a media payload with metadata
-        let mediaPayload: [String: Any] = [
-            "data": mediaData.base64EncodedString(),
-            "mediaType": mediaType,
-            "fileName": fileName,
-            "fileSize": mediaData.count
-        ]
-
-        guard let payloadData = try? JSONSerialization.data(withJSONObject: mediaPayload),
-              let payloadString = String(data: payloadData, encoding: .utf8) else {
-            return false
-        }
-        return sendMessage(to: recipientPublicKey, content: payloadString, type: "MEDIA_MESSAGE")
-    }
-
-    /// Send document via cross-platform mesh
-    func sendDocument(to recipientPublicKey: String, documentData: Data, fileName: String, mimeType: String) {
-        let documentPayload: [String: Any] = [
-            "data": documentData.base64EncodedString(),
-            "fileName": fileName,
-            "mimeType": mimeType,
-            "fileSize": documentData.count
-        ]
-
-        if let payloadData = try? JSONSerialization.data(withJSONObject: documentPayload),
-           let payloadString = String(data: payloadData, encoding: .utf8) {
-            sendMessage(to: recipientPublicKey, content: payloadString, type: "DOCUMENT_MESSAGE")
-        }
-    }
+    // __MEDIA_IN_THE_CLEAR_ON_THE_LAN_2026_11_07__
+    //
+    // `sendLocation`, `sendMedia` and `sendDocument` USED TO LIVE HERE and are
+    // gone. Each one base64'd a payload into `{data, mediaType/mimeType,
+    // fileName, fileSize}` and handed it to `sendMessage`, which writes JSON to
+    // an `NWParameters.tcp` connection — no TLS. A photo, a GPS fix, a PDF and
+    // its filename were readable by anyone on the same Wi-Fi.
+    //
+    // Android deleted its three counterparts on 25/09 (`__LEAK_FIX_2026_09_25__`).
+    // These survived because that commit's comment said it "mirrors iOS", which
+    // nobody checked: on iOS only the location CALL SITE had been rerouted, and
+    // the media one still `continue`d past the encrypted branch.
+    //
+    // NOTHING REPLACES THEM, because nothing needed to. Media, location and
+    // documents are already inside the ratchet ciphertext before this layer is
+    // reached: `MessageManager.sendMessage` encodes an attachment as
+    // `{"type":"media",…,"content":"<base64>"}` and encrypts THAT, and a location
+    // is a normal message whose plaintext is `📍LOCATION📍{json}`. Every cross-
+    // platform send now goes out through `relayMessage(meshWireSafe())` as
+    // ciphertext, which is what the direct live-connected bridge has done since
+    // 10/09.
+    //
+    // DELETED RATHER THAN DEPRECATED on purpose. Android could keep its version
+    // as a harmless pure envelope builder; these three WRITE TO THE SOCKET, so
+    // leaving them callable keeps the leak one line away. Receiving the legacy
+    // raw `LOCATION_MESSAGE` / `MEDIA_MESSAGE` / `DOCUMENT_MESSAGE` frames is
+    // untouched on both platforms, so peers on older builds still work.
+    //
+    // See `MeshNetworkManager.sendViaCrossPlatformMesh` for the call site this
+    // was removed from, and `OSHI_Mesh_Protocol_Reference.md` for the wire shape.
 
     // MARK: - TCP Server
 
@@ -538,6 +779,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
             OshiLog.mesh.info("[CrossPlatformMesh] No address for peer")
             return
         }
+        guard !peer.publicKey.isEmpty else { return }
 
         // 🔧 FIX: Serialize duplicate check on stateQueue (tcpConnections accessed from multiple threads)
         stateQueue.async { [weak self] in
@@ -552,6 +794,16 @@ class CrossPlatformMesh: NSObject, ObservableObject {
                 }
             }
 
+            // __NOTHING_EVER_DIALLED_A_PEER_TWICE_2026_11_07__ One dial per peer
+            // at a time, however many callers ask: the sweep, the two discovery
+            // callbacks and the Connect button all arrive here.
+            if self.dialsInFlight.contains(peer.publicKey) {
+                OshiLog.mesh.info("[CrossPlatformMesh] Dial already in flight for \(peer.displayName)")
+                return
+            }
+            self.dialsInFlight.insert(peer.publicKey)
+            self.lastDialAt[peer.publicKey] = Date().timeIntervalSince1970
+
             let endpoint = NWEndpoint.hostPort(host: NWEndpoint.Host(host), port: NWEndpoint.Port(rawValue: port)!)
             let connection = NWConnection(to: endpoint, using: .tcp)
 
@@ -564,6 +816,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
                     self?.tcpConnections[peer.publicKey] = connection
                     self?.sentIdentityTo.insert(peer.publicKey)
                 }
+                self?.noteDialFinished(peer.publicKey, failed: false)
 
                 DispatchQueue.main.async {
                     self?.addConnectedPeerOnMain(peer)
@@ -577,10 +830,16 @@ class CrossPlatformMesh: NSObject, ObservableObject {
 
             case .failed(let error):
                 OshiLog.mesh.info("[CrossPlatformMesh] Connection to \(peer.displayName) failed: \(error)")
+                // This used to be the end of the road. `cleanupConnection` looks
+                // the connection up in `tcpConnections`, where a dial that never
+                // reached .ready was never put — so the whole failure path was a
+                // no-op and the peer was simply never dialled again.
+                self?.noteDialFinished(peer.publicKey, failed: true)
                 self?.cleanupConnection(for: connection)
 
             case .cancelled:
                 OshiLog.mesh.info("[CrossPlatformMesh] Connection to \(peer.displayName) cancelled")
+                self?.noteDialFinished(peer.publicKey, failed: true)
                 self?.cleanupConnection(for: connection)
 
             default:
@@ -590,6 +849,180 @@ class CrossPlatformMesh: NSObject, ObservableObject {
 
             connection.start(queue: DispatchQueue.global(qos: .userInitiated))
         } // end stateQueue.async
+    }
+
+    // MARK: - Reconnect (see MeshReconnectPolicy)
+
+    /// Record the outcome of a dial. Only the attempt that is actually in
+    /// flight reports one: a connection that went `.ready` and is cancelled
+    /// minutes later is a disconnect, not a failed attempt.
+    private func noteDialFinished(_ key: String, failed: Bool) {
+        stateQueue.async { [weak self] in
+            guard let self = self else { return }
+            guard self.dialsInFlight.remove(key) != nil else { return }
+            if failed {
+                let n = (self.dialFailures[key] ?? 0) + 1
+                self.dialFailures[key] = n
+                OshiLog.mesh.info("[CrossPlatformMesh] dial failed for \(key.prefix(12))… — attempt \(n), next in \(MeshReconnectPolicy.backoff(failures: n))ms")
+            } else {
+                self.dialFailures.removeValue(forKey: key)
+            }
+        }
+    }
+
+    /// Is there a live connection for this peer key?
+    ///
+    /// Normalized, for the same reason `meshKeysMatch` is: an outgoing dial
+    /// keys the map on the spelling the peer ANNOUNCED, an incoming connection
+    /// on the spelling it stamped on its IDENTITY_EXCHANGE, and those differ
+    /// whenever one side uses base64url. Must be called on `stateQueue`.
+    private func hasLiveConnectionLocked(_ publicKey: String) -> Bool {
+        let want = CrossPlatformMesh.normalizedMeshKey(publicKey)
+        guard let connection = tcpConnections.first(where: {
+            CrossPlatformMesh.normalizedMeshKey($0.key) == want
+        })?.value else { return false }
+        return connection.state == .ready || connection.state == .preparing
+    }
+
+    /// Connect to one discovered peer, now, because the user asked.
+    ///
+    /// The Connect button on a cross-platform row was removed on 2026-08-18
+    /// because there was nothing public to call. This is the thing to call.
+    @discardableResult
+    func connectNow(publicKey: String) -> MeshConnectRequest {
+        guard !publicKey.isEmpty else { return .notDiscovered }
+
+        let want = CrossPlatformMesh.normalizedMeshKey(publicKey)
+        let peer = crossPlatformPeers.first {
+            CrossPlatformMesh.normalizedMeshKey($0.publicKey) == want
+        } ?? connectedPeers.first {
+            CrossPlatformMesh.normalizedMeshKey($0.publicKey) == want
+        }
+
+        guard let peer = peer else {
+            restartDiscovery(force: true)
+            return .notDiscovered
+        }
+
+        let connected = stateQueue.sync { hasLiveConnectionLocked(peer.publicKey) }
+        if connected { return .alreadyConnected }
+
+        let inFlight = stateQueue.sync { dialsInFlight.contains(peer.publicKey) }
+        // The user pressing the button forgives every earlier failure: they can
+        // see the other phone, and the backoff cannot.
+        stateQueue.async { [weak self] in self?.dialFailures.removeValue(forKey: peer.publicKey) }
+
+        switch MeshReconnectPolicy.decide(
+            connected: false,
+            hasAddress: peer.ipAddress != nil && peer.port != nil,
+            dialInFlight: inFlight,
+            failures: 0,
+            msSinceLastDial: Int.max,
+            userAsked: true
+        ) {
+        case .dial:
+            connectToPeer(peer)
+            return .dialing
+        case .rediscover:
+            restartDiscovery(force: true)
+            return .searching
+        // A dial is already running for this key — say so, do not open a second.
+        case .wait:
+            return .dialing
+        case .alreadyConnected:
+            return .alreadyConnected
+        }
+    }
+
+    /// Tear down Bonjour browsing and start it again, and re-arm the BLE scan.
+    ///
+    /// The only way to make a peer that is ALREADY published announce itself to
+    /// us a second time: `NetServiceBrowser` reports a service once per browse.
+    /// PeersView has no Refresh button today; this is what one would call.
+    ///
+    /// - Parameter force: skip the `rediscoverMinIntervalMs` floor. True for a
+    ///   user action, false for the automatic sweep.
+    func restartDiscovery(force: Bool = false) {
+        guard isRunning else { return }
+        let now = Date().timeIntervalSince1970
+        if !force,
+           (now - lastDiscoveryRestartAt) * 1000 < Double(MeshReconnectPolicy.rediscoverMinIntervalMs) {
+            return
+        }
+        lastDiscoveryRestartAt = now
+
+        OshiLog.mesh.info("[CrossPlatformMesh] 🔄 Restarting discovery (force=\(force), discovered=\(crossPlatformPeers.count), connected=\(connectedPeers.count))")
+
+        // Let BLE read announces again from peripherals we have already seen.
+        discoveredPeripherals.removeAll()
+        stopBLEScanning()
+        startBLEScanning()
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, self.isRunning else { return }
+            self.stopBonjourBrowsing()
+            // NetServiceBrowser does not like a search that races its own stop.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self = self, self.isRunning else { return }
+                self.startBonjourBrowsing()
+            }
+        }
+    }
+
+    /// Dial every discovered peer that is not connected and whose backoff has
+    /// elapsed. Runs every `MeshReconnectPolicy.sweepIntervalMs`.
+    private func sweepDiscoveredPeers() {
+        let peers = crossPlatformPeers
+        guard !peers.isEmpty else { return }
+        let now = Date().timeIntervalSince1970
+
+        var toDial: [CrossPlatformPeer] = []
+        var addressless = 0
+
+        stateQueue.sync {
+            for peer in peers where !peer.publicKey.isEmpty {
+                let sinceMs: Int
+                if let last = lastDialAt[peer.publicKey] {
+                    sinceMs = Int((now - last) * 1000)
+                } else {
+                    sinceMs = Int.max
+                }
+                switch MeshReconnectPolicy.decide(
+                    connected: hasLiveConnectionLocked(peer.publicKey),
+                    hasAddress: peer.ipAddress != nil && peer.port != nil,
+                    dialInFlight: dialsInFlight.contains(peer.publicKey),
+                    failures: dialFailures[peer.publicKey] ?? 0,
+                    msSinceLastDial: sinceMs,
+                    userAsked: false
+                ) {
+                case .dial: toDial.append(peer)
+                case .rediscover: addressless += 1
+                case .wait, .alreadyConnected: break
+                }
+            }
+        }
+
+        for peer in toDial {
+            OshiLog.mesh.info("[CrossPlatformMesh] 🔁 Reconnect sweep: dialling \(peer.displayName)")
+            connectToPeer(peer)
+        }
+        if addressless > 0 {
+            OshiLog.mesh.info("[CrossPlatformMesh] 🔁 Reconnect sweep: \(addressless) peer(s) with no address — asking discovery again")
+            restartDiscovery()
+        }
+    }
+
+    private func scheduleReconnectSweep() {
+        reconnectSweepTimer?.cancel()
+        let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.global(qos: .utility))
+        let seconds = Double(MeshReconnectPolicy.sweepIntervalMs) / 1000.0
+        timer.schedule(deadline: .now() + seconds, repeating: seconds)
+        timer.setEventHandler { [weak self] in
+            guard let self = self, self.isRunning else { return }
+            self.sweepDiscoveredPeers()
+        }
+        timer.resume()
+        reconnectSweepTimer = timer
     }
 
     private func sendIdentity(to connection: NWConnection) {
@@ -950,22 +1383,13 @@ class CrossPlatformMesh: NSObject, ObservableObject {
                 lastSeen: Date()
             )
 
-            // Check if message is for us.
-            // Be tolerant: Android sometimes stores our key with different whitespace/case
-            // padding than what we hold locally, which would cause a strict == to silently
-            // drop the message and route it to relay (where it dies because we have no
-            // outbound peers). Compare a normalized form first, then fall back to a
-            // prefix match for any remaining encoding skew.
-            let normalize: (String) -> String = { s in
-                s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-            }
-            let recipientNorm = normalize(message.recipientPublicKey)
-            let myNorm        = normalize(self.myPublicKey)
-            let prefixLen     = min(myNorm.count, recipientNorm.count, 32)
-            let isForUs =
-                message.recipientPublicKey.isEmpty ||
-                recipientNorm == myNorm ||
-                (prefixLen >= 16 && String(recipientNorm.prefix(prefixLen)) == String(myNorm.prefix(prefixLen)))
+            // Is the message for us? __MESH_RECIPIENT_SPELLING_2026_10_12__ —
+            // base64url and standard base64 are the same key. See
+            // `isAddressedToUs` for why a wrong answer here LOSES the message.
+            let isForUs = CrossPlatformMesh.isAddressedToUs(
+                message.recipientPublicKey,
+                myPublicKey: self.myPublicKey
+            )
 
             if isForUs {
                 OshiLog.mesh.info("[CrossPlatformMesh] Message is for us!")
@@ -982,7 +1406,7 @@ class CrossPlatformMesh: NSObject, ObservableObject {
                     userInfo: ["message": message]
                 )
             } else {
-                OshiLog.mesh.info("[CrossPlatformMesh] ⚠️ Recipient key mismatch — relaying. mine=\(myNorm.prefix(24))... msg=\(recipientNorm.prefix(24))...")
+                OshiLog.mesh.info("[CrossPlatformMesh] ⚠️ Recipient key mismatch — relaying. mine=\(CrossPlatformMesh.normalizedMeshKey(self.myPublicKey).prefix(24))... msg=\(CrossPlatformMesh.normalizedMeshKey(message.recipientPublicKey).prefix(24))...")
                 // Relay to intended recipient
                 self.relayToRecipient(message)
             }
@@ -1008,14 +1432,16 @@ class CrossPlatformMesh: NSObject, ObservableObject {
         // Also handles the throttled "no route" log inside the same critical
         // section (lastNoRouteLogAt is stateQueue-confined).
         let target: NWConnection? = stateQueue.sync {
-            if let connection = tcpConnections[message.recipientPublicKey] {
-                OshiLog.mesh.info("[CrossPlatformMesh] Direct send to \(message.recipientPublicKey.prefix(16))...")
-                return connection
+            // Tolerant of base64url/padding skew — see `meshKeysMatch`. A strict
+            // subscript here is how a live link gets passed over for the relay.
+            if let direct = connectionForRecipient(message.recipientPublicKey) {
+                OshiLog.mesh.info("[CrossPlatformMesh] Direct send to \(message.recipientPublicKey.prefix(16))... (matched \(direct.key.prefix(16))...)")
+                return direct.connection
             }
-            if let route = routingTable[message.recipientPublicKey],
-               let connection = tcpConnections[route.nextHop] {
+            if let route = routeForRecipient(message.recipientPublicKey),
+               let hop = connectionForRecipient(route.nextHop) {
                 OshiLog.mesh.info("[CrossPlatformMesh] Routed send via \(route.nextHop.prefix(16))...")
-                return connection
+                return hop.connection
             }
             // 🔧 FREEZE FIX: voice calls invoke this 50×/sec via sendCallAudio.
             // Throttle the no-route log to one per recipient per 5 s.
@@ -1128,9 +1554,60 @@ class CrossPlatformMesh: NSObject, ObservableObject {
         return (try? JSONSerialization.data(withJSONObject: info)) ?? Data()
     }
 
+    /// __THE_IP_WE_ANNOUNCE_MUST_BE_THE_LAN_ONE_2026_10_22__
+    ///
+    /// The address that goes into the BLE characteristic and the Bonjour record is
+    /// the one the Android phone dials. There is no BLE data path on either side
+    /// (both characteristics are READ-only, one JSON blob), so if that TCP
+    /// connection never comes up, iOS ↔ Android mesh does not happen at all.
+    ///
+    /// The old rule was `name == "en0" || name == "en1"`. Safe, and incomplete in
+    /// the one configuration people reach for when there is no router: with
+    /// Personal Hotspot ON, the iPhone's LAN address lives on `bridge100`, never
+    /// on `en0` — so we announced an EMPTY ip to the very peer that had just
+    /// joined our own network. Android then logs "no IP/port" and waits on
+    /// Bonjour. The `en0`/`en1` pair also leaves out `en2`+ (a wired adapter on
+    /// iPad, and the Mac under Catalyst, where Wi-Fi is not always `en0`).
+    ///
+    /// Pure and `static` so the ranking is testable; `getifaddrs` needs a device.
+    /// Mirror of Android's `pickLanIPv4` — keep the two in step.
+    ///
+    /// - Parameter candidates: (interface name, IPv4 literal), any order.
+    static func preferredLanIPv4(_ candidates: [(name: String, ip: String)]) -> String? {
+        // Up, carrying an IPv4, and useless to a peer on the local network:
+        // cellular is carrier NAT, utun/ipsec is a VPN, awdl/llw is the Apple
+        // peer-to-peer link MultipeerConnectivity already owns, anpi/XHC are
+        // internal.
+        let unusable = ["pdp_ip", "utun", "ipsec", "awdl", "llw", "lo",
+                        "anpi", "XHC", "ap1", "gif", "stf", "pktap"]
+        // Best first: a station or wired link, then a network we are HOSTING.
+        let tiers = [["en"], ["bridge"]]
+
+        func rank(_ name: String) -> Int {
+            if unusable.contains(where: { name.hasPrefix($0) }) { return -1 }
+            for (i, prefixes) in tiers.enumerated() where prefixes.contains(where: { name.hasPrefix($0) }) {
+                return i
+            }
+            return tiers.count          // unknown but not excluded: last resort
+        }
+
+        // 169.254.x.x means DHCP never completed: a fallback, never a choice.
+        let usable = candidates.compactMap { c -> (Int, String)? in
+            let r = rank(c.name)
+            guard r >= 0, !c.ip.isEmpty, c.ip != "0.0.0.0" else { return nil }
+            return (r, c.ip)
+        }
+        return usable
+            .sorted { lhs, rhs in
+                let l = (lhs.1.hasPrefix("169.254.") ? 1 : 0, lhs.0)
+                let r = (rhs.1.hasPrefix("169.254.") ? 1 : 0, rhs.0)
+                return l < r
+            }
+            .first?.1
+    }
+
     private func getLocalIPAddress() -> String? {
-        var address: String?
-        var linkLocalFallback: String?
+        var candidates: [(name: String, ip: String)] = []
         var ifaddr: UnsafeMutablePointer<ifaddrs>?
         guard getifaddrs(&ifaddr) == 0 else { return nil }
         defer { freeifaddrs(ifaddr) }
@@ -1139,23 +1616,20 @@ class CrossPlatformMesh: NSObject, ObservableObject {
         while ptr != nil {
             defer { ptr = ptr?.pointee.ifa_next }
             guard let interface = ptr?.pointee else { continue }
-            let addrFamily = interface.ifa_addr.pointee.sa_family
-            if addrFamily == UInt8(AF_INET) {
-                let name = String(cString: interface.ifa_name)
-                if name == "en0" || name == "en1" {
-                    var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-                    getnameinfo(interface.ifa_addr, socklen_t(interface.ifa_addr.pointee.sa_len), &hostname, socklen_t(hostname.count), nil, 0, NI_NUMERICHOST)
-                    let ip = String(cString: hostname)
-                    // 🔧 FIX: Prefer non-link-local addresses (169.254.x.x)
-                    if ip.hasPrefix("169.254.") {
-                        linkLocalFallback = ip
-                    } else {
-                        address = ip
-                    }
-                }
-            }
+            guard interface.ifa_addr.pointee.sa_family == UInt8(AF_INET) else { continue }
+            // Skip an interface the system reports as down: it has an address and
+            // no path, which is the same lie as announcing the cellular one.
+            guard (interface.ifa_flags & UInt32(IFF_UP)) != 0 else { continue }
+            var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+            getnameinfo(interface.ifa_addr, socklen_t(interface.ifa_addr.pointee.sa_len),
+                        &hostname, socklen_t(hostname.count), nil, 0, NI_NUMERICHOST)
+            candidates.append((String(cString: interface.ifa_name), String(cString: hostname)))
         }
-        return address ?? linkLocalFallback
+        let picked = CrossPlatformMesh.preferredLanIPv4(candidates)
+        if picked == nil && !candidates.isEmpty {
+            OshiLog.mesh.info("[CrossPlatformMesh] no LAN IPv4 to announce; saw \(candidates.map { $0.name })")
+        }
+        return picked
     }
 
     // MARK: - BLE Scanning
@@ -1690,14 +2164,34 @@ extension CrossPlatformMesh: CBPeripheralManagerDelegate {
 
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
         if request.characteristic.uuid == CrossPlatformMesh.CHAR_UUID {
-            let data = createAdvertisementData()
+            // __ONE_READ_MUST_SEE_ONE_DOCUMENT_2026_10_23__
+            //
+            // Snapshot at offset 0 and serve the continuation reads of a long read
+            // from that same snapshot. The announce is ~115 bytes and the default
+            // ATT MTU carries 22, so a long read is the ORDINARY case here: the
+            // central asks for 0, then 22, then 44. Recomputing per request embeds
+            // a fresh `ip`/`port` each time, so a Wi-Fi handover or a TCP server
+            // restart mid-read splices two different JSON documents together —
+            // `JSONObject` throws on the Android side, the peer is dropped in
+            // silence, and nothing in either log says why.
+            //
+            // Android has served reads this way since 2026-10-22
+            // (`CrossPlatformMesh.kt` gattReadSlice / gattPayloadSnapshot); this is
+            // the same rule, and `CrossPlatformMeshParityTest` now pins both.
+            let data: Data
+            if request.offset <= 0 {
+                data = createAdvertisementData()
+                gattPayloadSnapshot = data
+            } else {
+                data = gattPayloadSnapshot
+            }
             if request.offset > data.count {
                 peripheral.respond(to: request, withResult: .invalidOffset)
                 return
             }
             request.value = data.subdata(in: request.offset..<data.count)
             peripheral.respond(to: request, withResult: .success)
-            OshiLog.mesh.info("[CrossPlatformMesh] BLE read request served (port:\(myPort) ip:\(getLocalIPAddress() ?? "?"))")
+            OshiLog.mesh.info("[CrossPlatformMesh] BLE read request served (offset:\(request.offset) of \(data.count)B)")
         } else {
             peripheral.respond(to: request, withResult: .attributeNotFound)
         }
@@ -1753,20 +2247,25 @@ extension CrossPlatformMesh: NetServiceBrowserDelegate {
             return
         }
 
-        // Get IP address
-        var ipAddress: String?
+        // Get IP address.
+        //
+        // This used to take the first IPv4 and `break`, leaving `ipAddress` nil
+        // when a peer published none — and a nil address meant no connection
+        // attempt at all, ever, since nothing re-resolved. Collect them all and
+        // let `MeshReconnectPolicy.pickDialAddress` rank them, so an IPv6-only
+        // peer is reachable and a loopback or unscoped link-local never is.
+        var candidates: [String] = []
         for addressData in addresses {
             var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
             addressData.withUnsafeBytes { ptr in
                 let sockaddr = ptr.bindMemory(to: sockaddr.self).baseAddress!
                 getnameinfo(sockaddr, socklen_t(addressData.count), &hostname, socklen_t(hostname.count), nil, 0, NI_NUMERICHOST)
             }
-            let ip = String(cString: hostname)
-            // Prefer IPv4
-            if !ip.contains(":") {
-                ipAddress = ip
-                break
-            }
+            candidates.append(String(cString: hostname))
+        }
+        let ipAddress = MeshReconnectPolicy.pickDialAddress(candidates)
+        if ipAddress == nil && !candidates.isEmpty {
+            OshiLog.mesh.info("[CrossPlatformMesh] Resolved \(sender.name) to \(candidates.count) address(es), none dialable")
         }
 
         // Get TXT record info

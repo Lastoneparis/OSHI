@@ -232,18 +232,26 @@ final class TextSteganography {
         var bits: [Bool] = []
         var recording = false
 
-        for char in text {
-            if char == zwStart {
+        // Iterate UNICODE SCALARS, not Characters. A Swift `Character` is a grapheme
+        // cluster, and the zero-width joiner / non-joiner that carry our bits
+        // (U+200C = bit 1, U+200D = separator) fuse with the adjacent visible
+        // character into one cluster — so `for char in text` never yields them as
+        // their own Character and silently drops every embedded bit, making extract
+        // fail to round-trip what embed produced. Scalars are never clustered.
+        // Scalar values of the markers (see zwStart/zwSep/zwBit0/zwBit1 above):
+        // zwStart U+FEFF, zwSep U+200D, zwBit0 U+200B, zwBit1 U+200C.
+        for scalar in text.unicodeScalars {
+            switch scalar.value {
+            case 0xFEFF:                       // zwStart
                 recording = true
-                continue
-            }
-            if char == zwSep && recording {
-                break
-            }
-            if recording {
-                if char == zwBit0 { bits.append(false) }
-                else if char == zwBit1 { bits.append(true) }
-                // Skip visible characters
+            case 0x200D where recording:       // zwSep — end marker
+                return bits.isEmpty ? nil : bitsToData(bits)
+            case 0x200B where recording:       // zwBit0
+                bits.append(false)
+            case 0x200C where recording:       // zwBit1
+                bits.append(true)
+            default:
+                break   // visible characters (and any scalar before the start marker)
             }
         }
 

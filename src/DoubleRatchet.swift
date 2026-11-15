@@ -24,6 +24,22 @@ class DoubleRatchetSession: Codable {
     private(set) var sessionId: String  // Canonical identifier
     private(set) var isInitiator: Bool  // Role in this session
 
+    /// __PEER_VERSION_EVIDENCE_2026_10_09__ True once a real DH ratchet has run
+    /// in this session. Before that, the initiator's receiving chain is still
+    /// the derived opening chain that commit 0cfc8c9 introduced, and a decrypt
+    /// failure can be the old-peer mismatch. After it, both chains are random
+    /// and that diagnosis is no longer possible — so it must stop being offered.
+    ///
+    /// DELIBERATELY NOT in `CodingKeys`, so it does not survive a relaunch.
+    /// Adding a key to this type's `Codable` surface would touch the stored
+    /// session store, and reading back `false` for a session that HAD already
+    /// ratcheted costs nothing: `looksLikeLegacyResponderChain` then runs on a
+    /// post-ratchet chain where the legacy key cannot match, because both
+    /// chains are random by that point, so it returns false. The whole cost is
+    /// ≤32 chain advances and one failed AEAD attempt, on a decrypt that had
+    /// already failed. A false POSITIVE is not reachable.
+    private(set) var hasRatchetedSinceCreation = false
+
     /// Whether this session's root key absorbed post-quantum material.
     ///
     /// Decided ONCE, when the session is created, and then fixed. It is not a
@@ -127,6 +143,25 @@ class DoubleRatchetSession: Codable {
     private var needsDHRatchet: Bool = false
     
     private let sessionQueue = DispatchQueue(label: "com.app.ratchet.session", qos: .userInitiated)
+
+    /// __RATCHET_ENCODE_ON_QUEUE_2026_10_01__ `encode(to:)` read the keys with no lock
+    /// while `decrypt` replaced them on `sessionQueue`: the manager's save (JSONEncoder on
+    /// `com.app.ratchet.manager`) base64-encoded a chain key the main thread's decrypt had
+    /// just released → SIGSEGV (iPhone 17, build 156, 01/10 08:37, retryAllPendingDecryption
+    /// during a save). Reads now happen on the session queue; the marker lets code already
+    /// on it run inline instead of deadlocking on `sync`.
+    private static let sessionQueueKey = DispatchSpecificKey<ObjectIdentifier>()
+
+    private func markSessionQueue() {
+        sessionQueue.setSpecific(key: Self.sessionQueueKey, value: ObjectIdentifier(self))
+    }
+
+    private func onSessionQueue<T>(_ body: () throws -> T) rethrows -> T {
+        if DispatchQueue.getSpecific(key: Self.sessionQueueKey) == ObjectIdentifier(self) {
+            return try body()
+        }
+        return try sessionQueue.sync(execute: body)
+    }
     
     struct SkippedKey: Codable {
         let key: Data
@@ -157,6 +192,7 @@ class DoubleRatchetSession: Codable {
         self.sessionVersion = 2
         self.securityMode = securityMode
         self.pqCiphertext = pqCiphertext
+        markSessionQueue()
     }
     
     required init(from decoder: Decoder) throws {
@@ -186,9 +222,14 @@ class DoubleRatchetSession: Codable {
         securityMode = try container.decodeIfPresent(RatchetSecurityMode.self, forKey: .securityMode) ?? .classical
         pqCiphertext = try container.decodeIfPresent(Data.self, forKey: .pqCiphertext)
         pqCiphertextAcknowledged = try container.decodeIfPresent(Bool.self, forKey: .pqCiphertextAcknowledged) ?? false
+        markSessionQueue()
     }
     
     func encode(to encoder: Encoder) throws {
+        try onSessionQueue { try encodeUnlocked(to: encoder) }
+    }
+
+    private func encodeUnlocked(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(rootKey, forKey: .rootKey)
         try container.encode(sendingChainKey, forKey: .sendingChainKey)
@@ -267,6 +308,33 @@ class DoubleRatchetSession: Codable {
         ).withUnsafeBytes { Data($0) }
     }
 
+    /// The v2 counterpart of `responderInitialChain`, for the OLD, non-rotating
+    /// layout.
+    ///
+    /// __POURQUOI v2 EN A BESOIN AUSSI__ v2 ne fait jamais tourner le ratchet DH,
+    /// donc sa chaîne d'envoi de répondeur restait ces 32 octets nuls POUR
+    /// TOUJOURS — chaque message chiffré sous HKDF(00x32, "MessageKey") =
+    /// d663c614…4562, une constante identique sur tous les appareils du monde.
+    /// v3 a réparé sa propre version le 08/09; v2 la partageait, sur un parc plus
+    /// large, et c'était le défaut le plus visible pour qui lit le dépôt public.
+    ///
+    /// On la dérive désormais du secret partagé, comme le fait l'initiateur pour
+    /// sa première chaîne. v2 n'offre toujours pas de confidentialité persistante
+    /// pour ses messages d'ouverture — c'est sa limite de conception — mais la
+    /// CONSTANTE PUBLIQUE disparaît du comportement et du code.
+    ///
+    /// Info string DISTINCTE de v3 (`-v2` vs `-v3`): les deux ne doivent jamais
+    /// dériver la même valeur, et Kotlin doit produire ces octets exacts ou les
+    /// deux plateformes échouent l'AEAD en silence. [Audit 2026-09-09]
+    static func responderInitialChainV2(sharedSecret: Data) -> Data {
+        HKDF<SHA256>.deriveKey(
+            inputKeyMaterial: SymmetricKey(data: sharedSecret),
+            salt: Data(),
+            info: Data("ResponderInitialChain-v2".utf8),
+            outputByteCount: 32
+        ).withUnsafeBytes { Data($0) }
+    }
+
     /// Build a v3 session, initialised the way the Double Ratchet actually
     /// specifies rather than with both sides holding an un-rotating key.
     ///
@@ -328,7 +396,7 @@ class DoubleRatchetSession: Codable {
     }
     
     func encrypt(_ plaintext: String) throws -> DoubleRatchetMessage {
-        return try sessionQueue.sync {
+        return try onSessionQueue {
             try _encrypt(plaintext)
         }
     }
@@ -359,11 +427,14 @@ class DoubleRatchetSession: Codable {
         // half that IS safe alone: it turns a silent loss of confidentiality into
         // a visible send failure the caller's heal path already handles.
         //
-        // Scoped to v3 deliberately. v2 has the identical defect and a larger
-        // installed base; an unscoped guard would break every live v2 responder's
-        // first send. v2 needs its own coordinated fix. [Audit 2026-09-08]
-        if sessionVersion >= DoubleRatchetSession.ratchetingSessionVersion,
-           sendingChainKey == Data(repeating: 0, count: 32) {
+        // Now UNCONDITIONAL, v2 included. As of the 2026-09-09 fix no freshly
+        // built session — v2 or v3, initiator or responder — has a zero sending
+        // chain; the only way to reach one is a session PERSISTED by a build that
+        // predates the fix. Refusing it turns a silent send under the public
+        // constant into a visible failure that `handleDoubleRatchetError` heals
+        // by rebuilding the session (now always v3). The v2-scoped exception this
+        // replaced only existed because v2 still shipped the constant. [Audit 2026-09-09]
+        if sendingChainKey == Data(repeating: 0, count: 32) {
             OshiLog.crypto.error("🚨 Refusing to encrypt on an all-zero sending chain (v\(self.sessionVersion), \(self.isInitiator ? "INITIATOR" : "RESPONDER"))")
             throw DoubleRatchetError.uninitializedSendingChain
         }
@@ -403,7 +474,7 @@ class DoubleRatchetSession: Codable {
     }
     
     func decrypt(_ message: DoubleRatchetMessage) throws -> String {
-        return try sessionQueue.sync {
+        return try onSessionQueue {
             try _decrypt(message)
         }
     }
@@ -528,7 +599,47 @@ class DoubleRatchetSession: Codable {
                 let messageKey = deriveMessageKey(from: receivingChainKey)
                 
                 let headerData = encodeHeaderForAAD(message.header)
-                let plaintext = try decryptWithKey(message.ciphertext, key: messageKey, authenticating: headerData)
+                let plaintext: String
+                do {
+                    plaintext = try decryptWithKey(message.ciphertext, key: messageKey, authenticating: headerData)
+                } catch {
+                    // __PEER_VERSION_EVIDENCE_2026_10_09__ Work out WHY this
+                    // failed before giving up, because one cause is not a
+                    // corrupt message and the user can act on it.
+                    //
+                    // Commit 0cfc8c9 replaced the v3 responder's opening
+                    // sending chain — and the initiator's matching receiving
+                    // chain — with HKDF(sharedSecret, "ResponderInitialChain-v3").
+                    // It used to be 32 zero bytes. The wire format and the AAD
+                    // did not change, deliberately, so a peer still on the old
+                    // build fails the AEAD here in complete silence: there is
+                    // nothing in the message that says "version mismatch".
+                    //
+                    // `peerIsOutdated` cannot catch it either. It reads the
+                    // version the peer ANNOUNCED, and `appVersion`/`appPlatform`
+                    // were added by the very release that fixed the chain — so
+                    // a 1.0.43 peer announces nothing, the guard returns false,
+                    // and the "ask them to update" banner never appears for
+                    // exactly the peers it was written for.
+                    //
+                    // So we prove it instead of guessing. The old chain was a
+                    // world constant, which means we can derive the key that
+                    // build WOULD have used and test it. If it matches, the
+                    // peer is definitively running pre-0cfc8c9 code.
+                    //
+                    // The plaintext is deliberately DISCARDED and the original
+                    // error rethrown: that key has no secret input, so anyone
+                    // could have produced this ciphertext, and accepting it
+                    // would let a third party forge an opening message. This is
+                    // a diagnostic, not a fallback. Turning it into a fallback
+                    // is a separate, deliberate decision about accepting forged
+                    // opening messages from outdated peers; see the audit note.
+                    if looksLikeLegacyResponderChain(message, authenticating: headerData) {
+                        OshiLog.crypto.info("   🕰️ Peer is on a pre-0cfc8c9 build: this message decrypts under the OLD zero-seeded responder chain. Flagging the peer as outdated; NOT accepting the message.")
+                        onLegacyResponderChainDetected?()
+                    }
+                    throw error
+                }
                 
                 receivingChainKey = advanceChainKey(receivingChainKey)
                 receivingMessageNumber += 1
@@ -574,6 +685,10 @@ class DoubleRatchetSession: Codable {
         // ratcheted a second time on a key it had already consumed, and BOTH
         // directions died with no key material and no MITM position required.
         let needsDHRatchet: Bool
+        /// Same reason as `needsDHRatchet` above: set by `performDHRatchet`
+        /// before the AEAD tag is checked, so a forged packet must not be able
+        /// to flip it permanently.
+        let hasRatchetedSinceCreation: Bool
     }
     
     #if DEBUG
@@ -593,7 +708,8 @@ class DoubleRatchetSession: Codable {
             ourRatchetKeyPair: ourRatchetKeyPair,
             theirRatchetPublicKey: theirRatchetPublicKey,
             skippedKeys: skippedMessageKeys,
-            needsDHRatchet: needsDHRatchet
+            needsDHRatchet: needsDHRatchet,
+            hasRatchetedSinceCreation: hasRatchetedSinceCreation
         )
     }
     
@@ -607,6 +723,7 @@ class DoubleRatchetSession: Codable {
         ourRatchetKeyPair = state.ourRatchetKeyPair
         theirRatchetPublicKey = state.theirRatchetPublicKey
         needsDHRatchet = state.needsDHRatchet
+        hasRatchetedSinceCreation = state.hasRatchetedSinceCreation
         replaceSkipped(state.skippedKeys)
     }
     
@@ -627,6 +744,7 @@ class DoubleRatchetSession: Codable {
         ourRatchetKeyPair = newOurRatchet
         theirRatchetPublicKey = newPublicKey
         needsDHRatchet = true
+        hasRatchetedSinceCreation = true
     }
     
     private func skipMessageKeys(until targetNumber: UInt32, chainPublicKey: Data) throws {
@@ -654,6 +772,41 @@ class DoubleRatchetSession: Codable {
         OshiLog.crypto.info("   ✅ Skipped to msg#\(receivingMessageNumber), stored \(gap) key(s)")
     }
     
+    /// __PEER_VERSION_EVIDENCE_2026_10_09__ Called when a message turns out to
+    /// be encrypted under the pre-0cfc8c9 responder chain. Set by the session
+    /// manager so the crypto layer does not need to know about contacts.
+    var onLegacyResponderChainDetected: (() -> Void)?
+
+    /// True when `message` decrypts under the chain a pre-0cfc8c9 build would
+    /// have used for the responder's opening messages: 32 zero bytes, advanced
+    /// once per message.
+    ///
+    /// Only meaningful for the INITIATOR — it is the initiator's receiving
+    /// chain that was seeded to match the responder's opening sending chain —
+    /// and only before a real DH ratchet, after which both chains are random
+    /// and this can no longer be what went wrong.
+    ///
+    /// The result is thrown away by the caller. This exists to tell the user
+    /// "they need to update" with certainty, nothing more.
+    private func looksLikeLegacyResponderChain(_ message: DoubleRatchetMessage,
+                                               authenticating headerData: Data) -> Bool {
+        guard isInitiator,
+              sessionVersion >= DoubleRatchetSession.ratchetingSessionVersion,
+              !hasRatchetedSinceCreation else { return false }
+        // Bound the work: the opening chain is a handful of messages, and this
+        // runs on a failed decrypt, so it must not become a long loop on a
+        // peer that is simply sending garbage.
+        guard message.header.messageNumber <= 32 else { return false }
+        var chain = Data(repeating: 0, count: 32)
+        for _ in 0..<message.header.messageNumber {
+            chain = advanceChainKey(chain)
+        }
+        let legacyKey = deriveMessageKey(from: chain)
+        return (try? decryptWithKey(message.ciphertext,
+                                    key: legacyKey,
+                                    authenticating: headerData)) != nil
+    }
+
     private func deriveMessageKey(from chainKey: Data) -> Data {
         let key = HKDF<SHA256>.deriveKey(
             inputKeyMaterial: SymmetricKey(data: chainKey),
@@ -715,7 +868,12 @@ class DoubleRatchetSession: Codable {
         return plaintext
     }
     
-    private func encodeHeaderForAAD(_ header: DoubleRatchetMessage.MessageHeader) -> Data {
+    /// Interne plutôt que privée UNIQUEMENT pour que les tests puissent produire
+    /// des vecteurs d'AAD à confronter à Android. Sans ça, un test ne pourrait
+    /// que réimplémenter cette disposition — c'est-à-dire comparer ma lecture à
+    /// elle-même, ce qui ne prouve rien. Aucun appelant de production hors de
+    /// ce type ne doit s'en servir.
+    func encodeHeaderForAAD(_ header: DoubleRatchetMessage.MessageHeader) -> Data {
         var data = Data()
         
         // Always same order: publicKey, msgNum, prevLen, flag, version, sessionId
@@ -965,10 +1123,16 @@ class DoubleRatchetSessionManager {
                     securityMode: hybrid ? .hybridPQ : .classical,
                     pqCiphertext: pqCiphertext)
             } else {
+                // v2, la disposition non-rotative. La chaîne du répondeur était
+                // 32 octets nuls — la constante publique d663c614… ; elle est
+                // désormais dérivée du secret partagé (`responderInitialChainV2`),
+                // exactement comme la moitié initiateur l'est déjà. Plus aucune
+                // constante n'entre dans le chiffrement. [Audit 2026-09-09]
+                let responderChainV2 = DoubleRatchetSession.responderInitialChainV2(sharedSecret: ikm)
                 session = DoubleRatchetSession(
                     rootKey: rootKey,
-                    sendingChainKey: weAreInitiator ? initialChain : Data(repeating: 0, count: 32),
-                    receivingChainKey: weAreInitiator ? Data(repeating: 0, count: 32) : initialChain,
+                    sendingChainKey: weAreInitiator ? initialChain : responderChainV2,
+                    receivingChainKey: weAreInitiator ? responderChainV2 : initialChain,
                     sessionId: sessionId,
                     isInitiator: weAreInitiator,
                     securityMode: hybrid ? .hybridPQ : .classical,
@@ -976,6 +1140,14 @@ class DoubleRatchetSessionManager {
                 )
             }
             
+            // __PEER_VERSION_EVIDENCE_2026_10_09__ Let the session report an
+            // old-build peer without the crypto layer knowing what a contact
+            // is. `theirPublicKey` is captured rather than read back later
+            // because the session outlives this call.
+            session.onLegacyResponderChainDetected = { [theirPublicKey] in
+                PeerVersionStore.shared.recordLegacyRatchetEvidence(for: theirPublicKey)
+            }
+
             sessions[sessionId] = session
             // 🔴 WATCHDOG (0x8BADF00D): getOrCreateSession is reached synchronously from the
             // 1 Hz pending-decryption timer on the main runloop (MessageManager
@@ -1270,13 +1442,11 @@ extension DoubleRatchetSessionManager {
         }
     }
 
-    /// CV-010: only build a rotating session when the peer can read one.
+    /// A-t-on APPRIS que ce pair sait lire une session rotative ?
     ///
-    /// `_decrypt` compares `sessionVersion` with a strict equality, so a v3
-    /// session and a v2 one cannot exchange a single message. A peer that has
-    /// not advertised support therefore keeps the old, non-rotating session —
-    /// worse cryptography, but a working conversation, and it upgrades on its own
-    /// once their profile arrives and the session is next re-established.
+    /// A profile advertisement is the only safe signal that a peer can open a
+    /// v3 session. It is deliberately separate from the PQ-key directory: a
+    /// peer may publish a post-quantum key while still running a v2 ratchet.
     func wantsRatchetingSession(with peer: String) -> Bool {
         PeerCapabilityStore.shared.supportsRatchetV3(peer)
     }
@@ -1294,14 +1464,28 @@ extension DoubleRatchetSessionManager {
     /// version of a session being created, never lower one already established —
     /// a header is attacker-controlled, and "claim v2 to force the weaker
     /// ratchet" is exactly the downgrade that asymmetry refuses.
-    private func shouldRatchet(peer: String,
-                               incomingHeader: DoubleRatchetMessage.MessageHeader?) -> Bool {
+    ///
+    /// On initiation, create v3 only after that capability has been learned.
+    /// Starting v3 for an unknown peer makes every pre-v3 phone unable to read
+    /// the first message, which is not a graceful upgrade path. Two updated
+    /// peers that have not exchanged profiles may therefore begin on v2; once a
+    /// v3 header arrives, the receiver follows it and never downgrades again.
+    ///
+    /// La réception est INCHANGÉE: un en-tête v2 d'un pair pas à jour construit
+    /// encore une session v2 (chemin de lecture hérité, désormais sans constante
+    /// publique), et un en-tête ne peut jamais qu'ÉLEVER la version, jamais
+    /// l'abaisser — la protection anti-rétrogradation tient.
+    ///
+    /// `internal` plutôt que `private` uniquement pour que la politique soit
+    /// vérifiable par un test; personne d'autre ne l'appelle.
+    func shouldRatchet(peer: String,
+                       incomingHeader: DoubleRatchetMessage.MessageHeader?) -> Bool {
         if let v = incomingHeader?.sessionVersion,
            v >= DoubleRatchetSession.ratchetingSessionVersion {
             return true
         }
-        // No header means we are starting the conversation, so only what the peer
-        // has advertised can justify v3.
+        // No header means we are initiating; only an advertised capability can
+        // make that wire-format choice for a peer that has not spoken yet.
         return incomingHeader == nil && wantsRatchetingSession(with: peer)
     }
 }
