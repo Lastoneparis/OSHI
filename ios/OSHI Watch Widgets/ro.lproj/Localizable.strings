@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d necitite";
+"w2.all_read" = "Totul citit";
+"w2.widget.off" = "Activează Ceas inteligent în OSHI pe iPhone";
+"w2.widget.off_short" = "Dezactivat";
+"w2.widget.locked" = "Deblochează OSHI pe iPhone";
+"w2.widget.locked_short" = "Blocat";
+"w2.widget.open" = "Deschide OSHI";
+"w2.widget.name" = "OSHI necitite";
+"w2.widget.desc" = "Numărul de necitite și cine a scris — niciodată mesajele.";

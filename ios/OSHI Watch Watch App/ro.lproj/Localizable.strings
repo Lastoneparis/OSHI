@@ -1,0 +1,136 @@
+/* OSHI Watch App - Romanian */
+
+/* Status */
+"watch.status.connected" = "Conectat";
+"watch.status.not_reachable" = "iPhone inaccesibil";
+
+/* Navigation */
+"watch.open_iphone" = "Deschide OSHI pe iPhone";
+
+/* Common */
+"common.refresh" = "Reîmprospătează";
+"common.cancel" = "Anulează";
+
+/* Messages */
+"watch.loading_messages" = "Se încarcă mesajele…";
+"watch.no_messages" = "Niciun mesaj";
+"watch.sending" = "Se trimite…";
+"watch.dictate" = "Dictează";
+"watch.voice_message" = "Mesaj vocal";
+"watch.reply" = "Răspunde";
+"watch.media_attachment" = "Atașament media";
+
+/* Quick Replies */
+"watch.quick.yes" = "Da";
+"watch.quick.no" = "Nu";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Mai târziu";
+"watch.quick.omw" = "Sunt pe drum!";
+"watch.quick.thanks" = "Mulțumesc";
+
+/* Errors */
+"watch.error.send_failed" = "Mesajul nu a fost trimis";
+"watch.send.queued" = "În așteptarea iPhone";
+"watch.error.not_reachable" = "iPhone inaccesibil";
+
+/* Calls */
+"watch.call.incoming_video" = "Apel video primit";
+"watch.call.incoming_voice" = "Apel vocal primit";
+"watch.call.video" = "Apel video";
+"watch.call.voice" = "Apel vocal";
+"watch.call.connecting" = "Se conectează…";
+"watch.call.ringing" = "Sună…";
+"watch.call.in_call" = "În apel";
+"watch.call.ended" = "Apel încheiat";
+"watch.call.start" = "Începe apelul";
+"watch.call.unknown" = "Necunoscut";
+
+/* Call Actions */
+"call.action.accept" = "Acceptă";
+"call.action.decline" = "Refuză";
+
+/* Notifications */
+"watch.notification.new_message" = "Mesaj nou";
+
+/* Call Summary */
+"call.outgoing" = "Apel efectuat";
+"call.incoming" = "Apel primit";
+"call.no.answer" = "Niciun răspuns";
+"call.declined" = "Refuzat";
+"call.missed" = "Apel pierdut";
+"call.video.outgoing" = "Apel video efectuat";
+"call.video.incoming" = "Apel video primit";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Răspunde";
+"send" = "Trimite";
+"type_message" = "Scrie un mesaj";
+"notification.action.mark_read" = "Marchează ca citit";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Conversații";
+"w2.empty.title" = "Nicio conversație încă";
+"w2.empty.body" = "Conversațiile OSHI de pe iPhone apar aici.";
+"w2.disabled.title" = "Ceasul inteligent e dezactivat";
+"w2.disabled.body" = "Activează-l în OSHI pe iPhone: Setări › Dispozitive conectate › Ceas inteligent.";
+"w2.locked.title" = "OSHI este blocat";
+"w2.locked.body" = "Deblochează OSHI pe iPhone, apoi încearcă din nou.";
+"w2.unavailable.title" = "OSHI nu este pregătit";
+"w2.unavailable.body" = "Deschide OSHI o dată pe iPhone, apoi încearcă din nou.";
+"w2.nophone.title" = "iPhone indisponibil";
+"w2.nophone.body" = "Ține iPhone-ul aproape, cu OSHI instalat.";
+"w2.error.title" = "A apărut o problemă";
+"w2.error.body" = "iPhone-ul nu a răspuns. Încearcă din nou.";
+"w2.notfound" = "Această conversație nu mai este pe iPhone.";
+"w2.retry" = "Reîncearcă";
+"w2.reply" = "Răspunde";
+"w2.you" = "Tu";
+"w2.you_prefix" = "Tu: %@";
+"w2.react" = "Reacționează";
+"w2.speak_or_type" = "Dictează sau scrie";
+"w2.quick_replies" = "Răspunsuri rapide";
+"w2.sending" = "Se trimite…";
+"w2.sent" = "Trimis";
+"w2.send_failed" = "Netrimis. Încearcă din nou pe iPhone.";
+"w2.read_only" = "Nu poți răspunde în această conversație.";
+"w2.view_once" = "👁 Vizualizare unică — deschide pe iPhone";
+"w2.view_once_short" = "👁 Vizualizare unică";
+"w2.e2e" = "Criptat integral de iPhone-ul tău";
+"w2.replying_to" = "Răspuns la";
+"w2.loading" = "Se încarcă…";
+"w2.unread_count" = "%d necitite";
+"w2.all_read" = "Totul citit";
+"w2.call" = "Sună";
+"w2.media.photo" = "📷 Poză";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Vocal";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Fișier";
+"w2.media.location" = "📍 Locație";
+"w2.media.contact" = "👤 Contact";
+"w2.qr.on_my_way" = "Sunt pe drum";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Te sun mai târziu";
+"w2.qr.thanks" = "Mulțumesc!";
+"w2.qr.yes" = "Da";
+"w2.qr.no" = "Nu";
+"w2.qr.busy" = "Nu pot vorbi acum";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Iubesc";
+"w2.r.laugh" = "Râs";
+"w2.r.cry" = "Trist";
+"w2.r.thumbs" = "Like";
+"w2.r.wow" = "Uau";
+"w2.r.fire" = "Foc";
+"w2.mute" = "Mut";
+"w2.end_call" = "Închide";
+"w2.speaker" = "Difuzor";
+"w2.widget.off" = "Activează Ceas inteligent în OSHI pe iPhone";
+"w2.widget.off_short" = "Dezactivat";
+"w2.widget.locked" = "Deblochează OSHI pe iPhone";
+"w2.widget.locked_short" = "Blocat";
+"w2.widget.open" = "Deschide OSHI";
+"w2.widget.name" = "OSHI necitite";
+"w2.widget.desc" = "Numărul de necitite și cine a scris — niciodată mesajele.";

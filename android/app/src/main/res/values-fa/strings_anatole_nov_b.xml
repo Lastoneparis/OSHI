@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">پیام ویدیویی گرد، حداکثر ۱۵ ثانیه</string>
+    <string name="settings_panic_wipe_title">پاک‌کردن با ضربه روی لوگو</string>
+    <string name="settings_panic_wipe_subtitle">سه ضربهٔ سریع روی لوگوی OSHI همهٔ پیام‌ها، کلیدها و فایل‌های این گوشی را بدون تأیید پاک می‌کند. تا وقتی روشنش نکنید خاموش است.</string>
+    <string name="map_layer_title">نوع نقشه</string>
+    <string name="map_layer_standard">استاندارد</string>
+    <string name="map_layer_terrain">عوارض زمین</string>
+    <string name="map_layer_satellite">ماهواره</string>
+    <string name="map_layer_standard_desc">نقشهٔ OSHI، با مناطق دانلودشده آفلاین کار می‌کند</string>
+    <string name="map_layer_third_party_desc" formatted="true">فقط آنلاین. مستقیماً از %1$s بارگذاری می‌شود که منطقه‌ای را که نگاه می‌کنید می‌بیند.</string>
+    <string name="map_layer_offline_only_note">«فقط نقشه‌های آفلاین» روشن است: این لایه فقط کاشی‌هایی را نشان می‌دهد که قبلاً دیده‌اید.</string>
+</resources>

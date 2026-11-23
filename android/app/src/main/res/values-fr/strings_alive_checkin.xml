@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ALIVE_CHECK_IN_2026_11_04__ Voir values/strings_alive_checkin.xml pour la
+     règle qui gouverne cette copie : une confirmation manquée veut dire qu'aucune
+     confirmation n'est arrivée, et rien d'autre. -->
+<resources>
+
+    <string name="alive_summary_started">Vérification de sécurité activée</string>
+    <string name="alive_summary_confirmed">A confirmé être en vie</string>
+    <string name="alive_summary_stopped">Vérification de sécurité arrêtée</string>
+
+    <string name="alive_channel_name">Vérifications de sécurité</string>
+    <string name="alive_channel_description">Rappels pour vos propres confirmations, et avis lorsqu\'une personne que vous suivez n\'a pas répondu.</string>
+
+    <string name="alive_notification_overdue_title">Aucune confirmation de %1$s</string>
+    <string name="alive_notification_overdue_body">Sa confirmation était attendue il y a %1$s. Cela signifie seulement qu\'aucune confirmation n\'est arrivée.</string>
+    <string name="alive_notification_mine_due_title">Votre confirmation est attendue</string>
+    <string name="alive_notification_mine_due_body">Confirmez que vous êtes en vie pour ne pas laisser %1$s attendre.</string>
+    <string name="alive_action_im_alive">Je suis en vie</string>
+    <string name="alive_action_message_them">Écrire</string>
+    <string name="alive_unknown_peer">ce contact</string>
+
+    <string name="alive_duration_days_hours">%1$dj %2$dh</string>
+    <string name="alive_duration_hours_minutes">%1$dh %2$dmin</string>
+    <string name="alive_duration_minutes">%1$dmin</string>
+    <string name="alive_duration_now">moins d\'une minute</string>
+    <string name="alive_interval_every">toutes les %1$s</string>
+
+    <string name="alive_title">Vérification de sécurité</string>
+    <string name="alive_lane_you">Vous</string>
+    <string name="alive_state_due_in">attendue dans %1$s</string>
+    <string name="alive_state_overdue_by">sans réponse depuis %1$s</string>
+    <string name="alive_state_confirmed_ago">confirmée il y a %1$s</string>
+    <string name="alive_state_not_set">non configurée</string>
+    <string name="alive_bar_open_settings">Réglages de la vérification</string>
+
+    <string name="alive_sheet_explainer">Confirmez que vous êtes en vie selon un rythme choisi. %1$s voit votre décompte, et est averti si celui-ci expire sans réponse.</string>
+    <string name="alive_sheet_mine_switch">Confirmer à %1$s</string>
+    <string name="alive_sheet_interval">À quelle fréquence</string>
+    <string name="alive_interval_24h">Toutes les 24 heures</string>
+    <string name="alive_interval_48h">Toutes les 48 heures</string>
+    <string name="alive_interval_72h">Toutes les 72 heures</string>
+    <string name="alive_interval_custom">Personnalisé</string>
+    <string name="alive_interval_custom_hours">Toutes les %1$d heures</string>
+    <string name="alive_sheet_their_section">Vérification de %1$s</string>
+    <string name="alive_sheet_their_none">%1$s n\'a pas configuré de vérification ici.</string>
+    <string name="alive_sheet_their_next">Prochaine attendue %1$s</string>
+    <string name="alive_sheet_stop">Arrêter de confirmer</string>
+
+    <string name="alive_note_no_location">Aucune position n\'est partagée. Une confirmation ne transporte qu\'un horodatage.</string>
+    <string name="alive_note_delivery">Les rappels et les avis dépendent de votre réseau et de l\'autorisation de notification. Une confirmation manquée signifie qu\'aucune confirmation n\'est arrivée, rien de plus.</string>
+
+    <string name="alive_a11y_confirmed">Confirmation à jour</string>
+    <string name="alive_a11y_overdue">Confirmation expirée</string>
+    <string name="alive_a11y_neutral">Aucune vérification configurée</string>
+    <string name="alive_confirmed_toast">Confirmation envoyée</string>
+
+</resources>

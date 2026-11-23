@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Fitxer xifrat, llegible només amb la clau del teu compte</string>
+    <string name="settings_import_messages">Importa missatges</string>
+    <string name="settings_import_messages_desc">Restaura un fitxer xifrat .oshiexport</string>
+    <string name="settings_importing">S\'està important…</string>
+    <string name="export_media_skipped">%1$d fitxers adjunts eren massa grans i no s\'han exportat.</string>
+    <string name="import_messages_success">S\'han importat %1$d missatges (%2$d ja existien).</string>
+    <string name="import_error_wrong_account">Aquesta exportació pertany a un altre compte d\'OSHI. Restaura primer la clau d\'aquest compte.</string>
+    <string name="import_error_damaged">Aquesta exportació està malmesa o s\'ha modificat.</string>
+    <string name="import_error_other_platform">Aquesta exportació s\'ha fet amb OSHI per a %1$s i encara no es pot importar aquí.</string>
+    <string name="import_error_not_export">Aquest fitxer no és una exportació d\'OSHI.</string>
+    <string name="import_error_version">Aquesta exportació s\'ha fet amb una versió més recent d\'OSHI. Actualitza l\'app i torna-ho a provar.</string>
+    <string name="import_error_no_key">No hi ha cap clau de compte en aquest dispositiu. Restaura primer el teu compte.</string>
+    <string name="import_error_unreadable">No s\'ha pogut llegir el fitxer.</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Fișier criptat, lizibil doar cu cheia contului tău</string>
+    <string name="settings_import_messages">Importă mesaje</string>
+    <string name="settings_import_messages_desc">Restaurează un fișier criptat .oshiexport</string>
+    <string name="settings_importing">Se importă…</string>
+    <string name="export_media_skipped">%1$d atașamente erau prea mari și au fost omise din export.</string>
+    <string name="import_messages_success">%1$d mesaje importate (%2$d existau deja).</string>
+    <string name="import_error_wrong_account">Acest export aparține altui cont OSHI. Restaurează mai întâi cheia acelui cont.</string>
+    <string name="import_error_damaged">Acest export este deteriorat sau a fost modificat.</string>
+    <string name="import_error_other_platform">Acest export a fost creat de OSHI pentru %1$s și nu poate fi importat încă aici.</string>
+    <string name="import_error_not_export">Acest fișier nu este un export OSHI.</string>
+    <string name="import_error_version">Acest export a fost creat de o versiune mai nouă de OSHI. Actualizează aplicația și încearcă din nou.</string>
+    <string name="import_error_no_key">Nicio cheie de cont pe acest dispozitiv. Restaurează mai întâi contul.</string>
+    <string name="import_error_unreadable">Fișierul nu a putut fi citit.</string>
+</resources>

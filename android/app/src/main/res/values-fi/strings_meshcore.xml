@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore-radio</string>
+    <string name="meshcore_none">Ei MeshCore-radiota</string>
+    <string name="meshcore_scan">Etsi MeshCore-radioita</string>
+    <string name="meshcore_ready">Yhdistetty — OSHI-viestit käyttävät kanavaa #oshi-bridge</string>
+    <string name="meshcore_forget">Unohda tämä MeshCore-radio</string>
+    <string name="meshcore_bridge">Silta Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">MeshCore-radio kuljettaa OSHI-viestisi MeshCore-toistimien kautta. Siinä on oltava MeshCore companion -laiteohjelmisto, ja se kysyy PIN-koodiaan ensimmäisellä kerralla. OSHI lisää yhden kanavan, #oshi-bridge, vapaaseen paikkaan eikä koskaan muuta muita kanaviasi.</string>
+    <string name="meshcore_bridge_footer">Kun sekä Meshtastic- että MeshCore-radio on yhdistetty, tämä puhelin välittää OSHI-viestejä verkkojen välillä niin kauan kuin OSHI on käynnissä.</string>
+    <string name="meshcore_no_free_channel">Tämän radion kaikki 8 kanavapaikkaa ovat käytössä. Vapauta yksi MeshCore-sovelluksessa, jotta OSHI voi lisätä kanavan #oshi-bridge.</string>
+</resources>

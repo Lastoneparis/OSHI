@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Mensaje de vídeo redondo, máx. 15 s</string>
+    <string name="settings_panic_wipe_title">Borrar tocando el logo</string>
+    <string name="settings_panic_wipe_subtitle">Tres toques rápidos en el logo de OSHI borran todos los mensajes, claves y archivos de este teléfono, sin confirmación. Desactivado hasta que lo actives.</string>
+    <string name="map_layer_title">Tipo de mapa</string>
+    <string name="map_layer_standard">Estándar</string>
+    <string name="map_layer_terrain">Relieve</string>
+    <string name="map_layer_satellite">Satélite</string>
+    <string name="map_layer_standard_desc">Mapa OSHI, funciona sin conexión con las regiones descargadas</string>
+    <string name="map_layer_third_party_desc" formatted="true">Solo en línea. Se carga directamente desde %1$s, que ve la zona que miras.</string>
+    <string name="map_layer_offline_only_note">«Solo mapas sin conexión» está activado: esta capa solo muestra las teselas que ya has visto.</string>
+</resources>

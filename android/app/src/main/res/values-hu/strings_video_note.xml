@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videóüzenet</string>
+    <string name="video_note_title">Videóüzenet</string>
+    <string name="video_note_a11y" formatted="true">Videóüzenet, %1$s</string>
+    <string name="video_note_play">Lejátszás</string>
+    <string name="video_note_pause">Szünet</string>
+    <string name="video_note_record_button">Videóüzenet felvétele</string>
+    <string name="video_note_hint">Koppints a felvételhez, vagy tartsd lenyomva · max. 15 mp</string>
+    <string name="video_note_record">Felvétel indítása</string>
+    <string name="video_note_stop">Felvétel leállítása</string>
+    <string name="video_note_flip">Kameraváltás</string>
+    <string name="video_note_close">Bezárás</string>
+    <string name="video_note_review_title">A videóüzeneted</string>
+    <string name="video_note_preparing">Előkészítés…</string>
+    <string name="video_note_discard">Törlés</string>
+    <string name="video_note_retake">Újra</string>
+    <string name="video_note_send">Videóüzenet küldése</string>
+    <string name="video_note_too_short">Túl rövid. Koppints a felvételhez, vagy tartsd lenyomva a gombot.</string>
+    <string name="video_note_camera_denied">Videóüzenet felvételéhez hozzáférés szükséges a kamerához.</string>
+</resources>

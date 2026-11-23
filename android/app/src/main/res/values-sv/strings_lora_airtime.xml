@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Väntar på sändningstid för radion (lagstadgad gräns för arbetscykel)</string>
+    <string name="lora_jamming_title">Radiostörning upptäckt — möjlig störsändning</string>
+    <string name="lora_jamming_detail">Meddelanden skickas via Bluetooth-mesh eller internet när det går. Meddelanden till radion sparas och skickas över LoRa när kanalen är fri.</string>
+    <string name="lora_jamming_send_anyway">Skicka över LoRa ändå</string>
+    <string name="lora_jamming_override_active">Skickar över LoRa ändå till %1$s, eller tills kanalen är fri. Meddelanden kanske inte kommer fram.</string>
+</resources>

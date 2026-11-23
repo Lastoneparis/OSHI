@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (ko) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI는 주변 기기를 찾아 연결하기 위해 Bluetooth를 사용합니다. 인터넷 없이도 안전하게 기기 간 메시지를 주고받을 수 있습니다.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI는 메시 네트워크의 주변 기기로부터 암호화된 메시지를 수신하기 위해 Bluetooth가 필요합니다.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI는 예약된 통화를 캘린더에 추가하여 통화를 놓치지 않도록 도와줍니다.";
+"NSCalendarsUsageDescription" = "OSHI는 예약된 통화를 캘린더에 추가하여 통화를 놓치지 않도록 도와줍니다.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI는 예약된 통화를 캘린더에 추가하여 통화를 놓치지 않도록 도와줍니다.";
+"NSCameraUsageDescription" = "OSHI는 QR 코드 스캔과 암호화 메시지용 사진 촬영을 위해 카메라 접근 권한이 필요합니다.";
+"NSFaceIDUsageDescription" = "Face ID로 암호화된 메시지를 안전하게 잠금 해제하고 개인정보를 보호하세요.";
+"NSLocalNetworkUsageDescription" = "OSHI는 주변 기기와 Wi-Fi 다이렉트로 연결해 메시지를 더 빠르게 전달하기 위해 로컬 네트워크를 사용합니다.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI는 연락처와 실시간으로 위치를 공유하기 위해 위치 정보를 사용합니다. 위치는 암호화되며 사용자가 선택할 때만 공유됩니다.";
+"NSLocationAlwaysUsageDescription" = "OSHI는 앱이 백그라운드에 있을 때도 연락처와 실시간 위치를 공유하기 위해 위치 정보를 사용합니다. 위치는 암호화되며 사용자가 선택할 때만 공유됩니다.";
+"NSLocationWhenInUseUsageDescription" = "OSHI는 연락처에 위치를 공유하기 위해 위치 정보를 사용합니다. 위치는 암호화되며 사용자가 선택할 때만 공유됩니다.";
+"NSMicrophoneUsageDescription" = "OSHI는 암호화 메시지용 동영상을 소리와 함께 녹화하기 위해 마이크 접근 권한이 필요합니다.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI는 받은 이미지를 사진 보관함에 저장할 수 있습니다.";
+"NSPhotoLibraryUsageDescription" = "OSHI는 암호화 메시지로 보낼 이미지를 선택하기 위해 사진 보관함 접근 권한이 필요합니다.";
+"NSSpeechRecognitionUsageDescription" = "OSHI는 기기 내 음성 인식을 사용해 AI 어시스턴트에게 메시지를 받아쓰게 합니다. 음성은 전부 iPhone에서 텍스트로 변환되며 기기를 벗어나지 않습니다.";
+"NSUserNotificationsUsageDescription" = "OSHI는 새 암호화 메시지를 받으면 알림을 보내 중요한 연락을 놓치지 않도록 합니다.";

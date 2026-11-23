@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Можливо, цей телефон змінено</string>
+    <string name="device_integrity_dialog_body">OSHI виявив ознаки того, що на цьому телефоні може бути root або його змінено (%1$s). На такому телефоні інші програми можуть читати те, що на екрані, і те, що ви вводите, перш ніж OSHI це зашифрує. OSHI нічого не видалив і не заблокував. Ця перевірка евристична: вона може помилятися, а добре прихований root може її оминути.</string>
+    <string name="device_integrity_dialog_ok">Зрозуміло</string>
+    <string name="device_integrity_status_title">Цілісність пристрою</string>
+    <string name="device_integrity_status_flagged">OSHI виявив ознаки root або змін: %1$s</string>
+    <string name="device_integrity_finding_su">файл su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">застосунок для керування root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">система, підписана тестовими ключами</string>
+    <string name="device_integrity_finding_debuggable">система з налагодженням</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Телефони з root або змінені: OSHI шукає типові ознаки root (su, Magisk, Xposed/LSPosed, Frida, система з тестовими ключами або з налагодженням) і попереджає, якщо щось знаходить. Якщо нічого не знайдено, це не доводить, що телефон чистий.</string>
+    <string name="clipboard_hygiene_explainer">Копіювання: повідомлення, переклади, ключі відновлення й токени ботів, які ви копіюєте, позначаються як конфіденційні (Android 13+ приховує попередній перегляд). Якщо через 60 секунд вони ще в буфері обміну, OSHI їх видаляє: одразу, якщо OSHI відкрито, інакше під час наступного відкриття. Поки вони в буфері, їх можуть бачити ваша клавіатура й застосунки з доступом до буфера обміну, а клавіатури чи функції телефона, що зберігають історію буфера обміну, можуть залишити власну копію навіть після видалення.</string>
+</resources>

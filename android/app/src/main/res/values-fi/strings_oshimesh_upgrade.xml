@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Päivitä tämä radio OSHI Meshiin</string>
+    <string name="oshimesh_upgrade_body">Ilmainen ja avointa lähdekoodia. Säilyttää alueesi, kanavasi, avaimesi ja yhteystietosi, pysyy Meshtastic-verkossa ja tuo pitkät viestit, toimituskuittaukset ja viestit, jotka odottavat 72 h, kun joku on offline-tilassa.</string>
+    <string name="oshimesh_upgrade_share">Lähetä asennustyökalun linkki tietokoneelle</string>
+    <string name="oshimesh_upgrade_why">Mitä OSHI Mesh tuo</string>
+    <string name="oshimesh_upgrade_footer">Asennustyökalu toimii Chromessa tai Edgessä tietokoneella USB:n kautta. Valitse ”Säilytä asetukseni”, niin radio päivittyy noin minuutissa.</string>
+</resources>

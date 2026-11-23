@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Tonalité</string>
+    <string name="wallpaper_tone_automatic">Automatique</string>
+    <string name="wallpaper_tone_light">Clair</string>
+    <string name="wallpaper_tone_dark">Sombre</string>
+    <string name="wallpaper_tone_automatic_detail">Suit le mode clair et le mode sombre.</string>
+    <string name="wallpaper_tone_light_detail">Blanc avec maillage violet, même en mode sombre. Les messages passent en couleurs claires pour rester bien lisibles.</string>
+    <string name="wallpaper_tone_dark_detail">Noir avec maillage violet, même en mode clair.</string>
+    <string name="wallpaper_tone_more">Couleurs, dégradés, emoji et vos propres photos : ouvrez une discussion, puis ⋯ → Fond d’écran.</string>
+</resources>

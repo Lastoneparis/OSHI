@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">שעון חכם</string>
+    <string name="settings_smartwatch_subtitle">קראו את הצ׳אטים שלכם והשיבו להם משעון Wear OS. ההצפנה והשליחה נשארות בטלפון הזה; השעון לא שומר דבר.</string>
+</resources>

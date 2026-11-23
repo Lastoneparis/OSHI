@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Menunggu koneksi tersamar</string>
+    <string name="privacy_disguise_title">Penyamaran privasi</string>
+    <string name="privacy_disguise_subtitle">Samarkan lalu lintas · sembunyikan pesan dalam foto</string>
+    <string name="cover_switch_title">Samarkan lalu lintas OSHI</string>
+    <string name="cover_switch_caption">Pesan dan lampiran 1:1 Anda dikirim di dalam permintaan berpadding yang terlihat seperti analitik web biasa, sehingga ukuran dan waktunya lebih sulit dibedakan. Jika koneksi tersamar gagal, pesan akan menunggu — pesan tidak pernah dikirim tanpa penyamaran.</string>
+    <string name="cover_not_hidden">Tetap terlihat: bahwa Anda terhubung ke oshi-messenger.com (nama server dan sidik jari TLS), serta pesan grup, panggilan, notifikasi push untuk membangunkan aplikasi, dan pemeriksaan pesan baru, yang tidak disamarkan. Ini bukan anonimitas dan tidak menembus pemblokiran server OSHI — untuk itu, gunakan Samarkan sebagai foto.</string>
+    <string name="disguise_photo_title">Samarkan sebagai foto</string>
+    <string name="disguise_photo_explainer">Sembunyikan pesan terenkripsi end-to-end untuk satu kontak di dalam foto yang tampak biasa, lalu kirim foto itu melalui aplikasi apa pun, email, atau penyimpanan cloud — berguna saat OSHI sendiri diblokir. Di chat 1:1: + → Samarkan sebagai foto.</string>
+    <string name="disguise_reveal_button">Ungkap pesan tersembunyi</string>
+    <string name="disguise_reveal_hint">Anda juga dapat membagikan foto yang diterima ke OSHI dari aplikasi apa pun.</string>
+    <string name="disguise_sheet_for">Hanya %1$s yang dapat membacanya.</string>
+    <string name="disguise_message_hint">Pesan tersembunyi</string>
+    <string name="disguise_add_file">Tambahkan file kecil (maks. 256 KB)</string>
+    <string name="disguise_remove_file">Hapus %1$s</string>
+    <string name="disguise_file_too_large">File terlalu besar (maks. 256 KB)</string>
+    <string name="disguise_cover_generated">Pemandangan buatan</string>
+    <string name="disguise_cover_photo">Foto saya</string>
+    <string name="disguise_capacity">Menggunakan %1$s dari %2$s yang tersedia di gambar ini</string>
+    <string name="disguise_too_big">Terlalu panjang untuk gambar ini. Persingkat pesan, hapus file, atau pilih foto yang lebih besar.</string>
+    <string name="disguise_create_share">Buat foto dan bagikan</string>
+    <string name="disguise_warning_recompress">Kirim sebagai FILE atau dokumen. Aplikasi yang mengompres ulang foto (sebagian besar jejaring sosial, WhatsApp, Signal, atau Telegram dalam mode foto, tangkapan layar) menghapus pesan tersembunyi.</string>
+    <string name="disguise_warning_forensic">Ini menyembunyikan pesan dari siapa pun yang melihat foto. Analisis forensik tetap dapat mendeteksi bahwa foto tersebut membawa data tersembunyi, tetapi tidak dapat membacanya atau mengetahui untuk siapa data itu.</string>
+    <string name="disguise_working">Membuat foto…</string>
+    <string name="disguise_failed">Tidak dapat membuat foto.</string>
+    <string name="reveal_title">Pesan tersembunyi</string>
+    <string name="reveal_from">Dari %1$s</string>
+    <string name="reveal_hidden_on">Disembunyikan pada %1$s</string>
+    <string name="reveal_copy">Salin teks</string>
+    <string name="reveal_open_file">Buka %1$s</string>
+    <string name="reveal_checking">Mencari pesan tersembunyi…</string>
+    <string name="reveal_not_found">Tidak ada pesan tersembunyi untuk Anda di gambar ini. Jika dikirim sebagai foto, aplikasi yang membawanya mungkin telah mengompresnya ulang — mintalah dalam bentuk file.</string>
+    <string name="reveal_damaged">Gambar ini dibuat untuk Anda oleh %1$s, tetapi telah diubah dalam perjalanan dan tidak dapat dibaca lagi. Minta agar dikirim ulang sebagai file.</string>
+    <string name="reveal_unreadable">Tidak dapat membaca file ini.</string>
+    <string name="disguise_photo_short">Samarkan</string>
+</resources>

@@ -1,0 +1,134 @@
+/* OSHI Watch App - Thai */
+
+/* Status */
+"watch.status.connected" = "เชื่อมต่อแล้ว";
+"watch.status.not_reachable" = "ไม่สามารถเข้าถึง iPhone ได้";
+
+/* Navigation */
+"watch.open_iphone" = "เปิด OSHI บน iPhone";
+
+/* Common */
+"common.refresh" = "รีเฟรช";
+"common.cancel" = "ยกเลิก";
+
+/* Messages */
+"watch.loading_messages" = "กำลังโหลดข้อความ…";
+"watch.no_messages" = "ไม่มีข้อความ";
+"watch.sending" = "กำลังส่ง…";
+"watch.dictate" = "พูดตามคำบอก";
+"watch.voice_message" = "ข้อความเสียง";
+"watch.reply" = "ตอบกลับ";
+"watch.media_attachment" = "ไฟล์แนบ";
+
+/* Quick Replies */
+"watch.quick.yes" = "ใช่";
+"watch.quick.no" = "ไม่";
+"watch.quick.ok" = "ตกลง";
+"watch.quick.later" = "ภายหลัง";
+"watch.quick.omw" = "กำลังไป";
+"watch.quick.thanks" = "ขอบคุณ";
+
+/* Errors */
+"watch.error.send_failed" = "ส่งไม่สำเร็จ";
+"watch.send.queued" = "รอส่งผ่าน iPhone";
+"watch.error.not_reachable" = "ไม่สามารถเข้าถึง iPhone ได้";
+
+/* Calls */
+"watch.call.incoming_video" = "สายวิดีโอเข้า";
+"watch.call.incoming_voice" = "สายเสียงเข้า";
+"watch.call.video" = "สายวิดีโอ";
+"watch.call.voice" = "สายเสียง";
+"watch.call.connecting" = "กำลังเชื่อมต่อ…";
+"watch.call.ringing" = "กำลังโทร…";
+"watch.call.in_call" = "อยู่ในสาย";
+"watch.call.ended" = "สิ้นสุดสาย";
+"watch.call.start" = "เริ่มการโทร";
+"watch.call.unknown" = "ไม่ทราบ";
+
+/* Call Actions */
+"call.action.accept" = "รับสาย";
+"call.action.decline" = "ปฏิเสธ";
+
+/* Notifications */
+"watch.notification.new_message" = "ข้อความใหม่";
+
+/* Call Summary */
+"call.outgoing" = "สายโทรออก";
+"call.incoming" = "สายเข้า";
+"call.no.answer" = "ไม่มีคนรับ";
+"call.declined" = "ปฏิเสธแล้ว";
+"call.missed" = "สายที่ไม่ได้รับ";
+"call.video.outgoing" = "สายวิดีโอออก";
+"call.video.incoming" = "สายวิดีโอเข้า";
+
+/* Actions de notification au poignet. */
+"notification.action.reply" = "ตอบกลับ";
+"send" = "ส่ง";
+"type_message" = "พิมพ์ข้อความ";
+"notification.action.mark_read" = "อ่านแล้ว";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "แชท";
+"w2.empty.title" = "ยังไม่มีแชท";
+"w2.empty.body" = "แชท OSHI จาก iPhone ของคุณจะแสดงที่นี่";
+"w2.disabled.title" = "สมาร์ทวอทช์ปิดอยู่";
+"w2.disabled.body" = "เปิดใน OSHI บน iPhone: ตั้งค่า › อุปกรณ์ที่เชื่อมโยง › สมาร์ทวอทช์";
+"w2.locked.title" = "OSHI ล็อกอยู่";
+"w2.locked.body" = "ปลดล็อก OSHI บน iPhone แล้วลองอีกครั้ง";
+"w2.unavailable.title" = "OSHI ยังไม่พร้อม";
+"w2.unavailable.body" = "เปิด OSHI บน iPhone หนึ่งครั้ง แล้วลองอีกครั้ง";
+"w2.nophone.title" = "ติดต่อ iPhone ไม่ได้";
+"w2.nophone.body" = "วาง iPhone ที่ติดตั้ง OSHI ไว้ใกล้ๆ";
+"w2.error.title" = "เกิดข้อผิดพลาด";
+"w2.error.body" = "iPhone ไม่ตอบสนอง ลองอีกครั้ง";
+"w2.notfound" = "แชทนี้ไม่อยู่บน iPhone แล้ว";
+"w2.retry" = "ลองอีกครั้ง";
+"w2.reply" = "ตอบกลับ";
+"w2.you" = "คุณ";
+"w2.you_prefix" = "คุณ: %@";
+"w2.react" = "แสดงความรู้สึก";
+"w2.speak_or_type" = "พูดหรือพิมพ์";
+"w2.quick_replies" = "ตอบกลับด่วน";
+"w2.sending" = "กำลังส่ง…";
+"w2.sent" = "ส่งแล้ว";
+"w2.send_failed" = "ส่งไม่สำเร็จ ลองอีกครั้งบน iPhone";
+"w2.read_only" = "คุณตอบกลับในแชทนี้ไม่ได้";
+"w2.view_once" = "👁 ดูครั้งเดียว — เปิดบน iPhone";
+"w2.view_once_short" = "👁 ดูครั้งเดียว";
+"w2.e2e" = "เข้ารหัสตั้งแต่ต้นทางถึงปลายทางโดย iPhone";
+"w2.replying_to" = "ตอบกลับถึง";
+"w2.loading" = "กำลังโหลด…";
+"w2.unread_count" = "ยังไม่อ่าน %d";
+"w2.all_read" = "อ่านทั้งหมดแล้ว";
+"w2.call" = "โทร";
+"w2.media.photo" = "📷 รูปภาพ";
+"w2.media.video" = "🎥 วิดีโอ";
+"w2.media.voice" = "🎤 เสียง";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 ไฟล์";
+"w2.media.location" = "📍 ตำแหน่ง";
+"w2.media.contact" = "👤 รายชื่อ";
+"w2.qr.on_my_way" = "กำลังไป";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "เดี๋ยวโทรกลับ";
+"w2.qr.thanks" = "ขอบคุณ!";
+"w2.qr.yes" = "ใช่";
+"w2.qr.no" = "ไม่";
+"w2.qr.busy" = "ตอนนี้คุยไม่ได้";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "รัก";
+"w2.r.laugh" = "หัวเราะ";
+"w2.r.cry" = "เศร้า";
+"w2.r.thumbs" = "ถูกใจ";
+"w2.r.wow" = "ว้าว";
+"w2.r.fire" = "ไฟ";
+"w2.mute" = "ปิดเสียง";
+"w2.end_call" = "วางสาย";
+"w2.speaker" = "ลำโพง";
+"w2.widget.off" = "เปิดสมาร์ทวอทช์ใน OSHI บน iPhone";
+"w2.widget.off_short" = "ปิด";
+"w2.widget.locked" = "ปลดล็อก OSHI บน iPhone";
+"w2.widget.locked_short" = "ล็อกอยู่";
+"w2.widget.open" = "เปิด OSHI";
+"w2.widget.name" = "OSHI ยังไม่อ่าน";
+"w2.widget.desc" = "จำนวนที่ยังไม่อ่านและผู้ส่ง — ไม่แสดงข้อความเลย";

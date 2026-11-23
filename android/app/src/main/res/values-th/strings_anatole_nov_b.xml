@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">ข้อความวิดีโอทรงกลม สูงสุด 15 วินาที</string>
+    <string name="settings_panic_wipe_title">ลบโดยแตะโลโก้</string>
+    <string name="settings_panic_wipe_subtitle">แตะโลโก้ OSHI เร็วๆ สามครั้งจะลบข้อความ คีย์ และไฟล์ทั้งหมดบนโทรศัพท์นี้โดยไม่ต้องยืนยัน ปิดอยู่จนกว่าคุณจะเปิด</string>
+    <string name="map_layer_title">ประเภทแผนที่</string>
+    <string name="map_layer_standard">มาตรฐาน</string>
+    <string name="map_layer_terrain">ภูมิประเทศ</string>
+    <string name="map_layer_satellite">ดาวเทียม</string>
+    <string name="map_layer_standard_desc">แผนที่ OSHI ใช้งานออฟไลน์ได้กับภูมิภาคที่ดาวน์โหลดไว้</string>
+    <string name="map_layer_third_party_desc" formatted="true">ออนไลน์เท่านั้น โหลดโดยตรงจาก %1$s ซึ่งจะเห็นพื้นที่ที่คุณกำลังดู</string>
+    <string name="map_layer_offline_only_note">เปิด “แผนที่ออฟไลน์เท่านั้น” อยู่: เลเยอร์นี้จะแสดงเฉพาะไทล์ที่คุณเคยดูแล้ว</string>
+</resources>

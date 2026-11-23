@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Control-payload catalog labels, ported from iOS Localizable.strings.
+     call_generic is intentionally absent: iOS renders that label unlocalized,
+     so every locale falls back to the English default. -->
+<resources>
+    <string name="media_file">Fichier</string>
+    <string name="notification_reaction">A réagi à un message</string>
+</resources>

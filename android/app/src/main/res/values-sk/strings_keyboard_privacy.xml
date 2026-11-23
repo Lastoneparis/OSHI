@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Klávesnica</string>
+    <string name="keyboard_incognito_title">Anonymná klávesnica</string>
+    <string name="keyboard_incognito_subtitle">Požiadať klávesnicu, aby sa neučila z toho, čo píšete</string>
+    <string name="keyboard_status_title">Aktuálna klávesnica</string>
+    <string name="keyboard_status_trusted">%1$s · Vstavaná klávesnica</string>
+    <string name="keyboard_status_third_party">%1$s · Klávesnica tretej strany</string>
+    <string name="keyboard_status_unknown">Neznáma klávesnica</string>
+    <string name="keyboard_privacy_explainer">OSHI šifruje v tomto telefóne, ale to, čo píšete, prechádza najprv klávesnicou. Anonymný režim žiada klávesnicu, aby sa vaše slová neučila ani ich neukladala — Android nemôže klávesnicu prinútiť, môže ju iba požiadať. Klávesnica tretej strany môže aj tak čítať každé stlačenie klávesu, preto radšej používajte vstavanú klávesnicu telefónu. Ak je napadnutý samotný telefón (spyware), žiadna aplikácia neochráni to, čo píšete.</string>
+    <string name="keyboard_banner_title">Vaša klávesnica môže čítať, čo píšete, skôr než to OSHI zašifruje</string>
+    <string name="keyboard_banner_body">%1$s je klávesnica tretej strany. Na súkromné konverzácie prepnite na vstavanú klávesnicu telefónu.</string>
+    <string name="keyboard_banner_switch">Prepnúť klávesnicu</string>
+    <string name="keyboard_banner_dismiss">Zavrieť</string>
+</resources>

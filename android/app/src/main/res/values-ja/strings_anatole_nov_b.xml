@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">丸いビデオメッセージ（最長15秒）</string>
+    <string name="settings_panic_wipe_title">ロゴをタップして消去</string>
+    <string name="settings_panic_wipe_subtitle">OSHIロゴを素早く3回タップすると、このスマートフォンのすべてのメッセージ、鍵、ファイルが確認なしで消去されます。オンにしない限りオフです。</string>
+    <string name="map_layer_title">地図の種類</string>
+    <string name="map_layer_standard">標準</string>
+    <string name="map_layer_terrain">地形</string>
+    <string name="map_layer_satellite">衛星写真</string>
+    <string name="map_layer_standard_desc">OSHIマップ。ダウンロードした地域ならオフラインでも使えます</string>
+    <string name="map_layer_third_party_desc" formatted="true">オンラインのみ。%1$s から直接読み込まれるため、表示中の範囲が相手に伝わります。</string>
+    <string name="map_layer_offline_only_note">「オフラインマップのみ」がオンです：このレイヤーには表示済みのタイルのみが表示されます。</string>
+</resources>

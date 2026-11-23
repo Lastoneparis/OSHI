@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">رادیوی MeshCore</string>
+    <string name="meshcore_none">رادیوی MeshCore وجود ندارد</string>
+    <string name="meshcore_scan">جست‌وجوی رادیوهای MeshCore</string>
+    <string name="meshcore_ready">متصل — پیام‌های OSHI از #oshi-bridge استفاده می‌کنند</string>
+    <string name="meshcore_forget">فراموش کردن این رادیوی MeshCore</string>
+    <string name="meshcore_bridge">پل Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">رادیوی MeshCore پیام‌های OSHI شما را از طریق تکرارکننده‌های MeshCore می‌برد. باید فریمور MeshCore companion داشته باشد و بار اول PIN خود را می‌خواهد. OSHI فقط یک کانال، #oshi-bridge، در یک جای خالی اضافه می‌کند و هرگز کانال‌های دیگر شما را تغییر نمی‌دهد.</string>
+    <string name="meshcore_bridge_footer">وقتی یک رادیوی Meshtastic و یک رادیوی MeshCore هر دو وصل باشند، این گوشی تا وقتی OSHI باز است پیام‌های OSHI را بین دو شبکه جابه‌جا می‌کند.</string>
+    <string name="meshcore_no_free_channel">هر ۸ جای کانال این رادیو پر است. یکی را در اپ MeshCore آزاد کنید تا OSHI بتواند #oshi-bridge را اضافه کند.</string>
+</resources>

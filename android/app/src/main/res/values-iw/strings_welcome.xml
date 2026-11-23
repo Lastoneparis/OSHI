@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The welcome conversation seeded for a brand-new identity.
+
+  PORT OF iOS `WelcomeMessageManager.swift` + `<lproj>/Localizable.strings`
+  keys `welcome.message.body` / `welcome.message.card_caption`
+  (en.lproj/Localizable.strings:4785-4787).
+
+  The text is COPIED from the shipping iOS catalogue rather than re-translated,
+  so the two platforms say the same thing in the same words. Its own file, not
+  `strings.xml`, so a re-import of either catalogue cannot silently drop it.
+-->
+<resources>
+    <string name="welcome_message_body">ברוך הבא ל-OSHI. ההודעות שלך מוצפנות מקצה לקצה, ונרשמת בלי מספר טלפון ובלי חשבון — לאיש לא נמסר שאתה כאן.\n\nOSHI עובד גם בלי אינטרנט כלל: טלפונים קרובים דרך בלוטות׳ ו-Wi-Fi, ובמרחק קילומטרים עם מכשיר LoRa.\n\nשאלה, או משהו תקול? הקש למטה וכתוב לי ישירות.</string>
+    <string name="welcome_message_card_caption">הקש כדי להתחיל שיחה איתי</string>
+</resources>

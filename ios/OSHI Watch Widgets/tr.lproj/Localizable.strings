@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d okunmamış";
+"w2.all_read" = "Tümü okundu";
+"w2.widget.off" = "iPhone'unuzda OSHI'de Akıllı saati açın";
+"w2.widget.off_short" = "Kapalı";
+"w2.widget.locked" = "iPhone'unuzda OSHI'nin kilidini açın";
+"w2.widget.locked_short" = "Kilitli";
+"w2.widget.open" = "OSHI'yi aç";
+"w2.widget.name" = "OSHI okunmamış";
+"w2.widget.desc" = "Okunmamış sayısı ve kimin yazdığı — mesajlar asla.";

@@ -1,0 +1,49 @@
+OSHI Messenger - Proprietary License
+=====================================
+
+Copyright (c) 2024-2026 Hugo Moriceau / Moriceau Lab
+All Rights Reserved.
+
+TERMS AND CONDITIONS
+--------------------
+
+1. DEFINITIONS
+   "Software" refers to OSHI Messenger and all associated source code,
+   documentation, assets, and related materials.
+   "You" refers to any individual or entity accessing this Software.
+
+2. GRANT OF RIGHTS
+   This license grants You the following LIMITED rights:
+   - To VIEW the source code for educational and security audit purposes
+   - To REPORT security vulnerabilities to the copyright holder
+   - To VERIFY the security claims made about the Software
+
+3. RESTRICTIONS
+   You may NOT, without explicit written permission from the copyright holder:
+   - Copy, modify, merge, or create derivative works of the Software
+   - Distribute, sublicense, sell, or transfer the Software
+   - Use the Software or any portion thereof in any commercial product
+   - Use the Software to compete with OSHI Messenger
+   - Remove or alter any copyright notices or this license
+   - Reverse engineer for purposes other than security verification
+
+4. SECURITY RESEARCHERS
+   Security researchers are granted permission to:
+   - Analyze the cryptographic implementations
+   - Test for vulnerabilities in isolated environments
+   - Report findings through responsible disclosure
+   
+   Contact: security@oshi-messenger.com
+
+5. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+6. TERMINATION
+   This license terminates automatically if You violate any terms.
+   Upon termination, You must destroy all copies of the Software.
+
+7. GOVERNING LAW
+   This license is governed by the laws of Switzerland.
+
+For licensing inquiries: license@oshi-messenger.com
+Website: https://oshi-messenger.org

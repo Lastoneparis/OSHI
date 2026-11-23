@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">เอฟเฟกต์เสียง</string>
+    <string name="voice_preview_original">เสียงต้นฉบับ</string>
+    <string name="voice_preview_processing">กำลังใช้ %1$s…</string>
+    <string name="voice_preview_failed">%1$s ไม่สำเร็จ ใช้ต้นฉบับแทน</string>
+    <string name="voice_preview_view_once_hint">เล่นได้เพียงครั้งเดียว แล้วจะหายไป</string>
+    <string name="voice_preview_listening">กำลังฟัง…</string>
+</resources>

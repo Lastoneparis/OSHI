@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MeshCore radio (MeshCoreManager.kt, MeshCoreSection.kt). Wording and every translation are
+    copied from iOS */Localizable.strings, keys "meshcore.*", so both platforms say the same thing.
+-->
+<resources>
+    <string name="meshcore_title">MeshCore radio</string>
+    <string name="meshcore_none">No MeshCore radio</string>
+    <string name="meshcore_scan">Search for MeshCore radios</string>
+    <string name="meshcore_ready">Connected — OSHI messages use #oshi-bridge</string>
+    <string name="meshcore_forget">Forget this MeshCore radio</string>
+    <string name="meshcore_bridge">Bridge Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">A MeshCore radio carries your OSHI messages over MeshCore repeaters. It must run MeshCore companion firmware and asks for its PIN the first time. OSHI adds one channel, #oshi-bridge, in a free slot and never changes your other channels.</string>
+    <string name="meshcore_bridge_footer">With a Meshtastic and a MeshCore radio both connected, this phone repeats OSHI messages between the two networks while OSHI is running.</string>
+    <string name="meshcore_no_free_channel">All 8 channel slots on this radio are in use. Free one in the MeshCore app so OSHI can add #oshi-bridge.</string>
+</resources>

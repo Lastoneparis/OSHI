@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- OSHI "O" reaction (wire "⭕", U+2B55). __OSHI_O_REACTION_V2_2026_11_16__
+     SAME geometry as Android drawable/ic_reaction_oshi_o.xml and
+     ic_notification.xml / ic_launcher_monochrome.xml: in their 108-unit
+     source space, ring r 27 / r 15 about (54,50), even-odd, plus the
+     speech-bubble tail as its own path (a curved wedge, not a needle).
+     The viewBox is Android's 24x24 emoji cell mapped back into that source
+     space (scale 0.3742, translate -8.2068,-7.6064), so the glyph sits in
+     the same box on both platforms. Solid fill: #A98BFF. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="21.932 20.327 64.137 64.137">
+  <path fill="#A98BFF" fill-rule="evenodd" d="M54,23 A27,27 0 0 1 81,50 A27,27 0 0 1 54,77 A27,27 0 0 1 27,50 A27,27 0 0 1 54,23 Z M54,35 A15,15 0 0 1 69,50 A15,15 0 0 1 54,65 A15,15 0 0 1 39,50 A15,15 0 0 1 54,35 Z"/>
+  <path fill="#A98BFF" d="M49.31,76.59 Q43.80,81.38 37.10,81.79 Q39.84,68.12 33.32,67.36 Z"/>
+</svg>

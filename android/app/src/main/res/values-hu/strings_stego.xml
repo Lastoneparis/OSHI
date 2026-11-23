@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Várakozás az álcázott kapcsolatra</string>
+    <string name="privacy_disguise_title">Adatvédelmi álcázás</string>
+    <string name="privacy_disguise_subtitle">Forgalom álcázása · üzenet elrejtése fotóban</string>
+    <string name="cover_switch_title">OSHI-forgalom álcázása</string>
+    <string name="cover_switch_caption">A kétszemélyes üzeneteid és mellékleteid kitöltött kérésekben utaznak, amelyek hétköznapi webanalitikának tűnnek, így méretüket és időzítésüket nehezebb megkülönböztetni. Ha az álcázott kapcsolat nem működik, az üzenetek várakoznak – álcázás nélkül soha nem kerülnek elküldésre.</string>
+    <string name="cover_not_hidden">Továbbra is látható: az, hogy az oshi-messenger.com címhez csatlakozol (szervernév és TLS-ujjlenyomat), valamint a csoportos üzenetek, hívások, push-ébresztések és az új levelek ellenőrzése, amelyek nincsenek álcázva. Ez nem anonimitás, és nem kerüli meg az OSHI-szerver letiltását – ehhez használd az Álcázás fotóként funkciót.</string>
+    <string name="disguise_photo_title">Álcázás fotóként</string>
+    <string name="disguise_photo_explainer">Rejts el egy végpontok között titkosított üzenetet egyetlen partner számára egy hétköznapinak látszó fotóban, majd küldd el a fotót bármilyen alkalmazással, e-mailben vagy felhőtárhelyen keresztül – hasznos, ha maga az OSHI le van tiltva. Kétszemélyes csevegésben: + → Álcázás fotóként.</string>
+    <string name="disguise_reveal_button">Rejtett üzenet felfedése</string>
+    <string name="disguise_reveal_hint">Egy kapott fotót bármelyik alkalmazásból meg is oszthatsz az OSHI-val.</string>
+    <string name="disguise_sheet_for">Csak %1$s tudja elolvasni.</string>
+    <string name="disguise_message_hint">Rejtett üzenet</string>
+    <string name="disguise_add_file">Kis fájl hozzáadása (max. 256 KB)</string>
+    <string name="disguise_remove_file">%1$s eltávolítása</string>
+    <string name="disguise_file_too_large">A fájl túl nagy (max. 256 KB)</string>
+    <string name="disguise_cover_generated">Generált tájkép</string>
+    <string name="disguise_cover_photo">Saját fotó</string>
+    <string name="disguise_capacity">%1$s / %2$s felhasználva a képben rendelkezésre álló helyből</string>
+    <string name="disguise_too_big">Túl hosszú ehhez a képhez. Rövidítsd az üzenetet, távolítsd el a fájlt, vagy válassz nagyobb fotót.</string>
+    <string name="disguise_create_share">Fotó létrehozása és megosztása</string>
+    <string name="disguise_warning_recompress">FÁJLKÉNT vagy dokumentumként küldd el. A fotókat újratömörítő alkalmazások (a legtöbb közösségi hálózat, a WhatsApp, a Signal vagy a Telegram fotó módban, a képernyőképek) törlik a rejtett üzenetet.</string>
+    <string name="disguise_warning_forensic">Ez elrejti az üzenetet mindenki elől, aki a fotót nézi. Igazságügyi (forenzikus) elemzéssel azonban továbbra is kimutatható, hogy a fotó rejtett adatot tartalmaz, de elolvasni nem lehet, és azt sem lehet megállapítani, kinek szól.</string>
+    <string name="disguise_working">Fotó létrehozása…</string>
+    <string name="disguise_failed">Nem sikerült létrehozni a fotót.</string>
+    <string name="reveal_title">Rejtett üzenet</string>
+    <string name="reveal_from">Feladó: %1$s</string>
+    <string name="reveal_hidden_on">Elrejtve: %1$s</string>
+    <string name="reveal_copy">Szöveg másolása</string>
+    <string name="reveal_open_file">%1$s megnyitása</string>
+    <string name="reveal_checking">Rejtett üzenet keresése…</string>
+    <string name="reveal_not_found">Ebben a képben nincs neked szóló rejtett üzenet. Ha fotóként küldték, az azt továbbító alkalmazás újratömöríthette – kérd fájlként.</string>
+    <string name="reveal_damaged">Ezt a képet %1$s készítette neked, de útközben megváltozott, és már nem olvasható. Kérd, hogy küldjék el újra fájlként.</string>
+    <string name="reveal_unreadable">Nem sikerült beolvasni ezt a fájlt.</string>
+    <string name="disguise_photo_short">Álcázás</string>
+</resources>

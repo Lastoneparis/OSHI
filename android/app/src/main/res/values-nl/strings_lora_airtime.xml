@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Wachten op zendtijd voor de radio (wettelijke duty-cycle-limiet)</string>
+    <string name="lora_jamming_title">Radiostoring gedetecteerd — mogelijke jamming</string>
+    <string name="lora_jamming_detail">Berichten worden verstuurd via Bluetooth-mesh of internet zodra dat kan. Berichten voor de radio worden bewaard en gaan via LoRa zodra het kanaal vrij is.</string>
+    <string name="lora_jamming_send_anyway">Toch via LoRa versturen</string>
+    <string name="lora_jamming_override_active">Toch via LoRa versturen tot %1$s, of tot het kanaal vrij is. Berichten komen mogelijk niet aan.</string>
+</resources>

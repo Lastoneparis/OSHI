@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_NODE_TAP_2026_11_05__ The card shown when a radio's pin on the map is
+     tapped. Every string names a fact the node actually reports; there is no
+     battery line because `LoRaMeshNode` carries no battery, and a field invented
+     for visual balance is a field that lies. -->
+<resources>
+    <string name="lora_node_card_never_heard">never heard</string>
+    <string name="lora_node_card_heard_now">heard just now</string>
+    <string name="lora_node_card_heard_min">heard %1$d min ago</string>
+    <string name="lora_node_card_heard_hour">heard %1$d h ago</string>
+    <string name="lora_node_card_heard_day">heard %1$d d ago</string>
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <!-- A NodeInfo tells us a radio exists without telling us how well we hear
+         it, so "no signal yet" is a real state rather than a missing value. -->
+    <string name="lora_node_card_not_heard">not heard yet</string>
+    <string name="lora_node_card_direct">Direct</string>
+    <string name="lora_node_card_hops">%1$d hops</string>
+    <string name="lora_node_card_in_range">in range</string>
+    <string name="lora_node_card_relayed">relayed</string>
+    <string name="lora_node_card_from_you">from you</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+</resources>

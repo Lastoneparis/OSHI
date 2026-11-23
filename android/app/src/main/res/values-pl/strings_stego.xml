@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Oczekiwanie na zamaskowane połączenie</string>
+    <string name="privacy_disguise_title">Maskowanie prywatności</string>
+    <string name="privacy_disguise_subtitle">Maskuj ruch · ukryj wiadomość w zdjęciu</string>
+    <string name="cover_switch_title">Maskuj ruch OSHI</string>
+    <string name="cover_switch_caption">Twoje wiadomości i załączniki 1:1 są przesyłane wewnątrz dopełnionych żądań, które wyglądają jak zwykła analityka internetowa, więc ich rozmiar i czas trudniej odróżnić. Jeśli zamaskowane połączenie zawiedzie, wiadomości czekają — nigdy nie są wysyłane bez maskowania.</string>
+    <string name="cover_not_hidden">Nadal widoczne: to, że łączysz się z oshi-messenger.com (nazwa serwera i odcisk TLS), a także wiadomości grupowe, połączenia, wybudzenia push i sprawdzanie nowej poczty, które nie są maskowane. To nie jest anonimowość i nie omija blokady serwera OSHI — do tego użyj funkcji Zamaskuj jako zdjęcie.</string>
+    <string name="disguise_photo_title">Zamaskuj jako zdjęcie</string>
+    <string name="disguise_photo_explainer">Ukryj wiadomość zaszyfrowaną end-to-end dla jednego kontaktu w zwyczajnie wyglądającym zdjęciu, a następnie wyślij zdjęcie dowolną aplikacją, e-mailem lub przez chmurę — przydatne, gdy sam OSHI jest zablokowany. W czacie 1:1: + → Zamaskuj jako zdjęcie.</string>
+    <string name="disguise_reveal_button">Odkryj ukrytą wiadomość</string>
+    <string name="disguise_reveal_hint">Możesz też udostępnić otrzymane zdjęcie do OSHI z dowolnej aplikacji.</string>
+    <string name="disguise_sheet_for">Tylko %1$s może to przeczytać.</string>
+    <string name="disguise_message_hint">Ukryta wiadomość</string>
+    <string name="disguise_add_file">Dodaj mały plik (maks. 256 KB)</string>
+    <string name="disguise_remove_file">Usuń %1$s</string>
+    <string name="disguise_file_too_large">Plik jest za duży (maks. 256 KB)</string>
+    <string name="disguise_cover_generated">Wygenerowany krajobraz</string>
+    <string name="disguise_cover_photo">Moje zdjęcie</string>
+    <string name="disguise_capacity">Wykorzystuje %1$s z %2$s dostępnych w tym obrazie</string>
+    <string name="disguise_too_big">Za długie dla tego obrazu. Skróć wiadomość, usuń plik lub wybierz większe zdjęcie.</string>
+    <string name="disguise_create_share">Utwórz zdjęcie i udostępnij</string>
+    <string name="disguise_warning_recompress">Wyślij je jako PLIK lub dokument. Aplikacje, które ponownie kompresują zdjęcia (większość serwisów społecznościowych, WhatsApp, Signal lub Telegram w trybie zdjęć, zrzuty ekranu), usuwają ukrytą wiadomość.</string>
+    <string name="disguise_warning_forensic">Ukrywa to wiadomość przed każdym, kto ogląda zdjęcie. Analiza kryminalistyczna nadal może wykryć, że zdjęcie zawiera ukryte dane, ale nie może ich odczytać ani ustalić, dla kogo są przeznaczone.</string>
+    <string name="disguise_working">Tworzenie zdjęcia…</string>
+    <string name="disguise_failed">Nie udało się utworzyć zdjęcia.</string>
+    <string name="reveal_title">Ukryta wiadomość</string>
+    <string name="reveal_from">Od: %1$s</string>
+    <string name="reveal_hidden_on">Ukryto: %1$s</string>
+    <string name="reveal_copy">Kopiuj tekst</string>
+    <string name="reveal_open_file">Otwórz %1$s</string>
+    <string name="reveal_checking">Szukanie ukrytej wiadomości…</string>
+    <string name="reveal_not_found">Brak ukrytej wiadomości dla Ciebie w tym obrazie. Jeśli został wysłany jako zdjęcie, aplikacja, która go przesłała, mogła go ponownie skompresować — poproś o przesłanie go jako pliku.</string>
+    <string name="reveal_damaged">Ten obraz został utworzony dla Ciebie przez %1$s, ale został zmieniony po drodze i nie można go już odczytać. Poproś o ponowne wysłanie go jako pliku.</string>
+    <string name="reveal_unreadable">Nie udało się odczytać tego pliku.</string>
+    <string name="disguise_photo_short">Zamaskuj</string>
+</resources>

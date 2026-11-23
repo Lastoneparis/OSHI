@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (he) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI משתמש ב-Bluetooth כדי לאתר מכשירים בקרבת מקום ולהתחבר אליהם, לשליחת הודעות מאובטחות ישירות ללא אינטרנט.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI זקוק ל-Bluetooth כדי לקבל הודעות מוצפנות ממכשירים קרובים ברשת ה-mesh שלך.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI יכול להוסיף שיחות מתוזמנות ליומן שלך כדי שלא תפספס אף שיחה.";
+"NSCalendarsUsageDescription" = "OSHI יכול להוסיף שיחות מתוזמנות ליומן שלך כדי שלא תפספס אף שיחה.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI יכול להוסיף שיחות מתוזמנות ליומן שלך כדי שלא תפספס אף שיחה.";
+"NSCameraUsageDescription" = "OSHI זקוק לגישה למצלמה כדי לסרוק קודי QR ולצלם תמונות להודעות מוצפנות.";
+"NSFaceIDUsageDescription" = "השתמש ב-Face ID כדי לפתוח את ההודעות המוצפנות שלך בבטחה ולהגן על הפרטיות שלך.";
+"NSLocalNetworkUsageDescription" = "OSHI משתמש ברשת המקומית כדי ליצור חיבורי Wi-Fi ישירים עם מכשירים קרובים, כך שההודעות מגיעות מהר יותר.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI משתמש במיקום שלך כדי לשתף אותו בזמן אמת עם אנשי הקשר. המיקום מוצפן ומשותף רק כשתבחר בכך.";
+"NSLocationAlwaysUsageDescription" = "OSHI משתמש במיקום שלך לשיתוף בזמן אמת עם אנשי הקשר, גם כשהאפליקציה פועלת ברקע. המיקום מוצפן ומשותף רק כשתבחר בכך.";
+"NSLocationWhenInUseUsageDescription" = "OSHI משתמש במיקום שלך כדי לשתף אותו עם אנשי הקשר. המיקום מוצפן ומשותף רק כשתבחר בכך.";
+"NSMicrophoneUsageDescription" = "OSHI זקוק לגישה למיקרופון כדי להקליט סרטונים עם קול להודעות מוצפנות.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI יכול לשמור תמונות שהתקבלו בספריית התמונות שלך.";
+"NSPhotoLibraryUsageDescription" = "OSHI זקוק לגישה לספריית התמונות כדי שתוכל לבחור תמונות לשליחה כהודעות מוצפנות.";
+"NSSpeechRecognitionUsageDescription" = "OSHI משתמש בזיהוי דיבור על המכשיר עצמו כדי שתוכל להכתיב הודעות לעוזר ה-AI. הקול שלך מתומלל כולו ב-iPhone שלך ולעולם לא עוזב את המכשיר.";
+"NSUserNotificationsUsageDescription" = "OSHI שולח לך התראות כשמגיעות הודעות מוצפנות חדשות, כדי שלא תפספס דבר חשוב.";

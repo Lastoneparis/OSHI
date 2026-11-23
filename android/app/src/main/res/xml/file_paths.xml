@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path name="camera_photos" path="." />
+    <cache-path name="shared_media" path="shared/" />
+    <files-path name="media" path="media/" />
+    <files-path name="files_root" path="." />
+    <external-files-path name="external_media" path="media/" />
+    <!--
+        Settings → Export Messages writes to getExternalFilesDir(null)/exports.
+        Without this grant the share intent could only be handed a raw file://
+        Uri, which throws FileUriExposedException on API 24+ (hard crash, 2/2,
+        device walkthrough 2026-08-13).
+    -->
+    <external-files-path name="exports" path="exports/" />
+    <!--
+        __CALL_LOG_AT_REST_2026_09_23__ Settings → Share call diagnostics: the
+        REDACTED .txt export (CallDiagnosticsShare). The sealed log itself lives in
+        files/call_logs/ and is deliberately NOT exposed here.
+    -->
+    <cache-path name="call_diagnostics" path="call_diagnostics/" />
+</paths>

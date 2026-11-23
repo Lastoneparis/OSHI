@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">Rádio MeshCore</string>
+    <string name="meshcore_none">Nenhum rádio MeshCore</string>
+    <string name="meshcore_scan">Procurar rádios MeshCore</string>
+    <string name="meshcore_ready">Ligado — as mensagens do OSHI usam #oshi-bridge</string>
+    <string name="meshcore_forget">Esquecer este rádio MeshCore</string>
+    <string name="meshcore_bridge">Ponte Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">Um rádio MeshCore leva as suas mensagens do OSHI pelos repetidores MeshCore. Tem de usar o firmware MeshCore companion e pede o PIN da primeira vez. O OSHI acrescenta um único canal, #oshi-bridge, num espaço livre e nunca altera os seus outros canais.</string>
+    <string name="meshcore_bridge_footer">Com um rádio Meshtastic e um MeshCore ligados, este telemóvel reencaminha as mensagens do OSHI entre as duas redes enquanto o OSHI está aberto.</string>
+    <string name="meshcore_no_free_channel">Os 8 espaços de canal deste rádio estão ocupados. Liberte um na app MeshCore para o OSHI acrescentar #oshi-bridge.</string>
+</resources>

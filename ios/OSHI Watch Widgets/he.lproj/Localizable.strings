@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d שלא נקראו";
+"w2.all_read" = "הכול נקרא";
+"w2.widget.off" = "יש להפעיל שעון חכם ב-OSHI ב-iPhone";
+"w2.widget.off_short" = "כבוי";
+"w2.widget.locked" = "יש לבטל את נעילת OSHI ב-iPhone";
+"w2.widget.locked_short" = "נעול";
+"w2.widget.open" = "פתיחת OSHI";
+"w2.widget.name" = "OSHI שלא נקראו";
+"w2.widget.desc" = "מספר שלא נקראו ומי כתב — אף פעם לא ההודעות.";

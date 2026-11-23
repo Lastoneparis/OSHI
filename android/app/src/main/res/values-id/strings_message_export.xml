@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">File terenkripsi, hanya dapat dibaca dengan kunci akun Anda</string>
+    <string name="settings_import_messages">Impor pesan</string>
+    <string name="settings_import_messages_desc">Pulihkan file .oshiexport terenkripsi</string>
+    <string name="settings_importing">Mengimpor…</string>
+    <string name="export_media_skipped">%1$d lampiran terlalu besar dan tidak disertakan dalam ekspor.</string>
+    <string name="import_messages_success">%1$d pesan diimpor (%2$d sudah ada).</string>
+    <string name="import_error_wrong_account">Ekspor ini milik akun OSHI lain. Pulihkan kunci akun tersebut terlebih dahulu.</string>
+    <string name="import_error_damaged">Ekspor ini rusak atau telah diubah.</string>
+    <string name="import_error_other_platform">Ekspor ini dibuat oleh OSHI untuk %1$s dan belum dapat diimpor di sini.</string>
+    <string name="import_error_not_export">File ini bukan ekspor OSHI.</string>
+    <string name="import_error_version">Ekspor ini dibuat oleh versi OSHI yang lebih baru. Perbarui aplikasi dan coba lagi.</string>
+    <string name="import_error_no_key">Tidak ada kunci akun di perangkat ini. Pulihkan akun Anda terlebih dahulu.</string>
+    <string name="import_error_unreadable">File tidak dapat dibaca.</string>
+</resources>

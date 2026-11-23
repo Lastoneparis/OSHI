@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d chưa đọc";
+"w2.all_read" = "Đã đọc hết";
+"w2.widget.off" = "Bật Đồng hồ thông minh trong OSHI trên iPhone";
+"w2.widget.off_short" = "Tắt";
+"w2.widget.locked" = "Mở khóa OSHI trên iPhone";
+"w2.widget.locked_short" = "Đã khóa";
+"w2.widget.open" = "Mở OSHI";
+"w2.widget.name" = "OSHI chưa đọc";
+"w2.widget.desc" = "Số tin chưa đọc và người gửi — không bao giờ có nội dung.";

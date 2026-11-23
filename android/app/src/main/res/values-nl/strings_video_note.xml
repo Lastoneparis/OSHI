@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videobericht</string>
+    <string name="video_note_title">Videobericht</string>
+    <string name="video_note_a11y" formatted="true">Videobericht, %1$s</string>
+    <string name="video_note_play">Afspelen</string>
+    <string name="video_note_pause">Pauzeren</string>
+    <string name="video_note_record_button">Videobericht opnemen</string>
+    <string name="video_note_hint">Tik om op te nemen of houd ingedrukt · max. 15 s</string>
+    <string name="video_note_record">Opname starten</string>
+    <string name="video_note_stop">Opname stoppen</string>
+    <string name="video_note_flip">Camera wisselen</string>
+    <string name="video_note_close">Sluiten</string>
+    <string name="video_note_review_title">Je videobericht</string>
+    <string name="video_note_preparing">Voorbereiden…</string>
+    <string name="video_note_discard">Verwijderen</string>
+    <string name="video_note_retake">Opnieuw</string>
+    <string name="video_note_send">Videobericht versturen</string>
+    <string name="video_note_too_short">Te kort. Tik om op te nemen of houd de knop ingedrukt.</string>
+    <string name="video_note_camera_denied">Cameratoegang is nodig om een videobericht op te nemen.</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Bàn phím</string>
+    <string name="keyboard_incognito_title">Bàn phím ẩn danh</string>
+    <string name="keyboard_incognito_subtitle">Yêu cầu bàn phím không học những gì bạn gõ</string>
+    <string name="keyboard_status_title">Bàn phím hiện tại</string>
+    <string name="keyboard_status_trusted">%1$s · Bàn phím tích hợp</string>
+    <string name="keyboard_status_third_party">%1$s · Bàn phím bên thứ ba</string>
+    <string name="keyboard_status_unknown">Bàn phím không xác định</string>
+    <string name="keyboard_privacy_explainer">OSHI mã hóa ngay trên điện thoại này, nhưng những gì bạn gõ đi qua bàn phím trước. Chế độ ẩn danh yêu cầu bàn phím không học và không lưu từ ngữ của bạn — Android không thể buộc bàn phím tuân theo, chỉ có thể yêu cầu. Bàn phím bên thứ ba vẫn có thể đọc mọi lần nhấn phím, vì vậy nên dùng bàn phím tích hợp của điện thoại. Nếu chính điện thoại đã bị xâm nhập (phần mềm gián điệp), không ứng dụng nào có thể bảo vệ những gì bạn gõ.</string>
+    <string name="keyboard_banner_title">Bàn phím có thể đọc những gì bạn gõ trước khi OSHI mã hóa</string>
+    <string name="keyboard_banner_body">%1$s là bàn phím bên thứ ba. Với các cuộc trò chuyện riêng tư, hãy chuyển sang bàn phím tích hợp của điện thoại.</string>
+    <string name="keyboard_banner_switch">Đổi bàn phím</string>
+    <string name="keyboard_banner_dismiss">Bỏ qua</string>
+</resources>

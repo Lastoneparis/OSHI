@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Atualize este rádio para o OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Gratuito e de código aberto. Mantém a sua região, canais, chaves e contactos, continua na rede Meshtastic e acrescenta mensagens longas, confirmações de entrega e mensagens guardadas durante 72 h quando alguém está offline.</string>
+    <string name="oshimesh_upgrade_share">Enviar a ligação do instalador para um computador</string>
+    <string name="oshimesh_upgrade_why">O que o OSHI Mesh acrescenta</string>
+    <string name="oshimesh_upgrade_footer">O instalador funciona no Chrome ou no Edge num computador, por USB. Escolha “Manter as minhas definições” para atualizar este rádio em cerca de um minuto.</string>
+</resources>

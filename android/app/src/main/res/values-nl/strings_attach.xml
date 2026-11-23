@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Recent</string>
+    <string name="attach_selected_count">%1$d geselecteerd</string>
+    <string name="attach_all_photos">Alle foto’s</string>
+    <string name="attach_collapse">Inklappen</string>
+    <string name="attach_camera">Camera</string>
+    <string name="attach_gallery">Galerij</string>
+    <string name="attach_file">Bestand</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Locatie</string>
+    <string name="attach_contact">Contact</string>
+    <string name="attach_poll">Peiling</string>
+    <string name="attach_video_note">Videobericht</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Plannen</string>
+    <string name="attach_access_title">Je recente foto’s hier</string>
+    <string name="attach_access_body">OSHI leest je foto’s alleen zolang dit paneel open is. Niets verlaat je telefoon tenzij je het verstuurt.</string>
+    <string name="attach_access_allow">Toegang toestaan</string>
+    <string name="attach_access_settings">Instellingen openen</string>
+    <string name="attach_access_browse">Kiezen uit galerij</string>
+    <string name="attach_partial">Je hebt maar enkele foto’s met OSHI gedeeld.</string>
+    <string name="attach_partial_manage">Beheren</string>
+    <string name="attach_empty_title">Nog geen foto’s</string>
+    <string name="attach_caption_hint">Bijschrift toevoegen…</string>
+    <string name="attach_send_count">%1$d versturen</string>
+    <string name="attach_photo_a11y">Foto</string>
+    <string name="attach_video_a11y">Video, %1$s</string>
+    <string name="attach_limit">Maximaal %1$d tegelijk</string>
+</resources>

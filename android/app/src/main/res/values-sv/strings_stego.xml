@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Väntar på förklädd anslutning</string>
+    <string name="privacy_disguise_title">Integritetsförklädnad</string>
+    <string name="privacy_disguise_subtitle">Förklä trafik · göm ett meddelande i ett foto</string>
+    <string name="cover_switch_title">Förklä OSHI-trafik</string>
+    <string name="cover_switch_caption">Dina 1:1-meddelanden och bilagor färdas i utfyllda förfrågningar som ser ut som vanlig webbanalys, så deras storlek och tidpunkt är svårare att skilja åt. Om den förklädda anslutningen misslyckas väntar meddelandena — de skickas aldrig oförklädda.</string>
+    <string name="cover_not_hidden">Fortfarande synligt: att du ansluter till oshi-messenger.com (servernamn och TLS-fingeravtryck), samt gruppmeddelanden, samtal, push-väckningar och kontroller av ny e-post, som inte är förklädda. Detta är inte anonymitet och kringgår inte en blockering av OSHI-servern — använd i så fall Förklä som foto.</string>
+    <string name="disguise_photo_title">Förklä som foto</string>
+    <string name="disguise_photo_explainer">Göm ett end-to-end-krypterat meddelande till en kontakt i ett vanligt utseende foto och skicka sedan fotot via valfri app, e-post eller molnlagring — användbart när OSHI självt är blockerat. I en 1:1-chatt: + → Förklä som foto.</string>
+    <string name="disguise_reveal_button">Visa ett dolt meddelande</string>
+    <string name="disguise_reveal_hint">Du kan också dela ett mottaget foto till OSHI från valfri app.</string>
+    <string name="disguise_sheet_for">Bara %1$s kan läsa det.</string>
+    <string name="disguise_message_hint">Dolt meddelande</string>
+    <string name="disguise_add_file">Lägg till en liten fil (max 256 KB)</string>
+    <string name="disguise_remove_file">Ta bort %1$s</string>
+    <string name="disguise_file_too_large">Filen är för stor (max 256 KB)</string>
+    <string name="disguise_cover_generated">Genererat landskap</string>
+    <string name="disguise_cover_photo">Mitt foto</string>
+    <string name="disguise_capacity">Använder %1$s av %2$s tillgängligt i den här bilden</string>
+    <string name="disguise_too_big">För långt för den här bilden. Korta ner meddelandet, ta bort filen eller välj ett större foto.</string>
+    <string name="disguise_create_share">Skapa foto och dela</string>
+    <string name="disguise_warning_recompress">Skicka det som FIL eller dokument. Appar som komprimerar om foton (de flesta sociala nätverk, WhatsApp, Signal eller Telegram i fotoläge, skärmbilder) raderar det dolda meddelandet.</string>
+    <string name="disguise_warning_forensic">Detta döljer meddelandet för alla som tittar på fotot. Forensisk analys kan ändå upptäcka att fotot innehåller dold data, men kan inte läsa den eller avgöra vem den är till.</string>
+    <string name="disguise_working">Skapar foto…</string>
+    <string name="disguise_failed">Det gick inte att skapa fotot.</string>
+    <string name="reveal_title">Dolt meddelande</string>
+    <string name="reveal_from">Från %1$s</string>
+    <string name="reveal_hidden_on">Gömt %1$s</string>
+    <string name="reveal_copy">Kopiera text</string>
+    <string name="reveal_open_file">Öppna %1$s</string>
+    <string name="reveal_checking">Letar efter ett dolt meddelande…</string>
+    <string name="reveal_not_found">Inget dolt meddelande till dig i den här bilden. Om den skickades som foto kan appen som förmedlade den ha komprimerat om den — be att få den som fil.</string>
+    <string name="reveal_damaged">Den här bilden skapades åt dig av %1$s, men den ändrades på vägen och kan inte längre läsas. Be att få den skickad igen som fil.</string>
+    <string name="reveal_unreadable">Det gick inte att läsa den här filen.</string>
+    <string name="disguise_photo_short">Förklä</string>
+</resources>

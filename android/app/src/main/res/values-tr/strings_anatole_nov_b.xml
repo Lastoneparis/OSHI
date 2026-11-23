@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Yuvarlak video mesajı, en fazla 15 sn</string>
+    <string name="settings_panic_wipe_title">Logoya dokunarak sil</string>
+    <string name="settings_panic_wipe_subtitle">OSHI logosuna hızlıca üç kez dokunmak, bu telefondaki tüm mesajları, anahtarları ve dosyaları onay istemeden siler. Siz açana kadar kapalıdır.</string>
+    <string name="map_layer_title">Harita türü</string>
+    <string name="map_layer_standard">Standart</string>
+    <string name="map_layer_terrain">Arazi</string>
+    <string name="map_layer_satellite">Uydu</string>
+    <string name="map_layer_standard_desc">OSHI haritası, indirilen bölgelerle çevrimdışı çalışır</string>
+    <string name="map_layer_third_party_desc" formatted="true">Yalnızca çevrimiçi. Doğrudan %1$s üzerinden yüklenir; baktığınız alanı görür.</string>
+    <string name="map_layer_offline_only_note">“Yalnızca çevrimdışı haritalar” açık: bu katman yalnızca daha önce gördüğünüz döşemeleri gösterir.</string>
+</resources>

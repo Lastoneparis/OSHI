@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">لوحة المفاتيح</string>
+    <string name="keyboard_incognito_title">لوحة مفاتيح متخفية</string>
+    <string name="keyboard_incognito_subtitle">اطلب من لوحة المفاتيح ألا تتعلّم ما تكتبه</string>
+    <string name="keyboard_status_title">لوحة المفاتيح الحالية</string>
+    <string name="keyboard_status_trusted">%1$s · لوحة مفاتيح مدمجة</string>
+    <string name="keyboard_status_third_party">%1$s · لوحة مفاتيح من جهة خارجية</string>
+    <string name="keyboard_status_unknown">لوحة مفاتيح غير معروفة</string>
+    <string name="keyboard_privacy_explainer">يشفّر OSHI على هذا الهاتف، لكن ما تكتبه يمر أولاً عبر لوحة المفاتيح. يطلب الوضع المتخفي من لوحة المفاتيح ألا تتعلّم كلماتك أو تحتفظ بها — لا يستطيع Android إجبار لوحة المفاتيح على الامتثال، بل يطلب منها ذلك فقط. يمكن للوحة مفاتيح من جهة خارجية أن تقرأ كل ضغطة مفتاح رغم ذلك، لذا يُفضّل استخدام لوحة المفاتيح المدمجة في هاتفك. وإذا كان الهاتف نفسه مخترقًا (برنامج تجسس)، فلا يمكن لأي تطبيق حماية ما تكتبه.</string>
+    <string name="keyboard_banner_title">يمكن للوحة المفاتيح قراءة ما تكتبه قبل أن يشفّره OSHI</string>
+    <string name="keyboard_banner_body">%1$s لوحة مفاتيح من جهة خارجية. للمحادثات الخاصة، انتقل إلى لوحة المفاتيح المدمجة في هاتفك.</string>
+    <string name="keyboard_banner_switch">تغيير لوحة المفاتيح</string>
+    <string name="keyboard_banner_dismiss">إخفاء</string>
+</resources>

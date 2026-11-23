@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Клавіатура</string>
+    <string name="keyboard_incognito_title">Режим інкогніто для клавіатури</string>
+    <string name="keyboard_incognito_subtitle">Просити клавіатуру не запам’ятовувати те, що ви вводите</string>
+    <string name="keyboard_status_title">Поточна клавіатура</string>
+    <string name="keyboard_status_trusted">%1$s · Вбудована клавіатура</string>
+    <string name="keyboard_status_third_party">%1$s · Стороння клавіатура</string>
+    <string name="keyboard_status_unknown">Невідома клавіатура</string>
+    <string name="keyboard_privacy_explainer">OSHI шифрує на цьому телефоні, але все, що ви вводите, спершу проходить через клавіатуру. Режим інкогніто просить клавіатуру не запам’ятовувати й не зберігати ваші слова — Android не може змусити клавіатуру підкоритися, лише попросити. Стороння клавіатура все одно може читати кожне натискання, тож краще користуйтеся вбудованою клавіатурою телефона. Якщо сам телефон заражено (шпигунська програма), жоден застосунок не захистить те, що ви вводите.</string>
+    <string name="keyboard_banner_title">Клавіатура може прочитати те, що ви вводите, перш ніж OSHI це зашифрує</string>
+    <string name="keyboard_banner_body">%1$s — стороння клавіатура. Для приватних розмов перейдіть на вбудовану клавіатуру телефона.</string>
+    <string name="keyboard_banner_switch">Змінити клавіатуру</string>
+    <string name="keyboard_banner_dismiss">Сховати</string>
+</resources>

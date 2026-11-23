@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">อุปกรณ์ที่เชื่อมโยง</string>
+    <string name="devsync_settings_subtitle">ซิงค์ประวัติของคุณระหว่างอุปกรณ์โดยตรง</string>
+    <string name="devsync_status_on">เปิดการซิงค์โดยตรงอยู่ ประวัติของคุณย้ายจากอุปกรณ์หนึ่งไปอีกอุปกรณ์หนึ่ง ไม่มีสิ่งใดถูกเก็บไว้บนเซิร์ฟเวอร์</string>
+    <string name="devsync_status_off">ปิดการซิงค์โดยตรงบนอุปกรณ์นี้อยู่</string>
+    <string name="devsync_this_device">อุปกรณ์นี้</string>
+    <string name="devsync_device_id">รหัสอุปกรณ์ %1$s</string>
+    <string name="devsync_debug_override">ซิงค์โดยตรง (บังคับสำหรับดีบัก)</string>
+    <string name="devsync_debug_override_desc">บังคับเปิดการซิงค์อุปกรณ์โดยตรงสำหรับการติดตั้งนี้ ไม่ว่าเซิร์ฟเวอร์จะระบุอย่างไร</string>
+    <string name="devsync_pending_title">อนุมัติอุปกรณ์ใหม่</string>
+    <string name="devsync_pending_body">%1$s (%2$s) ต้องการรับประวัติของคุณ ตรวจสอบว่าหน้าจออีกเครื่องแสดงรหัสเดียวกัน</string>
+    <string name="devsync_waiting_body">กำลังรอการอนุมัติบนอุปกรณ์อีกเครื่อง ตรวจสอบว่าแสดงรหัสเดียวกัน</string>
+    <string name="devsync_peer_approved">อุปกรณ์อีกเครื่องอนุมัติแล้ว อนุมัติที่นี่เพื่อเสร็จสิ้น</string>
+    <string name="devsync_allow">อนุญาต</string>
+    <string name="devsync_deny">ปฏิเสธ</string>
+    <string name="devsync_linked_title">อุปกรณ์ที่เชื่อมโยง</string>
+    <string name="devsync_none_linked">ยังไม่มีอุปกรณ์ที่เชื่อมโยง เปิด OSHI บนอุปกรณ์อีกเครื่อง ใน Wi-Fi เดียวกันหรือออนไลน์พร้อมกัน</string>
+    <string name="devsync_last_sync">ซิงค์ล่าสุด: %1$s</string>
+    <string name="devsync_never">ไม่เคย</string>
+    <string name="devsync_syncing_now">กำลังซิงค์ (%1$s)</string>
+    <string name="devsync_remove">ลบ</string>
+    <string name="devsync_remove_confirm_title">ลบ %1$s ไหม</string>
+    <string name="devsync_remove_confirm_body">อุปกรณ์นี้จะไม่ได้รับประวัติของคุณอีก แต่จะเก็บสิ่งที่มีอยู่แล้วไว้</string>
+    <string name="devsync_sync_now">ซิงค์เลย</string>
+    <string name="devsync_cancel">ยกเลิก</string>
+    <string name="devsync_alert_unapproved">อุปกรณ์ที่ใช้บัญชีของคุณพยายามซิงค์: %1$s</string>
+    <string name="devsync_alert_linked">อุปกรณ์ใหม่ %1$s สามารถรับประวัติของคุณได้แล้ว</string>
+</resources>

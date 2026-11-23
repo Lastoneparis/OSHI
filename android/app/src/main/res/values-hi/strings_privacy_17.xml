@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">आपकी बातचीत की सुरक्षा के लिए OSHI में स्क्रीनशॉट अवरुद्ध हैं</string>
+    <string name="rn_hint_setting_title">संपर्कों को बताएँ कि मैं प्रतिबंधित नेटवर्क पर हूँ</string>
+    <string name="rn_hint_setting_caption">जब ट्रैफ़िक छिपा होता है, आपके संदेशों में एक छोटा एंड-टू-एंड एन्क्रिप्टेड संकेत रहता है, ताकि संपर्क जानें कि आप शायद सेंसर या निगरानी वाले नेटवर्क पर हैं। इसे केवल वही देख सकते हैं।</string>
+    <string name="rn_hint_chip">प्रतिबंधित नेटवर्क से भेजा गया</string>
+    <string name="rn_hint_explain_title">प्रतिबंधित नेटवर्क</string>
+    <string name="rn_hint_explain_body">यह व्यक्ति OSHI का निजता छद्मावरण इस्तेमाल करता है और शायद सेंसर या निगरानी वाले नेटवर्क पर है। सामान्य रूप से जवाब दें: OSHI उनकी ओर से छिपाना जारी रखता है। संदेश छोटे रखें; फ़ोटो और वीडियो धीमे हो सकते हैं।</string>
+</resources>

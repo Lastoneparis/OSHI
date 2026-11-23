@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">در انتظار زمان پخش رادیو (محدودیت قانونی چرخه کاری)</string>
+    <string name="lora_jamming_title">تداخل رادیویی شناسایی شد — احتمال پارازیت</string>
+    <string name="lora_jamming_detail">پیام‌ها در صورت امکان از طریق شبکه Bluetooth یا اینترنت ارسال می‌شوند. پیام‌های رادیو نگه داشته می‌شوند و پس از آزاد شدن کانال از طریق LoRa ارسال می‌شوند.</string>
+    <string name="lora_jamming_send_anyway">به هر حال با LoRa ارسال کن</string>
+    <string name="lora_jamming_override_active">ارسال با LoRa به هر حال تا %1$s، یا تا آزاد شدن کانال. ممکن است پیام‌ها نرسند.</string>
+</resources>

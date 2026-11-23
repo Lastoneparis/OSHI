@@ -1,0 +1,136 @@
+/* OSHI Watch App - Ukrainian */
+
+/* Status */
+"watch.status.connected" = "Підключено";
+"watch.status.not_reachable" = "iPhone недоступний";
+
+/* Navigation */
+"watch.open_iphone" = "Відкрити OSHI на iPhone";
+
+/* Common */
+"common.refresh" = "Оновити";
+"common.cancel" = "Скасувати";
+
+/* Messages */
+"watch.loading_messages" = "Завантаження повідомлень…";
+"watch.no_messages" = "Немає повідомлень";
+"watch.sending" = "Надсилання…";
+"watch.dictate" = "Диктування";
+"watch.voice_message" = "Голосове повідомлення";
+"watch.reply" = "Відповісти";
+"watch.media_attachment" = "Медіавкладення";
+
+/* Quick Replies */
+"watch.quick.yes" = "Так";
+"watch.quick.no" = "Ні";
+"watch.quick.ok" = "ОК";
+"watch.quick.later" = "Пізніше";
+"watch.quick.omw" = "Вже їду!";
+"watch.quick.thanks" = "Дякую";
+
+/* Errors */
+"watch.error.send_failed" = "Не вдалося надіслати повідомлення";
+"watch.send.queued" = "У черзі на iPhone";
+"watch.error.not_reachable" = "iPhone недоступний";
+
+/* Calls */
+"watch.call.incoming_video" = "Вхідний відеодзвінок";
+"watch.call.incoming_voice" = "Вхідний голосовий дзвінок";
+"watch.call.video" = "Відеодзвінок";
+"watch.call.voice" = "Голосовий дзвінок";
+"watch.call.connecting" = "З'єднання…";
+"watch.call.ringing" = "Дзвінок…";
+"watch.call.in_call" = "У дзвінку";
+"watch.call.ended" = "Дзвінок завершено";
+"watch.call.start" = "Почати дзвінок";
+"watch.call.unknown" = "Невідомий";
+
+/* Call Actions */
+"call.action.accept" = "Прийняти";
+"call.action.decline" = "Відхилити";
+
+/* Notifications */
+"watch.notification.new_message" = "Нове повідомлення";
+
+/* Call Summary */
+"call.outgoing" = "Вихідний дзвінок";
+"call.incoming" = "Вхідний дзвінок";
+"call.no.answer" = "Без відповіді";
+"call.declined" = "Відхилено";
+"call.missed" = "Пропущений дзвінок";
+"call.video.outgoing" = "Вихідний відеодзвінок";
+"call.video.incoming" = "Вхідний відеодзвінок";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Відповісти";
+"send" = "Надіслати";
+"type_message" = "Введіть повідомлення";
+"notification.action.mark_read" = "Прочитано";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Чати";
+"w2.empty.title" = "Чатів поки немає";
+"w2.empty.body" = "Тут з'являться ваші чати OSHI з iPhone.";
+"w2.disabled.title" = "Смарт-годинник вимкнено";
+"w2.disabled.body" = "Увімкніть в OSHI на iPhone: Налаштування › Пов'язані пристрої › Смарт-годинник.";
+"w2.locked.title" = "OSHI заблоковано";
+"w2.locked.body" = "Розблокуйте OSHI на iPhone і спробуйте ще раз.";
+"w2.unavailable.title" = "OSHI не готовий";
+"w2.unavailable.body" = "Відкрийте OSHI на iPhone хоча б раз і спробуйте ще раз.";
+"w2.nophone.title" = "iPhone недоступний";
+"w2.nophone.body" = "Тримайте поруч iPhone зі встановленим OSHI.";
+"w2.error.title" = "Щось пішло не так";
+"w2.error.body" = "iPhone не відповів. Спробуйте ще раз.";
+"w2.notfound" = "Цього чату більше немає на iPhone.";
+"w2.retry" = "Повторити";
+"w2.reply" = "Відповісти";
+"w2.you" = "Ви";
+"w2.you_prefix" = "Ви: %@";
+"w2.react" = "Реакція";
+"w2.speak_or_type" = "Диктуйте або пишіть";
+"w2.quick_replies" = "Швидкі відповіді";
+"w2.sending" = "Надсилання…";
+"w2.sent" = "Надіслано";
+"w2.send_failed" = "Не надіслано. Спробуйте ще раз на iPhone.";
+"w2.read_only" = "У цьому чаті не можна відповідати.";
+"w2.view_once" = "👁 Одноразовий перегляд — відкрийте на iPhone";
+"w2.view_once_short" = "👁 Одноразовий перегляд";
+"w2.e2e" = "Наскрізне шифрування на вашому iPhone";
+"w2.replying_to" = "У відповідь на";
+"w2.loading" = "Завантаження…";
+"w2.unread_count" = "Непрочитаних: %d";
+"w2.all_read" = "Усе прочитано";
+"w2.call" = "Подзвонити";
+"w2.media.photo" = "📷 Фото";
+"w2.media.video" = "🎥 Відео";
+"w2.media.voice" = "🎤 Голосове";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Файл";
+"w2.media.location" = "📍 Геопозиція";
+"w2.media.contact" = "👤 Контакт";
+"w2.qr.on_my_way" = "Уже їду";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Передзвоню пізніше";
+"w2.qr.thanks" = "Дякую!";
+"w2.qr.yes" = "Так";
+"w2.qr.no" = "Ні";
+"w2.qr.busy" = "Не можу говорити";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Люблю";
+"w2.r.laugh" = "Сміх";
+"w2.r.cry" = "Сум";
+"w2.r.thumbs" = "Клас";
+"w2.r.wow" = "Ого";
+"w2.r.fire" = "Вогонь";
+"w2.mute" = "Без звуку";
+"w2.end_call" = "Завершити";
+"w2.speaker" = "Динамік";
+"w2.widget.off" = "Увімкніть «Смарт-годинник» в OSHI на iPhone";
+"w2.widget.off_short" = "Вимк.";
+"w2.widget.locked" = "Розблокуйте OSHI на iPhone";
+"w2.widget.locked_short" = "Заблоковано";
+"w2.widget.open" = "Відкрити OSHI";
+"w2.widget.name" = "OSHI: непрочитані";
+"w2.widget.desc" = "Кількість непрочитаних і хто написав — без тексту повідомлень.";

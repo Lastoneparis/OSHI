@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LEAK_FIX_2026_09_25__ incoming link previews are fetched only on tap. -->
+<resources>
+    <string name="link_preview_tap_to_load">Tryk for at indlæse forhåndsvisning</string>
+</resources>

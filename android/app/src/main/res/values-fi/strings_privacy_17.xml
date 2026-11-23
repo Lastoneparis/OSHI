@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Kuvakaappaukset on estetty OSHIssa keskustelujesi suojaamiseksi</string>
+    <string name="rn_hint_setting_title">Kerro yhteystiedoille, että olen rajoitetussa verkossa</string>
+    <string name="rn_hint_setting_caption">Kun liikenne on naamioitu, viesteissäsi kulkee pieni päästä päähän salattu merkki, jotta yhteystiedot tietävät sinun ehkä olevan sensuroidussa tai valvotussa verkossa. Vain he näkevät sen.</string>
+    <string name="rn_hint_chip">Lähetetty rajoitetusta verkosta</string>
+    <string name="rn_hint_explain_title">Rajoitettu verkko</string>
+    <string name="rn_hint_explain_body">Tämä henkilö käyttää OSHIn naamiointia ja on todennäköisesti sensuroidussa tai valvotussa verkossa. Vastaa normaalisti: OSHI naamioi edelleen hänen liikenteensä. Pidä viestit lyhyinä; kuvat ja videot voivat olla hitaita.</string>
+</resources>

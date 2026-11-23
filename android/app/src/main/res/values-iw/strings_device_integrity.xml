@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">ייתכן שהטלפון הזה שונה</string>
+    <string name="device_integrity_dialog_body">OSHI זיהה סימנים לכך שהטלפון הזה עשוי להיות פרוץ (root) או משונה (%1$s). בטלפון כזה, תוכנות אחרות יכולות לקרוא את מה שמוצג במסך ואת מה שאתם מקלידים לפני ש-OSHI מצפין אותו. OSHI לא מחק ולא חסם דבר. הבדיקה הזו היוריסטית: היא עלולה לטעות, ו-root מוסתר היטב עלול לחמוק ממנה.</string>
+    <string name="device_integrity_dialog_ok">הבנתי</string>
+    <string name="device_integrity_status_title">שלמות המכשיר</string>
+    <string name="device_integrity_status_flagged">OSHI זיהה סימנים ל-root או לשינוי: %1$s</string>
+    <string name="device_integrity_finding_su">קובץ su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">אפליקציה לניהול root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">מערכת חתומה במפתחות בדיקה</string>
+    <string name="device_integrity_finding_debuggable">מערכת הניתנת לניפוי באגים</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">טלפונים פרוצים או משונים: OSHI מחפש סימנים נפוצים ל-root ‏(su,‏ Magisk,‏ Xposed/LSPosed,‏ Frida, מערכת חתומה במפתחות בדיקה או הניתנת לניפוי באגים) ומזהיר אתכם אם הוא מוצא כאלה. אם לא נמצא דבר, אין בכך הוכחה שהטלפון נקי.</string>
+    <string name="clipboard_hygiene_explainer">העתקה: הודעות, תרגומים, מפתחות שחזור ואסימוני בוט שאתם מעתיקים מסומנים כרגישים (Android 13+ מסתיר את התצוגה המקדימה). אם הם עדיין בלוח אחרי 60 שניות, OSHI מסיר אותם: מיד אם OSHI פתוח, ואחרת בפעם הבאה שתפתחו אותו. כל עוד הם בלוח, המקלדת שלכם ואפליקציות שמורשות לקרוא את הלוח יכולות לראות אותם, ומקלדות או תכונות של הטלפון ששומרות היסטוריית לוח עשויות לשמור עותק משלהן גם אחרי ההסרה.</string>
+</resources>

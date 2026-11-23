@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">Okosóra</string>
+    <string name="settings_smartwatch_subtitle">Olvasd és válaszold meg a csevegéseidet Wear OS órán. A titkosítás és a küldés ezen a telefonon marad; az óra semmit sem tárol.</string>
+</resources>

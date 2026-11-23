@@ -1,0 +1,136 @@
+/* OSHI Watch App - Norwegian Bokmål */
+
+/* Status */
+"watch.status.connected" = "Tilkoblet";
+"watch.status.not_reachable" = "iPhone ikke tilgjengelig";
+
+/* Navigation */
+"watch.open_iphone" = "Åpne OSHI på iPhone";
+
+/* Common */
+"common.refresh" = "Oppdater";
+"common.cancel" = "Avbryt";
+
+/* Messages */
+"watch.loading_messages" = "Laster meldinger…";
+"watch.no_messages" = "Ingen meldinger";
+"watch.sending" = "Sender…";
+"watch.dictate" = "Dikter";
+"watch.voice_message" = "Talemelding";
+"watch.reply" = "Svar";
+"watch.media_attachment" = "Medievedlegg";
+
+/* Quick Replies */
+"watch.quick.yes" = "Ja";
+"watch.quick.no" = "Nei";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Senere";
+"watch.quick.omw" = "På vei!";
+"watch.quick.thanks" = "Takk";
+
+/* Errors */
+"watch.error.send_failed" = "Kunne ikke sende meldingen";
+"watch.send.queued" = "Venter på iPhone";
+"watch.error.not_reachable" = "iPhone ikke tilgjengelig";
+
+/* Calls */
+"watch.call.incoming_video" = "Innkommende videoanrop";
+"watch.call.incoming_voice" = "Innkommende taleanrop";
+"watch.call.video" = "Videoanrop";
+"watch.call.voice" = "Taleanrop";
+"watch.call.connecting" = "Kobler til…";
+"watch.call.ringing" = "Ringer…";
+"watch.call.in_call" = "I anrop";
+"watch.call.ended" = "Anrop avsluttet";
+"watch.call.start" = "Start anrop";
+"watch.call.unknown" = "Ukjent";
+
+/* Call Actions */
+"call.action.accept" = "Godta";
+"call.action.decline" = "Avvis";
+
+/* Notifications */
+"watch.notification.new_message" = "Ny melding";
+
+/* Call Summary */
+"call.outgoing" = "Utgående anrop";
+"call.incoming" = "Innkommende anrop";
+"call.no.answer" = "Intet svar";
+"call.declined" = "Avvist";
+"call.missed" = "Tapt anrop";
+"call.video.outgoing" = "Utgående videoanrop";
+"call.video.incoming" = "Innkommende videoanrop";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Svar";
+"send" = "Send";
+"type_message" = "Skriv en melding";
+"notification.action.mark_read" = "Merk som lest";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Chatter";
+"w2.empty.title" = "Ingen chatter ennå";
+"w2.empty.body" = "OSHI-chattene fra iPhonen din vises her.";
+"w2.disabled.title" = "Smartklokke er av";
+"w2.disabled.body" = "Slå det på i OSHI på iPhonen: Innstillinger › Tilknyttede enheter › Smartklokke.";
+"w2.locked.title" = "OSHI er låst";
+"w2.locked.body" = "Lås opp OSHI på iPhonen, og prøv igjen.";
+"w2.unavailable.title" = "OSHI er ikke klar";
+"w2.unavailable.body" = "Åpne OSHI én gang på iPhonen, og prøv igjen.";
+"w2.nophone.title" = "iPhone kan ikke nås";
+"w2.nophone.body" = "Ha iPhonen med OSHI i nærheten.";
+"w2.error.title" = "Noe gikk galt";
+"w2.error.body" = "iPhonen svarte ikke. Prøv igjen.";
+"w2.notfound" = "Denne chatten finnes ikke lenger på iPhonen.";
+"w2.retry" = "Prøv igjen";
+"w2.reply" = "Svar";
+"w2.you" = "Deg";
+"w2.you_prefix" = "Deg: %@";
+"w2.react" = "Reager";
+"w2.speak_or_type" = "Snakk eller skriv";
+"w2.quick_replies" = "Hurtigsvar";
+"w2.sending" = "Sender …";
+"w2.sent" = "Sendt";
+"w2.send_failed" = "Ikke sendt. Prøv igjen på iPhonen.";
+"w2.read_only" = "Du kan ikke svare i denne chatten.";
+"w2.view_once" = "👁 Vis én gang – åpne den på iPhonen";
+"w2.view_once_short" = "👁 Vis én gang";
+"w2.e2e" = "Ende-til-ende-kryptert av iPhonen din";
+"w2.replying_to" = "Svarer på";
+"w2.loading" = "Laster inn …";
+"w2.unread_count" = "%d uleste";
+"w2.all_read" = "Alt er lest";
+"w2.call" = "Ring";
+"w2.media.photo" = "📷 Bilde";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Tale";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Fil";
+"w2.media.location" = "📍 Posisjon";
+"w2.media.contact" = "👤 Kontakt";
+"w2.qr.on_my_way" = "Er på vei";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Jeg ringer deg senere";
+"w2.qr.thanks" = "Takk!";
+"w2.qr.yes" = "Ja";
+"w2.qr.no" = "Nei";
+"w2.qr.busy" = "Kan ikke snakke nå";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Elsker";
+"w2.r.laugh" = "Latter";
+"w2.r.cry" = "Trist";
+"w2.r.thumbs" = "Tommel opp";
+"w2.r.wow" = "Wow";
+"w2.r.fire" = "Ild";
+"w2.mute" = "Demp";
+"w2.end_call" = "Legg på";
+"w2.speaker" = "Høyttaler";
+"w2.widget.off" = "Slå på Smartklokke i OSHI på iPhonen";
+"w2.widget.off_short" = "Av";
+"w2.widget.locked" = "Lås opp OSHI på iPhonen";
+"w2.widget.locked_short" = "Låst";
+"w2.widget.open" = "Åpne OSHI";
+"w2.widget.name" = "OSHI uleste";
+"w2.widget.desc" = "Antall uleste og hvem som skrev – aldri meldingene.";

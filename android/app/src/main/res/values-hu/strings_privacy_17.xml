@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Az OSHI-ban a képernyőképek tiltva vannak a beszélgetéseid védelmében</string>
+    <string name="rn_hint_setting_title">Tudassa a partnereimmel, hogy korlátozott hálózaton vagyok</string>
+    <string name="rn_hint_setting_caption">Amíg a forgalom álcázott, az üzeneteid egy kis, végponttól végpontig titkosított jelzést hordoznak, hogy a partnereid tudják: lehet, hogy cenzúrázott vagy megfigyelt hálózaton vagy. Csak ők látják.</string>
+    <string name="rn_hint_chip">Korlátozott hálózatról küldve</string>
+    <string name="rn_hint_explain_title">Korlátozott hálózat</string>
+    <string name="rn_hint_explain_body">Ez a személy az OSHI álcázását használja, és valószínűleg cenzúrázott vagy megfigyelt hálózaton van. Válaszolj nyugodtan: az OSHI továbbra is álcázza az ő oldalát. Írj rövid üzeneteket; a fotók és videók lassúak lehetnek.</string>
+</resources>

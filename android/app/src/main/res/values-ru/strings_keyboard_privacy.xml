@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Клавиатура</string>
+    <string name="keyboard_incognito_title">Режим инкогнито для клавиатуры</string>
+    <string name="keyboard_incognito_subtitle">Просить клавиатуру не запоминать то, что вы вводите</string>
+    <string name="keyboard_status_title">Текущая клавиатура</string>
+    <string name="keyboard_status_trusted">%1$s · Встроенная клавиатура</string>
+    <string name="keyboard_status_third_party">%1$s · Сторонняя клавиатура</string>
+    <string name="keyboard_status_unknown">Неизвестная клавиатура</string>
+    <string name="keyboard_privacy_explainer">OSHI шифрует на этом телефоне, но всё, что вы вводите, сначала проходит через клавиатуру. Режим инкогнито просит клавиатуру не запоминать и не сохранять ваши слова — Android не может заставить клавиатуру подчиниться, только попросить. Сторонняя клавиатура всё равно может читать каждое нажатие, поэтому лучше пользоваться встроенной клавиатурой телефона. Если сам телефон заражён (шпионская программа), ни одно приложение не защитит то, что вы вводите.</string>
+    <string name="keyboard_banner_title">Клавиатура может прочитать то, что вы вводите, до того как OSHI это зашифрует</string>
+    <string name="keyboard_banner_body">%1$s — сторонняя клавиатура. Для личных переписок переключитесь на встроенную клавиатуру телефона.</string>
+    <string name="keyboard_banner_switch">Сменить клавиатуру</string>
+    <string name="keyboard_banner_dismiss">Скрыть</string>
+</resources>

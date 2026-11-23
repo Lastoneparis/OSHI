@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">検索中…</string>
+    <string name="peers_status_peers_found">デバイスが見つかりました</string>
+    <string name="peers_status_permission_required">権限が必要です</string>
+    <string name="peers_subtitle_connected">接続中: %1$d</string>
+    <string name="peers_subtitle_connected_cross">接続中: %1$d（iOS）</string>
+    <string name="peers_subtitle_connected_mixed">接続中: %1$d（Android %2$d、iOS %3$d）</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth がオフです。オンにすると近くのデバイスを探せます</string>
+    <string name="peers_subtitle_permission_both">OSHI が Bluetooth を使えません。近くのデバイスが見えず、相手からも見えません</string>
+    <string name="peers_subtitle_permission_advertise">近くのデバイスからあなたが見えません。「付近のデバイス」の権限がありません</string>
+    <string name="peers_subtitle_permission_scan">OSHI が近くのデバイスを探せません。「付近のデバイス」の権限がありません</string>
+    <string name="peers_subtitle_ble_unsupported">この端末は Bluetooth LE で発信できません</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth が使用中です。別のアプリが無線を使っています</string>
+    <string name="peers_subtitle_ble_down">Bluetooth の検出が停止しました。再試行しています</string>
+    <string name="peers_subtitle_searching_lan">同じ Wi-Fi ネットワーク上の相手を探しています…</string>
+    <string name="peers_subtitle_disabled">メッシュネットワークはオフです</string>
+    <string name="peers_subtitle_looking">周囲のデバイスを探しています…</string>
+    <string name="peers_permission_card_title">付近のデバイスの検出をオンにする</string>
+    <string name="peers_permission_card_body">周囲の端末を見つけるには「付近のデバイス」の権限が必要です。権限がないと、すべてのメッセージはインターネット経由になります。</string>
+    <string name="peers_permission_card_action">許可</string>
+    <string name="peers_permission_card_settings">設定を開く</string>
+    <string name="peers_permission_card_denied_body">権限が拒否されたため、OSHI は周囲の相手を見つけられません。Android の設定で OSHI の「付近のデバイス」をオンにしてください。</string>
+    <string name="peers_same_wifi_note">2 台の端末が同じ Wi-Fi ネットワークに接続している必要があります。モバイルデータではメッセージはインターネット経由になります。</string>
+    <string name="peers_control_visible">表示</string>
+    <string name="peers_control_scan">スキャン</string>
+    <string name="peers_control_auto">自動</string>
+    <string name="peers_section_devices">デバイス</string>
+    <string name="peers_action_connect">接続</string>
+    <string name="peers_action_reconnect">再接続</string>
+    <string name="peers_info_reach_title">到達範囲</string>
+    <string name="peers_info_reach_desc">Wi-Fi ネットワークが届く範囲まで。メッセージは同じネットワーク上の他の OSHI 端末を経由して最大 50 ホップまで中継されます。</string>
+    <string name="peers_info_connection_desc">Bluetooth LE と Bonjour は 2 台の端末を引き合わせてアドレスを交換します。メッセージ自体はローカルネットワークを通ります。</string>
+    <string name="peers_info_tip1">2 台の端末を同じ Wi-Fi ネットワークにつないでください</string>
+    <string name="peers_info_tip2">端末どうしが見つけられるよう Bluetooth はオンのままにしてください</string>
+    <string name="peers_info_tip3">インターネット接続がなくても動作します（モバイルデータでは動作しません）</string>
+</resources>

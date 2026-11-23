@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">加密檔案，僅能以您的帳號金鑰讀取</string>
+    <string name="settings_import_messages">匯入訊息</string>
+    <string name="settings_import_messages_desc">還原加密的 .oshiexport 檔案</string>
+    <string name="settings_importing">正在匯入…</string>
+    <string name="export_media_skipped">%1$d 個附件過大，未包含在匯出中。</string>
+    <string name="import_messages_success">已匯入 %1$d 則訊息（%2$d 則已存在）。</string>
+    <string name="import_error_wrong_account">此匯出屬於另一個 OSHI 帳號。請先還原該帳號的金鑰。</string>
+    <string name="import_error_damaged">此匯出已損毀或遭到修改。</string>
+    <string name="import_error_other_platform">此匯出由 %1$s 版 OSHI 建立，暫時無法在此匯入。</string>
+    <string name="import_error_not_export">此檔案不是 OSHI 匯出檔。</string>
+    <string name="import_error_version">此匯出由較新版本的 OSHI 建立。請更新 App 後再試一次。</string>
+    <string name="import_error_no_key">此裝置上沒有帳號金鑰。請先還原您的帳號。</string>
+    <string name="import_error_unreadable">無法讀取該檔案。</string>
+</resources>

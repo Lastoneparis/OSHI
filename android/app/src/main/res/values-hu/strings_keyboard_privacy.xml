@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Billentyűzet</string>
+    <string name="keyboard_incognito_title">Inkognitó billentyűzet</string>
+    <string name="keyboard_incognito_subtitle">Kérd meg a billentyűzetet, hogy ne tanuljon abból, amit írsz</string>
+    <string name="keyboard_status_title">Jelenlegi billentyűzet</string>
+    <string name="keyboard_status_trusted">%1$s · Beépített billentyűzet</string>
+    <string name="keyboard_status_third_party">%1$s · Külső fejlesztésű billentyűzet</string>
+    <string name="keyboard_status_unknown">Ismeretlen billentyűzet</string>
+    <string name="keyboard_privacy_explainer">Az OSHI ezen a telefonon titkosít, de amit írsz, előbb a billentyűzeten halad át. Az inkognitó mód arra kéri a billentyűzetet, hogy ne tanulja meg és ne tárolja a szavaidat — az Android nem kényszerítheti engedelmességre a billentyűzetet, csak kérheti. Egy külső billentyűzet így is minden leütést elolvashat, ezért inkább a telefon beépített billentyűzetét használd. Ha maga a telefon fertőzött (kémprogram), egyetlen alkalmazás sem védheti meg, amit írsz.</string>
+    <string name="keyboard_banner_title">A billentyűzeted elolvashatja, amit írsz, mielőtt az OSHI titkosítja</string>
+    <string name="keyboard_banner_body">A(z) %1$s egy külső fejlesztésű billentyűzet. Privát beszélgetésekhez válts a telefon beépített billentyűzetére.</string>
+    <string name="keyboard_banner_switch">Billentyűzet váltása</string>
+    <string name="keyboard_banner_dismiss">Bezárás</string>
+</resources>

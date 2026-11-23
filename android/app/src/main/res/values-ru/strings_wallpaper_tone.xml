@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Тон</string>
+    <string name="wallpaper_tone_automatic">Автоматически</string>
+    <string name="wallpaper_tone_light">Светлый</string>
+    <string name="wallpaper_tone_dark">Тёмный</string>
+    <string name="wallpaper_tone_automatic_detail">Следует светлому и тёмному режиму.</string>
+    <string name="wallpaper_tone_light_detail">Белый с фиолетовой сетью даже в тёмном режиме. Сообщения переходят на светлые цвета и остаются хорошо читаемыми.</string>
+    <string name="wallpaper_tone_dark_detail">Чёрный с фиолетовой сетью даже в светлом режиме.</string>
+    <string name="wallpaper_tone_more">Цвета, градиенты, эмодзи и ваши фото: откройте чат, затем ⋯ → Обои.</string>
+</resources>

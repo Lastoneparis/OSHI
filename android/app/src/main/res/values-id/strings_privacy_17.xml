@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Tangkapan layar diblokir di OSHI untuk melindungi percakapan Anda</string>
+    <string name="rn_hint_setting_title">Beri tahu kontak bahwa saya di jaringan terbatas</string>
+    <string name="rn_hint_setting_caption">Saat lalu lintas disamarkan, pesan Anda membawa tanda kecil yang terenkripsi end-to-end agar kontak tahu Anda mungkin berada di jaringan yang disensor atau diawasi. Hanya mereka yang dapat melihatnya.</string>
+    <string name="rn_hint_chip">Dikirim dari jaringan terbatas</string>
+    <string name="rn_hint_explain_title">Jaringan terbatas</string>
+    <string name="rn_hint_explain_body">Orang ini memakai penyamaran OSHI dan kemungkinan berada di jaringan yang disensor atau diawasi. Balas seperti biasa: OSHI tetap menyamarkan sisinya. Buat pesan singkat; foto dan video mungkin lambat.</string>
+</resources>

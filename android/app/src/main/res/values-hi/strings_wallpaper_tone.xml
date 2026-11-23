@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">टोन</string>
+    <string name="wallpaper_tone_automatic">स्वचालित</string>
+    <string name="wallpaper_tone_light">हल्का</string>
+    <string name="wallpaper_tone_dark">गहरा</string>
+    <string name="wallpaper_tone_automatic_detail">लाइट और डार्क मोड के अनुसार बदलता है।</string>
+    <string name="wallpaper_tone_light_detail">डार्क मोड में भी बैंगनी जाल के साथ सफ़ेद। संदेश अपने हल्के रंगों में आ जाते हैं ताकि पढ़ने में आसान रहें।</string>
+    <string name="wallpaper_tone_dark_detail">लाइट मोड में भी बैंगनी जाल के साथ काला।</string>
+    <string name="wallpaper_tone_more">रंग, ग्रेडिएंट, इमोजी और आपकी अपनी फ़ोटो: कोई चैट खोलें, फिर ⋯ → वॉलपेपर।</string>
+</resources>

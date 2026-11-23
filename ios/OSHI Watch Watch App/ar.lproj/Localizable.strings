@@ -1,0 +1,136 @@
+/* OSHI Watch App - Arabic */
+
+/* Status */
+"watch.status.connected" = "متصل";
+"watch.status.not_reachable" = "iPhone غير متاح";
+
+/* Navigation */
+"watch.open_iphone" = "افتح OSHI على iPhone";
+
+/* Common */
+"common.refresh" = "تحديث";
+"common.cancel" = "إلغاء";
+
+/* Messages */
+"watch.loading_messages" = "جاري تحميل الرسائل…";
+"watch.no_messages" = "لا توجد رسائل";
+"watch.sending" = "جاري الإرسال…";
+"watch.dictate" = "إملاء";
+"watch.voice_message" = "رسالة صوتية";
+"watch.reply" = "رد";
+"watch.media_attachment" = "مرفق وسائط";
+
+/* Quick Replies */
+"watch.quick.yes" = "نعم";
+"watch.quick.no" = "لا";
+"watch.quick.ok" = "حسناً";
+"watch.quick.later" = "لاحقاً";
+"watch.quick.omw" = "في الطريق!";
+"watch.quick.thanks" = "شكراً";
+
+/* Errors */
+"watch.error.send_failed" = "فشل إرسال الرسالة";
+"watch.send.queued" = "في قائمة الانتظار للآيفون";
+"watch.error.not_reachable" = "iPhone غير متاح";
+
+/* Calls */
+"watch.call.incoming_video" = "مكالمة فيديو واردة";
+"watch.call.incoming_voice" = "مكالمة صوتية واردة";
+"watch.call.video" = "مكالمة فيديو";
+"watch.call.voice" = "مكالمة صوتية";
+"watch.call.connecting" = "جاري الاتصال…";
+"watch.call.ringing" = "جاري الرنين…";
+"watch.call.in_call" = "في مكالمة";
+"watch.call.ended" = "انتهت المكالمة";
+"watch.call.start" = "بدء مكالمة";
+"watch.call.unknown" = "غير معروف";
+
+/* Call Actions */
+"call.action.accept" = "قبول";
+"call.action.decline" = "رفض";
+
+/* Notifications */
+"watch.notification.new_message" = "رسالة جديدة";
+
+/* Call Summary */
+"call.outgoing" = "مكالمة صادرة";
+"call.incoming" = "مكالمة واردة";
+"call.no.answer" = "لا إجابة";
+"call.declined" = "مرفوضة";
+"call.missed" = "مكالمة فائتة";
+"call.video.outgoing" = "مكالمة فيديو صادرة";
+"call.video.incoming" = "مكالمة فيديو واردة";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "رد";
+"send" = "إرسال";
+"type_message" = "اكتب رسالة";
+"notification.action.mark_read" = "تعليم كمقروء";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "الدردشات";
+"w2.empty.title" = "لا توجد دردشات بعد";
+"w2.empty.body" = "تظهر هنا دردشات OSHI من iPhone.";
+"w2.disabled.title" = "الساعة الذكية متوقفة";
+"w2.disabled.body" = "فعّلها في OSHI على iPhone: الإعدادات › الأجهزة المرتبطة › الساعة الذكية.";
+"w2.locked.title" = "OSHI مقفل";
+"w2.locked.body" = "افتح قفل OSHI على iPhone ثم أعد المحاولة.";
+"w2.unavailable.title" = "OSHI غير جاهز";
+"w2.unavailable.body" = "افتح OSHI مرة واحدة على iPhone ثم أعد المحاولة.";
+"w2.nophone.title" = "تعذّر الوصول إلى iPhone";
+"w2.nophone.body" = "أبقِ iPhone قريبًا ومثبتًا عليه OSHI.";
+"w2.error.title" = "حدث خطأ ما";
+"w2.error.body" = "لم يستجب iPhone. أعد المحاولة.";
+"w2.notfound" = "لم تعد هذه الدردشة على iPhone.";
+"w2.retry" = "إعادة المحاولة";
+"w2.reply" = "رد";
+"w2.you" = "أنت";
+"w2.you_prefix" = "أنت: %@";
+"w2.react" = "تفاعل";
+"w2.speak_or_type" = "تحدّث أو اكتب";
+"w2.quick_replies" = "ردود سريعة";
+"w2.sending" = "جارٍ الإرسال…";
+"w2.sent" = "تم الإرسال";
+"w2.send_failed" = "لم يُرسل. أعد المحاولة على iPhone.";
+"w2.read_only" = "لا يمكنك الرد في هذه الدردشة.";
+"w2.view_once" = "👁 عرض لمرة واحدة — افتحه على iPhone";
+"w2.view_once_short" = "👁 عرض لمرة واحدة";
+"w2.e2e" = "مشفّر بين الطرفين بواسطة iPhone";
+"w2.replying_to" = "ردًا على";
+"w2.loading" = "جارٍ التحميل…";
+"w2.unread_count" = "غير مقروءة: %d";
+"w2.all_read" = "تمت قراءة الكل";
+"w2.call" = "اتصال";
+"w2.media.photo" = "📷 صورة";
+"w2.media.video" = "🎥 فيديو";
+"w2.media.voice" = "🎤 رسالة صوتية";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 ملف";
+"w2.media.location" = "📍 الموقع";
+"w2.media.contact" = "👤 جهة اتصال";
+"w2.qr.on_my_way" = "أنا في الطريق";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "سأتصل بك لاحقًا";
+"w2.qr.thanks" = "شكرًا!";
+"w2.qr.yes" = "نعم";
+"w2.qr.no" = "لا";
+"w2.qr.busy" = "لا أستطيع التحدث الآن";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "حب";
+"w2.r.laugh" = "ضحك";
+"w2.r.cry" = "حزن";
+"w2.r.thumbs" = "إعجاب";
+"w2.r.wow" = "واو";
+"w2.r.fire" = "نار";
+"w2.mute" = "كتم";
+"w2.end_call" = "إنهاء المكالمة";
+"w2.speaker" = "مكبر الصوت";
+"w2.widget.off" = "فعّل الساعة الذكية في OSHI على iPhone";
+"w2.widget.off_short" = "متوقفة";
+"w2.widget.locked" = "افتح قفل OSHI على iPhone";
+"w2.widget.locked_short" = "مقفل";
+"w2.widget.open" = "فتح OSHI";
+"w2.widget.name" = "OSHI غير المقروءة";
+"w2.widget.desc" = "عدد غير المقروءة ومن كتب — وليس الرسائل أبدًا.";

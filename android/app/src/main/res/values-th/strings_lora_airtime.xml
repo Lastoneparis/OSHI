@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">กำลังรอเวลาออกอากาศของวิทยุ (ขีดจำกัดรอบการทำงานตามกฎหมาย)</string>
+    <string name="lora_jamming_title">ตรวจพบสัญญาณรบกวนวิทยุ — อาจถูกรบกวนโดยเจตนา</string>
+    <string name="lora_jamming_detail">ข้อความจะถูกส่งผ่านเครือข่าย Bluetooth หรืออินเทอร์เน็ตเมื่อพร้อมใช้งาน ข้อความสำหรับวิทยุจะถูกเก็บไว้และส่งผ่าน LoRa เมื่อช่องสัญญาณว่าง</string>
+    <string name="lora_jamming_send_anyway">ส่งผ่าน LoRa ต่อไป</string>
+    <string name="lora_jamming_override_active">กำลังส่งผ่าน LoRa จนถึง %1$s หรือจนกว่าช่องสัญญาณจะว่าง ข้อความอาจส่งไม่ถึง</string>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launch palette, ported from iOS: LaunchBackground.colorset = #140526. -->
+<resources>
+    <color name="launch_background">#140526</color>
+</resources>

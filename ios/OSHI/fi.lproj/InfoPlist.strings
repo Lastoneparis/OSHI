@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (fi) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI käyttää Bluetoothia löytääkseen lähellä olevat laitteet ja yhdistääkseen niihin, jotta voit lähettää turvallisia viestejä suoraan ilman internetiä.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI tarvitsee Bluetoothia vastaanottaakseen salattuja viestejä mesh-verkkosi lähilaitteilta.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI voi lisätä ajastetut puhelut kalenteriisi, jotta et missaa yhtäkään.";
+"NSCalendarsUsageDescription" = "OSHI voi lisätä ajastetut puhelut kalenteriisi, jotta et missaa yhtäkään.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI voi lisätä ajastetut puhelut kalenteriisi, jotta et missaa yhtäkään.";
+"NSCameraUsageDescription" = "OSHI tarvitsee kameran käyttöoikeuden QR-koodien skannaamiseen ja kuvien ottamiseen salattuihin viesteihin.";
+"NSFaceIDUsageDescription" = "Avaa salatut viestisi turvallisesti Face ID:llä ja suojaa yksityisyytesi.";
+"NSLocalNetworkUsageDescription" = "OSHI käyttää paikallisverkkoa muodostaakseen suoria Wi-Fi-yhteyksiä lähellä oleviin laitteisiin, jotta viestit kulkevat nopeammin.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI käyttää sijaintiasi jakaakseen sen reaaliaikaisesti yhteystiedoillesi. Sijainti on salattu ja jaetaan vain, kun itse niin valitset.";
+"NSLocationAlwaysUsageDescription" = "OSHI käyttää sijaintiasi reaaliaikaiseen jakamiseen yhteystiedoillesi myös silloin, kun appi on taustalla. Sijainti on salattu ja jaetaan vain, kun itse niin valitset.";
+"NSLocationWhenInUseUsageDescription" = "OSHI käyttää sijaintiasi jakaakseen sen yhteystiedoillesi. Sijainti on salattu ja jaetaan vain, kun itse niin valitset.";
+"NSMicrophoneUsageDescription" = "OSHI tarvitsee mikrofonin käyttöoikeuden äänellisten videoiden tallentamiseen salattuihin viesteihin.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI voi tallentaa vastaanotetut kuvat kuvakirjastoosi.";
+"NSPhotoLibraryUsageDescription" = "OSHI tarvitsee pääsyn kuvakirjastoosi, jotta voit valita kuvia lähetettäväksi salattuina viesteinä.";
+"NSSpeechRecognitionUsageDescription" = "OSHI käyttää laitteessa toimivaa puheentunnistusta, jotta voit sanella viestejä tekoälyavustajalle. Äänesi muunnetaan tekstiksi kokonaan iPhonessasi eikä se poistu laitteeltasi.";
+"NSUserNotificationsUsageDescription" = "OSHI ilmoittaa sinulle uusista salatuista viesteistä, jotta et missaa mitään tärkeää.";

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">Ses efekti</string>
+    <string name="voice_preview_original">Orijinal ses</string>
+    <string name="voice_preview_processing">%1$s uygulanıyor…</string>
+    <string name="voice_preview_failed">%1$s olmadı, orijinal korundu</string>
+    <string name="voice_preview_view_once_hint">Yalnızca bir kez dinlenebilir, sonra kaybolur</string>
+    <string name="voice_preview_listening">Dinleniyor…</string>
+</resources>

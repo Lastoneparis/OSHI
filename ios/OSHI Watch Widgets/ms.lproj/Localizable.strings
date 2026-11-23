@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d belum dibaca";
+"w2.all_read" = "Semua dibaca";
+"w2.widget.off" = "Hidupkan Jam tangan pintar dalam OSHI pada iPhone";
+"w2.widget.off_short" = "Mati";
+"w2.widget.locked" = "Buka kunci OSHI pada iPhone";
+"w2.widget.locked_short" = "Dikunci";
+"w2.widget.open" = "Buka OSHI";
+"w2.widget.name" = "OSHI belum dibaca";
+"w2.widget.desc" = "Bilangan belum dibaca dan siapa yang menulis — bukan mesejnya.";

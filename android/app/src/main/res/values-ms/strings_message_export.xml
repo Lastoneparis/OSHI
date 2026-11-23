@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Fail disulitkan, hanya boleh dibaca dengan kunci akaun anda</string>
+    <string name="settings_import_messages">Import mesej</string>
+    <string name="settings_import_messages_desc">Pulihkan fail .oshiexport yang disulitkan</string>
+    <string name="settings_importing">Mengimport…</string>
+    <string name="export_media_skipped">%1$d lampiran terlalu besar dan tidak dimasukkan dalam eksport.</string>
+    <string name="import_messages_success">%1$d mesej diimport (%2$d sudah wujud).</string>
+    <string name="import_error_wrong_account">Eksport ini milik akaun OSHI lain. Pulihkan kunci akaun itu dahulu.</string>
+    <string name="import_error_damaged">Eksport ini rosak atau telah diubah suai.</string>
+    <string name="import_error_other_platform">Eksport ini dibuat oleh OSHI untuk %1$s dan belum boleh diimport di sini.</string>
+    <string name="import_error_not_export">Fail ini bukan eksport OSHI.</string>
+    <string name="import_error_version">Eksport ini dibuat oleh versi OSHI yang lebih baharu. Kemas kini apl dan cuba lagi.</string>
+    <string name="import_error_no_key">Tiada kunci akaun pada peranti ini. Pulihkan akaun anda dahulu.</string>
+    <string name="import_error_unreadable">Fail tidak dapat dibaca.</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Radyo yayın süresi bekleniyor (yasal görev döngüsü sınırı)</string>
+    <string name="lora_jamming_title">Radyo paraziti algılandı — olası karıştırma</string>
+    <string name="lora_jamming_detail">Mesajlar mümkün olduğunda Bluetooth ağı veya internet üzerinden gönderilecek. Radyo için olan mesajlar saklanır ve kanal temizlenince LoRa üzerinden gider.</string>
+    <string name="lora_jamming_send_anyway">Yine de LoRa ile gönder</string>
+    <string name="lora_jamming_override_active">%1$s saatine kadar veya kanal temizlenene kadar yine de LoRa ile gönderiliyor. Mesajlar ulaşmayabilir.</string>
+</resources>

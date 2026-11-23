@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">S’està cercant…</string>
+    <string name="peers_status_peers_found">Dispositius trobats</string>
+    <string name="peers_status_permission_required">Cal un permís</string>
+    <string name="peers_subtitle_connected">Connectats: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Connectats: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Connectats: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">El Bluetooth està desactivat: activa’l per trobar dispositius al teu voltant</string>
+    <string name="peers_subtitle_permission_both">OSHI no pot fer servir el Bluetooth: no veus cap dispositiu proper i ningú no et veu</string>
+    <string name="peers_subtitle_permission_advertise">Els dispositius propers no et poden veure: falta el permís Dispositius propers</string>
+    <string name="peers_subtitle_permission_scan">OSHI no pot cercar dispositius propers: falta el permís Dispositius propers</string>
+    <string name="peers_subtitle_ble_unsupported">Aquest telèfon no pot emetre per Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">El Bluetooth està ocupat: una altra aplicació fa servir la ràdio</string>
+    <string name="peers_subtitle_ble_down">La detecció per Bluetooth s’ha aturat: s’està reintentant</string>
+    <string name="peers_subtitle_searching_lan">S’estan cercant persones a la mateixa xarxa Wi-Fi…</string>
+    <string name="peers_subtitle_disabled">Xarxa mesh desactivada</string>
+    <string name="peers_subtitle_looking">S’estan cercant dispositius al teu voltant…</string>
+    <string name="peers_permission_card_title">Activa la detecció propera</string>
+    <string name="peers_permission_card_body">OSHI necessita el permís Dispositius propers per trobar telèfons al teu voltant. Sense ell, tots els missatges passen per Internet.</string>
+    <string name="peers_permission_card_action">Permet</string>
+    <string name="peers_permission_card_settings">Obre la configuració</string>
+    <string name="peers_permission_card_denied_body">S’ha denegat el permís, així que OSHI no pot trobar ningú a prop teu. Activa Dispositius propers per a OSHI a la configuració d’Android.</string>
+    <string name="peers_same_wifi_note">Els dos telèfons han de ser a la mateixa xarxa Wi-Fi. Amb dades mòbils, els missatges passen per Internet.</string>
+    <string name="peers_control_visible">Visible</string>
+    <string name="peers_control_scan">Cerca</string>
+    <string name="peers_control_auto">Automàtic</string>
+    <string name="peers_section_devices">Dispositius</string>
+    <string name="peers_action_connect">Connecta</string>
+    <string name="peers_action_reconnect">Torna a connectar</string>
+    <string name="peers_info_reach_title">Abast</string>
+    <string name="peers_info_reach_desc">Fins on arribi la teva xarxa Wi-Fi. Els missatges poden saltar per altres dispositius OSHI de la mateixa xarxa, fins a 50 salts.</string>
+    <string name="peers_info_connection_desc">El Bluetooth LE i Bonjour presenten dos dispositius i intercanvien una adreça. Els missatges viatgen per la teva xarxa local.</string>
+    <string name="peers_info_tip1">Posa els dos telèfons a la mateixa xarxa Wi-Fi</string>
+    <string name="peers_info_tip2">Deixa el Bluetooth activat perquè els dispositius es trobin</string>
+    <string name="peers_info_tip3">Funciona sense accés a Internet, però no amb dades mòbils</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Üzenetek és csoportok egyesítése</string>
+    <string name="chats_merged_setting_desc">Egy lista az összes csevegésedhez, személyek és csoportok szűrővel.</string>
+    <string name="chats_merged_filter_all">Mind</string>
+    <string name="chats_merged_filter_unread">Olvasatlan</string>
+    <string name="chats_merged_filter_groups">Csoportok</string>
+    <string name="chats_merged_filter_people">Személyek</string>
+    <string name="chats_merged_new_title">Új</string>
+    <string name="chats_merged_new_chat">Új csevegés</string>
+    <string name="chats_merged_new_chat_desc">Adj hozzá valakit QR-kóddal, hivatkozással vagy kulccsal</string>
+    <string name="chats_merged_new_group">Új csoport</string>
+    <string name="chats_merged_new_group_desc">Indíts csoportot a névjegyeiddel</string>
+    <string name="chats_merged_discover">Nyilvános csatornák felfedezése</string>
+    <string name="chats_merged_discover_desc">Csatlakozz a közeli nyilvános csoportokhoz</string>
+    <string name="chats_merged_scan_invite">Meghívó beolvasása</string>
+    <string name="chats_merged_scan_invite_desc">Csatlakozz egy csoporthoz vagy adj hozzá névjegyet QR-kódból</string>
+    <string name="chats_merged_scan_not_invite">Ez a QR-kód nem OSHI-meghívó</string>
+    <string name="chats_merged_calls_header">Valaki felhívása</string>
+    <string name="chats_merged_teaser_title">Csatlakozz egy nyilvános csatornához</string>
+    <string name="chats_merged_teaser_body">A közeli nyilvános csoportok internet nélkül is működnek. Nézd meg, ki van a közeledben.</string>
+    <string name="chats_merged_teaser_cta">Felfedezés</string>
+    <string name="chats_merged_nearby_title">Csoport a közelben</string>
+    <string name="chats_merged_empty_unread">Mindent elolvastál</string>
+    <string name="chats_merged_empty_people">Még nincsenek beszélgetések</string>
+    <string name="chats_merged_group_a11y">Csoport</string>
+</resources>

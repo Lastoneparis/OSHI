@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Este posibil ca acest telefon să fie modificat</string>
+    <string name="device_integrity_dialog_body">OSHI a detectat semne că acest telefon ar putea avea root sau ar putea fi modificat (%1$s). Pe un astfel de telefon, alte programe pot citi ce apare pe ecran și ce tastezi înainte ca OSHI să cripteze. OSHI nu a șters și nu a blocat nimic. Această verificare este euristică: se poate înșela, iar un root bine ascuns îi poate scăpa.</string>
+    <string name="device_integrity_dialog_ok">Am înțeles</string>
+    <string name="device_integrity_status_title">Integritatea dispozitivului</string>
+    <string name="device_integrity_status_flagged">OSHI a detectat semne de root sau de modificare: %1$s</string>
+    <string name="device_integrity_finding_su">fișier su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">aplicație de gestionare root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">sistem semnat cu chei de test</string>
+    <string name="device_integrity_finding_debuggable">sistem cu depanare activă</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Telefoane cu root sau modificate: OSHI caută semnele obișnuite de root (su, Magisk, Xposed/LSPosed, Frida, sistem semnat cu chei de test sau cu depanare) și te avertizează dacă găsește vreunul. Faptul că nu găsește nimic nu dovedește că telefonul este curat.</string>
+    <string name="clipboard_hygiene_explainer">Copiere: mesajele, traducerile, cheile de recuperare și tokenurile de bot pe care le copiezi sunt marcate ca sensibile (Android 13+ ascunde previzualizarea). Dacă sunt încă în clipboard după 60 de secunde, OSHI le elimină: imediat dacă OSHI este deschis, altfel data viitoare când îl deschizi. Cât timp sunt în clipboard, tastatura ta și aplicațiile care au voie să citească clipboardul le pot vedea, iar tastaturile sau funcțiile telefonului care păstrează un istoric al clipboardului își pot păstra propria copie chiar și după eliminare.</string>
+</resources>

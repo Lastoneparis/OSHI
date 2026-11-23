@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">Efecto de voz</string>
+    <string name="voice_preview_original">Voz original</string>
+    <string name="voice_preview_processing">Aplicando %1$s…</string>
+    <string name="voice_preview_failed">%1$s no funcionó, se mantiene el original</string>
+    <string name="voice_preview_view_once_hint">Solo se puede escuchar una vez y luego desaparece</string>
+    <string name="voice_preview_listening">Escuchando…</string>
+</resources>

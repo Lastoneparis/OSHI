@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Combine messages and groups</string>
+    <string name="chats_merged_setting_desc">One list for all your chats, with filters for people and groups.</string>
+    <string name="chats_merged_filter_all">All</string>
+    <string name="chats_merged_filter_unread">Unread</string>
+    <string name="chats_merged_filter_groups">Groups</string>
+    <string name="chats_merged_filter_people">People</string>
+    <string name="chats_merged_new_title">New</string>
+    <string name="chats_merged_new_chat">New chat</string>
+    <string name="chats_merged_new_chat_desc">Add someone by QR code, link or key</string>
+    <string name="chats_merged_new_group">New group</string>
+    <string name="chats_merged_new_group_desc">Start a group with your contacts</string>
+    <string name="chats_merged_discover">Discover public channels</string>
+    <string name="chats_merged_discover_desc">Join public groups around you</string>
+    <string name="chats_merged_scan_invite">Scan an invite</string>
+    <string name="chats_merged_scan_invite_desc">Join a group or add a contact from a QR code</string>
+    <string name="chats_merged_scan_not_invite">This QR code is not an OSHI invite</string>
+    <string name="chats_merged_calls_header">Call someone</string>
+    <string name="chats_merged_teaser_title">Join a public channel</string>
+    <string name="chats_merged_teaser_body">Public groups nearby work even without internet. See who is around you.</string>
+    <string name="chats_merged_teaser_cta">Discover</string>
+    <string name="chats_merged_nearby_title">Group nearby</string>
+    <string name="chats_merged_empty_unread">You\'re all caught up</string>
+    <string name="chats_merged_empty_people">No conversations yet</string>
+    <string name="chats_merged_group_a11y">Group</string>
+</resources>

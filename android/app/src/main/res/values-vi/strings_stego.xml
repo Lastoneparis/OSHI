@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Đang chờ kết nối ngụy trang</string>
+    <string name="privacy_disguise_title">Ngụy trang quyền riêng tư</string>
+    <string name="privacy_disguise_subtitle">Ngụy trang lưu lượng · giấu tin nhắn trong ảnh</string>
+    <string name="cover_switch_title">Ngụy trang lưu lượng OSHI</string>
+    <string name="cover_switch_caption">Tin nhắn và tệp đính kèm 1:1 của bạn được truyền bên trong các yêu cầu đã chèn đệm trông giống dữ liệu phân tích web thông thường, nên kích thước và thời điểm của chúng khó phân biệt hơn. Nếu kết nối ngụy trang thất bại, tin nhắn sẽ chờ — chúng không bao giờ được gửi đi mà không ngụy trang.</string>
+    <string name="cover_not_hidden">Vẫn có thể thấy: việc bạn kết nối tới oshi-messenger.com (tên máy chủ và dấu vân tay TLS), cùng tin nhắn nhóm, cuộc gọi, đánh thức qua thông báo đẩy và việc kiểm tra thư mới, vốn không được ngụy trang. Đây không phải là ẩn danh và không vượt qua được việc chặn máy chủ OSHI — trong trường hợp đó, hãy dùng Ngụy trang thành ảnh.</string>
+    <string name="disguise_photo_title">Ngụy trang thành ảnh</string>
+    <string name="disguise_photo_explainer">Giấu một tin nhắn mã hóa đầu cuối dành cho một liên hệ bên trong một bức ảnh trông bình thường, rồi gửi ảnh qua bất kỳ ứng dụng, e-mail hay ổ lưu trữ đám mây nào — hữu ích khi chính OSHI bị chặn. Trong cuộc trò chuyện 1:1: + → Ngụy trang thành ảnh.</string>
+    <string name="disguise_reveal_button">Hiện tin nhắn ẩn</string>
+    <string name="disguise_reveal_hint">Bạn cũng có thể chia sẻ ảnh đã nhận vào OSHI từ bất kỳ ứng dụng nào.</string>
+    <string name="disguise_sheet_for">Chỉ %1$s có thể đọc được.</string>
+    <string name="disguise_message_hint">Tin nhắn ẩn</string>
+    <string name="disguise_add_file">Thêm một tệp nhỏ (tối đa 256 KB)</string>
+    <string name="disguise_remove_file">Xóa %1$s</string>
+    <string name="disguise_file_too_large">Tệp quá lớn (tối đa 256 KB)</string>
+    <string name="disguise_cover_generated">Phong cảnh được tạo</string>
+    <string name="disguise_cover_photo">Ảnh của tôi</string>
+    <string name="disguise_capacity">Dùng %1$s trên %2$s còn trống trong ảnh này</string>
+    <string name="disguise_too_big">Quá dài cho ảnh này. Hãy rút ngắn tin nhắn, xóa tệp hoặc chọn ảnh lớn hơn.</string>
+    <string name="disguise_create_share">Tạo ảnh và chia sẻ</string>
+    <string name="disguise_warning_recompress">Hãy gửi dưới dạng TỆP hoặc tài liệu. Các ứng dụng nén lại ảnh (hầu hết mạng xã hội, WhatsApp, Signal hoặc Telegram ở chế độ ảnh, ảnh chụp màn hình) sẽ xóa mất tin nhắn ẩn.</string>
+    <string name="disguise_warning_forensic">Cách này giấu tin nhắn khỏi bất kỳ ai nhìn vào bức ảnh. Tuy vậy, phân tích pháp y vẫn có thể phát hiện rằng bức ảnh chứa dữ liệu ẩn, nhưng không thể đọc được hoặc biết nó dành cho ai.</string>
+    <string name="disguise_working">Đang tạo ảnh…</string>
+    <string name="disguise_failed">Không thể tạo ảnh.</string>
+    <string name="reveal_title">Tin nhắn ẩn</string>
+    <string name="reveal_from">Từ %1$s</string>
+    <string name="reveal_hidden_on">Đã giấu vào %1$s</string>
+    <string name="reveal_copy">Sao chép văn bản</string>
+    <string name="reveal_open_file">Mở %1$s</string>
+    <string name="reveal_checking">Đang tìm tin nhắn ẩn…</string>
+    <string name="reveal_not_found">Không có tin nhắn ẩn nào dành cho bạn trong ảnh này. Nếu nó được gửi dưới dạng ảnh, ứng dụng đã chuyển nó có thể đã nén lại — hãy yêu cầu gửi dưới dạng tệp.</string>
+    <string name="reveal_damaged">Ảnh này được %1$s tạo cho bạn, nhưng đã bị thay đổi trên đường truyền và không thể đọc được nữa. Hãy yêu cầu gửi lại dưới dạng tệp.</string>
+    <string name="reveal_unreadable">Không thể đọc tệp này.</string>
+    <string name="disguise_photo_short">Ngụy trang</string>
+</resources>

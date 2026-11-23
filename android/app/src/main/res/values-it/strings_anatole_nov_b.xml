@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Videomessaggio rotondo, max 15 s</string>
+    <string name="settings_panic_wipe_title">Cancella toccando il logo</string>
+    <string name="settings_panic_wipe_subtitle">Tre tocchi rapidi sul logo OSHI cancellano tutti i messaggi, le chiavi e i file su questo telefono, senza conferma. Disattivato finché non lo attivi.</string>
+    <string name="map_layer_title">Tipo di mappa</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Rilievo</string>
+    <string name="map_layer_satellite">Satellite</string>
+    <string name="map_layer_standard_desc">Mappa OSHI, funziona offline con le regioni scaricate</string>
+    <string name="map_layer_third_party_desc" formatted="true">Solo online. Caricata direttamente da %1$s, che vede la zona che guardi.</string>
+    <string name="map_layer_offline_only_note">«Solo mappe offline» è attivo: questo livello mostra solo i riquadri già visti.</string>
+</resources>

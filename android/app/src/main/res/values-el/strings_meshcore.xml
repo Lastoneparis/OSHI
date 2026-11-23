@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">Ασύρματος MeshCore</string>
+    <string name="meshcore_none">Κανένας ασύρματος MeshCore</string>
+    <string name="meshcore_scan">Αναζήτηση ασυρμάτων MeshCore</string>
+    <string name="meshcore_ready">Συνδέθηκε — τα μηνύματα OSHI χρησιμοποιούν το #oshi-bridge</string>
+    <string name="meshcore_forget">Διαγραφή αυτού του ασυρμάτου MeshCore</string>
+    <string name="meshcore_bridge">Γέφυρα Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">Ένας ασύρματος MeshCore μεταφέρει τα μηνύματα OSHI μέσω των αναμεταδοτών MeshCore. Πρέπει να έχει firmware MeshCore companion και ζητά το PIN του την πρώτη φορά. Το OSHI προσθέτει ένα μόνο κανάλι, το #oshi-bridge, σε ελεύθερη θέση και δεν αλλάζει ποτέ τα άλλα κανάλια σας.</string>
+    <string name="meshcore_bridge_footer">Με συνδεδεμένους έναν ασύρματο Meshtastic και έναν MeshCore, αυτό το τηλέφωνο αναμεταδίδει μηνύματα OSHI μεταξύ των δύο δικτύων όσο το OSHI είναι ανοιχτό.</string>
+    <string name="meshcore_no_free_channel">Και οι 8 θέσεις καναλιών αυτού του ασυρμάτου είναι κατειλημμένες. Ελευθερώστε μία στην εφαρμογή MeshCore για να προσθέσει το OSHI το #oshi-bridge.</string>
+</resources>

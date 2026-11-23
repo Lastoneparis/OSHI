@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">در انتظار اتصال استتارشده</string>
+    <string name="privacy_disguise_title">استتار</string>
+    <string name="privacy_disguise_subtitle">استتار ترافیک · پنهان کردن پیام در یک عکس</string>
+    <string name="cover_switch_title">استتار ترافیک OSHI</string>
+    <string name="cover_switch_caption">پیام‌ها و پیوست‌های دونفره‌ی شما درون درخواست‌های پرشده‌ای منتقل می‌شوند که شبیه آمار معمولی وب هستند، بنابراین تشخیص اندازه و زمان‌بندی آن‌ها دشوارتر است. اگر اتصال استتارشده ناموفق باشد، پیام‌ها منتظر می‌مانند — هرگز بدون استتار ارسال نمی‌شوند.</string>
+    <string name="cover_not_hidden">همچنان قابل مشاهده است: اینکه به oshi-messenger.com وصل می‌شوید (نام سرور و اثر انگشت TLS)، و نیز پیام‌های گروهی، تماس‌ها، بیدارباش‌های push و بررسی نامه‌های جدید که استتار نمی‌شوند. این ناشناسی نیست و مسدودسازی سرور OSHI را دور نمی‌زند — برای آن، از «استتار به‌شکل عکس» استفاده کنید.</string>
+    <string name="disguise_photo_title">استتار به‌شکل عکس</string>
+    <string name="disguise_photo_explainer">یک پیام رمزگذاری‌شده‌ی سرتاسری را برای یک مخاطب درون عکسی با ظاهر معمولی پنهان کنید، سپس عکس را از طریق هر برنامه، ایمیل یا فضای ابری بفرستید — مفید وقتی خود OSHI مسدود است. در گفتگوی دونفره: + ← استتار به‌شکل عکس.</string>
+    <string name="disguise_reveal_button">آشکار کردن پیام پنهان</string>
+    <string name="disguise_reveal_hint">همچنین می‌توانید عکس دریافتی را از هر برنامه‌ای با OSHI هم‌رسانی کنید.</string>
+    <string name="disguise_sheet_for">فقط %1$s می‌تواند آن را بخواند.</string>
+    <string name="disguise_message_hint">پیام پنهان</string>
+    <string name="disguise_add_file">افزودن یک فایل کوچک (حداکثر ۲۵۶ کیلوبایت)</string>
+    <string name="disguise_remove_file">حذف %1$s</string>
+    <string name="disguise_file_too_large">فایل خیلی بزرگ است (حداکثر ۲۵۶ کیلوبایت)</string>
+    <string name="disguise_cover_generated">منظره‌ی تولیدشده</string>
+    <string name="disguise_cover_photo">عکس من</string>
+    <string name="disguise_capacity">%1$s از %2$s ظرفیت موجود در این تصویر استفاده شده</string>
+    <string name="disguise_too_big">برای این تصویر خیلی طولانی است. پیام را کوتاه کنید، فایل را حذف کنید یا عکس بزرگ‌تری انتخاب کنید.</string>
+    <string name="disguise_create_share">ساخت عکس و هم‌رسانی</string>
+    <string name="disguise_warning_recompress">آن را به‌صورت فایل یا سند بفرستید. برنامه‌هایی که عکس‌ها را دوباره فشرده می‌کنند (بیشتر شبکه‌های اجتماعی، WhatsApp، Signal یا Telegram در حالت عکس، و اسکرین‌شات‌ها) پیام پنهان را پاک می‌کنند.</string>
+    <string name="disguise_warning_forensic">این کار پیام را از دید هر کسی که به عکس نگاه می‌کند پنهان می‌کند. با این حال، تحلیل جرم‌شناختی (فارنزیک) همچنان می‌تواند تشخیص دهد که عکس حاوی داده‌ی پنهان است، اما نمی‌تواند آن را بخواند یا بفهمد برای چه کسی است.</string>
+    <string name="disguise_working">در حال ساخت عکس…</string>
+    <string name="disguise_failed">ساخت عکس ممکن نشد.</string>
+    <string name="reveal_title">پیام پنهان</string>
+    <string name="reveal_from">از %1$s</string>
+    <string name="reveal_hidden_on">پنهان‌شده در %1$s</string>
+    <string name="reveal_copy">کپی متن</string>
+    <string name="reveal_open_file">باز کردن %1$s</string>
+    <string name="reveal_checking">در حال جستجوی پیام پنهان…</string>
+    <string name="reveal_not_found">در این تصویر پیام پنهانی برای شما نیست. اگر به‌صورت عکس فرستاده شده، ممکن است برنامه‌ای که آن را منتقل کرده دوباره فشرده‌اش کرده باشد — بخواهید آن را به‌صورت فایل بفرستند.</string>
+    <string name="reveal_damaged">این تصویر را %1$s برای شما ساخته است، اما در مسیر تغییر کرده و دیگر قابل خواندن نیست. بخواهید دوباره به‌صورت فایل ارسال شود.</string>
+    <string name="reveal_unreadable">خواندن این فایل ممکن نشد.</string>
+    <string name="disguise_photo_short">استتار</string>
+</resources>

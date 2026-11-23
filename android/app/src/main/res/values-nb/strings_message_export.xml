@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Kryptert fil, kan bare leses med kontonøkkelen din</string>
+    <string name="settings_import_messages">Importer meldinger</string>
+    <string name="settings_import_messages_desc">Gjenopprett en kryptert .oshiexport-fil</string>
+    <string name="settings_importing">Importerer…</string>
+    <string name="export_media_skipped">%1$d vedlegg var for store og ble utelatt fra eksporten.</string>
+    <string name="import_messages_success">%1$d meldinger importert (%2$d fantes allerede).</string>
+    <string name="import_error_wrong_account">Denne eksporten tilhører en annen OSHI-konto. Gjenopprett nøkkelen til den kontoen først.</string>
+    <string name="import_error_damaged">Denne eksporten er skadet eller har blitt endret.</string>
+    <string name="import_error_other_platform">Denne eksporten er laget av OSHI for %1$s og kan ikke importeres her ennå.</string>
+    <string name="import_error_not_export">Denne filen er ikke en OSHI-eksport.</string>
+    <string name="import_error_version">Denne eksporten er laget av en nyere versjon av OSHI. Oppdater appen og prøv igjen.</string>
+    <string name="import_error_no_key">Ingen kontonøkkel på denne enheten. Gjenopprett kontoen din først.</string>
+    <string name="import_error_unreadable">Filen kunne ikke leses.</string>
+</resources>

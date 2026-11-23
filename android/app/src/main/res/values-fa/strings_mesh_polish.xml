@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">در حال جست‌وجو…</string>
+    <string name="peers_status_peers_found">دستگاه‌ها پیدا شدند</string>
+    <string name="peers_status_permission_required">اجازه لازم است</string>
+    <string name="peers_subtitle_connected">متصل: %1$d</string>
+    <string name="peers_subtitle_connected_cross">متصل: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">متصل: %1$d (%2$d اندروید، %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">بلوتوث خاموش است — روشنش کنید تا دستگاه‌های اطرافتان پیدا شوند</string>
+    <string name="peers_subtitle_permission_both">‏OSHI نمی‌تواند از بلوتوث استفاده کند — نه شما دستگاه‌های نزدیک را می‌بینید و نه آن‌ها شما را</string>
+    <string name="peers_subtitle_permission_advertise">دستگاه‌های نزدیک شما را نمی‌بینند — اجازهٔ «دستگاه‌های اطراف» موجود نیست</string>
+    <string name="peers_subtitle_permission_scan">‏OSHI نمی‌تواند دنبال دستگاه‌های نزدیک بگردد — اجازهٔ «دستگاه‌های اطراف» موجود نیست</string>
+    <string name="peers_subtitle_ble_unsupported">این گوشی نمی‌تواند روی بلوتوث LE پخش کند</string>
+    <string name="peers_subtitle_ble_busy">بلوتوث مشغول است — برنامهٔ دیگری از رادیو استفاده می‌کند</string>
+    <string name="peers_subtitle_ble_down">کشف بلوتوث متوقف شده — در حال تلاش دوباره</string>
+    <string name="peers_subtitle_searching_lan">در حال جست‌وجوی افراد روی همان شبکهٔ Wi‑Fi…</string>
+    <string name="peers_subtitle_disabled">شبکهٔ mesh خاموش است</string>
+    <string name="peers_subtitle_looking">در حال جست‌وجوی دستگاه‌های اطراف…</string>
+    <string name="peers_permission_card_title">روشن کردن کشف دستگاه‌های نزدیک</string>
+    <string name="peers_permission_card_body">‏OSHI برای پیدا کردن گوشی‌های اطرافتان به اجازهٔ «دستگاه‌های اطراف» نیاز دارد. بدون آن هر پیام از اینترنت رد می‌شود.</string>
+    <string name="peers_permission_card_action">اجازه بده</string>
+    <string name="peers_permission_card_settings">باز کردن تنظیمات</string>
+    <string name="peers_permission_card_denied_body">اجازه رد شد، پس OSHI کسی را در نزدیکی شما پیدا نمی‌کند. در تنظیمات اندروید «دستگاه‌های اطراف» را برای OSHI روشن کنید.</string>
+    <string name="peers_same_wifi_note">هر دو گوشی باید روی یک شبکهٔ Wi‑Fi باشند. روی داده تلفن همراه، پیام‌ها از اینترنت می‌روند.</string>
+    <string name="peers_control_visible">قابل مشاهده</string>
+    <string name="peers_control_scan">اسکن</string>
+    <string name="peers_control_auto">خودکار</string>
+    <string name="peers_section_devices">دستگاه‌ها</string>
+    <string name="peers_action_connect">اتصال</string>
+    <string name="peers_action_reconnect">اتصال دوباره</string>
+    <string name="peers_info_reach_title">برد</string>
+    <string name="peers_info_reach_desc">تا هر جا که شبکهٔ Wi‑Fi شما می‌رسد. پیام‌ها می‌توانند از دستگاه‌های OSHI دیگر روی همان شبکه عبور کنند، تا ۵۰ پرش.</string>
+    <string name="peers_info_connection_desc">بلوتوث LE و Bonjour دو دستگاه را به هم معرفی می‌کنند و یک نشانی رد و بدل می‌کنند. خود پیام‌ها از شبکهٔ محلی شما می‌گذرند.</string>
+    <string name="peers_info_tip1">هر دو گوشی را به یک شبکهٔ Wi‑Fi وصل کنید</string>
+    <string name="peers_info_tip2">بلوتوث را روشن نگه دارید تا دستگاه‌ها همدیگر را پیدا کنند</string>
+    <string name="peers_info_tip3">بدون دسترسی به اینترنت کار می‌کند — اما با داده تلفن همراه نه</string>
+</resources>

@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d olvasatlan";
+"w2.all_read" = "Minden elolvasva";
+"w2.widget.off" = "Kapcsold be az Okosórát az OSHI-ban az iPhone-on";
+"w2.widget.off_short" = "Ki";
+"w2.widget.locked" = "Oldd fel az OSHI-t az iPhone-on";
+"w2.widget.locked_short" = "Zárolva";
+"w2.widget.open" = "OSHI megnyitása";
+"w2.widget.name" = "OSHI olvasatlan";
+"w2.widget.desc" = "Olvasatlanok száma és ki írt – az üzenetek soha.";

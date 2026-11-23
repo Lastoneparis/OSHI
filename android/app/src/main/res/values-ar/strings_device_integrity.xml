@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">قد يكون هذا الهاتف معدَّلاً</string>
+    <string name="device_integrity_dialog_body">رصد OSHI مؤشرات على أن هذا الهاتف قد يكون مكسور الحماية (root) أو معدَّلاً (%1$s). على هاتف كهذا، يمكن لبرامج أخرى قراءة ما يظهر على الشاشة وما تكتبه قبل أن يشفّره OSHI. لم يحذف OSHI أي شيء ولم يحظر أي شيء. هذا الفحص تقديري: قد يخطئ، وقد يفلت منه root مخفي جيداً.</string>
+    <string name="device_integrity_dialog_ok">فهمت</string>
+    <string name="device_integrity_status_title">سلامة الجهاز</string>
+    <string name="device_integrity_status_flagged">رصد OSHI مؤشرات على root أو تعديل: %1$s</string>
+    <string name="device_integrity_finding_su">ملف su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">تطبيق لإدارة root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">نظام موقّع بمفاتيح اختبار</string>
+    <string name="device_integrity_finding_debuggable">نظام قابل لتصحيح الأخطاء</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">الهواتف ذات root أو المعدَّلة: يبحث OSHI عن المؤشرات الشائعة لـ root ‏(su وMagisk وXposed/LSPosed وFrida، ونظام موقّع بمفاتيح اختبار أو قابل لتصحيح الأخطاء) وينبّهك إن وجد أياً منها. عدم العثور على شيء لا يثبت أن الهاتف سليم.</string>
+    <string name="clipboard_hygiene_explainer">النسخ: الرسائل والترجمات ومفاتيح الاستعادة ورموز البوتات التي تنسخها تُعلَّم كحساسة (يُخفي Android 13+ المعاينة). إن بقيت في الحافظة بعد 60 ثانية يزيلها OSHI: فورًا إن كان OSHI مفتوحًا، وإلا عند فتحه في المرة التالية. وما دامت في الحافظة، يمكن للوحة المفاتيح والتطبيقات المسموح لها بقراءة الحافظة رؤيتها، وقد تحتفظ لوحات المفاتيح أو ميزات الهاتف التي تحفظ سجلًا للحافظة بنسختها الخاصة حتى بعد إزالتها.</string>
+</resources>

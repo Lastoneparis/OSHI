@@ -1,0 +1,136 @@
+/* OSHI Watch App - Danish */
+
+/* Status */
+"watch.status.connected" = "Forbundet";
+"watch.status.not_reachable" = "iPhone kan ikke nås";
+
+/* Navigation */
+"watch.open_iphone" = "Åbn OSHI på iPhone";
+
+/* Common */
+"common.refresh" = "Opdatér";
+"common.cancel" = "Annuller";
+
+/* Messages */
+"watch.loading_messages" = "Indlæser beskeder…";
+"watch.no_messages" = "Ingen beskeder";
+"watch.sending" = "Sender…";
+"watch.dictate" = "Dikter";
+"watch.voice_message" = "Lydbesked";
+"watch.reply" = "Svar";
+"watch.media_attachment" = "Vedhæftet fil";
+
+/* Quick Replies */
+"watch.quick.yes" = "Ja";
+"watch.quick.no" = "Nej";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Senere";
+"watch.quick.omw" = "Er på vej!";
+"watch.quick.thanks" = "Tak";
+
+/* Errors */
+"watch.error.send_failed" = "Beskeden kunne ikke sendes";
+"watch.send.queued" = "I kø til iPhone";
+"watch.error.not_reachable" = "iPhone kan ikke nås";
+
+/* Calls */
+"watch.call.incoming_video" = "Indgående videoopkald";
+"watch.call.incoming_voice" = "Indgående taleopkald";
+"watch.call.video" = "Videoopkald";
+"watch.call.voice" = "Taleopkald";
+"watch.call.connecting" = "Forbinder…";
+"watch.call.ringing" = "Ringer…";
+"watch.call.in_call" = "I opkald";
+"watch.call.ended" = "Opkald afsluttet";
+"watch.call.start" = "Start opkald";
+"watch.call.unknown" = "Ukendt";
+
+/* Call Actions */
+"call.action.accept" = "Acceptér";
+"call.action.decline" = "Afvis";
+
+/* Notifications */
+"watch.notification.new_message" = "Ny besked";
+
+/* Call Summary */
+"call.outgoing" = "Udgående opkald";
+"call.incoming" = "Indgående opkald";
+"call.no.answer" = "Intet svar";
+"call.declined" = "Afvist";
+"call.missed" = "Ubesvaret opkald";
+"call.video.outgoing" = "Udgående videoopkald";
+"call.video.incoming" = "Indgående videoopkald";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Svar";
+"send" = "Send";
+"type_message" = "Skriv en besked";
+"notification.action.mark_read" = "Markér som læst";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Chats";
+"w2.empty.title" = "Ingen chats endnu";
+"w2.empty.body" = "Dine OSHI-chats fra din iPhone vises her.";
+"w2.disabled.title" = "Smartwatch er slået fra";
+"w2.disabled.body" = "Slå det til i OSHI på din iPhone: Indstillinger › Forbundne enheder › Smartwatch.";
+"w2.locked.title" = "OSHI er låst";
+"w2.locked.body" = "Lås OSHI op på din iPhone, og prøv igen.";
+"w2.unavailable.title" = "OSHI er ikke klar";
+"w2.unavailable.body" = "Åbn OSHI én gang på din iPhone, og prøv igen.";
+"w2.nophone.title" = "iPhone kan ikke nås";
+"w2.nophone.body" = "Hold din iPhone med OSHI i nærheden.";
+"w2.error.title" = "Noget gik galt";
+"w2.error.body" = "Din iPhone svarede ikke. Prøv igen.";
+"w2.notfound" = "Denne chat er ikke længere på din iPhone.";
+"w2.retry" = "Prøv igen";
+"w2.reply" = "Svar";
+"w2.you" = "Dig";
+"w2.you_prefix" = "Dig: %@";
+"w2.react" = "Reager";
+"w2.speak_or_type" = "Tal eller skriv";
+"w2.quick_replies" = "Hurtige svar";
+"w2.sending" = "Sender…";
+"w2.sent" = "Sendt";
+"w2.send_failed" = "Ikke sendt. Prøv igen på din iPhone.";
+"w2.read_only" = "Du kan ikke svare i denne chat.";
+"w2.view_once" = "👁 Vis én gang – åbn den på din iPhone";
+"w2.view_once_short" = "👁 Vis én gang";
+"w2.e2e" = "Krypteret end-to-end af din iPhone";
+"w2.replying_to" = "Svar til";
+"w2.loading" = "Indlæser…";
+"w2.unread_count" = "%d ulæste";
+"w2.all_read" = "Alt læst";
+"w2.call" = "Ring";
+"w2.media.photo" = "📷 Foto";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Stemme";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Fil";
+"w2.media.location" = "📍 Placering";
+"w2.media.contact" = "👤 Kontakt";
+"w2.qr.on_my_way" = "Jeg er på vej";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Jeg ringer senere";
+"w2.qr.thanks" = "Tak!";
+"w2.qr.yes" = "Ja";
+"w2.qr.no" = "Nej";
+"w2.qr.busy" = "Kan ikke tale nu";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Elsker";
+"w2.r.laugh" = "Grin";
+"w2.r.cry" = "Trist";
+"w2.r.thumbs" = "Tommel op";
+"w2.r.wow" = "Wow";
+"w2.r.fire" = "Ild";
+"w2.mute" = "Lydløs";
+"w2.end_call" = "Læg på";
+"w2.speaker" = "Højttaler";
+"w2.widget.off" = "Slå Smartwatch til i OSHI på din iPhone";
+"w2.widget.off_short" = "Fra";
+"w2.widget.locked" = "Lås OSHI op på din iPhone";
+"w2.widget.locked_short" = "Låst";
+"w2.widget.open" = "Åbn OSHI";
+"w2.widget.name" = "OSHI ulæste";
+"w2.widget.desc" = "Antal ulæste og hvem der skrev – aldrig beskederne.";

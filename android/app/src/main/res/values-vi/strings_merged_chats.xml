@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Gộp tin nhắn và nhóm</string>
+    <string name="chats_merged_setting_desc">Một danh sách cho mọi cuộc trò chuyện, có bộ lọc theo người và nhóm.</string>
+    <string name="chats_merged_filter_all">Tất cả</string>
+    <string name="chats_merged_filter_unread">Chưa đọc</string>
+    <string name="chats_merged_filter_groups">Nhóm</string>
+    <string name="chats_merged_filter_people">Mọi người</string>
+    <string name="chats_merged_new_title">Mới</string>
+    <string name="chats_merged_new_chat">Trò chuyện mới</string>
+    <string name="chats_merged_new_chat_desc">Thêm ai đó bằng mã QR, liên kết hoặc khóa</string>
+    <string name="chats_merged_new_group">Nhóm mới</string>
+    <string name="chats_merged_new_group_desc">Tạo nhóm với danh bạ của bạn</string>
+    <string name="chats_merged_discover">Khám phá kênh công khai</string>
+    <string name="chats_merged_discover_desc">Tham gia các nhóm công khai quanh bạn</string>
+    <string name="chats_merged_scan_invite">Quét lời mời</string>
+    <string name="chats_merged_scan_invite_desc">Tham gia nhóm hoặc thêm liên hệ từ mã QR</string>
+    <string name="chats_merged_scan_not_invite">Mã QR này không phải lời mời OSHI</string>
+    <string name="chats_merged_calls_header">Gọi cho ai đó</string>
+    <string name="chats_merged_teaser_title">Tham gia một kênh công khai</string>
+    <string name="chats_merged_teaser_body">Các nhóm công khai gần bạn hoạt động cả khi không có internet. Xem ai đang ở quanh bạn.</string>
+    <string name="chats_merged_teaser_cta">Khám phá</string>
+    <string name="chats_merged_nearby_title">Nhóm gần đây</string>
+    <string name="chats_merged_empty_unread">Bạn đã đọc hết</string>
+    <string name="chats_merged_empty_people">Chưa có cuộc trò chuyện</string>
+    <string name="chats_merged_group_a11y">Nhóm</string>
+</resources>

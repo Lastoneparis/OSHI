@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Mesaj video rotund, max. 15 s</string>
+    <string name="settings_panic_wipe_title">Ștergere prin atingerea logoului</string>
+    <string name="settings_panic_wipe_subtitle">Trei atingeri rapide pe logoul OSHI șterg toate mesajele, cheile și fișierele de pe acest telefon, fără confirmare. Dezactivat până când îl activezi.</string>
+    <string name="map_layer_title">Tip de hartă</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Relief</string>
+    <string name="map_layer_satellite">Satelit</string>
+    <string name="map_layer_standard_desc">Hartă OSHI, funcționează offline cu regiunile descărcate</string>
+    <string name="map_layer_third_party_desc" formatted="true">Doar online. Se încarcă direct de la %1$s, care vede zona la care te uiți.</string>
+    <string name="map_layer_offline_only_note">„Doar hărți offline” este activat: acest strat arată doar dalele pe care le-ai văzut deja.</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Dieses Funkgerät auf OSHI Mesh umstellen</string>
+    <string name="oshimesh_upgrade_body">Kostenlos und Open Source. Behält Region, Kanäle, Schlüssel und Kontakte, bleibt im Meshtastic-Netz und bringt lange Nachrichten, Zustellbestätigungen und Nachrichten, die 72 h warten, wenn jemand offline ist.</string>
+    <string name="oshimesh_upgrade_share">Flasher-Link an einen Computer senden</string>
+    <string name="oshimesh_upgrade_why">Was OSHI Mesh bringt</string>
+    <string name="oshimesh_upgrade_footer">Der Flasher läuft in Chrome oder Edge auf einem Computer, per USB. Wähle „Meine Einstellungen behalten“, um dieses Funkgerät in etwa einer Minute zu aktualisieren.</string>
+</resources>

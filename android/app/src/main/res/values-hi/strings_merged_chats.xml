@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">संदेश और समूह मिलाएँ</string>
+    <string name="chats_merged_setting_desc">आपकी सभी चैट के लिए एक सूची, लोगों और समूहों के फ़िल्टर के साथ।</string>
+    <string name="chats_merged_filter_all">सभी</string>
+    <string name="chats_merged_filter_unread">अपठित</string>
+    <string name="chats_merged_filter_groups">समूह</string>
+    <string name="chats_merged_filter_people">लोग</string>
+    <string name="chats_merged_new_title">नया</string>
+    <string name="chats_merged_new_chat">नई चैट</string>
+    <string name="chats_merged_new_chat_desc">QR कोड, लिंक या कुंजी से किसी को जोड़ें</string>
+    <string name="chats_merged_new_group">नया समूह</string>
+    <string name="chats_merged_new_group_desc">अपने संपर्कों के साथ समूह शुरू करें</string>
+    <string name="chats_merged_discover">सार्वजनिक चैनल खोजें</string>
+    <string name="chats_merged_discover_desc">आपके आस-पास के सार्वजनिक समूहों से जुड़ें</string>
+    <string name="chats_merged_scan_invite">आमंत्रण स्कैन करें</string>
+    <string name="chats_merged_scan_invite_desc">QR कोड से किसी समूह से जुड़ें या संपर्क जोड़ें</string>
+    <string name="chats_merged_scan_not_invite">यह QR कोड OSHI आमंत्रण नहीं है</string>
+    <string name="chats_merged_calls_header">किसी को कॉल करें</string>
+    <string name="chats_merged_teaser_title">किसी सार्वजनिक चैनल से जुड़ें</string>
+    <string name="chats_merged_teaser_body">आस-पास के सार्वजनिक समूह इंटरनेट के बिना भी काम करते हैं। देखें आपके आस-पास कौन है।</string>
+    <string name="chats_merged_teaser_cta">खोजें</string>
+    <string name="chats_merged_nearby_title">पास में समूह</string>
+    <string name="chats_merged_empty_unread">आपने सब पढ़ लिया है</string>
+    <string name="chats_merged_empty_people">अभी कोई बातचीत नहीं</string>
+    <string name="chats_merged_group_a11y">समूह</string>
+</resources>

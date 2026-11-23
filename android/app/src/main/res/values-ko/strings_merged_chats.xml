@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">메시지와 그룹 합치기</string>
+    <string name="chats_merged_setting_desc">모든 채팅을 하나의 목록으로. 사람과 그룹 필터를 제공합니다.</string>
+    <string name="chats_merged_filter_all">전체</string>
+    <string name="chats_merged_filter_unread">읽지 않음</string>
+    <string name="chats_merged_filter_groups">그룹</string>
+    <string name="chats_merged_filter_people">사람</string>
+    <string name="chats_merged_new_title">새로 만들기</string>
+    <string name="chats_merged_new_chat">새 채팅</string>
+    <string name="chats_merged_new_chat_desc">QR 코드, 링크 또는 키로 사람 추가</string>
+    <string name="chats_merged_new_group">새 그룹</string>
+    <string name="chats_merged_new_group_desc">연락처와 그룹 시작하기</string>
+    <string name="chats_merged_discover">공개 채널 찾기</string>
+    <string name="chats_merged_discover_desc">주변의 공개 그룹에 참여하세요</string>
+    <string name="chats_merged_scan_invite">초대 스캔</string>
+    <string name="chats_merged_scan_invite_desc">QR 코드로 그룹에 참여하거나 연락처 추가</string>
+    <string name="chats_merged_scan_not_invite">이 QR 코드는 OSHI 초대가 아닙니다</string>
+    <string name="chats_merged_calls_header">전화 걸기</string>
+    <string name="chats_merged_teaser_title">공개 채널에 참여하세요</string>
+    <string name="chats_merged_teaser_body">주변의 공개 그룹은 인터넷 없이도 작동합니다. 주변에 누가 있는지 확인해 보세요.</string>
+    <string name="chats_merged_teaser_cta">찾기</string>
+    <string name="chats_merged_nearby_title">주변 그룹</string>
+    <string name="chats_merged_empty_unread">모두 읽었습니다</string>
+    <string name="chats_merged_empty_people">아직 대화가 없습니다</string>
+    <string name="chats_merged_group_a11y">그룹</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">एन्क्रिप्टेड फ़ाइल, केवल आपकी खाता कुंजी से पढ़ी जा सकती है</string>
+    <string name="settings_import_messages">संदेश आयात करें</string>
+    <string name="settings_import_messages_desc">एन्क्रिप्टेड .oshiexport फ़ाइल पुनर्स्थापित करें</string>
+    <string name="settings_importing">आयात हो रहा है…</string>
+    <string name="export_media_skipped">%1$d अटैचमेंट बहुत बड़े थे और निर्यात में शामिल नहीं किए गए।</string>
+    <string name="import_messages_success">%1$d संदेश आयात किए गए (%2$d पहले से मौजूद थे)।</string>
+    <string name="import_error_wrong_account">यह निर्यात किसी अन्य OSHI खाते का है। पहले उस खाते की कुंजी पुनर्स्थापित करें।</string>
+    <string name="import_error_damaged">यह निर्यात क्षतिग्रस्त है या इसमें बदलाव किया गया है।</string>
+    <string name="import_error_other_platform">यह निर्यात %1$s के लिए OSHI द्वारा बनाया गया था और अभी यहाँ आयात नहीं किया जा सकता।</string>
+    <string name="import_error_not_export">यह फ़ाइल OSHI निर्यात नहीं है।</string>
+    <string name="import_error_version">यह निर्यात OSHI के नए संस्करण से बनाया गया था। ऐप अपडेट करें और फिर से प्रयास करें।</string>
+    <string name="import_error_no_key">इस डिवाइस पर कोई खाता कुंजी नहीं है। पहले अपना खाता पुनर्स्थापित करें।</string>
+    <string name="import_error_unreadable">फ़ाइल पढ़ी नहीं जा सकी।</string>
+</resources>

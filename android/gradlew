@@ -1,0 +1,52 @@
+#!/bin/sh
+
+##############################################################################
+# Gradle wrapper script for Unix
+##############################################################################
+
+APP_NAME="Gradle"
+APP_BASE_NAME=$(basename "$0")
+APP_HOME=$(cd "$(dirname "$0")" && pwd -P)
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+
+# Determine the Java command to use
+if [ -n "$JAVA_HOME" ]; then
+    JAVACMD="$JAVA_HOME/bin/java"
+else
+    JAVACMD="java"
+fi
+
+# Check that Java is available
+if ! command -v "$JAVACMD" >/dev/null 2>&1; then
+    echo "ERROR: JAVA_HOME is not set and no 'java' command could be found in PATH."
+    echo "Please set the JAVA_HOME variable to match the location of your Java installation."
+    exit 1
+fi
+
+# Download gradle wrapper if not present
+if [ ! -f "$CLASSPATH" ]; then
+    echo "Downloading Gradle wrapper..."
+    mkdir -p "$APP_HOME/gradle/wrapper"
+
+    WRAPPER_URL="https://raw.githubusercontent.com/gradle/gradle/v8.2.0/gradle/wrapper/gradle-wrapper.jar"
+
+    if command -v curl >/dev/null 2>&1; then
+        curl -L -o "$CLASSPATH" "$WRAPPER_URL"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -O "$CLASSPATH" "$WRAPPER_URL"
+    else
+        echo "ERROR: Neither curl nor wget found. Cannot download gradle wrapper."
+        exit 1
+    fi
+fi
+
+# Build and execute the command
+exec "$JAVACMD" \
+    -Xmx256m \
+    -Xms64m \
+    $JAVA_OPTS \
+    $GRADLE_OPTS \
+    -Dorg.gradle.appname="$APP_BASE_NAME" \
+    -classpath "$CLASSPATH" \
+    org.gradle.wrapper.GradleWrapperMain \
+    "$@"

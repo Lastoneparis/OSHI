@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Keresés…</string>
+    <string name="peers_status_peers_found">Eszközök találhatók</string>
+    <string name="peers_status_permission_required">Engedély szükséges</string>
+    <string name="peers_subtitle_connected">Csatlakozva: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Csatlakozva: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Csatlakozva: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">A Bluetooth ki van kapcsolva – kapcsold be, hogy megtaláld a közeli eszközöket</string>
+    <string name="peers_subtitle_permission_both">Az OSHI nem tudja használni a Bluetootht – nem látod a közeli eszközöket, és ők sem látnak téged</string>
+    <string name="peers_subtitle_permission_advertise">A közeli eszközök nem látnak téged – hiányzik a Közeli eszközök engedély</string>
+    <string name="peers_subtitle_permission_scan">Az OSHI nem tud közeli eszközöket keresni – hiányzik a Közeli eszközök engedély</string>
+    <string name="peers_subtitle_ble_unsupported">Ez a telefon nem tud Bluetooth LE-n sugározni</string>
+    <string name="peers_subtitle_ble_busy">A Bluetooth foglalt – egy másik alkalmazás használja a rádiót</string>
+    <string name="peers_subtitle_ble_down">A Bluetooth-keresés leállt – újrapróbálkozás</string>
+    <string name="peers_subtitle_searching_lan">Emberek keresése ugyanazon a Wi-Fi-hálózaton…</string>
+    <string name="peers_subtitle_disabled">Mesh hálózat kikapcsolva</string>
+    <string name="peers_subtitle_looking">Eszközök keresése a közelben…</string>
+    <string name="peers_permission_card_title">Közeli eszközök felderítésének bekapcsolása</string>
+    <string name="peers_permission_card_body">Az OSHI-nak szüksége van a Közeli eszközök engedélyre, hogy megtalálja a körülötted lévő telefonokat. Enélkül minden üzenet az interneten megy át.</string>
+    <string name="peers_permission_card_action">Engedélyezés</string>
+    <string name="peers_permission_card_settings">Beállítások megnyitása</string>
+    <string name="peers_permission_card_denied_body">Az engedélyt elutasítottad, ezért az OSHI senkit sem talál a közeledben. Kapcsold be a Közeli eszközök engedélyt az OSHI-hoz az Android beállításaiban.</string>
+    <string name="peers_same_wifi_note">Mindkét telefonnak ugyanazon a Wi-Fi-hálózaton kell lennie. Mobiladaton az üzenetek az interneten mennek át.</string>
+    <string name="peers_control_visible">Látható</string>
+    <string name="peers_control_scan">Keresés</string>
+    <string name="peers_control_auto">Automatikus</string>
+    <string name="peers_section_devices">Eszközök</string>
+    <string name="peers_action_connect">Csatlakozás</string>
+    <string name="peers_action_reconnect">Újracsatlakozás</string>
+    <string name="peers_info_reach_title">Hatótávolság</string>
+    <string name="peers_info_reach_desc">Ameddig a Wi-Fi-hálózatod elér. Az üzenetek ugorhatnak más OSHI-eszközökön keresztül ugyanazon a hálózaton, legfeljebb 50 ugrással.</string>
+    <string name="peers_info_connection_desc">A Bluetooth LE és a Bonjour összeismerteti a két eszközt, és címet cserél. Maguk az üzenetek a helyi hálózatodon utaznak.</string>
+    <string name="peers_info_tip1">Tedd mindkét telefont ugyanarra a Wi-Fi-hálózatra</string>
+    <string name="peers_info_tip2">Hagyd bekapcsolva a Bluetootht, hogy az eszközök megtalálják egymást</string>
+    <string name="peers_info_tip3">Internet-hozzáférés nélkül is működik – de mobiladaton nem</string>
+</resources>

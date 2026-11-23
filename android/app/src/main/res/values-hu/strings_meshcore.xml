@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore rádió</string>
+    <string name="meshcore_none">Nincs MeshCore rádió</string>
+    <string name="meshcore_scan">MeshCore rádiók keresése</string>
+    <string name="meshcore_ready">Csatlakozva — az OSHI üzenetek a #oshi-bridge csatornát használják</string>
+    <string name="meshcore_forget">MeshCore rádió elfelejtése</string>
+    <string name="meshcore_bridge">Híd Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">A MeshCore rádió a MeshCore átjátszókon keresztül viszi az OSHI üzeneteidet. MeshCore companion firmware kell rajta, és először a PIN-kódját kéri. Az OSHI egyetlen csatornát ad hozzá, a #oshi-bridge-et, egy szabad helyre, és a többi csatornádat soha nem módosítja.</string>
+    <string name="meshcore_bridge_footer">Ha egy Meshtastic és egy MeshCore rádió is csatlakozik, ez a telefon továbbítja az OSHI üzeneteket a két hálózat között, amíg az OSHI fut.</string>
+    <string name="meshcore_no_free_channel">A rádió mind a 8 csatornahelye foglalt. Szabadíts fel egyet a MeshCore alkalmazásban, hogy az OSHI hozzáadhassa a #oshi-bridge-et.</string>
+</resources>

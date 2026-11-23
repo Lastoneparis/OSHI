@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (ca) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI usa el Bluetooth per detectar dispositius propers i connectar-s'hi, per enviar missatges segurs directament entre dispositius sense internet.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI necessita el Bluetooth per rebre missatges xifrats dels dispositius propers de la teva xarxa mesh.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI pot afegir les trucades programades al teu calendari perquè no en perdis cap.";
+"NSCalendarsUsageDescription" = "OSHI pot afegir les trucades programades al teu calendari perquè no en perdis cap.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI pot afegir les trucades programades al teu calendari perquè no en perdis cap.";
+"NSCameraUsageDescription" = "OSHI necessita accés a la càmera per escanejar codis QR i fer fotos per als missatges xifrats.";
+"NSFaceIDUsageDescription" = "Fes servir el Face ID per desbloquejar amb seguretat els teus missatges xifrats i protegir la teva privadesa.";
+"NSLocalNetworkUsageDescription" = "OSHI usa la xarxa local per establir connexions Wi-Fi directes amb dispositius propers i enviar missatges més ràpid.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI usa la teva ubicació per compartir-la en directe amb els teus contactes. La ubicació va xifrada i només es comparteix quan tu ho decideixes.";
+"NSLocationAlwaysUsageDescription" = "OSHI usa la teva ubicació per compartir-la en directe amb els teus contactes, fins i tot amb l'app en segon pla. La ubicació va xifrada i només es comparteix quan tu ho decideixes.";
+"NSLocationWhenInUseUsageDescription" = "OSHI usa la teva ubicació per compartir-la amb els teus contactes. La ubicació va xifrada i només es comparteix quan tu ho decideixes.";
+"NSMicrophoneUsageDescription" = "OSHI necessita accés al micròfon per gravar vídeos amb so per als missatges xifrats.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI pot desar les imatges rebudes a la teva fototeca.";
+"NSPhotoLibraryUsageDescription" = "OSHI necessita accés a la teva fototeca per triar les imatges que envies com a missatges xifrats.";
+"NSSpeechRecognitionUsageDescription" = "OSHI usa el reconeixement de veu al mateix dispositiu perquè puguis dictar missatges a l'assistent d'IA. La teva veu es transcriu íntegrament a l'iPhone i no surt mai del dispositiu.";
+"NSUserNotificationsUsageDescription" = "OSHI t'envia notificacions quan reps missatges xifrats nous perquè no et perdis res important.";

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">แป้นพิมพ์</string>
+    <string name="keyboard_incognito_title">แป้นพิมพ์โหมดไม่ระบุตัวตน</string>
+    <string name="keyboard_incognito_subtitle">ขอให้แป้นพิมพ์ไม่เรียนรู้สิ่งที่คุณพิมพ์</string>
+    <string name="keyboard_status_title">แป้นพิมพ์ปัจจุบัน</string>
+    <string name="keyboard_status_trusted">%1$s · แป้นพิมพ์ในตัว</string>
+    <string name="keyboard_status_third_party">%1$s · แป้นพิมพ์ของบุคคลที่สาม</string>
+    <string name="keyboard_status_unknown">แป้นพิมพ์ที่ไม่รู้จัก</string>
+    <string name="keyboard_privacy_explainer">OSHI เข้ารหัสบนโทรศัพท์เครื่องนี้ แต่สิ่งที่คุณพิมพ์จะผ่านแป้นพิมพ์ก่อน โหมดไม่ระบุตัวตนจะขอให้แป้นพิมพ์ไม่เรียนรู้หรือเก็บคำของคุณ — Android บังคับแป้นพิมพ์ให้ทำตามไม่ได้ ทำได้เพียงขอ แป้นพิมพ์ของบุคคลที่สามยังคงอ่านทุกการกดแป้นได้ จึงควรใช้แป้นพิมพ์ในตัวของโทรศัพท์ หากตัวโทรศัพท์เองถูกเจาะ (สปายแวร์) ไม่มีแอปใดปกป้องสิ่งที่คุณพิมพ์ได้</string>
+    <string name="keyboard_banner_title">แป้นพิมพ์ของคุณอ่านสิ่งที่คุณพิมพ์ได้ก่อนที่ OSHI จะเข้ารหัส</string>
+    <string name="keyboard_banner_body">%1$s เป็นแป้นพิมพ์ของบุคคลที่สาม สำหรับการสนทนาส่วนตัว ให้เปลี่ยนไปใช้แป้นพิมพ์ในตัวของโทรศัพท์</string>
+    <string name="keyboard_banner_switch">เปลี่ยนแป้นพิมพ์</string>
+    <string name="keyboard_banner_dismiss">ปิด</string>
+</resources>

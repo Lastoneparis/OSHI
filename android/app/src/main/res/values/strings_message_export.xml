@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Encrypted message export/import (.oshiexport), 2026-09-22. -->
+<resources>
+    <string name="settings_export_encrypted_desc">Encrypted file, readable only with your account key</string>
+    <string name="settings_import_messages">Import Messages</string>
+    <string name="settings_import_messages_desc">Restore an encrypted .oshiexport file</string>
+    <string name="settings_importing">Importing…</string>
+    <string name="export_media_skipped">%1$d attachments were too large and were left out of the export.</string>
+    <string name="import_messages_success">Imported %1$d messages (%2$d already present).</string>
+    <string name="import_error_wrong_account">This export belongs to another OSHI account. Restore that account\'s key first.</string>
+    <string name="import_error_damaged">This export is damaged or has been modified.</string>
+    <string name="import_error_other_platform">This export was made by OSHI for %1$s and cannot be imported here yet.</string>
+    <string name="import_error_not_export">This file is not an OSHI export.</string>
+    <string name="import_error_version">This export was made by a newer version of OSHI. Update the app and try again.</string>
+    <string name="import_error_no_key">No account key on this device. Restore your account first.</string>
+    <string name="import_error_unreadable">The file could not be read.</string>
+</resources>

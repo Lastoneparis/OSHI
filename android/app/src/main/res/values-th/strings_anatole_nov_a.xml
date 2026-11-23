@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">ผู้ติดต่อใหม่</string>
+    <string name="conversation_open_contact">เปิดผู้ติดต่อ</string>
+    <string name="conversation_muted">ปิดการแจ้งเตือนแล้ว</string>
+    <string name="fab_new_contact">ผู้ติดต่อใหม่</string>
+    <string name="fab_pick_contact_voice">สายเสียง — เลือกผู้ติดต่อ</string>
+    <string name="fab_pick_contact_video">วิดีโอคอล — เลือกผู้ติดต่อ</string>
+    <string name="fab_pick_contact_empty">ยังไม่มีผู้ติดต่อ เพิ่มใครสักคนก่อน</string>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launch screen. Ported from iOS Localizable.strings "launch_subtitle". -->
+<resources>
+    <string name="launch_subtitle">Sikker messenger</string>
+</resources>

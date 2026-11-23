@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">En attente de la connexion déguisée</string>
+    <string name="privacy_disguise_title">Camouflage</string>
+    <string name="privacy_disguise_subtitle">Déguiser le trafic · cacher un message dans une photo</string>
+    <string name="cover_switch_title">Déguiser le trafic OSHI</string>
+    <string name="cover_switch_caption">Vos messages et pièces jointes en tête-à-tête voyagent dans des requêtes rembourrées qui ressemblent à des statistiques web ordinaires : leur taille et leur rythme sont plus difficiles à distinguer. Si la connexion déguisée échoue, les messages attendent — ils ne partent jamais sans déguisement.</string>
+    <string name="cover_not_hidden">Reste visible : le fait que vous vous connectez à oshi-messenger.com (nom du serveur et empreinte TLS), ainsi que les messages de groupe, les appels, les réveils push et la vérification des nouveaux messages, qui ne sont pas déguisés. Ce n’est pas de l’anonymat et cela ne contourne pas un blocage du serveur OSHI — pour cela, utilisez « Déguiser en photo ».</string>
+    <string name="disguise_photo_title">Déguiser en photo</string>
+    <string name="disguise_photo_explainer">Cachez un message chiffré de bout en bout pour un contact dans une photo d’apparence ordinaire, puis envoyez la photo par n’importe quelle app, e-mail ou cloud — utile quand OSHI lui-même est bloqué. Dans une conversation : + → Déguiser en photo.</string>
+    <string name="disguise_reveal_button">Révéler un message caché</string>
+    <string name="disguise_reveal_hint">Vous pouvez aussi partager une photo reçue vers OSHI depuis n’importe quelle app.</string>
+    <string name="disguise_sheet_for">Seul·e %1$s pourra le lire.</string>
+    <string name="disguise_message_hint">Message caché</string>
+    <string name="disguise_add_file">Ajouter un petit fichier (256 Ko max)</string>
+    <string name="disguise_remove_file">Retirer %1$s</string>
+    <string name="disguise_file_too_large">Fichier trop volumineux (256 Ko max)</string>
+    <string name="disguise_cover_generated">Paysage généré</string>
+    <string name="disguise_cover_photo">Ma photo</string>
+    <string name="disguise_capacity">Utilise %1$s sur %2$s disponibles dans cette image</string>
+    <string name="disguise_too_big">Trop long pour cette image. Raccourcissez le message, retirez le fichier ou choisissez une photo plus grande.</string>
+    <string name="disguise_create_share">Créer la photo et partager</string>
+    <string name="disguise_warning_recompress">Envoyez-la en tant que FICHIER ou document. Les apps qui recompressent les photos (la plupart des réseaux sociaux, WhatsApp, Signal ou Telegram en mode photo, les captures d’écran) effacent le message caché.</string>
+    <string name="disguise_warning_forensic">Le message est caché à quiconque regarde la photo. Une analyse forensique peut toutefois détecter que la photo contient des données cachées, sans pouvoir les lire ni savoir à qui elles sont destinées.</string>
+    <string name="disguise_working">Création de la photo…</string>
+    <string name="disguise_failed">Impossible de créer la photo.</string>
+    <string name="reveal_title">Message caché</string>
+    <string name="reveal_from">De %1$s</string>
+    <string name="reveal_hidden_on">Caché le %1$s</string>
+    <string name="reveal_copy">Copier le texte</string>
+    <string name="reveal_open_file">Ouvrir %1$s</string>
+    <string name="reveal_checking">Recherche d’un message caché…</string>
+    <string name="reveal_not_found">Aucun message caché pour vous dans cette image. S’il a été envoyé comme photo, l’app qui l’a transporté l’a peut-être recompressé — demandez-le en tant que fichier.</string>
+    <string name="reveal_damaged">Cette image a été créée pour vous par %1$s, mais elle a été modifiée en route et ne peut plus être lue. Demandez qu’elle soit renvoyée en tant que fichier.</string>
+    <string name="reveal_unreadable">Impossible de lire ce fichier.</string>
+    <string name="disguise_photo_short">Déguiser</string>
+</resources>

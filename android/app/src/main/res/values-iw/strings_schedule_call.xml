@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">שיחה עם %s</string>
+    <string name="schedule_call_when">מתי</string>
+    <string name="schedule_call_duration">משך</string>
+    <string name="schedule_call_title_optional">כותרת (אופציונלי)</string>
+    <string name="schedule_call_title_placeholder">לדוגמה: פגישה שבועית</string>
+    <string name="schedule_call_other_date">תאריך אחר</string>
+    <string name="schedule_call_schedule">תזמן</string>
+    <string name="schedule_call_timezone">אזור הזמן שלך: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">תזמון שיחה</string>
+</resources>

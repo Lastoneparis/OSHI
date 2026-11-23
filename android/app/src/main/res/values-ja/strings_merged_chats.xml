@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">メッセージとグループをまとめる</string>
+    <string name="chats_merged_setting_desc">すべてのチャットをひとつのリストに。人とグループで絞り込めます。</string>
+    <string name="chats_merged_filter_all">すべて</string>
+    <string name="chats_merged_filter_unread">未読</string>
+    <string name="chats_merged_filter_groups">グループ</string>
+    <string name="chats_merged_filter_people">人</string>
+    <string name="chats_merged_new_title">新規</string>
+    <string name="chats_merged_new_chat">新しいチャット</string>
+    <string name="chats_merged_new_chat_desc">QRコード、リンク、キーで相手を追加</string>
+    <string name="chats_merged_new_group">新しいグループ</string>
+    <string name="chats_merged_new_group_desc">連絡先とグループを始める</string>
+    <string name="chats_merged_discover">公開チャンネルを探す</string>
+    <string name="chats_merged_discover_desc">近くの公開グループに参加</string>
+    <string name="chats_merged_scan_invite">招待をスキャン</string>
+    <string name="chats_merged_scan_invite_desc">QRコードからグループに参加、または連絡先を追加</string>
+    <string name="chats_merged_scan_not_invite">このQRコードはOSHIの招待ではありません</string>
+    <string name="chats_merged_calls_header">電話をかける</string>
+    <string name="chats_merged_teaser_title">公開チャンネルに参加</string>
+    <string name="chats_merged_teaser_body">近くの公開グループはインターネットがなくても使えます。周りに誰がいるか見てみましょう。</string>
+    <string name="chats_merged_teaser_cta">探す</string>
+    <string name="chats_merged_nearby_title">近くのグループ</string>
+    <string name="chats_merged_empty_unread">すべて既読です</string>
+    <string name="chats_merged_empty_people">まだ会話はありません</string>
+    <string name="chats_merged_group_a11y">グループ</string>
+</resources>

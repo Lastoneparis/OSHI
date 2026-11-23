@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LoRa / Meshtastic strings — the Android port of the iOS LoRa screens.
+
+    Kept in their own file so no existing strings.xml (or any values-* locale
+    folder) is touched. English only; every key here still needs translating.
+
+    Wording is copied from iOS en.lproj/Localizable.strings (keys "lora.*" and
+    "meshtastic.*", lines 4583-4767) so both platforms say the same thing. Keys
+    marked NEW have no iOS counterpart — they cover controls iOS reaches through
+    a different route (owner rename, the diagnostics read-out).
+-->
+<resources>
+
+    <!-- ===================================================================
+         Settings screen (iOS MeshtasticSettingsView)
+         =================================================================== -->
+    <string name="meshtastic_title">Long-Range Radio (LoRa)</string>
+    <string name="meshtastic_no_radio">No radio paired</string>
+    <string name="meshtastic_footer">Pair a Meshtastic LoRa radio to send encrypted messages up to 30 km (line of sight) with no internet and no cell network.</string>
+    <string name="meshtastic_nearby">Compatible radios nearby</string>
+    <string name="meshtastic_bt_off">Bluetooth is off</string>
+    <string name="meshtastic_bt_denied">Bluetooth permission needed — tap to open Settings</string>
+    <string name="meshtastic_scan">Scan for radios</string>
+    <string name="meshtastic_stop_scan">Stop scanning</string>
+    <string name="meshtastic_searching">Searching…</string>
+    <string name="meshtastic_pair">Pair</string>
+    <string name="meshtastic_forget">Forget this radio</string>
+    <string name="meshtastic_forget_confirm">Forget this radio? You\'ll need to pair it again.</string>
+    <string name="meshtastic_nodes">Mesh nodes in range</string>
+    <string name="meshtastic_no_nodes">No other nodes heard yet</string>
+    <string name="meshtastic_test">Test broadcast</string>
+    <string name="meshtastic_test_placeholder">Message to everyone on the mesh…</string>
+    <string name="meshtastic_test_warning">Test messages are visible to every Meshtastic radio nearby on the public channel — don\'t send anything private. Messages between OSHI users stay end-to-end encrypted.</string>
+    <string name="meshtastic_traffic">LoRa traffic</string>
+    <string name="meshtastic_state_off">Not connected</string>
+    <string name="meshtastic_state_scanning">Scanning…</string>
+    <string name="meshtastic_state_connecting">Connecting…</string>
+    <string name="meshtastic_state_configuring">Syncing with radio…</string>
+    <string name="meshtastic_state_ready">Connected</string>
+    <string name="meshtastic_direct">direct</string>
+    <string name="meshtastic_hops">%1$d hops</string>
+    <!-- NEW: iOS builds this inline in the row. -->
+    <string name="meshtastic_rssi_dbm">RSSI %1$d dBm</string>
+    <!-- NEW: section header carries the count, as iOS does by concatenation. -->
+    <string name="meshtastic_nodes_count">Mesh nodes in range (%1$d)</string>
+
+    <!-- ===================================================================
+         Node setup screen (iOS LoRaNodeSetupView)
+         =================================================================== -->
+    <string name="lora_node_title">LoRa Node</string>
+    <string name="lora_node_name">Name</string>
+    <string name="lora_node_id">Node ID</string>
+    <string name="lora_node_peers">Nodes in range</string>
+    <string name="lora_node_region">Region</string>
+    <string name="lora_node_section_radio">RADIO</string>
+    <string name="lora_node_unnamed">Unnamed node</string>
+
+    <string name="lora_status_searching">Looking for a node</string>
+    <string name="lora_status_searching_detail">Power your node on and keep it nearby. It appears here within a few seconds.</string>
+    <string name="lora_status_connecting">Connecting</string>
+    <string name="lora_status_connecting_detail">Pairing with %1$s. Keep it nearby.</string>
+    <string name="lora_status_configuring">Setting up</string>
+    <string name="lora_status_configuring_detail">Reading the node\'s settings. This only takes a moment.</string>
+    <string name="lora_status_needs_region">One step left</string>
+    <string name="lora_status_needs_region_detail">This node is connected but has no region yet, so it will not transmit. Choose where it will be used.</string>
+    <string name="lora_status_ready">Ready</string>
+    <string name="lora_status_ready_detail">Your messages travel over LoRa when you are off the grid — no nearby phone, no internet.</string>
+    <string name="lora_status_tx_off">Transmission is switched off on this node</string>
+    <string name="lora_status_tx_off_detail">The node is configured but its radio is muted, so it can receive and not send.</string>
+
+    <string name="lora_region_section">REGION</string>
+    <string name="lora_region_picker">Region</string>
+    <string name="lora_region_apply">Set region</string>
+    <string name="lora_region_change">Change region</string>
+    <string name="lora_region_footer">Which frequencies and power a radio may use is set by law and differs by country. Pick where the node will actually be used — this is suggested from your device, not detected.</string>
+    <string name="lora_region_unset">Not set</string>
+
+    <string name="lora_preset_picker">Range mode</string>
+    <string name="lora_preset_longfast">Balanced</string>
+    <string name="lora_preset_longfast_detail">The default everyone else uses. Good range, reasonable speed.</string>
+    <string name="lora_preset_longslow">Longest range</string>
+    <string name="lora_preset_longslow_detail">Reaches further, sends more slowly. Both ends must match.</string>
+
+    <string name="lora_chile_apply">Use Chile community defaults</string>
+    <string name="lora_chile_detail">Sets US 902–928 MHz (Chile\'s band), LongFast and the public LongFast primary channel.</string>
+    <string name="lora_chile_confirm_title">Join Chile\'s public mesh?</string>
+    <string name="lora_chile_confirm_body">This replaces this node\'s primary channel. Use it only if you want to leave any private primary mesh and join Chile\'s public LongFast mesh.</string>
+    <string name="lora_chile_confirm_apply">Use public mesh</string>
+
+    <string name="lora_discovery_section">NEARBY NODES</string>
+    <string name="lora_discovery_searching">Searching…</string>
+    <string name="lora_discovery_footer">You only do this once. OSHI reconnects to a paired node by itself from then on.</string>
+
+    <string name="lora_signal_excellent">Excellent signal</string>
+    <string name="lora_signal_good">Good signal</string>
+    <string name="lora_signal_fair">Fair signal</string>
+    <string name="lora_signal_weak">Weak signal</string>
+
+    <string name="lora_error_bluetooth_off">Bluetooth is off</string>
+    <string name="lora_error_bluetooth_denied">OSHI needs Bluetooth permission to find your node</string>
+    <string name="lora_error_not_connected">No node connected</string>
+    <string name="lora_error_timeout">The node did not answer</string>
+    <string name="lora_error_too_large">Too large for one LoRa frame (%1$d bytes, limit %2$d)</string>
+    <string name="lora_error_unsupported">This node does not support %1$s</string>
+
+    <string name="lora_guide_section">HOW TO SET ONE UP</string>
+    <string name="lora_guide_step1">Get a supported board: a Heltec WiFi LoRa 32 V3, a Heltec Wireless Tracker or a LILYGO T3-S3.</string>
+    <string name="lora_guide_step2">On a computer, open oshi-messenger.com/lora/flash in Chrome or Edge, plug the board in by USB and flash it. It takes about a minute.</string>
+    <string name="lora_guide_step3">Unplug it, switch it on and keep it near your phone.</string>
+    <string name="lora_guide_step4">Tap it under Nearby nodes above. You pair it once.</string>
+    <string name="lora_guide_step5">Choose the region it will be used in. Until you do, the node listens but never transmits.</string>
+    <string name="lora_guide_link">Open the flasher</string>
+    <string name="lora_guide_footer">Once paired, OSHI uses the node by itself: Bluetooth and Wi-Fi first for whoever is close, LoRa when nobody is. Expect a few kilometres in a city, and considerably more with height and open ground.</string>
+
+    <string name="lora_pairing_section">PAIRING</string>
+    <string name="lora_pairing_picker">How it pairs</string>
+    <string name="lora_pairing_pin">Code on the node</string>
+    <string name="lora_pairing_pin_detail">Ask for a 6-digit code shown on the node\'s screen. Safer, and what the node does out of the box.</string>
+    <string name="lora_pairing_nopin">No code</string>
+    <string name="lora_pairing_nopin_detail">Pairs on a single tap. Choose this if your node has no screen.</string>
+    <string name="lora_pairing_footer">Only affects how this phone connects to the node over Bluetooth. It changes nothing about how your messages are encrypted.</string>
+
+    <string name="lora_blocked_section">WHY A MESSAGE DID NOT GO OUT</string>
+    <string name="lora_blocked_fix">Fix this</string>
+    <string name="lora_blocked_too_large">Message too long for LoRa</string>
+    <string name="lora_blocked_too_large_detail">%1$d bytes. LoRa carries short text only.</string>
+    <string name="lora_blocked_media">Photos and files cannot travel over LoRa</string>
+    <string name="lora_blocked_media_detail">LoRa carries short text only. Send this when you are back on a network, or near another OSHI phone.</string>
+
+    <!-- ===================================================================
+         NEW — owner rename. iOS renames a node from MeshtasticManager
+         (renameIfFactoryDefault / setOwner) with no screen of its own; Android
+         surfaces it so a node wearing "Meshtastic 23d8" can be given a name.
+         =================================================================== -->
+    <string name="lora_owner_section">NODE NAME</string>
+    <string name="lora_owner_long_label">Name</string>
+    <string name="lora_owner_short_label">Short name</string>
+    <string name="lora_owner_short_hint">4 characters</string>
+    <string name="lora_owner_apply">Rename node</string>
+    <string name="lora_owner_suggest">Use suggested name</string>
+    <string name="lora_owner_footer">This is what the node shows on its own screen, in other Meshtastic apps and on public mesh maps. The short name is limited to 4 characters.</string>
+
+    <!-- ===================================================================
+         NEW — diagnostics read-out. Every value renders "—" until the node
+         has actually reported it; a node that has said nothing about its
+         battery must never read "0 %".
+         =================================================================== -->
+    <string name="lora_diagnostics_section">DIAGNOSTICS</string>
+    <string name="lora_diag_health">Status</string>
+    <string name="lora_diag_firmware">Firmware</string>
+    <string name="lora_diag_battery">Battery</string>
+    <string name="lora_diag_charging">Charging</string>
+    <string name="lora_diag_ble_rssi">Bluetooth signal</string>
+    <string name="lora_diag_lora_rssi">LoRa signal</string>
+    <string name="lora_diag_snr">LoRa SNR</string>
+    <string name="lora_diag_region">Region</string>
+    <string name="lora_diag_frequency">Frequency</string>
+    <string name="lora_diag_uptime">Uptime</string>
+    <string name="lora_diag_last_packet">Last packet</string>
+    <string name="lora_diag_yes">Yes</string>
+    <string name="lora_diag_no">No</string>
+
+    <string name="lora_health_disconnected">Disconnected</string>
+    <string name="lora_health_connecting">Connecting</string>
+    <string name="lora_health_degraded">Needs attention</string>
+    <string name="lora_health_healthy">Healthy</string>
+
+    <!-- NEW — plumbing -->
+    <string name="lora_back">Back</string>
+    <string name="lora_cancel">Cancel</string>
+    <string name="lora_setup_open">Set up a LoRa node</string>
+    <string name="lora_setup_open_subtitle">Pair a long-range radio and choose its region</string>
+    <string name="lora_estimated_range" translatable="false">~%1$s</string>
+
+    <!-- Beacon my position over LoRa — opt-in, off by default, persisted off.
+         The footer names what the switch EXPOSES, not only what it does: the frame
+         leaves in cleartext to the broadcast address on the default LongFast channel,
+         whose key is published in Meshtastic's own source. Airtime rules (15 min, 100 m,
+         1 h ceiling) live in LoRaPositionBeacon and are repeated here in words. -->
+    <string name="lora_position_section">Share my position</string>
+    <string name="lora_position_toggle">Beacon my position over LoRa</string>
+    <string name="lora_position_footer">Off by default. Every radio in range can read your position — up to tens of kilometres away, including people you have never met — and it is sent unencrypted, like Meshtastic does. Sent about every 15 minutes while OSHI is open, and only once you have moved.</string>
+
+    <!-- Media over LoRa — opt-in, last-resort fallback with no internet at all. -->
+    <string name="lora_media_section">Media over LoRa</string>
+    <string name="lora_media_toggle">Send media over LoRa</string>
+    <string name="lora_media_footer">Off by default. With no internet at all, this sends photos and documents very slowly over LoRa, in small pieces — expect several minutes, and only small images will fit.</string>
+
+    <!-- Pre-send confirmation, shown only when a media send is about to ride LoRa
+         (opted in, radio connected, no internet at all). Mirrors iOS keys
+         "lora.media.confirm.*". %1$d is the estimated airtime in seconds; because
+         anything that fits caps at 12 frames × 2 s, the estimate is always seconds
+         here, so there is no minutes variant. -->
+    <string name="lora_media_confirm_title">Send over LoRa?</string>
+    <string name="lora_media_confirm_send">Send over LoRa</string>
+    <string name="lora_media_confirm_body">There is no internet right now. This will send over LoRa in about %1$d seconds — slowly, and only small media fits. Send it?</string>
+    <string name="lora_media_confirm_toobig">This looks too large for LoRa, where only small images fit. It will likely be refused. Try anyway?</string>
+
+    <!-- ===================================================================
+         NEW — interop reply to a bare/stock Meshtastic node (a "lora!<nodehex>"
+         pseudo-identity thread). Short on purpose: it sits on every inbound
+         bubble, on the header subtitle, and above the compose box, so it has
+         to read at a glance, not as a paragraph. Said plainly rather than
+         with the 🔒 this app uses for a REAL end-to-end thread, because this
+         is the opposite of that: an unsigned node number on a public channel,
+         not a key either side has proved. -->
+    <string name="lora_interop_unverified">Unverified · plaintext</string>
+    <string name="lora_interop_unverified_detail">This is a bare Meshtastic node, not an OSHI contact. Messages here are not end-to-end encrypted and the sender is not verified.</string>
+
+    <!-- __NEVER_OVER_THE_INTERNET_2026_10_20__ Both rows say what they COST, not
+         just what they do. "Prefer my radio" without "photos still use the
+         network" reads as a privacy switch and behaves like a speed limit;
+         "never send over the internet" without "incoming messages still arrive
+         that way" claims more than the code delivers. -->
+    <!-- __PIN_WITHOUT_A_SCREEN_2026_10_21__ The answer lived only on a forum.
+         The "first boot" clause is what explains the failures: the pairing mode
+         is fixed by whether a screen was present the first time the board
+         booted, and removing it later does not change it. -->
+    <string name="lora_pairing_noscreen_hint">No screen on your node? When it asks for a code, try 123456 — that is the default on boards that had no display the first time they booted.</string>
+
+    <!-- __RENAME_FROM_THE_APP_2026_10_21__ -->
+    <string name="lora_name_section">NODE NAME</string>
+    <string name="lora_name_long">Name</string>
+    <string name="lora_name_short">Short name</string>
+    <string name="lora_name_short_budget">%1$d of 4 bytes — three or four letters, or one emoji</string>
+    <string name="lora_name_save">Save name</string>
+    <string name="lora_name_saved">Sent to the node. Other clients pick it up on the next announcement.</string>
+    <string name="lora_name_footer">The short name is what fits on the node\u2019s own display and in other clients\u2019 lists. Meshtastic allows four BYTES there, so one emoji uses the whole budget.</string>
+
+    <string name="lora_routing_section">ROUTING</string>
+    <string name="lora_routing_prefer_radio">Prefer my radio over the internet</string>
+    <string name="lora_routing_prefer_radio_note">Text messages go out over LoRa first. Photos and files keep using the network when one is available — over the radio they would take minutes.</string>
+    <string name="lora_routing_no_internet">Never send over the internet</string>
+    <string name="lora_routing_no_internet_note">Nothing you send touches the relay — not a message, not a read receipt. Anything that cannot go by radio or to a nearby phone waits as pending. Incoming messages still arrive over the internet.</string>
+    <string name="lora_routing_no_route_warning">No radio is paired, so nothing can be sent until one is — or until a phone running OSHI is close enough for the mesh.</string>
+
+    <!-- __LORA_CHANNEL_2026_10_26__ Which mesh the node is on. Asked for by a
+         Play reviewer in Chile: the region was settable from the node screen,
+         the channel was not. -->
+    <string name="lora_channel_section">Mesh channel</string>
+    <string name="lora_channel_footer">The channel is which mesh you are on: two radios only hear each other when the name AND the key match. Leave both empty for LongFast, the channel the Meshtastic app ships with. Type a name to join a community mesh, and paste its key if it has one.</string>
+    <string name="lora_channel_name">Channel name</string>
+    <string name="lora_channel_name_budget">%1$d of %2$d bytes</string>
+    <string name="lora_channel_key">Channel key (optional)</string>
+    <string name="lora_channel_key_default">Default key</string>
+    <string name="lora_channel_key_hint">Empty uses the public default key, like a stock Meshtastic node. Paste the base64 key from a channel URL to use a private one.</string>
+    <string name="lora_channel_key_invalid">That is not a channel key. Paste the base64 key from a Meshtastic channel URL (16 or 32 bytes), or leave it empty for the default.</string>
+    <string name="lora_channel_apply">Write channel to node</string>
+    <string name="lora_channel_written">Sent to the node: %1$s</string>
+    <string name="lora_channel_last">Last written from this phone: %1$s</string>
+    <string name="lora_node_on_map">Heard over LoRa</string>
+    <!-- __PUBLIC_CHANNELS_2026_11_04__ Seeing and joining public LoRa channels.
+         A channel link is how every public mesh is actually shared; before this
+         the only way in was to type a name and a base64 key by hand. -->
+    <string name="lora_channels_section">Channels on this node</string>
+    <string name="lora_channels_footer">A channel is the mesh your radio is on. Two radios hear each other only if both the name and the key match.</string>
+    <string name="lora_channels_none">No channel read from the node yet. Connect it and this list fills in on its own.</string>
+    <string name="lora_channels_primary">Primary</string>
+    <string name="lora_channels_secondary">Secondary</string>
+    <string name="lora_channels_public_key">Public key — anyone can read this channel</string>
+    <string name="lora_channels_no_key">No encryption — messages go out in the clear</string>
+    <string name="lora_channels_private_key">Private key</string>
+    <string name="lora_join_section">Join a channel from a link</string>
+    <string name="lora_join_footer">Paste a meshtastic.org/e/# link. The link carries the channel key, so anyone who has the link is on the channel.</string>
+    <string name="lora_join_label">Channel link</string>
+    <string name="lora_join_invalid">That is not a channel link.</string>
+    <string name="lora_join_preview_one">This link joins %1$s.</string>
+    <string name="lora_join_preview_many">This link joins %1$s, plus %2$d more.</string>
+    <string name="lora_join_replaces">Joining replaces every channel on this node.</string>
+    <string name="lora_join_apply">Join this channel</string>
+    <string name="lora_join_done">Joined. The node is now on %1$s.</string>
+    <string name="lora_share_section">Share this mesh</string>
+    <string name="lora_share_footer">Anyone who opens this link joins the same mesh. It carries the channel key, so share it only with people you mean to have on the mesh.</string>
+    <string name="lora_share_copy">Copy the channel link</string>
+    <string name="lora_share_copied">Link copied.</string>
+    <!-- __LORA_NODE_LIST_2026_11_04__ / __LORA_HERO_2026_11_04__
+         A glanceable status card and a real list of the radios around you.
+         Before this the screen was ten stacked forms and the only sign of a mesh
+         was `nodes.size` printed as a number. -->
+    <string name="lora_hero_channel">Channel</string>
+    <string name="lora_hero_heard">Radios heard</string>
+    <string name="lora_hero_heard_present">%1$d now, %2$d total</string>
+    <string name="lora_nodes_section">Radios around you</string>
+    <string name="lora_nodes_footer">Every radio this node has heard. Distance is estimated from signal strength unless the radio reports a position.</string>
+    <string name="lora_nodes_empty">Nothing heard yet. A node announces itself every few minutes, so this fills in on its own.</string>
+    <string name="lora_nodes_direct">Direct</string>
+    <string name="lora_nodes_hops">%1$d hops</string>
+    <string name="lora_nodes_now">Now</string>
+    <string name="lora_nodes_minutes">%1$d min ago</string>
+    <string name="lora_nodes_hours">%1$d h ago</string>
+    <string name="lora_nodes_days">%1$d d ago</string>
+    <string name="lora_nodes_on_map">On the map</string>
+    <string name="lora_nodes_range_estimate">~%1$s–%2$s km</string>
+    <string name="lora_nodes_signal_a11y">Signal %1$d of 4, %2$s</string>
+    <string name="lora_nodes_me_badge">This node</string>
+    <string name="lora_configure_section">Configure radio</string>
+    <string name="lora_configure_show">Show radio settings</string>
+    <string name="lora_configure_hide">Hide radio settings</string>
+    <!-- __ANTI_JAMMING_PHASE1_2026_11_13__ LoRaJammingDetector, shown on the LoRa screen. -->
+    <string name="lora_jamming_title">Radio interference detected — possible jamming</string>
+    <string name="lora_jamming_detail">Messages will be sent via Bluetooth mesh or internet when available. Messages for the radio are kept and go out over LoRa once the channel clears.</string>
+    <!-- __ANTI_JAMMING_OVERRIDE_2026_11_13__ Button on the jamming warning, and the warning text while it is on. %1$s = a time (e.g. 14:32). -->
+    <string name="lora_jamming_send_anyway">Send over LoRa anyway</string>
+    <!-- __LORA_AIRTIME_HINT_2026_11_18__ Under a sent bubble the OSHI Mesh radio has held (QUEUED, not yet on the air) for over a minute: the regional duty-cycle budget is spent. -->
+    <string name="lora_waiting_airtime">Waiting for radio airtime (legal duty-cycle limit)</string>
+    <string name="lora_jamming_override_active">Sending over LoRa anyway until %1$s, or until the channel clears. Messages may not get through.</string>
+    <string name="lora_congested">The radio channel is busy: LoRa messages may be slow.</string>
+</resources>

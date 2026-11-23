@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Mesaj video</string>
+    <string name="video_note_title">Mesaj video</string>
+    <string name="video_note_a11y" formatted="true">Mesaj video, %1$s</string>
+    <string name="video_note_play">Redă</string>
+    <string name="video_note_pause">Pauză</string>
+    <string name="video_note_record_button">Înregistrează un mesaj video</string>
+    <string name="video_note_hint">Atinge pentru a înregistra sau ține apăsat · max. 15 s</string>
+    <string name="video_note_record">Pornește înregistrarea</string>
+    <string name="video_note_stop">Oprește înregistrarea</string>
+    <string name="video_note_flip">Schimbă camera</string>
+    <string name="video_note_close">Închide</string>
+    <string name="video_note_review_title">Mesajul tău video</string>
+    <string name="video_note_preparing">Se pregătește…</string>
+    <string name="video_note_discard">Șterge</string>
+    <string name="video_note_retake">Reînregistrează</string>
+    <string name="video_note_send">Trimite mesajul video</string>
+    <string name="video_note_too_short">Prea scurt. Atinge pentru a înregistra sau ține apăsat butonul.</string>
+    <string name="video_note_camera_denied">Este necesar accesul la cameră pentru a înregistra un mesaj video.</string>
+</resources>

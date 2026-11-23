@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Klavye</string>
+    <string name="keyboard_incognito_title">Gizli klavye</string>
+    <string name="keyboard_incognito_subtitle">Klavyeden yazdıklarınızı öğrenmemesini isteyin</string>
+    <string name="keyboard_status_title">Geçerli klavye</string>
+    <string name="keyboard_status_trusted">%1$s · Yerleşik klavye</string>
+    <string name="keyboard_status_third_party">%1$s · Üçüncü taraf klavye</string>
+    <string name="keyboard_status_unknown">Bilinmeyen klavye</string>
+    <string name="keyboard_privacy_explainer">OSHI bu telefonda şifreler, ancak yazdıklarınız önce klavyenizden geçer. Gizli mod, klavyeden kelimelerinizi öğrenmemesini ve saklamamasını ister — Android bir klavyeyi uymaya zorlayamaz, yalnızca isteyebilir. Üçüncü taraf bir klavye yine de her tuş vuruşunu okuyabilir; bu yüzden telefonunuzun yerleşik klavyesini tercih edin. Telefonun kendisi ele geçirilmişse (casus yazılım), hiçbir uygulama yazdıklarınızı koruyamaz.</string>
+    <string name="keyboard_banner_title">Klavyeniz, OSHI şifrelemeden önce yazdıklarınızı okuyabilir</string>
+    <string name="keyboard_banner_body">%1$s üçüncü taraf bir klavye. Özel sohbetler için telefonunuzun yerleşik klavyesine geçin.</string>
+    <string name="keyboard_banner_switch">Klavyeyi değiştir</string>
+    <string name="keyboard_banner_dismiss">Kapat</string>
+</resources>

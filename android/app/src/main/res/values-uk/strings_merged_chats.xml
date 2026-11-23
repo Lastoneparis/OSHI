@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Об\'єднати повідомлення та групи</string>
+    <string name="chats_merged_setting_desc">Один список усіх ваших чатів із фільтрами «Люди» та «Групи».</string>
+    <string name="chats_merged_filter_all">Усі</string>
+    <string name="chats_merged_filter_unread">Непрочитані</string>
+    <string name="chats_merged_filter_groups">Групи</string>
+    <string name="chats_merged_filter_people">Люди</string>
+    <string name="chats_merged_new_title">Новий</string>
+    <string name="chats_merged_new_chat">Новий чат</string>
+    <string name="chats_merged_new_chat_desc">Додайте контакт за QR-кодом, посиланням або ключем</string>
+    <string name="chats_merged_new_group">Нова група</string>
+    <string name="chats_merged_new_group_desc">Створіть групу з вашими контактами</string>
+    <string name="chats_merged_discover">Знайти публічні канали</string>
+    <string name="chats_merged_discover_desc">Приєднуйтеся до публічних груп поруч</string>
+    <string name="chats_merged_scan_invite">Сканувати запрошення</string>
+    <string name="chats_merged_scan_invite_desc">Приєднайтеся до групи або додайте контакт за QR-кодом</string>
+    <string name="chats_merged_scan_not_invite">Цей QR-код не є запрошенням OSHI</string>
+    <string name="chats_merged_calls_header">Зателефонувати</string>
+    <string name="chats_merged_teaser_title">Приєднатися до публічного каналу</string>
+    <string name="chats_merged_teaser_body">Публічні групи поблизу працюють навіть без інтернету. Подивіться, хто поруч.</string>
+    <string name="chats_merged_teaser_cta">Знайти</string>
+    <string name="chats_merged_nearby_title">Група поруч</string>
+    <string name="chats_merged_empty_unread">Ви все прочитали</string>
+    <string name="chats_merged_empty_people">Ще немає розмов</string>
+    <string name="chats_merged_group_a11y">Група</string>
+</resources>

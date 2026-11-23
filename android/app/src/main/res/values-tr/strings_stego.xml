@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Gizlenmiş bağlantı bekleniyor</string>
+    <string name="privacy_disguise_title">Gizlilik kamuflajı</string>
+    <string name="privacy_disguise_subtitle">Trafiği gizle · bir mesajı fotoğrafa sakla</string>
+    <string name="cover_switch_title">OSHI trafiğini gizle</string>
+    <string name="cover_switch_caption">Bire bir mesajlarınız ve ekleriniz, sıradan web analitiği gibi görünen dolgulu istekler içinde taşınır; böylece boyutlarını ve zamanlamalarını ayırt etmek zorlaşır. Gizlenmiş bağlantı başarısız olursa mesajlar bekler — asla gizlenmeden gönderilmez.</string>
+    <string name="cover_not_hidden">Hâlâ görünür olanlar: oshi-messenger.com’a bağlandığınız (sunucu adı ve TLS parmak izi) ile gizlenmeyen grup mesajları, aramalar, anlık bildirim uyandırmaları ve yeni posta kontrolleri. Bu anonimlik değildir ve OSHI sunucusunun engellenmesini aşmaz — bunun için Fotoğraf olarak gizle özelliğini kullanın.</string>
+    <string name="disguise_photo_title">Fotoğraf olarak gizle</string>
+    <string name="disguise_photo_explainer">Bir kişiye yönelik uçtan uca şifreli bir mesajı sıradan görünen bir fotoğrafın içine saklayın, ardından fotoğrafı herhangi bir uygulama, e-posta veya bulut depolama üzerinden gönderin — OSHI’nin kendisi engellendiğinde işe yarar. Bire bir sohbette: + → Fotoğraf olarak gizle.</string>
+    <string name="disguise_reveal_button">Gizli mesajı göster</string>
+    <string name="disguise_reveal_hint">Aldığınız bir fotoğrafı herhangi bir uygulamadan OSHI’ye de paylaşabilirsiniz.</string>
+    <string name="disguise_sheet_for">Yalnızca %1$s okuyabilir.</string>
+    <string name="disguise_message_hint">Gizli mesaj</string>
+    <string name="disguise_add_file">Küçük bir dosya ekle (en fazla 256 KB)</string>
+    <string name="disguise_remove_file">%1$s öğesini kaldır</string>
+    <string name="disguise_file_too_large">Dosya çok büyük (en fazla 256 KB)</string>
+    <string name="disguise_cover_generated">Oluşturulmuş manzara</string>
+    <string name="disguise_cover_photo">Fotoğrafım</string>
+    <string name="disguise_capacity">Bu görselde kullanılabilir %2$s alanın %1$s kadarı kullanılıyor</string>
+    <string name="disguise_too_big">Bu görsel için çok uzun. Mesajı kısaltın, dosyayı kaldırın veya daha büyük bir fotoğraf seçin.</string>
+    <string name="disguise_create_share">Fotoğraf oluştur ve paylaş</string>
+    <string name="disguise_warning_recompress">DOSYA veya belge olarak gönderin. Fotoğrafları yeniden sıkıştıran uygulamalar (çoğu sosyal ağ, fotoğraf modunda WhatsApp, Signal veya Telegram, ekran görüntüleri) gizli mesajı siler.</string>
+    <string name="disguise_warning_forensic">Bu, mesajı fotoğrafa bakan herkesten gizler. Adli analiz yine de fotoğrafın gizli veri taşıdığını tespit edebilir, ancak veriyi okuyamaz veya kime yönelik olduğunu anlayamaz.</string>
+    <string name="disguise_working">Fotoğraf oluşturuluyor…</string>
+    <string name="disguise_failed">Fotoğraf oluşturulamadı.</string>
+    <string name="reveal_title">Gizli mesaj</string>
+    <string name="reveal_from">Gönderen: %1$s</string>
+    <string name="reveal_hidden_on">Gizlenme tarihi: %1$s</string>
+    <string name="reveal_copy">Metni kopyala</string>
+    <string name="reveal_open_file">%1$s dosyasını aç</string>
+    <string name="reveal_checking">Gizli mesaj aranıyor…</string>
+    <string name="reveal_not_found">Bu görselde size yönelik gizli bir mesaj yok. Fotoğraf olarak gönderildiyse, onu taşıyan uygulama yeniden sıkıştırmış olabilir — dosya olarak göndermesini isteyin.</string>
+    <string name="reveal_damaged">Bu görsel sizin için %1$s tarafından oluşturuldu, ancak yolda değiştirildi ve artık okunamıyor. Dosya olarak yeniden gönderilmesini isteyin.</string>
+    <string name="reveal_unreadable">Bu dosya okunamadı.</string>
+    <string name="disguise_photo_short">Gizle</string>
+</resources>

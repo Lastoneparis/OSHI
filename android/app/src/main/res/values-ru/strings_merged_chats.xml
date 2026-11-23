@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Объединить сообщения и группы</string>
+    <string name="chats_merged_setting_desc">Один список всех ваших чатов с фильтрами «Люди» и «Группы».</string>
+    <string name="chats_merged_filter_all">Все</string>
+    <string name="chats_merged_filter_unread">Непрочитанные</string>
+    <string name="chats_merged_filter_groups">Группы</string>
+    <string name="chats_merged_filter_people">Люди</string>
+    <string name="chats_merged_new_title">Новый</string>
+    <string name="chats_merged_new_chat">Новый чат</string>
+    <string name="chats_merged_new_chat_desc">Добавьте контакт по QR-коду, ссылке или ключу</string>
+    <string name="chats_merged_new_group">Новая группа</string>
+    <string name="chats_merged_new_group_desc">Создайте группу с вашими контактами</string>
+    <string name="chats_merged_discover">Найти публичные каналы</string>
+    <string name="chats_merged_discover_desc">Присоединяйтесь к публичным группам рядом</string>
+    <string name="chats_merged_scan_invite">Сканировать приглашение</string>
+    <string name="chats_merged_scan_invite_desc">Вступите в группу или добавьте контакт по QR-коду</string>
+    <string name="chats_merged_scan_not_invite">Этот QR-код не является приглашением OSHI</string>
+    <string name="chats_merged_calls_header">Позвонить</string>
+    <string name="chats_merged_teaser_title">Присоединиться к публичному каналу</string>
+    <string name="chats_merged_teaser_body">Публичные группы поблизости работают даже без интернета. Посмотрите, кто рядом.</string>
+    <string name="chats_merged_teaser_cta">Найти</string>
+    <string name="chats_merged_nearby_title">Группа рядом</string>
+    <string name="chats_merged_empty_unread">Вы всё прочитали</string>
+    <string name="chats_merged_empty_people">Пока нет переписок</string>
+    <string name="chats_merged_group_a11y">Группа</string>
+</resources>

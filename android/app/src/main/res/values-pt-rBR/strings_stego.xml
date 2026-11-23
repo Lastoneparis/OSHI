@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Aguardando conexão disfarçada</string>
+    <string name="privacy_disguise_title">Disfarce de privacidade</string>
+    <string name="privacy_disguise_subtitle">Disfarçar o tráfego · esconder uma mensagem em uma foto</string>
+    <string name="cover_switch_title">Disfarçar o tráfego do OSHI</string>
+    <string name="cover_switch_caption">Suas mensagens e anexos 1:1 viajam dentro de requisições preenchidas que parecem análises comuns da web, então seu tamanho e horário ficam mais difíceis de distinguir. Se a conexão disfarçada falhar, as mensagens aguardam — elas nunca são enviadas sem disfarce.</string>
+    <string name="cover_not_hidden">Ainda visível: que você se conecta a oshi-messenger.com (nome do servidor e impressão digital TLS), além de mensagens de grupo, chamadas, despertares por push e verificações de novos e-mails, que não são disfarçados. Isso não é anonimato e não contorna um bloqueio do servidor OSHI — para isso, use Disfarçar como foto.</string>
+    <string name="disguise_photo_title">Disfarçar como foto</string>
+    <string name="disguise_photo_explainer">Esconda uma mensagem criptografada de ponta a ponta para um contato dentro de uma foto de aparência comum e envie a foto por qualquer app, e-mail ou nuvem — útil quando o próprio OSHI está bloqueado. Em uma conversa 1:1: + → Disfarçar como foto.</string>
+    <string name="disguise_reveal_button">Revelar uma mensagem oculta</string>
+    <string name="disguise_reveal_hint">Você também pode compartilhar uma foto recebida com o OSHI a partir de qualquer app.</string>
+    <string name="disguise_sheet_for">Só %1$s pode lê-la.</string>
+    <string name="disguise_message_hint">Mensagem oculta</string>
+    <string name="disguise_add_file">Adicionar um arquivo pequeno (máx. 256 KB)</string>
+    <string name="disguise_remove_file">Remover %1$s</string>
+    <string name="disguise_file_too_large">Arquivo grande demais (máx. 256 KB)</string>
+    <string name="disguise_cover_generated">Paisagem gerada</string>
+    <string name="disguise_cover_photo">Minha foto</string>
+    <string name="disguise_capacity">Usa %1$s de %2$s disponíveis nesta imagem</string>
+    <string name="disguise_too_big">Longo demais para esta imagem. Encurte a mensagem, remova o arquivo ou escolha uma foto maior.</string>
+    <string name="disguise_create_share">Criar foto e compartilhar</string>
+    <string name="disguise_warning_recompress">Envie como ARQUIVO ou documento. Apps que recomprimem fotos (a maioria das redes sociais, WhatsApp, Signal ou Telegram no modo foto, capturas de tela) apagam a mensagem oculta.</string>
+    <string name="disguise_warning_forensic">Isso esconde a mensagem de quem olha a foto. Uma análise forense ainda pode detectar que a foto contém dados ocultos, mas não consegue lê-los nem saber para quem são.</string>
+    <string name="disguise_working">Criando foto…</string>
+    <string name="disguise_failed">Não foi possível criar a foto.</string>
+    <string name="reveal_title">Mensagem oculta</string>
+    <string name="reveal_from">De %1$s</string>
+    <string name="reveal_hidden_on">Ocultada em %1$s</string>
+    <string name="reveal_copy">Copiar texto</string>
+    <string name="reveal_open_file">Abrir %1$s</string>
+    <string name="reveal_checking">Procurando uma mensagem oculta…</string>
+    <string name="reveal_not_found">Nenhuma mensagem oculta para você nesta imagem. Se ela foi enviada como foto, o app que a transportou pode tê-la recomprimido — peça que seja enviada como arquivo.</string>
+    <string name="reveal_damaged">Esta imagem foi feita para você por %1$s, mas foi alterada no caminho e não pode mais ser lida. Peça que seja enviada novamente como arquivo.</string>
+    <string name="reveal_unreadable">Não foi possível ler este arquivo.</string>
+    <string name="disguise_photo_short">Disfarçar</string>
+</resources>

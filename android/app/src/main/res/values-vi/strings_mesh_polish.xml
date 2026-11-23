@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Đang tìm…</string>
+    <string name="peers_status_peers_found">Đã tìm thấy thiết bị</string>
+    <string name="peers_status_permission_required">Cần quyền</string>
+    <string name="peers_subtitle_connected">Đã kết nối: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Đã kết nối: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Đã kết nối: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth đang tắt — hãy bật để tìm thiết bị quanh bạn</string>
+    <string name="peers_subtitle_permission_both">OSHI không dùng được Bluetooth — bạn không thấy thiết bị ở gần và họ cũng không thấy bạn</string>
+    <string name="peers_subtitle_permission_advertise">Thiết bị ở gần không thấy bạn — thiếu quyền Thiết bị ở gần</string>
+    <string name="peers_subtitle_permission_scan">OSHI không thể tìm thiết bị ở gần — thiếu quyền Thiết bị ở gần</string>
+    <string name="peers_subtitle_ble_unsupported">Điện thoại này không phát được qua Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth đang bận — một ứng dụng khác đang dùng sóng</string>
+    <string name="peers_subtitle_ble_down">Việc dò tìm Bluetooth đã dừng — đang thử lại</string>
+    <string name="peers_subtitle_searching_lan">Đang tìm người trên cùng mạng Wi-Fi…</string>
+    <string name="peers_subtitle_disabled">Đã tắt mạng mesh</string>
+    <string name="peers_subtitle_looking">Đang tìm thiết bị quanh bạn…</string>
+    <string name="peers_permission_card_title">Bật tìm thiết bị ở gần</string>
+    <string name="peers_permission_card_body">OSHI cần quyền Thiết bị ở gần để tìm điện thoại quanh bạn. Không có quyền này, mọi tin nhắn đều đi qua internet.</string>
+    <string name="peers_permission_card_action">Cho phép</string>
+    <string name="peers_permission_card_settings">Mở cài đặt</string>
+    <string name="peers_permission_card_denied_body">Quyền đã bị từ chối nên OSHI không tìm được ai ở gần bạn. Hãy bật Thiết bị ở gần cho OSHI trong cài đặt Android.</string>
+    <string name="peers_same_wifi_note">Cả hai điện thoại phải ở trên cùng một mạng Wi-Fi. Khi dùng dữ liệu di động, tin nhắn sẽ đi qua internet.</string>
+    <string name="peers_control_visible">Hiển thị</string>
+    <string name="peers_control_scan">Quét</string>
+    <string name="peers_control_auto">Tự động</string>
+    <string name="peers_section_devices">Thiết bị</string>
+    <string name="peers_action_connect">Kết nối</string>
+    <string name="peers_action_reconnect">Kết nối lại</string>
+    <string name="peers_info_reach_title">Phạm vi</string>
+    <string name="peers_info_reach_desc">Xa đến đâu mạng Wi-Fi của bạn phủ tới. Tin nhắn có thể nhảy qua các thiết bị OSHI khác trên cùng mạng, tối đa 50 chặng.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE và Bonjour giới thiệu hai thiết bị với nhau và trao đổi một địa chỉ. Bản thân tin nhắn thì đi qua mạng nội bộ của bạn.</string>
+    <string name="peers_info_tip1">Đặt cả hai điện thoại trên cùng một mạng Wi-Fi</string>
+    <string name="peers_info_tip2">Hãy bật Bluetooth để các thiết bị tìm thấy nhau</string>
+    <string name="peers_info_tip3">Hoạt động khi không có internet — nhưng không dùng được với dữ liệu di động</string>
+</resources>

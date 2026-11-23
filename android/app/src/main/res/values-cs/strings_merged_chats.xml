@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Sloučit zprávy a skupiny</string>
+    <string name="chats_merged_setting_desc">Jeden seznam všech vašich chatů s filtry pro lidi a skupiny.</string>
+    <string name="chats_merged_filter_all">Vše</string>
+    <string name="chats_merged_filter_unread">Nepřečtené</string>
+    <string name="chats_merged_filter_groups">Skupiny</string>
+    <string name="chats_merged_filter_people">Lidé</string>
+    <string name="chats_merged_new_title">Nový</string>
+    <string name="chats_merged_new_chat">Nový chat</string>
+    <string name="chats_merged_new_chat_desc">Přidejte někoho pomocí QR kódu, odkazu nebo klíče</string>
+    <string name="chats_merged_new_group">Nová skupina</string>
+    <string name="chats_merged_new_group_desc">Založte skupinu se svými kontakty</string>
+    <string name="chats_merged_discover">Objevit veřejné kanály</string>
+    <string name="chats_merged_discover_desc">Připojte se k veřejným skupinám ve vašem okolí</string>
+    <string name="chats_merged_scan_invite">Naskenovat pozvánku</string>
+    <string name="chats_merged_scan_invite_desc">Připojte se ke skupině nebo přidejte kontakt z QR kódu</string>
+    <string name="chats_merged_scan_not_invite">Tento QR kód není pozvánka OSHI</string>
+    <string name="chats_merged_calls_header">Zavolat někomu</string>
+    <string name="chats_merged_teaser_title">Připojte se k veřejnému kanálu</string>
+    <string name="chats_merged_teaser_body">Veřejné skupiny v okolí fungují i bez internetu. Podívejte se, kdo je kolem vás.</string>
+    <string name="chats_merged_teaser_cta">Objevit</string>
+    <string name="chats_merged_nearby_title">Skupina poblíž</string>
+    <string name="chats_merged_empty_unread">Máte vše přečteno</string>
+    <string name="chats_merged_empty_people">Zatím žádné konverzace</string>
+    <string name="chats_merged_group_a11y">Skupina</string>
+</resources>

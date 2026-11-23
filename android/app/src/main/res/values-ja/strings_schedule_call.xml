@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">%sとの通話</string>
+    <string name="schedule_call_when">日時</string>
+    <string name="schedule_call_duration">時間</string>
+    <string name="schedule_call_title_optional">タイトル（任意）</string>
+    <string name="schedule_call_title_placeholder">例：週次ミーティング</string>
+    <string name="schedule_call_other_date">別の日時</string>
+    <string name="schedule_call_schedule">予約する</string>
+    <string name="schedule_call_timezone">タイムゾーン: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">通話を予約</string>
+</resources>

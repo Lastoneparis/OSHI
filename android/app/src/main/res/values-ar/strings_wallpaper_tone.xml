@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">الدرجة</string>
+    <string name="wallpaper_tone_automatic">تلقائي</string>
+    <string name="wallpaper_tone_light">فاتح</string>
+    <string name="wallpaper_tone_dark">داكن</string>
+    <string name="wallpaper_tone_automatic_detail">يتبع الوضع الفاتح والداكن.</string>
+    <string name="wallpaper_tone_light_detail">أبيض مع شبكة بنفسجية، حتى في الوضع الداكن. تنتقل الرسائل إلى ألوانها الفاتحة لتبقى سهلة القراءة.</string>
+    <string name="wallpaper_tone_dark_detail">أسود مع شبكة بنفسجية، حتى في الوضع الفاتح.</string>
+    <string name="wallpaper_tone_more">الألوان والتدرجات والرموز التعبيرية وصورك: افتح محادثة ثم ⋯ ← الخلفية.</string>
+</resources>

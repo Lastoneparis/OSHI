@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">فایل رمزگذاری‌شده، فقط با کلید حساب شما قابل خواندن است</string>
+    <string name="settings_import_messages">وارد کردن پیام‌ها</string>
+    <string name="settings_import_messages_desc">بازیابی فایل رمزگذاری‌شده ‎.oshiexport</string>
+    <string name="settings_importing">در حال وارد کردن…</string>
+    <string name="export_media_skipped">تعداد پیوست‌هایی که به دلیل حجم زیاد از خروجی حذف شدند: %1$d.</string>
+    <string name="import_messages_success">%1$d پیام وارد شد (%2$d از قبل موجود بود).</string>
+    <string name="import_error_wrong_account">این خروجی متعلق به حساب OSHI دیگری است. ابتدا کلید آن حساب را بازیابی کنید.</string>
+    <string name="import_error_damaged">این خروجی آسیب دیده یا تغییر کرده است.</string>
+    <string name="import_error_other_platform">این خروجی توسط OSHI برای %1$s ساخته شده و هنوز نمی‌توان آن را اینجا وارد کرد.</string>
+    <string name="import_error_not_export">این فایل خروجی OSHI نیست.</string>
+    <string name="import_error_version">این خروجی با نسخه جدیدتری از OSHI ساخته شده است. برنامه را به‌روز کنید و دوباره امتحان کنید.</string>
+    <string name="import_error_no_key">کلید حسابی روی این دستگاه نیست. ابتدا حساب خود را بازیابی کنید.</string>
+    <string name="import_error_unreadable">فایل خوانده نشد.</string>
+</resources>

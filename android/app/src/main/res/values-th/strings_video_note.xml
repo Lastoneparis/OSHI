@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">ข้อความวิดีโอ</string>
+    <string name="video_note_title">ข้อความวิดีโอ</string>
+    <string name="video_note_a11y" formatted="true">ข้อความวิดีโอ, %1$s</string>
+    <string name="video_note_play">เล่น</string>
+    <string name="video_note_pause">หยุดชั่วคราว</string>
+    <string name="video_note_record_button">บันทึกข้อความวิดีโอ</string>
+    <string name="video_note_hint">แตะเพื่อบันทึกหรือกดค้างไว้ · สูงสุด 15 วินาที</string>
+    <string name="video_note_record">เริ่มบันทึก</string>
+    <string name="video_note_stop">หยุดบันทึก</string>
+    <string name="video_note_flip">สลับกล้อง</string>
+    <string name="video_note_close">ปิด</string>
+    <string name="video_note_review_title">ข้อความวิดีโอของคุณ</string>
+    <string name="video_note_preparing">กำลังเตรียม…</string>
+    <string name="video_note_discard">ลบ</string>
+    <string name="video_note_retake">ถ่ายใหม่</string>
+    <string name="video_note_send">ส่งข้อความวิดีโอ</string>
+    <string name="video_note_too_short">สั้นเกินไป แตะเพื่อบันทึกหรือกดปุ่มค้างไว้</string>
+    <string name="video_note_camera_denied">ต้องอนุญาตให้เข้าถึงกล้องเพื่อบันทึกข้อความวิดีโอ</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">مكالمة مع %s</string>
+    <string name="schedule_call_when">متى</string>
+    <string name="schedule_call_duration">المدة</string>
+    <string name="schedule_call_title_optional">العنوان (اختياري)</string>
+    <string name="schedule_call_title_placeholder">مثال: اجتماع أسبوعي</string>
+    <string name="schedule_call_other_date">تاريخ آخر</string>
+    <string name="schedule_call_schedule">جدولة</string>
+    <string name="schedule_call_timezone">منطقتك الزمنية: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">جدولة مكالمة</string>
+</resources>

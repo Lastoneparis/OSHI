@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Versleuteld bestand, alleen leesbaar met je accountsleutel</string>
+    <string name="settings_import_messages">Berichten importeren</string>
+    <string name="settings_import_messages_desc">Een versleuteld .oshiexport-bestand herstellen</string>
+    <string name="settings_importing">Importeren…</string>
+    <string name="export_media_skipped">%1$d bijlagen waren te groot en zijn niet geëxporteerd.</string>
+    <string name="import_messages_success">%1$d berichten geïmporteerd (%2$d al aanwezig).</string>
+    <string name="import_error_wrong_account">Deze export hoort bij een ander OSHI-account. Herstel eerst de sleutel van dat account.</string>
+    <string name="import_error_damaged">Deze export is beschadigd of gewijzigd.</string>
+    <string name="import_error_other_platform">Deze export is gemaakt door OSHI voor %1$s en kan hier nog niet worden geïmporteerd.</string>
+    <string name="import_error_not_export">Dit bestand is geen OSHI-export.</string>
+    <string name="import_error_version">Deze export is gemaakt door een nieuwere versie van OSHI. Werk de app bij en probeer het opnieuw.</string>
+    <string name="import_error_no_key">Geen accountsleutel op dit apparaat. Herstel eerst je account.</string>
+    <string name="import_error_unreadable">Het bestand kon niet worden gelezen.</string>
+</resources>

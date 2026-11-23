@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The scan window's frame: a rounded brand-coloured outline over a transparent
+  centre, so the camera preview shows through the hole while the surround stays
+  dimmed. Kept to a stroke rather than a filled shape for exactly that reason.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/transparent" />
+    <stroke
+        android:width="3dp"
+        android:color="@color/oshi_primary" />
+    <corners android:radius="24dp" />
+</shape>

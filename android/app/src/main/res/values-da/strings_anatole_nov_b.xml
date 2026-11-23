@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Rund videobesked, maks. 15 s</string>
+    <string name="settings_panic_wipe_title">Slet ved at trykke på logoet</string>
+    <string name="settings_panic_wipe_subtitle">Tre hurtige tryk på OSHI-logoet sletter alle beskeder, nøgler og filer på denne telefon uden bekræftelse. Slået fra, medmindre du slår det til.</string>
+    <string name="map_layer_title">Korttype</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Terræn</string>
+    <string name="map_layer_satellite">Satellit</string>
+    <string name="map_layer_standard_desc">OSHI-kort, virker offline med downloadede områder</string>
+    <string name="map_layer_third_party_desc" formatted="true">Kun online. Hentes direkte fra %1$s, som kan se det område, du kigger på.</string>
+    <string name="map_layer_offline_only_note">“Kun offline kort” er slået til: dette lag viser kun felter, du allerede har set.</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Поиск…</string>
+    <string name="peers_status_peers_found">Устройства найдены</string>
+    <string name="peers_status_permission_required">Нужно разрешение</string>
+    <string name="peers_subtitle_connected">Подключено: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Подключено: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Подключено: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth выключен — включите его, чтобы находить устройства рядом</string>
+    <string name="peers_subtitle_permission_both">OSHI не может использовать Bluetooth — вы не видите устройства рядом, и они не видят вас</string>
+    <string name="peers_subtitle_permission_advertise">Устройства рядом вас не видят — нет разрешения «Устройства поблизости»</string>
+    <string name="peers_subtitle_permission_scan">OSHI не может искать устройства рядом — нет разрешения «Устройства поблизости»</string>
+    <string name="peers_subtitle_ble_unsupported">Этот телефон не может вести передачу по Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth занят — радиомодуль использует другое приложение</string>
+    <string name="peers_subtitle_ble_down">Поиск по Bluetooth остановлен — повторная попытка</string>
+    <string name="peers_subtitle_searching_lan">Поиск людей в той же сети Wi-Fi…</string>
+    <string name="peers_subtitle_disabled">Mesh-сеть выключена</string>
+    <string name="peers_subtitle_looking">Поиск устройств рядом с вами…</string>
+    <string name="peers_permission_card_title">Включить поиск устройств рядом</string>
+    <string name="peers_permission_card_body">OSHI нужно разрешение «Устройства поблизости», чтобы находить телефоны рядом с вами. Без него каждое сообщение идёт через интернет.</string>
+    <string name="peers_permission_card_action">Разрешить</string>
+    <string name="peers_permission_card_settings">Открыть настройки</string>
+    <string name="peers_permission_card_denied_body">В разрешении отказано, поэтому OSHI никого рядом не найдёт. Включите «Устройства поблизости» для OSHI в настройках Android.</string>
+    <string name="peers_same_wifi_note">Оба телефона должны быть в одной сети Wi-Fi. При мобильном интернете сообщения идут через сеть.</string>
+    <string name="peers_control_visible">Видимость</string>
+    <string name="peers_control_scan">Поиск</string>
+    <string name="peers_control_auto">Авто</string>
+    <string name="peers_section_devices">Устройства</string>
+    <string name="peers_action_connect">Подключить</string>
+    <string name="peers_action_reconnect">Переподключить</string>
+    <string name="peers_info_reach_title">Дальность</string>
+    <string name="peers_info_reach_desc">Настолько далеко, насколько достаёт ваша сеть Wi-Fi. Сообщения могут проходить через другие устройства OSHI в той же сети, до 50 переходов.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE и Bonjour знакомят два устройства и обмениваются адресом. Сами сообщения идут по вашей локальной сети.</string>
+    <string name="peers_info_tip1">Подключите оба телефона к одной сети Wi-Fi</string>
+    <string name="peers_info_tip2">Оставьте Bluetooth включённым, чтобы устройства находили друг друга</string>
+    <string name="peers_info_tip3">Работает без доступа в интернет — но не через мобильный интернет</string>
+</resources>

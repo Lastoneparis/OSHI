@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Questo telefono potrebbe essere modificato</string>
+    <string name="device_integrity_dialog_body">OSHI ha rilevato segnali che questo telefono potrebbe essere rootato o modificato (%1$s). Su un telefono così, altri software possono leggere ciò che appare sullo schermo e ciò che digiti prima che OSHI lo cifri. OSHI non ha eliminato né bloccato nulla. Questo controllo è euristico: può sbagliare, e un root ben nascosto può sfuggirgli.</string>
+    <string name="device_integrity_dialog_ok">Ho capito</string>
+    <string name="device_integrity_status_title">Integrità del dispositivo</string>
+    <string name="device_integrity_status_flagged">OSHI ha rilevato segnali di root o modifica: %1$s</string>
+    <string name="device_integrity_finding_su">binario su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">app di gestione root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">sistema firmato con chiavi di test</string>
+    <string name="device_integrity_finding_debuggable">sistema debuggabile</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Telefoni rootati o modificati: OSHI cerca i segnali di root più comuni (su, Magisk, Xposed/LSPosed, Frida, sistema firmato con chiavi di test o debuggabile) e ti avvisa se ne trova. Non trovarne non dimostra che il telefono sia pulito.</string>
+    <string name="clipboard_hygiene_explainer">Copia: messaggi, traduzioni, chiavi di recupero e token dei bot che copi vengono contrassegnati come sensibili (Android 13+ nasconde l\'anteprima). Se sono ancora negli appunti dopo 60 secondi, OSHI li rimuove: subito se OSHI è aperto, altrimenti la prossima volta che lo apri. Finché restano negli appunti, la tastiera e le app autorizzate a leggerli possono vederli, e le tastiere o le funzioni del telefono che tengono una cronologia degli appunti possono conservarne una propria copia anche dopo la rimozione.</string>
+</resources>

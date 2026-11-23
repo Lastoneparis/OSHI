@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d sense llegir";
+"w2.all_read" = "Tot llegit";
+"w2.widget.off" = "Activa Rellotge intel·ligent a OSHI a l'iPhone";
+"w2.widget.off_short" = "Desactivat";
+"w2.widget.locked" = "Desbloqueja OSHI a l'iPhone";
+"w2.widget.locked_short" = "Bloquejat";
+"w2.widget.open" = "Obrir OSHI";
+"w2.widget.name" = "OSHI sense llegir";
+"w2.widget.desc" = "Quants sense llegir i qui ha escrit, mai els missatges.";

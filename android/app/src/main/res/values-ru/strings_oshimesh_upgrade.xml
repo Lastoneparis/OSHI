@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Перевести это радио на OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Бесплатно и с открытым кодом. Сохраняет регион, каналы, ключи и контакты, остаётся в сети Meshtastic и добавляет длинные сообщения, подтверждения доставки и хранение сообщений 72 часа, пока адресат не в сети.</string>
+    <string name="oshimesh_upgrade_share">Отправить ссылку на установщик на компьютер</string>
+    <string name="oshimesh_upgrade_why">Что даёт OSHI Mesh</string>
+    <string name="oshimesh_upgrade_footer">Установщик работает в Chrome или Edge на компьютере через USB. Выберите «Сохранить мои настройки», чтобы обновить это радио примерно за минуту.</string>
+</resources>

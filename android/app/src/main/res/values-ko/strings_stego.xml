@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">위장 연결을 기다리는 중</string>
+    <string name="privacy_disguise_title">프라이버시 위장</string>
+    <string name="privacy_disguise_subtitle">트래픽 위장 · 사진에 메시지 숨기기</string>
+    <string name="cover_switch_title">OSHI 트래픽 위장</string>
+    <string name="cover_switch_caption">1:1 메시지와 첨부 파일은 일반적인 웹 분석처럼 보이는 패딩된 요청 안에 담겨 전송되므로 크기와 타이밍을 구별하기가 더 어려워집니다. 위장 연결이 실패하면 메시지는 대기하며, 위장 없이 전송되는 일은 없습니다.</string>
+    <string name="cover_not_hidden">여전히 보이는 것: oshi-messenger.com에 접속한다는 사실(서버 이름과 TLS 지문), 그리고 위장되지 않는 그룹 메시지, 통화, 푸시 깨우기, 새 메일 확인. 이것은 익명성이 아니며 OSHI 서버 차단을 우회하지도 않습니다. 그런 경우에는 사진으로 위장을 사용하세요.</string>
+    <string name="disguise_photo_title">사진으로 위장</string>
+    <string name="disguise_photo_explainer">한 연락처를 위한 종단간 암호화 메시지를 평범해 보이는 사진 안에 숨긴 다음, 아무 앱, 이메일 또는 클라우드 드라이브로 사진을 보내세요. OSHI 자체가 차단되었을 때 유용합니다. 1:1 채팅에서: + → 사진으로 위장.</string>
+    <string name="disguise_reveal_button">숨겨진 메시지 보기</string>
+    <string name="disguise_reveal_hint">받은 사진을 어떤 앱에서든 OSHI로 공유할 수도 있습니다.</string>
+    <string name="disguise_sheet_for">%1$s님만 읽을 수 있습니다.</string>
+    <string name="disguise_message_hint">숨길 메시지</string>
+    <string name="disguise_add_file">작은 파일 추가(최대 256KB)</string>
+    <string name="disguise_remove_file">%1$s 삭제</string>
+    <string name="disguise_file_too_large">파일이 너무 큽니다(최대 256KB)</string>
+    <string name="disguise_cover_generated">생성된 풍경</string>
+    <string name="disguise_cover_photo">내 사진</string>
+    <string name="disguise_capacity">이 이미지에서 사용 가능한 %2$s 중 %1$s 사용</string>
+    <string name="disguise_too_big">이 이미지에 넣기에는 너무 깁니다. 메시지를 줄이거나, 파일을 삭제하거나, 더 큰 사진을 선택하세요.</string>
+    <string name="disguise_create_share">사진 만들고 공유</string>
+    <string name="disguise_warning_recompress">파일 또는 문서로 보내세요. 사진을 재압축하는 앱(대부분의 소셜 네트워크, 사진 모드의 WhatsApp, Signal 또는 Telegram, 스크린샷)은 숨겨진 메시지를 지워 버립니다.</string>
+    <string name="disguise_warning_forensic">사진을 보는 사람에게는 메시지가 숨겨집니다. 하지만 포렌식 분석으로 사진에 숨겨진 데이터가 있다는 사실은 여전히 탐지될 수 있습니다. 다만 그 내용을 읽거나 누구를 위한 것인지 알아낼 수는 없습니다.</string>
+    <string name="disguise_working">사진을 만드는 중…</string>
+    <string name="disguise_failed">사진을 만들 수 없습니다.</string>
+    <string name="reveal_title">숨겨진 메시지</string>
+    <string name="reveal_from">보낸 사람: %1$s</string>
+    <string name="reveal_hidden_on">숨긴 날짜: %1$s</string>
+    <string name="reveal_copy">텍스트 복사</string>
+    <string name="reveal_open_file">%1$s 열기</string>
+    <string name="reveal_checking">숨겨진 메시지를 찾는 중…</string>
+    <string name="reveal_not_found">이 이미지에는 나를 위한 숨겨진 메시지가 없습니다. 사진으로 전송되었다면 전달한 앱이 재압축했을 수 있습니다. 파일로 보내 달라고 요청하세요.</string>
+    <string name="reveal_damaged">이 이미지는 %1$s님이 나를 위해 만든 것이지만, 전달 과정에서 변경되어 더 이상 읽을 수 없습니다. 파일로 다시 보내 달라고 요청하세요.</string>
+    <string name="reveal_unreadable">이 파일을 읽을 수 없습니다.</string>
+    <string name="disguise_photo_short">위장</string>
+</resources>

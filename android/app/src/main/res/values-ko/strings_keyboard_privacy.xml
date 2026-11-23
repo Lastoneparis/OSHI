@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">키보드</string>
+    <string name="keyboard_incognito_title">시크릿 키보드</string>
+    <string name="keyboard_incognito_subtitle">입력한 내용을 학습하지 않도록 키보드에 요청</string>
+    <string name="keyboard_status_title">현재 키보드</string>
+    <string name="keyboard_status_trusted">%1$s · 기본 키보드</string>
+    <string name="keyboard_status_third_party">%1$s · 타사 키보드</string>
+    <string name="keyboard_status_unknown">알 수 없는 키보드</string>
+    <string name="keyboard_privacy_explainer">OSHI는 이 휴대전화에서 암호화하지만, 입력한 내용은 먼저 키보드를 거칩니다. 시크릿 모드는 키보드에 단어를 학습하거나 저장하지 말라고 요청합니다. Android는 키보드가 따르도록 강제할 수 없고 요청만 할 수 있습니다. 타사 키보드는 여전히 모든 키 입력을 읽을 수 있으므로 휴대전화의 기본 키보드를 사용하는 것이 좋습니다. 휴대전화 자체가 감염된 경우(스파이웨어) 어떤 앱도 입력 내용을 보호할 수 없습니다.</string>
+    <string name="keyboard_banner_title">OSHI가 암호화하기 전에 키보드가 입력 내용을 읽을 수 있습니다</string>
+    <string name="keyboard_banner_body">%1$s은(는) 타사 키보드입니다. 비공개 대화에는 휴대전화의 기본 키보드로 전환하세요.</string>
+    <string name="keyboard_banner_switch">키보드 변경</string>
+    <string name="keyboard_banner_dismiss">닫기</string>
+</resources>

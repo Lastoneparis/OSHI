@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">智慧手錶</string>
+    <string name="settings_smartwatch_subtitle">在 Wear OS 手錶上閱讀並回覆聊天。加密和傳送都在這支手機上完成；手錶不會保存任何內容。</string>
+</resources>

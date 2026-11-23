@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Dispositivi collegati</string>
+    <string name="devsync_settings_subtitle">Sincronizza la cronologia direttamente tra i tuoi dispositivi</string>
+    <string name="devsync_status_on">La sincronizzazione diretta è attiva. La cronologia passa da un dispositivo all\'altro; sul server non viene salvato nulla.</string>
+    <string name="devsync_status_off">La sincronizzazione diretta è disattivata su questo dispositivo.</string>
+    <string name="devsync_this_device">Questo dispositivo</string>
+    <string name="devsync_device_id">ID dispositivo %1$s</string>
+    <string name="devsync_debug_override">Sincronizzazione diretta (override debug)</string>
+    <string name="devsync_debug_override_desc">Forza la sincronizzazione diretta su questa installazione, qualunque cosa dica il server</string>
+    <string name="devsync_pending_title">Approva un nuovo dispositivo</string>
+    <string name="devsync_pending_body">%1$s (%2$s) vuole ricevere la tua cronologia. Verifica che l\'altro schermo mostri lo stesso codice.</string>
+    <string name="devsync_waiting_body">In attesa di approvazione sull\'altro dispositivo. Verifica che mostri lo stesso codice.</string>
+    <string name="devsync_peer_approved">L\'altro dispositivo ha già approvato. Approva qui per completare.</string>
+    <string name="devsync_allow">Consenti</string>
+    <string name="devsync_deny">Rifiuta</string>
+    <string name="devsync_linked_title">Dispositivi collegati</string>
+    <string name="devsync_none_linked">Nessun dispositivo collegato. Apri OSHI sull\'altro dispositivo, sulla stessa rete Wi-Fi o online nello stesso momento.</string>
+    <string name="devsync_last_sync">Ultima sincronizzazione: %1$s</string>
+    <string name="devsync_never">mai</string>
+    <string name="devsync_syncing_now">Sincronizzazione in corso (%1$s)</string>
+    <string name="devsync_remove">Rimuovi</string>
+    <string name="devsync_remove_confirm_title">Rimuovere %1$s?</string>
+    <string name="devsync_remove_confirm_body">Non riceverà più la tua cronologia. Conserva ciò che ha già.</string>
+    <string name="devsync_sync_now">Sincronizza ora</string>
+    <string name="devsync_cancel">Annulla</string>
+    <string name="devsync_alert_unapproved">Un dispositivo che usa il tuo account ha tentato di sincronizzarsi: %1$s</string>
+    <string name="devsync_alert_linked">Un nuovo dispositivo, %1$s, ora può ricevere la tua cronologia</string>
+</resources>

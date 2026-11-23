@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Missatge de vídeo</string>
+    <string name="video_note_title">Missatge de vídeo</string>
+    <string name="video_note_a11y" formatted="true">Missatge de vídeo, %1$s</string>
+    <string name="video_note_play">Reprodueix</string>
+    <string name="video_note_pause">Pausa</string>
+    <string name="video_note_record_button">Enregistra un missatge de vídeo</string>
+    <string name="video_note_hint">Toca per enregistrar o mantén premut · màx. 15 s</string>
+    <string name="video_note_record">Comença a enregistrar</string>
+    <string name="video_note_stop">Atura l\'enregistrament</string>
+    <string name="video_note_flip">Canvia de càmera</string>
+    <string name="video_note_close">Tanca</string>
+    <string name="video_note_review_title">El teu missatge de vídeo</string>
+    <string name="video_note_preparing">S\'està preparant…</string>
+    <string name="video_note_discard">Suprimeix</string>
+    <string name="video_note_retake">Torna-ho a fer</string>
+    <string name="video_note_send">Envia el missatge de vídeo</string>
+    <string name="video_note_too_short">Massa curt. Toca per enregistrar o mantén premut el botó.</string>
+    <string name="video_note_camera_denied">Cal accés a la càmera per enregistrar un missatge de vídeo.</string>
+</resources>

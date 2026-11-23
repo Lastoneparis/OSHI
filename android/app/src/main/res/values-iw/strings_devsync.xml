@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">מכשירים מקושרים</string>
+    <string name="devsync_settings_subtitle">סנכרון ההיסטוריה ישירות בין המכשירים שלך</string>
+    <string name="devsync_status_on">הסנכרון הישיר פעיל. ההיסטוריה עוברת ממכשיר למכשיר; שום דבר לא נשמר בשרת.</string>
+    <string name="devsync_status_off">הסנכרון הישיר כבוי במכשיר זה.</string>
+    <string name="devsync_this_device">המכשיר הזה</string>
+    <string name="devsync_device_id">מזהה מכשיר %1$s</string>
+    <string name="devsync_debug_override">סנכרון ישיר (עקיפת ניפוי באגים)</string>
+    <string name="devsync_debug_override_desc">הפעלה כפויה של סנכרון ישיר בהתקנה זו, בלי קשר למה שהשרת אומר</string>
+    <string name="devsync_pending_title">אישור מכשיר חדש</string>
+    <string name="devsync_pending_body">%1$s (%2$s) רוצה לקבל את ההיסטוריה שלך. יש לוודא שבמסך השני מוצג אותו קוד.</string>
+    <string name="devsync_waiting_body">ממתין לאישור במכשיר השני שלך. יש לוודא שמוצג בו אותו קוד.</string>
+    <string name="devsync_peer_approved">המכשיר השני כבר אישר. יש לאשר כאן כדי לסיים.</string>
+    <string name="devsync_allow">אישור</string>
+    <string name="devsync_deny">דחייה</string>
+    <string name="devsync_linked_title">מכשירים מקושרים</string>
+    <string name="devsync_none_linked">עדיין אין מכשיר מקושר. יש לפתוח את OSHI במכשיר השני, באותה רשת Wi-Fi או מחובר באותו זמן.</string>
+    <string name="devsync_last_sync">סנכרון אחרון: %1$s</string>
+    <string name="devsync_never">אף פעם</string>
+    <string name="devsync_syncing_now">מסנכרן עכשיו (%1$s)</string>
+    <string name="devsync_remove">הסרה</string>
+    <string name="devsync_remove_confirm_title">להסיר את %1$s?</string>
+    <string name="devsync_remove_confirm_body">הוא יפסיק לקבל את ההיסטוריה שלך. מה שכבר יש בו יישמר.</string>
+    <string name="devsync_sync_now">סנכרון עכשיו</string>
+    <string name="devsync_cancel">ביטול</string>
+    <string name="devsync_alert_unapproved">מכשיר שמשתמש בחשבון שלך ניסה להסתנכרן: %1$s</string>
+    <string name="devsync_alert_linked">מכשיר חדש, %1$s, יכול עכשיו לקבל את ההיסטוריה שלך</string>
+</resources>

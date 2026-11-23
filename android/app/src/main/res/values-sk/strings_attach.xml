@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Nedávne</string>
+    <string name="attach_selected_count">Vybraté: %1$d</string>
+    <string name="attach_all_photos">Všetky fotky</string>
+    <string name="attach_collapse">Zbaliť</string>
+    <string name="attach_camera">Fotoaparát</string>
+    <string name="attach_gallery">Galéria</string>
+    <string name="attach_file">Súbor</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Poloha</string>
+    <string name="attach_contact">Kontakt</string>
+    <string name="attach_poll">Anketa</string>
+    <string name="attach_video_note">Videospráva</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Naplánovať</string>
+    <string name="attach_access_title">Vaše nedávne fotky tu</string>
+    <string name="attach_access_body">OSHI číta vaše fotky iba, keď je tento panel otvorený. Nič neopustí telefón, kým to neodošlete.</string>
+    <string name="attach_access_allow">Povoliť prístup</string>
+    <string name="attach_access_settings">Otvoriť nastavenia</string>
+    <string name="attach_access_browse">Vybrať z galérie</string>
+    <string name="attach_partial">S OSHI ste zdieľali iba niektoré fotky.</string>
+    <string name="attach_partial_manage">Spravovať</string>
+    <string name="attach_empty_title">Zatiaľ žiadne fotky</string>
+    <string name="attach_caption_hint">Pridať popis…</string>
+    <string name="attach_send_count">Odoslať %1$d</string>
+    <string name="attach_photo_a11y">Fotka</string>
+    <string name="attach_video_a11y">Video, %1$s</string>
+    <string name="attach_limit">Naraz najviac %1$d</string>
+</resources>

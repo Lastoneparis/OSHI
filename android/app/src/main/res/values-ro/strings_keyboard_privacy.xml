@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Tastatură</string>
+    <string name="keyboard_incognito_title">Tastatură incognito</string>
+    <string name="keyboard_incognito_subtitle">Cere tastaturii să nu învețe ce scrii</string>
+    <string name="keyboard_status_title">Tastatura actuală</string>
+    <string name="keyboard_status_trusted">%1$s · Tastatură integrată</string>
+    <string name="keyboard_status_third_party">%1$s · Tastatură terță</string>
+    <string name="keyboard_status_unknown">Tastatură necunoscută</string>
+    <string name="keyboard_privacy_explainer">OSHI criptează pe acest telefon, dar ce scrii trece mai întâi prin tastatură. Modul incognito îi cere tastaturii să nu învețe și să nu păstreze cuvintele tale — Android nu poate obliga o tastatură să asculte, doar să-i ceară. O tastatură terță poate citi în continuare fiecare apăsare de tastă, așa că preferă tastatura integrată a telefonului. Dacă telefonul însuși este compromis (spyware), nicio aplicație nu poate proteja ce scrii.</string>
+    <string name="keyboard_banner_title">Tastatura ta poate citi ce scrii înainte ca OSHI să cripteze</string>
+    <string name="keyboard_banner_body">%1$s este o tastatură terță. Pentru conversațiile private, treci la tastatura integrată a telefonului.</string>
+    <string name="keyboard_banner_switch">Schimbă tastatura</string>
+    <string name="keyboard_banner_dismiss">Închide</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">Hangeffekt</string>
+    <string name="voice_preview_original">Eredeti hang</string>
+    <string name="voice_preview_processing">%1$s alkalmazása…</string>
+    <string name="voice_preview_failed">A(z) %1$s nem sikerült, az eredeti maradt</string>
+    <string name="voice_preview_view_once_hint">Csak egyszer játszható le, utána eltűnik</string>
+    <string name="voice_preview_listening">Lejátszás…</string>
+</resources>

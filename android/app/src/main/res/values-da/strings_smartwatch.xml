@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">Smartwatch</string>
+    <string name="settings_smartwatch_subtitle">Læs og besvar dine chats på et Wear OS-ur. Kryptering og afsendelse bliver på denne telefon; uret gemmer intet.</string>
+</resources>

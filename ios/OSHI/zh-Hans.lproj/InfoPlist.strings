@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (zh-Hans) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI 使用蓝牙发现并连接附近设备，让你无需联网也能安全地点对点收发消息。";
+"NSBluetoothPeripheralUsageDescription" = "OSHI 需要蓝牙才能接收网状网络中附近设备发来的加密消息。";
+"NSCalendarsFullAccessUsageDescription" = "OSHI 可将已安排的通话添加到你的日历，让你不错过任何来电。";
+"NSCalendarsUsageDescription" = "OSHI 可将已安排的通话添加到你的日历，让你不错过任何来电。";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI 可将已安排的通话添加到你的日历，让你不错过任何来电。";
+"NSCameraUsageDescription" = "OSHI 需要相机权限来扫描二维码并拍摄用于加密消息的照片。";
+"NSFaceIDUsageDescription" = "使用面容 ID 安全解锁加密消息，保护你的隐私。";
+"NSLocalNetworkUsageDescription" = "OSHI 使用本地网络与附近设备建立 Wi-Fi 直连，让消息发送更快。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI 使用你的位置，以便与联系人实时分享位置。位置信息经过加密，只有在你选择时才会分享。";
+"NSLocationAlwaysUsageDescription" = "OSHI 使用你的位置与联系人实时分享，即使应用在后台运行。位置信息经过加密，只有在你选择时才会分享。";
+"NSLocationWhenInUseUsageDescription" = "OSHI 使用你的位置，以便与联系人分享你的位置。位置信息经过加密，只有在你选择时才会分享。";
+"NSMicrophoneUsageDescription" = "OSHI 需要麦克风权限，以录制带声音的视频用于加密消息。";
+"NSPhotoLibraryAddUsageDescription" = "OSHI 可将收到的图片保存到你的照片图库。";
+"NSPhotoLibraryUsageDescription" = "OSHI 需要访问照片图库，以便你选择图片作为加密消息发送。";
+"NSSpeechRecognitionUsageDescription" = "OSHI 使用设备端语音识别，让你可以向 AI 助手口述消息。你的语音完全在 iPhone 上转写，绝不离开设备。";
+"NSUserNotificationsUsageDescription" = "收到新的加密消息时，OSHI 会向你发送通知，让你不错过重要沟通。";

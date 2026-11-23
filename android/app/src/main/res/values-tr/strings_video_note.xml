@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Görüntülü mesaj</string>
+    <string name="video_note_title">Görüntülü mesaj</string>
+    <string name="video_note_a11y" formatted="true">Görüntülü mesaj, %1$s</string>
+    <string name="video_note_play">Oynat</string>
+    <string name="video_note_pause">Duraklat</string>
+    <string name="video_note_record_button">Görüntülü mesaj kaydet</string>
+    <string name="video_note_hint">Kaydetmek için dokunun veya basılı tutun · en fazla 15 sn</string>
+    <string name="video_note_record">Kaydı başlat</string>
+    <string name="video_note_stop">Kaydı durdur</string>
+    <string name="video_note_flip">Kamerayı değiştir</string>
+    <string name="video_note_close">Kapat</string>
+    <string name="video_note_review_title">Görüntülü mesajınız</string>
+    <string name="video_note_preparing">Hazırlanıyor…</string>
+    <string name="video_note_discard">Sil</string>
+    <string name="video_note_retake">Yeniden çek</string>
+    <string name="video_note_send">Görüntülü mesajı gönder</string>
+    <string name="video_note_too_short">Çok kısa. Kaydetmek için dokunun veya düğmeyi basılı tutun.</string>
+    <string name="video_note_camera_denied">Görüntülü mesaj kaydetmek için kamera erişimi gerekiyor.</string>
+</resources>

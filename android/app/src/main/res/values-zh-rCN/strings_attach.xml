@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">最近</string>
+    <string name="attach_selected_count">已选 %1$d 项</string>
+    <string name="attach_all_photos">所有照片</string>
+    <string name="attach_collapse">收起</string>
+    <string name="attach_camera">相机</string>
+    <string name="attach_gallery">图库</string>
+    <string name="attach_file">文件</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">位置</string>
+    <string name="attach_contact">联系人</string>
+    <string name="attach_poll">投票</string>
+    <string name="attach_video_note">视频消息</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">定时</string>
+    <string name="attach_access_title">你最近的照片会显示在这里</string>
+    <string name="attach_access_body">OSHI 仅在此面板打开时读取你的照片。除非你发送，否则任何内容都不会离开手机。</string>
+    <string name="attach_access_allow">允许访问</string>
+    <string name="attach_access_settings">打开设置</string>
+    <string name="attach_access_browse">从图库选择</string>
+    <string name="attach_partial">你只与 OSHI 共享了部分照片。</string>
+    <string name="attach_partial_manage">管理</string>
+    <string name="attach_empty_title">还没有照片</string>
+    <string name="attach_caption_hint">添加说明…</string>
+    <string name="attach_send_count">发送 %1$d 项</string>
+    <string name="attach_photo_a11y">照片</string>
+    <string name="attach_video_a11y">视频，%1$s</string>
+    <string name="attach_limit">一次最多 %1$d 项</string>
+</resources>

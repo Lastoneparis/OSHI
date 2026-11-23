@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Tento telefón môže byť upravený</string>
+    <string name="device_integrity_dialog_body">OSHI zistil známky toho, že tento telefón môže byť rootnutý alebo upravený (%1$s). Na takom telefóne môže iný softvér čítať, čo je na obrazovke a čo píšete, skôr než to OSHI zašifruje. OSHI nič nevymazal ani nezablokoval. Táto kontrola je heuristická: môže sa mýliť a dobre skrytý root jej môže uniknúť.</string>
+    <string name="device_integrity_dialog_ok">Rozumiem</string>
+    <string name="device_integrity_status_title">Integrita zariadenia</string>
+    <string name="device_integrity_status_flagged">OSHI zistil známky rootu alebo úprav: %1$s</string>
+    <string name="device_integrity_finding_su">binárny súbor su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">aplikácia na správu rootu</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">systém podpísaný testovacími kľúčmi</string>
+    <string name="device_integrity_finding_debuggable">laditeľný systém</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Rootnuté alebo upravené telefóny: OSHI hľadá bežné známky rootu (su, Magisk, Xposed/LSPosed, Frida, systém podpísaný testovacími kľúčmi alebo laditeľný) a upozorní vás, ak nejaké nájde. Keď nič nenájde, neznamená to, že je telefón čistý.</string>
+    <string name="clipboard_hygiene_explainer">Kopírovanie: správy, preklady, kľúče na obnovenie a tokeny botov, ktoré skopírujete, sú označené ako citlivé (Android 13+ skryje náhľad). Ak sú po 60 sekundách stále v schránke, OSHI ich odstráni: hneď, ak je OSHI otvorené, inak pri jeho ďalšom otvorení. Kým sú v schránke, môže ich vidieť vaša klávesnica a aplikácie, ktoré smú čítať schránku, a klávesnice alebo funkcie telefónu, ktoré uchovávajú históriu schránky, si môžu ponechať vlastnú kópiu aj po odstránení.</string>
+</resources>

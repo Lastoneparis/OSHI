@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    __CASHU_2026_10_24__ Strings for the eCash card shown under a message that
+    carries a Cashu token.
+
+    Three strings, and the first one is the one that matters: a Cashu token is a
+    bearer instrument, so anyone who can read the conversation can spend it.
+    That sentence is the feature's safety, not its small print - do not drop it
+    to save a line, and do not soften it in translation.
+
+    Translations live in the localized values-*/strings.xml.
+-->
+<resources>
+    <string name="cashu_bearer_note">Anyone who gets this token can spend it.</string>
+    <string name="cashu_redeem">Redeem in a wallet</string>
+    <string name="cashu_no_wallet">No eCash wallet app on this device. Copy the token into your wallet, or use Redeem on the web.</string>
+    <string name="cashu_pay_usage">usage: /pay &lt;token&gt; — paste a cashu token, for example /pay cashuA…</string>
+    <string name="cashu_pay_not_token">That doesn\'t look like a cashu token — expected cashuA… or cashuB…</string>
+    <string name="cashu_pay_invalid">That token doesn\'t decode to a readable amount, so nothing was sent.</string>
+    <!-- %1$s = "10 sat" -->
+    <string name="cashu_pay_sent">Sent %1$s. Cashu is a bearer token: whoever redeems it first gets the money.</string>
+    <!-- %1$s = "10 sat" -->
+    <string name="cashu_pay_public_confirm">Everyone in this group can redeem %1$s. Nothing was sent. To send it anyway, type: /pay &lt;token&gt; public</string>
+    <!-- OSHI never asks the mint anything, so the figure on the card is the
+         amount the token CLAIMS. Saying so is what keeps a bearer instrument
+         from looking like a payment already received. -->
+    <string name="cashu_not_verified">OSHI hasn\'t checked this with the mint — it may already have been spent. It is yours only once your wallet redeems it.</string>
+    <string name="cashu_copy_token">Copy token</string>
+    <string name="cashu_redeem_web">Redeem on the web</string>
+    <string name="cashu_copied">Token copied.</string>
+    <!-- Shown before ANY message carrying a token reaches a group, however the
+         token got into the composer. /pay asks too, but a guard that only one
+         way of typing honours is not a guard. -->
+    <string name="cashu_group_confirm_title">Send eCash to the whole group?</string>
+    <!-- %1$s = "10 sat" -->
+    <string name="cashu_group_confirm_body">Everyone in this group can redeem %1$s, and the first one to do it keeps the money. There is no way to take it back.</string>
+    <string name="cashu_group_confirm_send">Send it</string>
+    <!-- The `/` menu entry. Short: it sits on one line under the command name. -->
+    <string name="cashu_pay_command_description">Send a cashu eCash token in this chat</string>
+    <string name="cashu_pay_command_hint">&lt;token&gt;</string>
+    <string name="cashu_send_title">Send bitcoin</string>
+    <string name="cashu_send_paste">Paste token</string>
+    <string name="cashu_send_field_hint">Paste a cashuA… or cashuB… token from your Cashu wallet</string>
+    <string name="cashu_too_long">This token is too long for the connection available right now (over LoRa a message carries about 500 bytes). Nothing was sent. Send it once you are online, or ask your wallet for a shorter cashuB token.</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Recente</string>
+    <string name="attach_selected_count">%1$d selectate</string>
+    <string name="attach_all_photos">Toate fotografiile</string>
+    <string name="attach_collapse">Restrânge</string>
+    <string name="attach_camera">Cameră</string>
+    <string name="attach_gallery">Galerie</string>
+    <string name="attach_file">Fișier</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Locație</string>
+    <string name="attach_contact">Contact</string>
+    <string name="attach_poll">Sondaj</string>
+    <string name="attach_video_note">Mesaj video</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Programează</string>
+    <string name="attach_access_title">Fotografiile tale recente aici</string>
+    <string name="attach_access_body">OSHI citește fotografiile doar cât timp acest panou este deschis. Nimic nu părăsește telefonul dacă nu îl trimiți.</string>
+    <string name="attach_access_allow">Permite accesul</string>
+    <string name="attach_access_settings">Deschide setările</string>
+    <string name="attach_access_browse">Alege din galerie</string>
+    <string name="attach_partial">Ai partajat doar unele fotografii cu OSHI.</string>
+    <string name="attach_partial_manage">Gestionează</string>
+    <string name="attach_empty_title">Încă nu există fotografii</string>
+    <string name="attach_caption_hint">Adaugă o descriere…</string>
+    <string name="attach_send_count">Trimite %1$d</string>
+    <string name="attach_photo_a11y">Fotografie</string>
+    <string name="attach_video_a11y">Video, %1$s</string>
+    <string name="attach_limit">Cel mult %1$d odată</string>
+</resources>

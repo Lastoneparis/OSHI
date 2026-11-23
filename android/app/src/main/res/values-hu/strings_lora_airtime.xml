@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Várakozás rádiós adásidőre (törvényes kitöltési tényező korlát)</string>
+    <string name="lora_jamming_title">Rádióinterferencia észlelve — lehetséges zavarás</string>
+    <string name="lora_jamming_detail">Az üzenetek Bluetooth mesh-en vagy interneten mennek, amint lehetséges. A rádiónak szánt üzenetek megmaradnak, és LoRán mennek ki, amikor a csatorna felszabadul.</string>
+    <string name="lora_jamming_send_anyway">Küldés LoRán mindenképp</string>
+    <string name="lora_jamming_override_active">Küldés LoRán mindenképp %1$s-ig, vagy amíg a csatorna fel nem szabadul. Előfordulhat, hogy az üzenetek nem érnek célba.</string>
+</resources>

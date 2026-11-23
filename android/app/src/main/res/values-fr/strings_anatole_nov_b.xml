@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Retours d'Anatole, 13/11/2026 (N2, N6, N17). -->
+<resources>
+    <string name="chat_video_note_desc">Message vidéo rond, 15 s max</string>
+
+    <string name="settings_panic_wipe_title">Effacer en touchant le logo</string>
+    <string name="settings_panic_wipe_subtitle">Trois touches rapides sur le logo OSHI effacent tous les messages, clés et fichiers de ce téléphone, sans confirmation. Désactivé tant que vous ne l\'activez pas.</string>
+
+    <string name="map_layer_title">Type de carte</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Relief</string>
+    <string name="map_layer_satellite">Satellite</string>
+    <string name="map_layer_standard_desc">Carte OSHI, fonctionne hors ligne avec les régions téléchargées</string>
+    <string name="map_layer_third_party_desc" formatted="true">En ligne uniquement. Chargée directement depuis %1$s, qui voit la zone que vous regardez.</string>
+    <string name="map_layer_offline_only_note">« Cartes hors-ligne uniquement » est activé : ce fond n\'affiche que les tuiles déjà vues.</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Strings for the armed check-in foreground service and its in-context
+    location-permission flow.
+
+    Kept in their own file on purpose: strings.xml is co-owned by other work in
+    flight. The translations themselves DO live in the localized values-*/
+    strings.xml (added by a later pass), so a key renamed or retyped here has to be
+    renamed or retyped in all 33 of them — the header used to claim they fell back
+    to English, which stopped being true.
+-->
+<resources>
+
+    <!-- Ongoing "location" foreground service that keeps an armed check-in alive -->
+    <string name="checkin_service_channel_name">Active check-in</string>
+    <string name="checkin_service_channel_description">Shows while a check-in is running so OSHI can follow your journey to its destination.</string>
+    <string name="checkin_service_status_generic">Watching your journey.</string>
+    <!-- %1$s = "To: <place>", %2$s = "ETA: <time>" -->
+    <string name="checkin_service_status_line" translatable="false">%1$s • %2$s</string>
+    <!-- __NO_BACKGROUND_LOCATION_2026_10_24__ Repeated on the ongoing notification
+         because it is the one surface guaranteed to be visible for the whole
+         journey. The arming screen says the same thing BEFORE the user commits
+         (checkin_foreground_only_note). The eight strings that used to live here —
+         the "Allow all the time" rationale and the "limited mode" fallback — are
+         gone with the ACCESS_BACKGROUND_LOCATION permission itself; see the comment
+         on the removed uses-permission line in AndroidManifest.xml. -->
+    <string name="checkin_service_foreground_only">This notification is what keeps the check-in running. Don\'t dismiss OSHI from recent apps.</string>
+
+    <!-- Said on the arming screen, above the Start button -->
+    <string name="checkin_foreground_only_note">OSHI watches this journey only while it is running. Keep it open or in the background: if you swipe OSHI out of recent apps, the check-in stops and no emergency alert is sent.</string>
+
+    <!-- Location refused: a check-in cannot fire at all -->
+    <string name="checkin_location_required_title">Location is required</string>
+    <string name="checkin_location_required_body">A check-in can\'t start without location access — OSHI would be unable to tell whether you arrived, and the emergency alert would carry no position. Grant location access to OSHI in Settings, then try again.</string>
+    <string name="checkin_location_required_settings">Open settings</string>
+    <string name="checkin_permission_dismiss">Close</string>
+</resources>

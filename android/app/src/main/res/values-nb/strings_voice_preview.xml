@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">Stemmeeffekt</string>
+    <string name="voice_preview_original">Original stemme</string>
+    <string name="voice_preview_processing">Bruker %1$s…</string>
+    <string name="voice_preview_failed">%1$s fungerte ikke, originalen beholdt</string>
+    <string name="voice_preview_view_once_hint">Kan bare spilles av én gang, så forsvinner den</string>
+    <string name="voice_preview_listening">Lytter…</string>
+</resources>

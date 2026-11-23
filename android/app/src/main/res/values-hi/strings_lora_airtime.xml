@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">रेडियो एयरटाइम की प्रतीक्षा (कानूनी ड्यूटी-साइकिल सीमा)</string>
+    <string name="lora_jamming_title">रेडियो हस्तक्षेप का पता चला — संभावित जैमिंग</string>
+    <string name="lora_jamming_detail">उपलब्ध होने पर संदेश Bluetooth मेश या इंटरनेट से भेजे जाएंगे। रेडियो के संदेश रखे जाते हैं और चैनल साफ़ होते ही LoRa से भेजे जाएंगे।</string>
+    <string name="lora_jamming_send_anyway">फिर भी LoRa से भेजें</string>
+    <string name="lora_jamming_override_active">%1$s तक या चैनल साफ़ होने तक फिर भी LoRa से भेजा जा रहा है। संदेश शायद न पहुंचें।</string>
+</resources>

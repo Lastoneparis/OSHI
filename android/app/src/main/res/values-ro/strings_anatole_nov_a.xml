@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Contact nou</string>
+    <string name="conversation_open_contact">Deschide contactul</string>
+    <string name="conversation_muted">Notificări dezactivate</string>
+    <string name="fab_new_contact">Contact nou</string>
+    <string name="fab_pick_contact_voice">Apel vocal — alege un contact</string>
+    <string name="fab_pick_contact_video">Apel video — alege un contact</string>
+    <string name="fab_pick_contact_empty">Încă nu ai contacte. Adaugă mai întâi pe cineva.</string>
+</resources>

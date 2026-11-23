@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">छिपे हुए कनेक्शन की प्रतीक्षा की जा रही है</string>
+    <string name="privacy_disguise_title">निजता छद्मावरण</string>
+    <string name="privacy_disguise_subtitle">ट्रैफ़िक छिपाएँ · फ़ोटो में संदेश छिपाएँ</string>
+    <string name="cover_switch_title">OSHI ट्रैफ़िक छिपाएँ</string>
+    <string name="cover_switch_caption">आपके 1:1 संदेश और अटैचमेंट पैडिंग वाले ऐसे अनुरोधों के अंदर जाते हैं जो सामान्य वेब एनालिटिक्स जैसे दिखते हैं, इसलिए उनके आकार और समय में अंतर करना कठिन होता है। अगर छिपा हुआ कनेक्शन विफल होता है, तो संदेश प्रतीक्षा करते हैं — वे कभी बिना छिपाए नहीं भेजे जाते।</string>
+    <string name="cover_not_hidden">फिर भी दिखाई देता है: यह कि आप oshi-messenger.com से कनेक्ट होते हैं (सर्वर का नाम और TLS फ़िंगरप्रिंट), और ग्रुप संदेश, कॉल, पुश वेक-अप और नई मेल की जाँच, जो छिपाए नहीं जाते। यह गुमनामी नहीं है और यह OSHI सर्वर पर लगी रोक को पार नहीं करता — उसके लिए, फ़ोटो के रूप में छिपाएँ का उपयोग करें।</string>
+    <string name="disguise_photo_title">फ़ोटो के रूप में छिपाएँ</string>
+    <string name="disguise_photo_explainer">किसी एक संपर्क के लिए एंड-टू-एंड एन्क्रिप्टेड संदेश को साधारण दिखने वाली फ़ोटो में छिपाएँ, फिर फ़ोटो को किसी भी ऐप, ई-मेल या क्लाउड ड्राइव से भेजें — यह तब उपयोगी है जब OSHI ख़ुद ब्लॉक हो। 1:1 चैट में: + → फ़ोटो के रूप में छिपाएँ।</string>
+    <string name="disguise_reveal_button">छिपा हुआ संदेश दिखाएँ</string>
+    <string name="disguise_reveal_hint">आप किसी भी ऐप से प्राप्त फ़ोटो को OSHI पर शेयर भी कर सकते हैं।</string>
+    <string name="disguise_sheet_for">केवल %1$s इसे पढ़ सकते हैं।</string>
+    <string name="disguise_message_hint">छिपा हुआ संदेश</string>
+    <string name="disguise_add_file">एक छोटी फ़ाइल जोड़ें (अधिकतम 256 KB)</string>
+    <string name="disguise_remove_file">%1$s हटाएँ</string>
+    <string name="disguise_file_too_large">फ़ाइल बहुत बड़ी है (अधिकतम 256 KB)</string>
+    <string name="disguise_cover_generated">बनाया गया लैंडस्केप</string>
+    <string name="disguise_cover_photo">मेरी फ़ोटो</string>
+    <string name="disguise_capacity">इस इमेज में उपलब्ध %2$s में से %1$s का उपयोग</string>
+    <string name="disguise_too_big">इस इमेज के लिए बहुत लंबा है। संदेश छोटा करें, फ़ाइल हटाएँ या बड़ी फ़ोटो चुनें।</string>
+    <string name="disguise_create_share">फ़ोटो बनाएँ और शेयर करें</string>
+    <string name="disguise_warning_recompress">इसे फ़ाइल या दस्तावेज़ के रूप में भेजें। जो ऐप फ़ोटो को दोबारा कंप्रेस करते हैं (ज़्यादातर सोशल नेटवर्क, फ़ोटो मोड में WhatsApp, Signal या Telegram, स्क्रीनशॉट), वे छिपा हुआ संदेश मिटा देते हैं।</string>
+    <string name="disguise_warning_forensic">यह फ़ोटो देखने वाले किसी भी व्यक्ति से संदेश छिपाता है। फ़ोरेंसिक विश्लेषण फिर भी यह पता लगा सकता है कि फ़ोटो में छिपा हुआ डेटा है, लेकिन उसे पढ़ नहीं सकता और न ही यह बता सकता है कि वह किसके लिए है।</string>
+    <string name="disguise_working">फ़ोटो बनाई जा रही है…</string>
+    <string name="disguise_failed">फ़ोटो नहीं बनाई जा सकी।</string>
+    <string name="reveal_title">छिपा हुआ संदेश</string>
+    <string name="reveal_from">%1$s से</string>
+    <string name="reveal_hidden_on">%1$s को छिपाया गया</string>
+    <string name="reveal_copy">टेक्स्ट कॉपी करें</string>
+    <string name="reveal_open_file">%1$s खोलें</string>
+    <string name="reveal_checking">छिपे हुए संदेश की खोज की जा रही है…</string>
+    <string name="reveal_not_found">इस इमेज में आपके लिए कोई छिपा हुआ संदेश नहीं है। अगर इसे फ़ोटो के रूप में भेजा गया था, तो इसे लाने वाले ऐप ने शायद इसे दोबारा कंप्रेस कर दिया हो — इसे फ़ाइल के रूप में माँगें।</string>
+    <string name="reveal_damaged">यह इमेज %1$s ने आपके लिए बनाई थी, लेकिन रास्ते में इसमें बदलाव हो गया और अब इसे पढ़ा नहीं जा सकता। इसे फ़ाइल के रूप में दोबारा भेजने के लिए कहें।</string>
+    <string name="reveal_unreadable">यह फ़ाइल पढ़ी नहीं जा सकी।</string>
+    <string name="disguise_photo_short">छिपाएँ</string>
+</resources>

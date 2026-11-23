@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Warte auf getarnte Verbindung</string>
+    <string name="privacy_disguise_title">Tarnung</string>
+    <string name="privacy_disguise_subtitle">Datenverkehr tarnen · Nachricht in einem Foto verstecken</string>
+    <string name="cover_switch_title">OSHI-Datenverkehr tarnen</string>
+    <string name="cover_switch_caption">Deine 1:1-Nachrichten und Anhänge werden in aufgefüllten Anfragen übertragen, die wie gewöhnliche Web-Statistiken aussehen, sodass ihre Größe und ihr zeitlicher Ablauf schwerer zu unterscheiden sind. Wenn die getarnte Verbindung fehlschlägt, warten die Nachrichten – sie werden nie ungetarnt gesendet.</string>
+    <string name="cover_not_hidden">Weiterhin sichtbar: dass du dich mit oshi-messenger.com verbindest (Servername und TLS-Fingerabdruck), sowie Gruppennachrichten, Anrufe, Push-Weckrufe und Abfragen nach neuen Nachrichten, die nicht getarnt werden. Das ist keine Anonymität und umgeht keine Sperre des OSHI-Servers – nutze dafür „Als Foto tarnen“.</string>
+    <string name="disguise_photo_title">Als Foto tarnen</string>
+    <string name="disguise_photo_explainer">Verstecke eine Ende-zu-Ende-verschlüsselte Nachricht für einen Kontakt in einem gewöhnlich aussehenden Foto und sende das Foto dann über eine beliebige App, per E-Mail oder Cloud-Speicher – nützlich, wenn OSHI selbst gesperrt ist. In einem 1:1-Chat: + → Als Foto tarnen.</string>
+    <string name="disguise_reveal_button">Versteckte Nachricht aufdecken</string>
+    <string name="disguise_reveal_hint">Du kannst ein empfangenes Foto auch aus jeder App an OSHI teilen.</string>
+    <string name="disguise_sheet_for">Nur %1$s kann sie lesen.</string>
+    <string name="disguise_message_hint">Versteckte Nachricht</string>
+    <string name="disguise_add_file">Kleine Datei hinzufügen (max. 256 KB)</string>
+    <string name="disguise_remove_file">%1$s entfernen</string>
+    <string name="disguise_file_too_large">Datei zu groß (max. 256 KB)</string>
+    <string name="disguise_cover_generated">Generierte Landschaft</string>
+    <string name="disguise_cover_photo">Mein Foto</string>
+    <string name="disguise_capacity">Belegt %1$s von %2$s verfügbar in diesem Bild</string>
+    <string name="disguise_too_big">Zu lang für dieses Bild. Kürze die Nachricht, entferne die Datei oder wähle ein größeres Foto.</string>
+    <string name="disguise_create_share">Foto erstellen und teilen</string>
+    <string name="disguise_warning_recompress">Sende es als DATEI oder Dokument. Apps, die Fotos neu komprimieren (die meisten sozialen Netzwerke, WhatsApp, Signal oder Telegram im Fotomodus, Screenshots), löschen die versteckte Nachricht.</string>
+    <string name="disguise_warning_forensic">Dies verbirgt die Nachricht vor allen, die das Foto ansehen. Eine forensische Analyse kann dennoch erkennen, dass das Foto versteckte Daten enthält, kann sie aber weder lesen noch feststellen, für wen sie bestimmt sind.</string>
+    <string name="disguise_working">Foto wird erstellt…</string>
+    <string name="disguise_failed">Das Foto konnte nicht erstellt werden.</string>
+    <string name="reveal_title">Versteckte Nachricht</string>
+    <string name="reveal_from">Von %1$s</string>
+    <string name="reveal_hidden_on">Versteckt am %1$s</string>
+    <string name="reveal_copy">Text kopieren</string>
+    <string name="reveal_open_file">%1$s öffnen</string>
+    <string name="reveal_checking">Suche nach versteckter Nachricht…</string>
+    <string name="reveal_not_found">Keine versteckte Nachricht für dich in diesem Bild. Wenn es als Foto gesendet wurde, hat die übertragende App es möglicherweise neu komprimiert – bitte darum, es als Datei zu erhalten.</string>
+    <string name="reveal_damaged">Dieses Bild wurde von %1$s für dich erstellt, aber unterwegs verändert und kann nicht mehr gelesen werden. Bitte darum, es erneut als Datei zu senden.</string>
+    <string name="reveal_unreadable">Diese Datei konnte nicht gelesen werden.</string>
+    <string name="disguise_photo_short">Tarnen</string>
+</resources>

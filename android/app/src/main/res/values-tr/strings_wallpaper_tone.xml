@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Ton</string>
+    <string name="wallpaper_tone_automatic">Otomatik</string>
+    <string name="wallpaper_tone_light">Açık</string>
+    <string name="wallpaper_tone_dark">Koyu</string>
+    <string name="wallpaper_tone_automatic_detail">Açık ve koyu modu izler.</string>
+    <string name="wallpaper_tone_light_detail">Koyu modda bile mor ağlı beyaz. Mesajlar kolay okunsun diye açık renklerine geçer.</string>
+    <string name="wallpaper_tone_dark_detail">Açık modda bile mor ağlı siyah.</string>
+    <string name="wallpaper_tone_more">Renkler, geçişler, emoji ve kendi fotoğrafların: bir sohbet aç, ardından ⋯ → Duvar kâğıdı.</string>
+</resources>

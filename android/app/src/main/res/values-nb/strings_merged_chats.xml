@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Slå sammen meldinger og grupper</string>
+    <string name="chats_merged_setting_desc">Én liste for alle chattene dine, med filtre for personer og grupper.</string>
+    <string name="chats_merged_filter_all">Alle</string>
+    <string name="chats_merged_filter_unread">Uleste</string>
+    <string name="chats_merged_filter_groups">Grupper</string>
+    <string name="chats_merged_filter_people">Personer</string>
+    <string name="chats_merged_new_title">Ny</string>
+    <string name="chats_merged_new_chat">Ny chat</string>
+    <string name="chats_merged_new_chat_desc">Legg til noen med QR-kode, lenke eller nøkkel</string>
+    <string name="chats_merged_new_group">Ny gruppe</string>
+    <string name="chats_merged_new_group_desc">Start en gruppe med kontaktene dine</string>
+    <string name="chats_merged_discover">Oppdag offentlige kanaler</string>
+    <string name="chats_merged_discover_desc">Bli med i offentlige grupper i nærheten</string>
+    <string name="chats_merged_scan_invite">Skann en invitasjon</string>
+    <string name="chats_merged_scan_invite_desc">Bli med i en gruppe eller legg til en kontakt fra en QR-kode</string>
+    <string name="chats_merged_scan_not_invite">Denne QR-koden er ikke en OSHI-invitasjon</string>
+    <string name="chats_merged_calls_header">Ring noen</string>
+    <string name="chats_merged_teaser_title">Bli med i en offentlig kanal</string>
+    <string name="chats_merged_teaser_body">Offentlige grupper i nærheten fungerer selv uten internett. Se hvem som er rundt deg.</string>
+    <string name="chats_merged_teaser_cta">Oppdag</string>
+    <string name="chats_merged_nearby_title">Gruppe i nærheten</string>
+    <string name="chats_merged_empty_unread">Du har lest alt</string>
+    <string name="chats_merged_empty_people">Ingen samtaler ennå</string>
+    <string name="chats_merged_group_a11y">Gruppe</string>
+</resources>

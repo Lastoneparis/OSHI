@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (id) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI menggunakan Bluetooth untuk menemukan dan terhubung ke perangkat di sekitar agar Anda bisa berkirim pesan aman langsung antarperangkat tanpa internet.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI memerlukan Bluetooth untuk menerima pesan terenkripsi dari perangkat di sekitar dalam jaringan mesh Anda.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI dapat menambahkan panggilan terjadwal ke kalender Anda agar tidak ada yang terlewat.";
+"NSCalendarsUsageDescription" = "OSHI dapat menambahkan panggilan terjadwal ke kalender Anda agar tidak ada yang terlewat.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI dapat menambahkan panggilan terjadwal ke kalender Anda agar tidak ada yang terlewat.";
+"NSCameraUsageDescription" = "OSHI memerlukan akses kamera untuk memindai kode QR dan mengambil foto untuk pesan terenkripsi.";
+"NSFaceIDUsageDescription" = "Gunakan Face ID untuk membuka pesan terenkripsi Anda dengan aman dan melindungi privasi Anda.";
+"NSLocalNetworkUsageDescription" = "OSHI menggunakan jaringan lokal untuk membuat koneksi Wi-Fi Direct dengan perangkat di sekitar agar pesan terkirim lebih cepat.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI menggunakan lokasi Anda untuk membagikan posisi Anda secara langsung kepada kontak. Lokasi Anda dienkripsi dan hanya dibagikan bila Anda memilihnya.";
+"NSLocationAlwaysUsageDescription" = "OSHI menggunakan lokasi Anda untuk berbagi posisi secara langsung kepada kontak, bahkan saat aplikasi berjalan di latar belakang. Lokasi Anda dienkripsi dan hanya dibagikan bila Anda memilihnya.";
+"NSLocationWhenInUseUsageDescription" = "OSHI menggunakan lokasi Anda untuk membagikan posisi Anda kepada kontak. Lokasi Anda dienkripsi dan hanya dibagikan bila Anda memilihnya.";
+"NSMicrophoneUsageDescription" = "OSHI memerlukan akses mikrofon untuk merekam video beserta suara untuk pesan terenkripsi.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI dapat menyimpan gambar yang diterima ke pustaka foto Anda.";
+"NSPhotoLibraryUsageDescription" = "OSHI memerlukan akses ke pustaka foto agar Anda bisa memilih gambar untuk dikirim sebagai pesan terenkripsi.";
+"NSSpeechRecognitionUsageDescription" = "OSHI menggunakan pengenalan suara di perangkat agar Anda bisa mendiktekan pesan ke asisten AI. Suara Anda ditranskripsi sepenuhnya di iPhone dan tidak pernah keluar dari perangkat.";
+"NSUserNotificationsUsageDescription" = "OSHI mengirim notifikasi saat Anda menerima pesan terenkripsi baru agar tidak ada hal penting yang terlewat.";

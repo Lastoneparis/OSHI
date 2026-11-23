@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Wachten op vermomde verbinding</string>
+    <string name="privacy_disguise_title">Privacyvermomming</string>
+    <string name="privacy_disguise_subtitle">Verkeer vermommen · een bericht in een foto verbergen</string>
+    <string name="cover_switch_title">OSHI-verkeer vermommen</string>
+    <string name="cover_switch_caption">Je 1-op-1-berichten en bijlagen reizen in opgevulde verzoeken die eruitzien als gewone webanalyse, zodat hun grootte en timing moeilijker te onderscheiden zijn. Als de vermomde verbinding mislukt, wachten berichten — ze worden nooit onvermomd verstuurd.</string>
+    <string name="cover_not_hidden">Nog steeds zichtbaar: dat je verbinding maakt met oshi-messenger.com (servernaam en TLS-vingerafdruk), en groepsberichten, oproepen, push-wekoproepen en controles op nieuwe mail, die niet vermomd zijn. Dit is geen anonimiteit en omzeilt geen blokkade van de OSHI-server — gebruik daarvoor Vermommen als foto.</string>
+    <string name="disguise_photo_title">Vermommen als foto</string>
+    <string name="disguise_photo_explainer">Verberg een end-to-end versleuteld bericht voor één contact in een gewoon ogende foto en stuur de foto via elke app, e-mail of clouddienst — handig wanneer OSHI zelf geblokkeerd is. In een 1-op-1-chat: + → Vermommen als foto.</string>
+    <string name="disguise_reveal_button">Een verborgen bericht onthullen</string>
+    <string name="disguise_reveal_hint">Je kunt een ontvangen foto ook vanuit elke app met OSHI delen.</string>
+    <string name="disguise_sheet_for">Alleen %1$s kan het lezen.</string>
+    <string name="disguise_message_hint">Verborgen bericht</string>
+    <string name="disguise_add_file">Klein bestand toevoegen (max. 256 KB)</string>
+    <string name="disguise_remove_file">%1$s verwijderen</string>
+    <string name="disguise_file_too_large">Bestand te groot (max. 256 KB)</string>
+    <string name="disguise_cover_generated">Gegenereerd landschap</string>
+    <string name="disguise_cover_photo">Mijn foto</string>
+    <string name="disguise_capacity">Gebruikt %1$s van %2$s beschikbaar in deze afbeelding</string>
+    <string name="disguise_too_big">Te lang voor deze afbeelding. Maak het bericht korter, verwijder het bestand of kies een grotere foto.</string>
+    <string name="disguise_create_share">Foto maken en delen</string>
+    <string name="disguise_warning_recompress">Stuur het als BESTAND of document. Apps die foto’s opnieuw comprimeren (de meeste sociale netwerken, WhatsApp, Signal of Telegram in fotomodus, schermafbeeldingen) wissen het verborgen bericht.</string>
+    <string name="disguise_warning_forensic">Dit verbergt het bericht voor iedereen die naar de foto kijkt. Forensische analyse kan nog steeds detecteren dat de foto verborgen gegevens bevat, maar kan ze niet lezen of zien voor wie ze bedoeld zijn.</string>
+    <string name="disguise_working">Foto maken…</string>
+    <string name="disguise_failed">Kan de foto niet maken.</string>
+    <string name="reveal_title">Verborgen bericht</string>
+    <string name="reveal_from">Van %1$s</string>
+    <string name="reveal_hidden_on">Verborgen op %1$s</string>
+    <string name="reveal_copy">Tekst kopiëren</string>
+    <string name="reveal_open_file">%1$s openen</string>
+    <string name="reveal_checking">Zoeken naar een verborgen bericht…</string>
+    <string name="reveal_not_found">Geen verborgen bericht voor jou in deze afbeelding. Als het als foto is verstuurd, heeft de app die het vervoerde het mogelijk opnieuw gecomprimeerd — vraag om het als bestand.</string>
+    <string name="reveal_damaged">Deze afbeelding is voor jou gemaakt door %1$s, maar is onderweg gewijzigd en kan niet meer worden gelezen. Vraag om het opnieuw als bestand te sturen.</string>
+    <string name="reveal_unreadable">Kan dit bestand niet lezen.</string>
+    <string name="disguise_photo_short">Vermommen</string>
+</resources>

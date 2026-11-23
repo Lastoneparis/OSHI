@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Titkosított fájl, csak a fiókkulcsoddal olvasható</string>
+    <string name="settings_import_messages">Üzenetek importálása</string>
+    <string name="settings_import_messages_desc">Titkosított .oshiexport fájl visszaállítása</string>
+    <string name="settings_importing">Importálás…</string>
+    <string name="export_media_skipped">%1$d melléklet túl nagy volt, ezért kimaradt az exportból.</string>
+    <string name="import_messages_success">%1$d üzenet importálva (%2$d már megvolt).</string>
+    <string name="import_error_wrong_account">Ez az export egy másik OSHI-fiókhoz tartozik. Először annak a fióknak a kulcsát állítsd vissza.</string>
+    <string name="import_error_damaged">Ez az export sérült vagy módosították.</string>
+    <string name="import_error_other_platform">Ezt az exportot az OSHI %1$s verziója készítette, ide még nem importálható.</string>
+    <string name="import_error_not_export">Ez a fájl nem OSHI-export.</string>
+    <string name="import_error_version">Ezt az exportot az OSHI egy újabb verziója készítette. Frissítsd az alkalmazást, és próbáld újra.</string>
+    <string name="import_error_no_key">Ezen az eszközön nincs fiókkulcs. Először állítsd vissza a fiókodat.</string>
+    <string name="import_error_unreadable">A fájl nem olvasható.</string>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). Translated into
+     the 33 shipped locales (values-*/strings_devsync.xml); add new keys there too. -->
+<resources>
+    <string name="devsync_title">Linked devices</string>
+    <string name="devsync_settings_subtitle">Sync your history directly between your devices</string>
+    <string name="devsync_status_on">Direct sync is on. Your history moves device to device; nothing is stored on the server.</string>
+    <string name="devsync_status_off">Direct sync is off on this device.</string>
+    <string name="devsync_this_device">This device</string>
+    <string name="devsync_device_id">Device ID %1$s</string>
+    <string name="devsync_debug_override">Direct sync (debug override)</string>
+    <string name="devsync_debug_override_desc">Force direct device sync on for this install, whatever the server says</string>
+    <string name="devsync_pending_title">Approve a new device</string>
+    <string name="devsync_pending_body">%1$s (%2$s) wants to receive your history. Check that the other screen shows the same code.</string>
+    <string name="devsync_waiting_body">Waiting for approval on your other device. Check that it shows the same code.</string>
+    <string name="devsync_peer_approved">The other device already approved. Approve here to finish.</string>
+    <string name="devsync_allow">Allow</string>
+    <string name="devsync_deny">Deny</string>
+    <string name="devsync_linked_title">Linked devices</string>
+    <string name="devsync_none_linked">No device linked yet. Open OSHI on your other device, on the same Wi-Fi or online at the same time.</string>
+    <string name="devsync_last_sync">Last sync: %1$s</string>
+    <string name="devsync_never">never</string>
+    <string name="devsync_syncing_now">Syncing now (%1$s)</string>
+    <string name="devsync_remove">Remove</string>
+    <string name="devsync_remove_confirm_title">Remove %1$s?</string>
+    <string name="devsync_remove_confirm_body">It will stop receiving your history. It keeps what it already has.</string>
+    <string name="devsync_sync_now">Sync now</string>
+    <string name="devsync_cancel">Cancel</string>
+    <string name="devsync_alert_unapproved">A device using your account tried to sync: %1$s</string>
+    <string name="devsync_alert_linked">A new device, %1$s, can now receive your history</string>
+</resources>

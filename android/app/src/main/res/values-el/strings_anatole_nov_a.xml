@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Νέα επαφή</string>
+    <string name="conversation_open_contact">Άνοιγμα επαφής</string>
+    <string name="conversation_muted">Ειδοποιήσεις ανενεργές</string>
+    <string name="fab_new_contact">Νέα επαφή</string>
+    <string name="fab_pick_contact_voice">Φωνητική κλήση — επιλέξτε επαφή</string>
+    <string name="fab_pick_contact_video">Βιντεοκλήση — επιλέξτε επαφή</string>
+    <string name="fab_pick_contact_empty">Δεν υπάρχουν ακόμη επαφές. Προσθέστε πρώτα κάποιον.</string>
+</resources>

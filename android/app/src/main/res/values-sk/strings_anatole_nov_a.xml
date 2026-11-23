@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Nový kontakt</string>
+    <string name="conversation_open_contact">Otvoriť kontakt</string>
+    <string name="conversation_muted">Upozornenia vypnuté</string>
+    <string name="fab_new_contact">Nový kontakt</string>
+    <string name="fab_pick_contact_voice">Hlasový hovor — vyberte kontakt</string>
+    <string name="fab_pick_contact_video">Videohovor — vyberte kontakt</string>
+    <string name="fab_pick_contact_empty">Zatiaľ žiadne kontakty. Najprv niekoho pridajte.</string>
+</resources>

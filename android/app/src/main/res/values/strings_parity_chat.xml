@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Control-payload catalog labels. media_file / notification.reaction
+     ported from iOS Localizable.strings. call_generic matches iOS, which
+     renders it unlocalized. -->
+<resources>
+    <string name="media_file">File</string>
+    <string name="notification_reaction">Reacted to a message</string>
+    <string name="call_generic">Call</string>
+</resources>

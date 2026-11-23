@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Strings introduced by the 2026-08-13 device-walkthrough fix pass.
+    Kept in their own file so no existing strings.xml (or any values-* locale
+    folder) is touched.
+-->
+<resources>
+
+    <!-- Settings → Export Messages (P0: FileUriExposedException crash) -->
+    <string name="export_failed_with_reason">Export failed: %1$s</string>
+    <string name="export_share_no_app">No app on this device can receive the export file.</string>
+
+    <!--
+        Honest send failure (P0: sends failed silently). Used as the accessibility
+        label on the conversation-row status icon, so a screen reader never
+        announces a failed message as "Sent".
+    -->
+    <string name="message_status_failed">Not sent</string>
+
+    <!--
+        1:1 chat empty state. Values copied verbatim from iOS
+        OSHI/en.lproj/Localizable.strings:4562-4563 (rendered by
+        OSHI/ChatView.swift:1494-1521).
+    -->
+    <string name="chat_empty_title">Messages are end-to-end encrypted</string>
+    <string name="chat_empty_subtitle">No one outside this chat, not even OSHI, can read them. Say hi 👋</string>
+
+    <!--
+        Delivery badge. The old keys were wrong: `delivery_badge_vps` literally
+        read "IPFS" (strings.xml:1013), so a message logcat reported as
+        "📤 Message sent via VPS" was badged IPFS on screen. Values below match
+        iOS OSHI/en.lproj/Localizable.strings:619-632, which is also where the
+        outgoing/incoming split comes from (DeliveryMethodBadge.swift:71-90).
+        Note iOS maps BOTH its `.ipfs` and its no-method case to the same
+        "…via Internet" wording — so do we.
+    -->
+    <string name="delivery_sent_internet">Sent via Internet</string>
+    <string name="delivery_received_internet">Via Internet</string>
+    <string name="delivery_sent_mesh">Sent via Mesh</string>
+    <string name="delivery_received_mesh">Via Mesh</string>
+    <string name="delivery_sent_tor">Sent via Tor</string>
+    <string name="delivery_received_tor">Via Tor</string>
+    <string name="delivery_status_failed">Failed</string>
+
+    <!-- New Group: explain why Create is disabled instead of looking broken -->
+    <string name="group_create_needs_member">Add at least one member to create the group.</string>
+
+    <!--
+        Offline-map continent section headers. The live manifest sends lowercase
+        snake_case keys (africa / americas / asia / europe / middle_east /
+        north_america / oceania / south_america), which used to be printed raw.
+    -->
+    <string name="map_continent_africa">Africa</string>
+    <string name="map_continent_americas">Americas</string>
+    <string name="map_continent_asia">Asia</string>
+    <string name="map_continent_europe">Europe</string>
+    <string name="map_continent_middle_east">Middle East</string>
+    <string name="map_continent_north_america">North America</string>
+    <string name="map_continent_oceania">Oceania</string>
+    <string name="map_continent_south_america">South America</string>
+
+    <!-- Offline maps -->
+    <string name="offline_map_size_unknown">Size unavailable</string>
+    <string name="offline_map_routing_unavailable">Turn-by-turn routing isn\'t available for this area</string>
+    <string name="offline_map_routing_unavailable_body">OSHI has no road graph covering this route, so it can\'t give you real directions. Download the offline region that contains both points, then try again.</string>
+
+</resources>

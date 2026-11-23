@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">ملف مشفّر، لا يمكن قراءته إلا بمفتاح حسابك</string>
+    <string name="settings_import_messages">استيراد الرسائل</string>
+    <string name="settings_import_messages_desc">استعادة ملف ‎.oshiexport مشفّر</string>
+    <string name="settings_importing">جارٍ الاستيراد…</string>
+    <string name="export_media_skipped">عدد المرفقات المستبعدة من التصدير لكبر حجمها: %1$d.</string>
+    <string name="import_messages_success">تم استيراد %1$d رسالة (%2$d موجودة مسبقًا).</string>
+    <string name="import_error_wrong_account">هذا التصدير يخص حساب OSHI آخر. استعد مفتاح ذلك الحساب أولًا.</string>
+    <string name="import_error_damaged">هذا التصدير تالف أو تم تعديله.</string>
+    <string name="import_error_other_platform">تم إنشاء هذا التصدير بواسطة OSHI لـ %1$s ولا يمكن استيراده هنا بعد.</string>
+    <string name="import_error_not_export">هذا الملف ليس تصديرًا من OSHI.</string>
+    <string name="import_error_version">تم إنشاء هذا التصدير بإصدار أحدث من OSHI. حدّث التطبيق وحاول مرة أخرى.</string>
+    <string name="import_error_no_key">لا يوجد مفتاح حساب على هذا الجهاز. استعد حسابك أولًا.</string>
+    <string name="import_error_unreadable">تعذّرت قراءة الملف.</string>
+</resources>

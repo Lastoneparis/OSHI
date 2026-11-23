@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore 무전기</string>
+    <string name="meshcore_none">MeshCore 무전기 없음</string>
+    <string name="meshcore_scan">MeshCore 무전기 검색</string>
+    <string name="meshcore_ready">연결됨 — OSHI 메시지는 #oshi-bridge 사용</string>
+    <string name="meshcore_forget">이 MeshCore 무전기 삭제</string>
+    <string name="meshcore_bridge">브리지 Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">MeshCore 무전기는 OSHI 메시지를 MeshCore 중계기를 통해 전달합니다. MeshCore companion 펌웨어가 필요하며 처음 연결할 때 PIN을 묻습니다. OSHI는 빈 슬롯에 채널 #oshi-bridge 하나만 추가하고 다른 채널은 절대 바꾸지 않습니다.</string>
+    <string name="meshcore_bridge_footer">Meshtastic 무전기와 MeshCore 무전기가 모두 연결되어 있으면 OSHI가 실행되는 동안 이 휴대폰이 두 네트워크 사이에서 OSHI 메시지를 중계합니다.</string>
+    <string name="meshcore_no_free_channel">이 무전기의 채널 슬롯 8개가 모두 사용 중입니다. OSHI가 #oshi-bridge를 추가할 수 있도록 MeshCore 앱에서 하나를 비워 주세요.</string>
+</resources>

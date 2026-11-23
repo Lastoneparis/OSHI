@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Frissítsd ezt a rádiót OSHI Meshre</string>
+    <string name="oshimesh_upgrade_body">Ingyenes és nyílt forráskódú. Megtartja a régiót, a csatornákat, a kulcsokat és a névjegyeket, a Meshtastic hálózaton marad, és hozzáadja a hosszú üzeneteket, a kézbesítési visszaigazolást és a 72 órán át megőrzött üzeneteket, ha valaki offline.</string>
+    <string name="oshimesh_upgrade_share">Flasher-link küldése egy számítógépre</string>
+    <string name="oshimesh_upgrade_why">Amit az OSHI Mesh hozzáad</string>
+    <string name="oshimesh_upgrade_footer">A flasher Chrome-ban vagy Edge-ben fut számítógépen, USB-n keresztül. A „Beállítások megtartása” lehetőséggel a rádió nagyjából egy perc alatt frissül.</string>
+</resources>

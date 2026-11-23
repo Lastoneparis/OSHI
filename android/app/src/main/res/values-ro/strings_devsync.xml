@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Dispozitive asociate</string>
+    <string name="devsync_settings_subtitle">Sincronizează istoricul direct între dispozitivele tale</string>
+    <string name="devsync_status_on">Sincronizarea directă este activată. Istoricul trece de la un dispozitiv la altul; nimic nu este stocat pe server.</string>
+    <string name="devsync_status_off">Sincronizarea directă este dezactivată pe acest dispozitiv.</string>
+    <string name="devsync_this_device">Acest dispozitiv</string>
+    <string name="devsync_device_id">ID dispozitiv %1$s</string>
+    <string name="devsync_debug_override">Sincronizare directă (forțare debug)</string>
+    <string name="devsync_debug_override_desc">Forțează sincronizarea directă pe această instalare, indiferent ce spune serverul</string>
+    <string name="devsync_pending_title">Aprobă un dispozitiv nou</string>
+    <string name="devsync_pending_body">%1$s (%2$s) vrea să primească istoricul tău. Verifică dacă celălalt ecran afișează același cod.</string>
+    <string name="devsync_waiting_body">Se așteaptă aprobarea pe celălalt dispozitiv. Verifică dacă afișează același cod.</string>
+    <string name="devsync_peer_approved">Celălalt dispozitiv a aprobat deja. Aprobă aici pentru a finaliza.</string>
+    <string name="devsync_allow">Permite</string>
+    <string name="devsync_deny">Refuză</string>
+    <string name="devsync_linked_title">Dispozitive asociate</string>
+    <string name="devsync_none_linked">Niciun dispozitiv asociat încă. Deschide OSHI pe celălalt dispozitiv, în aceeași rețea Wi-Fi sau online în același timp.</string>
+    <string name="devsync_last_sync">Ultima sincronizare: %1$s</string>
+    <string name="devsync_never">niciodată</string>
+    <string name="devsync_syncing_now">Se sincronizează acum (%1$s)</string>
+    <string name="devsync_remove">Elimină</string>
+    <string name="devsync_remove_confirm_title">Elimini %1$s?</string>
+    <string name="devsync_remove_confirm_body">Nu va mai primi istoricul tău. Păstrează ce are deja.</string>
+    <string name="devsync_sync_now">Sincronizează acum</string>
+    <string name="devsync_cancel">Anulează</string>
+    <string name="devsync_alert_unapproved">Un dispozitiv care folosește contul tău a încercat să se sincronizeze: %1$s</string>
+    <string name="devsync_alert_linked">Un dispozitiv nou, %1$s, poate primi acum istoricul tău</string>
+</resources>

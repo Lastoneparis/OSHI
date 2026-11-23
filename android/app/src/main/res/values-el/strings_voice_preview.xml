@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">Εφέ φωνής</string>
+    <string name="voice_preview_original">Αρχική φωνή</string>
+    <string name="voice_preview_processing">Εφαρμογή %1$s…</string>
+    <string name="voice_preview_failed">Το %1$s απέτυχε, διατηρήθηκε το αρχικό</string>
+    <string name="voice_preview_view_once_hint">Αναπαράγεται μόνο μία φορά και μετά εξαφανίζεται</string>
+    <string name="voice_preview_listening">Αναπαραγωγή…</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">Jam tangan pintar</string>
+    <string name="settings_smartwatch_subtitle">Baca dan balas obrolan Anda dari jam Wear OS. Enkripsi dan pengiriman tetap di ponsel ini; jam tidak menyimpan apa pun.</string>
+</resources>

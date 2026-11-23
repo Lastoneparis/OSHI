@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Mesajları ve grupları birleştir</string>
+    <string name="chats_merged_setting_desc">Tüm sohbetleriniz için tek liste; kişiler ve gruplar için filtrelerle.</string>
+    <string name="chats_merged_filter_all">Tümü</string>
+    <string name="chats_merged_filter_unread">Okunmamış</string>
+    <string name="chats_merged_filter_groups">Gruplar</string>
+    <string name="chats_merged_filter_people">Kişiler</string>
+    <string name="chats_merged_new_title">Yeni</string>
+    <string name="chats_merged_new_chat">Yeni sohbet</string>
+    <string name="chats_merged_new_chat_desc">QR kod, bağlantı veya anahtarla birini ekleyin</string>
+    <string name="chats_merged_new_group">Yeni grup</string>
+    <string name="chats_merged_new_group_desc">Kişilerinizle bir grup başlatın</string>
+    <string name="chats_merged_discover">Herkese açık kanalları keşfet</string>
+    <string name="chats_merged_discover_desc">Çevrenizdeki herkese açık gruplara katılın</string>
+    <string name="chats_merged_scan_invite">Davet tara</string>
+    <string name="chats_merged_scan_invite_desc">QR koddan bir gruba katılın veya kişi ekleyin</string>
+    <string name="chats_merged_scan_not_invite">Bu QR kod bir OSHI daveti değil</string>
+    <string name="chats_merged_calls_header">Birini ara</string>
+    <string name="chats_merged_teaser_title">Herkese açık bir kanala katılın</string>
+    <string name="chats_merged_teaser_body">Yakındaki herkese açık gruplar internet olmadan da çalışır. Çevrenizde kimler olduğuna bakın.</string>
+    <string name="chats_merged_teaser_cta">Keşfet</string>
+    <string name="chats_merged_nearby_title">Yakında grup</string>
+    <string name="chats_merged_empty_unread">Hepsini okudunuz</string>
+    <string name="chats_merged_empty_people">Henüz sohbet yok</string>
+    <string name="chats_merged_group_a11y">Grup</string>
+</resources>

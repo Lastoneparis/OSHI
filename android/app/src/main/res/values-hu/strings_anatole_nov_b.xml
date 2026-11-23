@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Kerek videoüzenet, max. 15 mp</string>
+    <string name="settings_panic_wipe_title">Törlés a logó koppintásával</string>
+    <string name="settings_panic_wipe_subtitle">Három gyors koppintás az OSHI logóra megerősítés nélkül töröl minden üzenetet, kulcsot és fájlt ezen a telefonon. Kikapcsolva, amíg be nem kapcsolja.</string>
+    <string name="map_layer_title">Térképtípus</string>
+    <string name="map_layer_standard">Normál</string>
+    <string name="map_layer_terrain">Domborzat</string>
+    <string name="map_layer_satellite">Műhold</string>
+    <string name="map_layer_standard_desc">OSHI térkép, a letöltött régiókkal offline is működik</string>
+    <string name="map_layer_third_party_desc" formatted="true">Csak online. Közvetlenül innen töltődik be: %1$s, amely látja a nézett területet.</string>
+    <string name="map_layer_offline_only_note">A „Csak offline térképek” be van kapcsolva: ez a réteg csak a már megtekintett csempéket mutatja.</string>
+</resources>

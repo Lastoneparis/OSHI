@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Video message</string>
+    <string name="video_note_title">Video message</string>
+    <string name="video_note_a11y" formatted="true">Video message, %1$s</string>
+    <string name="video_note_play">Play</string>
+    <string name="video_note_pause">Pause</string>
+    <string name="video_note_record_button">Record a video message</string>
+    <string name="video_note_hint">Tap to record or hold · 15 s max</string>
+    <string name="video_note_record">Start recording</string>
+    <string name="video_note_stop">Stop recording</string>
+    <string name="video_note_flip">Switch camera</string>
+    <string name="video_note_close">Close</string>
+    <string name="video_note_review_title">Your video message</string>
+    <string name="video_note_preparing">Preparing…</string>
+    <string name="video_note_discard">Delete</string>
+    <string name="video_note_retake">Retake</string>
+    <string name="video_note_send">Send video message</string>
+    <string name="video_note_too_short">Too short. Tap to record, or hold the button.</string>
+    <string name="video_note_camera_denied">Camera access is needed to record a video message.</string>
+</resources>

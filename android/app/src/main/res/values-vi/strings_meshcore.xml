@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">Bộ đàm MeshCore</string>
+    <string name="meshcore_none">Không có bộ đàm MeshCore</string>
+    <string name="meshcore_scan">Tìm bộ đàm MeshCore</string>
+    <string name="meshcore_ready">Đã kết nối — tin nhắn OSHI dùng #oshi-bridge</string>
+    <string name="meshcore_forget">Quên bộ đàm MeshCore này</string>
+    <string name="meshcore_bridge">Cầu nối Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">Bộ đàm MeshCore chuyển tin nhắn OSHI của bạn qua các trạm lặp MeshCore. Nó phải chạy firmware MeshCore companion và sẽ hỏi mã PIN ở lần đầu. OSHI chỉ thêm một kênh, #oshi-bridge, vào ô trống và không bao giờ thay đổi các kênh khác của bạn.</string>
+    <string name="meshcore_bridge_footer">Khi cả bộ đàm Meshtastic và MeshCore đều được kết nối, điện thoại này chuyển tiếp tin nhắn OSHI giữa hai mạng trong lúc OSHI đang mở.</string>
+    <string name="meshcore_no_free_channel">Cả 8 ô kênh của bộ đàm này đều đã dùng. Hãy giải phóng một ô trong ứng dụng MeshCore để OSHI thêm được #oshi-bridge.</string>
+</resources>

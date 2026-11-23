@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Lets the OSHI watch app find this phone app over the
+     Wearable Data Layer (CapabilityClient). Advertising it reveals nothing beyond
+     "OSHI is installed", and only to our own watch app. -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@array/android_wear_capabilities">
+    <string-array name="android_wear_capabilities" translatable="false">
+        <item>oshi_phone_bridge</item>
+    </string-array>
+</resources>

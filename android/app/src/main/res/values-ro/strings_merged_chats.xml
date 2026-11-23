@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Combină mesajele și grupurile</string>
+    <string name="chats_merged_setting_desc">O singură listă pentru toate conversațiile tale, cu filtre pentru persoane și grupuri.</string>
+    <string name="chats_merged_filter_all">Toate</string>
+    <string name="chats_merged_filter_unread">Necitite</string>
+    <string name="chats_merged_filter_groups">Grupuri</string>
+    <string name="chats_merged_filter_people">Persoane</string>
+    <string name="chats_merged_new_title">Nou</string>
+    <string name="chats_merged_new_chat">Conversație nouă</string>
+    <string name="chats_merged_new_chat_desc">Adaugă pe cineva prin cod QR, link sau cheie</string>
+    <string name="chats_merged_new_group">Grup nou</string>
+    <string name="chats_merged_new_group_desc">Creează un grup cu contactele tale</string>
+    <string name="chats_merged_discover">Descoperă canale publice</string>
+    <string name="chats_merged_discover_desc">Alătură-te grupurilor publice din jurul tău</string>
+    <string name="chats_merged_scan_invite">Scanează o invitație</string>
+    <string name="chats_merged_scan_invite_desc">Alătură-te unui grup sau adaugă un contact dintr-un cod QR</string>
+    <string name="chats_merged_scan_not_invite">Acest cod QR nu este o invitație OSHI</string>
+    <string name="chats_merged_calls_header">Sună pe cineva</string>
+    <string name="chats_merged_teaser_title">Alătură-te unui canal public</string>
+    <string name="chats_merged_teaser_body">Grupurile publice din apropiere funcționează chiar și fără internet. Vezi cine e în jurul tău.</string>
+    <string name="chats_merged_teaser_cta">Descoperă</string>
+    <string name="chats_merged_nearby_title">Grup în apropiere</string>
+    <string name="chats_merged_empty_unread">Ești la zi</string>
+    <string name="chats_merged_empty_people">Nicio conversație încă</string>
+    <string name="chats_merged_group_a11y">Grup</string>
+</resources>

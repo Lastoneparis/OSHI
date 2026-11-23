@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    __OSHI_O_REACTION_2026_11_15__ The OSHI "O" drawn wherever the reaction
+    "⭕" (U+2B55, no variation selector) is rendered: quick bar, reaction chips,
+    conversation-list preview. The wire value stays the plain "⭕", so a client
+    that predates this (iOS 1.0.43, older Android) shows a red circle.
+
+    Variant for light surfaces: the brand gradient of the launcher background (#7A3BFF -> #3D0FB0), so it reads as the app icon's own purple.
+
+    Geometry is the brand mark of drawable/ic_launcher_monochrome.xml and
+    drawable/ic_notification.xml (bold ring + speech-bubble tail at the lower
+    left), fitted into a 24x24 emoji cell with the same transform as the
+    notification icon: glyph box 1.89..22.10 x 1.00..23.00, i.e. the full
+    height of an emoji glyph with ~1dp clearance.
+
+    No tint: ReactionGlyph picks this file or its _dark twin from the surface
+    the glyph sits on (the chat thread can pin its own light/dark scheme, so
+    drawable-night/ would follow the system and be wrong there).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <group
+        android:pivotX="0"
+        android:pivotY="0"
+        android:scaleX="0.3742"
+        android:scaleY="0.3742"
+        android:translateX="-8.2068"
+        android:translateY="-7.6064">
+
+        <!-- The ring: r 27 and r 15 about (54,50), evenOdd punches the counter. -->
+        <path
+            android:fillType="evenOdd"
+            android:pathData="M54,23 A27,27 0 0 1 81,50 A27,27 0 0 1 54,77 A27,27 0 0 1 27,50 A27,27 0 0 1 54,23 Z M54,35 A15,15 0 0 1 69,50 A15,15 0 0 1 54,65 A15,15 0 0 1 39,50 A15,15 0 0 1 54,35 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:type="linear"
+                    android:startX="27"
+                    android:startY="23"
+                    android:endX="81"
+                    android:endY="82">
+                    <item android:offset="0.0" android:color="#FF7A3BFF"/>
+                    <item android:offset="0.5" android:color="#FF5616EC"/>
+                    <item android:offset="1.0" android:color="#FF3D0FB0"/>
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- The tail, its own path so it unions with the ring. -->
+        <path
+            android:pathData="M49.31,76.59 Q43.80,81.38 37.10,81.79 Q39.84,68.12 33.32,67.36 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:type="linear"
+                    android:startX="27"
+                    android:startY="23"
+                    android:endX="81"
+                    android:endY="82">
+                    <item android:offset="0.0" android:color="#FF7A3BFF"/>
+                    <item android:offset="0.5" android:color="#FF5616EC"/>
+                    <item android:offset="1.0" android:color="#FF3D0FB0"/>
+                </gradient>
+            </aapt:attr>
+        </path>
+    </group>
+</vector>

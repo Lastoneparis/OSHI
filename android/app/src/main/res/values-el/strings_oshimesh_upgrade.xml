@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Αναβάθμιση αυτού του ασυρμάτου σε OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Δωρεάν και ανοιχτού κώδικα. Κρατά την περιοχή, τα κανάλια, τα κλειδιά και τις επαφές σας, μένει στο δίκτυο Meshtastic και προσθέτει μεγάλα μηνύματα, επιβεβαιώσεις παράδοσης και μηνύματα που φυλάσσονται 72 ώρες όταν κάποιος είναι εκτός σύνδεσης.</string>
+    <string name="oshimesh_upgrade_share">Αποστολή του συνδέσμου εγκατάστασης σε υπολογιστή</string>
+    <string name="oshimesh_upgrade_why">Τι προσθέτει το OSHI Mesh</string>
+    <string name="oshimesh_upgrade_footer">Ο εγκαταστάτης λειτουργεί σε Chrome ή Edge σε υπολογιστή, μέσω USB. Επιλέξτε «Διατήρηση ρυθμίσεων» για να ενημερώσετε αυτόν τον ασύρματο σε περίπου ένα λεπτό.</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">في انتظار الاتصال المموّه</string>
+    <string name="privacy_disguise_title">التمويه</string>
+    <string name="privacy_disguise_subtitle">تمويه حركة البيانات · إخفاء رسالة داخل صورة</string>
+    <string name="cover_switch_title">تمويه حركة بيانات OSHI</string>
+    <string name="cover_switch_caption">تنتقل رسائلك ومرفقاتك الفردية داخل طلبات مُبطَّنة تشبه إحصاءات الويب العادية، فيصبح التمييز بين أحجامها وتوقيتاتها أصعب. إذا فشل الاتصال المموّه، تنتظر الرسائل — ولا تُرسَل أبدًا دون تمويه.</string>
+    <string name="cover_not_hidden">ما يظل مرئيًا: أنك تتصل بـ oshi-messenger.com (اسم الخادم وبصمة TLS)، وكذلك رسائل المجموعات والمكالمات وتنبيهات الإيقاظ (push) وعمليات التحقق من البريد الجديد، فهذه غير مموّهة. هذا ليس إخفاءً للهوية ولا يتجاوز حجب خادم OSHI — لذلك استخدم «التمويه كصورة».</string>
+    <string name="disguise_photo_title">التمويه كصورة</string>
+    <string name="disguise_photo_explainer">أخفِ رسالة مشفّرة من طرف إلى طرف لجهة اتصال واحدة داخل صورة عادية المظهر، ثم أرسل الصورة عبر أي تطبيق أو بريد إلكتروني أو تخزين سحابي — مفيد عندما يكون OSHI نفسه محجوبًا. في محادثة فردية: + ← التمويه كصورة.</string>
+    <string name="disguise_reveal_button">كشف رسالة مخفية</string>
+    <string name="disguise_reveal_hint">يمكنك أيضًا مشاركة صورة مستلمة إلى OSHI من أي تطبيق.</string>
+    <string name="disguise_sheet_for">لا يستطيع قراءتها إلا %1$s.</string>
+    <string name="disguise_message_hint">رسالة مخفية</string>
+    <string name="disguise_add_file">إضافة ملف صغير (256 كيلوبايت كحد أقصى)</string>
+    <string name="disguise_remove_file">إزالة %1$s</string>
+    <string name="disguise_file_too_large">الملف كبير جدًا (256 كيلوبايت كحد أقصى)</string>
+    <string name="disguise_cover_generated">منظر طبيعي مُولَّد</string>
+    <string name="disguise_cover_photo">صورتي</string>
+    <string name="disguise_capacity">يستخدم %1$s من %2$s متاحة في هذه الصورة</string>
+    <string name="disguise_too_big">طويلة جدًا بالنسبة لهذه الصورة. اختصر الرسالة أو أزل الملف أو اختر صورة أكبر.</string>
+    <string name="disguise_create_share">إنشاء الصورة ومشاركتها</string>
+    <string name="disguise_warning_recompress">أرسلها كملف أو مستند. التطبيقات التي تعيد ضغط الصور (معظم الشبكات الاجتماعية، وWhatsApp أو Signal أو Telegram في وضع الصور، ولقطات الشاشة) تمحو الرسالة المخفية.</string>
+    <string name="disguise_warning_forensic">هذا يُخفي الرسالة عن أي شخص ينظر إلى الصورة. ومع ذلك يمكن للتحليل الجنائي الرقمي أن يكتشف أن الصورة تحمل بيانات مخفية، لكنه لا يستطيع قراءتها ولا معرفة لمن هي.</string>
+    <string name="disguise_working">جارٍ إنشاء الصورة…</string>
+    <string name="disguise_failed">تعذّر إنشاء الصورة.</string>
+    <string name="reveal_title">رسالة مخفية</string>
+    <string name="reveal_from">من %1$s</string>
+    <string name="reveal_hidden_on">أُخفيت في %1$s</string>
+    <string name="reveal_copy">نسخ النص</string>
+    <string name="reveal_open_file">فتح %1$s</string>
+    <string name="reveal_checking">جارٍ البحث عن رسالة مخفية…</string>
+    <string name="reveal_not_found">لا توجد رسالة مخفية لك في هذه الصورة. إذا أُرسلت كصورة، فربما أعاد التطبيق الذي نقلها ضغطها — اطلب إرسالها كملف.</string>
+    <string name="reveal_damaged">أنشأ %1$s هذه الصورة لك، لكنها تعرّضت للتعديل في الطريق ولم تعد قابلة للقراءة. اطلب إعادة إرسالها كملف.</string>
+    <string name="reveal_unreadable">تعذّرت قراءة هذا الملف.</string>
+    <string name="disguise_photo_short">تمويه</string>
+</resources>

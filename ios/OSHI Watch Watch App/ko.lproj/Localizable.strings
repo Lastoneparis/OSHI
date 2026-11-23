@@ -1,0 +1,136 @@
+/* OSHI Watch App - Korean */
+
+/* Status */
+"watch.status.connected" = "연결됨";
+"watch.status.not_reachable" = "iPhone에 연결할 수 없음";
+
+/* Navigation */
+"watch.open_iphone" = "iPhone에서 OSHI 열기";
+
+/* Common */
+"common.refresh" = "새로고침";
+"common.cancel" = "취소";
+
+/* Messages */
+"watch.loading_messages" = "메시지 불러오는 중…";
+"watch.no_messages" = "메시지 없음";
+"watch.sending" = "전송 중…";
+"watch.dictate" = "받아쓰기";
+"watch.voice_message" = "음성 메시지";
+"watch.reply" = "답장";
+"watch.media_attachment" = "미디어 첨부";
+
+/* Quick Replies */
+"watch.quick.yes" = "예";
+"watch.quick.no" = "아니요";
+"watch.quick.ok" = "확인";
+"watch.quick.later" = "나중에";
+"watch.quick.omw" = "가고 있어요!";
+"watch.quick.thanks" = "감사합니다";
+
+/* Errors */
+"watch.error.send_failed" = "메시지 전송 실패";
+"watch.send.queued" = "iPhone 대기 중";
+"watch.error.not_reachable" = "iPhone에 연결할 수 없음";
+
+/* Calls */
+"watch.call.incoming_video" = "영상 통화 수신 중";
+"watch.call.incoming_voice" = "음성 통화 수신 중";
+"watch.call.video" = "영상 통화";
+"watch.call.voice" = "음성 통화";
+"watch.call.connecting" = "연결 중…";
+"watch.call.ringing" = "벨 울리는 중…";
+"watch.call.in_call" = "통화 중";
+"watch.call.ended" = "통화 종료";
+"watch.call.start" = "통화 시작";
+"watch.call.unknown" = "알 수 없음";
+
+/* Call Actions */
+"call.action.accept" = "수락";
+"call.action.decline" = "거절";
+
+/* Notifications */
+"watch.notification.new_message" = "새 메시지";
+
+/* Call Summary */
+"call.outgoing" = "발신 통화";
+"call.incoming" = "수신 통화";
+"call.no.answer" = "응답 없음";
+"call.declined" = "거절됨";
+"call.missed" = "부재중 통화";
+"call.video.outgoing" = "발신 영상 통화";
+"call.video.incoming" = "수신 영상 통화";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "답장";
+"send" = "전송";
+"type_message" = "메시지 입력";
+"notification.action.mark_read" = "읽음 표시";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "채팅";
+"w2.empty.title" = "아직 채팅이 없습니다";
+"w2.empty.body" = "iPhone의 OSHI 채팅이 여기에 표시됩니다.";
+"w2.disabled.title" = "스마트워치가 꺼져 있음";
+"w2.disabled.body" = "iPhone의 OSHI에서 켜세요: 설정 › 연결된 기기 › 스마트워치.";
+"w2.locked.title" = "OSHI가 잠겨 있음";
+"w2.locked.body" = "iPhone에서 OSHI 잠금을 해제한 다음 다시 시도하세요.";
+"w2.unavailable.title" = "OSHI가 준비되지 않음";
+"w2.unavailable.body" = "iPhone에서 OSHI를 한 번 연 다음 다시 시도하세요.";
+"w2.nophone.title" = "iPhone에 연결할 수 없음";
+"w2.nophone.body" = "OSHI가 설치된 iPhone을 가까이에 두세요.";
+"w2.error.title" = "문제가 발생했습니다";
+"w2.error.body" = "iPhone이 응답하지 않았습니다. 다시 시도하세요.";
+"w2.notfound" = "이 채팅은 더 이상 iPhone에 없습니다.";
+"w2.retry" = "재시도";
+"w2.reply" = "답장";
+"w2.you" = "나";
+"w2.you_prefix" = "나: %@";
+"w2.react" = "반응";
+"w2.speak_or_type" = "말하거나 입력";
+"w2.quick_replies" = "빠른 답장";
+"w2.sending" = "보내는 중…";
+"w2.sent" = "보냄";
+"w2.send_failed" = "보내지 못했습니다. iPhone에서 다시 시도하세요.";
+"w2.read_only" = "이 채팅에는 답장할 수 없습니다.";
+"w2.view_once" = "👁 한 번만 보기 — iPhone에서 여세요";
+"w2.view_once_short" = "👁 한 번만 보기";
+"w2.e2e" = "iPhone에서 종단간 암호화됨";
+"w2.replying_to" = "답장 대상";
+"w2.loading" = "로드 중…";
+"w2.unread_count" = "읽지 않음 %d개";
+"w2.all_read" = "모두 읽음";
+"w2.call" = "전화";
+"w2.media.photo" = "📷 사진";
+"w2.media.video" = "🎥 동영상";
+"w2.media.voice" = "🎤 음성";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 파일";
+"w2.media.location" = "📍 위치";
+"w2.media.contact" = "👤 연락처";
+"w2.qr.on_my_way" = "가는 중이야";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "나중에 전화할게";
+"w2.qr.thanks" = "고마워!";
+"w2.qr.yes" = "예";
+"w2.qr.no" = "아니요";
+"w2.qr.busy" = "지금 통화 못 해";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "사랑";
+"w2.r.laugh" = "웃음";
+"w2.r.cry" = "슬픔";
+"w2.r.thumbs" = "좋아요";
+"w2.r.wow" = "와우";
+"w2.r.fire" = "불";
+"w2.mute" = "음소거";
+"w2.end_call" = "통화 종료";
+"w2.speaker" = "스피커";
+"w2.widget.off" = "iPhone의 OSHI에서 스마트워치를 켜세요";
+"w2.widget.off_short" = "끔";
+"w2.widget.locked" = "iPhone에서 OSHI 잠금 해제";
+"w2.widget.locked_short" = "잠김";
+"w2.widget.open" = "OSHI 열기";
+"w2.widget.name" = "OSHI 읽지 않음";
+"w2.widget.desc" = "읽지 않은 수와 보낸 사람 — 메시지 내용은 표시 안 함.";

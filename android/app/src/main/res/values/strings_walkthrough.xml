@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Strings added while fixing the 2026-08-13 on-device walkthrough findings
+  (parity/verify/2026-08-13-device-walkthrough.md, finding 6).
+
+  Every entry here replaced a user-visible English literal hardcoded in a
+  Compose screen of a 34-locale app. Kept in a separate file so the existing
+  strings*.xml stay untouched and the delta is easy to hand to translation.
+
+  English copy is taken verbatim from the iOS Localizable.strings key where one
+  exists (cited per block); otherwise it preserves the exact wording the Android
+  literal already shipped, so no locale sees a copy change it did not ask for.
+-->
+<resources>
+
+    <!-- ══ Conversations first-run empty state ═══════════════════════════════
+         iOS EmptyStateView (MessagesListView.swift:1664). Copy identical to
+         en.lproj/Localizable.strings:4573-4579. -->
+    <string name="onboarding_start_title">You\'re all set!</string>
+    <string name="onboarding_start_subtitle">No phone number, no email, no account. Just you — and it\'s private by design.</string>
+    <string name="onboarding_start_step1">Send them a link — or scan each other\'s code if you\'re together.</string>
+    <string name="onboarding_start_step2">You\'re instantly connected — no sign-up, no waiting.</string>
+    <string name="onboarding_start_step3">Message, call, and share — always end-to-end encrypted.</string>
+    <string name="onboarding_start_show_code">Show my code</string>
+    <string name="onboarding_start_scan_code">Scan a friend\'s code</string>
+
+    <!-- The identity-backup prompt needed NO new key: `backup_prompt_title` and
+         `backup_prompt_message` already shipped translated in strings.xml:1510-1511
+         and MainActivity was simply not using them. -->
+
+    <!-- ══ New Message composer ══════════════════════════════════════════════
+         iOS NewMessageView.swift:498-511 (attach menu), :540 (attachment count),
+         :549 (clear all), :151 (sent). -->
+    <string name="new_composer_attach_single">Attach photo</string>
+    <string name="new_composer_attach_multiple">Attach multiple photos</string>
+    <string name="new_composer_clear_all">Clear all</string>
+    <string name="new_composer_remove_attachment">Remove attachment</string>
+    <plurals name="new_composer_attachments">
+        <item quantity="one">%d attachment</item>
+        <item quantity="other">%d attachments</item>
+    </plurals>
+    <string name="new_message_sent">Message sent</string>
+    <string name="new_message_send_failed">Message could not be sent. Please try again.</string>
+    <string name="new_open_conversation">Open conversation instead</string>
+
+    <!-- ══ Clipboard labels (surfaced by the system clipboard UI) ════════════ -->
+    <string name="clipboard_label_oshi_key">OSHI key</string>
+    <string name="clipboard_label_oshi_address">OSHI address</string>
+    <string name="clipboard_label_oshi_public_key">OSHI public key</string>
+
+    <!-- ══ Discover Groups state machine ═════════════════════════════════════ -->
+    <string name="discover_groups_scanning_title">Scanning for Groups</string>
+    <string name="discover_groups_scanning_body">Looking for public groups broadcast by nearby devices via mesh network…</string>
+    <string name="discover_groups_scanning_hint">Make sure Bluetooth and Wi-Fi are enabled</string>
+    <string name="discover_groups_none_title">No groups found</string>
+    <string name="discover_groups_none_body">No public groups are being broadcast nearby right now. Move closer to other OSHI users and try again.</string>
+    <string name="discover_groups_error_title">Mesh network is off</string>
+    <string name="discover_groups_error_body">Public groups are discovered over the local mesh. Enable Bluetooth and Wi-Fi, then try again.</string>
+    <string name="discover_groups_retry">Try again</string>
+    <plurals name="discover_groups_found">
+        <item quantity="one">%d group found nearby</item>
+        <item quantity="other">%d groups found nearby</item>
+    </plurals>
+
+    <!-- ══ Portal tabs (were derived from Kotlin enum names) ═════════════════ -->
+    <string name="portal_tab_channels">Channels</string>
+    <string name="portal_tab_bots">Bots</string>
+    <string name="portal_tab_apps">Apps</string>
+
+    <!-- ══ Settings ══════════════════════════════════════════════════════════ -->
+    <string name="settings_always_use_relay">Always use relay server</string>
+    <string name="settings_always_use_relay_desc">Skip direct P2P probing; route calls through the TURN relay</string>
+    <!-- "<status> · <last sync>", e.g. "Connected · 2 min ago" -->
+    <string name="settings_status_dot_separator" translatable="false">%1$s · %2$s</string>
+
+    <!-- ══ Nearby peers ══════════════════════════════════════════════════════ -->
+    <string name="peers_none_found_title">No Peers Found</string>
+    <string name="peers_none_found_body">Make sure nearby devices have\nOSHI open with mesh enabled</string>
+    <string name="peers_start_scanning">Start Scanning</string>
+    <string name="peers_mesh_info_title">Mesh Network</string>
+    <string name="peers_mesh_info_about">About</string>
+    <string name="peers_mesh_info_what_title">What is Mesh?</string>
+    <string name="peers_mesh_info_what_desc">Mesh networking allows direct device-to-device communication without internet. Messages hop between devices to reach distant recipients.</string>
+    <string name="peers_mesh_info_features">Features</string>
+    <string name="peers_mesh_info_range_title">Range</string>
+    <string name="peers_mesh_info_range_desc">Up to ~10km via multi-hop relay (200m per hop, max 50 hops)</string>
+    <string name="peers_mesh_info_connection_title">Connection</string>
+    <string name="peers_mesh_info_connection_desc">Uses Bluetooth LE and WiFi Direct for peer discovery and data transfer</string>
+    <string name="peers_mesh_info_encryption_title">Encryption</string>
+    <string name="peers_mesh_info_encryption_desc">All messages are end-to-end encrypted with AES-256-GCM</string>
+    <string name="peers_mesh_info_tips">Tips</string>
+    <string name="peers_mesh_info_tip1">Keep Bluetooth and WiFi enabled for best range</string>
+    <string name="peers_mesh_info_tip2">More peers nearby = better relay coverage</string>
+    <string name="peers_mesh_info_tip3">Works even without cellular or internet connection</string>
+
+    <!-- ══ On-device AI eligibility (AIChatScreen) ═══════════════════════════ -->
+    <string name="ai_requirement_device">Pixel 8 Pro or newer / Samsung S24 or newer</string>
+    <string name="ai_requirement_os">Android 14+ with Gemini Nano enabled</string>
+    <string name="ai_requirement_enable">Enable in Settings &gt; Google &gt; AI settings</string>
+
+    <!-- ══ Calls ═════════════════════════════════════════════════════════════ -->
+    <string name="call_end_to_end_encrypted">End-to-end encrypted</string>
+    <string name="call_incoming_video">Incoming Video Call…</string>
+
+    <!-- ══ Forward picker ════════════════════════════════════════════════════ -->
+    <string name="forward_to_title">Forward to</string>
+    <string name="forward_no_results">No contacts or groups found</string>
+
+    <!-- ══ Misc ══════════════════════════════════════════════════════════════ -->
+    <string name="link_preview_loading">Loading preview…</string>
+    <!-- Sample bubbles in the wallpaper picker preview, never sent to anyone. -->
+    <string name="wallpaper_preview_incoming">Hello! 👋</string>
+    <string name="wallpaper_preview_outgoing">Hi there!</string>
+
+</resources>

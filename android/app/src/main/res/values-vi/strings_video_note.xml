@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Tin nhắn video</string>
+    <string name="video_note_title">Tin nhắn video</string>
+    <string name="video_note_a11y" formatted="true">Tin nhắn video, %1$s</string>
+    <string name="video_note_play">Phát</string>
+    <string name="video_note_pause">Tạm dừng</string>
+    <string name="video_note_record_button">Quay tin nhắn video</string>
+    <string name="video_note_hint">Chạm để quay hoặc nhấn giữ · tối đa 15 giây</string>
+    <string name="video_note_record">Bắt đầu quay</string>
+    <string name="video_note_stop">Dừng quay</string>
+    <string name="video_note_flip">Đổi camera</string>
+    <string name="video_note_close">Đóng</string>
+    <string name="video_note_review_title">Tin nhắn video của bạn</string>
+    <string name="video_note_preparing">Đang chuẩn bị…</string>
+    <string name="video_note_discard">Xóa</string>
+    <string name="video_note_retake">Quay lại</string>
+    <string name="video_note_send">Gửi tin nhắn video</string>
+    <string name="video_note_too_short">Quá ngắn. Chạm để quay hoặc nhấn giữ nút.</string>
+    <string name="video_note_camera_denied">Cần quyền truy cập camera để quay tin nhắn video.</string>
+</resources>

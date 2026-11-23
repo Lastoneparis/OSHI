@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">Rádio MeshCore</string>
+    <string name="meshcore_none">Žádné rádio MeshCore</string>
+    <string name="meshcore_scan">Hledat rádia MeshCore</string>
+    <string name="meshcore_ready">Připojeno — zprávy OSHI používají #oshi-bridge</string>
+    <string name="meshcore_forget">Zapomenout toto rádio MeshCore</string>
+    <string name="meshcore_bridge">Most Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">Rádio MeshCore přenáší vaše zprávy OSHI přes opakovače MeshCore. Musí mít firmware MeshCore companion a poprvé se zeptá na PIN. OSHI přidá jediný kanál, #oshi-bridge, do volného slotu a vaše ostatní kanály nikdy nemění.</string>
+    <string name="meshcore_bridge_footer">Když jsou připojena rádia Meshtastic i MeshCore, tento telefon předává zprávy OSHI mezi oběma sítěmi, dokud je OSHI spuštěné.</string>
+    <string name="meshcore_no_free_channel">Všech 8 slotů kanálů tohoto rádia je obsazeno. Uvolněte jeden v aplikaci MeshCore, aby OSHI mohlo přidat #oshi-bridge.</string>
+</resources>

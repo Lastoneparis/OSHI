@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">الأجهزة المرتبطة</string>
+    <string name="devsync_settings_subtitle">زامِن سجلك مباشرةً بين أجهزتك</string>
+    <string name="devsync_status_on">المزامنة المباشرة مفعّلة. ينتقل سجلك من جهاز إلى آخر، ولا يُخزَّن أي شيء على الخادم.</string>
+    <string name="devsync_status_off">المزامنة المباشرة متوقفة على هذا الجهاز.</string>
+    <string name="devsync_this_device">هذا الجهاز</string>
+    <string name="devsync_device_id">معرّف الجهاز %1$s</string>
+    <string name="devsync_debug_override">المزامنة المباشرة (تجاوز التصحيح)</string>
+    <string name="devsync_debug_override_desc">فرض المزامنة المباشرة بين الأجهزة لهذا التثبيت أيًّا كان ما يقوله الخادم</string>
+    <string name="devsync_pending_title">الموافقة على جهاز جديد</string>
+    <string name="devsync_pending_body">يريد %1$s (%2$s) استلام سجلك. تحقّق من أن الشاشة الأخرى تعرض الرمز نفسه.</string>
+    <string name="devsync_waiting_body">بانتظار الموافقة على جهازك الآخر. تحقّق من أنه يعرض الرمز نفسه.</string>
+    <string name="devsync_peer_approved">وافق الجهاز الآخر بالفعل. وافِق هنا لإكمال العملية.</string>
+    <string name="devsync_allow">سماح</string>
+    <string name="devsync_deny">رفض</string>
+    <string name="devsync_linked_title">الأجهزة المرتبطة</string>
+    <string name="devsync_none_linked">لا توجد أجهزة مرتبطة بعد. افتح OSHI على جهازك الآخر، على شبكة Wi-Fi نفسها أو متصلًا في الوقت نفسه.</string>
+    <string name="devsync_last_sync">آخر مزامنة: %1$s</string>
+    <string name="devsync_never">أبدًا</string>
+    <string name="devsync_syncing_now">جارٍ المزامنة الآن (%1$s)</string>
+    <string name="devsync_remove">إزالة</string>
+    <string name="devsync_remove_confirm_title">إزالة %1$s؟</string>
+    <string name="devsync_remove_confirm_body">سيتوقف عن استلام سجلك، ويحتفظ بما لديه بالفعل.</string>
+    <string name="devsync_sync_now">زامِن الآن</string>
+    <string name="devsync_cancel">إلغاء</string>
+    <string name="devsync_alert_unapproved">حاول جهاز يستخدم حسابك المزامنة: %1$s</string>
+    <string name="devsync_alert_linked">يمكن لجهاز جديد، %1$s، الآن استلام سجلك</string>
+</resources>

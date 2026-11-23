@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Screenshots are blocked in OSHI to protect your conversations</string>
+    <string name="rn_hint_setting_title">Let contacts know I\'m on a restricted network</string>
+    <string name="rn_hint_setting_caption">While traffic is disguised, your messages carry a small hint, end-to-end encrypted, so contacts know you may be on a censored or monitored network. Only they can see it.</string>
+    <string name="rn_hint_chip">Sent through a restricted network</string>
+    <string name="rn_hint_explain_title">Restricted network</string>
+    <string name="rn_hint_explain_body">This person uses OSHI\'s privacy disguise and is probably on a censored or monitored network. Reply normally: OSHI keeps disguising their side. Keep messages short; photos and videos may be slow.</string>
+</resources>

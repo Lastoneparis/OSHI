@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Salattu tiedosto, luettavissa vain tilisi avaimella</string>
+    <string name="settings_import_messages">Tuo viestejä</string>
+    <string name="settings_import_messages_desc">Palauta salattu .oshiexport-tiedosto</string>
+    <string name="settings_importing">Tuodaan…</string>
+    <string name="export_media_skipped">%1$d liitettä oli liian suuria, eikä niitä viety.</string>
+    <string name="import_messages_success">%1$d viestiä tuotu (%2$d oli jo olemassa).</string>
+    <string name="import_error_wrong_account">Tämä vienti kuuluu toiselle OSHI-tilille. Palauta ensin kyseisen tilin avain.</string>
+    <string name="import_error_damaged">Tämä vienti on vahingoittunut tai sitä on muokattu.</string>
+    <string name="import_error_other_platform">Tämä vienti on tehty OSHI:lla alustalle %1$s, eikä sitä voi vielä tuoda tänne.</string>
+    <string name="import_error_not_export">Tämä tiedosto ei ole OSHI-vienti.</string>
+    <string name="import_error_version">Tämä vienti on tehty OSHI:n uudemmalla versiolla. Päivitä sovellus ja yritä uudelleen.</string>
+    <string name="import_error_no_key">Tällä laitteella ei ole tilin avainta. Palauta ensin tilisi.</string>
+    <string name="import_error_unreadable">Tiedostoa ei voitu lukea.</string>
+</resources>

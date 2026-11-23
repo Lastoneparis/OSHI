@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">キーボード</string>
+    <string name="keyboard_incognito_title">シークレットキーボード</string>
+    <string name="keyboard_incognito_subtitle">入力内容を学習しないようキーボードに求める</string>
+    <string name="keyboard_status_title">現在のキーボード</string>
+    <string name="keyboard_status_trusted">%1$s · 内蔵キーボード</string>
+    <string name="keyboard_status_third_party">%1$s · サードパーティ製キーボード</string>
+    <string name="keyboard_status_unknown">不明なキーボード</string>
+    <string name="keyboard_privacy_explainer">OSHIはこの端末上で暗号化しますが、入力した文字はまずキーボードを通ります。シークレットモードは、言葉を学習・保存しないようキーボードに求めます。Androidはキーボードに従わせることはできず、求めることしかできません。サードパーティ製キーボードはそれでもすべてのキー入力を読み取れるため、端末の内蔵キーボードの使用をおすすめします。端末自体が侵害されている場合（スパイウェア）、入力内容を守れるアプリはありません。</string>
+    <string name="keyboard_banner_title">OSHIが暗号化する前に、キーボードは入力内容を読み取れます</string>
+    <string name="keyboard_banner_body">%1$sはサードパーティ製キーボードです。プライベートな会話には端末の内蔵キーボードに切り替えてください。</string>
+    <string name="keyboard_banner_switch">キーボードを切り替える</string>
+    <string name="keyboard_banner_dismiss">閉じる</string>
+</resources>

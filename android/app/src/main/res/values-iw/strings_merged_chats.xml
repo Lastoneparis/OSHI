@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">איחוד הודעות וקבוצות</string>
+    <string name="chats_merged_setting_desc">רשימה אחת לכל הצ\'אטים שלך, עם מסננים לאנשים ולקבוצות.</string>
+    <string name="chats_merged_filter_all">הכל</string>
+    <string name="chats_merged_filter_unread">לא נקראו</string>
+    <string name="chats_merged_filter_groups">קבוצות</string>
+    <string name="chats_merged_filter_people">אנשים</string>
+    <string name="chats_merged_new_title">חדש</string>
+    <string name="chats_merged_new_chat">צ\'אט חדש</string>
+    <string name="chats_merged_new_chat_desc">הוסף מישהו באמצעות קוד QR, קישור או מפתח</string>
+    <string name="chats_merged_new_group">קבוצה חדשה</string>
+    <string name="chats_merged_new_group_desc">פתח קבוצה עם אנשי הקשר שלך</string>
+    <string name="chats_merged_discover">גלה ערוצים ציבוריים</string>
+    <string name="chats_merged_discover_desc">הצטרף לקבוצות ציבוריות סביבך</string>
+    <string name="chats_merged_scan_invite">סרוק הזמנה</string>
+    <string name="chats_merged_scan_invite_desc">הצטרף לקבוצה או הוסף איש קשר מקוד QR</string>
+    <string name="chats_merged_scan_not_invite">קוד QR זה אינו הזמנה של OSHI</string>
+    <string name="chats_merged_calls_header">התקשר למישהו</string>
+    <string name="chats_merged_teaser_title">הצטרף לערוץ ציבורי</string>
+    <string name="chats_merged_teaser_body">קבוצות ציבוריות בקרבתך פועלות גם בלי אינטרנט. ראה מי נמצא סביבך.</string>
+    <string name="chats_merged_teaser_cta">גלה</string>
+    <string name="chats_merged_nearby_title">קבוצה בקרבת מקום</string>
+    <string name="chats_merged_empty_unread">קראת הכל</string>
+    <string name="chats_merged_empty_people">אין עדיין שיחות</string>
+    <string name="chats_merged_group_a11y">קבוצה</string>
+</resources>

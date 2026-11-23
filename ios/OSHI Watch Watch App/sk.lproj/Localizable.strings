@@ -1,0 +1,134 @@
+/* OSHI Watch App - Slovak */
+
+/* Status */
+"watch.status.connected" = "Pripojené";
+"watch.status.not_reachable" = "iPhone nedostupný";
+
+/* Navigation */
+"watch.open_iphone" = "Otvorte OSHI na iPhone";
+
+/* Common */
+"common.refresh" = "Obnoviť";
+"common.cancel" = "Zrušiť";
+
+/* Messages */
+"watch.loading_messages" = "Načítavanie správ…";
+"watch.no_messages" = "Žiadne správy";
+"watch.sending" = "Odosiela sa…";
+"watch.dictate" = "Diktovať";
+"watch.voice_message" = "Hlasová správa";
+"watch.reply" = "Odpovedať";
+"watch.media_attachment" = "Príloha";
+
+/* Quick Replies */
+"watch.quick.yes" = "Áno";
+"watch.quick.no" = "Nie";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Neskôr";
+"watch.quick.omw" = "Už idem!";
+"watch.quick.thanks" = "Ďakujem";
+
+/* Errors */
+"watch.error.send_failed" = "Odoslanie zlyhalo";
+"watch.send.queued" = "Čaká na iPhone";
+"watch.error.not_reachable" = "iPhone nedostupný";
+
+/* Calls */
+"watch.call.incoming_video" = "Prichádzajúci videohovor";
+"watch.call.incoming_voice" = "Prichádzajúci hlasový hovor";
+"watch.call.video" = "Videohovor";
+"watch.call.voice" = "Hlasový hovor";
+"watch.call.connecting" = "Pripája sa…";
+"watch.call.ringing" = "Zvoní…";
+"watch.call.in_call" = "Prebieha hovor";
+"watch.call.ended" = "Hovor ukončený";
+"watch.call.start" = "Začať hovor";
+"watch.call.unknown" = "Neznámy";
+
+/* Call Actions */
+"call.action.accept" = "Prijať";
+"call.action.decline" = "Odmietnuť";
+
+/* Notifications */
+"watch.notification.new_message" = "Nová správa";
+
+/* Call Summary */
+"call.outgoing" = "Odchádzajúci hovor";
+"call.incoming" = "Prichádzajúci hovor";
+"call.no.answer" = "Bez odpovede";
+"call.declined" = "Odmietnutý";
+"call.missed" = "Zmeškaný hovor";
+"call.video.outgoing" = "Odchádzajúci videohovor";
+"call.video.incoming" = "Prichádzajúci videohovor";
+
+/* Actions de notification au poignet. */
+"notification.action.reply" = "Odpovedať";
+"send" = "Odoslať";
+"type_message" = "Napíšte správu";
+"notification.action.mark_read" = "Prečítané";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Chaty";
+"w2.empty.title" = "Zatiaľ žiadne chaty";
+"w2.empty.body" = "Tu sa zobrazia vaše chaty OSHI z iPhonu.";
+"w2.disabled.title" = "Inteligentné hodinky sú vypnuté";
+"w2.disabled.body" = "Zapnite ich v OSHI na iPhone: Nastavenia › Prepojené zariadenia › Inteligentné hodinky.";
+"w2.locked.title" = "OSHI je zamknuté";
+"w2.locked.body" = "Odomknite OSHI na iPhone a skúste to znova.";
+"w2.unavailable.title" = "OSHI nie je pripravené";
+"w2.unavailable.body" = "Otvorte OSHI raz na iPhone a skúste to znova.";
+"w2.nophone.title" = "iPhone nie je dostupný";
+"w2.nophone.body" = "Majte iPhone s OSHI nablízku.";
+"w2.error.title" = "Niečo sa pokazilo";
+"w2.error.body" = "iPhone neodpovedal. Skúste to znova.";
+"w2.notfound" = "Tento chat už na iPhone nie je.";
+"w2.retry" = "Skúsiť znova";
+"w2.reply" = "Odpovedať";
+"w2.you" = "Vy";
+"w2.you_prefix" = "Vy: %@";
+"w2.react" = "Reagovať";
+"w2.speak_or_type" = "Diktujte alebo píšte";
+"w2.quick_replies" = "Rýchle odpovede";
+"w2.sending" = "Odosiela sa…";
+"w2.sent" = "Odoslané";
+"w2.send_failed" = "Neodoslané. Skúste to znova na iPhone.";
+"w2.read_only" = "Do tohto chatu nemôžete odpovedať.";
+"w2.view_once" = "👁 Zobraziť raz – otvorte na iPhone";
+"w2.view_once_short" = "👁 Zobraziť raz";
+"w2.e2e" = "End-to-end šifrované vaším iPhonom";
+"w2.replying_to" = "Odpoveď na";
+"w2.loading" = "Načítava sa…";
+"w2.unread_count" = "Neprečítané: %d";
+"w2.all_read" = "Všetko prečítané";
+"w2.call" = "Volať";
+"w2.media.photo" = "📷 Fotka";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Hlasová správa";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Súbor";
+"w2.media.location" = "📍 Poloha";
+"w2.media.contact" = "👤 Kontakt";
+"w2.qr.on_my_way" = "Som na ceste";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Zavolám neskôr";
+"w2.qr.thanks" = "Vďaka!";
+"w2.qr.yes" = "Áno";
+"w2.qr.no" = "Nie";
+"w2.qr.busy" = "Teraz nemôžem hovoriť";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Láska";
+"w2.r.laugh" = "Smiech";
+"w2.r.cry" = "Smútok";
+"w2.r.thumbs" = "Palec hore";
+"w2.r.wow" = "Wow";
+"w2.r.fire" = "Oheň";
+"w2.mute" = "Stlmiť";
+"w2.end_call" = "Zložiť";
+"w2.speaker" = "Reproduktor";
+"w2.widget.off" = "Zapnite Inteligentné hodinky v OSHI na iPhone";
+"w2.widget.off_short" = "Vyp.";
+"w2.widget.locked" = "Odomknite OSHI na iPhone";
+"w2.widget.locked_short" = "Zamknuté";
+"w2.widget.open" = "Otvoriť OSHI";
+"w2.widget.name" = "OSHI neprečítané";
+"w2.widget.desc" = "Počet neprečítaných a kto písal – nikdy nie správy.";

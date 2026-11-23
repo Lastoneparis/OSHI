@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">Äänitehoste</string>
+    <string name="voice_preview_original">Alkuperäinen ääni</string>
+    <string name="voice_preview_processing">Käytetään %1$s…</string>
+    <string name="voice_preview_failed">%1$s ei onnistunut, alkuperäinen säilytettiin</string>
+    <string name="voice_preview_view_once_hint">Voidaan toistaa vain kerran, sitten se katoaa</string>
+    <string name="voice_preview_listening">Kuunnellaan…</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">OSHI บล็อกการจับภาพหน้าจอเพื่อปกป้องการสนทนาของคุณ</string>
+    <string name="rn_hint_setting_title">แจ้งผู้ติดต่อว่าฉันอยู่บนเครือข่ายที่ถูกจำกัด</string>
+    <string name="rn_hint_setting_caption">ขณะที่การรับส่งข้อมูลถูกอำพราง ข้อความของคุณจะมีสัญลักษณ์เล็ก ๆ ที่เข้ารหัสตั้งแต่ต้นทางถึงปลายทาง เพื่อให้ผู้ติดต่อรู้ว่าคุณอาจอยู่บนเครือข่ายที่ถูกเซ็นเซอร์หรือเฝ้าดู มีเพียงพวกเขาที่เห็น</string>
+    <string name="rn_hint_chip">ส่งจากเครือข่ายที่ถูกจำกัด</string>
+    <string name="rn_hint_explain_title">เครือข่ายที่ถูกจำกัด</string>
+    <string name="rn_hint_explain_body">บุคคลนี้ใช้การอำพรางของ OSHI และน่าจะอยู่บนเครือข่ายที่ถูกเซ็นเซอร์หรือเฝ้าดู ตอบกลับตามปกติได้ OSHI ยังคงอำพรางฝั่งของเขาต่อไป ส่งข้อความสั้น ๆ รูปภาพและวิดีโออาจช้า</string>
+</resources>

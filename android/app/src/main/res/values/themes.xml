@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.OSHI" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/oshi_primary</item>
+        <item name="android:navigationBarColor">@color/light_background</item>
+        <item name="android:windowBackground">@color/light_background</item>
+    </style>
+
+    <!-- Splash/Launch theme -->
+    <style name="Theme.OSHI.Splash" parent="Theme.OSHI">
+        <item name="android:windowBackground">@color/oshi_primary</item>
+    </style>
+
+    <!-- __SPLASH_HANDOVER_2026_11_16__ MainActivity's theme. Below API 31 the
+         starting window is this theme's window background: the logo on the
+         splash ground (launch_window) under a matching status bar, exactly
+         what LaunchScreen.kt draws first. The navigation bar keeps the theme's
+         colour: the app's edge-to-edge scrim follows the PHONE's mode, and a
+         purple starting bar faded to that scrim at the hand-over (API 30, 3-button).
+         ThemeBoot.apply replaces the background in onCreate, before the app's
+         first frame. values-v31 resets it: the system splash does this job there. -->
+    <style name="Theme.OSHI.Launcher" parent="Theme.OSHI">
+        <item name="android:windowBackground">@drawable/launch_window</item>
+        <item name="android:statusBarColor">@color/launch_background</item>
+    </style>
+
+    <!-- __OLED_SPLASH_2026_11_16__ Splash themes set at runtime through
+         SplashScreen.setSplashScreenTheme (API 33+, see ThemeBoot.kt). Below
+         API 31 they are never used; declared here so R.style resolves. -->
+    <style name="Theme.OSHI.SplashOledNight" parent="Theme.OSHI" />
+    <style name="Theme.OSHI.SplashOledAlways" parent="Theme.OSHI" />
+</resources>

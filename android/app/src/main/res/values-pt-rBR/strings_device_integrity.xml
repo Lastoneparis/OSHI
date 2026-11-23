@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Este celular pode estar modificado</string>
+    <string name="device_integrity_dialog_body">O OSHI detectou sinais de que este celular pode estar com root ou modificado (%1$s). Num celular assim, outros softwares podem ler o que aparece na tela e o que você digita antes que o OSHI criptografe. O OSHI não apagou nem bloqueou nada. Esta verificação é heurística: pode errar, e um root bem escondido pode escapar dela.</string>
+    <string name="device_integrity_dialog_ok">Entendi</string>
+    <string name="device_integrity_status_title">Integridade do dispositivo</string>
+    <string name="device_integrity_status_flagged">O OSHI detectou sinais de root ou modificação: %1$s</string>
+    <string name="device_integrity_finding_su">binário su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">app de gerenciamento de root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">sistema assinado com chaves de teste</string>
+    <string name="device_integrity_finding_debuggable">sistema depurável</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Celulares com root ou modificados: o OSHI procura sinais comuns de root (su, Magisk, Xposed/LSPosed, Frida, sistema assinado com chaves de teste ou depurável) e avisa se encontrar algum. Não encontrar nada não prova que o celular esteja limpo.</string>
+    <string name="clipboard_hygiene_explainer">Copiar: mensagens, traduções, chaves de recuperação e tokens de bot que você copia são marcados como sensíveis (o Android 13+ oculta a prévia). Se ainda estiverem na área de transferência após 60 segundos, o OSHI os remove: na hora se o OSHI estiver aberto, senão na próxima vez que você o abrir. Enquanto estiverem lá, seu teclado e os apps autorizados a ler a área de transferência podem vê-los, e teclados ou recursos do celular que guardam um histórico da área de transferência podem manter a própria cópia mesmo depois da remoção.</string>
+</resources>

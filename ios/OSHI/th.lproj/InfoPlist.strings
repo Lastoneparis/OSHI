@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (th) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI ใช้บลูทูธเพื่อค้นหาและเชื่อมต่อกับอุปกรณ์ใกล้เคียง เพื่อส่งข้อความอย่างปลอดภัยโดยตรงระหว่างอุปกรณ์โดยไม่ต้องใช้อินเทอร์เน็ต";
+"NSBluetoothPeripheralUsageDescription" = "OSHI ต้องใช้บลูทูธเพื่อรับข้อความที่เข้ารหัสจากอุปกรณ์ใกล้เคียงในเครือข่าย mesh ของคุณ";
+"NSCalendarsFullAccessUsageDescription" = "OSHI สามารถเพิ่มสายที่นัดหมายไว้ลงในปฏิทินของคุณ เพื่อไม่ให้คุณพลาดสายใด";
+"NSCalendarsUsageDescription" = "OSHI สามารถเพิ่มสายที่นัดหมายไว้ลงในปฏิทินของคุณ เพื่อไม่ให้คุณพลาดสายใด";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI สามารถเพิ่มสายที่นัดหมายไว้ลงในปฏิทินของคุณ เพื่อไม่ให้คุณพลาดสายใด";
+"NSCameraUsageDescription" = "OSHI ต้องใช้กล้องเพื่อสแกนรหัส QR และถ่ายรูปสำหรับข้อความที่เข้ารหัส";
+"NSFaceIDUsageDescription" = "ใช้ Face ID เพื่อปลดล็อกข้อความที่เข้ารหัสของคุณอย่างปลอดภัยและปกป้องความเป็นส่วนตัว";
+"NSLocalNetworkUsageDescription" = "OSHI ใช้เครือข่ายในพื้นที่เพื่อเชื่อมต่อ Wi-Fi โดยตรงกับอุปกรณ์ใกล้เคียง ทำให้ส่งข้อความได้เร็วขึ้น";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI ใช้ตำแหน่งของคุณเพื่อแชร์ตำแหน่งแบบเรียลไทม์กับผู้ติดต่อ ตำแหน่งของคุณถูกเข้ารหัสและจะแชร์เมื่อคุณเลือกเท่านั้น";
+"NSLocationAlwaysUsageDescription" = "OSHI ใช้ตำแหน่งของคุณเพื่อแชร์แบบเรียลไทม์กับผู้ติดต่อ แม้ขณะแอปทำงานอยู่เบื้องหลัง ตำแหน่งของคุณถูกเข้ารหัสและจะแชร์เมื่อคุณเลือกเท่านั้น";
+"NSLocationWhenInUseUsageDescription" = "OSHI ใช้ตำแหน่งของคุณเพื่อแชร์ตำแหน่งกับผู้ติดต่อ ตำแหน่งของคุณถูกเข้ารหัสและจะแชร์เมื่อคุณเลือกเท่านั้น";
+"NSMicrophoneUsageDescription" = "OSHI ต้องใช้ไมโครโฟนเพื่อบันทึกวิดีโอพร้อมเสียงสำหรับข้อความที่เข้ารหัส";
+"NSPhotoLibraryAddUsageDescription" = "OSHI สามารถบันทึกรูปภาพที่ได้รับลงในคลังรูปภาพของคุณ";
+"NSPhotoLibraryUsageDescription" = "OSHI ต้องเข้าถึงคลังรูปภาพเพื่อให้คุณเลือกรูปภาพส่งเป็นข้อความที่เข้ารหัส";
+"NSSpeechRecognitionUsageDescription" = "OSHI ใช้การรู้จำเสียงพูดบนเครื่องเพื่อให้คุณพูดข้อความถึงผู้ช่วย AI ได้ เสียงของคุณถูกถอดความบน iPhone ทั้งหมดและไม่เคยออกจากเครื่อง";
+"NSUserNotificationsUsageDescription" = "OSHI ส่งการแจ้งเตือนเมื่อคุณได้รับข้อความที่เข้ารหัสใหม่ เพื่อไม่ให้คุณพลาดเรื่องสำคัญ";

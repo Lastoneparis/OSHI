@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore 电台</string>
+    <string name="meshcore_none">没有 MeshCore 电台</string>
+    <string name="meshcore_scan">搜索 MeshCore 电台</string>
+    <string name="meshcore_ready">已连接 — OSHI 消息使用 #oshi-bridge</string>
+    <string name="meshcore_forget">忘记此 MeshCore 电台</string>
+    <string name="meshcore_bridge">桥接 Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">MeshCore 电台通过 MeshCore 中继传送你的 OSHI 消息。它需要运行 MeshCore companion 固件，首次连接时会要求输入 PIN。OSHI 只会在空闲位置添加一个信道 #oshi-bridge，绝不会改动你的其他信道。</string>
+    <string name="meshcore_bridge_footer">当 Meshtastic 电台和 MeshCore 电台都已连接时，只要 OSHI 在运行，这部手机就会在两个网络之间转发 OSHI 消息。</string>
+    <string name="meshcore_no_free_channel">此电台的 8 个信道位置都已占用。请在 MeshCore 应用中空出一个，以便 OSHI 添加 #oshi-bridge。</string>
+</resources>

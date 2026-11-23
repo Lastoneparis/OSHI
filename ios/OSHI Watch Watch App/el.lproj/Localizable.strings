@@ -1,0 +1,136 @@
+/* OSHI Watch App - Greek */
+
+/* Status */
+"watch.status.connected" = "Συνδεδεμένο";
+"watch.status.not_reachable" = "iPhone μη προσβάσιμο";
+
+/* Navigation */
+"watch.open_iphone" = "Άνοιγμα OSHI στο iPhone";
+
+/* Common */
+"common.refresh" = "Ανανέωση";
+"common.cancel" = "Άκυρο";
+
+/* Messages */
+"watch.loading_messages" = "Φόρτωση μηνυμάτων…";
+"watch.no_messages" = "Δεν υπάρχουν μηνύματα";
+"watch.sending" = "Αποστολή…";
+"watch.dictate" = "Υπαγόρευση";
+"watch.voice_message" = "Φωνητικό μήνυμα";
+"watch.reply" = "Απάντηση";
+"watch.media_attachment" = "Συνημμένο";
+
+/* Quick Replies */
+"watch.quick.yes" = "Ναι";
+"watch.quick.no" = "Όχι";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Αργότερα";
+"watch.quick.omw" = "Έρχομαι!";
+"watch.quick.thanks" = "Ευχαριστώ";
+
+/* Errors */
+"watch.error.send_failed" = "Αποτυχία αποστολής μηνύματος";
+"watch.send.queued" = "Σε αναμονή για iPhone";
+"watch.error.not_reachable" = "Το iPhone δεν είναι προσβάσιμο";
+
+/* Calls */
+"watch.call.incoming_video" = "Εισερχόμενη βιντεοκλήση";
+"watch.call.incoming_voice" = "Εισερχόμενη φωνητική κλήση";
+"watch.call.video" = "Βιντεοκλήση";
+"watch.call.voice" = "Φωνητική κλήση";
+"watch.call.connecting" = "Σύνδεση…";
+"watch.call.ringing" = "Κουδουνίζει…";
+"watch.call.in_call" = "Σε κλήση";
+"watch.call.ended" = "Η κλήση τερματίστηκε";
+"watch.call.start" = "Έναρξη κλήσης";
+"watch.call.unknown" = "Άγνωστος";
+
+/* Call Actions */
+"call.action.accept" = "Αποδοχή";
+"call.action.decline" = "Απόρριψη";
+
+/* Notifications */
+"watch.notification.new_message" = "Νέο μήνυμα";
+
+/* Call Summary */
+"call.outgoing" = "Εξερχόμενη κλήση";
+"call.incoming" = "Εισερχόμενη κλήση";
+"call.no.answer" = "Καμία απάντηση";
+"call.declined" = "Απορρίφθηκε";
+"call.missed" = "Αναπάντητη κλήση";
+"call.video.outgoing" = "Εξερχόμενη βιντεοκλήση";
+"call.video.incoming" = "Εισερχόμενη βιντεοκλήση";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Απάντηση";
+"send" = "Αποστολή";
+"type_message" = "Γράψτε ένα μήνυμα";
+"notification.action.mark_read" = "Αναγνωσμένο";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Συνομιλίες";
+"w2.empty.title" = "Καμία συνομιλία ακόμα";
+"w2.empty.body" = "Οι συνομιλίες OSHI του iPhone σας εμφανίζονται εδώ.";
+"w2.disabled.title" = "Το έξυπνο ρολόι είναι ανενεργό";
+"w2.disabled.body" = "Ενεργοποιήστε το στο OSHI στο iPhone: Ρυθμίσεις › Συνδεδεμένες συσκευές › Έξυπνο ρολόι.";
+"w2.locked.title" = "Το OSHI είναι κλειδωμένο";
+"w2.locked.body" = "Ξεκλειδώστε το OSHI στο iPhone και δοκιμάστε ξανά.";
+"w2.unavailable.title" = "Το OSHI δεν είναι έτοιμο";
+"w2.unavailable.body" = "Ανοίξτε το OSHI μία φορά στο iPhone και δοκιμάστε ξανά.";
+"w2.nophone.title" = "Το iPhone δεν είναι προσβάσιμο";
+"w2.nophone.body" = "Κρατήστε κοντά το iPhone με εγκατεστημένο το OSHI.";
+"w2.error.title" = "Κάτι πήγε στραβά";
+"w2.error.body" = "Το iPhone δεν απάντησε. Δοκιμάστε ξανά.";
+"w2.notfound" = "Αυτή η συνομιλία δεν υπάρχει πλέον στο iPhone.";
+"w2.retry" = "Επανάληψη";
+"w2.reply" = "Απάντηση";
+"w2.you" = "Εσείς";
+"w2.you_prefix" = "Εσείς: %@";
+"w2.react" = "Αντίδραση";
+"w2.speak_or_type" = "Υπαγορεύστε ή γράψτε";
+"w2.quick_replies" = "Γρήγορες απαντήσεις";
+"w2.sending" = "Αποστολή…";
+"w2.sent" = "Εστάλη";
+"w2.send_failed" = "Δεν εστάλη. Δοκιμάστε ξανά στο iPhone.";
+"w2.read_only" = "Δεν μπορείτε να απαντήσετε σε αυτή τη συνομιλία.";
+"w2.view_once" = "👁 Προβολή μία φορά — ανοίξτε το στο iPhone";
+"w2.view_once_short" = "👁 Προβολή μία φορά";
+"w2.e2e" = "Κρυπτογράφηση από άκρο σε άκρο από το iPhone";
+"w2.replying_to" = "Απάντηση σε";
+"w2.loading" = "Φόρτωση…";
+"w2.unread_count" = "%d μη αναγνωσμένα";
+"w2.all_read" = "Όλα διαβασμένα";
+"w2.call" = "Κλήση";
+"w2.media.photo" = "📷 Φωτογραφία";
+"w2.media.video" = "🎥 Βίντεο";
+"w2.media.voice" = "🎤 Φωνητικό";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Αρχείο";
+"w2.media.location" = "📍 Τοποθεσία";
+"w2.media.contact" = "👤 Επαφή";
+"w2.qr.on_my_way" = "Έρχομαι";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Θα σε πάρω αργότερα";
+"w2.qr.thanks" = "Ευχαριστώ!";
+"w2.qr.yes" = "Ναι";
+"w2.qr.no" = "Όχι";
+"w2.qr.busy" = "Δεν μπορώ να μιλήσω";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Αγάπη";
+"w2.r.laugh" = "Γέλιο";
+"w2.r.cry" = "Λύπη";
+"w2.r.thumbs" = "Μπράβο";
+"w2.r.wow" = "Ουάου";
+"w2.r.fire" = "Φωτιά";
+"w2.mute" = "Σίγαση";
+"w2.end_call" = "Τερματισμός";
+"w2.speaker" = "Ηχείο";
+"w2.widget.off" = "Ενεργοποιήστε το Έξυπνο ρολόι στο OSHI στο iPhone";
+"w2.widget.off_short" = "Ανενεργό";
+"w2.widget.locked" = "Ξεκλειδώστε το OSHI στο iPhone";
+"w2.widget.locked_short" = "Κλειδωμένο";
+"w2.widget.open" = "Άνοιγμα OSHI";
+"w2.widget.name" = "OSHI μη αναγνωσμένα";
+"w2.widget.desc" = "Πλήθος μη αναγνωσμένων και ποιος έγραψε — ποτέ τα μηνύματα.";

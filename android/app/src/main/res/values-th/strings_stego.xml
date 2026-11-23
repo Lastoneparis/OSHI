@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">กำลังรอการเชื่อมต่อแบบอำพราง</string>
+    <string name="privacy_disguise_title">การอำพรางเพื่อความเป็นส่วนตัว</string>
+    <string name="privacy_disguise_subtitle">อำพรางการรับส่งข้อมูล · ซ่อนข้อความในรูปภาพ</string>
+    <string name="cover_switch_title">อำพรางการรับส่งข้อมูลของ OSHI</string>
+    <string name="cover_switch_caption">ข้อความและไฟล์แนบแบบ 1:1 ของคุณจะเดินทางภายในคำขอที่ถูกเติมข้อมูลจนดูเหมือนการวิเคราะห์เว็บทั่วไป ทำให้แยกแยะขนาดและจังหวะเวลาได้ยากขึ้น หากการเชื่อมต่อแบบอำพรางล้มเหลว ข้อความจะรอ — จะไม่ถูกส่งออกไปโดยไม่อำพรางเลย</string>
+    <string name="cover_not_hidden">ยังมองเห็นได้: การที่คุณเชื่อมต่อกับ oshi-messenger.com (ชื่อเซิร์ฟเวอร์และลายนิ้วมือ TLS) รวมถึงข้อความกลุ่ม การโทร การปลุกด้วยการแจ้งเตือนแบบพุช และการตรวจหาจดหมายใหม่ ซึ่งไม่ได้ถูกอำพราง นี่ไม่ใช่การไม่เปิดเผยตัวตน และไม่สามารถหลบเลี่ยงการบล็อกเซิร์ฟเวอร์ OSHI ได้ — สำหรับกรณีนั้น ให้ใช้ อำพรางเป็นรูปภาพ</string>
+    <string name="disguise_photo_title">อำพรางเป็นรูปภาพ</string>
+    <string name="disguise_photo_explainer">ซ่อนข้อความที่เข้ารหัสแบบต้นทางถึงปลายทางสำหรับผู้ติดต่อหนึ่งคนไว้ในรูปภาพที่ดูธรรมดา แล้วส่งรูปนั้นผ่านแอปใดก็ได้ อีเมล หรือคลาวด์ไดรฟ์ — มีประโยชน์เมื่อ OSHI เองถูกบล็อก ในแชท 1:1: + → อำพรางเป็นรูปภาพ</string>
+    <string name="disguise_reveal_button">เปิดเผยข้อความที่ซ่อนอยู่</string>
+    <string name="disguise_reveal_hint">คุณยังสามารถแชร์รูปภาพที่ได้รับมายัง OSHI จากแอปใดก็ได้</string>
+    <string name="disguise_sheet_for">มีเพียง %1$s เท่านั้นที่อ่านได้</string>
+    <string name="disguise_message_hint">ข้อความที่ซ่อนไว้</string>
+    <string name="disguise_add_file">เพิ่มไฟล์ขนาดเล็ก (สูงสุด 256 KB)</string>
+    <string name="disguise_remove_file">ลบ %1$s</string>
+    <string name="disguise_file_too_large">ไฟล์ใหญ่เกินไป (สูงสุด 256 KB)</string>
+    <string name="disguise_cover_generated">ภาพทิวทัศน์ที่สร้างขึ้น</string>
+    <string name="disguise_cover_photo">รูปภาพของฉัน</string>
+    <string name="disguise_capacity">ใช้ %1$s จาก %2$s ที่มีในรูปภาพนี้</string>
+    <string name="disguise_too_big">ยาวเกินไปสำหรับรูปภาพนี้ ให้ย่อข้อความ ลบไฟล์ออก หรือเลือกรูปภาพที่ใหญ่ขึ้น</string>
+    <string name="disguise_create_share">สร้างรูปภาพและแชร์</string>
+    <string name="disguise_warning_recompress">ส่งเป็นไฟล์หรือเอกสาร แอปที่บีบอัดรูปภาพใหม่ (โซเชียลเน็ตเวิร์กส่วนใหญ่, WhatsApp, Signal หรือ Telegram ในโหมดรูปภาพ, ภาพหน้าจอ) จะลบข้อความที่ซ่อนอยู่</string>
+    <string name="disguise_warning_forensic">วิธีนี้ซ่อนข้อความจากทุกคนที่ดูรูปภาพ แต่การวิเคราะห์ทางนิติวิทยาศาสตร์ยังอาจตรวจพบได้ว่ารูปภาพมีข้อมูลซ่อนอยู่ แม้จะอ่านข้อมูลนั้นหรือบอกไม่ได้ว่าส่งถึงใคร</string>
+    <string name="disguise_working">กำลังสร้างรูปภาพ…</string>
+    <string name="disguise_failed">ไม่สามารถสร้างรูปภาพได้</string>
+    <string name="reveal_title">ข้อความที่ซ่อนไว้</string>
+    <string name="reveal_from">จาก %1$s</string>
+    <string name="reveal_hidden_on">ซ่อนไว้เมื่อ %1$s</string>
+    <string name="reveal_copy">คัดลอกข้อความ</string>
+    <string name="reveal_open_file">เปิด %1$s</string>
+    <string name="reveal_checking">กำลังค้นหาข้อความที่ซ่อนอยู่…</string>
+    <string name="reveal_not_found">ไม่มีข้อความที่ซ่อนไว้สำหรับคุณในรูปภาพนี้ หากถูกส่งมาเป็นรูปภาพ แอปที่ใช้ส่งอาจบีบอัดรูปใหม่แล้ว — ขอให้ส่งมาเป็นไฟล์</string>
+    <string name="reveal_damaged">รูปภาพนี้ถูกสร้างให้คุณโดย %1$s แต่ถูกแก้ไขระหว่างทางและไม่สามารถอ่านได้อีกต่อไป ขอให้ส่งมาใหม่เป็นไฟล์</string>
+    <string name="reveal_unreadable">ไม่สามารถอ่านไฟล์นี้ได้</string>
+    <string name="disguise_photo_short">อำพราง</string>
+</resources>

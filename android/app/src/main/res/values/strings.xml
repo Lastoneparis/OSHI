@@ -1,0 +1,2650 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OSHI</string>
+    <string name="app_tagline">Secure Mesh Messenger</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome">Welcome to OSHI</string>
+    <string name="onboarding_description">End-to-end encrypted messaging that works even without internet</string>
+    <string name="onboarding_create_identity">Create Identity</string>
+    <string name="onboarding_restore_identity">Restore Identity</string>
+
+    <!-- Messages -->
+    <string name="messages_title">Messages</string>
+    <string name="messages_empty">No messages yet</string>
+    <string name="messages_new">New Message</string>
+    <string name="message_placeholder">Type a message…</string>
+
+    <!-- New Message Screen (iOS-style tabs) -->
+    <string name="new_message_title">New Message</string>
+    <string name="new_hero_title">Start a Conversation</string>
+    <string name="new_hero_subtitle">Scan a QR code, share yours, or paste a key</string>
+    <string name="new_tab_scan">Scan</string>
+    <string name="new_tab_my_code">My Code</string>
+    <string name="new_tab_paste">Paste</string>
+    <string name="new_scan_title">Scan QR Code</string>
+    <string name="new_scan_tap_to_scan">Tap to Scan</string>
+    <string name="new_scan_hint">Point your camera at a contact\'s QR code</string>
+    <string name="new_my_code_share_hint">Let others scan this to add you</string>
+    <string name="new_my_code_share">Share My Key</string>
+    <string name="new_paste_recipient_key">Recipient Public Key</string>
+    <string name="new_paste_placeholder">Paste public key here…</string>
+    <string name="new_paste_valid">Valid address</string>
+    <string name="new_paste_invalid">Invalid address format</string>
+    <string name="new_key_error_empty">Paste the recipient\'s public key</string>
+    <string name="new_key_error_spaces">This has spaces in it — a key is one unbroken block of 44 characters.</string>
+    <string name="new_key_error_extra_characters">There are extra characters after the end of the key. Delete them.</string>
+    <string name="new_key_error_padding">The key is missing its final “=”. Copy the whole key again.</string>
+    <string name="new_key_error_too_short">Too short for a key — a key is 44 characters.</string>
+    <string name="new_key_error_too_long">Too long for a key — a key is 44 characters.</string>
+    <string name="new_key_error_not_a_key">This is not an OSHI key. Ask them to share their key again.</string>
+    <string name="new_key_error_own_key">This is your own key. Choose someone else to message.</string>
+    <string name="new_recipient_title">Recipient</string>
+    <string name="new_composer_message">Message</string>
+    <string name="new_composer_view_once">View Once</string>
+    <string name="new_composer_view_once_desc">Media disappears after viewing</string>
+    <string name="new_composer_send">Send Message</string>
+    <string name="peers_nearby">Nearby</string>
+    <string name="common_ok">OK</string>
+    <string name="message_sent">Sent</string>
+    <string name="message_delivered">Delivered</string>
+    <string name="message_read">Read</string>
+    <string name="message_failed">Failed to send</string>
+
+    <!-- Mesh Network -->
+    <string name="mesh_title">Mesh Network</string>
+    <string name="mesh_status_connected">Connected</string>
+    <string name="mesh_status_searching">Searching for peers…</string>
+    <string name="mesh_status_offline">Offline</string>
+    <string name="mesh_peers_nearby">%d peers nearby</string>
+    <string name="mesh_direct">Mesh Direct</string>
+    <string name="mesh_relay">Mesh Relay</string>
+
+    <!-- Calls -->
+    <string name="call_voice">Voice Call</string>
+    <string name="call_video">Video Call</string>
+    <string name="call_incoming">Incoming call from %s</string>
+    <string name="call_outgoing">Calling %s…</string>
+    <string name="call_connecting">Connecting…</string>
+    <string name="call_connected">Connected</string>
+    <string name="call_ended">Call ended</string>
+    <string name="call_declined">Call declined</string>
+    <string name="call_missed">Missed call</string>
+    <string name="call_no_answer">No answer</string>
+    <string name="call_summary_outgoing">Outgoing call</string>
+    <string name="call_summary_incoming">Incoming call</string>
+    <string name="call_accept">Accept</string>
+    <string name="call_decline">Decline</string>
+    <string name="call_end">End Call</string>
+    <string name="call_mute">Mute</string>
+    <string name="call_unmute">Unmute</string>
+    <string name="call_speaker">Speaker</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_profile">Profile</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_privacy">Privacy</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_oled_black">OLED black</string>
+    <string name="settings_theme_oled_black_desc">Pure black backgrounds for OLED screens. Applies whenever the dark theme is on.</string>
+    <string name="settings_backup">Backup Keys</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version %s</string>
+
+    <!-- QR Code -->
+    <string name="qr_my_code">My QR Code</string>
+    <string name="qr_scan">Scan QR Code</string>
+    <string name="qr_scan_instruction">Scan a contact\'s QR code to add them</string>
+
+    <!-- Contacts -->
+    <string name="contacts_title">Contacts</string>
+    <string name="contacts_add">Add Contact</string>
+    <string name="contacts_empty">No contacts yet</string>
+    <string name="contact_alias">Alias</string>
+    <string name="contact_public_key">Public Key</string>
+    <string name="contact_block">Block Contact</string>
+    <string name="contact_delete">Delete Contact</string>
+
+    <!-- Encryption -->
+    <string name="encryption_e2e">🔒 E2E</string>
+    <string name="encryption_verified">Verified</string>
+    <string name="encryption_safety_number">Safety Number</string>
+
+    <!-- Connection -->
+    <string name="connection_vps">Server</string>
+    <string name="connection_mesh">Mesh</string>
+    <string name="connection_tor">Relay</string>
+
+    <!-- Permissions -->
+    <string name="permission_location_title">Location Permission</string>
+    <string name="permission_location_message">OSHI needs location permission to discover nearby devices for mesh messaging</string>
+    <string name="permission_bluetooth_title">Bluetooth Permission</string>
+    <string name="permission_bluetooth_message">OSHI needs Bluetooth to connect with nearby devices</string>
+    <string name="permission_camera_title">Camera Permission</string>
+    <string name="permission_camera_message">OSHI needs camera access to scan QR codes and make video calls</string>
+    <string name="permission_microphone_title">Microphone Permission</string>
+    <string name="permission_microphone_message">OSHI needs microphone access for voice calls</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="copy">Copy</string>
+    <string name="copied">Copied!</string>
+    <string name="share">Share</string>
+    <string name="refresh">Refresh</string>
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="search">Search</string>
+    <string name="select">Select</string>
+    <string name="confirm">Confirm</string>
+
+    <!-- Groups -->
+    <string name="groups_title">Groups</string>
+    <string name="groups_empty">No groups yet</string>
+    <string name="group_create">Create Group</string>
+    <string name="group_name">Group Name</string>
+    <string name="group_description">Description</string>
+    <string name="group_members">Members</string>
+    <string name="group_add_members">Add Members</string>
+    <string name="group_remove_member">Remove Member</string>
+    <string name="group_leave">Leave Group</string>
+    <string name="group_delete">Delete Group</string>
+    <string name="group_settings">Group Settings</string>
+    <string name="group_info">Group Info</string>
+    <string name="group_admin">Admin</string>
+    <string name="group_member_count">%d members</string>
+    <string name="group_created_by">Created by %s</string>
+    <string name="group_public">Public Group</string>
+    <string name="group_private">Private Group</string>
+    <string name="group_reply_in_private">Reply in private</string>
+    <string name="group_add_to_contacts">Add to contacts</string>
+    <string name="group_member_actions">Member Actions</string>
+    <!-- __MEMBER_COULD_ONLY_BE_REPORTED_AS_A_ROOM_2026_11_06__ per-member moderation -->
+    <string name="group_block_member">Block this member</string>
+    <string name="group_unblock_member">Unblock this member</string>
+    <string name="group_report_member">Report this member</string>
+    <string name="group_member_blocked">Blocked. Their messages in this group will no longer reach you.</string>
+    <string name="group_member_unblocked">Unblocked.</string>
+    <string name="report_member_dialog_title">Report this member</string>
+    <string name="report_member_already_filed">You already reported this member.</string>
+
+    <!-- Message Reactions -->
+    <string name="reaction_add">Add Reaction</string>
+    <string name="reaction_remove">Remove Reaction</string>
+    <string name="reaction_by">Reacted by %s</string>
+    <string name="reactions_count">%d reactions</string>
+
+    <!-- Typing Indicators -->
+    <string name="typing_indicator">%s is typing…</string>
+    <string name="typing_indicator_multiple">Several people are typing…</string>
+
+    <!-- Scheduled Calls -->
+    <string name="scheduled_calls_title">Scheduled Calls</string>
+    <string name="scheduled_calls_empty">No scheduled calls</string>
+    <string name="schedule_call">Schedule Call</string>
+    <string name="scheduled_call_time">Scheduled for %s</string>
+    <string name="scheduled_call_reminder">Reminder: %d minutes before</string>
+    <string name="scheduled_call_accept">Accept</string>
+    <string name="scheduled_call_decline">Decline</string>
+    <string name="scheduled_call_reschedule">Reschedule</string>
+    <string name="scheduled_call_cancel">Cancel</string>
+    <string name="scheduled_call_upcoming">Upcoming Calls</string>
+    <string name="scheduled_call_past">Past Calls</string>
+    <string name="scheduled_call_notes">Notes</string>
+    <string name="scheduled_call_notification">Call with %1$s in %2$d minutes</string>
+
+    <!-- Message Actions -->
+    <string name="message_reply">Reply</string>
+    <string name="message_forward">Forward</string>
+    <string name="message_edit">Edit</string>
+    <string name="message_delete_for_me">Delete for me</string>
+    <string name="message_delete_for_everyone">Delete for everyone</string>
+    <string name="message_edited">Edited</string>
+    <string name="message_deleted">This message was deleted</string>
+    <string name="message_editing">Editing message</string>
+    <string name="message_forwarded">Forwarded</string>
+    <string name="message_replying_to">Replying to %s</string>
+    <string name="message_copy_text">Copy Text</string>
+    <string name="message_select">Select Message</string>
+
+    <!-- Message Pins -->
+    <string name="pin_message">Pin Message</string>
+    <string name="unpin_message">Unpin Message</string>
+    <string name="pinned_title">Pinned Message</string>
+    <string name="no_pinned_messages">No pinned messages</string>
+    <string name="max_pinned_reached">Maximum pinned messages reached</string>
+
+    <!-- Safety Numbers -->
+    <string name="safety_number_title">Safety Number</string>
+    <string name="safety_number_description">Verify this safety number with your contact to ensure your conversation is secure.</string>
+    <string name="safety_number_verify">Verify</string>
+    <string name="safety_number_verified">Verified</string>
+    <string name="safety_number_not_verified">Not Verified</string>
+    <string name="safety_number_scan">Scan their code</string>
+    <string name="safety_number_show_qr">Show my code</string>
+    <string name="safety_number_match">Safety numbers match!</string>
+    <string name="safety_number_mismatch">Safety numbers do not match!</string>
+    <string name="safety_number_changed">Safety number has changed</string>
+
+    <!-- Key Rotation -->
+    <string name="key_rotation_title">Key Rotation</string>
+    <string name="key_rotation_description">Rotating your keys improves security</string>
+    <string name="key_rotation_recommended">Key rotation recommended</string>
+    <string name="key_rotation_days_until">%d days until next rotation</string>
+    <string name="key_rotation_start">Rotate Keys</string>
+    <string name="key_rotation_in_progress">Rotation in progress…</string>
+    <string name="key_rotation_waiting">Waiting for confirmations (%1$d/%2$d)</string>
+    <string name="key_rotation_completed">Key rotation completed</string>
+    <string name="key_rotation_failed">Key rotation failed</string>
+
+    <!-- Screenshot Protection -->
+    <string name="screenshot_protection">Screenshot Protection</string>
+    <string name="screenshot_protection_enabled">Screenshots blocked</string>
+    <string name="screenshot_protection_disabled">Screenshots allowed</string>
+    <string name="screenshot_protection_description">Prevent screenshots and screen recording in this app</string>
+
+    <!-- Steganography -->
+
+    <!-- App Badge -->
+    <string name="badge_unread_messages">%d unread messages</string>
+
+    <!-- Mesh Booster -->
+    <string name="mesh_booster_title">Mesh Booster</string>
+    <string name="mesh_booster_start">Start Boost</string>
+    <string name="mesh_booster_stop">Stop Boost</string>
+    <string name="mesh_booster_active">Boosting Active</string>
+    <string name="mesh_booster_health">Network Health: %d%%</string>
+    <string name="mesh_booster_peers">Peers: %d</string>
+    <string name="mesh_booster_direct">Direct: %d</string>
+    <string name="mesh_booster_relay">Relay: %d</string>
+    <string name="mesh_booster_android">Android: %d</string>
+    <string name="mesh_booster_ios">iOS: %d</string>
+    <string name="mesh_booster_reconnect">Force Reconnect</string>
+
+    <!-- Multi-Device Sync -->
+    <string name="multi_device_title">Multi-Device</string>
+    <string name="multi_device_link">Link Device</string>
+    <string name="multi_device_unlink">Unlink Device</string>
+    <string name="multi_device_linked">Linked Devices</string>
+    <string name="multi_device_no_devices">No linked devices</string>
+    <string name="multi_device_code">Link Code: %s</string>
+    <string name="multi_device_enter_code">Enter code from other device</string>
+    <string name="multi_device_expires">Expires in %d seconds</string>
+    <string name="multi_device_syncing">Syncing…</string>
+    <string name="multi_device_last_sync">Last sync: %s</string>
+
+    <!-- Calendar Export -->
+    <string name="export_title">Export</string>
+    <string name="export_messages">Export Messages</string>
+    <string name="export_to_calendar">Export to Calendar</string>
+    <string name="export_to_text">Export as Text</string>
+    <string name="export_to_csv">Export as CSV</string>
+    <string name="export_to_json">Export as JSON</string>
+    <string name="export_success">Exported successfully</string>
+    <string name="export_failed">Export failed</string>
+    <string name="export_share">Share Export</string>
+    <string name="exported_files">Exported Files</string>
+    <string name="export_delete_all">Delete All Exports</string>
+
+    <!-- Web Session -->
+    <string name="web_session_title">Web Session</string>
+    <string name="web_session_subtitle">Manage your connected web interfaces</string>
+    <string name="web_session_scan">Scan QR to connect</string>
+    <string name="web_session_scan_qr">Scan QR to connect</string>
+    <string name="web_session_how_it_works">How it works</string>
+    <string name="web_session_connected">Connected to web</string>
+    <string name="web_session_disconnect">Disconnect</string>
+    <string name="web_session_active">Active Sessions</string>
+    <string name="web_session_back">Back</string>
+    <string name="web_session_linked_devices">Linked Devices</string>
+    <string name="web_session_disconnect_all">Disconnect All</string>
+    <string name="web_session_connected_to_web">Connected to web interface</string>
+    <string name="web_session_active_sessions">Active Sessions</string>
+    <string name="web_session_disconnect_session">Disconnect Session</string>
+    <string name="web_session_disconnect_session_message">Are you sure you want to disconnect this web session? You will need to scan the QR code again to reconnect.</string>
+    <string name="web_session_disconnect_all_sessions">Disconnect All Sessions</string>
+    <string name="web_session_disconnect_all_message">Are you sure you want to disconnect all web sessions? You will need to scan the QR code again to reconnect any device.</string>
+    <string name="web_session_link_web">Link Web Interface</string>
+    <string name="web_session_link_description">Use OSHI on your computer by scanning this QR code</string>
+    <string name="web_session_qr_content_desc">QR Code for web linking</string>
+    <string name="web_session_qr_expires">QR code expires in 2 minutes</string>
+    <string name="web_session_connecting">Connecting…</string>
+    <string name="web_session_generate_qr">Generate QR Code</string>
+    <string name="web_session_how_to_link">How to link</string>
+    <string name="web_session_step1">Open web.oshi.app in your browser</string>
+    <string name="web_session_step2">Click \"Link Mobile App\"</string>
+    <string name="web_session_step3">Point your phone at the screen to scan</string>
+    <string name="web_session_badge_active">Active</string>
+    <string name="web_session_last_active">Last active: %s</string>
+    <string name="web_session_e2e_encrypted">End-to-End Encrypted</string>
+    <string name="web_session_security_notice">Your messages are encrypted on your phone and can only be read by you and your recipient. Web sessions use a secure encrypted tunnel.</string>
+
+    <!-- Web Session — iOS parity (scan-on-mobile flow) -->
+    <string name="web_session_screen_title">Web Sessions</string>
+    <string name="web_session_link_computer">Link a Computer</string>
+    <string name="web_session_scan_qr_subtitle">Scan QR code from OSHI Web</string>
+    <string name="web_session_footer">Use OSHI on your computer at oshi-messenger.com/web</string>
+    <string name="web_session_section_oshi_web">OSHI WEB</string>
+    <string name="web_session_no_sessions">No active web sessions</string>
+    <string name="web_session_revoke">Revoke</string>
+    <string name="web_session_revoke_session_title">Revoke Session?</string>
+    <string name="web_session_revoke_message">This will log out %1$s on %2$s.</string>
+    <string name="web_session_revoke_all_title">Revoke All Sessions?</string>
+    <string name="web_session_revoke_all_message">This will log you out from all %1$d computers.</string>
+    <string name="web_session_revoke_all_button">Revoke All Sessions</string>
+    <string name="web_session_revoke_all_footer">This will log you out from all computers.</string>
+    <string name="web_session_last_updated">Last updated</string>
+    <string name="web_session_security_section">SECURITY</string>
+    <string name="web_session_security_expire">Sessions expire after 30 days</string>
+    <string name="web_session_security_encrypted_short">Messages are end-to-end encrypted</string>
+    <string name="web_session_security_no_contacts">Web sessions cannot see your contacts</string>
+    <string name="web_session_scan_prompt">Point your camera at the QR code shown on oshi-messenger.com/web</string>
+    <string name="web_session_link_success">Web session linked successfully</string>
+    <string name="web_session_link_failed">Could not link this web session</string>
+    <string name="web_session_linking">Linking…</string>
+
+    <!-- Location -->
+    <string name="location_share">Share Location</string>
+    <string name="location_sharing_active">Sharing location</string>
+    <string name="location_stop_sharing">Stop Sharing</string>
+    <string name="location_view">View Location</string>
+    <string name="location_share_current">Send Current Location</string>
+    <string name="location_share_live">Share Live Location</string>
+    <string name="location_live_duration">Share for</string>
+    <string name="location_2_minutes">2 minutes</string>
+    <string name="location_5_minutes">5 minutes</string>
+    <string name="location_15_minutes">15 minutes</string>
+    <string name="location_30_minutes">30 minutes</string>
+    <string name="location_1_hour">1 hour</string>
+    <string name="location_8_hours">8 hours</string>
+    <string name="location_sharing_live">Sharing Live Location</string>
+    <string name="location_shared_location">Shared Location</string>
+    <string name="location_open_in_maps">Open in Maps</string>
+    <string name="location_expired">Location expired</string>
+    <string name="location_updating">Getting location\u2026</string>
+    <string name="location_accuracy_high">High accuracy</string>
+    <string name="location_updates_realtime">Updates in real-time</string>
+    <string name="location_enable">Enable Location</string>
+    <string name="location_enable_desc">Tap to allow location access</string>
+    <string name="location_allow">Allow Location</string>
+    <string name="location_unable">Unable to get location. Please try again.</string>
+    <string name="location_live">LIVE</string>
+    <string name="location_stop">Stop</string>
+    <string name="location_extend">Extend</string>
+    <string name="location_extend_title">Extend Live Location</string>
+    <string name="location_extend_15min">Add 15 minutes</string>
+    <string name="location_extend_30min">Add 30 minutes</string>
+    <string name="location_extend_1hour">Add 1 hour</string>
+    <string name="location_share_mine">Share Mine</string>
+    <string name="location_open">Open</string>
+    <string name="location_expires_in">Expires in %s</string>
+    <string name="location_live_share_for">Share Live Location For</string>
+    <string name="location_directions">Get Directions</string>
+    <string name="location_permission_denied">Location Access Denied</string>
+    <string name="location_permission_denied_message">To share your location, please enable location access in Settings.</string>
+
+    <!-- Media -->
+    <string name="media_send_photo">Send Photo</string>
+    <string name="media_send_video">Send Video</string>
+    <string name="media_send_audio">Send Voice Message</string>
+    <string name="media_send_document">Send Document</string>
+    <string name="media_recording">Recording…</string>
+    <string name="media_tap_to_record">Tap to record</string>
+    <string name="media_hold_to_record">Hold to record</string>
+    <string name="media_release_to_send">Release to send</string>
+
+    <!-- View-Once Media (iOS compatible) -->
+    <string name="media_view_once">View Once</string>
+    <string name="media_view_once_description">Photo will disappear after viewing</string>
+    <string name="media_view_once_opened">Opened</string>
+    <string name="media_view_once_expired">Media expired</string>
+    <string name="media_view_once_tap">Tap to view</string>
+    <string name="media_view_once_photo">View-once photo</string>
+    <string name="media_view_once_video">View-once video</string>
+
+    <!-- Message Search -->
+    <string name="search_messages">Search messages</string>
+    <string name="search_in_chat">Search in chat</string>
+    <string name="search_no_results">No results found</string>
+    <string name="search_results">%d results</string>
+    <string name="search_result_in">in %s</string>
+    <string name="search_match_counter">%1$d of %2$d</string>
+    <string name="search_previous">Previous match</string>
+    <string name="search_next">Next match</string>
+
+    <!-- Delivery Status -->
+    <string name="delivery_via_vps">Via Server</string>
+    <string name="delivery_via_mesh">Via Mesh</string>
+    <string name="delivery_via_relay">Via Relay</string>
+    <string name="delivery_via_ipfs">Via IPFS</string>
+    <string name="delivery_via_tor">Via Relay</string>
+
+    <!-- Time -->
+    <string name="time_now">Now</string>
+    <string name="time_minutes_ago">%d min ago</string>
+    <string name="time_hours_ago">%d hours ago</string>
+    <string name="time_yesterday">Yesterday</string>
+
+    <!-- Group Chat -->
+    <string name="group_chat_empty">No messages yet</string>
+    <string name="group_chat_start">Start the conversation!</string>
+    <string name="group_members_count">members</string>
+    <string name="message_reply_to">Replying to message</string>
+
+    <!-- Profile Edit -->
+    <string name="profile_edit_title">Edit Profile</string>
+    <string name="profile_change_photo">Change Photo</string>
+    <string name="profile_display_name">Display Name</string>
+    <string name="profile_name_placeholder">Enter your name</string>
+    <string name="profile_public_key">Public Key</string>
+    <string name="profile_remove_photo">Remove Photo</string>
+    <string name="profile_choose_photo">Choose Photo</string>
+    <string name="profile_take_photo">Take Photo</string>
+    <string name="profile_choose_gallery">Choose from Gallery</string>
+
+    <!-- Wallpaper -->
+    <string name="wallpaper_title">Chat Wallpaper</string>
+    <string name="wallpaper_colors">Colors</string>
+    <string name="wallpaper_gradients">Gradients</string>
+    <string name="wallpaper_emoji">Emoji</string>
+    <string name="wallpaper_reset">Reset to Default</string>
+
+    <!-- Onboarding - Additional -->
+    <string name="onboarding_subtitle">Secure, private messaging that works even without internet</string>
+    <string name="onboarding_key_features">Key Features</string>
+    <string name="onboarding_e2e_title">End-to-End Encryption</string>
+    <string name="onboarding_e2e_desc">All messages are encrypted. Only you and the recipient can read them.</string>
+    <string name="onboarding_mesh_title">Mesh Networking</string>
+    <string name="onboarding_mesh_desc">Send messages directly to nearby users, even without internet.</string>
+    <string name="onboarding_calls_title">Secure Calls</string>
+    <string name="onboarding_calls_desc">Voice and video calls with full encryption.</string>
+    <string name="onboarding_cross_platform_title">Cross-Platform</string>
+    <string name="onboarding_cross_platform_desc">Works with iOS and Android devices seamlessly.</string>
+    <string name="onboarding_create_your_identity">Create Your Identity</string>
+    <string name="onboarding_choose_display_name">Choose a display name for your contacts</string>
+    <string name="onboarding_display_name">Display Name</string>
+    <string name="onboarding_key_info">A unique encryption key pair will be generated for you. Make sure to backup your keys later.</string>
+    <string name="onboarding_back">Back</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_creating">Creating…</string>
+    <string name="onboarding_error_create">Failed to create identity: %s</string>
+    <string name="onboarding_restore_from_backup">I have a backup — restore my identity</string>
+    <string name="onboarding_restore_title">Restore identity</string>
+    <string name="onboarding_restore_description">Paste the 64-byte recovery key you exported from another device.</string>
+    <string name="onboarding_recovery_key">Recovery key</string>
+    <string name="onboarding_paste_clipboard">Paste from clipboard</string>
+    <string name="onboarding_scan_qr">Scan QR</string>
+    <string name="onboarding_scan_prompt">Scan your OSHI recovery QR code</string>
+    <string name="onboarding_restore_action">Restore</string>
+    <string name="onboarding_recover_from_device">Recover identity from this device</string>
+    <string name="onboarding_recover_device_ok">Identity recovered from this device.</string>
+    <string name="onboarding_recover_device_none">No previous identity found on this device. Use the recovery key option below.</string>
+    <string name="chat_copy_public_key">Copy public key</string>
+    <string name="chat_public_key_copied">Public key copied</string>
+    <string name="settings_delete_identity">Delete identity from this device</string>
+    <string name="settings_delete_identity_desc">Wipe keys and reset onboarding</string>
+    <string name="settings_delete_identity_warning">This permanently deletes your private keys and the local Auto-Backup blob. You will not be able to receive messages sent to this identity. Make sure you have a recovery key first.</string>
+    <string name="settings_delete_identity_confirm">Delete</string>
+    <string name="settings_delete_identity_done">Identity deleted</string>
+
+    <!-- Chat Screen -->
+    <string name="chat_type_message">Message</string>
+    <string name="chat_e2e_encrypted">🔒 E2E</string>
+    <string name="chat_sending_image">Sending image…</string>
+    <string name="chat_failed_load_image">Failed to load image</string>
+    <string name="chat_sending_video">Sending video…</string>
+    <string name="chat_failed_load_video">Failed to load video</string>
+
+    <!-- Play policy 2026-09-16 (production rejection, "broken functionality"):
+         the reviewer was shown a RAW exception string in a toast —
+         "Public key must be 32 bytes, got 8 (input: oshi.welcome...)" — because
+         every send-failure path piped `exception.message` straight to the UI.
+         These four replace that. The exception still reaches Logcat in full. -->
+    <string name="chat_send_failed">Message not sent. Tap the message to try again.</string>
+    <string name="chat_image_send_failed">Image not sent. Tap the message to try again.</string>
+    <string name="chat_gif_send_failed">GIF not sent. Tap the message to try again.</string>
+    <string name="chat_system_thread_readonly">This is a note from OSHI, not from a person, so it can\'t be replied to. Add a contact to start a conversation.</string>
+    <string name="chat_video_too_large">Video too large (max 50 MB)</string>
+    <string name="chat_sending_document">Sending document…</string>
+    <string name="chat_failed_load_document">Failed to load document</string>
+    <string name="chat_copied">Copied</string>
+    <string name="chat_message_forwarded">Message forwarded</string>
+    <string name="chat_voice_call">Voice Call</string>
+    <string name="chat_video_call">Video Call</string>
+    <string name="chat_more_options">More options</string>
+    <string name="chat_wallpaper">Wallpaper</string>
+    <string name="chat_clear_chat">Clear chat</string>
+    <string name="chat_attach">Attach</string>
+    <string name="chat_share_location">Share Location</string>
+    <string name="chat_slide_to_cancel">&lt; Slide to cancel</string>
+    <string name="chat_record_voice">Record Voice</string>
+    <string name="chat_send_voice">Send Voice</string>
+    <string name="chat_react_to_message">React to message</string>
+    <string name="chat_message_actions">Message Actions</string>
+    <string name="chat_forward_to">Forward to…</string>
+    <string name="chat_no_conversations">No conversations available</string>
+    <string name="chat_view_once">View Once</string>
+    <string name="chat_view_once_desc">Photo/video disappears after viewing</string>
+    <string name="chat_photo">Photo</string>
+    <string name="chat_photo_desc">Send a photo from gallery</string>
+    <string name="chat_video">Video</string>
+    <string name="chat_video_desc">Send a video from gallery</string>
+    <string name="chat_document_title">Document</string>
+    <string name="chat_document_desc">Send a file or document</string>
+    <string name="location_share_desc">Share your current location</string>
+    <string name="share_contact_desc">Share a contact from your phone</string>
+    <string name="chat_camera_desc">Take a new photo or video</string>
+
+    <!-- Settings Screen - Additional -->
+    <string name="settings_oshi_user">OSHI User</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_my_qr_code">My QR Code</string>
+    <string name="settings_share_public_key">Share your public key</string>
+    <string name="settings_groups">Groups</string>
+    <string name="settings_manage_groups">Manage your group chats</string>
+    <string name="settings_backup_keys">Backup Keys</string>
+    <string name="settings_export_keys">Export your encryption keys</string>
+    <string name="settings_identity_details">Identity Details</string>
+    <string name="settings_view_identity">View your identity information</string>
+    <string name="settings_biometric_lock">Biometric Lock</string>
+    <string name="settings_biometric_subtitle">Require biometrics to open</string>
+    <string name="settings_biometric_unavailable">Not available on this device</string>
+    <string name="settings_auto_lock">Auto-Lock</string>
+    <string name="settings_auto_lock_disabled">Disabled</string>
+    <string name="settings_auto_lock_30s">After 30 seconds</string>
+    <string name="settings_auto_lock_1m">After 1 minute</string>
+    <string name="settings_auto_lock_5m">After 5 minutes</string>
+    <string name="settings_auto_lock_15m">After 15 minutes</string>
+    <string name="settings_auto_lock_unlock_title">Unlock OSHI</string>
+    <string name="settings_auto_lock_unlock_subtitle">Authenticate to continue</string>
+    <string name="settings_read_receipts">Read Receipts</string>
+    <string name="settings_read_receipts_desc">Show when you\'ve read messages</string>
+    <string name="settings_last_seen">Last Seen</string>
+    <string name="settings_last_seen_desc">Show your last active time</string>
+    <string name="settings_blocked_contacts">Blocked Contacts</string>
+    <string name="settings_manage_blocked">Manage blocked users</string>
+
+    <!-- Reported items — iOS SettingsView.swift:1010-1017 + ReportedItemsView
+         (ContactActionsView.swift:688). Android had no reporting subsystem at all. -->
+    <string name="settings_reports">Reported Items</string>
+    <string name="settings_reports_desc">See what you reported</string>
+    <string name="settings_reports_empty">You have not reported anyone.</string>
+    <string name="settings_reports_count">%1$d report(s)</string>
+    <string name="report_status_sent">Sent</string>
+    <string name="report_status_pending">Pending</string>
+    <string name="report_status_rejected">Rejected</string>
+    <string name="report_retry_all">Retry sending</string>
+    <string name="report_withdraw_title">Remove this report?</string>
+    <string name="report_withdraw_message">It disappears from this list. A report already delivered to the moderation team is not recalled.</string>
+    <string name="report_withdraw_confirm">Remove</string>
+    <string name="block_reason_spam">Spam</string>
+    <string name="block_reason_harassment">Harassment</string>
+    <string name="block_reason_inappropriate">Inappropriate content</string>
+    <string name="block_reason_other">Other</string>
+
+    <!-- Legal — iOS SettingsView.swift:1096-1107. Play expects an in-app privacy
+         link for a messaging app; Android had neither link and no string for one. -->
+    <string name="settings_legal">Legal</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_terms_of_service">Terms of Service</string>
+    <string name="settings_enable_notifications">Enable push notifications</string>
+    <string name="settings_sound">Sound</string>
+    <string name="settings_sound_desc">Play notification sounds</string>
+    <string name="settings_vibration">Vibration</string>
+    <string name="settings_vibration_desc">Vibrate on notifications</string>
+    <string name="settings_message_preview">Message Preview</string>
+    <string name="settings_message_preview_desc">Show message content in notifications</string>
+    <string name="settings_linked_devices">Linked Devices</string>
+    <string name="settings_oshi_web">OSHI Web</string>
+    <string name="settings_link_browser">Link OSHI to your browser</string>
+    <string name="settings_data_management">Data Management</string>
+    <string name="settings_export_messages">Export Messages</string>
+    <string name="settings_exporting">Exporting…</string>
+    <string name="settings_export_to_json">Export all messages to JSON</string>
+    <string name="settings_clear_sessions">Clear Sessions</string>
+    <string name="settings_clear_sessions_desc">Clear encryption sessions</string>
+    <string name="settings_clear_all_messages">Clear All Messages</string>
+    <string name="settings_delete_history">Delete all message history</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_help_faq">Help &amp; FAQ</string>
+    <string name="settings_help_faq_desc">Frequently asked questions</string>
+    <string name="settings_edit_name">Edit Name</string>
+    <string name="settings_display_name">Display Name</string>
+    <string name="settings_clear_sessions_warning">This will clear all encryption sessions. You may need to re-establish secure connections with your contacts.</string>
+    <string name="settings_clear_messages_warning">This will permanently delete all your messages. This action cannot be undone.</string>
+    <string name="settings_disconnect">Disconnect</string>
+    <string name="settings_disconnect_warning">Are you sure you want to disconnect? This will clear all your data and you will need to set up your identity again.</string>
+    <string name="settings_delete_all">Delete All</string>
+    <string name="settings_clear">Clear</string>
+    <string name="settings_created">Created %s</string>
+    <string name="settings_stat_messages">Messages</string>
+    <string name="settings_stat_chats">Chats</string>
+    <string name="settings_stat_peers">Peers</string>
+
+    <!-- GroupChatViewModel -->
+    <string name="sender_name_me">Me</string>
+
+    <!-- Video Call -->
+    <string name="video_call_title">Video Call</string>
+    <string name="video_call_connecting">Connecting video…</string>
+    <string name="video_call_switch_camera">Switch Camera</string>
+    <string name="video_call_camera_off">Camera Off</string>
+    <string name="video_call_camera_on">Camera On</string>
+    <string name="video_switch_to_voice">Switch to Voice</string>
+
+    <!-- __LOCAL_GIF_LIBRARY_2026_09_13__ GIF & sticker picker.
+         English only for now, deliberately: an untranslated key falls back to
+         values/ on every locale, which is the same contract iOS's
+         `localizedOrFallback` gives it. The pack's own labels are pixels, not
+         strings — the images are pre-rendered per language. -->
+    <string name="gif_picker_title">GIFs &amp; Stickers</string>
+    <string name="gif_tab_gifs">GIFs</string>
+    <string name="gif_tab_stickers">Stickers</string>
+    <string name="gif_category_all">All</string>
+    <string name="gif_picker_search">Search</string>
+    <string name="gif_picker_no_results">Nothing here</string>
+    <string name="chat_gif_title">GIFs &amp; Stickers</string>
+    <string name="chat_gif_desc">Send an animated GIF or sticker</string>
+
+    <!-- Additional Chat Screen -->
+    <string name="chat_mic_permission_required">Microphone permission required</string>
+    <string name="chat_share_content">Share Content</string>
+    <string name="chat_play_video">Play video</string>
+    <string name="chat_pause">Pause</string>
+    <string name="chat_play">Play</string>
+    <string name="chat_download">Download</string>
+    <string name="chat_send">Send</string>
+    <string name="profile_picture">Profile picture</string>
+
+    <!-- Additional Settings Screen -->
+    <string name="settings_font_size">Font Size</string>
+    <string name="settings_preview_text">Preview text at %d%%</string>
+    <string name="settings_prevent_screenshots">Prevent screenshots in app</string>
+    <string name="settings_edit_photo">Edit photo</string>
+    <string name="settings_enable_push">Enable push notifications</string>
+
+    <!-- Video Player -->
+    <string name="video_player_close">Close video</string>
+    <string name="video_player_fullscreen">Video Player</string>
+    <string name="video_saved">Video saved to Downloads</string>
+    <string name="video_save_failed">Failed to save video</string>
+
+    <!-- Document Save -->
+    <string name="document_saved">Document saved to Downloads</string>
+    <string name="document_save_failed">Failed to save document</string>
+    <string name="document_open">Open</string>
+
+    <!-- Speaker Toggle -->
+    <string name="speaker_on">Speaker on</string>
+    <string name="speaker_off">Earpiece</string>
+
+    <!-- Caption -->
+    <string name="caption_placeholder">Add a caption…</string>
+    <string name="media_preview_send">Send</string>
+
+    <!-- Contact Sharing -->
+    <string name="share_contact">Share Contact</string>
+    <string name="contact_shared">Contact Shared</string>
+    <string name="copy_public_key">Copy Public Key</string>
+    <string name="public_key_copied">Public key copied</string>
+    <string name="no_contacts_to_share">No contacts to share</string>
+
+    <!-- Notification Actions -->
+    <string name="notification_reply">Reply</string>
+    <string name="notification_mark_read">Mark as Read</string>
+    <string name="notification_reply_hint">Type a reply…</string>
+    <string name="notification_reply_sent">Reply sent</string>
+
+    <!-- Media Viewer -->
+    <string name="media_viewer_title">Media</string>
+    <string name="save_to_gallery">Save to Gallery</string>
+    <string name="saved_to_gallery">Saved to gallery</string>
+    <string name="failed_to_save">Failed to save</string>
+
+    <!-- Media Gallery (per-chat grid of shared photos/videos) -->
+    <string name="media_gallery_title">Media Gallery</string>
+    <string name="media_gallery_empty">No photos or videos yet</string>
+    <string name="media_gallery_action">Media, Links &amp; Docs</string>
+
+    <!-- Date Search -->
+    <string name="search_by_date">Search by Date</string>
+    <string name="date_today">Today</string>
+    <string name="date_this_week">This Week</string>
+    <string name="date_this_month">This Month</string>
+    <string name="date_custom_range">Custom Range</string>
+
+    <!-- Scheduled Messages -->
+    <string name="scheduled_msg_title">Scheduled Messages</string>
+    <string name="scheduled_msg_menu">Schedule Message</string>
+    <string name="scheduled_msg_schedule">Schedule</string>
+    <string name="scheduled_msg_preview">Preview</string>
+    <string name="scheduled_msg_when">When to send</string>
+    <string name="scheduled_msg_tone_romantic">Romantic</string>
+    <string name="scheduled_msg_tone_friendly">Friendly</string>
+    <string name="scheduled_msg_tone_family">Family</string>
+    <string name="scheduled_msg_tone_casual">Casual</string>
+    <string name="scheduled_msg_tone_formal">Formal</string>
+    <string name="scheduled_msg_generating">Generating message\u2026</string>
+    <string name="scheduled_msg_regenerate">Regenerate</string>
+    <string name="scheduled_msg_subtitle">AI will craft a heartfelt message for your contact</string>
+    <string name="scheduled_msg_delivered">Your message has been delivered</string>
+    <string name="scheduled_msg_cancelled">Message cancelled</string>
+    <string name="scheduled_msg_no_pending">No scheduled messages</string>
+
+    <!-- About / Philosophy -->
+    <string name="about_navigation_title">About</string>
+    <string name="about_tagline">The Sovereign Messenger</string>
+    <string name="about_tag_offline">Offline</string>
+    <string name="about_tag_secure">Secure</string>
+    <string name="about_tag_decentralized">Decentralized</string>
+    <string name="about_vision_title">The Vision</string>
+    <string name="about_vision_p1">OSHI is not just a messenger — it\'s a communication protocol for digital freedom. Built on principles of sovereignty, privacy, and resilience.</string>
+    <string name="about_vision_p2">It works without servers, using peer-to-peer mesh networking to route messages through direct Bluetooth/Wi-Fi connections or multi-hop relay nodes.</string>
+    <string name="about_vision_p3">Every message is protected by the Signal Double Ratchet cryptosystem, ensuring perfect forward secrecy and post-compromise security — even across offline relays and out-of-order delivery.</string>
+    <string name="about_principles_title">Core Principles</string>
+    <string name="about_principles_privacy_title">Privacy by Default</string>
+    <string name="about_principles_privacy_desc">Zero metadata, zero tracking, zero compromise. Your conversations belong only to you.</string>
+    <string name="about_principles_decentralization_title">Decentralization</string>
+    <string name="about_principles_decentralization_desc">No central authority, no single point of failure. Power distributed across the network.</string>
+    <string name="about_principles_sovereignty_title">Sovereignty</string>
+    <string name="about_principles_sovereignty_desc">You control your identity, your data, and your connections.</string>
+    <string name="about_principles_resilience_title">Resilience</string>
+    <string name="about_principles_resilience_desc">Works in low-connectivity and offline scenarios. Communication keeps flowing.</string>
+    <string name="about_features_title">Technical Features</string>
+    <string name="about_features_double_ratchet_title">Double Ratchet Protocol</string>
+    <string name="about_features_double_ratchet_desc">Strong end-to-end encryption with forward secrecy on every message.</string>
+    <string name="about_features_mesh_title">Multi-Hop Mesh Routing</string>
+    <string name="about_features_mesh_desc">Messages relay through trusted peers to reach their destination, even offline.</string>
+    <string name="about_features_fallback_title">Hybrid Cloud Fallback</string>
+    <string name="about_features_fallback_desc">Encrypted IPFS storage ensures delivery when direct mesh isn\'t available.</string>
+    <string name="about_features_identity_title">Cryptographic Identity</string>
+    <string name="about_features_identity_desc">Identity-based authentication using public-key cryptography.</string>
+    <string name="about_features_ordering_title">Out-of-Order Handling</string>
+    <string name="about_features_ordering_desc">Advanced message buffering handles network chaos gracefully.</string>
+    <string name="about_features_media_title">Encrypted Media</string>
+    <string name="about_features_media_desc">Send photos and videos with AES-256-GCM encryption, decrypted only by recipient.</string>
+    <string name="about_features_qr_title">QR Code Pairing</string>
+    <string name="about_features_qr_desc">Scan to verify and add contacts with cryptographic safety numbers.</string>
+    <string name="about_features_serverless_title">Serverless Architecture</string>
+    <string name="about_features_serverless_desc">No central database, no user accounts, no data collection. Ever.</string>
+    <string name="about_how_it_works_title">How It Works</string>
+    <string name="about_how_step1_title">Generate Your Identity</string>
+    <string name="about_how_step1_desc">Create a cryptographic identity that becomes your unique, verifiable identity.</string>
+    <string name="about_how_step2_title">Connect to Peers</string>
+    <string name="about_how_step2_desc">Discover nearby devices via Bluetooth or WiFi mesh, or scan QR codes to add trusted contacts.</string>
+    <string name="about_how_step3_title">Send Encrypted Messages</string>
+    <string name="about_how_step3_desc">Messages are encrypted with Double Ratchet and sent directly to peers or relayed through the mesh.</string>
+    <string name="about_how_step4_title">Fallback to Cloud</string>
+    <string name="about_how_step4_desc">If mesh fails, messages are encrypted and stored on IPFS, only decryptable by the recipient.</string>
+    <string name="about_how_step5_title">Perfect Forward Secrecy</string>
+    <string name="about_how_step5_desc">Even if keys are compromised later, past conversations remain secure forever.</string>
+    <string name="about_use_cases_title">Built For</string>
+    <string name="about_use_cases_journalists_title">Writers</string>
+    <string name="about_use_cases_journalists_desc">Reliable, private communication for writers in remote areas.</string>
+    <string name="about_use_cases_activists_title">Professionals</string>
+    <string name="about_use_cases_activists_desc">Organize and communicate privately, without a central server.</string>
+    <string name="about_use_cases_emergency_title">Emergency Response</string>
+    <string name="about_use_cases_emergency_desc">Coordinate when infrastructure fails</string>
+    <string name="about_use_cases_travelers_title">Travelers</string>
+    <string name="about_use_cases_travelers_desc">Stay connected without roaming or internet</string>
+    <string name="about_use_cases_privacy_title">Privacy Advocates</string>
+    <string name="about_use_cases_privacy_desc">Communicate without corporate intermediaries</string>
+    <string name="about_use_cases_crypto_title">Crypto Users</string>
+    <string name="about_use_cases_crypto_desc">Native identity integration for secure coordination</string>
+    <string name="about_open_source_title">Open Source &amp; Transparency</string>
+    <string name="about_open_source_p1">OSHI is 100% open source, built with transparency and auditability at its core. Every line of code is public and verifiable.</string>
+    <string name="about_open_source_p2">We believe that privacy tools must be open to be trusted. No backdoors, no hidden telemetry, no proprietary algorithms.</string>
+    <string name="about_open_source_contribute">Community contributions are welcome!</string>
+    <string name="about_open_source_view_code">View Source Code on GitHub</string>
+    <string name="about_open_source_visit_website">Visit Our Website</string>
+    <string name="about_philosophy_title">Philosophy</string>
+    <string name="about_philosophy_quote1">Communication is a fundamental human right, not a product to be monetized.</string>
+    <string name="about_philosophy_quote2">Privacy should be the default, not a premium feature.</string>
+    <string name="about_philosophy_quote3">No one should have the power to silence your voice or read your thoughts.</string>
+    <string name="about_philosophy_quote4">True freedom requires tools that cannot be controlled, censored, or surveilled.</string>
+    <string name="about_tech_stack_title">Technical Stack</string>
+    <string name="about_tech_stack_encryption">Encryption</string>
+    <string name="about_tech_stack_identity">Identity</string>
+    <string name="about_tech_stack_networking">Networking</string>
+    <string name="about_tech_stack_storage">Storage</string>
+    <string name="about_tech_stack_platform">Platform</string>
+    <string name="about_tech_stack_cryptography">Cryptography</string>
+    <string name="about_footer_tagline">Built for a world without central control.</string>
+    <string name="about_footer_motto">Private by default.</string>
+    <string name="about_footer_copyright">\u00A9 2026 OSHI Project</string>
+
+    <!-- Audio Effects -->
+    <string name="call_effect">Effect</string>
+    <string name="call_effect_picker_title">Voice Effect</string>
+    <string name="call_effect_normal">Normal</string>
+    <string name="call_effect_robot">Robot</string>
+    <string name="call_effect_alien">Alien</string>
+    <string name="call_effect_deep">Deep</string>
+    <string name="call_effect_chipmunk">Chipmunk</string>
+    <string name="call_effect_echo">Echo</string>
+    <string name="call_effect_reverb">Reverb</string>
+    <string name="call_effect_anonymous">Modulated</string>
+    <string name="call_effect_none_desc">No voice modification</string>
+    <string name="call_effect_robot_desc">Metallic robotic voice</string>
+    <string name="call_effect_alien_desc">High-pitched alien voice</string>
+    <string name="call_effect_deep_desc">Deep bass voice</string>
+    <string name="call_effect_chipmunk_desc">High-speed chipmunk voice</string>
+    <string name="call_effect_anonymous_desc">Modulated voice tone</string>
+    <string name="call_effect_echo_desc">Repeating echo effect</string>
+    <string name="call_effect_reverb_desc">Cathedral-like ambience</string>
+    <string name="audio_processing_effect">Processing effect\u2026</string>
+    <string name="audio_processing_wait">This will take a few seconds</string>
+    <string name="audio_effect_ready">Effect ready!</string>
+    <string name="audio_message">Audio Message</string>
+
+    <!-- System Event Messages -->
+    <string name="group_system_created_by">Group created by %s</string>
+    <string name="group_system_name_changed_by">%s changed the group name</string>
+    <string name="group_system_admin_changed_to">%s is now an admin</string>
+    <string name="group_system_member_removed">was removed</string>
+    <string name="group_system_created">Group was created</string>
+    <string name="group_system_name_changed">Group name was changed</string>
+    <string name="group_system_picture_changed">Group picture was changed</string>
+    <string name="group_system_picture_removed">Group picture was removed</string>
+    <string name="group_system_admin_changed">Admin was changed</string>
+    <string name="group_system_message_pinned">A message was pinned</string>
+    <string name="group_system_message_unpinned">A message was unpinned</string>
+    <string name="group_system_message_pinned_by">%s pinned a message</string>
+    <string name="group_system_message_unpinned_by">%s unpinned a message</string>
+    <string name="group_system_wallpaper_changed">Wallpaper was changed</string>
+    <string name="group_system_wallpaper_changed_by">%s changed the wallpaper</string>
+    <string name="group_system_message_deleted">A message was deleted</string>
+    <string name="system_profile_requested">Profile requested</string>
+    <string name="system_profile_request_received">Profile request received</string>
+    <string name="system_profile_updated">You updated your profile</string>
+    <string name="system_contact_profile_updated">%s updated their profile</string>
+    <string name="system_wallpaper_changed">You changed the chat wallpaper</string>
+    <string name="system_contact_wallpaper_changed">%s changed the chat wallpaper</string>
+
+    <!-- Scheduled Calls / Events -->
+    <string name="event_create_title">Schedule a Call</string>
+    <string name="event_create_when">When</string>
+    <string name="event_create_datetime">Date &amp; Time</string>
+    <string name="event_create_duration">Duration</string>
+    <string name="event_create_title_optional">Title (Optional)</string>
+    <string name="event_create_title_placeholder">e.g., Weekly Sync</string>
+    <string name="event_create_preview">Preview</string>
+    <string name="event_create_schedule">Schedule</string>
+    <string name="event_timezone_info">Your timezone: %1$s (UTC%2$s)</string>
+    <string name="event_call_scheduled">Scheduled Call</string>
+    <string name="event_created_by">Created by %s</string>
+    <string name="event_status_pending">Pending</string>
+    <string name="event_status_confirmed">Confirmed</string>
+    <string name="event_status_declined">Declined</string>
+    <string name="event_status_cancelled">Cancelled</string>
+    <string name="event_status_completed">Completed</string>
+    <string name="event_accept">Accept</string>
+    <string name="event_decline">Decline</string>
+    <string name="event_you_accepted">You accepted</string>
+    <string name="event_you_declined">You declined</string>
+    <string name="event_join_call">Join Call</string>
+    <string name="event_starting_soon">Starting soon!</string>
+    <string name="event_in_minutes">In %d minutes</string>
+    <string name="event_in_hours">In %d hours</string>
+    <string name="event_in_days">In %d days</string>
+    <string name="event_reminder_title">Scheduled Call</string>
+    <string name="event_remind_later">Remind Later</string>
+    <string name="event_starting_at">Call starting at %s</string>
+    <string name="event_notification_title">Scheduled Call</string>
+    <string name="event_notification_body">Call with %1$s starting soon</string>
+    <string name="event_notification_now_title">Call Starting Now!</string>
+    <string name="event_notification_now_body">Your call with %1$s is starting</string>
+    <string name="event_duration">Duration</string>
+
+    <!-- Calendar Integration -->
+    <string name="calendar_add">Add to Calendar</string>
+    <string name="calendar_added">Added!</string>
+    <string name="calendar_share">Share .ics</string>
+    <string name="calendar_permission_denied">Calendar access denied. Please enable in Settings.</string>
+    <string name="calendar_event_notes">OSHI encrypted call with %s</string>
+    <string name="calendar_no_writable">No writable calendar found. Please create a calendar first.</string>
+    <string name="calendar_open_settings">Open Settings</string>
+    <string name="calendar_error_title">Calendar Error</string>
+    <string name="permission_calendar_title">Calendar</string>
+    <string name="permission_calendar_description">Add scheduled calls to your calendar</string>
+
+    <!-- Wallpaper Expanded -->
+    <string name="wallpaper_preview">Preview</string>
+    <string name="wallpaper_custom_image">Custom Image</string>
+    <string name="wallpaper_choose_photo">Choose from Gallery</string>
+    <string name="wallpaper_save_this_chat">Save for This Chat</string>
+    <string name="wallpaper_sample_received">Hello!</string>
+    <string name="wallpaper_sample_sent">Hi there!</string>
+    <string name="wallpaper_emoji_patterns">Emoji Patterns</string>
+    <string name="wallpaper_oshi_patterns">OSHI Patterns</string>
+    <string name="wallpaper_gradient_presets">Gradient Presets</string>
+    <string name="wallpaper_solid_colors">Solid Colors</string>
+
+    <!-- FAQ -->
+    <string name="faq_title">FAQ</string>
+    <string name="faq_q1_question">What is OSHI?</string>
+    <string name="faq_q1_answer">OSHI is a secure, decentralized messaging app that uses mesh networking and end-to-end encryption to protect your privacy.</string>
+    <string name="faq_q2_question">How does mesh networking work?</string>
+    <string name="faq_q2_answer">OSHI uses Bluetooth and WiFi to create a peer-to-peer network with nearby devices. Messages hop between devices until they reach the recipient.</string>
+    <string name="faq_q3_question">Is my data encrypted?</string>
+    <string name="faq_q3_answer">Yes! OSHI uses the Double Ratchet algorithm (same as Signal) for end-to-end encryption. Only you and your recipient can read messages.</string>
+    <string name="faq_q4_question">What if I lose my device?</string>
+    <string name="faq_q4_answer">Make sure to backup your keys in Settings > Backup Keys. Without your backup, you cannot recover your identity.</string>
+    <string name="faq_q5_question">Can I use OSHI without internet?</string>
+    <string name="faq_q5_answer">Yes! OSHI\'s mesh networking allows you to send messages to nearby users without internet.</string>
+    <string name="faq_q6_question">How do I add contacts?</string>
+    <string name="faq_q6_answer">Go to New Message and either scan your contact\'s QR code, share your QR code, or paste their public key.</string>
+
+    <!-- Onboarding Good Conduct — iOS GoodConductPage (OnboardingView.swift:731-778).
+         The user-conduct disclosure a UGC messenger shows before first use. -->
+    <string name="onboarding_conduct_title">Community Guidelines</string>
+    <string name="onboarding_conduct_subtitle">OSHI is built on trust and respect. Please follow these guidelines:</string>
+    <string name="onboarding_rule_respect">Be respectful to all users</string>
+    <string name="onboarding_rule_privacy">Respect others\' privacy</string>
+    <string name="onboarding_rule_secure">Keep your identity secure</string>
+    <string name="onboarding_rule_backup">Backup your keys safely</string>
+    <string name="onboarding_rule_no_spam">No spam or unsolicited messages</string>
+    <string name="onboarding_rule_no_abuse">No harassment or abuse</string>
+    <string name="onboarding_rule_no_illegal">No illegal content</string>
+
+    <!-- Onboarding Disclaimer -->
+    <string name="onboarding_disclaimer_title">Important Notice</string>
+    <string name="onboarding_disclaimer_subtitle">Please read before using OSHI</string>
+    <string name="onboarding_disclaimer_audit_title">No Security Audit Yet</string>
+    <string name="onboarding_disclaimer_audit_desc">This app has not undergone a professional security audit. While we use strong encryption, use at your own discretion.</string>
+    <string name="onboarding_disclaimer_anonymous_title">Privacy-first</string>
+    <string name="onboarding_disclaimer_anonymous_desc">OSHI does not require an account, a phone number, or an email. Your identity stays on your device.</string>
+    <string name="onboarding_disclaimer_mesh_title">Mesh Network Technology</string>
+    <string name="onboarding_disclaimer_mesh_desc">Without internet, messages hop from phone to phone — about 100 m directly, and further when other people nearby relay them along. A paired Meshtastic LoRa radio reaches about 30 km.</string>
+    <string name="onboarding_disclaimer_critical_title">For Critical Situations</string>
+    <string name="onboarding_disclaimer_critical_desc">Designed for scenarios when a country is disconnected from the internet. Communicate freely even when networks are down.</string>
+    <string name="onboarding_disclaimer_note">This is beta software. Features may change and bugs may occur.</string>
+    <string name="onboarding_disclaimer_notifications_title">Secure Notifications</string>
+    <string name="onboarding_disclaimer_notifications_desc">For security, messages and calls are only received when the app is open. In crisis situations, if your phone is locked, notifications only arrive after the app is open for 2+ seconds.</string>
+    <string name="onboarding_disclaimer_cloud_title">Encrypted Cloud Fallback</string>
+    <string name="onboarding_disclaimer_cloud_desc">When contacts are not nearby, messages are stored encrypted on IPFS (decentralized storage) and voice calls use our relay server. All data remains end-to-end encrypted.</string>
+
+    <!-- Onboarding Guide -->
+    <string name="guide_welcome_title">Welcome to OSHI!</string>
+    <string name="guide_messages_tab_title">Messages</string>
+    <string name="guide_groups_tab_title">Groups</string>
+    <string name="guide_new_tab_title">New Conversation</string>
+    <string name="guide_settings_tab_title">Settings &amp; Identity</string>
+    <string name="guide_collaborative_title">Collaborative Network</string>
+    <string name="guide_complete_title">You\'re Ready!</string>
+    <string name="guide_welcome_desc">OSHI is a collaborative encrypted messenger. Messages can travel up to 10km through nearby devices — even without internet! Let\'s show you around.</string>
+    <string name="guide_messages_tab_desc">Your private conversations appear here. Make encrypted voice calls by tapping any conversation.</string>
+    <string name="guide_groups_tab_desc">Create private groups or join public ones nearby. Discover groups within 10km using mesh technology.</string>
+    <string name="guide_new_tab_desc">Start a new conversation here. Scan a contact\'s QR code or paste their public key. No phone numbers, no accounts — just cryptographic keys.</string>
+    <string name="guide_settings_tab_desc">Your crypto identity lives here. Share your QR code or public key with others so they can message you.</string>
+    <string name="guide_collaborative_desc">OSHI is collaborative: when you keep the app open, your device helps relay encrypted messages for others. The more people with OSHI open, the further messages can travel!</string>
+    <string name="guide_complete_desc">You\'re all set! Remember: keep OSHI open to receive messages and help others communicate. Welcome to the network!</string>
+    <string name="guide_button_next">Next</string>
+    <string name="guide_button_skip">Skip Guide</string>
+    <string name="guide_button_start">Start Messaging</string>
+
+    <!-- Deep Links / Contact Sharing -->
+    <string name="deeplink_add_contact">Add Contact</string>
+    <string name="deeplink_add_contact_desc">This person wants to connect with you on OSHI</string>
+    <string name="deeplink_public_key">Public Key</string>
+    <string name="deeplink_contact_name">Contact Name</string>
+    <string name="deeplink_name_placeholder">Enter a name (optional)</string>
+    <string name="deeplink_add_and_chat">Add &amp; Start Chat</string>
+    <string name="deeplink_new_contact">New Contact</string>
+    <string name="deeplink_contact_added">Contact Added!</string>
+    <string name="deeplink_start_chatting">You can now start chatting securely</string>
+    <string name="deeplink_open_chat">Open Chat</string>
+    <string name="deeplink_invalid_key">Invalid public key format</string>
+    <string name="deeplink_own_key_error">You cannot add yourself as a contact</string>
+
+    <!-- Privacy / Security Settings -->
+    <string name="privacy_notifications_voip">Call Notifications</string>
+    <string name="privacy_notifications_voip_description">Receive calls when app is closed</string>
+    <string name="privacy_notifications_push">Push Notifications</string>
+    <string name="privacy_notifications_push_description">Receive messages when app is closed</string>
+    <string name="privacy_notifications_footer_push_disabled">Push notifications are disabled. You will only receive notifications when the app is open.</string>
+    <string name="lock_screen_unlock_biometric">Unlock with Biometrics</string>
+    <string name="lock_screen_unlock_reason">Unlock OSHI to continue</string>
+    <string name="security_other_title">Other Security</string>
+    <string name="security_other_screen_lock">Lock on Screen Off</string>
+    <string name="security_other_screen_lock_description">Automatically lock app when screen turns off</string>
+
+    <!-- Important Notice -->
+    <string name="settings_important_notice">Important Notice</string>
+    <string name="settings_notice_no_notifications_title">No Push Notifications</string>
+    <string name="settings_notice_no_notifications_desc">For maximum privacy and security, OSHI does not use push notifications. No server ever knows when you receive messages.</string>
+    <string name="settings_notice_no_notifications_instruction">Open the app periodically and wait a few seconds to check for new messages.</string>
+
+    <!-- Multi-Device Sync Expanded -->
+    <string name="multi_device_enabled">Enabled</string>
+    <string name="multi_device_disabled">Disabled</string>
+    <string name="multi_device_status">Status</string>
+    <string name="multi_device_sync_now">Sync Now</string>
+    <string name="multi_device_description">Sync your messages across all devices using the same OSHI identity. Messages are end-to-end encrypted.</string>
+    <string name="multi_device_registered_devices">Registered Devices (%d)</string>
+    <string name="multi_device_how_it_works">How It Works</string>
+    <string name="multi_device_disable_title">Disable Sync?</string>
+    <string name="multi_device_disable_message">This will unregister this device from sync. Messages will no longer sync across devices.</string>
+    <string name="multi_device_disable">Disable</string>
+    <string name="multi_device_status_idle">Idle</string>
+    <string name="multi_device_status_syncing">Syncing\u2026</string>
+    <string name="multi_device_status_synced">Synced</string>
+    <string name="multi_device_status_error">Sync Error</string>
+    <string name="multi_device_this_device">This Device</string>
+    <string name="multi_device_last_seen_time">Last seen: %s</string>
+    <string name="multi_device_info_1">Same private key required on all devices</string>
+    <string name="multi_device_info_2">Messages synced via encrypted cloud relay</string>
+    <string name="multi_device_info_3">VPS cannot read your messages</string>
+
+    <!-- View-Once Expanded -->
+    <string name="media_view_once_tap_to_view">Tap to view</string>
+    <string name="media_view_once_viewed">Viewed</string>
+    <string name="media_view_once_will_disappear">Will disappear after viewing</string>
+    <string name="media_view_once_hold_to_view">Hold to view</string>
+    <string name="media_view_once_sender_warning">You can also view this only once</string>
+    <string name="media_view_once_message_opened">Message opened</string>
+
+    <!-- Cleanup / Storage -->
+    <string name="cleanup_title">Storage &amp; Cleanup</string>
+    <string name="cleanup_clear_cache">Clear Cache</string>
+    <string name="cleanup_clear_cache_desc">Remove temporary files and cached data</string>
+    <string name="cleanup_old_messages">Clean Old Messages</string>
+    <string name="cleanup_old_messages_desc">Delete messages older than selected period</string>
+    <string name="cleanup_storage_used">Storage used: %s</string>
+    <string name="cleanup_cache_cleared">Cache cleared</string>
+    <string name="cleanup_30_days">Older than 30 days</string>
+    <string name="cleanup_90_days">Older than 90 days</string>
+    <string name="cleanup_1_year">Older than 1 year</string>
+    <string name="cleanup_all_messages">All messages</string>
+    <string name="cleanup_confirm_title">Delete Messages?</string>
+    <string name="cleanup_confirm_message">This will permanently delete selected messages. This cannot be undone.</string>
+
+    <!-- Delivery Method Badge -->
+    <string name="delivery_badge_vps">IPFS</string>
+    <string name="delivery_badge_mesh">Mesh</string>
+    <string name="delivery_badge_tor">Tor</string>
+    <string name="delivery_badge_ipfs">IPFS</string>
+    <string name="delivery_badge_direct">Direct</string>
+
+    <!-- Translate Action -->
+    <string name="message_translate">Translate</string>
+    <string name="translation_title">Translation</string>
+    <string name="translation_original">Original</string>
+    <string name="translation_in_progress">Translating…</string>
+    <string name="translation_unavailable">Translation unavailable. Please try again.</string>
+    <string name="translation_unsupported_language">This language is not supported for on-device translation.</string>
+    <string name="translation_needs_download">This language pack has not been downloaded yet. Connect to the internet to download it.</string>
+    <string name="translation_same_language">Already in your language</string>
+
+    <!-- System Info Bubbles -->
+    <string name="system_profile_update">Profile updated</string>
+    <string name="system_wallpaper_update">Wallpaper changed</string>
+    <string name="system_key_rotation">Encryption keys rotated</string>
+
+    <!-- Recording Hint Overlay -->
+    <string name="recording_hint_hold">Hold to record, release to send</string>
+    <string name="recording_hint_slide">Slide left to cancel</string>
+    <string name="recording_hint_dismiss">Got it</string>
+
+    <!-- Accessibility -->
+    <string name="accessibility_send_button">Send message</string>
+    <string name="accessibility_menu_button">Open menu</string>
+    <string name="accessibility_message_bubble">Message from %s</string>
+    <string name="accessibility_back_button">Go back</string>
+    <string name="accessibility_close_button">Close</string>
+    <string name="accessibility_attachment_button">Add attachment</string>
+    <string name="accessibility_voice_record_button">Record voice message</string>
+    <string name="accessibility_camera_button">Take photo</string>
+    <string name="accessibility_search_button">Search messages</string>
+    <string name="accessibility_call_button">Make call</string>
+    <string name="accessibility_video_call_button">Make video call</string>
+    <string name="accessibility_profile_picture">Profile picture of %s</string>
+    <string name="accessibility_message_status">Message status: %s</string>
+    <string name="accessibility_reaction_button">Add reaction</string>
+    <string name="accessibility_pin_button">Pin message</string>
+
+    <!-- Bot Management -->
+    <string name="bot_create">Create Bot</string>
+    <string name="bot_choose_type">Choose Bot Type</string>
+    <string name="bot_add_trigger">Add Trigger</string>
+    <string name="bot_api_title">Bot API</string>
+    <string name="bot_name">Bot Name</string>
+    <string name="bot_name_placeholder">Enter bot name</string>
+    <string name="bot_token">Bot Token</string>
+    <string name="bot_token_copied">Bot token copied</string>
+    <string name="bot_webhook_url">Webhook URL</string>
+    <string name="bot_webhook_url_placeholder">https://your-server.com/webhook</string>
+    <string name="bot_trigger_command">Command</string>
+    <string name="bot_trigger_keyword">Keyword</string>
+    <string name="bot_trigger_regex">Regex</string>
+    <string name="bot_response_template">Response Template</string>
+    <string name="bot_delete">Delete Bot</string>
+    <string name="bot_delete_confirm">Are you sure you want to delete this bot? This action cannot be undone.</string>
+    <string name="bot_active">Active</string>
+    <string name="bot_inactive">Inactive</string>
+    <string name="bot_no_bots">No bots created yet</string>
+    <string name="bot_created">Bot created successfully</string>
+    <string name="bot_group_assignment">Assign to Group</string>
+
+    <!-- Bot inline keyboards, callback queries and mini apps -->
+    <string name="bot_action_unavailable">This bot\'s buttons aren\'t available on this device</string>
+    <string name="bot_action_not_member">You\'re not in a group this bot serves</string>
+    <string name="bot_action_unknown_bot">This bot no longer exists</string>
+    <string name="bot_action_failed">The bot couldn\'t handle that action</string>
+    <string name="bot_action_no_answer">The bot didn\'t answer</string>
+    <string name="bot_alert_ok">OK</string>
+    <string name="bot_link_open_failed">No app can open that link</string>
+    <string name="bot_webapp_failed">Couldn\'t open the mini app</string>
+    <string name="bot_webapp_close">Close mini app</string>
+    <string name="bot_webapp_default_title">Mini app</string>
+
+    <!-- Portal / Discovery -->
+    <string name="portal_title">Discovery</string>
+    <string name="portal_browsing">Browsing nearby\u2026</string>
+    <string name="portal_discover_groups">Discover Groups</string>
+    <string name="portal_join_group">Join Group</string>
+    <string name="portal_public_channels">Public Channels</string>
+    <string name="portal_nearby_groups">Nearby Groups</string>
+    <string name="portal_no_groups_found">No groups found nearby</string>
+    <string name="portal_scanning">Scanning for nearby groups\u2026</string>
+    <string name="portal_members_count">%d members</string>
+    <string name="portal_join">Join</string>
+    <string name="portal_joined">Joined!</string>
+
+    <!-- Error Messages -->
+    <string name="error_connection_failed">Connection failed. Please try again.</string>
+    <string name="error_encryption_failed">Encryption error. Please retry.</string>
+    <string name="error_network_required">Network connection required</string>
+    <string name="error_message_too_large">Message is too large to send</string>
+    <string name="error_file_not_found">File not found</string>
+    <string name="error_permission_denied">Permission denied</string>
+    <string name="error_timeout">Request timed out</string>
+    <string name="error_unknown">An unknown error occurred</string>
+    <string name="error_invalid_key">Invalid public key</string>
+    <string name="error_already_added">Contact already added</string>
+    <string name="error_send_failed">Failed to send message</string>
+    <string name="error_download_failed">Download failed</string>
+    <string name="error_mesh_unavailable">Mesh network unavailable. Enable Bluetooth and WiFi.</string>
+    <string name="error_ipfs_upload_failed">Failed to upload to IPFS. Check your connection.</string>
+    <string name="error_ipfs_download_failed">Failed to download from IPFS.</string>
+    <string name="error_signature_verification_failed">Message signature verification failed</string>
+    <string name="error_video_call_failed">Video call connection failed</string>
+    <string name="error_audio_permission">Microphone permission required for calls</string>
+    <string name="error_camera_permission">Camera permission required</string>
+    <string name="error_storage_permission">Storage permission required</string>
+    <string name="error_biometric_not_available">Biometric authentication not available</string>
+    <string name="error_session_expired">Session expired. Please reconnect.</string>
+    <string name="error_group_full">This group has reached maximum members</string>
+    <string name="error_not_admin">Only group admins can perform this action</string>
+
+    <!-- Mesh Network Expanded -->
+    <string name="mesh_status_active">Active</string>
+    <string name="mesh_status_advertising">Advertising\u2026</string>
+    <string name="mesh_peer_connected">Peer connected</string>
+    <string name="mesh_peer_disconnected">Peer disconnected</string>
+    <string name="mesh_enable_bluetooth">Enable Bluetooth</string>
+    <string name="mesh_enable_wifi">Enable WiFi</string>
+    <string name="mesh_enable_location">Enable Location Services</string>
+    <string name="mesh_network_relay">Network Relay</string>
+    <string name="mesh_hops">%d hops</string>
+    <string name="mesh_auto_reconnect">Auto Reconnect</string>
+    <string name="mesh_discovery_scanning">Scanning for peers\u2026</string>
+
+    <!-- Settings - Profile Links -->
+    <string name="settings_profile_links">Profile Links</string>
+    <string name="settings_show_profile_links">Show Profile Links</string>
+    <string name="settings_show_profile_links_desc">Display your profile links in chat</string>
+    <string name="settings_edit_profile_links">Edit Profile Links</string>
+    <string name="settings_edit_profile_links_desc">Manage your social and web links</string>
+
+    <!-- Settings - Typing Indicators -->
+    <string name="settings_typing_indicators">Typing Indicators</string>
+    <string name="settings_typing_indicators_desc">Show when you\'re typing a message</string>
+
+    <!-- Block forwarding & copying - opt-in, OFF by default.
+         The description states the limit on purpose: this restricts THIS
+         device. It cannot bind the recipient, who holds the plaintext. -->
+    <string name="settings_block_forward_copy">Block forwarding &amp; copying</string>
+    <string name="settings_block_forward_copy_desc">Hides Forward and Copy in one-to-one and group chats. Applies to this device only — it cannot stop the people you write to from forwarding, copying or screenshotting your messages.</string>
+
+    <string name="settings_privacy_relay">Privacy relay (beta)</string>
+    <string name="settings_privacy_relay_desc">Sends messages, key requests, photos and files through an independent relay, so the OSHI server never sees your IP address. If the relay is unreachable, sending waits instead of bypassing it.</string>
+    <string name="settings_privacy_relay_unavailable">Not available in this version yet.</string>
+    <!-- Settings - In-App Sounds -->
+    <string name="settings_in_app_sounds">In-App Sounds</string>
+    <string name="settings_in_app_sounds_desc">Play sounds while app is open</string>
+
+    <!-- Settings - Calls -->
+    <string name="settings_calls">Calls</string>
+    <string name="settings_default_voice_effect">Default Voice Effect</string>
+    <string name="settings_default_voice_effect_desc">Applied to all outgoing calls</string>
+    <string name="settings_call_quality">Call Quality</string>
+    <string name="settings_call_quality_desc">Audio quality for voice calls</string>
+    <string name="settings_call_quality_auto">Auto</string>
+    <string name="settings_call_quality_low">Low</string>
+    <string name="settings_call_quality_high">High</string>
+    <string name="settings_contacts_only_calls">Contacts Only</string>
+    <string name="settings_contacts_only_calls_desc">Only receive calls from contacts</string>
+
+    <!-- Settings - Call Privacy -->
+    <string name="settings_call_privacy">Call Privacy</string>
+    <string name="settings_call_privacy_relay">Always Relay (recommended)</string>
+    <string name="settings_call_privacy_relay_desc">Your IP address is always hidden. Slightly higher latency.</string>
+    <string name="settings_call_privacy_direct">Allow Direct Calls</string>
+    <string name="settings_call_privacy_direct_desc">Lower latency with contacts. Your IP may be visible to them.</string>
+
+    <!-- Settings - Steganography -->
+
+    <!-- Settings - Bot Management -->
+    <string name="settings_bot_management_desc">Manage bots and automations</string>
+
+    <!-- Settings - Chat Bubble Style -->
+    <string name="settings_bubble_style">Chat Bubble Style</string>
+    <string name="settings_bubble_style_modern">Modern</string>
+    <string name="settings_bubble_style_classic">Classic</string>
+    <string name="settings_bubble_style_minimal">Minimal</string>
+
+    <!-- AI Features -->
+    <string name="ai_ask_placeholder">Ask AI anything\u2026</string>
+    <string name="ai_style_formal">Formal</string>
+    <string name="ai_style_casual">Casual</string>
+    <string name="ai_style_friendly">Friendly</string>
+    <string name="ai_style_professional">Professional</string>
+    <string name="ai_action_correct">Correct Grammar</string>
+    <string name="ai_action_translate">Translate</string>
+    <string name="ai_action_summarize">Summarize</string>
+    <string name="ai_action_improve">Improve Writing</string>
+    <string name="ai_action_shorten">Make Shorter</string>
+    <string name="ai_action_expand">Expand</string>
+    <string name="ai_processing">Processing\u2026</string>
+    <string name="ai_error">AI is unavailable right now</string>
+
+    <!-- Bot Create Screen -->
+    <string name="bot_create_header">Create Bot</string>
+    <string name="bot_create_choose_type">Choose Type</string>
+    <string name="bot_create_add_triggers">Add Triggers</string>
+    <string name="bot_create_review">Review &amp; Create</string>
+    <string name="bot_create_created">Bot Created!</string>
+    <string name="bot_create_name">Bot Name</string>
+    <string name="bot_create_username">Username</string>
+    <string name="bot_create_description">Description</string>
+    <string name="bot_create_type">Bot Type</string>
+    <string name="bot_create_templates">Templates</string>
+    <string name="bot_create_triggers_count">Triggers (%d)</string>
+    <string name="bot_create_add_trigger">Add Trigger</string>
+    <string name="bot_create_condition">Condition</string>
+    <string name="bot_create_condition_command_placeholder">/mycommand</string>
+    <string name="bot_create_condition_keyword_placeholder">keyword</string>
+    <string name="bot_create_response">Response</string>
+    <string name="bot_create_response_placeholder">Bot response message. Use {{message}} for original text.</string>
+    <string name="bot_create_add">Add</string>
+    <string name="bot_create_summary">Summary</string>
+    <string name="bot_create_summary_name">Name: %s</string>
+    <string name="bot_create_summary_username">Username: @%s</string>
+    <string name="bot_create_summary_type">Type: %s</string>
+    <string name="bot_create_summary_triggers">Triggers: %d</string>
+    <string name="bot_create_summary_description">Description: %s</string>
+    <string name="bot_create_webhook_url">Webhook URL (optional)</string>
+    <string name="bot_create_script">Script (optional)</string>
+    <string name="bot_create_bot_ready">Your bot is ready!</string>
+    <string name="bot_create_quick_start">Quick Start</string>
+    <string name="bot_create_send_via_api">Send messages via API:</string>
+    <string name="bot_create_copy_token">Copy Token</string>
+    <string name="bot_create_back">Back</string>
+    <string name="bot_create_next">Next</string>
+
+    <!-- New Message Screen -->
+    <!-- Group Chat Screen -->
+    <string name="group_chat_group_fallback">Group</string>
+    <string name="group_chat_unmute">Unmute</string>
+    <string name="group_chat_mute">Mute</string>
+    <string name="group_chat_info">Info</string>
+    <string name="group_chat_document_fallback">Document</string>
+    <string name="group_chat_video">Video</string>
+    <string name="group_chat_voice_message">Voice message</string>
+    <string name="group_chat_type_public">Public</string>
+    <string name="group_chat_type_admin_only">Admin Only</string>
+    <string name="group_chat_type_collaborative">Collaborative</string>
+    <string name="group_chat_members_label">Members</string>
+    <string name="group_chat_members_count_label">%d members</string>    <string name="group_chat_you">You</string>
+    <string name="group_chat_creator">Creator</string>
+    <string name="group_chat_invite_to_group">Invite to Group</string>
+    <string name="group_chat_scan_to_join">Scan to join this group</string>
+    <string name="group_chat_copy_invite_link">Copy Invite Link</string>
+    <string name="group_chat_more_members">+%d more</string>
+    <string name="group_chat_key_copied">Key copied</string>
+    <string name="group_chat_image">Image</string>
+    <string name="group_chat_group_avatar">Group avatar</string>
+    <string name="group_chat_group_qr_code">Group QR Code</string>
+
+    <!-- Chat Screen - Toolbar & Features (iOS parity) -->
+    <string name="chat_set_alias">Rename</string>
+    <string name="chat_set_alias_title">Rename Contact</string>
+    <string name="chat_set_alias_hint">Enter a name for this contact</string>
+    <string name="contact_shared_nickname_hint">Nickname: %1$s</string>
+    <string name="chat_reset_session">Reset Session</string>
+    <string name="chat_reset_session_confirm">Reset the encryption session with this contact? This may require re-establishing the secure connection.</string>
+    <string name="chat_block_contact">Block Contact</string>
+    <string name="chat_unblock_contact">Unblock Contact</string>
+    <string name="chat_mark_old_identity">Mark old identity</string>
+    <string name="chat_mark_old_identity_title">Mark this key as old?</string>
+    <string name="chat_mark_old_identity_message">Use this if the contact regenerated their identity. The current key will stop ringing your phone for calls and stop delivering messages addressed to this contact. The new identity will work normally.</string>
+    <string name="chat_mark_old_identity_confirm">Mark as old</string>
+    <string name="chat_delete_conversation">Delete Conversation</string>
+    <string name="chat_delete_conversation_confirm">Delete all messages in this conversation? This cannot be undone.</string>
+    <string name="chat_session_reset_done">Encryption session reset</string>
+    <string name="chat_pinned_message">Pinned Message</string>
+    <string name="chat_not_delivered">Not Delivered. Tap to try again.</string>
+    <string name="chat_refreshing">Refreshing messages\u2026</string>
+
+    <!-- Accessibility - Additional -->
+    <string name="accessibility_remove_trigger">Remove trigger</string>
+    <string name="accessibility_add_trigger">Add trigger</string>
+    <string name="accessibility_copy_token">Copy or check token</string>
+    <string name="accessibility_connection_status">Connection status</string>
+    <string name="accessibility_error_status">Error status</string>
+    <string name="accessibility_warning">Warning</string>
+    <string name="accessibility_qr_code_icon">QR code</string>
+    <string name="accessibility_generate_qr">Generate QR code</string>
+    <string name="accessibility_browser_icon">Browser session</string>
+    <string name="accessibility_security_icon">Security information</string>
+    <string name="accessibility_change_picture">Change profile picture</string>
+    <string name="accessibility_copy_key">Copy public key</string>
+    <string name="accessibility_default_avatar">Default avatar</string>
+    <string name="accessibility_attach">Attach file</string>
+    <string name="accessibility_emoji">Emoji picker</string>
+    <string name="accessibility_cancel_reply">Cancel reply</string>
+
+    <!-- Hardcoded strings extracted from Kotlin screens -->
+    <string name="chat_contact_blocked">This contact is blocked</string>
+    <string name="chat_blocked_by_contact">You can no longer send messages to this contact</string>
+    <string name="chat_preparing_media">Preparing…</string>
+    <string name="chat_unblock">Unblock</string>
+    <string name="chat_scroll_to_bottom">Scroll to bottom</string>
+    <string name="chat_you">You</string>
+    <string name="chat_unknown">Unknown</string>
+    <string name="group_failed_load_contact">Failed to load contact</string>
+    <string name="groups_title_header">Groups</string>
+    <string name="groups_search_placeholder">Search groups</string>
+    <string name="groups_filter_all">All</string>
+    <string name="groups_no_groups_yet">No Groups Yet</string>
+    <string name="groups_no_groups_desc">Create a group to start chatting with multiple people at once</string>
+    <string name="groups_discover_nearby">You can also discover public groups nearby</string>
+    <string name="groups_no_results">No groups found</string>
+    <string name="groups_new_group">New Group</string>
+    <string name="groups_create_button">Create</string>
+    <string name="groups_label_group_name">GROUP NAME</string>
+    <string name="groups_enter_group_name">Enter group name</string>
+    <string name="groups_label_group_type">GROUP TYPE</string>
+    <string name="groups_label_avatar">AVATAR</string>
+    <string name="groups_add_members_readonly">ADD MEMBERS (READ-ONLY)</string>
+    <string name="groups_add_members_label">ADD MEMBERS</string>
+    <string name="groups_pick_from_contacts">Pick from Contacts (%d)</string>
+    <string name="groups_add_contacts_count">Add %d Contact(s)</string>
+    <string name="groups_member_public_key">Member public key</string>
+    <string name="groups_qr_scanner_unavailable">QR Scanner not available</string>
+    <string name="groups_added_members_count">ADDED MEMBERS (%d)</string>
+    <string name="groups_public_info">Public groups can be discovered by anyone nearby and joined without invitation.</string>
+    <string name="groups_admin_actions">Admin Actions</string>
+    <string name="groups_change_picture">Change Picture</string>
+    <string name="groups_group_id">Group ID</string>
+    <string name="groups_members_count">%d members</string>
+    <string name="groups_key_copied">Key copied</string>
+
+    <!-- Check-In Safety Messages (6A.7) -->
+    <string name="checkin_title">Check-In</string>
+    <string name="checkin_started">Check-In Started</string>
+    <string name="checkin_started_duration">Check-In Started (%s)</string>
+    <string name="checkin_completed">Check-In Completed - Safe</string>
+    <string name="checkin_expired">Check-In Expired - Alert!</string>
+    <string name="checkin_cancelled">Check-In Cancelled</string>
+
+    <!-- Scheduled Call Bubbles (6A.8) -->
+    <string name="scheduled_call_bubble_title">Scheduled Call</string>
+    <string name="scheduled_call_bubble_time_tbd">Time TBD</string>
+    <string name="scheduled_call_bubble_minutes">%d minutes</string>
+    <string name="scheduled_call_bubble_join">Join</string>
+    <string name="scheduled_call_bubble_by">by %s</string>
+    <string name="scheduled_call_status_pending">Pending</string>
+    <string name="scheduled_call_status_confirmed">Confirmed</string>
+    <string name="scheduled_call_status_cancelled">Cancelled</string>
+
+    <!-- Map Open Preference -->
+    <string name="map_open_preference">Open locations in</string>
+    <string name="map_open_preference_hint">Applies when you tap a shared location, a check-in or an address in a chat. The Map tab always shows OSHI\'s map.</string>
+    <string name="checkin_open_map">Show on map</string>
+    <string name="map_option_oshi">OSHI Maps</string>
+    <string name="map_option_google" translatable="false">Google Maps</string>
+    <string name="map_option_waze" translatable="false">Waze</string>
+
+    <!-- QR Code Screen (Priority 1) -->
+    <string name="qr_my_public_key">My Public Key</string>
+    <string name="qr_share_to_connect">Share your public key to connect</string>
+    <string name="qr_back">Back</string>
+    <string name="qr_content_description">QR Code</string>
+    <string name="qr_add_me">Add me on OSHI!</string>
+    <string name="qr_my_public_key_label">My Public Key:</string>
+    <string name="qr_share_public_key">Share Public Key</string>
+    <string name="qr_open_on_other_device">Open OSHI on another device</string>
+    <string name="qr_go_to_scan">Go to New Message > Scan QR</string>
+    <string name="qr_scan_to_connect">Scan this code to connect</string>
+
+    <!-- New Message Screen - Instructions (Priority 2) -->
+    <string name="new_message_online">Online</string>
+    <string name="new_contact_added">Contact added!</string>
+    <string name="new_invalid_qr">Invalid QR code</string>
+    <string name="new_scan_prompt">Scan a QR code to add a contact</string>
+    <string name="new_camera_permission_required">Camera permission is required to scan QR codes</string>
+    <string name="new_copied_to_clipboard">Copied to clipboard</string>
+    <string name="new_share_via">Share via</string>
+    <string name="new_share_add_me">Add me on OSHI!</string>
+    <string name="new_share_public_key">My public key:</string>
+
+    <!-- Settings Screen - Hardcoded strings (Priority 3) -->
+    <string name="settings_backup_identity_key">Backup Identity Key</string>
+    <string name="settings_backup_key_warning">Keep your private key safe. Anyone with access to it can impersonate you.</string>
+    <string name="settings_copy_to_clipboard">Copy to Clipboard</string>
+    <string name="settings_reveal_key">Reveal Key</string>
+    <string name="settings_identity_address">Identity Address</string>
+    <string name="settings_key_created">Key Created</string>
+    <string name="settings_encryption_label">Encryption</string>
+    <string name="settings_encryption_type">X25519 + AES-256-GCM (End-to-End Encrypted)</string>
+    <string name="settings_copy_address">Copy Address</string>
+    <string name="settings_key_backup_restore">Key Backup &amp; Restore</string>
+    <string name="settings_key_backup_restore_desc">Export or import your identity key</string>
+    <string name="settings_scheduled_calls">Scheduled Calls</string>
+    <string name="settings_scheduled_calls_desc">View and schedule encrypted calls</string>
+    <string name="settings_scheduled_messages">Scheduled Messages</string>
+    <string name="settings_scheduled_messages_desc">Schedule messages for future delivery</string>
+    <string name="settings_advanced">Advanced</string>
+    <string name="settings_features">Features</string>
+    <string name="settings_peers_connected">%d peers connected</string>
+    <string name="settings_mesh_networking">Mesh networking</string>
+    <string name="settings_mesh_networking_toggle_subtitle">Turn off to stop the always-on "Oshi mesh network active" notification</string>
+    <string name="settings_portal">Portal</string>
+    <string name="settings_portal_desc">Bots, channels, apps</string>
+
+    <!-- Video Call Screen (Priority 4) -->
+    <string name="video_call_ended">Call Ended</string>
+    <string name="video_call_duration">Duration: %s</string>
+    <string name="video_call_quality">Quality: %s</string>
+    <string name="video_quality_title">Video Quality</string>
+    <string name="video_background_blur">Background Blur</string>
+    <string name="blur_none">No effect</string>
+    <string name="blur_background">Blur background, keep face sharp</string>
+    <string name="blur_full">Blur entire frame</string>
+    <string name="blur_pixelate">Light pixelation</string>
+    <string name="blur_heavy_pixelate">Heavy pixelation</string>
+    <string name="blur_ultra_pixelate">Maximum pixelation</string>
+    <string name="blur_intensity">Intensity: %d%%</string>
+
+    <!-- Incoming Call Overlay (Priority 4) -->
+    <string name="incoming_e2e_encrypted">End-to-end encrypted</string>
+    <string name="incoming_video_call">Incoming Video Call</string>
+    <string name="incoming_voice_call">Incoming Voice Call</string>
+    <string name="incoming_decline">Decline</string>
+    <string name="incoming_voice">Voice</string>
+    <string name="incoming_video">Video</string>
+
+    <!-- Groups Screen (Priority 5) -->
+    <string name="groups_add_contacts">Add %d Contact(s)</string>
+    <string name="groups_members_label">Members</string>
+    <string name="groups_you">You</string>
+    <string name="groups_creator">Creator</string>
+    <string name="groups_more_members">+%d more members</string>
+    <string name="groups_show_fewer_members">Show fewer</string>
+    <string name="groups_leave_group">Leave Group</string>
+    <string name="groups_share_group">Share Group</string>
+    <string name="groups_delete_title">Delete Group?</string>
+    <string name="groups_delete_message">This action cannot be undone. All messages will be deleted for all members.</string>
+    <string name="groups_leave_title">Leave Group?</string>
+    <string name="groups_leave_message">You will no longer receive messages from this group.</string>
+    <string name="groups_leave_action">Leave</string>
+    <string name="groups_discover">Discover Groups</string>
+    <string name="groups_join">Join</string>
+
+    <!-- Group Chat Screen (Priority 5) -->
+    <string name="group_chat_search_placeholder">Search messages\u2026</string>
+    <string name="group_chat_admin">Admin</string>
+    <string name="group_chat_pin_message">Pin message</string>
+    <string name="group_chat_promote_admin">Promote to Admin</string>
+    <string name="group_chat_remove_admin">Remove Admin</string>
+
+    <!-- AI Chat Screen (Priority 6) -->
+    <string name="ai_assistant_title">AI Assistant</string>
+    <string name="ai_offline_title">Offline AI Assistant</string>
+    <string name="ai_offline_desc">Powered by on-device AI.\n100% offline. No data sent anywhere.</string>
+    <string name="ai_offline_download_desc">Download a private AI model to chat offline. Runs 100% on your device — no data sent anywhere.</string>
+    <string name="ai_new_chat">New Chat</string>
+    <string name="ai_recent_chats">Recent Chats</string>
+    <string name="ai_ask_anything">Ask anything\u2026</string>
+    <string name="ai_downloading">Downloading\u2026 %d%%</string>
+    <string name="ai_model_size">Selected automatically for your device (%s GB)</string>
+    <string name="ai_model_label">Model: %s GB</string>
+    <string name="ai_free_space">Free: %d GB</string>
+
+    <!-- Map Navigation (Priority 7) -->
+    <string name="nav_start">Start navigation</string>
+    <string name="nav_arrived">You have arrived</string>
+    <string name="nav_arrived_at">You have arrived at %s</string>
+    <string name="nav_head_on">Head on %s</string>
+    <string name="nav_continue_to_dest">Continue to destination</string>
+    <string name="nav_turn">Turn %1$s</string>
+    <string name="nav_turn_onto">Turn %1$s onto %2$s</string>
+    <string name="nav_continue_on">Continue on %s</string>
+    <string name="nav_continue_straight">Continue straight</string>
+    <string name="nav_merge">Merge %1$s</string>
+    <string name="nav_merge_onto">Merge %1$s onto %2$s</string>
+    <string name="nav_fork">Take the %1$s fork</string>
+    <string name="nav_fork_onto">Take the %1$s fork onto %2$s</string>
+    <string name="nav_roundabout">Enter roundabout</string>
+    <string name="nav_roundabout_exit">Enter roundabout (exit %d)</string>
+    <string name="nav_roundabout_then">Enter roundabout, then %s</string>
+    <string name="nav_roundabout_exit_then">Enter roundabout (exit %1$d), then %2$s</string>
+    <string name="nav_rotary">Enter rotary</string>
+    <string name="nav_rotary_exit">Enter rotary, exit to %s</string>
+
+    <!-- Recovery Key Backup / Restore -->
+    <string name="recovery_key_title">Recovery Key</string>
+    <string name="recovery_key_description">A simple key that can restore your identity on any device. No passphrase needed.</string>
+    <string name="recovery_key_warning">Anyone with this key can access your identity</string>
+    <string name="recovery_key_reveal">Reveal Key</string>
+    <string name="recovery_key_hide">Hide</string>
+    <string name="recovery_key_copy">Copy</string>
+    <string name="recovery_key_show_qr">Show QR Code</string>
+    <string name="recovery_key_qr_title">Recovery Key</string>
+    <string name="recovery_key_qr_description">Scan this QR code on another device to restore your identity. No passphrase needed.</string>
+    <string name="recovery_key_qr_warning">Anyone who scans this QR code can access your identity</string>
+    <string name="recovery_key_restore_title">Recovery Key</string>
+    <string name="recovery_key_restore_description">Paste a 64-byte recovery key or scan its QR code to restore your identity instantly.</string>
+    <string name="recovery_key_restore_placeholder">Paste your recovery key here</string>
+    <string name="recovery_key_restore_button">Restore from Recovery Key</string>
+    <string name="recovery_key_restore_success">Identity restored from recovery key!</string>
+    <string name="recovery_key_restore_failed">Failed to restore identity from recovery key</string>
+    <string name="recovery_key_invalid_size">Invalid key: must be 64 bytes (got %d)</string>
+    <string name="recovery_key_invalid_format">Invalid Base64 format</string>
+    <string name="recovery_key_scanned">Recovery key QR code scanned</string>
+    <string name="passphrase_encrypted_backup">Passphrase-Encrypted Backup</string>
+    <string name="backup_prompt_title">Backup Your Identity</string>
+    <string name="backup_prompt_message">Your identity has been created. We strongly recommend backing up your recovery key now. Without a backup, you cannot recover your identity if you delete or reinstall the app.</string>
+    <string name="backup_prompt_now">Backup Now</string>
+    <string name="backup_prompt_later">Later</string>
+
+    <!-- Key Backup Screen -->
+    <string name="key_backup_title">Key Backup</string>
+    <string name="key_backup_export">Export</string>
+    <string name="key_backup_import">Import</string>
+    <string name="key_backup_recovery_key">Recovery Key</string>
+    <string name="key_backup_recovery_key_desc">A simple key that can restore your identity on any device. No passphrase needed.</string>
+    <string name="key_backup_reveal_key">Reveal Key</string>
+    <string name="key_backup_hide">Hide</string>
+    <string name="key_backup_show_qr">Show QR Code</string>
+    <string name="key_backup_warning_anyone_access">Anyone with this key can access your identity</string>
+    <string name="key_backup_keep_safe">Keep your backup safe</string>
+    <string name="key_backup_keep_safe_desc">Your private key controls your identity. Anyone with access to this backup and your passphrase can impersonate you.</string>
+    <string name="key_backup_your_public_key">Your Public Key</string>
+    <string name="key_backup_passphrase_label">Passphrase (min 8 characters)</string>
+    <string name="key_backup_passphrase_placeholder">Enter a strong passphrase</string>
+    <string name="key_backup_passphrase_min">Passphrase must be at least 8 characters</string>
+    <string name="key_backup_confirm_passphrase">Confirm Passphrase</string>
+    <string name="key_backup_reenter_passphrase">Re-enter your passphrase</string>
+    <string name="key_backup_passphrase_mismatch">Passphrases do not match</string>
+    <string name="key_backup_export_qr">Export as QR Code</string>
+    <string name="key_backup_copied_clipboard">Copied to Clipboard!</string>
+    <string name="key_backup_copy_clipboard">Copy to Clipboard</string>
+    <string name="key_backup_export_failed">Export failed: %s</string>
+    <string name="key_backup_encrypted_backup_title">Encrypted Key Backup</string>
+    <string name="key_backup_qr_scan_desc">Scan this QR code on another device to restore your identity. You will need your passphrase to decrypt it.</string>
+    <string name="key_backup_qr_too_large">QR code too large. Use clipboard export instead.</string>
+    <string name="key_backup_recovery_qr_desc">Scan this QR code on another device to restore your identity. No passphrase needed.</string>
+    <string name="key_backup_qr_too_large_copy">QR code too large. Use copy instead.</string>
+    <string name="key_backup_anyone_scan_qr">Anyone who scans this QR code can access your identity</string>
+    <string name="key_backup_import_info">Paste your encrypted key backup or scan its QR code, then enter the passphrase you used during export to restore your identity.</string>
+    <string name="key_backup_recovery_paste_desc">Paste a 64-byte recovery key or scan its QR code to restore your identity instantly.</string>
+    <string name="key_backup_paste_recovery_key">Paste your recovery key here</string>
+    <string name="key_backup_scan_qr">Scan QR</string>
+    <string name="key_backup_paste">Paste</string>
+    <string name="key_backup_clipboard_empty">Clipboard is empty</string>
+    <string name="key_backup_restore_recovery_key">Restore from Recovery Key</string>
+    <string name="key_backup_replace_key_title">Replace Existing Key?</string>
+    <string name="key_backup_replace_recovery_warning">Restoring from a recovery key will overwrite your current identity. Make sure you have a backup of your current key before proceeding.</string>
+    <string name="key_backup_replace_key">Replace Key</string>
+    <string name="key_backup_restored_recovery">Identity restored from recovery key!</string>
+    <string name="key_backup_encrypted_key_label">Encrypted Key Backup</string>
+    <string name="key_backup_paste_base64">Paste your base64 encrypted key</string>
+    <string name="key_backup_passphrase">Passphrase</string>
+    <string name="key_backup_enter_passphrase">Enter your backup passphrase</string>
+    <string name="key_backup_restore_key">Restore Key</string>
+    <string name="key_backup_replace_encrypted_warning">Restoring a key will overwrite your current identity. Your existing private key will be permanently replaced. Make sure you have a backup of your current key before proceeding.</string>
+    <string name="key_backup_restored_success">Key restored successfully!</string>
+    <string name="key_backup_scan_prompt">Scan your OSHI key backup QR code</string>
+    <string name="key_backup_scan_recovery_prompt">Scan recovery key QR code</string>
+    <string name="key_backup_camera_required">Camera permission is required to scan QR codes</string>
+    <string name="key_backup_qr_scanned">QR code scanned successfully</string>
+    <string name="key_backup_qr_cancelled">QR scan cancelled or unreadable</string>
+    <string name="key_backup_recovery_scanned">Recovery key QR code scanned</string>
+
+    <!-- Bot Portal Screen -->
+    <string name="bot_portal_title">Portal</string>
+    <string name="bot_portal_create_bot">Create Bot</string>
+    <string name="bot_portal_search">Search\u2026</string>
+    <string name="bot_portal_my_channels">My Channels</string>
+    <string name="bot_portal_discovered_channels">Discovered Channels</string>
+    <string name="bot_portal_no_channels">No Channels Yet</string>
+    <string name="bot_portal_discover_channels">Create a channel or discover nearby ones</string>
+    <string name="bot_portal_create_channel">Create Channel</string>
+    <string name="bot_portal_joined">Joined</string>
+    <string name="bot_portal_join">Join</string>
+    <string name="bot_portal_members">%d members</string>
+    <string name="bot_portal_no_bots">No Bots Yet</string>
+    <string name="bot_portal_create_first_bot">Tap + to create your first bot</string>
+    <string name="bot_portal_msgs">%d msgs</string>
+    <string name="bot_portal_app_marketplace">App Marketplace</string>
+    <string name="bot_portal_coming_soon">Coming soon</string>
+
+    <!-- Bot Detail Screen -->
+    <string name="bot_detail_title">Bot Detail</string>
+    <string name="bot_detail_messages_sent">Messages Sent</string>
+    <string name="bot_detail_bot_token">Bot Token</string>
+    <string name="bot_detail_copy_token">Copy Token</string>
+    <string name="bot_detail_post_as_bot">Post as Bot</string>
+    <string name="bot_detail_send_test_desc">Send a test message from this bot</string>
+    <string name="bot_hint_none_in_group">No bot is listening in this group yet.</string>
+    <string name="bot_detail_test_placeholder">Type a test message\u2026</string>
+    <string name="bot_detail_send_test">Send Test Message</string>
+    <string name="bot_detail_enabled">Enabled</string>
+    <string name="bot_detail_triggers">Triggers</string>
+    <string name="bot_detail_script">Script</string>
+    <string name="bot_detail_webhook_url">Webhook URL</string>
+    <string name="bot_detail_permissions">Permissions</string>
+    <string name="bot_detail_send_messages">Send Messages</string>
+    <string name="bot_detail_read_messages">Read Messages</string>
+    <string name="bot_detail_send_media">Send Media</string>
+    <string name="bot_detail_pin_messages">Pin Messages</string>
+    <string name="bot_detail_manage_members">Manage Members</string>
+    <string name="bot_detail_register_server">Register with Server</string>
+    <string name="bot_detail_delete_title">Delete Bot</string>
+    <string name="bot_detail_delete_confirm">Are you sure you want to delete %s? This cannot be undone.</string>
+
+    <!-- Blocked Contacts Screen -->
+    <string name="blocked_contacts_title">Blocked Contacts</string>
+    <string name="blocked_contacts_count_one">%d blocked contact</string>
+    <string name="blocked_contacts_count_other">%d blocked contacts</string>
+    <string name="blocked_contacts_empty">No Blocked Contacts</string>
+    <string name="blocked_contacts_empty_desc">Contacts you block will appear here</string>
+    <string name="blocked_contacts_unblock">Unblock</string>
+    <string name="blocked_contacts_unblock_title">Unblock Contact</string>
+    <string name="blocked_contacts_unblock_confirm">Are you sure you want to unblock %s? They will be able to send you messages again.</string>
+    <string name="blocked_contacts_about_title">About Blocking</string>
+    <string name="blocked_contacts_about_desc">Blocked contacts cannot send you messages or see your online status. They are told that their messages no longer reach you.</string>
+    <string name="blocked_contacts_unknown">Unknown</string>
+
+    <!-- Scheduled Message Screen -->
+    <string name="scheduled_messages_title">Scheduled Messages</string>
+    <string name="scheduled_messages_empty">No Scheduled Messages</string>
+    <string name="scheduled_messages_empty_desc">Tap the + button to schedule a message for future delivery.</string>
+    <string name="scheduled_messages_new">New Scheduled Message</string>
+    <string name="scheduled_messages_recipient_key">Recipient Public Key</string>
+    <string name="scheduled_messages_paste_key">Paste recipient\'s public key</string>
+    <string name="scheduled_messages_key_short">Key too short</string>
+    <string name="scheduled_messages_tone">Tone</string>
+    <string name="scheduled_messages_message_label">Message</string>
+    <string name="scheduled_messages_message_placeholder">Write your message or use AI suggestions</string>
+    <string name="scheduled_messages_ai_suggestion">AI Suggestion (%s)</string>
+    <string name="scheduled_messages_time_future">Scheduled time must be in the future</string>
+    <string name="scheduled_messages_schedule">Schedule</string>
+    <string name="scheduled_messages_key_error">Recipient key is too short</string>
+    <string name="scheduled_messages_content_error">Message content is required</string>
+    <string name="scheduled_messages_time_error">Select a future time</string>
+    <string name="scheduled_messages_scheduled_toast">Message scheduled!</string>
+    <string name="scheduled_messages_status_pending">Pending</string>
+    <string name="scheduled_messages_status_sent">Sent</string>
+    <string name="scheduled_messages_status_cancelled">Cancelled</string>
+    <string name="scheduled_messages_status_failed">Failed</string>
+
+    <!-- Scheduled Call Screen -->
+    <string name="scheduled_calls_screen_title">Scheduled Calls</string>
+    <string name="scheduled_calls_schedule">Schedule a call</string>
+    <string name="scheduled_calls_schedule_title">Schedule a Call</string>
+    <string name="scheduled_calls_peer_key">Peer Public Key</string>
+    <string name="scheduled_calls_day_offset">Day offset:</string>
+    <string name="scheduled_calls_today">Today</string>
+    <string name="scheduled_calls_day_plus">+%dd</string>
+    <string name="scheduled_calls_hour">Hour:</string>
+    <string name="scheduled_calls_video">Video call</string>
+    <string name="scheduled_calls_decline">Decline</string>
+    <string name="scheduled_calls_accept">Accept</string>
+
+    <!-- Map Navigation Screen -->
+    <string name="map_nav_title">Navigation</string>
+    <string name="map_nav_no_route">No active route</string>
+    <string name="map_nav_select_dest">Select a destination on the map to start navigation</string>
+    <string name="map_nav_start_marker">Start</string>
+    <string name="map_nav_destination">Destination</string>
+    <string name="map_nav_you">You</string>
+    <string name="map_nav_drive">Drive</string>
+    <string name="map_nav_walk">Walk</string>
+    <string name="map_nav_bike">Bike</string>
+    <string name="map_nav_distance">Distance</string>
+    <string name="map_nav_duration">Duration</string>
+    <string name="map_nav_mode">Mode</string>
+    <string name="map_nav_mode_driving">Driving</string>
+    <string name="map_nav_mode_walking">Walking</string>
+    <string name="map_nav_mode_cycling">Cycling</string>
+    <string name="map_nav_next_step">Next Step</string>
+    <string name="map_nav_stop">Stop</string>
+    <string name="map_nav_start">Start Navigation</string>
+    <string name="map_nav_steps">Steps</string>
+
+    <!-- Map Search Screen -->
+    <string name="map_search_title">Search Places</string>
+    <string name="map_search_placeholder">Search restaurants, hotels, ATMs\u2026</string>
+    <string name="map_search_categories">Categories</string>
+    <string name="map_search_no_results">No results found</string>
+    <string name="map_search_no_results_desc">No results found online or offline. Check your connection or try a different query.</string>
+    <string name="map_search_results_count">%d results</string>
+    <string name="map_search_streets">Streets</string>
+    <string name="map_search_places">Places</string>
+    <string name="map_search_streets_addresses">Streets &amp; Addresses</string>
+    <string name="map_search_street_badge">Street</string>
+    <string name="map_search_restaurant">Restaurant</string>
+    <string name="map_search_cafe">Cafe</string>
+    <string name="map_search_supermarket">Supermarket</string>
+    <string name="map_search_fuel">Fuel</string>
+    <string name="map_search_pharmacy">Pharmacy</string>
+    <string name="map_search_hospital">Hospital</string>
+    <string name="map_search_hotel">Hotel</string>
+    <string name="map_search_atm">ATM</string>
+    <string name="map_search_parking">Parking</string>
+    <string name="map_search_ev_charging">EV Charging</string>
+    <string name="map_search_bus">Bus</string>
+    <string name="map_search_train">Train</string>
+
+    <!-- AI Shortcuts Screen -->
+    <string name="ai_shortcuts_title">AI Assistant</string>
+    <string name="ai_shortcuts_try">Try: %s</string>
+    <string name="ai_shortcuts_your_question">Your question</string>
+    <string name="ai_shortcuts_conversation_mode">Conversation Mode</string>
+    <string name="ai_shortcuts_generating">Generating\u2026</string>
+    <string name="ai_shortcuts_generate_suggestions">Generate Suggestions</string>
+    <string name="ai_shortcuts_rule_based">Rule-based</string>
+    <string name="ai_shortcuts_ai">AI</string>
+    <string name="ai_shortcuts_processing">Processing\u2026</string>
+    <string name="ai_shortcuts_process">Process</string>
+    <string name="ai_shortcuts_apply">Apply</string>
+
+    <!-- AI Quick Bar -->
+    <string name="ai_quickbar_correct">Correct</string>
+    <string name="ai_quickbar_improve">Improve</string>
+
+    <!-- AI Writing Assistant Sheet (3-tab onglet) -->
+    <string name="ai_tab_improve">Improve</string>
+    <string name="ai_tab_generate">Generate</string>
+    <string name="ai_tab_thinking_of_you">Thinking of you</string>
+    <string name="ai_mode_icebreaker">Icebreaker</string>
+    <string name="ai_mode_relaunch">Relaunch</string>
+    <string name="ai_mode_flirty">Flirty</string>
+    <string name="ai_mode_friendly">Friendly</string>
+    <string name="ai_generate_suggestions">Generate suggestions</string>
+    <string name="ai_use_suggestion">Use</string>
+    <string name="ai_regenerate">Regenerate</string>
+    <string name="ai_thinking_of_you_title">Thinking of you</string>
+    <string name="ai_correct">Correct</string>
+    <string name="ai_translate">Translate</string>
+
+    <!-- Check-In Screen -->
+    <string name="checkin_safety_title">Safety Check-In</string>
+    <string name="checkin_safety_desc">%s will be notified when you arrive. If you don\'t respond, emergency data will be shared.</string>
+    <string name="checkin_where">Where are you going?</string>
+    <string name="checkin_dest_placeholder">Enter destination address</string>
+    <string name="checkin_tap_map">Tap to select on map</string>
+    <string name="checkin_how">How are you getting there?</string>
+    <string name="checkin_extra_time">Add extra time? (optional)</string>
+    <string name="checkin_none">None</string>
+    <string name="checkin_extra_min">+%dmin</string>
+    <string name="checkin_eta">Estimated Arrival</string>
+    <string name="checkin_calculating">Calculating\u2026</string>
+    <string name="checkin_start">Start Check-In</string>
+    <string name="checkin_active">Check-In Active</string>
+    <string name="checkin_to">To: %s</string>
+    <string name="checkin_eta_time">ETA: %s</string>
+    <string name="checkin_arrived">I\'ve Arrived</string>
+    <string name="checkin_extend">Extend</string>
+    <string name="checkin_heading_to">Heading to: %s</string>
+    <string name="checkin_mode" formatted="false">Mode: %s %s</string>
+    <string name="checkin_emergency_data">EMERGENCY DATA</string>
+    <string name="checkin_battery">Battery: %s</string>
+    <string name="checkin_device">Device: %s</string>
+    <string name="checkin_last_location" formatted="false">Last location: %s, %s</string>
+
+    <!-- Chat Wallpaper -->
+    <string name="wallpaper_chat_wallpaper">Chat Wallpaper</string>
+    <string name="wallpaper_tab_oshi" translatable="false">OSHI</string>
+    <string name="wallpaper_tab_colors">Colors</string>
+    <string name="wallpaper_tab_gradients">Gradients</string>
+    <string name="wallpaper_tab_emoji">Emoji</string>
+    <string name="wallpaper_tab_photo">Photo</string>
+    <string name="wallpaper_default">Default</string>
+    <string name="wallpaper_choose_photo_gallery">Choose a photo from your gallery</string>
+    <string name="wallpaper_change_photo">Change Photo</string>
+    <string name="wallpaper_remove">Remove</string>
+    <string name="wallpaper_save_chat">Save for This Chat</string>
+    <string name="wallpaper_load_failed">Failed to load image</string>
+    <string name="settings_rate_oshi">Rate OSHI</string>
+    <string name="ai_powered_local">Powered by OSHI Artificial Intelligence · 100% offline</string>
+    <string name="ai_attach">Attach</string>
+    <string name="ai_attach_photo">Photo Library</string>
+    <string name="ai_attach_camera">Camera</string>
+    <string name="ai_attach_document">Document</string>
+    <string name="ai_text_extracted">Text extracted from %s</string>
+    <string name="ai_no_text_found">No text found in this file</string>
+    <string name="ai_file_too_large">File too large (max 50MB)</string>
+    <string name="ai_selected_device">Selected for your device</string>
+    <string name="ai_gb_download">GB download</string>
+    <string name="ai_gb_free">GB free</string>
+
+    <!-- Profile Links Editor -->
+    <string name="profile_links_title">Edit Profile Links</string>
+    <string name="profile_links_website">Website</string>
+    <string name="profile_links_linkedin">LinkedIn</string>
+    <string name="profile_links_twitter">Twitter / X</string>
+    <string name="profile_links_instagram">Instagram</string>
+    <string name="profile_links_github">GitHub</string>
+    <string name="profile_links_save">Save</string>
+    <string name="profile_links_saved">Profile links saved</string>
+    <string name="profile_links_url_placeholder">https://…</string>
+
+    <!-- Itinerary -->
+    <string name="itinerary_plan_route">Plan Route</string>
+    <string name="itinerary_dropped_pin">Dropped pin</string>
+    <string name="itinerary_origin">Origin</string>
+    <string name="itinerary_destination">Destination</string>
+    <string name="itinerary_calculating">Calculating route…</string>
+
+    <!-- Offline Maps -->
+    <string name="offline_maps_title">Offline Maps</string>
+    <string name="offline_maps_loading">Loading regions…</string>
+    <string name="offline_maps_delete_region">Delete Region</string>
+
+    <!-- Voice/Video Call -->
+    <string name="call_video_request">Video Call Request</string>
+    <!-- Accepter la vidéo sans allumer sa propre caméra (VUPG 0x05). iOS propose
+         ce troisième choix depuis le début; il manquait côté Android. -->
+    <string name="call_video_watch_only">Watch only</string>
+    <string name="call_video_upgrade_message">%1$s wants to enable video — turn yours on too?</string>
+    <string name="call_video_upgrade_inviting_title">Inviting to video</string>
+    <string name="call_video_upgrade_inviting_message">Waiting for %1$s to accept…</string>
+    <string name="call_video_button">Video</string>
+
+    <!-- Map / Navigation i18n pass 2026-04-26 -->
+    <string name="map_itinerary_title">Itinerary</string>
+    <string name="map_itinerary_my_location">My location</string>
+    <string name="map_itinerary_destination">Destination</string>
+    <string name="map_itinerary_calculating">Calculating…</string>
+    <string name="map_itinerary_enter_destination">Enter a destination</string>
+    <string name="map_share">Share</string>
+    <string name="map_search_placeholder_short">Search restaurants, pharmacies…</string>
+    <string name="map_search_places_title">Search Places</string>
+    <string name="map_search_searching">Searching nearby…</string>
+    <string name="map_search_all_categories">All Categories</string>
+    <string name="map_search_section_streets_addresses">Streets &amp; Addresses</string>
+    <string name="map_search_section_places">Places</string>
+    <string name="map_search_empty_title">Search for places nearby</string>
+    <string name="map_search_empty_desc">Results will appear here</string>
+    <string name="map_maneuver_head_towards">Head towards %1$s</string>
+    <string name="map_maneuver_continue_straight">Continue straight</string>
+    <string name="map_maneuver_arrive_at">Arrive at %1$s</string>
+    <string name="map_nav_then">Then</string>
+    <string name="map_nav_arrived">Arrived</string>
+    <string name="map_nav_arrived_message">You have arrived</string>
+    <string name="map_nav_off_route">Off route</string>
+    <string name="map_nav_recalculating">Recalculating…</string>
+    <string name="map_nav_remaining">remaining</string>
+    <string name="map_nav_eta_format">ETA %1$s</string>
+    <string name="map_nav_in_distance">In %1$s</string>
+    <string name="map_nav_now">Now</string>
+    <string name="map_regions_placeholder_message">Download map regions for offline use.
+Search, navigate, and explore without internet.</string>
+    <string name="map_regions_routing_prompt_title">Download offline navigation?</string>
+    <string name="map_regions_routing_prompt_download">Download</string>
+    <string name="map_regions_routing_prompt_skip">Skip</string>
+    <string name="map_regions_routing_prompt_message">Download offline navigation data for this region?</string>
+    <string name="map_regions_routing_prompt_message_with_size">Download turn-by-turn navigation data for %1$s? (%2$s)</string>
+    <string name="map_regions_banner_title">Download maps for offline use</string>
+    <string name="map_regions_banner_subtitle">No internet needed after download</string>
+    <string name="map_regions_banner_feature_tiles">Map tiles</string>
+    <string name="map_regions_banner_feature_poi">POI search</string>
+    <string name="map_regions_banner_feature_routing">Routing</string>
+    <string name="map_regions_banner_feature_streets">Streets</string>
+    <string name="map_regions_banner_description">Each region includes the full map, thousands of points of interest (restaurants, hotels, ATMs, hospitals…) and turn-by-turn navigation — all stored on your device.</string>
+    <string name="map_regions_routing_label">Navigation</string>
+    <string name="map_regions_routing_downloading">Downloading navigation data…</string>
+    <string name="map_regions_routing_download_button">Download offline navigation</string>
+    <string name="map_regions_routing_ready">Ready for offline use</string>
+    <string name="map_regions_routing_description">Offline Navigation</string>
+    <string name="map_regions_street_index_label">Street index</string>
+    <string name="map_regions_street_index_downloading">Downloading street index…</string>
+    <string name="map_regions_street_index_download_button">Download street index</string>
+    <string name="map_regions_street_index_ready">Ready for offline use</string>
+    <string name="map_regions_street_index_description">Street Index</string>
+    <string name="map_regions_subsection_full_countries">Full Countries</string>
+    <string name="map_regions_subsection_cities_regions">Cities &amp; Regions</string>
+    <string name="map_regions_delete_confirm_message_with_name">Delete %1$s? This will remove all offline map data, routing data, and street index for this region.</string>
+    <string name="map_regions_refresh">Refresh</string>
+    <string name="map_regions_back">Back</string>
+    <string name="map_regions_storage_used_format">%1$s used</string>
+    <string name="map_regions_storage_used_format_gb">%1$.1f GB used</string>
+    <string name="map_regions_insufficient_space">Not enough free space on this device to install this region.</string>
+    <string name="map_regions_download_failed">Download failed</string>
+    <string name="map_poi_restaurant">Restaurants</string>
+    <string name="map_poi_cafe">Cafés</string>
+    <string name="map_poi_bar">Bars</string>
+    <string name="map_poi_fuel">Gas Stations</string>
+    <string name="map_poi_hospital">Hospitals</string>
+    <string name="map_poi_pharmacy">Pharmacies</string>
+    <string name="map_poi_hotel">Hotels</string>
+    <string name="map_poi_supermarket">Markets</string>
+    <string name="map_poi_atm">ATMs</string>
+    <string name="map_poi_bank">Banks</string>
+    <string name="map_poi_parking">Parking</string>
+    <string name="map_poi_charging_station">EV Charging</string>
+    <string name="map_poi_bus_station">Bus Stations</string>
+    <string name="map_poi_train_station">Train Stations</string>
+    <string name="map_poi_airport">Airports</string>
+    <string name="map_poi_police">Police</string>
+    <string name="map_poi_post_office">Post Offices</string>
+    <string name="map_poi_school">Schools</string>
+    <string name="map_poi_university">Universities</string>
+    <string name="map_poi_museum">Museums</string>
+    <string name="map_poi_park">Parks</string>
+    <string name="map_poi_beach">Beaches</string>
+    <string name="map_poi_embassy">Embassies</string>
+    <string name="map_poi_place_of_worship">Places of Worship</string>
+    <string name="map_poi_other">Other</string>
+    <string name="map_poi_chip_restaurant">Restaurant</string>
+    <string name="map_poi_chip_cafe">Cafe</string>
+    <string name="map_poi_chip_supermarket">Market</string>
+    <string name="map_poi_chip_fuel">Fuel</string>
+    <string name="map_poi_chip_pharmacy">Pharmacy</string>
+    <string name="map_poi_chip_hospital">Hospital</string>
+    <string name="map_poi_chip_hotel">Hotel</string>
+    <string name="map_poi_chip_atm">ATM</string>
+    <string name="map_poi_chip_parking">Parking</string>
+    <string name="map_poi_chip_charging_station">EV</string>
+    <string name="map_poi_chip_bus_station">Bus</string>
+    <string name="map_poi_chip_train_station">Train</string>
+
+    <!-- Map / Navigation supplemental keys 2026-04-26 -->
+    <string name="map_marker_your_location">Your Location</string>
+    <string name="map_marker_current_position">Current position</string>
+    <string name="map_marker_contact">Contact</string>
+    <string name="map_marker_live_location">Live Location</string>
+    <string name="map_marker_shared_location">Shared Location</string>
+    <string name="map_search_bar_placeholder">Search places, addresses…</string>
+    <string name="map_action_my_location">My Location</string>
+    <string name="map_action_follow_location">Follow my location</string>
+    <string name="map_action_stop_following">Stop following</string>
+    <string name="map_action_ai_assistant">AI Assistant</string>
+    <string name="map_action_call">Call</string>
+    <string name="map_navigate">Navigate</string>
+    <string name="map_update">Update</string>
+    <string name="map_retry">Retry</string>
+    <string name="downloaded_regions">Downloaded</string>
+
+    <!-- Bottom navigation tabs -->
+    <string name="tab_chats">Messages</string>
+    <string name="tab_ai">AI</string>
+    <string name="tab_map">Map</string>
+    <string name="tab_settings">Settings</string>
+    <string name="tab_new">New</string>
+
+    <!-- Schedule message (in-chat sheet) -->
+    <!-- 🔧 2026-08-24: aligned with iOS. `scheduled_msg.menu` is "Thinking of You"
+         (en.lproj/Localizable.strings:3998) / "Je pense à toi"
+         (fr.lproj:4080) — it is the AI-crafted scheduled message, not a
+         "send this later" button. French already said the right thing here;
+         English did not, and the two named different features. -->
+    <string name="chat_schedule_message">Thinking of You</string>
+    <string name="chat_schedule_message_desc">Send a message later</string>
+    <string name="checkin_desc">Stay safe — let a contact follow you home</string>
+    <string name="chat_schedule_pick_time">Pick date and time</string>
+    <string name="chat_schedule_send">Schedule</string>
+    <string name="chat_schedule_cancel">Cancel</string>
+    <string name="chat_schedule_too_soon">Pick a time at least one minute in the future.</string>
+    <string name="chat_schedule_added">Message scheduled</string>
+    <string name="chat_schedule_empty">Type your message first</string>
+    <string name="chat_schedule_when">Send at</string>
+
+    <!-- Voice message recorder / player -->
+    <string name="chat_voice_record">Hold to record</string>
+    <string name="chat_voice_release_to_send">Release to send</string>
+    <string name="chat_voice_slide_to_cancel">Slide to cancel</string>
+    <string name="chat_voice_canceled">Recording canceled</string>
+    <string name="chat_voice_speed_1x">1x</string>
+    <string name="chat_voice_speed_1_5x">1.5x</string>
+    <string name="chat_voice_speed_2x">2x</string>
+    <string name="chat_voice_too_short">Recording too short</string>
+    <!-- __VOICE_MINIPLAYER_2026_10_09__ the floating player's replay control -->
+    <string name="audio_replay">Replay</string>
+
+    <!-- Audit: hardcoded labels in screens -->
+    <string name="peers_title_nearby">Nearby Peers</string>
+    <string name="peers_done">Done</string>
+    <string name="media_open">Open</string>
+    <string name="media_share_button">Share</string>
+    <string name="media_share_failed">Failed to share</string>
+    <string name="chat_share_image_failed">Failed to share image</string>
+    <string name="groups_qr_unavailable">QR Scanner not available</string>
+    <string name="profile_camera_permission_required">Camera permission required</string>
+    <string name="call_short_decline">Decline</string>
+    <string name="call_short_voice">Voice</string>
+    <string name="call_short_video">Video</string>
+
+    <!-- Audit: accessibility content descriptions -->
+    <string name="accessibility_back">Back</string>
+    <string name="accessibility_close">Close</string>
+    <string name="accessibility_clear">Clear</string>
+    <string name="conversations_search_no_results">No conversations match your search</string>
+    <string name="accessibility_share">Share</string>
+    <string name="accessibility_decline">Decline</string>
+    <string name="accessibility_accept">Accept</string>
+    <string name="accessibility_accept_voice">Accept Voice</string>
+    <string name="accessibility_accept_video">Accept Video</string>
+    <string name="accessibility_end_call">End Call</string>
+    <string name="accessibility_send">Send</string>
+    <string name="accessibility_delete">Delete</string>
+    <string name="accessibility_refresh">Refresh</string>
+    <string name="accessibility_info">Info</string>
+    <string name="accessibility_remove">Remove</string>
+    <string name="accessibility_search_messages">Search messages</string>
+    <string name="accessibility_clear_search">Clear search</string>
+    <string name="accessibility_clear_chat">Clear chat</string>
+    <string name="accessibility_chat_history">Chat history</string>
+    <string name="accessibility_new_chat">New chat</string>
+    <string name="accessibility_back_to_chats">Back to chats</string>
+    <string name="accessibility_back_to_voice">Back to voice</string>
+    <string name="accessibility_unpin">Unpin</string>
+    <string name="accessibility_scroll_to_bottom">Scroll to bottom</string>
+    <string name="accessibility_check_in">Check-In</string>
+    <string name="accessibility_scheduled_call">Scheduled Call</string>
+    <string name="accessibility_qr_scanner">Scan QR</string>
+    <string name="accessibility_add_member">Add Member</string>
+    <string name="accessibility_sync_groups">Sync groups</string>
+    <string name="accessibility_qr_code">QR Code</string>
+    <string name="accessibility_settings">Settings</string>
+    <string name="accessibility_mail">Mail</string>
+    <string name="accessibility_new_message">New Message</string>
+    <string name="accessibility_profile_avatar">Profile picture</string>
+    <string name="accessibility_remote_video">Remote video</string>
+    <string name="accessibility_local_preview">Local preview</string>
+    <string name="accessibility_pdf_page">PDF page</string>
+    <string name="accessibility_map_preview">Map preview</string>
+    <string name="accessibility_profile">Profile</string>
+    <string name="accessibility_recovery_qr">Recovery Key QR Code</string>
+    <string name="accessibility_encrypted_qr">Encrypted Key QR Code</string>
+    <string name="accessibility_map_button">Map</string>
+    <string name="accessibility_ai_button">AI</string>
+    <string name="accessibility_link_preview_image">Link preview image</string>
+    <string name="accessibility_hide_links">Hide links</string>
+    <string name="accessibility_location_map">Location map</string>
+    <string name="forward_picker_search_placeholder">Search groups and contacts…</string>
+
+    <!-- Group Invite (QR / Universal Link) — added by group-invite feature -->
+    <string name="group_invite_title">Invite to Group</string>
+    <string name="group_invite_button">Invite</string>
+    <string name="group_invite_share_link">Share Link</string>
+    <string name="group_invite_share_text">Join my OSHI group: %1$s</string>
+    <string name="group_invite_scan_hint">Scan this QR code with OSHI to join the group</string>
+    <string name="group_invite_id_format">Group ID: %1$s</string>
+    <string name="group_invite_from">Invited by %1$s</string>
+    <string name="group_invite_join_button">Join Group</string>
+    <string name="group_invite_default_name">Group</string>
+    <string name="group_invite_invalid_title">Invalid Invite</string>
+    <string name="group_invite_invalid_message">This invite link is invalid or expired.</string>
+    <string name="group_invite_you_joined">You joined the group</string>
+    <string name="group_picture_change">Change Picture</string>
+    <string name="group_picture_set">Set Group Picture</string>
+    <string name="group_picture_changed_system">Group picture updated</string>
+    <string name="group_wallpaper_change">Group Wallpaper</string>
+    <string name="group_wallpaper_set">Set Group Wallpaper</string>
+    <string name="group_wallpaper_synced">Wallpaper synced to all members</string>
+    <string name="group_wallpaper_changed_system">Group wallpaper updated</string>
+    <string name="groups_quick_actions">Quick Actions</string>
+    <string name="chat_record_video">Record video</string>
+    <string name="message_translate_short">Translate</string>
+    <string name="group_picture_updating">Updating group picture…</string>
+    <string name="group_wallpaper_updating">Updating group wallpaper…</string>
+    <string name="group_chat_more_actions">More actions</string>
+    <plurals name="group_members_count_plural">
+        <item quantity="one">%1$d member</item>
+        <item quantity="other">%1$d members</item>
+    </plurals>
+
+    <!-- Offline routing -->
+    <string name="settings_routing_offline_title">Offline maps only</string>
+    <string name="settings_routing_offline_subtitle">Disable network fallback for tiles, search, and routing</string>
+    <string name="routing_download_progress">Downloading routing graph…</string>
+    <string name="ai_gemini_nano_supported_title">Gemini Nano available</string>
+    <string name="ai_gemini_nano_downloading">Your phone is preparing Gemini Nano. OSHI AI will be ready in a moment — no extra download needed.</string>
+    <string name="ai_gemini_nano_downloadable">Your phone supports Gemini Nano. The system will download it shortly — OSHI AI uses it directly, no extra download.</string>
+    <string name="ai_gemini_nano_preparing">OSHI AI is getting ready…</string>
+    <string name="ai_use_oshi_offline_instead">Or download the OSHI offline model instead</string>
+    <string name="ai_download_failed_network">Download failed — check your connection and tap Retry.</string>
+    <string name="ai_download_failed_server">The download server did not respond. Tap Retry, or try again later.</string>
+
+    <!-- Chats tab segments (were hardcoded English in ChatsTabScreen.kt) -->
+    <string name="tab_messages">Messages</string>
+    <string name="tab_groups">Groups</string>
+
+    <!-- Inbound share sheet (Android equivalent of the iOS Share Extension) -->
+    <string name="share_target_label">Send with OSHI</string>
+    <string name="share_target_title">Send to</string>
+    <string name="share_target_search">Search contacts and groups</string>
+    <string name="share_target_text">Text</string>
+    <string name="share_target_attachments">%1$d attachment(s)</string>
+    <string name="share_target_no_contacts">Add a contact first, then you can share into OSHI.</string>
+    <string name="share_target_sending">Sending…</string>
+    <string name="share_target_sent">Sent</string>
+    <string name="share_target_failed">Could not send the shared content</string>
+    <string name="share_target_contact">Contact</string>
+    <string name="share_target_group">Group</string>
+
+    <!-- Portal → Apps tab (mesh apps, matching iOS PortalView appsTab) -->
+    <string name="portal_apps_title">Mesh Apps</string>
+    <string name="portal_apps_description">Utilities that run over the OSHI mesh — no internet required.</string>
+    <string name="portal_mesh_active">Mesh active</string>
+    <string name="portal_mesh_inactive">Mesh inactive</string>
+    <string name="portal_peers_connected">%1$d peer(s) connected</string>
+    <string name="portal_mesh_inactive_hint">Turn on Bluetooth and Wi-Fi to reach nearby devices.</string>
+    <string name="portal_app_radar">Mesh Radar</string>
+    <string name="portal_app_radar_desc">See every device currently reachable over the mesh.</string>
+    <string name="portal_app_public_channels">Public Channels</string>
+    <string name="portal_app_public_channels_desc">Discover and join public channels around you.</string>
+    <string name="portal_app_file_share">File Share</string>
+    <string name="portal_app_file_share_desc">Send a file straight to a connected peer.</string>
+    <string name="portal_app_relay">Relay</string>
+    <string name="portal_app_relay_desc">How OSHI hops messages across devices.</string>
+    <string name="portal_app_network_map">Network Map</string>
+    <string name="portal_app_network_map_desc">A live picture of your mesh neighbourhood.</string>
+    <string name="portal_radar_mesh_on">Mesh is on</string>
+    <string name="portal_radar_mesh_off">Mesh is off</string>
+    <string name="portal_radar_peer_summary">%1$d connected · %2$d discovered</string>
+    <string name="portal_radar_connected">Connected</string>
+    <string name="portal_radar_discovered">Discovered</string>
+    <string name="portal_radar_no_peers">No devices in range yet</string>
+    <string name="portal_fileshare_info">Pick a connected peer to open its chat, then attach the file you want to send over the mesh.</string>
+    <string name="portal_fileshare_no_peers">No connected peers. Files can only be sent to a device that is currently connected.</string>
+    <string name="portal_fileshare_send">Send</string>
+    <string name="portal_relay_title">Store and forward</string>
+    <string name="portal_relay_desc">Messages hop from device to device until they reach the recipient.</string>
+    <string name="portal_relay_how">How it works</string>
+    <string name="portal_relay_step1">Your message is encrypted end-to-end before it leaves this device.</string>
+    <string name="portal_relay_step2">Nearby OSHI devices carry it onward without being able to read it.</string>
+    <string name="portal_relay_step3">It is delivered as soon as the recipient comes into range.</string>
+    <string name="portal_relay_status">Status</string>
+    <string name="portal_relay_active">Relay active</string>
+    <string name="portal_relay_inactive">Relay inactive</string>
+    <string name="portal_netmap_you">You</string>
+    <string name="portal_netmap_connected">Connected peers</string>
+    <string name="portal_netmap_discovered">Discovered peers</string>
+    <string name="portal_netmap_active">Mesh active</string>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         Turn-by-turn navigation (added 2026-08-13).
+         Previously hardcoded English literals in OfflineRouter.kt while the app
+         ships 33 languages. iOS runs the identical set through NSLocalizedString
+         (OfflineRouter.swift:628-648).
+         NOTE map_maneuver_onto is a FORMAT string, not a concatenation: the word
+         order of "<maneuver> onto <road>" is not universal.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <string name="map_maneuver_start">Start</string>
+    <string name="map_maneuver_arrive">Arrive at destination</string>
+    <string name="map_maneuver_continue">Continue</string>
+    <string name="map_maneuver_turn_left">Turn left</string>
+    <string name="map_maneuver_turn_right">Turn right</string>
+    <string name="map_maneuver_bear_left">Bear left</string>
+    <string name="map_maneuver_bear_right">Bear right</string>
+    <string name="map_maneuver_sharp_left">Sharp left</string>
+    <string name="map_maneuver_sharp_right">Sharp right</string>
+    <string name="map_maneuver_uturn">Make a U-turn</string>
+    <string name="map_maneuver_roundabout">Take the roundabout</string>
+    <string name="map_maneuver_merge">Merge</string>
+    <string name="map_maneuver_fork">Keep going</string>
+    <string name="map_maneuver_onto">onto %1$s</string>
+    <string name="map_road_motorway">the motorway</string>
+    <string name="map_road_trunk">the trunk road</string>
+    <string name="map_road_primary">the main road</string>
+    <string name="map_road_secondary">the secondary road</string>
+    <string name="map_road_tertiary">the road</string>
+    <string name="map_road_residential">the street</string>
+    <string name="map_road_path">the path</string>
+    <string name="map_road_cycleway">the cycleway</string>
+    <string name="map_road_service">the service road</string>
+
+    <!-- POI categories present in the live poi.db but absent from the enum, so
+         they all collapsed to "Other" (gym 3 242, toilet 2 710, cinema 948 rows
+         in fr-idf alone). -->
+    <string name="map_poi_gym">Gyms</string>
+    <string name="map_poi_chip_gym">Gym</string>
+    <string name="map_poi_toilet">Toilets</string>
+    <string name="map_poi_chip_toilet">Toilets</string>
+    <string name="map_poi_cinema">Cinemas</string>
+    <string name="map_poi_chip_cinema">Cinema</string>
+
+    <!-- Offline routing: 79 of the server's 234 regions have no road graph
+         (every fr-* and de-*), so this is a normal state, not an error.
+         Mirrors iOS map.regions.roadgraph.unavailable_for_country. -->
+    <string name="map_roadgraph_unavailable_for_country">Offline routing data is not yet available for this country.</string>
+    <string name="map_roadgraph_checksum_mismatch">The downloaded routing data failed its integrity check and was discarded.</string>
+    <string name="map_roadgraph_download_failed">Could not download offline routing data. Check your connection and try again.</string>
+
+    <!-- Check-in local notifications (added 2026-08-13). Android had three TODO
+         stubs; iOS posts three real UNNotificationRequests
+         (CheckInManager.swift:456-500). The WARNING one is the user's only
+         chance to cancel before a false emergency alert reaches a contact. -->
+    <string name="checkin_notification_channel_name">Check-in safety alerts</string>
+    <string name="checkin_notification_channel_description">Warnings and emergency alerts for journeys you are sharing with a contact.</string>
+    <string name="checkin_warning_title">Are you okay?</string>
+    <string name="checkin_warning_body">You haven\'t arrived yet. Tap to confirm you\'re safe.</string>
+    <string name="checkin_warning_action_safe">I\'m safe</string>
+    <string name="checkin_arrived_title">You\'ve arrived!</string>
+    <string name="checkin_arrived_body">Your contact has been notified that you arrived safely at %1$s.</string>
+    <string name="checkin_emergency_title">Emergency Alert Sent</string>
+    <string name="checkin_emergency_body">Your location and device info have been shared with your contact.</string>
+
+    <!-- Check-In: the NAME of each message type.
+         These were English literals on `CheckInMessage.displayTitle`, and that is
+         what the conversation row prints (ConversationsScreen.formatPreviewText)
+         and what the in-thread CheckInBubble titles itself with — so the row read
+         "Emergency Alert" in all 34 locales. iOS resolves the same set through
+         NSLocalizedString (CheckInMessage.swift:36-42).
+         `started` and `cancelled` reuse checkin_started / checkin_cancelled. -->
+    <string name="checkin_type_update">Location Update</string>
+    <string name="checkin_type_arrived">Arrived Safely</string>
+    <string name="checkin_type_extended">Time Extended</string>
+    <string name="checkin_type_warning">Check-In Warning</string>
+    <string name="checkin_type_emergency">Emergency Alert</string>
+
+    <!-- Check-In transport modes. walking/driving reuse map_nav_mode_*. -->
+    <string name="checkin_mode_transit">Transit</string>
+
+    <!-- Check-In: a check-in RECEIVED from a contact.
+         Ported from iOS NotificationManager.swift:519-535. A location `update` has
+         no entry on purpose — iOS silences it (NotificationManager.swift:300-306)
+         so five-minute position pings do not buzz the phone all evening. -->
+    <string name="checkin_incoming_started">Check-In started to %1$s</string>
+    <string name="checkin_incoming_arrived">Arrived safely!</string>
+    <string name="checkin_incoming_warning">Hasn\'t arrived yet</string>
+    <string name="checkin_incoming_emergency">Emergency! Location shared</string>
+    <string name="checkin_incoming_extended">Extended check-in time</string>
+    <string name="checkin_incoming_cancelled">Check-In cancelled</string>
+
+    <!-- Location preview rendered from OSHI's own tile cache/proxy, replacing the
+         dead staticmap.openstreetmap.de image (NXDOMAIN). -->
+    <string name="location_preview_unavailable">Map preview unavailable offline</string>
+    <string name="error_camera_unavailable">Camera unavailable</string>
+    <string name="scheduled_call_reminder_15">Call in 15 minutes</string>
+    <string name="scheduled_call_reminder_5">Call in 5 minutes</string>
+    <string name="scheduled_call_reminder_now">Scheduled call starting now</string>
+    <string name="scheduled_call_reminder_default">Scheduled call reminder</string>
+
+    <!-- Chat UI parity pass (2026-08-23). Every string here replaces a hardcoded
+         English literal in a composable, which is the class of bug F-4 was. -->
+    <string name="chat_report_contact">Report</string>
+    <string name="report_dialog_title">Report this contact</string>
+    <string name="report_dialog_message">Tell the moderation team what is wrong. Nothing from your conversation is attached.</string>
+    <string name="report_details_hint">What happened? (optional)</string>
+    <string name="report_submit">Send report</string>
+    <string name="report_sent_confirmation">Report sent. Thank you.</string>
+    <string name="report_already_filed">You already reported this contact.</string>
+
+    <!-- F-17: GroupType.displayName / .description were English literals in the model. -->
+    <string name="group_type_admin_only">Admin Only</string>
+    <string name="group_type_collaborative">Collaborative</string>
+    <string name="group_type_public">Public</string>
+    <string name="group_type_admin_only_desc">Only admins can send messages</string>
+    <string name="group_type_collaborative_desc">All members can send messages</string>
+    <string name="group_type_public_desc">Anyone nearby can join</string>
+
+    <!-- F-13: playful bubble silhouettes and accents (iOS BubbleFunShapes.swift). -->
+    <string name="bubble_accent_title">Bubble colour</string>
+    <string name="bubble_silhouette_title">Bubble shape</string>
+    <string name="bubble_bold_text">Bold message text</string>
+    <string name="bubble_accent_oshi">OSHI</string>
+    <string name="bubble_accent_ocean">Ocean</string>
+    <string name="bubble_accent_sunset">Sunset</string>
+    <string name="bubble_accent_forest">Forest</string>
+    <string name="bubble_accent_graphite">Graphite</string>
+    <string name="bubble_accent_rose">Rose</string>
+    <string name="bubble_shape_none">Classic</string>
+    <string name="bubble_shape_comic">Comic</string>
+    <string name="bubble_shape_heart">Heart</string>
+    <string name="bubble_shape_car">Car</string>
+    <string name="bubble_shape_balloon">Balloon</string>
+    <string name="bubble_shape_cat">Cat</string>
+    <string name="bubble_shape_dog">Dog</string>
+    <string name="reactions_show_all">More reactions</string>
+    <!-- F-12: these three were hardcoded English content descriptions on the
+         conversation-row delivery tick, i.e. read out in English by TalkBack in
+         all 34 languages. -->
+    <string name="message_status_sent">Sent</string>
+    <string name="message_status_delivered">Delivered</string>
+    <string name="message_status_read">Read</string>
+
+    <!-- Onboarding pages 2 and 3 — ports of iOS `SendMessagePage` and
+         `ConnectivityPage` (OnboardingView.swift:481, :525). English copy taken
+         verbatim from OSHI/en.lproj/Localizable.strings so the two platforms say
+         the same thing; the other 33 locales still need these keys translated. -->
+    <string name="onboarding_message_title">Send Your First Message</string>
+    <string name="onboarding_message_description">Connect with someone by scanning their QR code or entering their public key.</string>
+    <string name="onboarding_method_qr_title">Method 1: Scan QR Code</string>
+    <string name="onboarding_method_paste_title">Method 2: Copy/Paste Public Key</string>
+    <string name="onboarding_reach_title">How your messages travel</string>
+    <string name="onboarding_reach_subtitle">OSHI works two ways — with or without the internet.</string>
+    <string name="onboarding_reach_online_title">Online</string>
+    <string name="onboarding_reach_online_body">With internet, reach anyone in the world instantly.</string>
+    <string name="onboarding_reach_offline_title">Offline (mesh)</string>
+    <string name="onboarding_reach_offline_body">No internet? Messages hop phone-to-phone through people nearby who have OSHI open.</string>
+    <string name="onboarding_reach_range1_dist">~100 m</string>
+    <string name="onboarding_reach_range1_label">Phone to phone, directly</string>
+    <string name="onboarding_reach_range2_dist">~500 m</string>
+    <string name="onboarding_reach_range2_label">Further, when others relay in between</string>
+    <string name="onboarding_reach_range3_dist">~30 km</string>
+    <string name="onboarding_reach_range3_label">With a Meshtastic LoRa radio over Bluetooth</string>
+    <string name="onboarding_reach_tip">Offline needs other people nearby with OSHI open. The more people, the further your message travels.</string>
+    <string name="onboarding_reach_disclaimer">Offline mesh is short range. Both phones need OSHI open to find each other, roughly 100 m apart in the open and much less through walls. It reaches further only when other people nearby also have OSHI open to pass the message along. If no one is in range, OSHI sends over the internet instead.</string>
+
+    <!-- Settings entry point for the bubble accent / silhouette / bold-text picker,
+         where iOS keeps it (SettingsView `BubbleStyleSelector`). -->
+    <string name="settings_bubble_appearance">Bubble Appearance</string>
+    <string name="settings_bubble_appearance_desc">Colour, shape and bold text</string>
+    <!-- TEAM MAP 2026-08-23: distance units for on-map labels. Were hardcoded
+         "m" / "%.1f km" literals in MapScreen.kt. NEW KEYS - need translating. -->
+    <string name="map_distance_m" translatable="false">%1$d m</string>
+    <string name="map_distance_km" translatable="false">%1$s km</string>
+
+    <!-- Call state + connection quality (TEAM CALL 2026-08-23) -->
+    <string name="call_state_ringing">Ringing…</string>
+    <string name="call_state_on_call">On call</string>
+    <string name="call_state_reconnecting">Reconnecting…</string>
+    <string name="call_state_disconnected">Disconnected</string>
+    <string name="call_quality_excellent">Excellent</string>
+    <string name="call_quality_good">Good</string>
+    <string name="call_quality_fair">Fair</string>
+    <string name="call_quality_poor">Poor</string>
+    <string name="call_quality_very_poor">Very poor</string>
+    <string name="video_call_waiting">Waiting for video…</string>
+    <string name="video_call_camera_paused">Camera off</string>
+
+    <!-- TEAM BEAUTY 2026-08-23: hardcoded English found on the identity
+         restore path (KeyBackupScreen / OnboardingScreen) and on the two chat
+         surfaces. Every one of these was previously an English literal shown
+         in all 34 languages. -->
+    <string name="key_backup_invalid_key_size">Invalid key: must be 64 bytes (got %1$d)</string>
+    <string name="key_backup_invalid_base64">Invalid Base64 format</string>
+    <string name="key_backup_identity_restored">Identity restored from recovery key!</string>
+    <string name="key_backup_restore_identity_failed">Failed to restore identity from recovery key</string>
+    <string name="key_backup_key_restored">Key restored successfully!</string>
+    <string name="key_backup_wrong_passphrase">Wrong passphrase or corrupted backup</string>
+    <string name="key_backup_invalid_format">Invalid backup data format</string>
+    <string name="key_backup_restore_failed">Restore failed: %1$s</string>
+    <string name="accessibility_show_passphrase">Show passphrase</string>
+    <string name="accessibility_hide_passphrase">Hide passphrase</string>
+    <string name="onboarding_invalid_recovery_key">Invalid key — must be the 64-byte base64 export</string>
+    <string name="chat_is_typing">%1$s is typing…</string>
+    <string name="chat_peer">Peer</string>
+    <string name="chat_join_call">Join</string>
+    <string name="chat_live_badge">LIVE</string>
+    <string name="chat_open_link">Open</string>
+    <plurals name="search_results_found">
+        <item quantity="one">%1$d result found</item>
+        <item quantity="other">%1$d results found</item>
+    </plurals>
+
+    <!-- Call end reasons, muted banner and remote-video health (calls round 5) -->
+    <string name="call_end_network_error">Network error</string>
+    <string name="call_end_connection_lost">Connection lost</string>
+    <string name="call_end_answered_elsewhere">Answered on another device</string>
+    <string name="call_muted">Muted</string>
+    <string name="call_video_rx_stalled">No video is coming through</string>
+    <string name="call_video_rx_weak">Very weak video connection</string>
+    <string name="call_video_rx_audio_ok">Audio is not affected</string>
+    <string name="chat_media_loading">Loading attachment…</string>
+    <string name="chat_media_unavailable">Attachment unavailable · tap to retry</string>
+    <string name="group_edit_window_expired">This message can no longer be edited.</string>
+
+    <!--
+      Version notices drawn above a conversation. Both banners are informational
+      and dismissible; neither blocks composing, sending or reading, and neither
+      appears at all when the peer sent no version or the server said nothing.
+      Wording is deliberately plain and unalarming.
+    -->
+    <string name="peer_older_version_title">%1$s is on an older version of OSHI</string>
+    <string name="peer_older_version_detail">Messages between you may not arrive until they update to the latest version.</string>
+    <string name="app_update_available_title">An update is available</string>
+    <string name="app_update_available_detail">You are on version %1$s. Updating keeps your messages going through to everyone.</string>
+    <string name="app_update_available_action">Update</string>
+    <string name="version_notice_dismiss">Dismiss</string>
+
+    <!--
+      __UPDATES_BUTTON_2026_11_02__ (N10) The "updates and maintenance" sheet,
+      opened from the icon beside Mail on the conversations list. Every line is
+      backed by something real: the running version, the server's version floor
+      (the same one the in-chat banner reads), and the site that publishes the
+      notes. There is deliberately no "notify me" switch — there is no
+      announcement channel to subscribe to, and a switch that stores a boolean
+      and changes nothing is not a feature.
+    -->
+    <string name="updates_title">Updates and maintenance</string>
+    <string name="updates_current_version">You are running OSHI %1$s</string>
+    <string name="updates_checking">Checking for a newer version…</string>
+    <string name="updates_available">A newer version of OSHI is available.</string>
+    <string name="updates_up_to_date">You are on the latest version we know about.</string>
+    <string name="updates_news_body">New features, fixes and maintenance notices are published with every release.</string>
+    <string name="updates_news_action">Read the release notes</string>
+    <string name="accessibility_updates">Updates and maintenance</string>
+    <string name="linked_device_alert_title">New device linked to your account</string>
+    <string name="linked_device_alert_body">A device was just linked to your OSHI account. If this wasn\'t you, open Linked Devices and remove it now.</string>
+    <string name="linked_device_alert_body_plural">%1$d devices were just linked to your OSHI account. If this wasn\'t you, open Linked Devices and remove them now.</string>
+
+    <!--
+      📈 Shown inside a `$AAPL` chip when the quote could not be fetched. Same
+      wording as iOS `en.lproj/Localizable.strings` "quote.unavailable", so the
+      two clients say the same thing about the same message. Android used to
+      render nothing here, which is indistinguishable from a chip still loading.
+    -->
+    <string name="ticker_quote_unavailable">Price unavailable</string>
+<!-- __CALL_RATING_2026_09_22__ begin — post-call quality rating -->
+    <string name="call_rating_title">How was the call quality?</string>
+    <string name="call_rating_subtitle">Your answer helps us find and fix problems. Nothing from your conversation is shared.</string>
+    <string name="call_rating_star_accessibility">%1$d out of 5 stars</string>
+    <string name="call_rating_what_happened">What went wrong?</string>
+    <string name="call_rating_reason_could_not_hear_them">I couldn\'t hear them</string>
+    <string name="call_rating_reason_they_could_not_hear_me">They couldn\'t hear me</string>
+    <string name="call_rating_reason_choppy">Robotic or choppy audio</string>
+    <string name="call_rating_reason_delay">Long delay</string>
+    <string name="call_rating_reason_echo">Echo</string>
+    <string name="call_rating_reason_dropped">The call ended on its own</string>
+    <string name="call_rating_note_placeholder">Anything else? (optional)</string>
+    <string name="call_rating_privacy">Only your rating and this note are sent — never audio, names or messages.</string>
+    <string name="call_rating_send">Send</string>
+    <string name="call_rating_not_now">Not now</string>
+    <string name="call_rating_thanks">Thank you</string>
+    <string name="call_rating_nothing_to_rate">There is no recent call to rate.</string>
+<!-- __CALL_RATING_2026_09_22__ end -->
+<!-- __PER_DEVICE_MAILBOX_WEB_E2E_STRINGS__ -->
+    <string name="device_mailbox_removed_title">This device was removed from your OSHI account</string>
+    <string name="device_mailbox_removed_body">New messages no longer reach this device directly. To link it again, approve it from another of your devices.</string>
+    <string name="web_session_security_e2e">Encrypted end to end between this phone and your browser</string>
+    <string name="web_session_security_not_e2e">Older web sessions are not end-to-end encrypted</string>
+    <string name="web_session_notice_e2e">Web sessions linked from the current OSHI Web page are end-to-end encrypted: the server relays data it cannot read. Compare the code under each session with the one in your browser.</string>
+    <string name="web_session_notice_not_e2e">A web session below uses the older protocol and is not end-to-end encrypted: the OSHI server can read what it relays to that browser. Remove it, reload oshi-messenger.com/web and link it again.</string>
+    <string name="web_session_row_e2e_code">End-to-end encrypted · code %1$s</string>
+    <string name="web_session_row_e2e">End-to-end encrypted</string>
+    <string name="web_session_row_not_e2e">Not end-to-end encrypted</string>
+    <string name="web_session_link_success_e2e">Linked, end-to-end encrypted. Code shown in the browser: %1$s</string>
+    <string name="web_session_link_success_not_e2e">Linked, but not end-to-end encrypted: this browser page is out of date. Reload oshi-messenger.com/web and scan again.</string>
+    <string name="web_session_qr_reload">Reload the OSHI Web page and scan again</string>
+    <string name="web_session_qr_invalid">This QR code is not a valid OSHI Web code</string>
+<!-- __PER_DEVICE_MAILBOX_WEB_E2E_STRINGS__ end -->
+    <!-- __GROUP_E2E_V2_2026_09_23__ GROUP_E2E_V2_SPEC §6 -->
+    <string name="group_member_must_update">%1$s must update OSHI to receive this group\'s messages.</string>
+    <!-- __BOT_E2E_2026_09_23__ BOT_SEAL_SPEC §3 -->
+    <string name="bot_seal_caption_server">Bot messages are encrypted to you on the OSHI server as soon as they arrive. The bot\'s operator writes them, so it can read them.</string>
+    <string name="bot_seal_caption_bot">End-to-end encrypted by the bot. Only the bot\'s operator and the group members can read them.</string>
+    <string name="bot_seal_caption_none">Not end-to-end encrypted.</string>
+    <!-- __CALL_LOG_AT_REST_2026_09_23__ iOS settings.calls.diaglog.* -->
+    <string name="settings_calls_diaglog_title">Share call diagnostics</string>
+    <string name="settings_calls_diaglog_subtitle">Call-path data only. No messages, contacts or conversation content.</string>
+    <string name="call_error_unavailable">Contact unavailable</string>
+    <!-- __FIRST_CONTACT_REMOTE_2026_10_10__ adding a first contact when apart -->
+    <string name="onboarding_invite_link">Invite someone</string>
+    <string name="onboarding_invite_link_sub">Send a link by message or email — works even if they\'re far away</string>
+    <string name="onboarding_together_header">Or, if you\'re together right now</string>
+    <string name="invite_share_my_link">Send my invite link</string>
+    <string name="invite_body_opener">%1$s would like to chat with you on OSHI — private, encrypted messages.</string>
+    <string name="invite_body_opener_anonymous">Someone would like to chat with you on OSHI — private, encrypted messages.</string>
+    <string name="invite_body_hint">Open the link above on your phone. If you don\'t have OSHI yet, it will show you how to get it.</string>
+
+    <!-- __POLLS_2026_10_23__ Polls in 1:1 and group chats. -->
+    <string name="you">You</string>
+    <string name="poll_title">Poll</string>
+    <string name="poll_create">New poll</string>
+    <string name="poll_question">Question</string>
+    <string name="poll_question_placeholder">Ask something</string>
+    <string name="poll_options">Answers</string>
+    <string name="poll_option_placeholder">Answer %d</string>
+    <string name="poll_add_option">Add an answer</string>
+    <string name="poll_remove_option">Remove this answer</string>
+    <string name="poll_multiple_answers">Multiple answers</string>
+    <string name="poll_multiple_answers_hint">Everyone picks one answer. Turn this on to allow several.</string>
+    <string name="poll_multiple_answers_badge">Multiple</string>
+    <string name="poll_anonymous">Hide who voted</string>
+    <string name="poll_anonymous_hint">Names are not collected. A ballot still travels from its sender, like any message.</string>
+    <string name="poll_anonymous_badge">Anonymous</string>
+    <string name="poll_duration">Closes</string>
+    <string name="poll_duration_never">No end</string>
+    <string name="poll_duration_1h">In 1 hour</string>
+    <string name="poll_duration_6h">In 6 hours</string>
+    <string name="poll_duration_24h">In 24 hours</string>
+    <string name="poll_duration_3d">In 3 days</string>
+    <string name="poll_duration_7d">In 7 days</string>
+    <string name="poll_send">Send</string>
+    <string name="poll_votes">%d votes</string>
+    <string name="poll_votes_one">1 vote</string>
+    <string name="poll_closed">Closed</string>
+    <string name="poll_closes_in">Closes %s</string>
+    <string name="poll_tap_to_vote">Tap to vote</string>
+    <string name="poll_see_voters">See who voted</string>
+    <string name="poll_hide_voters">Hide</string>
+    <string name="poll_voter">Someone</string>
+    <string name="poll_accessibility_option">%1$d percent, %2$d votes</string>
+    <!-- __OFFLINE_ONLY_CONVERSATION_2026_10_23__ -->
+    <string name="offline_only_menu_on">Use mesh and radio only</string>
+    <string name="offline_only_menu_off">Allow the internet again</string>
+    <string name="offline_only_summary_on">This conversation is now offline only</string>
+    <string name="offline_only_summary_off">This conversation can use the internet again</string>
+
+    <!-- N16: last seen on the contact card. Ported from iOS presence.* -->
+    <string name="presence_now">Just now</string>
+    <string name="presence_minutes_ago">%d minutes ago</string>
+    <string name="presence_hours_ago">%d hours ago</string>
+    <string name="presence_unknown">Unknown</string>
+
+    <!-- N15: why the mesh is finding nobody, instead of claiming it is searching -->
+    <string name="mesh_blocked_permission">Nearby devices permission is off</string>
+    <string name="mesh_blocked_bluetooth">Bluetooth is off</string>
+    <string name="mesh_blocked_wifi">Wi\u2011Fi is off</string>
+
+    <!-- N18: pin a conversation to the top of the list -->
+    <string name="conversation_pin">Pin to top</string>
+    <string name="conversation_unpin">Unpin</string>
+    <!-- __GROUP_RECEIPTS_2026_11_02__ (N8) Who received and who read one GROUP
+         message. "Not yet delivered" is NOT an error state: it is the answer
+         the user most needs, and omitting those members would read as
+         everyone having received it. -->
+    <string name="group_receipts_action">Info</string>
+    <string name="group_receipts_title">Message info</string>
+    <string name="group_receipts_read">Read by</string>
+    <string name="group_receipts_delivered">Delivered to</string>
+    <string name="group_receipts_pending">Not yet delivered</string>
+    <!-- __PROFILE_BIO_2026_11_02__ (N4) The bio a user publishes to their
+         contacts. The ephemeral note says "hidden", never "deleted": the
+         peer holds the text and nothing here can reach their device. -->
+    <string name="profile_bio_label">Bio</string>
+    <string name="profile_bio_placeholder">A line about you (optional)</string>
+    <string name="profile_bio_ephemeral">Ephemeral bio</string>
+    <string name="profile_bio_ephemeral_note">Hidden after 24 hours. It is not deleted from anyone\'s device.</string>
+    <!-- __IN_APP_GUIDES_2026_11_02__ The two things people keep asking how to
+         do. The Cashu warning is part of the guide, not a footnote: a token is
+         bearer cash, and glossing over that to read more smoothly would be the
+         most expensive sentence in the app. -->
+    <string name="guides_title">How do I…?</string>
+    <string name="guide_add_contact_title">Add a contact</string>
+    <string name="guide_add_contact_sub">No phone number, no account — just a code</string>
+    <string name="guide_add_contact_s1">Tap the + button, then "My code". That QR code IS your address in OSHI. There is no phone number and no username.</string>
+    <string name="guide_add_contact_s2">Sitting together? Have them tap "Scan" and point their camera at your code. You are connected — that is the whole step.</string>
+    <string name="guide_add_contact_s3">Far apart? Tap "Invite by link" and send that link however you like — SMS, email, any app. Opening it on a phone with OSHI adds you.</string>
+    <string name="guide_add_contact_s4">No internet at all? Open "Nearby". Any phone running OSHI within about 100 m appears there over Bluetooth, and you can add each other with no network.</string>
+    <string name="guide_cashu_title">Send bitcoin in a chat</string>
+    <string name="guide_cashu_sub">Cashu ecash — OSHI never holds your money</string>
+    <string name="guide_cashu_s1">OSHI has no wallet and never holds your money. It carries a Cashu token — ecash backed by bitcoin — the way it carries a photo.</string>
+    <string name="guide_cashu_s2">You need a Cashu wallet first. eNuts, Minibits, or cashu.me in a browser: all free, about a minute to set up.</string>
+    <string name="guide_cashu_s3">In the wallet, choose a mint and add a little money over Lightning. A few hundred sats is plenty to try this.</string>
+    <string name="guide_cashu_s4">Make a token: tap Send in the wallet, enter an amount, copy. You get a long line of text starting with cashuB. That text IS the money.</string>
+    <string name="guide_cashu_s6">They tap Redeem and the money lands in their wallet. A token sent to you looks the same: tap Redeem. OSHI is only the envelope.</string>
+    <string name="guide_cashu_s5">In the chat, type / in the message box and choose /pay, then paste the token. OSHI shows the amount before it sends, so you can check it.</string>
+    <string name="guide_cashu_warning">A Cashu token is cash. Anyone who gets the text can spend it, and whoever redeems it first keeps it — so send it only to the person you mean. OSHI cannot ask the mint whether a token has already been spent: it is yours only once your own wallet redeems it.</string>
+    <string name="guide_cashu_learn_more">What is Cashu?</string>
+    <!-- __IMAGE_CROP_2026_11_02__ (N13) -->
+    <string name="crop_title">Crop photo</string>
+    <string name="crop_rotate">Rotate</string>
+    <string name="crop_edit">Crop</string>
+    <string name="reaction_notification">Reacted to a message</string>
+    <string name="lora_unverified">unverified</string>
+    <string name="lora_buy_node">Buy a node</string>
+    <string name="lora_buy_from">from %1$s</string>
+    <!-- __THE_CONNECT_BUTTON_WAS_A_COMMENT_2026_11_07__ A press on Connecter used
+         to run no code and say nothing. These are the three things it can now say. -->
+    <string name="peers_connect_dialing">Connecting to %1$s…</string>
+    <string name="peers_connect_already">%1$s is already connected</string>
+    <string name="peers_connect_searching">No address for %1$s yet — searching again…</string>
+    <!-- __CHANNEL_ROOMS_ALL_SENT_ON_SLOT_ZERO_2026_11_07__ -->
+    <string name="lora_error_channel_unknown">This channel is not on the connected radio — it may have been renamed, moved or removed. Nothing was sent.</string>
+    <!-- __MESSAGE_THE_NODE_FROM_THE_MAP_2026_11_07__ -->
+    <string name="lora_node_message">Message this node</string>
+    <!-- __THE_MAP_DECIDED_WHAT_YOU_SAW_2026_11_07__ -->
+    <string name="map_pois_hide">Hide places</string>
+    <string name="map_pois_show">Show places</string>
+    <!-- __THE_PENCIL_SAID_NOTHING_2026_11_08__ -->
+    <string name="new_message_fab">New</string>
+    <!-- __WELCOME_IS_A_REAL_CONVERSATION_2026_11_08__ -->
+    <string name="chat_welcome_creator_notice">Written by OSHI, and it reaches Hugo, who created it. He reads replies.</string>
+    <!-- __PHOTO_MARKUP_2026_11_08__ -->
+    <string name="markup_undo">Undo</string>
+    <string name="markup_done">Done</string>
+    <string name="markup_draw">Draw</string>
+    <string name="updates_open_store">Open OSHI in the Play Store</string>
+    <string name="settings_keep_running_background">Keep running in the background</string>
+    <string name="settings_keep_running_background_desc">Stay reachable nearby (Bluetooth/Wi-Fi) when OSHI is closed. Android then shows the OSHI icon in the status bar. Messages and calls arrive by notification either way.</string>
+    <string name="settings_keep_running_background_no_push">On: this phone has no Google push, so OSHI must keep running to receive messages.</string>
+    <string name="settings_privacy_relay_address">Relay address</string>
+    <string name="settings_privacy_relay_not_set">Not set — enter a relay address to turn this on</string>
+    <string name="settings_privacy_relay_address_hint">The https address of an Oblivious HTTP relay run by someone other than OSHI. It sees your IP address but cannot read anything.</string>
+    <string name="settings_privacy_relay_address_invalid">Enter an https:// address of a relay that is not OSHI\'s server.</string>
+    <string name="chat_unread_divider">Unread messages</string>
+    <string name="settings_animated_reactions">Animated OSHI reactions</string>
+    <string name="settings_animated_reactions_desc">Off: standard emoji</string>
+    <string name="reactions_new_hint">New: iPhones on an older version may show these as 👍</string>
+</resources>

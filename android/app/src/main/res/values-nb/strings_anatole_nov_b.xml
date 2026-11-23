@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Rund videomelding, maks 15 s</string>
+    <string name="settings_panic_wipe_title">Slett ved å trykke på logoen</string>
+    <string name="settings_panic_wipe_subtitle">Tre raske trykk på OSHI-logoen sletter alle meldinger, nøkler og filer på denne telefonen, uten bekreftelse. Av med mindre du slår det på.</string>
+    <string name="map_layer_title">Karttype</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Terreng</string>
+    <string name="map_layer_satellite">Satellitt</string>
+    <string name="map_layer_standard_desc">OSHI-kart, fungerer frakoblet med nedlastede områder</string>
+    <string name="map_layer_third_party_desc" formatted="true">Bare på nett. Lastes direkte fra %1$s, som ser området du ser på.</string>
+    <string name="map_layer_offline_only_note">«Kun frakoblede kart» er på: dette laget viser bare fliser du allerede har sett.</string>
+</resources>

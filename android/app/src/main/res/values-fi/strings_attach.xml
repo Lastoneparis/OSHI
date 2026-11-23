@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Viimeisimmät</string>
+    <string name="attach_selected_count">%1$d valittu</string>
+    <string name="attach_all_photos">Kaikki kuvat</string>
+    <string name="attach_collapse">Pienennä</string>
+    <string name="attach_camera">Kamera</string>
+    <string name="attach_gallery">Galleria</string>
+    <string name="attach_file">Tiedosto</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Sijainti</string>
+    <string name="attach_contact">Yhteystieto</string>
+    <string name="attach_poll">Kysely</string>
+    <string name="attach_video_note">Videoviesti</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Ajoita</string>
+    <string name="attach_access_title">Viimeisimmät kuvasi tässä</string>
+    <string name="attach_access_body">OSHI lukee kuviasi vain, kun tämä paneeli on auki. Mikään ei lähde puhelimesta, ellet lähetä sitä.</string>
+    <string name="attach_access_allow">Salli käyttö</string>
+    <string name="attach_access_settings">Avaa asetukset</string>
+    <string name="attach_access_browse">Valitse galleriasta</string>
+    <string name="attach_partial">Olet jakanut OSHIlle vain osan kuvista.</string>
+    <string name="attach_partial_manage">Hallitse</string>
+    <string name="attach_empty_title">Ei vielä kuvia</string>
+    <string name="attach_caption_hint">Lisää kuvateksti…</string>
+    <string name="attach_send_count">Lähetä %1$d</string>
+    <string name="attach_photo_a11y">Kuva</string>
+    <string name="attach_video_a11y">Video, %1$s</string>
+    <string name="attach_limit">Enintään %1$d kerralla</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">Έξυπνο ρολόι</string>
+    <string name="settings_smartwatch_subtitle">Διαβάστε και απαντήστε στις συνομιλίες σας από ένα ρολόι Wear OS. Η κρυπτογράφηση και η αποστολή μένουν σε αυτό το τηλέφωνο· το ρολόι δεν κρατά τίποτα.</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videoviesti</string>
+    <string name="video_note_title">Videoviesti</string>
+    <string name="video_note_a11y" formatted="true">Videoviesti, %1$s</string>
+    <string name="video_note_play">Toista</string>
+    <string name="video_note_pause">Tauko</string>
+    <string name="video_note_record_button">Tallenna videoviesti</string>
+    <string name="video_note_hint">Napauta tallentaaksesi tai pidä painettuna · enint. 15 s</string>
+    <string name="video_note_record">Aloita tallennus</string>
+    <string name="video_note_stop">Lopeta tallennus</string>
+    <string name="video_note_flip">Vaihda kameraa</string>
+    <string name="video_note_close">Sulje</string>
+    <string name="video_note_review_title">Videoviestisi</string>
+    <string name="video_note_preparing">Valmistellaan…</string>
+    <string name="video_note_discard">Poista</string>
+    <string name="video_note_retake">Tallenna uudelleen</string>
+    <string name="video_note_send">Lähetä videoviesti</string>
+    <string name="video_note_too_short">Liian lyhyt. Napauta tallentaaksesi tai pidä painiketta painettuna.</string>
+    <string name="video_note_camera_denied">Videoviestin tallentaminen vaatii kameran käyttöoikeuden.</string>
+</resources>

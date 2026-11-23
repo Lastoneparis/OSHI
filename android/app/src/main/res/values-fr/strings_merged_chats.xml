@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Fusionner Messages et Groupes</string>
+    <string name="chats_merged_setting_desc">Une seule liste pour toutes vos discussions, avec des filtres Personnes et Groupes.</string>
+    <string name="chats_merged_filter_all">Tout</string>
+    <string name="chats_merged_filter_unread">Non lus</string>
+    <string name="chats_merged_filter_groups">Groupes</string>
+    <string name="chats_merged_filter_people">Personnes</string>
+    <string name="chats_merged_new_title">Nouveau</string>
+    <string name="chats_merged_new_chat">Nouvelle discussion</string>
+    <string name="chats_merged_new_chat_desc">Ajouter quelqu\'un par QR code, lien ou clé</string>
+    <string name="chats_merged_new_group">Nouveau groupe</string>
+    <string name="chats_merged_new_group_desc">Créer un groupe avec vos contacts</string>
+    <string name="chats_merged_discover">Découvrir des canaux publics</string>
+    <string name="chats_merged_discover_desc">Rejoindre les groupes publics autour de vous</string>
+    <string name="chats_merged_scan_invite">Scanner une invitation</string>
+    <string name="chats_merged_scan_invite_desc">Rejoindre un groupe ou ajouter un contact depuis un QR code</string>
+    <string name="chats_merged_scan_not_invite">Ce QR code n\'est pas une invitation OSHI</string>
+    <string name="chats_merged_calls_header">Appeler quelqu\'un</string>
+    <string name="chats_merged_teaser_title">Rejoindre un canal public</string>
+    <string name="chats_merged_teaser_body">Les groupes publics à proximité fonctionnent même sans internet. Découvrez qui est autour de vous.</string>
+    <string name="chats_merged_teaser_cta">Découvrir</string>
+    <string name="chats_merged_nearby_title">Groupe à proximité</string>
+    <string name="chats_merged_empty_unread">Vous êtes à jour</string>
+    <string name="chats_merged_empty_people">Aucune conversation pour l\'instant</string>
+    <string name="chats_merged_group_a11y">Groupe</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Βιντεομήνυμα</string>
+    <string name="video_note_title">Βιντεομήνυμα</string>
+    <string name="video_note_a11y" formatted="true">Βιντεομήνυμα, %1$s</string>
+    <string name="video_note_play">Αναπαραγωγή</string>
+    <string name="video_note_pause">Παύση</string>
+    <string name="video_note_record_button">Εγγραφή βιντεομηνύματος</string>
+    <string name="video_note_hint">Πατήστε για εγγραφή ή κρατήστε πατημένο · έως 15 δλ</string>
+    <string name="video_note_record">Έναρξη εγγραφής</string>
+    <string name="video_note_stop">Διακοπή εγγραφής</string>
+    <string name="video_note_flip">Εναλλαγή κάμερας</string>
+    <string name="video_note_close">Κλείσιμο</string>
+    <string name="video_note_review_title">Το βιντεομήνυμά σας</string>
+    <string name="video_note_preparing">Προετοιμασία…</string>
+    <string name="video_note_discard">Διαγραφή</string>
+    <string name="video_note_retake">Ξανά</string>
+    <string name="video_note_send">Αποστολή βιντεομηνύματος</string>
+    <string name="video_note_too_short">Πολύ σύντομο. Πατήστε για εγγραφή ή κρατήστε πατημένο το κουμπί.</string>
+    <string name="video_note_camera_denied">Απαιτείται πρόσβαση στην κάμερα για την εγγραφή βιντεομηνύματος.</string>
+</resources>

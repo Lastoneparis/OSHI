@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (nl) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI gebruikt bluetooth om apparaten in de buurt te vinden en ermee te verbinden, zodat je veilig en zonder internet rechtstreeks berichten kunt sturen.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI heeft bluetooth nodig om versleutelde berichten te ontvangen van apparaten in de buurt in je mesh-netwerk.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI kan geplande gesprekken aan je agenda toevoegen, zodat je er geen mist.";
+"NSCalendarsUsageDescription" = "OSHI kan geplande gesprekken aan je agenda toevoegen, zodat je er geen mist.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI kan geplande gesprekken aan je agenda toevoegen, zodat je er geen mist.";
+"NSCameraUsageDescription" = "OSHI heeft toegang tot de camera nodig om QR-codes te scannen en foto's te maken voor versleutelde berichten.";
+"NSFaceIDUsageDescription" = "Gebruik Face ID om je versleutelde berichten veilig te ontgrendelen en je privacy te beschermen.";
+"NSLocalNetworkUsageDescription" = "OSHI gebruikt het lokale netwerk om Wi-Fi Direct-verbindingen te maken met apparaten in de buurt, zodat berichten sneller aankomen.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI gebruikt je locatie om je positie live met contacten te delen. Je locatie is versleuteld en wordt alleen gedeeld als je dat zelf kiest.";
+"NSLocationAlwaysUsageDescription" = "OSHI gebruikt je locatie om die live met contacten te delen, ook als de app op de achtergrond staat. Je locatie is versleuteld en wordt alleen gedeeld als je dat zelf kiest.";
+"NSLocationWhenInUseUsageDescription" = "OSHI gebruikt je locatie om je positie met contacten te delen. Je locatie is versleuteld en wordt alleen gedeeld als je dat zelf kiest.";
+"NSMicrophoneUsageDescription" = "OSHI heeft toegang tot de microfoon nodig om video's met geluid op te nemen voor versleutelde berichten.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI kan ontvangen afbeeldingen bewaren in je fotobibliotheek.";
+"NSPhotoLibraryUsageDescription" = "OSHI heeft toegang tot je fotobibliotheek nodig om afbeeldingen te kiezen die je als versleuteld bericht verstuurt.";
+"NSSpeechRecognitionUsageDescription" = "OSHI gebruikt spraakherkenning op het apparaat zelf, zodat je berichten kunt inspreken voor de AI-assistent. Je stem wordt volledig op je iPhone omgezet naar tekst en verlaat je apparaat nooit.";
+"NSUserNotificationsUsageDescription" = "OSHI stuurt je een melding bij nieuwe versleutelde berichten, zodat je niets belangrijks mist.";

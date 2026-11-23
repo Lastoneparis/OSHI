@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  OSHI's scanner viewfinder.
+
+  ZXing's stock layout is a full-bleed preview with a red laser line and the
+  prompt pinned to the bottom. This replaces it with a dimmed surround and a
+  square window, which is the part that actually helps: it tells the user where
+  to put the code, and a square matches a QR's aspect ratio so the framing is
+  honest about what will be read.
+
+  `zxing_barcode_scanner` is the id DecoratedBarcodeView must keep — CaptureActivity
+  looks it up by that name — as are `zxing_viewfinder_view` and `zxing_status_view`.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/zxing_barcode_scanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:zxing_preview_scaling_strategy="centerCrop"
+        app:zxing_use_texture_view="true" />
+
+    <!-- Dimmed surround + framed window. A vertical chain of scrims leaves a
+         square hole in the middle; the frame is drawn on the hole itself. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#A6000000" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#A6000000" />
+
+                <!-- The window itself: square, transparent, brand-framed. -->
+                <View
+                    android:id="@+id/oshi_scan_window"
+                    android:layout_width="260dp"
+                    android:layout_height="260dp"
+                    android:background="@drawable/oshi_scan_frame" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#A6000000" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#A6000000" />
+    </LinearLayout>
+
+    <!-- Prompt sits ABOVE the window rather than at the screen bottom, so it is
+         read before the user starts aiming. -->
+    <TextView
+        android:id="@+id/zxing_status_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="96dp"
+        android:paddingHorizontal="32dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:background="@android:color/transparent" />
+
+</FrameLayout>

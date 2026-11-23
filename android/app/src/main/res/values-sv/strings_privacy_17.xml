@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Skärmdumpar är blockerade i OSHI för att skydda dina konversationer</string>
+    <string name="rn_hint_setting_title">Låt kontakter veta att jag är på ett begränsat nätverk</string>
+    <string name="rn_hint_setting_caption">Medan trafiken är förklädd bär dina meddelanden en liten, end-to-end-krypterad markering så att kontakter vet att du kanske är på ett censurerat eller övervakat nätverk. Bara de ser den.</string>
+    <string name="rn_hint_chip">Skickat från ett begränsat nätverk</string>
+    <string name="rn_hint_explain_title">Begränsat nätverk</string>
+    <string name="rn_hint_explain_body">Den här personen använder OSHI:s förklädnad och är troligen på ett censurerat eller övervakat nätverk. Svara som vanligt: OSHI fortsätter att förklä deras sida. Håll meddelandena korta; bilder och video kan gå långsamt.</string>
+</resources>

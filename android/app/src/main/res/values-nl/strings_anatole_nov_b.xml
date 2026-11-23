@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Rond videobericht, max. 15 s</string>
+    <string name="settings_panic_wipe_title">Wissen door op het logo te tikken</string>
+    <string name="settings_panic_wipe_subtitle">Drie keer snel tikken op het OSHI-logo wist alle berichten, sleutels en bestanden op deze telefoon, zonder bevestiging. Uit tenzij je het inschakelt.</string>
+    <string name="map_layer_title">Kaarttype</string>
+    <string name="map_layer_standard">Standaard</string>
+    <string name="map_layer_terrain">Terrein</string>
+    <string name="map_layer_satellite">Satelliet</string>
+    <string name="map_layer_standard_desc">OSHI-kaart, werkt offline met gedownloade regio\'s</string>
+    <string name="map_layer_third_party_desc" formatted="true">Alleen online. Rechtstreeks geladen van %1$s, dat het gebied ziet dat je bekijkt.</string>
+    <string name="map_layer_offline_only_note">‘Alleen offline kaarten’ staat aan: deze laag toont alleen tegels die je al hebt gezien.</string>
+</resources>

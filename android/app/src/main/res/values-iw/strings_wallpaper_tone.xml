@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">גוון</string>
+    <string name="wallpaper_tone_automatic">אוטומטי</string>
+    <string name="wallpaper_tone_light">בהיר</string>
+    <string name="wallpaper_tone_dark">כהה</string>
+    <string name="wallpaper_tone_automatic_detail">עוקב אחר מצב בהיר ומצב כהה.</string>
+    <string name="wallpaper_tone_light_detail">לבן עם רשת סגולה, גם במצב כהה. ההודעות עוברות לצבעים הבהירים שלהן כדי להישאר קריאות.</string>
+    <string name="wallpaper_tone_dark_detail">שחור עם רשת סגולה, גם במצב בהיר.</string>
+    <string name="wallpaper_tone_more">צבעים, מעברי צבע, אמוג׳י ותמונות משלך: פתחו צ׳אט ואז ⋯ ← טפט.</string>
+</resources>

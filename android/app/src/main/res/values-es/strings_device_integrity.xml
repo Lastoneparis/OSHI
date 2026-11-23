@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Es posible que este teléfono esté modificado</string>
+    <string name="device_integrity_dialog_body">OSHI detectó indicios de que este teléfono puede estar rooteado o modificado (%1$s). En un teléfono así, otro software puede leer lo que aparece en pantalla y lo que escribes antes de que OSHI lo cifre. OSHI no ha borrado ni bloqueado nada. Esta comprobación es heurística: puede equivocarse, y un root bien oculto puede escapar de ella.</string>
+    <string name="device_integrity_dialog_ok">Entendido</string>
+    <string name="device_integrity_status_title">Integridad del dispositivo</string>
+    <string name="device_integrity_status_flagged">OSHI detectó indicios de root o modificación: %1$s</string>
+    <string name="device_integrity_finding_su">binario su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">app de gestión de root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">sistema firmado con claves de prueba</string>
+    <string name="device_integrity_finding_debuggable">sistema depurable</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Teléfonos rooteados o modificados: OSHI busca indicios habituales de root (su, Magisk, Xposed/LSPosed, Frida, sistema firmado con claves de prueba o depurable) y te avisa si encuentra alguno. No encontrarlos no demuestra que el teléfono esté limpio.</string>
+    <string name="clipboard_hygiene_explainer">Copiar: los mensajes, traducciones, claves de recuperación y tokens de bot que copias se marcan como sensibles (Android 13+ oculta la vista previa). Si siguen en el portapapeles a los 60 segundos, OSHI los elimina: de inmediato si OSHI está abierto o, si no, la próxima vez que lo abras. Mientras estén ahí, tu teclado y las apps con permiso para leer el portapapeles pueden verlos, y los teclados o funciones del teléfono que guardan un historial del portapapeles pueden conservar su propia copia incluso después de eliminarlos.</string>
+</resources>

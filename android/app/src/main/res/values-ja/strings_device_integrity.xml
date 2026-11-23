@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">このスマートフォンは改造されている可能性があります</string>
+    <string name="device_integrity_dialog_body">OSHIは、このスマートフォンがroot化または改造されている可能性を示す兆候を検出しました（%1$s）。このようなスマートフォンでは、OSHIが暗号化する前に、他のソフトウェアが画面の内容や入力内容を読み取れます。OSHIは何も削除・ブロックしていません。この確認はヒューリスティックなもので、誤ることがあり、巧妙に隠されたrootは検出できない場合があります。</string>
+    <string name="device_integrity_dialog_ok">了解しました</string>
+    <string name="device_integrity_status_title">デバイスの完全性</string>
+    <string name="device_integrity_status_flagged">OSHIがrootまたは改造の兆候を検出しました：%1$s</string>
+    <string name="device_integrity_finding_su">suバイナリ</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">root管理アプリ</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">テストキーで署名されたシステム</string>
+    <string name="device_integrity_finding_debuggable">デバッグ可能なシステム</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">root化・改造されたスマートフォン：OSHIはrootの一般的な兆候（su、Magisk、Xposed/LSPosed、Frida、テストキー署名またはデバッグ可能なシステム）を探し、見つかった場合は警告します。何も見つからなくても、スマートフォンが安全だという証明にはなりません。</string>
+    <string name="clipboard_hygiene_explainer">コピー：コピーしたメッセージ、翻訳、復元キー、ボットトークンは機密としてマークされます（Android 13以降ではプレビューが非表示）。60秒後もクリップボードに残っていれば、OSHIが削除します。OSHIが開いていればすぐに、そうでなければ次に開いたときに削除します。クリップボードにある間は、キーボードやクリップボードの読み取りを許可されたアプリから見える状態で、クリップボード履歴を保存するキーボードやスマートフォンの機能は、削除後も独自のコピーを保持している場合があります。</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Mesej video</string>
+    <string name="video_note_title">Mesej video</string>
+    <string name="video_note_a11y" formatted="true">Mesej video, %1$s</string>
+    <string name="video_note_play">Main</string>
+    <string name="video_note_pause">Jeda</string>
+    <string name="video_note_record_button">Rakam mesej video</string>
+    <string name="video_note_hint">Ketik untuk merakam atau tahan · maks. 15 saat</string>
+    <string name="video_note_record">Mula merakam</string>
+    <string name="video_note_stop">Henti merakam</string>
+    <string name="video_note_flip">Tukar kamera</string>
+    <string name="video_note_close">Tutup</string>
+    <string name="video_note_review_title">Mesej video anda</string>
+    <string name="video_note_preparing">Menyediakan…</string>
+    <string name="video_note_discard">Padam</string>
+    <string name="video_note_retake">Rakam semula</string>
+    <string name="video_note_send">Hantar mesej video</string>
+    <string name="video_note_too_short">Terlalu pendek. Ketik untuk merakam atau tahan butang.</string>
+    <string name="video_note_camera_denied">Akses kamera diperlukan untuk merakam mesej video.</string>
+</resources>

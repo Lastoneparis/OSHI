@@ -1,0 +1,13 @@
+{
+  "canonicalMessage" : "YjJ4a0xXdGxlUzFpWVhObE5qUXRaWGhoYlhCc1pRPT0AYm1WM0xXdGxlUzFpWVhObE5qUXRaWGhoYlhCc1pRPT0AAAABmRVcYgAAAAAH",
+  "info" : "OSHI-KeyRotation-v1",
+  "macKey" : "akhsOKDcXZLcYrjqR7YjfqHkpn7\/hW2JfoPCsW1oXqU=",
+  "newPublicKey" : "bmV3LWtleS1iYXNlNjQtZXhhbXBsZQ==",
+  "oldPublicKey" : "b2xkLWtleS1iYXNlNjQtZXhhbXBsZQ==",
+  "rotationNumber" : 7,
+  "sharedSecret" : "BRAbJjE8R1JdaHN+iZSfqrXAy9bh7PcCDRgjLjlET1o=",
+  "tag" : "9g956IZiczSChz9DB+N0D2AzmJXgYQQO6fcgDnHX1LE=",
+  "tagAmbiguousA_BC" : "A4O4mxGZnvKoZaTKwkRrifjIkN4+d5d1F26fYt4ctCo=",
+  "tagAmbiguousAB_C" : "BxEErXDfCuxoRAYmGjFdC6oOoMldQnqVsiUq3ySViqU=",
+  "timestampMillis" : "1757000000000"
+}

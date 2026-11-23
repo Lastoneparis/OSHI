@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videomelding</string>
+    <string name="video_note_title">Videomelding</string>
+    <string name="video_note_a11y" formatted="true">Videomelding, %1$s</string>
+    <string name="video_note_play">Spill av</string>
+    <string name="video_note_pause">Pause</string>
+    <string name="video_note_record_button">Ta opp en videomelding</string>
+    <string name="video_note_hint">Trykk for å ta opp, eller hold inne · maks 15 sek</string>
+    <string name="video_note_record">Start opptak</string>
+    <string name="video_note_stop">Stopp opptak</string>
+    <string name="video_note_flip">Bytt kamera</string>
+    <string name="video_note_close">Lukk</string>
+    <string name="video_note_review_title">Videomeldingen din</string>
+    <string name="video_note_preparing">Forbereder…</string>
+    <string name="video_note_discard">Slett</string>
+    <string name="video_note_retake">Ta opp på nytt</string>
+    <string name="video_note_send">Send videomelding</string>
+    <string name="video_note_too_short">For kort. Trykk for å ta opp, eller hold knappen inne.</string>
+    <string name="video_note_camera_denied">Kameratilgang trengs for å ta opp en videomelding.</string>
+</resources>

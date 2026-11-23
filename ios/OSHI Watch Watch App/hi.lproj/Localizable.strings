@@ -1,0 +1,136 @@
+/* OSHI Watch App - Hindi */
+
+/* Status */
+"watch.status.connected" = "कनेक्टेड";
+"watch.status.not_reachable" = "iPhone उपलब्ध नहीं";
+
+/* Navigation */
+"watch.open_iphone" = "iPhone पर OSHI खोलें";
+
+/* Common */
+"common.refresh" = "रिफ़्रेश";
+"common.cancel" = "रद्द करें";
+
+/* Messages */
+"watch.loading_messages" = "संदेश लोड हो रहे हैं…";
+"watch.no_messages" = "कोई संदेश नहीं";
+"watch.sending" = "भेजा जा रहा है…";
+"watch.dictate" = "डिक्टेट";
+"watch.voice_message" = "वॉइस मैसेज";
+"watch.reply" = "जवाब दें";
+"watch.media_attachment" = "मीडिया अटैचमेंट";
+
+/* Quick Replies */
+"watch.quick.yes" = "हाँ";
+"watch.quick.no" = "नहीं";
+"watch.quick.ok" = "ठीक है";
+"watch.quick.later" = "बाद में";
+"watch.quick.omw" = "आ रहा हूँ!";
+"watch.quick.thanks" = "धन्यवाद";
+
+/* Errors */
+"watch.error.send_failed" = "संदेश भेजने में विफल";
+"watch.send.queued" = "iPhone के लिए कतार में";
+"watch.error.not_reachable" = "iPhone उपलब्ध नहीं है";
+
+/* Calls */
+"watch.call.incoming_video" = "इनकमिंग वीडियो कॉल";
+"watch.call.incoming_voice" = "इनकमिंग वॉइस कॉल";
+"watch.call.video" = "वीडियो कॉल";
+"watch.call.voice" = "वॉइस कॉल";
+"watch.call.connecting" = "कनेक्ट हो रहा है…";
+"watch.call.ringing" = "रिंग हो रही है…";
+"watch.call.in_call" = "कॉल पर";
+"watch.call.ended" = "कॉल समाप्त";
+"watch.call.start" = "कॉल शुरू करें";
+"watch.call.unknown" = "अज्ञात";
+
+/* Call Actions */
+"call.action.accept" = "स्वीकार करें";
+"call.action.decline" = "अस्वीकार करें";
+
+/* Notifications */
+"watch.notification.new_message" = "नया संदेश";
+
+/* Call Summary */
+"call.outgoing" = "आउटगोइंग कॉल";
+"call.incoming" = "इनकमिंग कॉल";
+"call.no.answer" = "कोई जवाब नहीं";
+"call.declined" = "अस्वीकृत";
+"call.missed" = "मिस्ड कॉल";
+"call.video.outgoing" = "आउटगोइंग वीडियो कॉल";
+"call.video.incoming" = "इनकमिंग वीडियो कॉल";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "उत्तर दें";
+"send" = "भेजें";
+"type_message" = "संदेश लिखें";
+"notification.action.mark_read" = "पढ़ा हुआ";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "चैट";
+"w2.empty.title" = "अभी कोई चैट नहीं";
+"w2.empty.body" = "आपके iPhone की OSHI चैट यहाँ दिखती हैं।";
+"w2.disabled.title" = "स्मार्टवॉच बंद है";
+"w2.disabled.body" = "इसे अपने iPhone पर OSHI में चालू करें: सेटिंग्स › लिंक किए गए डिवाइस › स्मार्टवॉच।";
+"w2.locked.title" = "OSHI लॉक है";
+"w2.locked.body" = "अपने iPhone पर OSHI अनलॉक करें, फिर दोबारा कोशिश करें।";
+"w2.unavailable.title" = "OSHI तैयार नहीं है";
+"w2.unavailable.body" = "अपने iPhone पर OSHI एक बार खोलें, फिर दोबारा कोशिश करें।";
+"w2.nophone.title" = "iPhone पहुँच से बाहर है";
+"w2.nophone.body" = "OSHI इंस्टॉल किए iPhone को पास रखें।";
+"w2.error.title" = "कुछ गड़बड़ हो गई";
+"w2.error.body" = "आपके iPhone ने जवाब नहीं दिया। दोबारा कोशिश करें।";
+"w2.notfound" = "यह चैट अब आपके iPhone पर नहीं है।";
+"w2.retry" = "फिर से कोशिश करें";
+"w2.reply" = "जवाब दें";
+"w2.you" = "आप";
+"w2.you_prefix" = "आप: %@";
+"w2.react" = "प्रतिक्रिया दें";
+"w2.speak_or_type" = "बोलें या टाइप करें";
+"w2.quick_replies" = "झटपट जवाब";
+"w2.sending" = "भेजा जा रहा है…";
+"w2.sent" = "भेजा गया";
+"w2.send_failed" = "नहीं भेजा गया। अपने iPhone पर दोबारा कोशिश करें।";
+"w2.read_only" = "आप इस चैट में जवाब नहीं दे सकते।";
+"w2.view_once" = "👁 एक बार देखें — अपने iPhone पर खोलें";
+"w2.view_once_short" = "👁 एक बार देखें";
+"w2.e2e" = "आपके iPhone द्वारा एंड-टू-एंड एन्क्रिप्टेड";
+"w2.replying_to" = "इसका जवाब";
+"w2.loading" = "लोड हो रहा है…";
+"w2.unread_count" = "%d अपठित";
+"w2.all_read" = "सब पढ़ लिया";
+"w2.call" = "कॉल करें";
+"w2.media.photo" = "📷 फ़ोटो";
+"w2.media.video" = "🎥 वीडियो";
+"w2.media.voice" = "🎤 वॉइस";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 फ़ाइल";
+"w2.media.location" = "📍 लोकेशन";
+"w2.media.contact" = "👤 संपर्क";
+"w2.qr.on_my_way" = "रास्ते में हूँ";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "बाद में कॉल करता हूँ";
+"w2.qr.thanks" = "धन्यवाद!";
+"w2.qr.yes" = "हाँ";
+"w2.qr.no" = "नहीं";
+"w2.qr.busy" = "अभी बात नहीं कर सकता";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "प्यार";
+"w2.r.laugh" = "हँसी";
+"w2.r.cry" = "उदास";
+"w2.r.thumbs" = "बढ़िया";
+"w2.r.wow" = "वाह";
+"w2.r.fire" = "आग";
+"w2.mute" = "म्यूट";
+"w2.end_call" = "कॉल खत्म करें";
+"w2.speaker" = "स्पीकर";
+"w2.widget.off" = "अपने iPhone पर OSHI में स्मार्टवॉच चालू करें";
+"w2.widget.off_short" = "बंद";
+"w2.widget.locked" = "अपने iPhone पर OSHI अनलॉक करें";
+"w2.widget.locked_short" = "लॉक";
+"w2.widget.open" = "OSHI खोलें";
+"w2.widget.name" = "OSHI अपठित";
+"w2.widget.desc" = "अपठित संख्या और किसने लिखा — संदेश कभी नहीं।";

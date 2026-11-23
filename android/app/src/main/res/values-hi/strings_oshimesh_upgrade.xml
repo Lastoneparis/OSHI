@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">इस रेडियो को OSHI Mesh पर अपग्रेड करें</string>
+    <string name="oshimesh_upgrade_body">मुफ़्त और ओपन सोर्स। आपका क्षेत्र, चैनल, कुंजियाँ और संपर्क बने रहते हैं, Meshtastic नेटवर्क पर ही रहता है, और लंबे संदेश, डिलीवरी रसीदें तथा किसी के ऑफ़लाइन होने पर 72 घंटे तक रखे गए संदेश जोड़ता है।</string>
+    <string name="oshimesh_upgrade_share">फ़्लैशर का लिंक कंप्यूटर पर भेजें</string>
+    <string name="oshimesh_upgrade_why">OSHI Mesh क्या जोड़ता है</string>
+    <string name="oshimesh_upgrade_footer">फ़्लैशर कंप्यूटर पर Chrome या Edge में USB से चलता है। इस रेडियो को लगभग एक मिनट में अपडेट करने के लिए “मेरी सेटिंग्स रखें” चुनें।</string>
+</resources>

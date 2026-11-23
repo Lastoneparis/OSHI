@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (en) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI uses Bluetooth to discover and connect with nearby devices for secure peer-to-peer messaging without internet.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI needs Bluetooth to receive encrypted messages from nearby devices in your mesh network.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI can add scheduled call events to your calendar so you never miss a call.";
+"NSCalendarsUsageDescription" = "OSHI can add scheduled call events to your calendar so you never miss a call.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI can add scheduled call events to your calendar so you never miss a call.";
+"NSCameraUsageDescription" = "OSHI needs camera access to scan QR codes and take photos for encrypted messages.";
+"NSFaceIDUsageDescription" = "Use Face ID to securely unlock your encrypted messages and protect your privacy.";
+"NSLocalNetworkUsageDescription" = "OSHI uses local network to establish WiFi Direct connections with nearby devices for faster messaging.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI uses your location to share live position updates with contacts. Your location is encrypted and only shared when you choose.";
+"NSLocationAlwaysUsageDescription" = "OSHI uses your location for live sharing with contacts even when the app is in background. Your location is encrypted and only shared when you choose.";
+"NSLocationWhenInUseUsageDescription" = "OSHI uses your location to share your position with contacts. Your location is encrypted and only shared when you choose.";
+"NSMicrophoneUsageDescription" = "OSHI needs microphone access to record videos with audio for encrypted messages.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI can save received images to your photo library.";
+"NSPhotoLibraryUsageDescription" = "OSHI needs photo library access to select images to send as encrypted messages.";
+"NSSpeechRecognitionUsageDescription" = "OSHI uses on-device speech recognition to let you dictate messages to the AI assistant. Your voice is transcribed entirely on your iPhone and never leaves your device.";
+"NSUserNotificationsUsageDescription" = "OSHI sends you notifications when you receive new encrypted messages so you never miss important communications.";

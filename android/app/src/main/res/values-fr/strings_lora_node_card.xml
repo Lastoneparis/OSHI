@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_NODE_TAP_2026_11_05__ Voir values/ pour la règle. -->
+<resources>
+    <string name="lora_node_card_never_heard">jamais entendu</string>
+    <string name="lora_node_card_heard_now">entendu à l\'instant</string>
+    <string name="lora_node_card_heard_min">entendu il y a %1$d min</string>
+    <string name="lora_node_card_heard_hour">entendu il y a %1$d h</string>
+    <string name="lora_node_card_heard_day">entendu il y a %1$d j</string>
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_not_heard">pas encore entendu</string>
+    <string name="lora_node_card_direct">Direct</string>
+    <string name="lora_node_card_hops">%1$d sauts</string>
+    <string name="lora_node_card_in_range">à portée</string>
+    <string name="lora_node_card_relayed">relayé</string>
+    <string name="lora_node_card_from_you">de vous</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+</resources>

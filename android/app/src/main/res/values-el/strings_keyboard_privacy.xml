@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Πληκτρολόγιο</string>
+    <string name="keyboard_incognito_title">Πληκτρολόγιο ανώνυμης περιήγησης</string>
+    <string name="keyboard_incognito_subtitle">Ζητήστε από το πληκτρολόγιο να μη μαθαίνει ό,τι πληκτρολογείτε</string>
+    <string name="keyboard_status_title">Τρέχον πληκτρολόγιο</string>
+    <string name="keyboard_status_trusted">%1$s · Ενσωματωμένο πληκτρολόγιο</string>
+    <string name="keyboard_status_third_party">%1$s · Πληκτρολόγιο τρίτου</string>
+    <string name="keyboard_status_unknown">Άγνωστο πληκτρολόγιο</string>
+    <string name="keyboard_privacy_explainer">Το OSHI κρυπτογραφεί σε αυτό το τηλέφωνο, αλλά ό,τι πληκτρολογείτε περνά πρώτα από το πληκτρολόγιο. Η ανώνυμη λειτουργία ζητά από το πληκτρολόγιο να μη μαθαίνει ούτε να κρατά τις λέξεις σας — το Android δεν μπορεί να αναγκάσει ένα πληκτρολόγιο να υπακούσει, μόνο να το ζητήσει. Ένα πληκτρολόγιο τρίτου μπορεί ακόμη να διαβάζει κάθε πάτημα πλήκτρου, γι’ αυτό προτιμήστε το ενσωματωμένο πληκτρολόγιο του τηλεφώνου. Αν το ίδιο το τηλέφωνο έχει παραβιαστεί (λογισμικό κατασκοπείας), καμία εφαρμογή δεν μπορεί να προστατεύσει ό,τι πληκτρολογείτε.</string>
+    <string name="keyboard_banner_title">Το πληκτρολόγιό σας μπορεί να διαβάσει ό,τι γράφετε πριν το κρυπτογραφήσει το OSHI</string>
+    <string name="keyboard_banner_body">Το %1$s είναι πληκτρολόγιο τρίτου. Για ιδιωτικές συνομιλίες, αλλάξτε στο ενσωματωμένο πληκτρολόγιο του τηλεφώνου.</string>
+    <string name="keyboard_banner_switch">Αλλαγή πληκτρολογίου</string>
+    <string name="keyboard_banner_dismiss">Παράβλεψη</string>
+</resources>

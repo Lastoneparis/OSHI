@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Keyboard</string>
+    <string name="keyboard_incognito_title">Incognito keyboard</string>
+    <string name="keyboard_incognito_subtitle">Ask the keyboard not to learn what you type</string>
+    <string name="keyboard_status_title">Current keyboard</string>
+    <string name="keyboard_status_trusted">%1$s · Built-in keyboard</string>
+    <string name="keyboard_status_third_party">%1$s · Third-party keyboard</string>
+    <string name="keyboard_status_unknown">Unknown keyboard</string>
+    <string name="keyboard_privacy_explainer">OSHI encrypts on this phone, but what you type goes through your keyboard first. Incognito asks the keyboard not to learn or keep your words — Android cannot force a keyboard to obey, it can only ask. A third-party keyboard can still read every keystroke, so prefer your phone\'s built-in keyboard. If the phone itself is compromised (spyware), no app can protect what you type.</string>
+    <string name="keyboard_banner_title">Your keyboard can read what you type before OSHI encrypts it</string>
+    <string name="keyboard_banner_body">%1$s is a third-party keyboard. For private conversations, switch to your phone\'s built-in keyboard.</string>
+    <string name="keyboard_banner_switch">Switch keyboard</string>
+    <string name="keyboard_banner_dismiss">Dismiss</string>
+</resources>

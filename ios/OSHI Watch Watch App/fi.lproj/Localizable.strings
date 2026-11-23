@@ -1,0 +1,136 @@
+/* OSHI Watch App - Finnish */
+
+/* Status */
+"watch.status.connected" = "Yhdistetty";
+"watch.status.not_reachable" = "iPhone ei tavoitettavissa";
+
+/* Navigation */
+"watch.open_iphone" = "Avaa OSHI iPhonessa";
+
+/* Common */
+"common.refresh" = "Päivitä";
+"common.cancel" = "Peruuta";
+
+/* Messages */
+"watch.loading_messages" = "Ladataan viestejä…";
+"watch.no_messages" = "Ei viestejä";
+"watch.sending" = "Lähetetään…";
+"watch.dictate" = "Sanele";
+"watch.voice_message" = "Ääniviesti";
+"watch.reply" = "Vastaa";
+"watch.media_attachment" = "Medialiite";
+
+/* Quick Replies */
+"watch.quick.yes" = "Kyllä";
+"watch.quick.no" = "Ei";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Myöhemmin";
+"watch.quick.omw" = "Olen tulossa!";
+"watch.quick.thanks" = "Kiitos";
+
+/* Errors */
+"watch.error.send_failed" = "Viestin lähetys epäonnistui";
+"watch.send.queued" = "Jonossa iPhonelle";
+"watch.error.not_reachable" = "iPhone ei ole tavoitettavissa";
+
+/* Calls */
+"watch.call.incoming_video" = "Saapuva videopuhelu";
+"watch.call.incoming_voice" = "Saapuva äänipuhelu";
+"watch.call.video" = "Videopuhelu";
+"watch.call.voice" = "Äänipuhelu";
+"watch.call.connecting" = "Yhdistetään…";
+"watch.call.ringing" = "Soi…";
+"watch.call.in_call" = "Puhelussa";
+"watch.call.ended" = "Puhelu päättyi";
+"watch.call.start" = "Aloita puhelu";
+"watch.call.unknown" = "Tuntematon";
+
+/* Call Actions */
+"call.action.accept" = "Hyväksy";
+"call.action.decline" = "Hylkää";
+
+/* Notifications */
+"watch.notification.new_message" = "Uusi viesti";
+
+/* Call Summary */
+"call.outgoing" = "Lähtevä puhelu";
+"call.incoming" = "Saapuva puhelu";
+"call.no.answer" = "Ei vastausta";
+"call.declined" = "Hylätty";
+"call.missed" = "Vastaamaton puhelu";
+"call.video.outgoing" = "Lähtevä videopuhelu";
+"call.video.incoming" = "Saapuva videopuhelu";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Vastaa";
+"send" = "Lähetä";
+"type_message" = "Kirjoita viesti";
+"notification.action.mark_read" = "Merkitse luetuksi";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Keskustelut";
+"w2.empty.title" = "Ei vielä keskusteluja";
+"w2.empty.body" = "iPhonesi OSHI-keskustelut näkyvät tässä.";
+"w2.disabled.title" = "Älykello ei ole käytössä";
+"w2.disabled.body" = "Ota se käyttöön iPhonen OSHIssa: Asetukset › Linkitetyt laitteet › Älykello.";
+"w2.locked.title" = "OSHI on lukittu";
+"w2.locked.body" = "Avaa OSHIn lukitus iPhonessa ja yritä uudelleen.";
+"w2.unavailable.title" = "OSHI ei ole valmis";
+"w2.unavailable.body" = "Avaa OSHI kerran iPhonessa ja yritä uudelleen.";
+"w2.nophone.title" = "iPhonea ei tavoiteta";
+"w2.nophone.body" = "Pidä iPhone lähellä, ja OSHI asennettuna.";
+"w2.error.title" = "Jokin meni vikaan";
+"w2.error.body" = "iPhone ei vastannut. Yritä uudelleen.";
+"w2.notfound" = "Tätä keskustelua ei enää ole iPhonessasi.";
+"w2.retry" = "Yritä uudelleen";
+"w2.reply" = "Vastaa";
+"w2.you" = "Sinä";
+"w2.you_prefix" = "Sinä: %@";
+"w2.react" = "Reagoi";
+"w2.speak_or_type" = "Sanele tai kirjoita";
+"w2.quick_replies" = "Pikavastaukset";
+"w2.sending" = "Lähetetään…";
+"w2.sent" = "Lähetetty";
+"w2.send_failed" = "Ei lähetetty. Yritä uudelleen iPhonessa.";
+"w2.read_only" = "Et voi vastata tähän keskusteluun.";
+"w2.view_once" = "👁 Näytä kerran – avaa iPhonessa";
+"w2.view_once_short" = "👁 Näytä kerran";
+"w2.e2e" = "iPhonesi salaa päästä päähän";
+"w2.replying_to" = "Vastaus viestiin";
+"w2.loading" = "Ladataan…";
+"w2.unread_count" = "%d lukematonta";
+"w2.all_read" = "Kaikki luettu";
+"w2.call" = "Soita";
+"w2.media.photo" = "📷 Kuva";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Ääni";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Tiedosto";
+"w2.media.location" = "📍 Sijainti";
+"w2.media.contact" = "👤 Yhteystieto";
+"w2.qr.on_my_way" = "Olen tulossa";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Soitan myöhemmin";
+"w2.qr.thanks" = "Kiitos!";
+"w2.qr.yes" = "Kyllä";
+"w2.qr.no" = "Ei";
+"w2.qr.busy" = "En voi puhua nyt";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Rakastan";
+"w2.r.laugh" = "Nauru";
+"w2.r.cry" = "Surullinen";
+"w2.r.thumbs" = "Peukku";
+"w2.r.wow" = "Vau";
+"w2.r.fire" = "Tuli";
+"w2.mute" = "Mykistä";
+"w2.end_call" = "Lopeta";
+"w2.speaker" = "Kaiutin";
+"w2.widget.off" = "Ota Älykello käyttöön iPhonen OSHIssa";
+"w2.widget.off_short" = "Pois";
+"w2.widget.locked" = "Avaa OSHIn lukitus iPhonessa";
+"w2.widget.locked_short" = "Lukittu";
+"w2.widget.open" = "Avaa OSHI";
+"w2.widget.name" = "OSHI lukemattomat";
+"w2.widget.desc" = "Lukemattomien määrä ja kuka kirjoitti – ei koskaan viestejä.";

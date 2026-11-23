@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Strings introduced by the 2026-08-23 offline-map fix pass ("FIXED (offline,
+    round 5)" in parity/verify/2026-08-23-map.md).
+
+    Kept in their own file so no existing strings.xml — nor any values-* locale
+    folder — is touched while ~20 sessions share this tree.
+
+    ALL OF THESE NEED TRANSLATING INTO THE OTHER 33 LOCALES.
+-->
+<resources>
+
+    <!--
+        ItineraryScreen: "Offline maps only" is ON, so android.location.Geocoder
+        (a Google network service) must not be called. Saying so is the fix; the
+        field previously just went quiet, which reads as a broken text box.
+    -->
+    <string name="itinerary_address_lookup_offline_only">Address lookup is off in Offline maps only</string>
+    <string name="itinerary_address_lookup_offline_only_body">Looking up an address uses an online service, so OSHI won\'t send what you type anywhere. Turn off “Offline maps only” in Settings, or pick a starting point and destination on the map.</string>
+
+    <!--
+        Regions whose manifest entry carries no POI artifact (22 of 254 on
+        2026-08-23: us, jp, br, ca, ru, id and 16 metros). Shown on the region
+        card so the limitation is known BEFORE the download, not discovered as a
+        permanent silent hole afterwards.
+    -->
+    <string name="map_region_no_poi_search">No place search in this region</string>
+    <string name="map_region_no_poi_search_body">This region is published without a places database, so searching for shops, stations or restaurants inside it will return nothing. Map tiles and streets still work.</string>
+
+    <!--
+        POI search empty states. An empty result must not look the same in all
+        four cases — that is the entire defect being fixed.
+    -->
+    <string name="map_search_no_region_downloaded">No offline region downloaded</string>
+    <string name="map_search_no_region_downloaded_desc">Download the offline region covering this area to search places without a connection.</string>
+    <string name="map_search_no_poi_data">This region has no places database</string>
+    <string name="map_search_no_poi_data_desc">The region you downloaded is published without a places index, so place search can\'t return anything here — this isn\'t a network problem and retrying won\'t help. Street search and map tiles still work.</string>
+    <string name="map_search_partial_poi_data">Some downloaded regions have no places database</string>
+    <string name="map_search_partial_poi_data_desc">No match found. Note that %1$s ships without a places index, so nothing inside it can be found by place search.</string>
+
+</resources>

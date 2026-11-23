@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">Hiệu ứng giọng</string>
+    <string name="voice_preview_original">Giọng gốc</string>
+    <string name="voice_preview_processing">Đang áp dụng %1$s…</string>
+    <string name="voice_preview_failed">%1$s không thành công, giữ bản gốc</string>
+    <string name="voice_preview_view_once_hint">Chỉ nghe được một lần, sau đó sẽ biến mất</string>
+    <string name="voice_preview_listening">Đang nghe…</string>
+</resources>

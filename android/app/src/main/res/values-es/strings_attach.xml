@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Recientes</string>
+    <string name="attach_selected_count">%1$d seleccionados</string>
+    <string name="attach_all_photos">Todas las fotos</string>
+    <string name="attach_collapse">Contraer</string>
+    <string name="attach_camera">Cámara</string>
+    <string name="attach_gallery">Galería</string>
+    <string name="attach_file">Archivo</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Ubicación</string>
+    <string name="attach_contact">Contacto</string>
+    <string name="attach_poll">Encuesta</string>
+    <string name="attach_video_note">Videonota</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Programar</string>
+    <string name="attach_access_title">Tus fotos recientes aquí</string>
+    <string name="attach_access_body">OSHI solo lee tus fotos mientras este panel está abierto. Nada sale de tu teléfono a menos que lo envíes.</string>
+    <string name="attach_access_allow">Permitir acceso</string>
+    <string name="attach_access_settings">Abrir ajustes</string>
+    <string name="attach_access_browse">Elegir de la galería</string>
+    <string name="attach_partial">Solo has compartido algunas fotos con OSHI.</string>
+    <string name="attach_partial_manage">Gestionar</string>
+    <string name="attach_empty_title">Aún no hay fotos</string>
+    <string name="attach_caption_hint">Añade un pie de foto…</string>
+    <string name="attach_send_count">Enviar %1$d</string>
+    <string name="attach_photo_a11y">Foto</string>
+    <string name="attach_video_a11y">Vídeo, %1$s</string>
+    <string name="attach_limit">Hasta %1$d a la vez</string>
+</resources>

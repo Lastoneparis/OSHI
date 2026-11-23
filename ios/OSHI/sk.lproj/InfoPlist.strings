@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (sk) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI používa Bluetooth na vyhľadanie blízkych zariadení a pripojenie k nim, aby ste mohli bezpečne posielať správy priamo medzi zariadeniami bez internetu.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI potrebuje Bluetooth na prijímanie šifrovaných správ z blízkych zariadení vo vašej mesh sieti.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI môže pridávať naplánované hovory do vášho kalendára, aby ste žiadny nezmeškali.";
+"NSCalendarsUsageDescription" = "OSHI môže pridávať naplánované hovory do vášho kalendára, aby ste žiadny nezmeškali.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI môže pridávať naplánované hovory do vášho kalendára, aby ste žiadny nezmeškali.";
+"NSCameraUsageDescription" = "OSHI potrebuje prístup k fotoaparátu na skenovanie QR kódov a fotenie do šifrovaných správ.";
+"NSFaceIDUsageDescription" = "Použite Face ID na bezpečné odomknutie šifrovaných správ a ochranu svojho súkromia.";
+"NSLocalNetworkUsageDescription" = "OSHI používa lokálnu sieť na priame Wi-Fi spojenie s blízkymi zariadeniami pre rýchlejšie doručovanie správ.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI používa vašu polohu, aby ju mohol naživo zdieľať s kontaktmi. Poloha je šifrovaná a zdieľa sa len vtedy, keď sa tak rozhodnete.";
+"NSLocationAlwaysUsageDescription" = "OSHI používa vašu polohu na živé zdieľanie s kontaktmi, aj keď je aplikácia na pozadí. Poloha je šifrovaná a zdieľa sa len vtedy, keď sa tak rozhodnete.";
+"NSLocationWhenInUseUsageDescription" = "OSHI používa vašu polohu, aby ju mohol zdieľať s kontaktmi. Poloha je šifrovaná a zdieľa sa len vtedy, keď sa tak rozhodnete.";
+"NSMicrophoneUsageDescription" = "OSHI potrebuje prístup k mikrofónu na nahrávanie videí so zvukom do šifrovaných správ.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI môže ukladať prijaté obrázky do vašej knižnice fotiek.";
+"NSPhotoLibraryUsageDescription" = "OSHI potrebuje prístup ku knižnici fotiek, aby ste mohli vybrať obrázky na odoslanie v šifrovaných správach.";
+"NSSpeechRecognitionUsageDescription" = "OSHI používa rozpoznávanie reči priamo v zariadení, aby ste mohli diktovať správy AI asistentovi. Váš hlas sa prepisuje výhradne na vašom iPhone a nikdy neopustí zariadenie.";
+"NSUserNotificationsUsageDescription" = "OSHI vám pošle oznámenie o nových šifrovaných správach, aby ste nezmeškali nič dôležité.";

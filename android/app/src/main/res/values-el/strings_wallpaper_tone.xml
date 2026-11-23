@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Τόνος</string>
+    <string name="wallpaper_tone_automatic">Αυτόματο</string>
+    <string name="wallpaper_tone_light">Φωτεινό</string>
+    <string name="wallpaper_tone_dark">Σκοτεινό</string>
+    <string name="wallpaper_tone_automatic_detail">Ακολουθεί τη φωτεινή και τη σκοτεινή λειτουργία.</string>
+    <string name="wallpaper_tone_light_detail">Λευκό με μωβ πλέγμα, ακόμη και στη σκοτεινή λειτουργία. Τα μηνύματα περνούν στα φωτεινά τους χρώματα για να διαβάζονται εύκολα.</string>
+    <string name="wallpaper_tone_dark_detail">Μαύρο με μωβ πλέγμα, ακόμη και στη φωτεινή λειτουργία.</string>
+    <string name="wallpaper_tone_more">Χρώματα, διαβαθμίσεις, emoji και δικές σας φωτογραφίες: ανοίξτε μια συνομιλία και μετά ⋯ → Ταπετσαρία.</string>
+</resources>

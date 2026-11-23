@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Teclado</string>
+    <string name="keyboard_incognito_title">Teclado incógnito</string>
+    <string name="keyboard_incognito_subtitle">Pedir al teclado que no aprenda lo que escribes</string>
+    <string name="keyboard_status_title">Teclado actual</string>
+    <string name="keyboard_status_trusted">%1$s · Teclado integrado</string>
+    <string name="keyboard_status_third_party">%1$s · Teclado de terceros</string>
+    <string name="keyboard_status_unknown">Teclado desconocido</string>
+    <string name="keyboard_privacy_explainer">OSHI cifra en este teléfono, pero lo que escribes pasa antes por tu teclado. El modo incógnito le pide que no aprenda ni guarde tus palabras: Android no puede obligar a un teclado a obedecer, solo pedírselo. Un teclado de terceros puede seguir leyendo cada pulsación, así que es mejor usar el teclado integrado de tu teléfono. Si el propio teléfono está comprometido (software espía), ninguna app puede proteger lo que escribes.</string>
+    <string name="keyboard_banner_title">Tu teclado puede leer lo que escribes antes de que OSHI lo cifre</string>
+    <string name="keyboard_banner_body">%1$s es un teclado de terceros. Para tus conversaciones privadas, cambia al teclado integrado de tu teléfono.</string>
+    <string name="keyboard_banner_switch">Cambiar de teclado</string>
+    <string name="keyboard_banner_dismiss">Descartar</string>
+</resources>

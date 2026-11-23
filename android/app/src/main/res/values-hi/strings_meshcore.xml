@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore रेडियो</string>
+    <string name="meshcore_none">कोई MeshCore रेडियो नहीं</string>
+    <string name="meshcore_scan">MeshCore रेडियो खोजें</string>
+    <string name="meshcore_ready">जुड़ा हुआ — OSHI संदेश #oshi-bridge का उपयोग करते हैं</string>
+    <string name="meshcore_forget">यह MeshCore रेडियो भूलें</string>
+    <string name="meshcore_bridge">ब्रिज Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">MeshCore रेडियो आपके OSHI संदेश MeshCore रिपीटरों से ले जाता है। उस पर MeshCore companion फ़र्मवेयर होना चाहिए और पहली बार वह अपना PIN पूछता है। OSHI खाली जगह में सिर्फ़ एक चैनल, #oshi-bridge, जोड़ता है और आपके दूसरे चैनल कभी नहीं बदलता।</string>
+    <string name="meshcore_bridge_footer">Meshtastic और MeshCore दोनों रेडियो जुड़े होने पर, OSHI खुला रहने तक यह फ़ोन दोनों नेटवर्कों के बीच OSHI संदेश आगे भेजता है।</string>
+    <string name="meshcore_no_free_channel">इस रेडियो के सभी 8 चैनल स्थान भरे हैं। MeshCore ऐप में एक खाली करें ताकि OSHI #oshi-bridge जोड़ सके।</string>
+</resources>

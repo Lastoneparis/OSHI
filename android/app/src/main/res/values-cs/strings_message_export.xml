@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Šifrovaný soubor, čitelný pouze klíčem vašeho účtu</string>
+    <string name="settings_import_messages">Importovat zprávy</string>
+    <string name="settings_import_messages_desc">Obnovit šifrovaný soubor .oshiexport</string>
+    <string name="settings_importing">Importování…</string>
+    <string name="export_media_skipped">Počet příloh vynechaných z exportu kvůli velikosti: %1$d.</string>
+    <string name="import_messages_success">Importováno zpráv: %1$d (již existujících: %2$d).</string>
+    <string name="import_error_wrong_account">Tento export patří jinému účtu OSHI. Nejprve obnovte klíč tohoto účtu.</string>
+    <string name="import_error_damaged">Tento export je poškozený nebo byl změněn.</string>
+    <string name="import_error_other_platform">Tento export vytvořil OSHI pro %1$s a zatím jej zde nelze importovat.</string>
+    <string name="import_error_not_export">Tento soubor není export OSHI.</string>
+    <string name="import_error_version">Tento export vytvořila novější verze OSHI. Aktualizujte aplikaci a zkuste to znovu.</string>
+    <string name="import_error_no_key">Na tomto zařízení není klíč účtu. Nejprve obnovte svůj účet.</string>
+    <string name="import_error_unreadable">Soubor nelze přečíst.</string>
+</resources>

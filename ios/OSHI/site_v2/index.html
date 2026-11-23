@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09090f">
+<title>OSHI — A messenger that works when nothing else does.</title>
+<meta name="description" content="OSHI Messenger. End-to-end encrypted. Mesh networking. Offline maps. On-device AI. No phone number. Zero metadata. The messenger built for the world after the cloud.">
+<meta property="og:title" content="OSHI — A messenger that works when nothing else does.">
+<meta property="og:description" content="End-to-end encrypted. Mesh. Offline maps. On-device AI. No phone number. Zero metadata.">
+<meta property="og:image" content="/og-image.png">
+<meta property="og:url" content="https://oshi-messenger.com/V2/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://oshi-messenger.com/V2/">
+<link rel="alternate" hreflang="en" href="https://oshi-messenger.com/V2/?lang=en">
+<link rel="alternate" hreflang="fr" href="https://oshi-messenger.com/V2/?lang=fr">
+<link rel="alternate" hreflang="es" href="https://oshi-messenger.com/V2/?lang=es">
+<link rel="alternate" hreflang="de" href="https://oshi-messenger.com/V2/?lang=de">
+<link rel="alternate" hreflang="it" href="https://oshi-messenger.com/V2/?lang=it">
+<link rel="alternate" hreflang="pt" href="https://oshi-messenger.com/V2/?lang=pt">
+<link rel="alternate" hreflang="zh" href="https://oshi-messenger.com/V2/?lang=zh">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="oshi-v2.css">
+</head>
+<body>
+
+<canvas id="mesh-bg" aria-hidden="true"></canvas>
+
+<nav class="nav" id="nav">
+  <a href="/V2/" class="nav-logo">
+    <svg class="nav-logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+      <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c8bff"/><stop offset="1" stop-color="#b06ad2"/></linearGradient></defs>
+      <path d="M16 2 L28 9 L28 23 L16 30 L4 23 L4 9 Z" fill="none" stroke="url(#lg)" stroke-width="2"/>
+      <circle cx="16" cy="16" r="3.5" fill="url(#lg)"/>
+    </svg>
+    <span>OSHI</span>
+  </a>
+  <div class="nav-links">
+    <a href="#manifesto" data-i18n="nav.manifesto">Manifesto</a>
+    <a href="#features" data-i18n="nav.features">Features</a>
+    <a href="#compare" data-i18n="nav.compare">Comparison</a>
+    <a href="#trust" data-i18n="nav.trust">Trust</a>
+    <div class="lang-picker" id="langPicker"></div>
+    <a href="#download" class="nav-cta" data-i18n="nav.cta">Get the app →</a>
+  </div>
+  <button class="nav-mobile" aria-label="Menu" id="navBurger">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow reveal">
+      <span class="pulse"></span>
+      <span data-i18n="hero.eyebrow">End-to-end encrypted · Mesh-capable · iOS + Android</span>
+    </div>
+    <h1 class="hero-title reveal">
+      <span data-i18n="hero.title_a">A messenger that works </span><em data-i18n="hero.title_em">when nothing else does.</em>
+    </h1>
+    <p class="hero-sub reveal" data-i18n="hero.sub">
+      OSHI is the encrypted messenger built for the world after the cloud.
+      No phone number. Zero metadata. Speaks Bluetooth and Wi-Fi mesh when
+      the internet's down, hides messages in plain sight when it isn't.
+    </p>
+    <div class="hero-cta reveal">
+      <a href="https://apps.apple.com/app/id6753926350" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+        <span data-i18n="hero.cta_ios">Download for iOS</span>
+      </a>
+      <a href="#download" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.5.5 0 0 0-.86-.5l-1.86 3.22a11.91 11.91 0 0 0-9.36 0L5.4 5.8a.5.5 0 0 0-.86.5L6.4 9.48A11.99 11.99 0 0 0 .98 19h22.04a11.99 11.99 0 0 0-5.42-9.52zM7 16.25a1.25 1.25 0 1 1 1.25-1.25A1.25 1.25 0 0 1 7 16.25zm10 0a1.25 1.25 0 1 1 1.25-1.25A1.25 1.25 0 0 1 17 16.25z"/></svg>
+        <span data-i18n="hero.cta_android">Download for Android</span>
+      </a>
+      <a href="#manifesto" class="btn btn-ghost">
+        <span data-i18n="hero.cta_manifesto">Read the manifesto</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14m-4-4 4 4-4 4"/></svg>
+      </a>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="hero-stat"><b>0</b><span data-i18n="hero.stat1_label">phone numbers required</span></div>
+      <div class="hero-stat"><b>6</b><span data-i18n="hero.stat2_label">covert channels</span></div>
+      <div class="hero-stat"><b>180+</b><span data-i18n="hero.stat3_label">regions offline-ready</span></div>
+      <div class="hero-stat"><b>28</b><span data-i18n="hero.stat4_label">languages</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll reveal" aria-hidden="true">
+    <span data-i18n="hero.scroll">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section class="manifesto" id="manifesto">
+  <div class="manifesto-inner">
+    <p class="manifesto-label reveal" data-i18n="manifesto.label">Our manifesto</p>
+    <h2 class="manifesto-title reveal">
+      <span data-i18n="manifesto.title_a">Privacy isn't a feature. </span><span class="grad" data-i18n="manifesto.title_em">It's the product.</span>
+    </h2>
+    <div class="manifesto-grid">
+      <p class="reveal" data-i18n="manifesto.p1">Every other messenger you've used logs your friends, harvests your contact graph, and stores your messages on someone else's server in a country you've never visited. They call it security; we call it surveillance with a nice icon.</p>
+      <p class="reveal" data-i18n="manifesto.p2">OSHI is different by design. There is no central server holding your conversations. No phone number tying your identity to a SIM card. No cloud backups leaking your photos. Your messages are end-to-end encrypted with X25519 + ChaCha20-Poly1305 and never decrypted anywhere but on your device.</p>
+      <p class="reveal" data-i18n="manifesto.p3">When the internet works, we use it — but invisibly, with steganographic covert channels that look like ordinary HTTPS. When it doesn't, OSHI speaks Bluetooth LE and Wi-Fi Direct mesh, hop-routes through nearby devices, and keeps you connected through blackouts, festivals, deserts, and demonstrations.</p>
+      <p class="reveal" data-i18n="manifesto.p4">Open source. Zero metadata. No telemetry. No ads. The only entity that knows what you said is you.</p>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <header class="section-header reveal">
+    <span class="section-eyebrow" data-i18n="features.eyebrow">What's inside</span>
+    <h2><span data-i18n="features.title_a">Everything you'd expect from a messenger. </span><em data-i18n="features.title_em">And the part nobody else built.</em></h2>
+  </header>
+
+  <div class="bento">
+    <article class="bento-card bento-tall reveal">
+      <div class="bento-icon">
+        <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="24" cy="24" r="3"/><circle cx="8" cy="14" r="2.5"/><circle cx="40" cy="14" r="2.5"/>
+          <circle cx="8" cy="34" r="2.5"/><circle cx="40" cy="34" r="2.5"/>
+          <path d="M11 14L21 22M37 14L27 22M11 34L21 26M37 34L27 26"/>
+        </svg>
+      </div>
+      <h3 data-i18n="features.f1_h">Bluetooth + Wi-Fi mesh</h3>
+      <p data-i18n="features.f1_p">When there's no cell signal and no internet, OSHI keeps working. Messages hop-route through nearby devices, encrypted end-to-end at every leg, so you stay in touch through blackouts, festivals, and natural disasters.</p>
+      <ul class="bento-list">
+        <li data-i18n="features.f1_l1">Multi-hop relay (TTL 7)</li>
+        <li data-i18n="features.f1_l2">Encrypted at every hop</li>
+        <li data-i18n="features.f1_l3">Reaches ~300 m per hop in dense networks</li>
+        <li data-i18n="features.f1_l4">Battery-aware: ~3 % per hour idle</li>
+      </ul>
+    </article>
+
+    <article class="bento-card reveal">
+      <div class="bento-icon">
+        <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="6" y="14" width="36" height="26" rx="3"/>
+          <path d="M14 14V10a10 10 0 0 1 20 0v4"/>
+        </svg>
+      </div>
+      <h3 data-i18n="features.f2_h">Zero metadata</h3>
+      <p data-i18n="features.f2_p">No phone number, no email, no friend graph stored anywhere. Identity is a public key pair generated on your device.</p>
+    </article>
+
+    <article class="bento-card reveal">
+      <div class="bento-icon">
+        <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M24 6 L42 16 V32 L24 42 L6 32 V16 Z"/>
+          <path d="M24 18l-6 6 6 6 6-6z" fill="currentColor" opacity=".25"/>
+        </svg>
+      </div>
+      <h3 data-i18n="features.f3_h">Steganographic covert channels</h3>
+      <p data-i18n="features.f3_p">6 ways to pass messages through inspection: HTTPS look-alike, audio modem, image LSB, DNS, NTP, ICMP.</p>
+    </article>
+
+    <article class="bento-card bento-wide reveal">
+      <div class="bento-icon">
+        <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 12l12-6 12 6 12-6v30l-12 6-12-6-12 6z"/>
+          <path d="M18 6v30M30 12v30"/>
+        </svg>
+      </div>
+      <div>
+        <h3 data-i18n="features.f4_h">Offline maps for 180+ regions</h3>
+        <p data-i18n="features.f4_p">Download a country once and navigate it forever. Tiles, road graph, addresses, and POIs — all stored on-device. Turn-by-turn routing without sending a byte to Google or Apple. Even searches like "12 rue de Rivoli" or "pharmacy" stay local.</p>
+        <div class="badge-row">
+          <span class="chip" data-i18n="features.f4_b1">120 GB of OSM data hosted</span>
+          <span class="chip" data-i18n="features.f4_b2">House-number aware search</span>
+          <span class="chip" data-i18n="features.f4_b3">A* offline routing</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="bento-card reveal">
+      <div class="bento-icon">
+        <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="24" cy="24" r="18"/>
+          <path d="M14 24a10 10 0 0 1 20 0M18 30a6 6 0 0 1 12 0"/>
+          <circle cx="24" cy="18" r="2" fill="currentColor"/>
+        </svg>
+      </div>
+      <h3 data-i18n="features.f5_h">On-device AI</h3>
+      <p data-i18n="features.f5_p">Apple Intelligence + Gemini Nano locally. Smart replies, summarisation, translation — never your tokens, never your data.</p>
+    </article>
+
+    <article class="bento-card reveal">
+      <div class="bento-icon">
+        <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="8" y="6" width="32" height="36" rx="4"/>
+          <path d="M16 16h16M16 24h16M16 32h10"/>
+        </svg>
+      </div>
+      <h3 data-i18n="features.f6_h">Bot API</h3>
+      <p data-i18n="features.f6_p">Build encrypted bots that talk over mesh. Webhook-compatible. No central server required.</p>
+    </article>
+
+    <article class="bento-card reveal">
+      <div class="bento-icon">
+        <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M24 6L8 14v10c0 9 7 16 16 18 9-2 16-9 16-18V14z"/>
+          <path d="M18 24l4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3 data-i18n="features.f7_h">Open source</h3>
+      <p data-i18n="features.f7_p">Crypto audited, code on GitHub, builds reproducible. Verify everything we say with the source.</p>
+    </article>
+  </div>
+</section>
+
+<section class="compare" id="compare">
+  <header class="section-header reveal">
+    <span class="section-eyebrow" data-i18n="compare.eyebrow">How we stack up</span>
+    <h2 data-i18n="compare.title">The honest comparison.</h2>
+    <p data-i18n="compare.sub">Other messengers protect your messages. We refuse to know they ever existed.</p>
+  </header>
+
+  <div class="compare-table reveal">
+    <div class="cmp-row cmp-head">
+      <div></div>
+      <div><strong>OSHI</strong></div>
+      <div>Signal</div>
+      <div>WhatsApp</div>
+      <div>Telegram</div>
+    </div>
+    <div class="cmp-row"><div data-i18n="compare.r1">End-to-end encrypted</div><div class="yes">✓</div><div class="yes">✓</div><div class="yes">✓</div><div class="warn">opt-in</div></div>
+    <div class="cmp-row"><div data-i18n="compare.r2">Works without internet</div><div class="yes">✓ mesh</div><div class="no">—</div><div class="no">—</div><div class="no">—</div></div>
+    <div class="cmp-row"><div data-i18n="compare.r3">No phone number required</div><div class="yes">✓</div><div class="warn">username</div><div class="no">—</div><div class="no">—</div></div>
+    <div class="cmp-row"><div data-i18n="compare.r4">Zero metadata logged</div><div class="yes">✓</div><div class="warn">partial</div><div class="no">graph</div><div class="no">graph</div></div>
+    <div class="cmp-row"><div data-i18n="compare.r5">Steganographic transport</div><div class="yes">6 channels</div><div class="no">—</div><div class="no">—</div><div class="no">—</div></div>
+    <div class="cmp-row"><div data-i18n="compare.r6">On-device AI</div><div class="yes">✓</div><div class="no">—</div><div class="no">—</div><div class="no">—</div></div>
+    <div class="cmp-row"><div data-i18n="compare.r7">Offline maps + navigation</div><div class="yes">✓ 180+ regions</div><div class="no">—</div><div class="no">—</div><div class="no">—</div></div>
+    <div class="cmp-row"><div data-i18n="compare.r8">Open source &amp; reproducible</div><div class="yes">✓</div><div class="yes">✓</div><div class="no">client only</div><div class="no">client only</div></div>
+    <div class="cmp-row"><div data-i18n="compare.r9">No central server can be subpoenaed</div><div class="yes">✓</div><div class="warn">central</div><div class="warn">central</div><div class="warn">central</div></div>
+  </div>
+</section>
+
+<section class="trust" id="trust">
+  <header class="section-header reveal">
+    <span class="section-eyebrow" data-i18n="trust.eyebrow">Security in depth</span>
+    <h2><span data-i18n="trust.title_a">You don't have to trust us. </span><em data-i18n="trust.title_em">That's the point.</em></h2>
+  </header>
+
+  <div class="trust-grid">
+    <article class="trust-card reveal">
+      <div class="trust-num">01</div>
+      <h3 data-i18n="trust.t1_h">Identity is a key, not an account</h3>
+      <p data-i18n="trust.t1_p">Your handle is the SHA-256 fingerprint of a public key generated on first launch. Nothing to forget, nothing to phish, nothing to legally compel from us — we never had it.</p>
+    </article>
+    <article class="trust-card reveal">
+      <div class="trust-num">02</div>
+      <h3 data-i18n="trust.t2_h">X25519 + ChaCha20-Poly1305</h3>
+      <p data-i18n="trust.t2_p">Industry-standard end-to-end encryption. Double-ratchet forward secrecy on every conversation. No backdoor, no key-escrow, no plaintext shadow copy on our infrastructure.</p>
+    </article>
+    <article class="trust-card reveal">
+      <div class="trust-num">03</div>
+      <h3 data-i18n="trust.t3_h">Zero-knowledge by construction</h3>
+      <p data-i18n="trust.t3_p">OSHI's servers see encrypted blobs and routing hints — never plaintext, never the recipient's name. The minimum architecture for the maximum privacy.</p>
+    </article>
+    <article class="trust-card reveal">
+      <div class="trust-num">04</div>
+      <h3 data-i18n="trust.t4_h">Offline by design</h3>
+      <p data-i18n="trust.t4_p">The decryption keys, the maps, the AI inference — everything that touches your data runs on your hardware. The cloud is optional, not assumed.</p>
+    </article>
+  </div>
+</section>
+
+<section class="usecase" id="usecase">
+  <header class="section-header reveal">
+    <span class="section-eyebrow" data-i18n="usecase.eyebrow">Built for the moments that matter</span>
+    <h2 data-i18n="usecase.title">The messenger you reach for when the others stop working.</h2>
+  </header>
+
+  <div class="uc-grid">
+    <div class="uc reveal">
+      <div class="uc-num">→</div>
+      <h3 data-i18n="usecase.u1_h">Journalists in hostile networks</h3>
+      <p data-i18n="usecase.u1_p">Source protection isn't a checkbox. OSHI's steganographic channels let you publish to a contact through inspection. The metadata that's not collected can't be subpoenaed.</p>
+    </div>
+    <div class="uc reveal">
+      <div class="uc-num">→</div>
+      <h3 data-i18n="usecase.u2_h">Travellers off-grid</h3>
+      <p data-i18n="usecase.u2_p">Hiking a national park, sailing the Med, driving the Sahara. The maps are loaded, the routing is local, and your group chat works peer-to-peer over mesh.</p>
+    </div>
+    <div class="uc reveal">
+      <div class="uc-num">→</div>
+      <h3 data-i18n="usecase.u3_h">Crowds &amp; demonstrations</h3>
+      <p data-i18n="usecase.u3_p">Carrier networks fail. OSHI's mesh thrives where there are bodies. Hop through 1 000 phones to reach the friend three blocks away.</p>
+    </div>
+    <div class="uc reveal">
+      <div class="uc-num">→</div>
+      <h3 data-i18n="usecase.u4_h">Privacy-aware professionals</h3>
+      <p data-i18n="usecase.u4_p">Lawyers, doctors, founders. Conversations that shouldn't ever appear in a discovery request. Zero metadata leaves no paper trail to subpoena.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="download">
+  <div class="cta-inner reveal">
+    <h2 data-i18n="cta.title">Try the messenger they don't want you to have.</h2>
+    <p data-i18n="cta.sub">Free. Open source. No phone number, no signup. Install in 30 seconds, encrypted in 30 milliseconds.</p>
+    <div class="cta-buttons">
+      <a href="https://apps.apple.com/app/id6753926350" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+        <span data-i18n="cta.btn_ios">Download for iOS</span>
+      </a>
+      <a href="#android-beta" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.5.5 0 0 0-.86-.5l-1.86 3.22a11.91 11.91 0 0 0-9.36 0L5.4 5.8a.5.5 0 0 0-.86.5L6.4 9.48A11.99 11.99 0 0 0 .98 19h22.04a11.99 11.99 0 0 0-5.42-9.52zM7 16.25a1.25 1.25 0 1 1 1.25-1.25A1.25 1.25 0 0 1 7 16.25zm10 0a1.25 1.25 0 1 1 1.25-1.25A1.25 1.25 0 0 1 17 16.25z"/></svg>
+        <span data-i18n="cta.btn_android">Download for Android</span>
+      </a>
+      <a href="https://github.com/" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58C20.57 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        <span data-i18n="cta.btn_github">Source on GitHub</span>
+      </a>
+    </div>
+    <p class="cta-foot" data-i18n="cta.foot" data-i18n-html>Android beta opens July 2026. <a href="#">Get notified →</a></p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/V2/" class="nav-logo">
+        <svg class="nav-logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 2 L28 9 L28 23 L16 30 L4 23 L4 9 Z" fill="none" stroke="url(#lg)" stroke-width="2"/>
+          <circle cx="16" cy="16" r="3.5" fill="url(#lg)"/>
+        </svg>
+        <span>OSHI</span>
+      </a>
+      <p data-i18n="footer.tag">A messenger that works when nothing else does.</p>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <h4 data-i18n="footer.col1_h">Product</h4>
+        <a href="#features" data-i18n="footer.col1_a">Features</a>
+        <a href="#compare" data-i18n="footer.col1_b">Comparison</a>
+        <a href="/bot-api.html" data-i18n="footer.col1_c">Bot API</a>
+        <a href="https://apps.apple.com/app/id6753926350" data-i18n="footer.col1_d">iOS app</a>
+      </div>
+      <div>
+        <h4 data-i18n="footer.col2_h">Trust</h4>
+        <a href="/privacy.html" data-i18n="footer.col2_a">Privacy policy</a>
+        <a href="/terms.html" data-i18n="footer.col2_b">Terms</a>
+        <a href="/license.html" data-i18n="footer.col2_c">License</a>
+        <a href="#trust" data-i18n="footer.col2_d">Security</a>
+      </div>
+      <div>
+        <h4 data-i18n="footer.col3_h">Company</h4>
+        <a href="/about.html" data-i18n="footer.col3_a">About</a>
+        <a href="/support.html" data-i18n="footer.col3_b">Support</a>
+        <a href="/investor/" data-i18n="footer.col3_c">Investors</a>
+        <a href="mailto:contact@oshi-messenger.com" data-i18n="footer.col3_d">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span data-i18n="footer.copyright">© 2026 OSHI Messenger. The minimum architecture for the maximum privacy.</span>
+    <span class="footer-status"><span class="pulse green"></span> <span data-i18n="footer.status">All systems operational</span></span>
+  </div>
+</footer>
+
+<script src="i18n.js" defer></script>
+<script src="oshi-v2.js" defer></script>
+</body>
+</html>

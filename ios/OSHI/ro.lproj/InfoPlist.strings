@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (ro) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI folosește Bluetooth pentru a descoperi dispozitivele din apropiere și a se conecta la ele, permițând mesaje securizate direct între dispozitive, fără internet.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI are nevoie de Bluetooth pentru a primi mesaje criptate de la dispozitivele din apropiere din rețeaua ta mesh.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI poate adăuga apelurile programate în calendarul tău, ca să nu pierzi niciunul.";
+"NSCalendarsUsageDescription" = "OSHI poate adăuga apelurile programate în calendarul tău, ca să nu pierzi niciunul.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI poate adăuga apelurile programate în calendarul tău, ca să nu pierzi niciunul.";
+"NSCameraUsageDescription" = "OSHI are nevoie de acces la cameră pentru a scana coduri QR și a face fotografii pentru mesaje criptate.";
+"NSFaceIDUsageDescription" = "Folosește Face ID pentru a debloca în siguranță mesajele criptate și a-ți proteja intimitatea.";
+"NSLocalNetworkUsageDescription" = "OSHI folosește rețeaua locală pentru conexiuni Wi-Fi Direct cu dispozitivele din apropiere, ca mesajele să ajungă mai repede.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI folosește locația ta pentru a o partaja în timp real cu persoanele de contact. Locația este criptată și se partajează doar când alegi tu.";
+"NSLocationAlwaysUsageDescription" = "OSHI folosește locația ta pentru partajare în timp real cu persoanele de contact, chiar și când aplicația e în fundal. Locația este criptată și se partajează doar când alegi tu.";
+"NSLocationWhenInUseUsageDescription" = "OSHI folosește locația ta pentru a o partaja cu persoanele de contact. Locația este criptată și se partajează doar când alegi tu.";
+"NSMicrophoneUsageDescription" = "OSHI are nevoie de acces la microfon pentru a înregistra videoclipuri cu sunet pentru mesaje criptate.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI poate salva imaginile primite în biblioteca ta foto.";
+"NSPhotoLibraryUsageDescription" = "OSHI are nevoie de acces la biblioteca foto pentru a alege imaginile trimise ca mesaje criptate.";
+"NSSpeechRecognitionUsageDescription" = "OSHI folosește recunoașterea vocală direct pe dispozitiv, ca să poți dicta mesaje asistentului AI. Vocea ta este transcrisă integral pe iPhone și nu îți părăsește niciodată dispozitivul.";
+"NSUserNotificationsUsageDescription" = "OSHI îți trimite notificări când primești mesaje criptate noi, ca să nu pierzi nimic important.";

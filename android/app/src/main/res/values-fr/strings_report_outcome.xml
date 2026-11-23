@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="report_queued_confirmation">Signalement enregistré sur cet appareil. Il sera envoyé dès que le serveur sera joignable (Réglages › Confidentialité › Éléments signalés).</string>
+    <string name="report_rejected_confirmation">Le serveur a refusé ce signalement. Il reste visible dans Réglages › Confidentialité › Éléments signalés.</string>
+    <string name="chat_report_group">Signaler le groupe</string>
+    <string name="report_group_dialog_title">Signaler ce groupe</string>
+    <string name="report_group_already_filed">Vous avez déjà signalé ce groupe.</string>
+</resources>

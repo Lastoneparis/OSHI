@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">鍵盤</string>
+    <string name="keyboard_incognito_title">無痕鍵盤</string>
+    <string name="keyboard_incognito_subtitle">要求鍵盤不要學習你輸入的內容</string>
+    <string name="keyboard_status_title">目前的鍵盤</string>
+    <string name="keyboard_status_trusted">%1$s · 內建鍵盤</string>
+    <string name="keyboard_status_third_party">%1$s · 第三方鍵盤</string>
+    <string name="keyboard_status_unknown">不明的鍵盤</string>
+    <string name="keyboard_privacy_explainer">OSHI 在這支手機上加密，但你輸入的內容會先經過鍵盤。無痕模式會要求鍵盤不要學習或儲存你的字詞——Android 無法強制鍵盤遵守，只能提出要求。第三方鍵盤仍然可以讀取每一次按鍵，因此建議使用手機的內建鍵盤。如果手機本身已遭入侵（間諜軟體），任何應用程式都無法保護你輸入的內容。</string>
+    <string name="keyboard_banner_title">在 OSHI 加密之前，你的鍵盤可以讀取你輸入的內容</string>
+    <string name="keyboard_banner_body">%1$s 是第三方鍵盤。進行私密對話時，請切換到手機的內建鍵盤。</string>
+    <string name="keyboard_banner_switch">切換鍵盤</string>
+    <string name="keyboard_banner_dismiss">關閉</string>
+</resources>

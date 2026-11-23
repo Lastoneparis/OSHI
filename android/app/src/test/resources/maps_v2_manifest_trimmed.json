@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "updated": "2026-08-13T02:24:38Z",
+  "regions": [
+    {
+      "id": "fr-idf",
+      "name": "Ile-de-France",
+      "country": "FR",
+      "continent": "europe",
+      "bbox": [
+        1.44,
+        48.12,
+        3.56,
+        49.24
+      ],
+      "files": {
+        "tiles": {
+          "url": "https://oshi-messenger.com/tiles/{z}/{x}/{y}.png",
+          "size": 0,
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "routing": {
+          "url": "https://oshi-messenger.com/files/routing/fr-routing.tar.gz",
+          "size": 0,
+          "sha256": "435222af66801343ec836fe0e5176428c2768b268ae399c795120f7962797637",
+          "shared": true,
+          "shared_size": 1639819051
+        },
+        "poi": {
+          "url": "https://oshi-messenger.com/maps/v2/fr-idf/poi.db",
+          "size": 31191040,
+          "sha256": "51c121484cc16b76b5618e88e1c07c45c039d6220c508ee3039ce707c98812e1"
+        },
+        "streets": {
+          "url": "https://oshi-messenger.com/files/streets/fr-streets.db.gz",
+          "size": 0,
+          "sha256": "98f0ab4cdb3be8efc9767747957afd6be8c9a90026509dce7ff58f3845d32d64",
+          "shared": true,
+          "shared_size": 78470916
+        }
+      },
+      "osmDate": "2026-04-29",
+      "rows": 190364
+    },
+    {
+      "id": "de-by",
+      "name": "Bayern",
+      "country": "DE",
+      "continent": "europe",
+      "bbox": [
+        8.97,
+        47.27,
+        13.84,
+        50.56
+      ],
+      "files": {
+        "tiles": {
+          "url": "https://oshi-messenger.com/tiles/{z}/{x}/{y}.png",
+          "size": 0,
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "routing": {
+          "url": "https://oshi-messenger.com/files/routing/de-routing.tar.gz",
+          "size": 0,
+          "sha256": "35aceb898dc73a0a18c4ebff726205896f5d4eb827aca932e7ba835e81f79d6b",
+          "shared": true,
+          "shared_size": 4315756485
+        },
+        "poi": {
+          "url": "https://oshi-messenger.com/maps/v2/de-by/poi.db",
+          "size": 85192704,
+          "sha256": "ee7bee99ca21dce4a177c5b7c76647328f989afb11c5b167bfa2378326fcb025"
+        },
+        "streets": {
+          "url": "https://oshi-messenger.com/files/streets/de-streets.db.gz",
+          "size": 0,
+          "sha256": "8f9d0392f66df7596afc8cdc965f7e974e85a7d2f303e64c22f9a11970044190",
+          "shared": true,
+          "shared_size": 64455396
+        }
+      },
+      "osmDate": "2026-04-29",
+      "rows": 508910
+    },
+    {
+      "id": "gb-eng-lon",
+      "name": "Greater London",
+      "country": "GB",
+      "continent": "europe",
+      "bbox": [
+        -0.51,
+        51.29,
+        0.33,
+        51.69
+      ],
+      "files": {
+        "tiles": {
+          "url": "https://oshi-messenger.com/tiles/{z}/{x}/{y}.png",
+          "size": 0,
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "routing": {
+          "url": "https://oshi-messenger.com/files/routing/gb-routing.tar.gz",
+          "size": 0,
+          "sha256": "774dd24b73ef007b26752ef6c52ac7096eb73b73b942b24e38a9d506d32c8524",
+          "shared": true,
+          "shared_size": 2787301738
+        },
+        "poi": {
+          "url": "https://oshi-messenger.com/maps/v2/gb-eng-lon/poi.db",
+          "size": 20279296,
+          "sha256": "30bc11d99103165fc02e520510cdef4f72e3af59aed96319111db4853d57e207"
+        },
+        "streets": {
+          "url": "https://oshi-messenger.com/files/streets/gb-streets.db.gz",
+          "size": 0,
+          "sha256": "8c8caa34006e7f86cd74cb77ff9291d5f8f6d50490ab71cc900e4653146b6f0f",
+          "shared": true,
+          "shared_size": 34394849
+        },
+        "roadgraph": {
+          "url": "https://oshi-messenger.com/files/roadgraph/gb-roadgraph.db.gz",
+          "size": 0,
+          "sha256": "64bb68aa231931339556d67138c9d8ae24b1f20c3edda4d85b1a4fe30769f211",
+          "shared": true,
+          "shared_size": 4538059059
+        }
+      },
+      "osmDate": "2026-04-29",
+      "rows": 111333
+    },
+    {
+      "id": "gb",
+      "name": "United Kingdom",
+      "country": "GB",
+      "continent": "europe",
+      "bbox": [
+        -8.17,
+        49.96,
+        1.75,
+        60.86
+      ],
+      "files": {
+        "tiles": {
+          "url": "https://oshi-messenger.com/tiles/{z}/{x}/{y}.png",
+          "size": 0,
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "routing": {
+          "url": "https://oshi-messenger.com/files/routing/gb-routing.tar.gz",
+          "size": 2787301738,
+          "sha256": "774dd24b73ef007b26752ef6c52ac7096eb73b73b942b24e38a9d506d32c8524"
+        },
+        "poi": {
+          "url": "https://oshi-messenger.com/maps/v2/gb/poi.db",
+          "size": 168075264,
+          "sha256": "7ff0cdc413a5365ad84b1292a801918cc733f454ce5763501d4082aab4bbb256"
+        },
+        "streets": {
+          "url": "https://oshi-messenger.com/files/streets/gb-streets.db.gz",
+          "size": 34394849,
+          "sha256": "8c8caa34006e7f86cd74cb77ff9291d5f8f6d50490ab71cc900e4653146b6f0f"
+        },
+        "roadgraph": {
+          "url": "https://oshi-messenger.com/files/roadgraph/gb-roadgraph.db.gz",
+          "size": 4538059059,
+          "sha256": "64bb68aa231931339556d67138c9d8ae24b1f20c3edda4d85b1a4fe30769f211"
+        }
+      },
+      "osmDate": "2026-04-29",
+      "rows": 990260
+    }
+  ]
+}

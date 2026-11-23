@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Peranti dipautkan</string>
+    <string name="devsync_settings_subtitle">Segerakkan sejarah anda terus antara peranti anda</string>
+    <string name="devsync_status_on">Penyegerakan terus dihidupkan. Sejarah anda bergerak dari peranti ke peranti; tiada apa-apa disimpan di pelayan.</string>
+    <string name="devsync_status_off">Penyegerakan terus dimatikan pada peranti ini.</string>
+    <string name="devsync_this_device">Peranti ini</string>
+    <string name="devsync_device_id">ID peranti %1$s</string>
+    <string name="devsync_debug_override">Penyegerakan terus (override nyahpepijat)</string>
+    <string name="devsync_debug_override_desc">Paksa penyegerakan terus untuk pemasangan ini, tanpa mengira kata pelayan</string>
+    <string name="devsync_pending_title">Luluskan peranti baharu</string>
+    <string name="devsync_pending_body">%1$s (%2$s) mahu menerima sejarah anda. Pastikan skrin satu lagi menunjukkan kod yang sama.</string>
+    <string name="devsync_waiting_body">Menunggu kelulusan pada peranti anda yang lain. Pastikan ia menunjukkan kod yang sama.</string>
+    <string name="devsync_peer_approved">Peranti satu lagi sudah meluluskan. Luluskan di sini untuk selesai.</string>
+    <string name="devsync_allow">Benarkan</string>
+    <string name="devsync_deny">Tolak</string>
+    <string name="devsync_linked_title">Peranti dipautkan</string>
+    <string name="devsync_none_linked">Belum ada peranti dipautkan. Buka OSHI pada peranti anda yang lain, pada Wi-Fi yang sama atau dalam talian pada masa yang sama.</string>
+    <string name="devsync_last_sync">Penyegerakan terakhir: %1$s</string>
+    <string name="devsync_never">tidak pernah</string>
+    <string name="devsync_syncing_now">Sedang menyegerak (%1$s)</string>
+    <string name="devsync_remove">Alih keluar</string>
+    <string name="devsync_remove_confirm_title">Alih keluar %1$s?</string>
+    <string name="devsync_remove_confirm_body">Ia tidak akan menerima sejarah anda lagi. Ia menyimpan apa yang sudah ada.</string>
+    <string name="devsync_sync_now">Segerakkan sekarang</string>
+    <string name="devsync_cancel">Batal</string>
+    <string name="devsync_alert_unapproved">Peranti yang menggunakan akaun anda cuba menyegerak: %1$s</string>
+    <string name="devsync_alert_linked">Peranti baharu, %1$s, kini boleh menerima sejarah anda</string>
+</resources>

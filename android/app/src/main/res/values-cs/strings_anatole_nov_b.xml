@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Kulatá videozpráva, max. 15 s</string>
+    <string name="settings_panic_wipe_title">Smazat klepnutím na logo</string>
+    <string name="settings_panic_wipe_subtitle">Tři rychlá klepnutí na logo OSHI smažou všechny zprávy, klíče a soubory v tomto telefonu, bez potvrzení. Vypnuto, dokud to nezapnete.</string>
+    <string name="map_layer_title">Typ mapy</string>
+    <string name="map_layer_standard">Standardní</string>
+    <string name="map_layer_terrain">Terén</string>
+    <string name="map_layer_satellite">Satelit</string>
+    <string name="map_layer_standard_desc">Mapa OSHI, funguje offline se staženými oblastmi</string>
+    <string name="map_layer_third_party_desc" formatted="true">Jen online. Načítá se přímo z %1$s, který vidí oblast, na kterou se díváte.</string>
+    <string name="map_layer_offline_only_note">„Pouze offline mapy“ je zapnuto: tato vrstva zobrazuje jen dlaždice, které jste už viděli.</string>
+</resources>

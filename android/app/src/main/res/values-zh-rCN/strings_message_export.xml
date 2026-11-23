@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">加密文件，仅可用您的账户密钥读取</string>
+    <string name="settings_import_messages">导入消息</string>
+    <string name="settings_import_messages_desc">恢复加密的 .oshiexport 文件</string>
+    <string name="settings_importing">正在导入…</string>
+    <string name="export_media_skipped">%1$d 个附件过大，未包含在导出中。</string>
+    <string name="import_messages_success">已导入 %1$d 条消息（%2$d 条已存在）。</string>
+    <string name="import_error_wrong_account">此导出属于另一个 OSHI 账户。请先恢复该账户的密钥。</string>
+    <string name="import_error_damaged">此导出已损坏或被修改。</string>
+    <string name="import_error_other_platform">此导出由 %1$s 版 OSHI 创建，暂时无法在此导入。</string>
+    <string name="import_error_not_export">此文件不是 OSHI 导出文件。</string>
+    <string name="import_error_version">此导出由更新版本的 OSHI 创建。请更新应用后重试。</string>
+    <string name="import_error_no_key">此设备上没有账户密钥。请先恢复您的账户。</string>
+    <string name="import_error_unreadable">无法读取该文件。</string>
+</resources>

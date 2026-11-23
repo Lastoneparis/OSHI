@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Combinar mensagens e grupos</string>
+    <string name="chats_merged_setting_desc">Uma só lista para todas as suas conversas, com filtros de pessoas e grupos.</string>
+    <string name="chats_merged_filter_all">Todas</string>
+    <string name="chats_merged_filter_unread">Não lidas</string>
+    <string name="chats_merged_filter_groups">Grupos</string>
+    <string name="chats_merged_filter_people">Pessoas</string>
+    <string name="chats_merged_new_title">Novo</string>
+    <string name="chats_merged_new_chat">Nova conversa</string>
+    <string name="chats_merged_new_chat_desc">Adicione alguém por código QR, ligação ou chave</string>
+    <string name="chats_merged_new_group">Novo grupo</string>
+    <string name="chats_merged_new_group_desc">Crie um grupo com os seus contactos</string>
+    <string name="chats_merged_discover">Descobrir canais públicos</string>
+    <string name="chats_merged_discover_desc">Junte-se a grupos públicos perto de si</string>
+    <string name="chats_merged_scan_invite">Ler um convite</string>
+    <string name="chats_merged_scan_invite_desc">Junte-se a um grupo ou adicione um contacto a partir de um código QR</string>
+    <string name="chats_merged_scan_not_invite">Este código QR não é um convite OSHI</string>
+    <string name="chats_merged_calls_header">Ligar a alguém</string>
+    <string name="chats_merged_teaser_title">Junte-se a um canal público</string>
+    <string name="chats_merged_teaser_body">Os grupos públicos próximos funcionam mesmo sem internet. Veja quem está à sua volta.</string>
+    <string name="chats_merged_teaser_cta">Descobrir</string>
+    <string name="chats_merged_nearby_title">Grupo próximo</string>
+    <string name="chats_merged_empty_unread">Está tudo em dia</string>
+    <string name="chats_merged_empty_people">Ainda sem conversas</string>
+    <string name="chats_merged_group_a11y">Grupo</string>
+</resources>

@@ -1,0 +1,134 @@
+/* OSHI Watch App - Vietnamese */
+
+/* Status */
+"watch.status.connected" = "Đã kết nối";
+"watch.status.not_reachable" = "Không thể kết nối iPhone";
+
+/* Navigation */
+"watch.open_iphone" = "Mở OSHI trên iPhone";
+
+/* Common */
+"common.refresh" = "Làm mới";
+"common.cancel" = "Hủy";
+
+/* Messages */
+"watch.loading_messages" = "Đang tải tin nhắn…";
+"watch.no_messages" = "Không có tin nhắn";
+"watch.sending" = "Đang gửi…";
+"watch.dictate" = "Đọc chính tả";
+"watch.voice_message" = "Tin nhắn thoại";
+"watch.reply" = "Trả lời";
+"watch.media_attachment" = "Tệp đính kèm";
+
+/* Quick Replies */
+"watch.quick.yes" = "Có";
+"watch.quick.no" = "Không";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Để sau";
+"watch.quick.omw" = "Đang đến!";
+"watch.quick.thanks" = "Cảm ơn";
+
+/* Errors */
+"watch.error.send_failed" = "Gửi thất bại";
+"watch.send.queued" = "Đang chờ iPhone";
+"watch.error.not_reachable" = "Không thể kết nối iPhone";
+
+/* Calls */
+"watch.call.incoming_video" = "Cuộc gọi video đến";
+"watch.call.incoming_voice" = "Cuộc gọi thoại đến";
+"watch.call.video" = "Cuộc gọi video";
+"watch.call.voice" = "Cuộc gọi thoại";
+"watch.call.connecting" = "Đang kết nối…";
+"watch.call.ringing" = "Đang đổ chuông…";
+"watch.call.in_call" = "Đang gọi";
+"watch.call.ended" = "Cuộc gọi đã kết thúc";
+"watch.call.start" = "Bắt đầu cuộc gọi";
+"watch.call.unknown" = "Không xác định";
+
+/* Call Actions */
+"call.action.accept" = "Chấp nhận";
+"call.action.decline" = "Từ chối";
+
+/* Notifications */
+"watch.notification.new_message" = "Tin nhắn mới";
+
+/* Call Summary */
+"call.outgoing" = "Cuộc gọi đi";
+"call.incoming" = "Cuộc gọi đến";
+"call.no.answer" = "Không trả lời";
+"call.declined" = "Đã từ chối";
+"call.missed" = "Cuộc gọi nhỡ";
+"call.video.outgoing" = "Cuộc gọi video đi";
+"call.video.incoming" = "Cuộc gọi video đến";
+
+/* Actions de notification au poignet. */
+"notification.action.reply" = "Trả lời";
+"send" = "Gửi";
+"type_message" = "Nhập tin nhắn";
+"notification.action.mark_read" = "Đã đọc";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Trò chuyện";
+"w2.empty.title" = "Chưa có cuộc trò chuyện";
+"w2.empty.body" = "Các cuộc trò chuyện OSHI trên iPhone sẽ hiện ở đây.";
+"w2.disabled.title" = "Đồng hồ thông minh đang tắt";
+"w2.disabled.body" = "Bật trong OSHI trên iPhone: Cài đặt › Thiết bị đã liên kết › Đồng hồ thông minh.";
+"w2.locked.title" = "OSHI đang khóa";
+"w2.locked.body" = "Mở khóa OSHI trên iPhone rồi thử lại.";
+"w2.unavailable.title" = "OSHI chưa sẵn sàng";
+"w2.unavailable.body" = "Mở OSHI một lần trên iPhone rồi thử lại.";
+"w2.nophone.title" = "Không kết nối được iPhone";
+"w2.nophone.body" = "Giữ iPhone có cài OSHI ở gần.";
+"w2.error.title" = "Đã xảy ra lỗi";
+"w2.error.body" = "iPhone không phản hồi. Hãy thử lại.";
+"w2.notfound" = "Cuộc trò chuyện này không còn trên iPhone.";
+"w2.retry" = "Thử lại";
+"w2.reply" = "Trả lời";
+"w2.you" = "Bạn";
+"w2.you_prefix" = "Bạn: %@";
+"w2.react" = "Bày tỏ cảm xúc";
+"w2.speak_or_type" = "Nói hoặc nhập";
+"w2.quick_replies" = "Trả lời nhanh";
+"w2.sending" = "Đang gửi…";
+"w2.sent" = "Đã gửi";
+"w2.send_failed" = "Chưa gửi. Hãy thử lại trên iPhone.";
+"w2.read_only" = "Bạn không thể trả lời trong cuộc trò chuyện này.";
+"w2.view_once" = "👁 Xem một lần — mở trên iPhone";
+"w2.view_once_short" = "👁 Xem một lần";
+"w2.e2e" = "Mã hóa đầu cuối bởi iPhone của bạn";
+"w2.replying_to" = "Đang trả lời";
+"w2.loading" = "Đang tải…";
+"w2.unread_count" = "%d chưa đọc";
+"w2.all_read" = "Đã đọc hết";
+"w2.call" = "Gọi";
+"w2.media.photo" = "📷 Ảnh";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Thoại";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Tệp";
+"w2.media.location" = "📍 Vị trí";
+"w2.media.contact" = "👤 Liên hệ";
+"w2.qr.on_my_way" = "Đang tới";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Mình gọi lại sau";
+"w2.qr.thanks" = "Cảm ơn!";
+"w2.qr.yes" = "Có";
+"w2.qr.no" = "Không";
+"w2.qr.busy" = "Giờ không nói được";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Yêu thích";
+"w2.r.laugh" = "Cười";
+"w2.r.cry" = "Buồn";
+"w2.r.thumbs" = "Thích";
+"w2.r.wow" = "Wow";
+"w2.r.fire" = "Lửa";
+"w2.mute" = "Tắt tiếng";
+"w2.end_call" = "Kết thúc";
+"w2.speaker" = "Loa ngoài";
+"w2.widget.off" = "Bật Đồng hồ thông minh trong OSHI trên iPhone";
+"w2.widget.off_short" = "Tắt";
+"w2.widget.locked" = "Mở khóa OSHI trên iPhone";
+"w2.widget.locked_short" = "Đã khóa";
+"w2.widget.open" = "Mở OSHI";
+"w2.widget.name" = "OSHI chưa đọc";
+"w2.widget.desc" = "Số tin chưa đọc và người gửi — không bao giờ có nội dung.";

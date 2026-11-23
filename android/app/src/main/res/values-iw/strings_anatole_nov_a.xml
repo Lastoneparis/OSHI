@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">איש קשר חדש</string>
+    <string name="conversation_open_contact">פתיחת איש הקשר</string>
+    <string name="conversation_muted">התראות כבויות</string>
+    <string name="fab_new_contact">איש קשר חדש</string>
+    <string name="fab_pick_contact_voice">שיחה קולית — בחירת איש קשר</string>
+    <string name="fab_pick_contact_video">שיחת וידאו — בחירת איש קשר</string>
+    <string name="fab_pick_contact_empty">עדיין אין אנשי קשר. יש להוסיף מישהו קודם.</string>
+</resources>

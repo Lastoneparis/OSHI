@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Menunggu waktu siar radio (batas siklus kerja yang sah)</string>
+    <string name="lora_jamming_title">Gangguan radio terdeteksi — kemungkinan jamming</string>
+    <string name="lora_jamming_detail">Pesan akan dikirim lewat mesh Bluetooth atau internet saat tersedia. Pesan untuk radio disimpan dan dikirim lewat LoRa setelah kanal bersih.</string>
+    <string name="lora_jamming_send_anyway">Tetap kirim lewat LoRa</string>
+    <string name="lora_jamming_override_active">Tetap mengirim lewat LoRa hingga %1$s, atau hingga kanal bersih. Pesan mungkin tidak sampai.</string>
+</resources>

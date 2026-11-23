@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videospráva</string>
+    <string name="video_note_title">Videospráva</string>
+    <string name="video_note_a11y" formatted="true">Videospráva, %1$s</string>
+    <string name="video_note_play">Prehrať</string>
+    <string name="video_note_pause">Pozastaviť</string>
+    <string name="video_note_record_button">Nahrať videosprávu</string>
+    <string name="video_note_hint">Ťuknutím nahráte, alebo podržte · max. 15 s</string>
+    <string name="video_note_record">Spustiť nahrávanie</string>
+    <string name="video_note_stop">Zastaviť nahrávanie</string>
+    <string name="video_note_flip">Prepnúť kameru</string>
+    <string name="video_note_close">Zavrieť</string>
+    <string name="video_note_review_title">Vaša videospráva</string>
+    <string name="video_note_preparing">Pripravuje sa…</string>
+    <string name="video_note_discard">Odstrániť</string>
+    <string name="video_note_retake">Nahrať znova</string>
+    <string name="video_note_send">Odoslať videosprávu</string>
+    <string name="video_note_too_short">Príliš krátke. Ťuknutím nahráte, alebo tlačidlo podržte.</string>
+    <string name="video_note_camera_denied">Na nahranie videospravy je potrebný prístup ku kamere.</string>
+</resources>

@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d अपठित";
+"w2.all_read" = "सब पढ़ लिया";
+"w2.widget.off" = "अपने iPhone पर OSHI में स्मार्टवॉच चालू करें";
+"w2.widget.off_short" = "बंद";
+"w2.widget.locked" = "अपने iPhone पर OSHI अनलॉक करें";
+"w2.widget.locked_short" = "लॉक";
+"w2.widget.open" = "OSHI खोलें";
+"w2.widget.name" = "OSHI अपठित";
+"w2.widget.desc" = "अपठित संख्या और किसने लिखा — संदेश कभी नहीं।";

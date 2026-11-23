@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Снимки экрана в OSHI заблокированы, чтобы защитить ваши переписки</string>
+    <string name="rn_hint_setting_title">Сообщать контактам, что я в ограниченной сети</string>
+    <string name="rn_hint_setting_caption">Пока трафик замаскирован, ваши сообщения несут небольшую метку со сквозным шифрованием, чтобы контакты знали, что вы, возможно, в цензурируемой или прослушиваемой сети. Видят её только они.</string>
+    <string name="rn_hint_chip">Отправлено из ограниченной сети</string>
+    <string name="rn_hint_explain_title">Ограниченная сеть</string>
+    <string name="rn_hint_explain_body">Этот человек пользуется маскировкой OSHI и, вероятно, находится в цензурируемой или прослушиваемой сети. Отвечайте как обычно: OSHI продолжает маскировать его трафик. Пишите коротко; фото и видео могут идти медленно.</string>
+</resources>

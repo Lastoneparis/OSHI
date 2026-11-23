@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Tin nhắn video tròn, tối đa 15 giây</string>
+    <string name="settings_panic_wipe_title">Xóa bằng cách chạm vào logo</string>
+    <string name="settings_panic_wipe_subtitle">Chạm nhanh ba lần vào logo OSHI sẽ xóa mọi tin nhắn, khóa và tệp trên điện thoại này mà không cần xác nhận. Tắt cho đến khi bạn bật.</string>
+    <string name="map_layer_title">Loại bản đồ</string>
+    <string name="map_layer_standard">Tiêu chuẩn</string>
+    <string name="map_layer_terrain">Địa hình</string>
+    <string name="map_layer_satellite">Vệ tinh</string>
+    <string name="map_layer_standard_desc">Bản đồ OSHI, hoạt động ngoại tuyến với các vùng đã tải xuống</string>
+    <string name="map_layer_third_party_desc" formatted="true">Chỉ trực tuyến. Tải trực tiếp từ %1$s, nơi có thể thấy khu vực bạn đang xem.</string>
+    <string name="map_layer_offline_only_note">“Chỉ bản đồ ngoại tuyến” đang bật: lớp này chỉ hiển thị các ô bạn đã xem.</string>
+</resources>

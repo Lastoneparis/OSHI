@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Linkitetyt laitteet</string>
+    <string name="devsync_settings_subtitle">Synkronoi historiasi suoraan laitteidesi välillä</string>
+    <string name="devsync_status_on">Suora synkronointi on päällä. Historiasi siirtyy laitteelta toiselle; palvelimelle ei tallenneta mitään.</string>
+    <string name="devsync_status_off">Suora synkronointi on pois päältä tässä laitteessa.</string>
+    <string name="devsync_this_device">Tämä laite</string>
+    <string name="devsync_device_id">Laitetunnus %1$s</string>
+    <string name="devsync_debug_override">Suora synkronointi (debug-ohitus)</string>
+    <string name="devsync_debug_override_desc">Pakota suora laitesynkronointi päälle tässä asennuksessa palvelimesta riippumatta</string>
+    <string name="devsync_pending_title">Hyväksy uusi laite</string>
+    <string name="devsync_pending_body">%1$s (%2$s) haluaa vastaanottaa historiasi. Tarkista, että toinen näyttö näyttää saman koodin.</string>
+    <string name="devsync_waiting_body">Odotetaan hyväksyntää toisella laitteellasi. Tarkista, että se näyttää saman koodin.</string>
+    <string name="devsync_peer_approved">Toinen laite on jo hyväksynyt. Hyväksy tässä viimeistelläksesi.</string>
+    <string name="devsync_allow">Salli</string>
+    <string name="devsync_deny">Estä</string>
+    <string name="devsync_linked_title">Linkitetyt laitteet</string>
+    <string name="devsync_none_linked">Ei vielä linkitettyjä laitteita. Avaa OSHI toisella laitteellasi samassa Wi-Fi-verkossa tai verkossa samaan aikaan.</string>
+    <string name="devsync_last_sync">Viimeisin synkronointi: %1$s</string>
+    <string name="devsync_never">ei koskaan</string>
+    <string name="devsync_syncing_now">Synkronoidaan (%1$s)</string>
+    <string name="devsync_remove">Poista</string>
+    <string name="devsync_remove_confirm_title">Poistetaanko %1$s?</string>
+    <string name="devsync_remove_confirm_body">Se ei enää vastaanota historiaasi. Sillä jo oleva säilyy.</string>
+    <string name="devsync_sync_now">Synkronoi nyt</string>
+    <string name="devsync_cancel">Peruuta</string>
+    <string name="devsync_alert_unapproved">Tiliäsi käyttävä laite yritti synkronoida: %1$s</string>
+    <string name="devsync_alert_linked">Uusi laite, %1$s, voi nyt vastaanottaa historiasi</string>
+</resources>

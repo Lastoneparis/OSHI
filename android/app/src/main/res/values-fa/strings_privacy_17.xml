@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">گرفتن اسکرین‌شات در OSHI برای محافظت از گفتگوهای شما مسدود است</string>
+    <string name="rn_hint_setting_title">به مخاطبانم بگو که در شبکه‌ای محدود هستم</string>
+    <string name="rn_hint_setting_caption">وقتی ترافیک استتار شده است، پیام‌های شما نشانه‌ای کوچک و رمزگذاری‌شدهٔ سرتاسری دارند تا مخاطبان بدانند شاید در شبکه‌ای سانسورشده یا تحت نظارت هستید. فقط آن‌ها آن را می‌بینند.</string>
+    <string name="rn_hint_chip">ارسال‌شده از یک شبکهٔ محدود</string>
+    <string name="rn_hint_explain_title">شبکهٔ محدود</string>
+    <string name="rn_hint_explain_body">این فرد از استتار OSHI استفاده می‌کند و احتمالاً در شبکه‌ای سانسورشده یا تحت نظارت است. عادی پاسخ دهید: OSHI همچنان ترافیک او را استتار می‌کند. پیام‌ها را کوتاه نگه دارید؛ عکس و ویدیو ممکن است کند باشند.</string>
+</resources>

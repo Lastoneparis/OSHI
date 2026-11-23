@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Převést toto rádio na OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Zdarma a open source. Zachová region, kanály, klíče i kontakty, zůstane v síti Meshtastic a přidá dlouhé zprávy, potvrzení doručení a zprávy uchované 72 h, když je někdo offline.</string>
+    <string name="oshimesh_upgrade_share">Poslat odkaz na flasher do počítače</string>
+    <string name="oshimesh_upgrade_why">Co přináší OSHI Mesh</string>
+    <string name="oshimesh_upgrade_footer">Flasher běží v Chrome nebo Edge na počítači přes USB. Zvolte „Zachovat nastavení“ a rádio se aktualizuje asi za minutu.</string>
+</resources>

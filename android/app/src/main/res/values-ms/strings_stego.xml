@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Menunggu sambungan tersamar</string>
+    <string name="privacy_disguise_title">Penyamaran privasi</string>
+    <string name="privacy_disguise_subtitle">Samarkan trafik · sembunyikan mesej dalam foto</string>
+    <string name="cover_switch_title">Samarkan trafik OSHI</string>
+    <string name="cover_switch_caption">Mesej dan lampiran 1:1 anda dihantar di dalam permintaan berpad yang kelihatan seperti analitik web biasa, jadi saiz dan masanya lebih sukar dibezakan. Jika sambungan tersamar gagal, mesej akan menunggu — ia tidak pernah dihantar tanpa penyamaran.</string>
+    <string name="cover_not_hidden">Masih kelihatan: hakikat bahawa anda menyambung ke oshi-messenger.com (nama pelayan dan cap jari TLS), serta mesej kumpulan, panggilan, isyarat bangun push dan semakan mel baharu, yang tidak disamarkan. Ini bukan keanoniman dan tidak memintas sekatan terhadap pelayan OSHI — untuk itu, gunakan Samarkan sebagai foto.</string>
+    <string name="disguise_photo_title">Samarkan sebagai foto</string>
+    <string name="disguise_photo_explainer">Sembunyikan mesej yang disulitkan hujung ke hujung untuk seorang kenalan di dalam foto yang kelihatan biasa, kemudian hantar foto itu melalui mana-mana aplikasi, e-mel atau storan awan — berguna apabila OSHI sendiri disekat. Dalam sembang 1:1: + → Samarkan sebagai foto.</string>
+    <string name="disguise_reveal_button">Dedahkan mesej tersembunyi</string>
+    <string name="disguise_reveal_hint">Anda juga boleh berkongsi foto yang diterima ke OSHI daripada mana-mana aplikasi.</string>
+    <string name="disguise_sheet_for">Hanya %1$s boleh membacanya.</string>
+    <string name="disguise_message_hint">Mesej tersembunyi</string>
+    <string name="disguise_add_file">Tambah fail kecil (maks. 256 KB)</string>
+    <string name="disguise_remove_file">Alih keluar %1$s</string>
+    <string name="disguise_file_too_large">Fail terlalu besar (maks. 256 KB)</string>
+    <string name="disguise_cover_generated">Pemandangan yang dijana</string>
+    <string name="disguise_cover_photo">Foto saya</string>
+    <string name="disguise_capacity">Menggunakan %1$s daripada %2$s yang tersedia dalam imej ini</string>
+    <string name="disguise_too_big">Terlalu panjang untuk imej ini. Pendekkan mesej, alih keluar fail atau pilih foto yang lebih besar.</string>
+    <string name="disguise_create_share">Cipta foto dan kongsi</string>
+    <string name="disguise_warning_recompress">Hantar sebagai FAIL atau dokumen. Aplikasi yang memampatkan semula foto (kebanyakan rangkaian sosial, WhatsApp, Signal atau Telegram dalam mod foto, tangkapan skrin) memadamkan mesej tersembunyi.</string>
+    <string name="disguise_warning_forensic">Ini menyembunyikan mesej daripada sesiapa yang melihat foto itu. Analisis forensik masih boleh mengesan bahawa foto itu membawa data tersembunyi, tetapi tidak dapat membacanya atau mengetahui untuk siapa ia ditujukan.</string>
+    <string name="disguise_working">Mencipta foto…</string>
+    <string name="disguise_failed">Tidak dapat mencipta foto.</string>
+    <string name="reveal_title">Mesej tersembunyi</string>
+    <string name="reveal_from">Daripada %1$s</string>
+    <string name="reveal_hidden_on">Disembunyikan pada %1$s</string>
+    <string name="reveal_copy">Salin teks</string>
+    <string name="reveal_open_file">Buka %1$s</string>
+    <string name="reveal_checking">Mencari mesej tersembunyi…</string>
+    <string name="reveal_not_found">Tiada mesej tersembunyi untuk anda dalam imej ini. Jika ia dihantar sebagai foto, aplikasi yang membawanya mungkin telah memampatkannya semula — minta ia dihantar sebagai fail.</string>
+    <string name="reveal_damaged">Imej ini dibuat untuk anda oleh %1$s, tetapi ia telah diubah dalam perjalanan dan tidak lagi boleh dibaca. Minta ia dihantar semula sebagai fail.</string>
+    <string name="reveal_unreadable">Tidak dapat membaca fail ini.</string>
+    <string name="disguise_photo_short">Samarkan</string>
+</resources>

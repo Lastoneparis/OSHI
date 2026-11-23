@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">โทรศัพท์เครื่องนี้อาจถูกดัดแปลง</string>
+    <string name="device_integrity_dialog_body">OSHI ตรวจพบสัญญาณว่าโทรศัพท์เครื่องนี้อาจถูกรูทหรือดัดแปลง (%1$s) บนโทรศัพท์แบบนี้ ซอฟต์แวร์อื่นอาจอ่านสิ่งที่แสดงบนหน้าจอและสิ่งที่คุณพิมพ์ได้ก่อนที่ OSHI จะเข้ารหัส OSHI ไม่ได้ลบหรือบล็อกสิ่งใด การตรวจสอบนี้เป็นการคาดการณ์: อาจผิดพลาดได้ และรูทที่ซ่อนไว้อย่างดีอาจหลุดรอดไปได้</string>
+    <string name="device_integrity_dialog_ok">เข้าใจแล้ว</string>
+    <string name="device_integrity_status_title">ความสมบูรณ์ของอุปกรณ์</string>
+    <string name="device_integrity_status_flagged">OSHI ตรวจพบสัญญาณของการรูทหรือการดัดแปลง: %1$s</string>
+    <string name="device_integrity_finding_su">ไฟล์ su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">แอปจัดการรูท</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">ระบบที่ลงนามด้วยคีย์ทดสอบ</string>
+    <string name="device_integrity_finding_debuggable">ระบบที่ดีบักได้</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">โทรศัพท์ที่ถูกรูทหรือดัดแปลง: OSHI มองหาสัญญาณการรูทที่พบบ่อย (su, Magisk, Xposed/LSPosed, Frida, ระบบที่ลงนามด้วยคีย์ทดสอบหรือดีบักได้) และจะเตือนคุณหากพบ การไม่พบสิ่งใดไม่ได้พิสูจน์ว่าโทรศัพท์สะอาด</string>
+    <string name="clipboard_hygiene_explainer">การคัดลอก: ข้อความ คำแปล คีย์กู้คืน และโทเค็นบอทที่คุณคัดลอกจะถูกทำเครื่องหมายว่าละเอียดอ่อน (Android 13+ ซ่อนตัวอย่าง) หากยังอยู่ในคลิปบอร์ดหลัง 60 วินาที OSHI จะลบออก: ทันทีหาก OSHI เปิดอยู่ หรือในครั้งถัดไปที่คุณเปิด ระหว่างที่ยังอยู่ในคลิปบอร์ด คีย์บอร์ดของคุณและแอปที่ได้รับอนุญาตให้อ่านคลิปบอร์ดจะเห็นได้ และคีย์บอร์ดหรือฟีเจอร์ของโทรศัพท์ที่เก็บประวัติคลิปบอร์ดอาจเก็บสำเนาของตัวเองไว้แม้หลังจากลบแล้ว</string>
+</resources>

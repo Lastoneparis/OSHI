@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Đang chờ thời gian phát sóng vô tuyến (giới hạn chu kỳ hoạt động theo luật)</string>
+    <string name="lora_jamming_title">Phát hiện nhiễu vô tuyến — có thể bị gây nhiễu</string>
+    <string name="lora_jamming_detail">Tin nhắn sẽ được gửi qua mạng Bluetooth hoặc internet khi có thể. Tin nhắn cho radio được giữ lại và sẽ gửi qua LoRa khi kênh thông thoáng.</string>
+    <string name="lora_jamming_send_anyway">Vẫn gửi qua LoRa</string>
+    <string name="lora_jamming_override_active">Vẫn gửi qua LoRa đến %1$s, hoặc đến khi kênh thông thoáng. Tin nhắn có thể không đến nơi.</string>
+</resources>

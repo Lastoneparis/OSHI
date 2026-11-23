@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Dark counterpart of values/themes.xml.
+
+  Without this the window background stayed #FFFFFF in dark mode, so every cold
+  start flashed a full white screen between the system splash and Compose's
+  first frame. `android:windowBackground` is the one item here that still does
+  anything from targetSdk 36 — edge-to-edge is enforced on Android 16, which
+  makes `statusBarColor` and `navigationBarColor` no-ops (the bars are
+  transparent and the system draws its own contrast scrim). They are kept only
+  so pre-36 devices running this same APK keep their current appearance.
+-->
+<resources>
+    <style name="Theme.OSHI" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@color/dark_background</item>
+        <item name="android:navigationBarColor">@color/dark_background</item>
+        <item name="android:windowBackground">@color/dark_background</item>
+    </style>
+
+    <style name="Theme.OSHI.Splash" parent="Theme.OSHI">
+        <item name="android:windowBackground">@color/launch_background</item>
+    </style>
+</resources>

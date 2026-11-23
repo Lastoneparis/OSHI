@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">この無線機を OSHI Mesh にアップグレード</string>
+    <string name="oshimesh_upgrade_body">無料のオープンソース。リージョン、チャンネル、鍵、連絡先はそのまま、Meshtastic ネットワークにも残り、長いメッセージ、配信確認、相手がオフラインの間 72 時間保管されるメッセージが加わります。</string>
+    <string name="oshimesh_upgrade_share">書き込みツールのリンクをパソコンに送る</string>
+    <string name="oshimesh_upgrade_why">OSHI Mesh で加わること</string>
+    <string name="oshimesh_upgrade_footer">書き込みツールはパソコンの Chrome または Edge で USB 経由で動きます。「設定を残す」を選ぶと、約 1 分でこの無線機を更新できます。</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">正在等待無線電發射時間（法定工作週期限制）</string>
+    <string name="lora_jamming_title">偵測到無線電干擾 — 可能遭到干擾</string>
+    <string name="lora_jamming_detail">訊息將在可用時透過藍牙網狀網路或網際網路傳送。傳給電台的訊息會被保留，頻道恢復後透過 LoRa 送出。</string>
+    <string name="lora_jamming_send_anyway">仍透過 LoRa 傳送</string>
+    <string name="lora_jamming_override_active">在 %1$s 前或頻道恢復前仍透過 LoRa 傳送。訊息可能無法送達。</string>
+</resources>

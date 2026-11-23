@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Uusi yhteystieto</string>
+    <string name="conversation_open_contact">Avaa yhteystieto</string>
+    <string name="conversation_muted">Ilmoitukset pois</string>
+    <string name="fab_new_contact">Uusi yhteystieto</string>
+    <string name="fab_pick_contact_voice">Äänipuhelu — valitse yhteystieto</string>
+    <string name="fab_pick_contact_video">Videopuhelu — valitse yhteystieto</string>
+    <string name="fab_pick_contact_empty">Ei vielä yhteystietoja. Lisää ensin joku.</string>
+</resources>

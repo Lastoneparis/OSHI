@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">جهة اتصال جديدة</string>
+    <string name="conversation_open_contact">فتح جهة الاتصال</string>
+    <string name="conversation_muted">الإشعارات متوقفة</string>
+    <string name="fab_new_contact">جهة اتصال جديدة</string>
+    <string name="fab_pick_contact_voice">مكالمة صوتية — اختر جهة اتصال</string>
+    <string name="fab_pick_contact_video">مكالمة فيديو — اختر جهة اتصال</string>
+    <string name="fab_pick_contact_empty">لا توجد جهات اتصال بعد. أضف شخصًا أولًا.</string>
+</resources>

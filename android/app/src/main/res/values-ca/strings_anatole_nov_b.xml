@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Missatge de vídeo rodó, màx. 15 s</string>
+    <string name="settings_panic_wipe_title">Esborra tocant el logotip</string>
+    <string name="settings_panic_wipe_subtitle">Tres tocs ràpids al logotip d\'OSHI esborren tots els missatges, claus i fitxers d\'aquest telèfon, sense confirmació. Desactivat fins que l\'activis.</string>
+    <string name="map_layer_title">Tipus de mapa</string>
+    <string name="map_layer_standard">Estàndard</string>
+    <string name="map_layer_terrain">Relleu</string>
+    <string name="map_layer_satellite">Satèl·lit</string>
+    <string name="map_layer_standard_desc">Mapa OSHI, funciona fora de línia amb les regions baixades</string>
+    <string name="map_layer_third_party_desc" formatted="true">Només en línia. Es carrega directament de %1$s, que veu la zona que mires.</string>
+    <string name="map_layer_offline_only_note">«Només mapes fora de línia» està activat: aquesta capa només mostra les tessel·les que ja has vist.</string>
+</resources>

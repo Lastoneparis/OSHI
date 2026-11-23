@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Круглое видеосообщение, до 15 с</string>
+    <string name="settings_panic_wipe_title">Стирание касанием логотипа</string>
+    <string name="settings_panic_wipe_subtitle">Три быстрых касания логотипа OSHI стирают все сообщения, ключи и файлы на этом телефоне без подтверждения. Выключено, пока вы это не включите.</string>
+    <string name="map_layer_title">Тип карты</string>
+    <string name="map_layer_standard">Стандартная</string>
+    <string name="map_layer_terrain">Рельеф</string>
+    <string name="map_layer_satellite">Спутник</string>
+    <string name="map_layer_standard_desc">Карта OSHI, работает офлайн с загруженными регионами</string>
+    <string name="map_layer_third_party_desc" formatted="true">Только онлайн. Загружается напрямую с %1$s, который видит просматриваемую область.</string>
+    <string name="map_layer_offline_only_note">«Только офлайн-карты» включено: этот слой показывает только уже просмотренные тайлы.</string>
+</resources>

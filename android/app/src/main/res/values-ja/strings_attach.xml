@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">最近</string>
+    <string name="attach_selected_count">%1$d件選択</string>
+    <string name="attach_all_photos">すべての写真</string>
+    <string name="attach_collapse">折りたたむ</string>
+    <string name="attach_camera">カメラ</string>
+    <string name="attach_gallery">ギャラリー</string>
+    <string name="attach_file">ファイル</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">位置情報</string>
+    <string name="attach_contact">連絡先</string>
+    <string name="attach_poll">投票</string>
+    <string name="attach_video_note">ビデオメッセージ</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">予約</string>
+    <string name="attach_access_title">最近の写真がここに表示されます</string>
+    <string name="attach_access_body">OSHIはこのパネルを開いている間だけ写真を読み取ります。送信しない限り、何も端末の外に出ません。</string>
+    <string name="attach_access_allow">アクセスを許可</string>
+    <string name="attach_access_settings">設定を開く</string>
+    <string name="attach_access_browse">ギャラリーから選ぶ</string>
+    <string name="attach_partial">OSHIと一部の写真のみ共有しています。</string>
+    <string name="attach_partial_manage">管理</string>
+    <string name="attach_empty_title">まだ写真がありません</string>
+    <string name="attach_caption_hint">キャプションを追加…</string>
+    <string name="attach_send_count">%1$d件を送信</string>
+    <string name="attach_photo_a11y">写真</string>
+    <string name="attach_video_a11y">動画、%1$s</string>
+    <string name="attach_limit">一度に%1$d件まで</string>
+</resources>

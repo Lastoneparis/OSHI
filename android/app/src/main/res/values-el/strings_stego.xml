@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Αναμονή για συγκαλυμμένη σύνδεση</string>
+    <string name="privacy_disguise_title">Συγκάλυψη</string>
+    <string name="privacy_disguise_subtitle">Συγκάλυψη κίνησης · απόκρυψη μηνύματος σε φωτογραφία</string>
+    <string name="cover_switch_title">Συγκάλυψη κίνησης OSHI</string>
+    <string name="cover_switch_caption">Τα μηνύματα και τα συνημμένα σας 1:1 ταξιδεύουν μέσα σε αιτήματα με συμπλήρωση που μοιάζουν με συνηθισμένα στατιστικά ιστού, ώστε το μέγεθος και ο χρονισμός τους να ξεχωρίζουν πιο δύσκολα. Αν η συγκαλυμμένη σύνδεση αποτύχει, τα μηνύματα περιμένουν — δεν στέλνονται ποτέ χωρίς συγκάλυψη.</string>
+    <string name="cover_not_hidden">Παραμένουν ορατά: ότι συνδέεστε στο oshi-messenger.com (όνομα διακομιστή και αποτύπωμα TLS), καθώς και τα ομαδικά μηνύματα, οι κλήσεις, οι αφυπνίσεις push και οι έλεγχοι για νέα αλληλογραφία, που δεν συγκαλύπτονται. Αυτό δεν είναι ανωνυμία και δεν παρακάμπτει έναν αποκλεισμό του διακομιστή OSHI — για αυτό, χρησιμοποιήστε «Συγκάλυψη ως φωτογραφία».</string>
+    <string name="disguise_photo_title">Συγκάλυψη ως φωτογραφία</string>
+    <string name="disguise_photo_explainer">Κρύψτε ένα μήνυμα με κρυπτογράφηση από άκρο σε άκρο για μία επαφή μέσα σε μια φωτογραφία με συνηθισμένη όψη και στείλτε τη φωτογραφία μέσω οποιασδήποτε εφαρμογής, email ή αποθηκευτικού χώρου cloud — χρήσιμο όταν το ίδιο το OSHI είναι αποκλεισμένο. Σε συνομιλία 1:1: + → Συγκάλυψη ως φωτογραφία.</string>
+    <string name="disguise_reveal_button">Αποκάλυψη κρυφού μηνύματος</string>
+    <string name="disguise_reveal_hint">Μπορείτε επίσης να κοινοποιήσετε στο OSHI μια φωτογραφία που λάβατε, από οποιαδήποτε εφαρμογή.</string>
+    <string name="disguise_sheet_for">Μόνο ο/η %1$s μπορεί να το διαβάσει.</string>
+    <string name="disguise_message_hint">Κρυφό μήνυμα</string>
+    <string name="disguise_add_file">Προσθήκη μικρού αρχείου (έως 256 KB)</string>
+    <string name="disguise_remove_file">Αφαίρεση %1$s</string>
+    <string name="disguise_file_too_large">Πολύ μεγάλο αρχείο (έως 256 KB)</string>
+    <string name="disguise_cover_generated">Τοπίο που δημιουργήθηκε</string>
+    <string name="disguise_cover_photo">Η φωτογραφία μου</string>
+    <string name="disguise_capacity">Χρησιμοποιεί %1$s από %2$s διαθέσιμα σε αυτή την εικόνα</string>
+    <string name="disguise_too_big">Πολύ μεγάλο για αυτή την εικόνα. Συντομεύστε το μήνυμα, αφαιρέστε το αρχείο ή επιλέξτε μεγαλύτερη φωτογραφία.</string>
+    <string name="disguise_create_share">Δημιουργία φωτογραφίας και κοινοποίηση</string>
+    <string name="disguise_warning_recompress">Στείλτε τη ως ΑΡΧΕΙΟ ή έγγραφο. Οι εφαρμογές που συμπιέζουν ξανά τις φωτογραφίες (τα περισσότερα κοινωνικά δίκτυα, WhatsApp, Signal ή Telegram σε λειτουργία φωτογραφίας, στιγμιότυπα οθόνης) σβήνουν το κρυφό μήνυμα.</string>
+    <string name="disguise_warning_forensic">Έτσι το μήνυμα κρύβεται από όποιον κοιτάζει τη φωτογραφία. Μια εγκληματολογική ανάλυση μπορεί ωστόσο να εντοπίσει ότι η φωτογραφία περιέχει κρυφά δεδομένα, αλλά δεν μπορεί να τα διαβάσει ούτε να καταλάβει για ποιον προορίζονται.</string>
+    <string name="disguise_working">Δημιουργία φωτογραφίας…</string>
+    <string name="disguise_failed">Δεν ήταν δυνατή η δημιουργία της φωτογραφίας.</string>
+    <string name="reveal_title">Κρυφό μήνυμα</string>
+    <string name="reveal_from">Από %1$s</string>
+    <string name="reveal_hidden_on">Κρύφτηκε στις %1$s</string>
+    <string name="reveal_copy">Αντιγραφή κειμένου</string>
+    <string name="reveal_open_file">Άνοιγμα %1$s</string>
+    <string name="reveal_checking">Αναζήτηση κρυφού μηνύματος…</string>
+    <string name="reveal_not_found">Δεν υπάρχει κρυφό μήνυμα για εσάς σε αυτή την εικόνα. Αν στάλθηκε ως φωτογραφία, η εφαρμογή που τη μετέφερε μπορεί να την έχει συμπιέσει ξανά — ζητήστε να σας τη στείλουν ως αρχείο.</string>
+    <string name="reveal_damaged">Αυτή η εικόνα δημιουργήθηκε για εσάς από %1$s, αλλά αλλοιώθηκε στη διαδρομή και δεν μπορεί πλέον να διαβαστεί. Ζητήστε να σας σταλεί ξανά ως αρχείο.</string>
+    <string name="reveal_unreadable">Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου.</string>
+    <string name="disguise_photo_short">Συγκάλυψη</string>
+</resources>

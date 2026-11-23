@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Legutóbbiak</string>
+    <string name="attach_selected_count">%1$d kiválasztva</string>
+    <string name="attach_all_photos">Összes fotó</string>
+    <string name="attach_collapse">Összecsukás</string>
+    <string name="attach_camera">Kamera</string>
+    <string name="attach_gallery">Galéria</string>
+    <string name="attach_file">Fájl</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Hely</string>
+    <string name="attach_contact">Névjegy</string>
+    <string name="attach_poll">Szavazás</string>
+    <string name="attach_video_note">Videóüzenet</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Ütemezés</string>
+    <string name="attach_access_title">Legutóbbi fotóid itt</string>
+    <string name="attach_access_body">Az OSHI csak akkor olvassa a fotóidat, amíg ez a panel nyitva van. Semmi sem hagyja el a telefont, amíg el nem küldöd.</string>
+    <string name="attach_access_allow">Hozzáférés engedélyezése</string>
+    <string name="attach_access_settings">Beállítások megnyitása</string>
+    <string name="attach_access_browse">Választás a galériából</string>
+    <string name="attach_partial">Csak néhány fotót osztottál meg az OSHI-val.</string>
+    <string name="attach_partial_manage">Kezelés</string>
+    <string name="attach_empty_title">Még nincsenek fotók</string>
+    <string name="attach_caption_hint">Képaláírás…</string>
+    <string name="attach_send_count">%1$d küldése</string>
+    <string name="attach_photo_a11y">Fotó</string>
+    <string name="attach_video_a11y">Videó, %1$s</string>
+    <string name="attach_limit">Egyszerre legfeljebb %1$d</string>
+</resources>

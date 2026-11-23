@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Nylige</string>
+    <string name="attach_selected_count">%1$d valgt</string>
+    <string name="attach_all_photos">Alle bilder</string>
+    <string name="attach_collapse">Skjul</string>
+    <string name="attach_camera">Kamera</string>
+    <string name="attach_gallery">Galleri</string>
+    <string name="attach_file">Fil</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Posisjon</string>
+    <string name="attach_contact">Kontakt</string>
+    <string name="attach_poll">Avstemning</string>
+    <string name="attach_video_note">Videomelding</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Planlegg</string>
+    <string name="attach_access_title">Dine nyeste bilder her</string>
+    <string name="attach_access_body">OSHI leser bildene dine bare mens dette panelet er åpent. Ingenting forlater telefonen med mindre du sender det.</string>
+    <string name="attach_access_allow">Gi tilgang</string>
+    <string name="attach_access_settings">Åpne innstillinger</string>
+    <string name="attach_access_browse">Velg fra galleri</string>
+    <string name="attach_partial">Du har bare delt noen bilder med OSHI.</string>
+    <string name="attach_partial_manage">Administrer</string>
+    <string name="attach_empty_title">Ingen bilder ennå</string>
+    <string name="attach_caption_hint">Legg til bildetekst…</string>
+    <string name="attach_send_count">Send %1$d</string>
+    <string name="attach_photo_a11y">Bilde</string>
+    <string name="attach_video_a11y">Video, %1$s</string>
+    <string name="attach_limit">Opptil %1$d om gangen</string>
+</resources>

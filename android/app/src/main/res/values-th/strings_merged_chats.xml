@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">รวมข้อความและกลุ่ม</string>
+    <string name="chats_merged_setting_desc">รายการเดียวสำหรับทุกแชท พร้อมตัวกรองบุคคลและกลุ่ม</string>
+    <string name="chats_merged_filter_all">ทั้งหมด</string>
+    <string name="chats_merged_filter_unread">ยังไม่ได้อ่าน</string>
+    <string name="chats_merged_filter_groups">กลุ่ม</string>
+    <string name="chats_merged_filter_people">บุคคล</string>
+    <string name="chats_merged_new_title">ใหม่</string>
+    <string name="chats_merged_new_chat">แชทใหม่</string>
+    <string name="chats_merged_new_chat_desc">เพิ่มคนด้วยคิวอาร์โค้ด ลิงก์ หรือคีย์</string>
+    <string name="chats_merged_new_group">กลุ่มใหม่</string>
+    <string name="chats_merged_new_group_desc">เริ่มกลุ่มกับผู้ติดต่อของคุณ</string>
+    <string name="chats_merged_discover">ค้นพบช่องสาธารณะ</string>
+    <string name="chats_merged_discover_desc">เข้าร่วมกลุ่มสาธารณะใกล้คุณ</string>
+    <string name="chats_merged_scan_invite">สแกนคำเชิญ</string>
+    <string name="chats_merged_scan_invite_desc">เข้าร่วมกลุ่มหรือเพิ่มผู้ติดต่อจากคิวอาร์โค้ด</string>
+    <string name="chats_merged_scan_not_invite">คิวอาร์โค้ดนี้ไม่ใช่คำเชิญของ OSHI</string>
+    <string name="chats_merged_calls_header">โทรหาใครสักคน</string>
+    <string name="chats_merged_teaser_title">เข้าร่วมช่องสาธารณะ</string>
+    <string name="chats_merged_teaser_body">กลุ่มสาธารณะใกล้คุณใช้งานได้แม้ไม่มีอินเทอร์เน็ต ดูว่ามีใครอยู่รอบตัวคุณบ้าง</string>
+    <string name="chats_merged_teaser_cta">ค้นพบ</string>
+    <string name="chats_merged_nearby_title">กลุ่มใกล้คุณ</string>
+    <string name="chats_merged_empty_unread">คุณอ่านครบแล้ว</string>
+    <string name="chats_merged_empty_people">ยังไม่มีการสนทนา</string>
+    <string name="chats_merged_group_a11y">กลุ่ม</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Keyboard</string>
+    <string name="keyboard_incognito_title">Keyboard penyamaran</string>
+    <string name="keyboard_incognito_subtitle">Minta keyboard agar tidak mempelajari yang Anda ketik</string>
+    <string name="keyboard_status_title">Keyboard saat ini</string>
+    <string name="keyboard_status_trusted">%1$s · Keyboard bawaan</string>
+    <string name="keyboard_status_third_party">%1$s · Keyboard pihak ketiga</string>
+    <string name="keyboard_status_unknown">Keyboard tidak dikenal</string>
+    <string name="keyboard_privacy_explainer">OSHI mengenkripsi di ponsel ini, tetapi yang Anda ketik melewati keyboard terlebih dahulu. Mode penyamaran meminta keyboard agar tidak mempelajari atau menyimpan kata-kata Anda — Android tidak dapat memaksa keyboard untuk patuh, hanya bisa meminta. Keyboard pihak ketiga tetap dapat membaca setiap ketukan tombol, jadi sebaiknya gunakan keyboard bawaan ponsel Anda. Jika ponselnya sendiri telah disusupi (spyware), tidak ada aplikasi yang dapat melindungi apa yang Anda ketik.</string>
+    <string name="keyboard_banner_title">Keyboard Anda dapat membaca yang Anda ketik sebelum OSHI mengenkripsinya</string>
+    <string name="keyboard_banner_body">%1$s adalah keyboard pihak ketiga. Untuk percakapan pribadi, beralihlah ke keyboard bawaan ponsel Anda.</string>
+    <string name="keyboard_banner_switch">Ganti keyboard</string>
+    <string name="keyboard_banner_dismiss">Tutup</string>
+</resources>

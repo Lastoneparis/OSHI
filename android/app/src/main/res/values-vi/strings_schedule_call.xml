@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">Cuộc gọi với %s</string>
+    <string name="schedule_call_when">Khi nào</string>
+    <string name="schedule_call_duration">Thời lượng</string>
+    <string name="schedule_call_title_optional">Tiêu đề (Tùy chọn)</string>
+    <string name="schedule_call_title_placeholder">ví dụ: Họp định kỳ hàng tuần</string>
+    <string name="schedule_call_other_date">Ngày khác</string>
+    <string name="schedule_call_schedule">Lên lịch</string>
+    <string name="schedule_call_timezone">Múi giờ của bạn: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">Lên lịch cuộc gọi</string>
+</resources>

@@ -1,0 +1,21 @@
+{
+  "_comment" : "__CALL_LOG_AT_REST_2026_09_23__ OSHILOG1 cross-platform vectors. 'fixedNonce' = built by an independent AES-GCM (Python cryptography) with the nonces given; Kotlin CallLogRecords.sealWithNonce must reproduce it byte for byte, and iOS CallLogRecords.decode opens it. 'swift' = sealed by iOS CallLogRecords.seal (CryptoKit, random nonces); Kotlin must open it.",
+  "fixedNonce" : {
+    "fileBase64" : "T1NISUxPRzEAAACzAAECAwQFBgcICQoLej/rJvjFjUjFCLfo0IUUTe+54BQS+8tcShKLpW4dYcB1dcrcnfEgrlmURsC6t3wJ3GNQvWDmk/QPpxpDOMuFnJVKrxWmogYTaTqQTozuYoRn7qwAAwR9GI+Y6OIUn96k68Vk25l8wkGsLAyEZUUYUohXNprR/xWqd89m47LWXlTmckSP9ZCUA0m1AIFB+jqnVYCMRwggmX/oZPQlhdeeVP0NvNBpwsUAAABhDA0ODxAREhMUFRYXw8xZ6klbzGoaGHiBoLkc12U53dzYTQuawf/aEHs0RNp/oytxpOVlKV69SRfUjFmVwhj+kv29WvRuHfzOmqQE51hrDIf7LIBw/6Kb2hK0hIfQOHGo2A==",
+    "records" : [
+      {
+        "nonceHex" : "000102030405060708090a0b",
+        "plaintext" : "===== OSHI call log — run started 2026-09-20T12:00:00.000Z (previous run: call_debug.prev.log) =====\n[2026-09-20T12:00:01.000Z] DIAG_PATH | vector=1\n"
+      },
+      {
+        "nonceHex" : "0c0d0e0f1011121314151617",
+        "plaintext" : "[2026-09-20T12:00:02.000Z] 🔄 STATE CHANGE: CONNECTING → IN_CALL\n"
+      }
+    ]
+  },
+  "keyHex" : "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "swift" : {
+    "fileBase64" : "T1NISUxPRzEAAABx4KG86kHST1HJvxODsHC5OXDGrmUNeNh1QRBZRNjW1VXnimzTiETaomzivqnbOPPL/3pBaGe8CKhuGrfKCMWTD8LPQHTQrJt5wbCoq0CA1lrpcarzPZ9rwE/XTKQFZqEf+njASB5gbcO7b1hAmjzHSEwAAABQkGCoKYbCi6799RDwCAoM86XH00AdUCb91xnCWBN1Os0WDNPXMfi0HhN618M/BwvC++cAs7yY+zJAlWbHwDyvt/+s14t8Vsta1M40LgzjT6Q=",
+    "plaintext" : "[2026-09-20T13:00:00.000Z] DIAG_TX_PRIMARY | none -> UDP_RELAY | sealed-by=CryptoKit\n[2026-09-20T13:00:01.000Z] 📞 CALL ENDED - hungUp\n"
+  }
+}

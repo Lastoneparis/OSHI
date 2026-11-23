@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Πρόσφατα</string>
+    <string name="attach_selected_count">Επιλέχθηκαν %1$d</string>
+    <string name="attach_all_photos">Όλες οι φωτογραφίες</string>
+    <string name="attach_collapse">Σύμπτυξη</string>
+    <string name="attach_camera">Κάμερα</string>
+    <string name="attach_gallery">Συλλογή</string>
+    <string name="attach_file">Αρχείο</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Τοποθεσία</string>
+    <string name="attach_contact">Επαφή</string>
+    <string name="attach_poll">Δημοσκόπηση</string>
+    <string name="attach_video_note">Βιντεομήνυμα</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Προγραμματισμός</string>
+    <string name="attach_access_title">Οι πρόσφατες φωτογραφίες σας εδώ</string>
+    <string name="attach_access_body">Το OSHI διαβάζει τις φωτογραφίες σας μόνο όσο είναι ανοιχτό αυτό το πλαίσιο. Τίποτα δεν φεύγει από το τηλέφωνο αν δεν το στείλετε.</string>
+    <string name="attach_access_allow">Να επιτρέπεται</string>
+    <string name="attach_access_settings">Άνοιγμα ρυθμίσεων</string>
+    <string name="attach_access_browse">Επιλογή από συλλογή</string>
+    <string name="attach_partial">Έχετε μοιραστεί μόνο ορισμένες φωτογραφίες με το OSHI.</string>
+    <string name="attach_partial_manage">Διαχείριση</string>
+    <string name="attach_empty_title">Καμία φωτογραφία ακόμη</string>
+    <string name="attach_caption_hint">Προσθήκη λεζάντας…</string>
+    <string name="attach_send_count">Αποστολή %1$d</string>
+    <string name="attach_photo_a11y">Φωτογραφία</string>
+    <string name="attach_video_a11y">Βίντεο, %1$s</string>
+    <string name="attach_limit">Έως %1$d κάθε φορά</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Tangentbord</string>
+    <string name="keyboard_incognito_title">Inkognitotangentbord</string>
+    <string name="keyboard_incognito_subtitle">Be tangentbordet att inte lära sig det du skriver</string>
+    <string name="keyboard_status_title">Nuvarande tangentbord</string>
+    <string name="keyboard_status_trusted">%1$s · Inbyggt tangentbord</string>
+    <string name="keyboard_status_third_party">%1$s · Tangentbord från tredje part</string>
+    <string name="keyboard_status_unknown">Okänt tangentbord</string>
+    <string name="keyboard_privacy_explainer">OSHI krypterar på den här telefonen, men det du skriver går först genom tangentbordet. Inkognito ber tangentbordet att inte lära sig eller spara dina ord — Android kan inte tvinga ett tangentbord att lyda, bara be om det. Ett tangentbord från tredje part kan fortfarande läsa varje tangenttryckning, så använd hellre telefonens inbyggda tangentbord. Om själva telefonen är komprometterad (spionprogram) kan ingen app skydda det du skriver.</string>
+    <string name="keyboard_banner_title">Ditt tangentbord kan läsa det du skriver innan OSHI krypterar det</string>
+    <string name="keyboard_banner_body">%1$s är ett tangentbord från tredje part. Byt till telefonens inbyggda tangentbord för privata samtal.</string>
+    <string name="keyboard_banner_switch">Byt tangentbord</string>
+    <string name="keyboard_banner_dismiss">Stäng</string>
+</resources>

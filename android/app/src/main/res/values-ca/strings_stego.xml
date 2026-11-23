@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Esperant la connexió camuflada</string>
+    <string name="privacy_disguise_title">Camuflatge</string>
+    <string name="privacy_disguise_subtitle">Camuflar el trànsit · amagar un missatge en una foto</string>
+    <string name="cover_switch_title">Camuflar el trànsit d’OSHI</string>
+    <string name="cover_switch_caption">Els teus missatges i fitxers adjunts 1:1 viatgen dins de sol·licituds amb farciment que semblen estadístiques web corrents, de manera que la seva mida i el seu ritme són més difícils de distingir. Si la connexió camuflada falla, els missatges esperen: mai no s’envien sense camuflar.</string>
+    <string name="cover_not_hidden">Continua sent visible: que et connectes a oshi-messenger.com (nom del servidor i empremta TLS), així com els missatges de grup, les trucades, els avisos push i les comprovacions de correu nou, que no es camuflen. Això no és anonimat i no evita un bloqueig del servidor d’OSHI; per a això, fes servir «Camuflar com a foto».</string>
+    <string name="disguise_photo_title">Camuflar com a foto</string>
+    <string name="disguise_photo_explainer">Amaga un missatge xifrat d’extrem a extrem per a un contacte dins d’una foto d’aspecte corrent i envia la foto per qualsevol app, correu electrònic o emmagatzematge al núvol; útil quan OSHI està bloquejat. En un xat 1:1: + → Camuflar com a foto.</string>
+    <string name="disguise_reveal_button">Revelar un missatge amagat</string>
+    <string name="disguise_reveal_hint">També pots compartir amb OSHI una foto rebuda des de qualsevol app.</string>
+    <string name="disguise_sheet_for">Només %1$s el pot llegir.</string>
+    <string name="disguise_message_hint">Missatge amagat</string>
+    <string name="disguise_add_file">Afegir un fitxer petit (màx. 256 KB)</string>
+    <string name="disguise_remove_file">Treure %1$s</string>
+    <string name="disguise_file_too_large">Fitxer massa gran (màx. 256 KB)</string>
+    <string name="disguise_cover_generated">Paisatge generat</string>
+    <string name="disguise_cover_photo">La meva foto</string>
+    <string name="disguise_capacity">Fa servir %1$s de %2$s disponibles en aquesta imatge</string>
+    <string name="disguise_too_big">Massa llarg per a aquesta imatge. Escurça el missatge, treu el fitxer o tria una foto més gran.</string>
+    <string name="disguise_create_share">Crear la foto i compartir</string>
+    <string name="disguise_warning_recompress">Envia-la com a FITXER o document. Les apps que recomprimeixen les fotos (la majoria de xarxes socials, WhatsApp, Signal o Telegram en mode foto, les captures de pantalla) esborren el missatge amagat.</string>
+    <string name="disguise_warning_forensic">Això amaga el missatge a qualsevol que miri la foto. Una anàlisi forense encara pot detectar que la foto conté dades amagades, però no les pot llegir ni saber per a qui són.</string>
+    <string name="disguise_working">Creant la foto…</string>
+    <string name="disguise_failed">No s’ha pogut crear la foto.</string>
+    <string name="reveal_title">Missatge amagat</string>
+    <string name="reveal_from">De %1$s</string>
+    <string name="reveal_hidden_on">Amagat el %1$s</string>
+    <string name="reveal_copy">Copiar el text</string>
+    <string name="reveal_open_file">Obrir %1$s</string>
+    <string name="reveal_checking">Cercant un missatge amagat…</string>
+    <string name="reveal_not_found">No hi ha cap missatge amagat per a tu en aquesta imatge. Si es va enviar com a foto, l’app que la va transportar pot haver-la recomprimit: demana que te l’enviïn com a fitxer.</string>
+    <string name="reveal_damaged">%1$s va crear aquesta imatge per a tu, però es va alterar pel camí i ja no es pot llegir. Demana que te la tornin a enviar com a fitxer.</string>
+    <string name="reveal_unreadable">No s’ha pogut llegir aquest fitxer.</string>
+    <string name="disguise_photo_short">Camuflar</string>
+</resources>

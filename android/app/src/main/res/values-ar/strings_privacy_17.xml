@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">لقطات الشاشة محظورة في OSHI لحماية محادثاتك</string>
+    <string name="rn_hint_setting_title">إعلام جهات اتصالي بأنني على شبكة مقيّدة</string>
+    <string name="rn_hint_setting_caption">عندما تكون حركة البيانات مموّهة، تحمل رسائلك إشارة صغيرة مشفّرة من طرف إلى طرف ليعرف جهات اتصالك أنك قد تكون على شبكة خاضعة للرقابة أو المراقبة. هم وحدهم يرونها.</string>
+    <string name="rn_hint_chip">أُرسلت عبر شبكة مقيّدة</string>
+    <string name="rn_hint_explain_title">شبكة مقيّدة</string>
+    <string name="rn_hint_explain_body">يستخدم هذا الشخص تمويه OSHI وهو على الأرجح على شبكة خاضعة للرقابة أو المراقبة. ردّ بشكل طبيعي: يواصل OSHI تمويه جهته. اجعل الرسائل قصيرة؛ قد تكون الصور والفيديوهات بطيئة.</string>
+</resources>

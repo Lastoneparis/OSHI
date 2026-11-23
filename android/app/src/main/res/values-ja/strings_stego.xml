@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">偽装接続を待っています</string>
+    <string name="privacy_disguise_title">プライバシー偽装</string>
+    <string name="privacy_disguise_subtitle">通信を偽装 · 写真にメッセージを隠す</string>
+    <string name="cover_switch_title">OSHI の通信を偽装</string>
+    <string name="cover_switch_caption">1対1のメッセージと添付ファイルは、一般的なウェブ解析のように見える、パディングされたリクエストの中で送られるため、サイズやタイミングを見分けにくくなります。偽装接続に失敗した場合、メッセージは待機します。偽装なしで送信されることはありません。</string>
+    <string name="cover_not_hidden">引き続き見えるもの：oshi-messenger.com に接続していること（サーバー名と TLS フィンガープリント）、および偽装されないグループメッセージ、通話、プッシュによる起動、新着メールの確認。これは匿名化ではなく、OSHI サーバーへのブロックを回避するものでもありません。その場合は「写真に偽装」を使ってください。</string>
+    <string name="disguise_photo_title">写真に偽装</string>
+    <string name="disguise_photo_explainer">1人の連絡先に宛てたエンドツーエンド暗号化メッセージを普通に見える写真の中に隠し、その写真を任意のアプリ、メール、クラウドドライブで送信します。OSHI 自体がブロックされているときに便利です。1対1のチャットで：+ → 写真に偽装。</string>
+    <string name="disguise_reveal_button">隠されたメッセージを表示</string>
+    <string name="disguise_reveal_hint">受け取った写真を、任意のアプリから OSHI に共有することもできます。</string>
+    <string name="disguise_sheet_for">%1$s だけが読めます。</string>
+    <string name="disguise_message_hint">隠すメッセージ</string>
+    <string name="disguise_add_file">小さなファイルを追加（最大 256 KB）</string>
+    <string name="disguise_remove_file">%1$s を削除</string>
+    <string name="disguise_file_too_large">ファイルが大きすぎます（最大 256 KB）</string>
+    <string name="disguise_cover_generated">生成された風景</string>
+    <string name="disguise_cover_photo">自分の写真</string>
+    <string name="disguise_capacity">この画像で使える %2$s のうち %1$s を使用</string>
+    <string name="disguise_too_big">この画像には長すぎます。メッセージを短くするか、ファイルを削除するか、もっと大きな写真を選んでください。</string>
+    <string name="disguise_create_share">写真を作成して共有</string>
+    <string name="disguise_warning_recompress">「ファイル」またはドキュメントとして送信してください。写真を再圧縮するアプリ（ほとんどの SNS、写真モードの WhatsApp・Signal・Telegram、スクリーンショット）では、隠されたメッセージが消えてしまいます。</string>
+    <string name="disguise_warning_forensic">写真を見た人にはメッセージは分かりません。ただし、フォレンジック解析によって写真に隠しデータが含まれていることは検出される可能性があります。その内容を読むことや、誰宛てかを知ることはできません。</string>
+    <string name="disguise_working">写真を作成しています…</string>
+    <string name="disguise_failed">写真を作成できませんでした。</string>
+    <string name="reveal_title">隠されたメッセージ</string>
+    <string name="reveal_from">%1$s から</string>
+    <string name="reveal_hidden_on">%1$s に隠されました</string>
+    <string name="reveal_copy">テキストをコピー</string>
+    <string name="reveal_open_file">%1$s を開く</string>
+    <string name="reveal_checking">隠されたメッセージを探しています…</string>
+    <string name="reveal_not_found">この画像にはあなた宛ての隠されたメッセージはありません。写真として送られた場合、それを運んだアプリが再圧縮した可能性があります。ファイルとして送ってもらってください。</string>
+    <string name="reveal_damaged">この画像は %1$s があなたのために作成したものですが、途中で改変されたため、もう読み取れません。ファイルとして再送してもらってください。</string>
+    <string name="reveal_unreadable">このファイルを読み取れませんでした。</string>
+    <string name="disguise_photo_short">偽装</string>
+</resources>

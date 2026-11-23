@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">رقِّ هذا الراديو إلى OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">مجاني ومفتوح المصدر. يحتفظ بمنطقتك وقنواتك ومفاتيحك وجهات اتصالك، ويبقى على شبكة Meshtastic، ويضيف رسائل طويلة وإشعارات التسليم وحفظ الرسائل 72 ساعة عندما يكون أحدهم غير متصل.</string>
+    <string name="oshimesh_upgrade_share">إرسال رابط أداة التثبيت إلى حاسوب</string>
+    <string name="oshimesh_upgrade_why">ما يضيفه OSHI Mesh</string>
+    <string name="oshimesh_upgrade_footer">تعمل أداة التثبيت في Chrome أو Edge على حاسوب عبر USB. اختر «احتفظ بإعداداتي» لتحديث هذا الراديو في دقيقة تقريبًا.</string>
+</resources>

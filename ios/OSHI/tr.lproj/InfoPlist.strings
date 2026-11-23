@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (tr) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI, yakındaki cihazları bulup bağlanmak için Bluetooth kullanır; böylece internet olmadan güvenli, cihazdan cihaza mesajlaşabilirsiniz.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI, mesh ağınızdaki yakın cihazlardan şifreli mesaj alabilmek için Bluetooth gerektirir.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI, planlanan aramaları takviminize ekleyebilir; böylece hiçbir aramayı kaçırmazsınız.";
+"NSCalendarsUsageDescription" = "OSHI, planlanan aramaları takviminize ekleyebilir; böylece hiçbir aramayı kaçırmazsınız.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI, planlanan aramaları takviminize ekleyebilir; böylece hiçbir aramayı kaçırmazsınız.";
+"NSCameraUsageDescription" = "OSHI, QR kodlarını taramak ve şifreli mesajlar için fotoğraf çekmek üzere kamera erişimine ihtiyaç duyar.";
+"NSFaceIDUsageDescription" = "Şifreli mesajlarınızı güvenle açmak ve gizliliğinizi korumak için Face ID kullanın.";
+"NSLocalNetworkUsageDescription" = "OSHI, yakındaki cihazlarla doğrudan Wi-Fi bağlantısı kurmak ve mesajları daha hızlı iletmek için yerel ağı kullanır.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI, konumunuzu kişilerinizle canlı olarak paylaşmak için kullanır. Konumunuz şifrelenir ve yalnızca siz istediğinizde paylaşılır.";
+"NSLocationAlwaysUsageDescription" = "OSHI, uygulama arka plandayken bile konumunuzu kişilerinizle canlı paylaşmak için kullanır. Konumunuz şifrelenir ve yalnızca siz istediğinizde paylaşılır.";
+"NSLocationWhenInUseUsageDescription" = "OSHI, konumunuzu kişilerinizle paylaşmak için kullanır. Konumunuz şifrelenir ve yalnızca siz istediğinizde paylaşılır.";
+"NSMicrophoneUsageDescription" = "OSHI, şifreli mesajlar için sesli video kaydetmek üzere mikrofon erişimine ihtiyaç duyar.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI, aldığınız görselleri fotoğraf kitaplığınıza kaydedebilir.";
+"NSPhotoLibraryUsageDescription" = "OSHI, şifreli mesaj olarak göndereceğiniz görselleri seçebilmeniz için fotoğraf kitaplığınıza erişim ister.";
+"NSSpeechRecognitionUsageDescription" = "OSHI, yapay zekâ asistanına mesaj dikte edebilmeniz için cihaz üzerinde konuşma tanıma kullanır. Sesiniz tamamen iPhone'unuzda metne çevrilir ve cihazınızdan hiç çıkmaz.";
+"NSUserNotificationsUsageDescription" = "OSHI, yeni şifreli mesaj aldığınızda bildirim gönderir; böylece önemli hiçbir şeyi kaçırmazsınız.";

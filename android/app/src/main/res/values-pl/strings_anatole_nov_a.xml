@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Nowy kontakt</string>
+    <string name="conversation_open_contact">Otwórz kontakt</string>
+    <string name="conversation_muted">Powiadomienia wyłączone</string>
+    <string name="fab_new_contact">Nowy kontakt</string>
+    <string name="fab_pick_contact_voice">Połączenie głosowe — wybierz kontakt</string>
+    <string name="fab_pick_contact_video">Połączenie wideo — wybierz kontakt</string>
+    <string name="fab_pick_contact_empty">Brak kontaktów. Najpierw kogoś dodaj.</string>
+</resources>

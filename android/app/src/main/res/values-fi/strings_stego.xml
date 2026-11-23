@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Odotetaan naamioitua yhteyttä</string>
+    <string name="privacy_disguise_title">Yksityisyysnaamio</string>
+    <string name="privacy_disguise_subtitle">Naamioi liikenne · piilota viesti kuvaan</string>
+    <string name="cover_switch_title">Naamioi OSHI-liikenne</string>
+    <string name="cover_switch_caption">Kahdenkeskiset viestisi ja liitteesi kulkevat täytettyjen pyyntöjen sisällä, jotka näyttävät tavalliselta verkkoanalytiikalta, joten niiden kokoa ja ajoitusta on vaikeampi erottaa. Jos naamioitu yhteys epäonnistuu, viestit odottavat – niitä ei koskaan lähetetä naamioimattomina.</string>
+    <string name="cover_not_hidden">Edelleen näkyvissä: se, että muodostat yhteyden osoitteeseen oshi-messenger.com (palvelimen nimi ja TLS-sormenjälki), sekä ryhmäviestit, puhelut, push-herätykset ja uusien viestien tarkistukset, joita ei naamioida. Tämä ei ole anonymiteettiä eikä kierrä OSHI-palvelimen estoa – käytä siihen toimintoa Naamioi kuvaksi.</string>
+    <string name="disguise_photo_title">Naamioi kuvaksi</string>
+    <string name="disguise_photo_explainer">Piilota päästä päähän salattu viesti yhdelle yhteyshenkilölle tavallisen näköiseen kuvaan ja lähetä kuva millä tahansa sovelluksella, sähköpostilla tai pilvitallennustilan kautta – hyödyllistä, kun itse OSHI on estetty. Kahdenkeskisessä keskustelussa: + → Naamioi kuvaksi.</string>
+    <string name="disguise_reveal_button">Paljasta piilotettu viesti</string>
+    <string name="disguise_reveal_hint">Voit myös jakaa vastaanotetun kuvan OSHIin mistä tahansa sovelluksesta.</string>
+    <string name="disguise_sheet_for">Vain %1$s voi lukea sen.</string>
+    <string name="disguise_message_hint">Piilotettu viesti</string>
+    <string name="disguise_add_file">Lisää pieni tiedosto (enintään 256 kt)</string>
+    <string name="disguise_remove_file">Poista %1$s</string>
+    <string name="disguise_file_too_large">Tiedosto on liian suuri (enintään 256 kt)</string>
+    <string name="disguise_cover_generated">Luotu maisema</string>
+    <string name="disguise_cover_photo">Oma kuva</string>
+    <string name="disguise_capacity">Käyttää %1$s / %2$s tämän kuvan käytettävissä olevasta tilasta</string>
+    <string name="disguise_too_big">Liian pitkä tähän kuvaan. Lyhennä viestiä, poista tiedosto tai valitse suurempi kuva.</string>
+    <string name="disguise_create_share">Luo kuva ja jaa</string>
+    <string name="disguise_warning_recompress">Lähetä se TIEDOSTONA tai dokumenttina. Sovellukset, jotka pakkaavat kuvia uudelleen (useimmat sosiaaliset mediat, WhatsApp, Signal tai Telegram kuvatilassa, kuvakaappaukset), poistavat piilotetun viestin.</string>
+    <string name="disguise_warning_forensic">Tämä piilottaa viestin kaikilta, jotka katsovat kuvaa. Rikostekninen analyysi voi silti havaita, että kuvassa on piilotettua dataa, mutta ei voi lukea sitä eikä selvittää, kenelle se on tarkoitettu.</string>
+    <string name="disguise_working">Luodaan kuvaa…</string>
+    <string name="disguise_failed">Kuvan luominen epäonnistui.</string>
+    <string name="reveal_title">Piilotettu viesti</string>
+    <string name="reveal_from">Lähettäjä: %1$s</string>
+    <string name="reveal_hidden_on">Piilotettu %1$s</string>
+    <string name="reveal_copy">Kopioi teksti</string>
+    <string name="reveal_open_file">Avaa %1$s</string>
+    <string name="reveal_checking">Etsitään piilotettua viestiä…</string>
+    <string name="reveal_not_found">Tässä kuvassa ei ole sinulle piilotettua viestiä. Jos se lähetettiin kuvana, sen välittänyt sovellus on ehkä pakannut sen uudelleen – pyydä sitä tiedostona.</string>
+    <string name="reveal_damaged">%1$s teki tämän kuvan sinulle, mutta sitä muutettiin matkalla eikä sitä voi enää lukea. Pyydä lähettämään se uudelleen tiedostona.</string>
+    <string name="reveal_unreadable">Tiedostoa ei voitu lukea.</string>
+    <string name="disguise_photo_short">Naamioi</string>
+</resources>

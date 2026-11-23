@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Zoeken…</string>
+    <string name="peers_status_peers_found">Apparaten gevonden</string>
+    <string name="peers_status_permission_required">Toestemming nodig</string>
+    <string name="peers_subtitle_connected">Verbonden: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Verbonden: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Verbonden: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth staat uit — zet het aan om apparaten in de buurt te vinden</string>
+    <string name="peers_subtitle_permission_both">OSHI kan Bluetooth niet gebruiken — je ziet geen apparaten in de buurt en niemand ziet jou</string>
+    <string name="peers_subtitle_permission_advertise">Apparaten in de buurt kunnen je niet zien — de toestemming Apparaten in de buurt ontbreekt</string>
+    <string name="peers_subtitle_permission_scan">OSHI kan niet zoeken naar apparaten in de buurt — de toestemming Apparaten in de buurt ontbreekt</string>
+    <string name="peers_subtitle_ble_unsupported">Deze telefoon kan niet zenden via Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth is bezet — een andere app gebruikt de radio</string>
+    <string name="peers_subtitle_ble_down">Bluetooth-detectie ligt stil — nieuwe poging</string>
+    <string name="peers_subtitle_searching_lan">Zoeken naar mensen op hetzelfde wifi-netwerk…</string>
+    <string name="peers_subtitle_disabled">Meshnetwerk uit</string>
+    <string name="peers_subtitle_looking">Zoeken naar apparaten in de buurt…</string>
+    <string name="peers_permission_card_title">Ontdekking in de buurt inschakelen</string>
+    <string name="peers_permission_card_body">OSHI heeft de toestemming Apparaten in de buurt nodig om telefoons om je heen te vinden. Zonder die toestemming gaat elk bericht via internet.</string>
+    <string name="peers_permission_card_action">Toestaan</string>
+    <string name="peers_permission_card_settings">Instellingen openen</string>
+    <string name="peers_permission_card_denied_body">De toestemming is geweigerd, dus OSHI vindt niemand in je buurt. Zet Apparaten in de buurt aan voor OSHI in de Android-instellingen.</string>
+    <string name="peers_same_wifi_note">Beide telefoons moeten op hetzelfde wifi-netwerk zitten. Op mobiele data gaan berichten via internet.</string>
+    <string name="peers_control_visible">Zichtbaar</string>
+    <string name="peers_control_scan">Scannen</string>
+    <string name="peers_control_auto">Auto</string>
+    <string name="peers_section_devices">Apparaten</string>
+    <string name="peers_action_connect">Verbinden</string>
+    <string name="peers_action_reconnect">Opnieuw verbinden</string>
+    <string name="peers_info_reach_title">Bereik</string>
+    <string name="peers_info_reach_desc">Zo ver als je wifi-netwerk reikt. Berichten kunnen via andere OSHI-apparaten op hetzelfde netwerk hoppen, tot 50 hops.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE en Bonjour stellen twee apparaten aan elkaar voor en wisselen een adres uit. De berichten zelf gaan over je lokale netwerk.</string>
+    <string name="peers_info_tip1">Zet beide telefoons op hetzelfde wifi-netwerk</string>
+    <string name="peers_info_tip2">Laat Bluetooth aanstaan zodat apparaten elkaar kunnen vinden</string>
+    <string name="peers_info_tip3">Werkt zonder internettoegang — maar niet via mobiele data</string>
+</resources>

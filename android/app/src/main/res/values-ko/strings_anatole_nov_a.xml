@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">새 연락처</string>
+    <string name="conversation_open_contact">연락처 열기</string>
+    <string name="conversation_muted">알림 꺼짐</string>
+    <string name="fab_new_contact">새 연락처</string>
+    <string name="fab_pick_contact_voice">음성 통화 — 연락처 선택</string>
+    <string name="fab_pick_contact_video">영상 통화 — 연락처 선택</string>
+    <string name="fab_pick_contact_empty">아직 연락처가 없습니다. 먼저 연락처를 추가하세요.</string>
+</resources>

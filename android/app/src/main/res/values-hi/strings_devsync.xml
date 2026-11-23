@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">लिंक किए गए डिवाइस</string>
+    <string name="devsync_settings_subtitle">अपना इतिहास सीधे अपने डिवाइसों के बीच सिंक करें</string>
+    <string name="devsync_status_on">डायरेक्ट सिंक चालू है। आपका इतिहास एक डिवाइस से दूसरे डिवाइस पर जाता है; सर्वर पर कुछ भी सेव नहीं होता।</string>
+    <string name="devsync_status_off">इस डिवाइस पर डायरेक्ट सिंक बंद है।</string>
+    <string name="devsync_this_device">यह डिवाइस</string>
+    <string name="devsync_device_id">डिवाइस ID %1$s</string>
+    <string name="devsync_debug_override">डायरेक्ट सिंक (डीबग ओवरराइड)</string>
+    <string name="devsync_debug_override_desc">सर्वर कुछ भी कहे, इस इंस्टॉल के लिए डायरेक्ट डिवाइस सिंक ज़बरदस्ती चालू करें</string>
+    <string name="devsync_pending_title">नया डिवाइस मंज़ूर करें</string>
+    <string name="devsync_pending_body">%1$s (%2$s) आपका इतिहास पाना चाहता है। जाँचें कि दूसरी स्क्रीन पर वही कोड दिख रहा है।</string>
+    <string name="devsync_waiting_body">आपके दूसरे डिवाइस पर मंज़ूरी का इंतज़ार है। जाँचें कि उस पर वही कोड दिख रहा है।</string>
+    <string name="devsync_peer_approved">दूसरा डिवाइस पहले ही मंज़ूरी दे चुका है। पूरा करने के लिए यहाँ मंज़ूर करें।</string>
+    <string name="devsync_allow">अनुमति दें</string>
+    <string name="devsync_deny">अस्वीकार करें</string>
+    <string name="devsync_linked_title">लिंक किए गए डिवाइस</string>
+    <string name="devsync_none_linked">अभी कोई डिवाइस लिंक नहीं है। अपने दूसरे डिवाइस पर OSHI खोलें, उसी Wi-Fi पर या उसी समय ऑनलाइन।</string>
+    <string name="devsync_last_sync">पिछला सिंक: %1$s</string>
+    <string name="devsync_never">कभी नहीं</string>
+    <string name="devsync_syncing_now">अभी सिंक हो रहा है (%1$s)</string>
+    <string name="devsync_remove">हटाएँ</string>
+    <string name="devsync_remove_confirm_title">%1$s हटाएँ?</string>
+    <string name="devsync_remove_confirm_body">इसे अब आपका इतिहास नहीं मिलेगा। जो इसके पास पहले से है, वह रहेगा।</string>
+    <string name="devsync_sync_now">अभी सिंक करें</string>
+    <string name="devsync_cancel">रद्द करें</string>
+    <string name="devsync_alert_unapproved">आपके खाते वाले एक डिवाइस ने सिंक करने की कोशिश की: %1$s</string>
+    <string name="devsync_alert_linked">एक नया डिवाइस, %1$s, अब आपका इतिहास पा सकता है</string>
+</resources>

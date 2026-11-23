@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">קובץ מוצפן, קריא רק באמצעות מפתח החשבון שלך</string>
+    <string name="settings_import_messages">ייבוא הודעות</string>
+    <string name="settings_import_messages_desc">שחזור קובץ ‎.oshiexport מוצפן</string>
+    <string name="settings_importing">מייבא…</string>
+    <string name="export_media_skipped">מספר הקבצים המצורפים שהושמטו מהייצוא בגלל גודלם: %1$d.</string>
+    <string name="import_messages_success">יובאו %1$d הודעות (%2$d כבר היו קיימות).</string>
+    <string name="import_error_wrong_account">ייצוא זה שייך לחשבון OSHI אחר. יש לשחזר קודם את המפתח של אותו חשבון.</string>
+    <string name="import_error_damaged">ייצוא זה פגום או שונה.</string>
+    <string name="import_error_other_platform">ייצוא זה נוצר על ידי OSHI עבור %1$s ועדיין לא ניתן לייבא אותו כאן.</string>
+    <string name="import_error_not_export">קובץ זה אינו ייצוא של OSHI.</string>
+    <string name="import_error_version">ייצוא זה נוצר בגרסה חדשה יותר של OSHI. יש לעדכן את האפליקציה ולנסות שוב.</string>
+    <string name="import_error_no_key">אין מפתח חשבון במכשיר זה. יש לשחזר קודם את החשבון.</string>
+    <string name="import_error_unreadable">לא ניתן היה לקרוא את הקובץ.</string>
+</resources>

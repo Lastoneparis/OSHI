@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore 無線機</string>
+    <string name="meshcore_none">MeshCore 無線機なし</string>
+    <string name="meshcore_scan">MeshCore 無線機を探す</string>
+    <string name="meshcore_ready">接続済み — OSHI メッセージは #oshi-bridge を使用</string>
+    <string name="meshcore_forget">この MeshCore 無線機を削除</string>
+    <string name="meshcore_bridge">ブリッジ Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">MeshCore 無線機は OSHI のメッセージを MeshCore のリピーター経由で運びます。MeshCore companion ファームウェアが必要で、初回は PIN を求められます。OSHI は空きスロットにチャンネル #oshi-bridge を一つ追加するだけで、ほかのチャンネルは変更しません。</string>
+    <string name="meshcore_bridge_footer">Meshtastic と MeshCore の無線機が両方つながっている間、OSHI が起動していればこの電話が二つのネットワーク間で OSHI メッセージを中継します。</string>
+    <string name="meshcore_no_free_channel">この無線機のチャンネル枠 8 つがすべて使用中です。OSHI が #oshi-bridge を追加できるよう、MeshCore アプリで一つ空けてください。</string>
+</resources>

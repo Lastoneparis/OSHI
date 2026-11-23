@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">Κλήση με %s</string>
+    <string name="schedule_call_when">Πότε</string>
+    <string name="schedule_call_duration">Διάρκεια</string>
+    <string name="schedule_call_title_optional">Τίτλος (Προαιρετικό)</string>
+    <string name="schedule_call_title_placeholder">π.χ., Εβδομαδιαία Συνάντηση</string>
+    <string name="schedule_call_other_date">Άλλη ημερομηνία</string>
+    <string name="schedule_call_schedule">Προγραμματισμός</string>
+    <string name="schedule_call_timezone">Η ζώνη ώρας σας: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">Προγραμματισμός Κλήσης</string>
+</resources>

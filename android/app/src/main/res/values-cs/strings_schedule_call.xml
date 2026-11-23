@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">Hovor s: %s</string>
+    <string name="schedule_call_when">Kdy</string>
+    <string name="schedule_call_duration">Délka</string>
+    <string name="schedule_call_title_optional">Název (volitelné)</string>
+    <string name="schedule_call_title_placeholder">např. Týdenní sync</string>
+    <string name="schedule_call_other_date">Jiné datum</string>
+    <string name="schedule_call_schedule">Naplánovat</string>
+    <string name="schedule_call_timezone">Vaše časové pásmo: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">Naplánovat hovor</string>
+</resources>

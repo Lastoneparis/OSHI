@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">دستگاه‌های پیوندشده</string>
+    <string name="devsync_settings_subtitle">تاریخچه‌تان را مستقیماً بین دستگاه‌هایتان همگام کنید</string>
+    <string name="devsync_status_on">همگام‌سازی مستقیم روشن است. تاریخچه‌تان از دستگاهی به دستگاه دیگر منتقل می‌شود؛ هیچ چیز روی سرور ذخیره نمی‌شود.</string>
+    <string name="devsync_status_off">همگام‌سازی مستقیم روی این دستگاه خاموش است.</string>
+    <string name="devsync_this_device">این دستگاه</string>
+    <string name="devsync_device_id">شناسه دستگاه %1$s</string>
+    <string name="devsync_debug_override">همگام‌سازی مستقیم (نادیده‌گیری اشکال‌زدایی)</string>
+    <string name="devsync_debug_override_desc">همگام‌سازی مستقیم دستگاه را برای این نصب اجباری کن، صرف‌نظر از نظر سرور</string>
+    <string name="devsync_pending_title">تأیید دستگاه جدید</string>
+    <string name="devsync_pending_body">%1$s (%2$s) می‌خواهد تاریخچه‌تان را دریافت کند. بررسی کنید صفحه دیگر همین کد را نشان دهد.</string>
+    <string name="devsync_waiting_body">در انتظار تأیید روی دستگاه دیگرتان. بررسی کنید همین کد را نشان دهد.</string>
+    <string name="devsync_peer_approved">دستگاه دیگر قبلاً تأیید کرده است. برای پایان، اینجا تأیید کنید.</string>
+    <string name="devsync_allow">اجازه</string>
+    <string name="devsync_deny">رد</string>
+    <string name="devsync_linked_title">دستگاه‌های پیوندشده</string>
+    <string name="devsync_none_linked">هنوز دستگاهی پیوند نشده است. OSHI را روی دستگاه دیگرتان باز کنید، در همان Wi-Fi یا هم‌زمان آنلاین.</string>
+    <string name="devsync_last_sync">آخرین همگام‌سازی: %1$s</string>
+    <string name="devsync_never">هرگز</string>
+    <string name="devsync_syncing_now">در حال همگام‌سازی (%1$s)</string>
+    <string name="devsync_remove">حذف</string>
+    <string name="devsync_remove_confirm_title">%1$s حذف شود؟</string>
+    <string name="devsync_remove_confirm_body">دیگر تاریخچه‌تان را دریافت نمی‌کند. آنچه را دارد نگه می‌دارد.</string>
+    <string name="devsync_sync_now">همگام‌سازی اکنون</string>
+    <string name="devsync_cancel">لغو</string>
+    <string name="devsync_alert_unapproved">دستگاهی با حساب شما تلاش کرد همگام شود: %1$s</string>
+    <string name="devsync_alert_linked">دستگاه جدید %1$s اکنون می‌تواند تاریخچه‌تان را دریافت کند</string>
+</resources>

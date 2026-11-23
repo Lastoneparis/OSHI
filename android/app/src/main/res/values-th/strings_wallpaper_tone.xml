@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">โทน</string>
+    <string name="wallpaper_tone_automatic">อัตโนมัติ</string>
+    <string name="wallpaper_tone_light">สว่าง</string>
+    <string name="wallpaper_tone_dark">มืด</string>
+    <string name="wallpaper_tone_automatic_detail">เปลี่ยนตามโหมดสว่างและโหมดมืด</string>
+    <string name="wallpaper_tone_light_detail">สีขาวพร้อมโครงข่ายสีม่วง แม้ในโหมดมืด ข้อความจะเปลี่ยนเป็นสีโทนสว่างเพื่อให้อ่านง่าย</string>
+    <string name="wallpaper_tone_dark_detail">สีดำพร้อมโครงข่ายสีม่วง แม้ในโหมดสว่าง</string>
+    <string name="wallpaper_tone_more">สี ไล่สี อีโมจิ และรูปของคุณเอง: เปิดแชท แล้วแตะ ⋯ → วอลเปเปอร์</string>
+</resources>

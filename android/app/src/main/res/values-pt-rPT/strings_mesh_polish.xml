@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">A procurar…</string>
+    <string name="peers_status_peers_found">Dispositivos encontrados</string>
+    <string name="peers_status_permission_required">Permissão necessária</string>
+    <string name="peers_subtitle_connected">Ligados: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Ligados: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Ligados: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">O Bluetooth está desligado — ligue-o para encontrar dispositivos por perto</string>
+    <string name="peers_subtitle_permission_both">O OSHI não consegue usar o Bluetooth — não vê ninguém por perto e ninguém o vê a si</string>
+    <string name="peers_subtitle_permission_advertise">Os dispositivos por perto não o conseguem ver — falta a permissão Dispositivos próximos</string>
+    <string name="peers_subtitle_permission_scan">O OSHI não consegue procurar dispositivos por perto — falta a permissão Dispositivos próximos</string>
+    <string name="peers_subtitle_ble_unsupported">Este telemóvel não consegue transmitir por Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">O Bluetooth está ocupado — outra aplicação está a usar o rádio</string>
+    <string name="peers_subtitle_ble_down">A deteção por Bluetooth parou — a tentar de novo</string>
+    <string name="peers_subtitle_searching_lan">A procurar pessoas na mesma rede Wi-Fi…</string>
+    <string name="peers_subtitle_disabled">Rede mesh desligada</string>
+    <string name="peers_subtitle_looking">A procurar dispositivos por perto…</string>
+    <string name="peers_permission_card_title">Ativar a deteção por perto</string>
+    <string name="peers_permission_card_body">O OSHI precisa da permissão Dispositivos próximos para encontrar telemóveis à sua volta. Sem ela, todas as mensagens passam pela Internet.</string>
+    <string name="peers_permission_card_action">Permitir</string>
+    <string name="peers_permission_card_settings">Abrir definições</string>
+    <string name="peers_permission_card_denied_body">A permissão foi recusada, por isso o OSHI não encontra ninguém por perto. Ative Dispositivos próximos para o OSHI nas definições do Android.</string>
+    <string name="peers_same_wifi_note">Os dois telemóveis têm de estar na mesma rede Wi-Fi. Com dados móveis, as mensagens passam pela Internet.</string>
+    <string name="peers_control_visible">Visível</string>
+    <string name="peers_control_scan">Procurar</string>
+    <string name="peers_control_auto">Automático</string>
+    <string name="peers_section_devices">Dispositivos</string>
+    <string name="peers_action_connect">Ligar</string>
+    <string name="peers_action_reconnect">Voltar a ligar</string>
+    <string name="peers_info_reach_title">Alcance</string>
+    <string name="peers_info_reach_desc">Até onde chegar a sua rede Wi-Fi. As mensagens podem saltar por outros dispositivos OSHI da mesma rede, até 50 saltos.</string>
+    <string name="peers_info_connection_desc">O Bluetooth LE e o Bonjour apresentam dois dispositivos e trocam um endereço. As mensagens seguem pela sua rede local.</string>
+    <string name="peers_info_tip1">Ponha os dois telemóveis na mesma rede Wi-Fi</string>
+    <string name="peers_info_tip2">Mantenha o Bluetooth ligado para que os dispositivos se encontrem</string>
+    <string name="peers_info_tip3">Funciona sem acesso à Internet — mas não com dados móveis</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">新聯絡人</string>
+    <string name="conversation_open_contact">開啟聯絡人</string>
+    <string name="conversation_muted">通知已關閉</string>
+    <string name="fab_new_contact">新聯絡人</string>
+    <string name="fab_pick_contact_voice">語音通話 — 選擇聯絡人</string>
+    <string name="fab_pick_contact_video">視訊通話 — 選擇聯絡人</string>
+    <string name="fab_pick_contact_empty">尚無聯絡人。請先新增一個人。</string>
+</resources>

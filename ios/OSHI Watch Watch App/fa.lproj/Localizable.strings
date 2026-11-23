@@ -1,0 +1,136 @@
+/* OSHI Watch App - Farsi (Persian) */
+
+/* Status */
+"watch.status.connected" = "متصل";
+"watch.status.not_reachable" = "iPhone در دسترس نیست";
+
+/* Navigation */
+"watch.open_iphone" = "باز کردن OSHI در iPhone";
+
+/* Common */
+"common.refresh" = "بازخوانی";
+"common.cancel" = "لغو";
+
+/* Messages */
+"watch.loading_messages" = "در حال بارگذاری پیام‌ها…";
+"watch.no_messages" = "پیامی وجود ندارد";
+"watch.sending" = "در حال ارسال…";
+"watch.dictate" = "دیکته";
+"watch.voice_message" = "پیام صوتی";
+"watch.reply" = "پاسخ";
+"watch.media_attachment" = "پیوست رسانه‌ای";
+
+/* Quick Replies */
+"watch.quick.yes" = "بله";
+"watch.quick.no" = "خیر";
+"watch.quick.ok" = "باشه";
+"watch.quick.later" = "بعداً";
+"watch.quick.omw" = "دارم میام!";
+"watch.quick.thanks" = "ممنون";
+
+/* Errors */
+"watch.error.send_failed" = "ارسال پیام ناموفق بود";
+"watch.send.queued" = "در صف ارسال به آیفون";
+"watch.error.not_reachable" = "iPhone در دسترس نیست";
+
+/* Calls */
+"watch.call.incoming_video" = "تماس ویدیویی ورودی";
+"watch.call.incoming_voice" = "تماس صوتی ورودی";
+"watch.call.video" = "تماس ویدیویی";
+"watch.call.voice" = "تماس صوتی";
+"watch.call.connecting" = "در حال اتصال…";
+"watch.call.ringing" = "در حال زنگ زدن…";
+"watch.call.in_call" = "در تماس";
+"watch.call.ended" = "تماس پایان یافت";
+"watch.call.start" = "شروع تماس";
+"watch.call.unknown" = "ناشناس";
+
+/* Call Actions */
+"call.action.accept" = "پذیرش";
+"call.action.decline" = "رد";
+
+/* Notifications */
+"watch.notification.new_message" = "پیام جدید";
+
+/* Call Summary */
+"call.outgoing" = "تماس خروجی";
+"call.incoming" = "تماس ورودی";
+"call.no.answer" = "بدون پاسخ";
+"call.declined" = "رد شده";
+"call.missed" = "تماس از دست رفته";
+"call.video.outgoing" = "تماس تصویری خروجی";
+"call.video.incoming" = "تماس تصویری ورودی";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "پاسخ";
+"send" = "ارسال";
+"type_message" = "پیام بنویسید";
+"notification.action.mark_read" = "علامت‌گذاری خوانده‌شده";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "گفتگوها";
+"w2.empty.title" = "هنوز گفتگویی نیست";
+"w2.empty.body" = "گفتگوهای OSHI آیفون شما اینجا نمایش داده می‌شوند.";
+"w2.disabled.title" = "ساعت هوشمند خاموش است";
+"w2.disabled.body" = "آن را در OSHI روی iPhone روشن کنید: تنظیمات › دستگاه‌های پیوندشده › ساعت هوشمند.";
+"w2.locked.title" = "OSHI قفل است";
+"w2.locked.body" = "قفل OSHI را روی iPhone باز کنید و دوباره امتحان کنید.";
+"w2.unavailable.title" = "OSHI آماده نیست";
+"w2.unavailable.body" = "OSHI را یک بار روی iPhone باز کنید و دوباره امتحان کنید.";
+"w2.nophone.title" = "iPhone در دسترس نیست";
+"w2.nophone.body" = "iPhone دارای OSHI را نزدیک خود نگه دارید.";
+"w2.error.title" = "مشکلی پیش آمد";
+"w2.error.body" = "iPhone پاسخ نداد. دوباره امتحان کنید.";
+"w2.notfound" = "این گفتگو دیگر روی iPhone شما نیست.";
+"w2.retry" = "تلاش دوباره";
+"w2.reply" = "پاسخ";
+"w2.you" = "شما";
+"w2.you_prefix" = "شما: %@";
+"w2.react" = "واکنش";
+"w2.speak_or_type" = "بگویید یا بنویسید";
+"w2.quick_replies" = "پاسخ‌های سریع";
+"w2.sending" = "در حال ارسال…";
+"w2.sent" = "ارسال شد";
+"w2.send_failed" = "ارسال نشد. روی iPhone دوباره امتحان کنید.";
+"w2.read_only" = "نمی‌توانید در این گفتگو پاسخ دهید.";
+"w2.view_once" = "👁 مشاهده یک‌باره — روی iPhone باز کنید";
+"w2.view_once_short" = "👁 مشاهده یک‌باره";
+"w2.e2e" = "رمزگذاری سرتاسری توسط iPhone شما";
+"w2.replying_to" = "در پاسخ به";
+"w2.loading" = "در حال بارگیری…";
+"w2.unread_count" = "%d خوانده‌نشده";
+"w2.all_read" = "همه خوانده شد";
+"w2.call" = "تماس";
+"w2.media.photo" = "📷 عکس";
+"w2.media.video" = "🎥 ویدیو";
+"w2.media.voice" = "🎤 صوتی";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 فایل";
+"w2.media.location" = "📍 موقعیت";
+"w2.media.contact" = "👤 مخاطب";
+"w2.qr.on_my_way" = "در راهم";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "بعداً تماس می‌گیرم";
+"w2.qr.thanks" = "ممنون!";
+"w2.qr.yes" = "بله";
+"w2.qr.no" = "نه";
+"w2.qr.busy" = "الان نمی‌توانم صحبت کنم";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "عشق";
+"w2.r.laugh" = "خنده";
+"w2.r.cry" = "غم";
+"w2.r.thumbs" = "لایک";
+"w2.r.wow" = "وای";
+"w2.r.fire" = "آتش";
+"w2.mute" = "بی‌صدا";
+"w2.end_call" = "قطع تماس";
+"w2.speaker" = "بلندگو";
+"w2.widget.off" = "ساعت هوشمند را در OSHI روی iPhone روشن کنید";
+"w2.widget.off_short" = "خاموش";
+"w2.widget.locked" = "قفل OSHI را روی iPhone باز کنید";
+"w2.widget.locked_short" = "قفل";
+"w2.widget.open" = "باز کردن OSHI";
+"w2.widget.name" = "OSHI خوانده‌نشده";
+"w2.widget.desc" = "تعداد خوانده‌نشده‌ها و فرستنده — هرگز خود پیام‌ها.";

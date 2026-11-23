@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>keychain-access-groups</key>
+	<array>
+		<!-- Deliberately ONLY the shared group. Adding the app's own group here
+		     would give the extension read access to every secret the app has
+		     ever stored, instead of the three keys it needs to send. -->
+		<string>$(AppIdentifierPrefix)Moriceau-lab.Genesis.shared</string>
+	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.Moriceau-lab.Genesis</string>
+	</array>
+</dict>
+</plist>

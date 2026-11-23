@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Тон</string>
+    <string name="wallpaper_tone_automatic">Автоматично</string>
+    <string name="wallpaper_tone_light">Світлий</string>
+    <string name="wallpaper_tone_dark">Темний</string>
+    <string name="wallpaper_tone_automatic_detail">Слідує світлому й темному режиму.</string>
+    <string name="wallpaper_tone_light_detail">Білий із фіолетовою сіткою навіть у темному режимі. Повідомлення переходять на світлі кольори й лишаються добре читабельними.</string>
+    <string name="wallpaper_tone_dark_detail">Чорний із фіолетовою сіткою навіть у світлому режимі.</string>
+    <string name="wallpaper_tone_more">Кольори, градієнти, емодзі та ваші фото: відкрийте чат, потім ⋯ → Шпалери.</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">اخیر</string>
+    <string name="attach_selected_count">%1$d انتخاب شد</string>
+    <string name="attach_all_photos">همهٔ عکس‌ها</string>
+    <string name="attach_collapse">جمع کردن</string>
+    <string name="attach_camera">دوربین</string>
+    <string name="attach_gallery">گالری</string>
+    <string name="attach_file">فایل</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">مکان</string>
+    <string name="attach_contact">مخاطب</string>
+    <string name="attach_poll">نظرسنجی</string>
+    <string name="attach_video_note">پیام ویدیویی</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">زمان‌بندی</string>
+    <string name="attach_access_title">عکس‌های اخیر شما اینجا</string>
+    <string name="attach_access_body">OSHI فقط وقتی این پنل باز است عکس‌هایتان را می‌خواند. تا خودتان نفرستید، چیزی از گوشی خارج نمی‌شود.</string>
+    <string name="attach_access_allow">اجازهٔ دسترسی</string>
+    <string name="attach_access_settings">باز کردن تنظیمات</string>
+    <string name="attach_access_browse">انتخاب از گالری</string>
+    <string name="attach_partial">فقط برخی عکس‌ها را با OSHI به اشتراک گذاشته‌اید.</string>
+    <string name="attach_partial_manage">مدیریت</string>
+    <string name="attach_empty_title">هنوز عکسی نیست</string>
+    <string name="attach_caption_hint">افزودن توضیح…</string>
+    <string name="attach_send_count">ارسال %1$d</string>
+    <string name="attach_photo_a11y">عکس</string>
+    <string name="attach_video_a11y">ویدیو، %1$s</string>
+    <string name="attach_limit">حداکثر %1$d در هر بار</string>
+</resources>

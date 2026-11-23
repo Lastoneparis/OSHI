@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">%s 님과 통화</string>
+    <string name="schedule_call_when">시간</string>
+    <string name="schedule_call_duration">통화 시간</string>
+    <string name="schedule_call_title_optional">제목 (선택 사항)</string>
+    <string name="schedule_call_title_placeholder">예: 주간 싱크</string>
+    <string name="schedule_call_other_date">다른 날짜</string>
+    <string name="schedule_call_schedule">예약</string>
+    <string name="schedule_call_timezone">내 시간대: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">통화 예약</string>
+</resources>

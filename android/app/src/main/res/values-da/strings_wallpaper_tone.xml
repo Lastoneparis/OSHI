@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Tone</string>
+    <string name="wallpaper_tone_automatic">Automatisk</string>
+    <string name="wallpaper_tone_light">Lys</string>
+    <string name="wallpaper_tone_dark">Mørk</string>
+    <string name="wallpaper_tone_automatic_detail">Følger lys og mørk tilstand.</string>
+    <string name="wallpaper_tone_light_detail">Hvid med violet net, også i mørk tilstand. Beskeder skifter til deres lyse farver, så de er nemme at læse.</string>
+    <string name="wallpaper_tone_dark_detail">Sort med violet net, også i lys tilstand.</string>
+    <string name="wallpaper_tone_more">Farver, forløb, emoji og dine egne fotos: åbn en chat og derefter ⋯ → Baggrund.</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">הודעת וידאו</string>
+    <string name="video_note_title">הודעת וידאו</string>
+    <string name="video_note_a11y" formatted="true">הודעת וידאו, %1$s</string>
+    <string name="video_note_play">הפעלה</string>
+    <string name="video_note_pause">השהיה</string>
+    <string name="video_note_record_button">הקלטת הודעת וידאו</string>
+    <string name="video_note_hint">הקישו להקלטה או לחצו לחיצה ארוכה · עד 15 שניות</string>
+    <string name="video_note_record">התחלת הקלטה</string>
+    <string name="video_note_stop">עצירת הקלטה</string>
+    <string name="video_note_flip">החלפת מצלמה</string>
+    <string name="video_note_close">סגירה</string>
+    <string name="video_note_review_title">הודעת הווידאו שלך</string>
+    <string name="video_note_preparing">בהכנה…</string>
+    <string name="video_note_discard">מחיקה</string>
+    <string name="video_note_retake">צילום מחדש</string>
+    <string name="video_note_send">שליחת הודעת וידאו</string>
+    <string name="video_note_too_short">קצר מדי. הקישו להקלטה או החזיקו את הכפתור.</string>
+    <string name="video_note_camera_denied">נדרשת גישה למצלמה כדי להקליט הודעת וידאו.</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">Радио MeshCore</string>
+    <string name="meshcore_none">Нет радио MeshCore</string>
+    <string name="meshcore_scan">Искать радио MeshCore</string>
+    <string name="meshcore_ready">Подключено — сообщения OSHI идут через #oshi-bridge</string>
+    <string name="meshcore_forget">Забыть это радио MeshCore</string>
+    <string name="meshcore_bridge">Мост Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">Радио MeshCore передаёт ваши сообщения OSHI через ретрансляторы MeshCore. На нём должна стоять прошивка MeshCore companion; при первом подключении оно спросит PIN. OSHI добавляет только один канал, #oshi-bridge, в свободный слот и никогда не меняет другие ваши каналы.</string>
+    <string name="meshcore_bridge_footer">Когда подключены и радио Meshtastic, и радио MeshCore, этот телефон пересылает сообщения OSHI между двумя сетями, пока OSHI открыт.</string>
+    <string name="meshcore_no_free_channel">Все 8 слотов каналов на этом радио заняты. Освободите один в приложении MeshCore, чтобы OSHI мог добавить #oshi-bridge.</string>
+</resources>

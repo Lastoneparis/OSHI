@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Tónus</string>
+    <string name="wallpaper_tone_automatic">Automatikus</string>
+    <string name="wallpaper_tone_light">Világos</string>
+    <string name="wallpaper_tone_dark">Sötét</string>
+    <string name="wallpaper_tone_automatic_detail">Követi a világos és a sötét módot.</string>
+    <string name="wallpaper_tone_light_detail">Fehér lila hálóval, sötét módban is. Az üzenetek világos színekre váltanak, így jól olvashatók maradnak.</string>
+    <string name="wallpaper_tone_dark_detail">Fekete lila hálóval, világos módban is.</string>
+    <string name="wallpaper_tone_more">Színek, színátmenetek, emojik és saját fotók: nyiss meg egy csevegést, majd ⋯ → Háttérkép.</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Combina missatges i grups</string>
+    <string name="chats_merged_setting_desc">Una sola llista per a tots els teus xats, amb filtres de persones i grups.</string>
+    <string name="chats_merged_filter_all">Tots</string>
+    <string name="chats_merged_filter_unread">No llegits</string>
+    <string name="chats_merged_filter_groups">Grups</string>
+    <string name="chats_merged_filter_people">Persones</string>
+    <string name="chats_merged_new_title">Nou</string>
+    <string name="chats_merged_new_chat">Xat nou</string>
+    <string name="chats_merged_new_chat_desc">Afegeix algú amb un codi QR, un enllaç o una clau</string>
+    <string name="chats_merged_new_group">Grup nou</string>
+    <string name="chats_merged_new_group_desc">Crea un grup amb els teus contactes</string>
+    <string name="chats_merged_discover">Descobreix canals públics</string>
+    <string name="chats_merged_discover_desc">Uneix-te a grups públics del teu voltant</string>
+    <string name="chats_merged_scan_invite">Escaneja una invitació</string>
+    <string name="chats_merged_scan_invite_desc">Uneix-te a un grup o afegeix un contacte des d\'un codi QR</string>
+    <string name="chats_merged_scan_not_invite">Aquest codi QR no és una invitació d\'OSHI</string>
+    <string name="chats_merged_calls_header">Truca a algú</string>
+    <string name="chats_merged_teaser_title">Uneix-te a un canal públic</string>
+    <string name="chats_merged_teaser_body">Els grups públics propers funcionen fins i tot sense internet. Mira qui hi ha al teu voltant.</string>
+    <string name="chats_merged_teaser_cta">Descobreix</string>
+    <string name="chats_merged_nearby_title">Grup a prop</string>
+    <string name="chats_merged_empty_unread">Estàs al dia</string>
+    <string name="chats_merged_empty_people">Encara no hi ha converses</string>
+    <string name="chats_merged_group_a11y">Grup</string>
+</resources>

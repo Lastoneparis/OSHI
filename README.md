@@ -13,7 +13,7 @@
   <a href="https://apps.apple.com/app/oshi-mesh/id6753926350"><img src="https://img.shields.io/badge/App_Store-Download-0D96F6?style=flat-square&logo=apple&logoColor=white" alt="Download on the App Store"/></a>
   <a href="https://github.com/Lastoneparis/OSHI/actions/workflows/verify.yml"><img src="https://github.com/Lastoneparis/OSHI/actions/workflows/verify.yml/badge.svg" alt="verify"/></a>
   <a href="docs/protocol.md"><img src="https://img.shields.io/badge/Protocol-Double_Ratchet_%2B_X3DH-8B5CF6?style=flat-square" alt="Protocol"/></a>
-  <a href="src/"><img src="https://img.shields.io/badge/Crypto_source-published-2EA043?style=flat-square" alt="Crypto source published"/></a>
+  <a href="#on-open-source-precisely"><img src="https://img.shields.io/badge/Full_app_source-published-2EA043?style=flat-square" alt="Full app source published"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-000000?style=flat-square" alt="MIT"/></a>
   <a href="https://oshi-messenger.com"><img src="https://img.shields.io/badge/oshi--messenger.com-8B5CF6?style=flat-square" alt="Website"/></a>
 </p>
@@ -70,11 +70,21 @@ The implementation is in this repository and you can read it:
 | [`docs/protocol.md`](docs/protocol.md) | The wire protocol, in full |
 | [`docs/encryption.md`](docs/encryption.md) | Threat model and key lifecycle |
 
-**On "open source", precisely:** the cryptographic core, the mesh layer and the
-bot SDK are published here under MIT. The application shell around them — UI,
-App Store plumbing, media pipeline — is not. We would rather tell you exactly
-what you can audit than claim a green checkmark we have not earned. If you find a
-flaw in what is published, see the bug bounty below.
+**On "open source", precisely:** the complete source code of the iOS, Apple Watch and
+Android apps is in this repository under MIT, and the desktop app (Windows, macOS, Linux)
+is in [Lastoneparis/oshi-desktop](https://github.com/Lastoneparis/oshi-desktop), one tag
+per published version. What is deliberately **not** here: signing keys and keystores,
+Firebase/push configuration, App Store and Play Store assets, the server, the third-party
+GIF and sticker packs (their licences do not allow redistribution) and prebuilt native
+libraries (llama.cpp, built from its own upstream). If you find a flaw, see the bug
+bounty below.
+
+| Folder | What it is | Built from |
+|--------|-----------|-----------|
+| [`ios/`](ios/) | iOS, iPadOS, macOS (Catalyst) and Apple Watch app, share and notification extensions, unit and UI tests, vendored Opus/Concentus | release 1.0.49, commit `a2226280` |
+| [`android/`](android/) | Android phone app, Wear OS app and bridge, unit and instrumented tests | release 1.7.0, commit `7c762d5d` |
+| [`src/`](src/) | The cryptography and mesh files highlighted above (also inside `ios/OSHI/`) | iOS 1.0.46 |
+| [oshi-desktop](https://github.com/Lastoneparis/oshi-desktop) | Desktop app | tags `v1.5.0` … `v1.6.4` |
 
 ---
 

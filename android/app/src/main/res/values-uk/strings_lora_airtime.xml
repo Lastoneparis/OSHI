@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Очікування ефірного часу радіо (законне обмеження робочого циклу)</string>
+    <string name="lora_jamming_title">Виявлено радіозавади — можливе глушіння</string>
+    <string name="lora_jamming_detail">Повідомлення буде надіслано через Bluetooth-мережу або інтернет, щойно це стане можливим. Повідомлення для радіо зберігаються й підуть через LoRa, коли канал звільниться.</string>
+    <string name="lora_jamming_send_anyway">Однаково надіслати через LoRa</string>
+    <string name="lora_jamming_override_active">Надсилання через LoRa однаково до %1$s або доки канал не звільниться. Повідомлення можуть не дійти.</string>
+</resources>

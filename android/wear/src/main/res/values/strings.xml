@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">OSHI</string>
+    <string name="complication_label">OSHI unread</string>
+    <string name="chats_title">Chats</string>
+    <string name="empty_title">No conversations yet</string>
+    <string name="empty_body">Your chats from OSHI on your phone show up here.</string>
+    <string name="status_disabled_title">Smartwatch is off</string>
+    <string name="status_disabled_body">Enable it in OSHI on your phone: Settings › Linked Devices › Smartwatch.</string>
+    <string name="status_locked_title">OSHI is locked</string>
+    <string name="status_locked_body">Unlock OSHI on your phone, then try again.</string>
+    <string name="status_unavailable_title">OSHI isn\'t ready</string>
+    <string name="status_unavailable_body">Open OSHI on your phone once, then try again.</string>
+    <string name="status_no_phone_title">Phone not reachable</string>
+    <string name="status_no_phone_body">Keep your phone nearby with OSHI installed.</string>
+    <string name="status_error_title">Something went wrong</string>
+    <string name="status_error_body">Your phone didn\'t answer. Try again.</string>
+    <string name="status_not_found">This conversation is no longer on your phone.</string>
+    <string name="retry">Retry</string>
+    <string name="reply">Reply</string>
+    <string name="you_prefix">You: %1$s</string>
+    <string name="you">You</string>
+    <string name="react_title">React</string>
+    <string name="reply_voice">Speak or type</string>
+    <string name="quick_replies">Quick replies</string>
+    <string name="sending">Sending…</string>
+    <string name="sent">Sent</string>
+    <string name="send_failed">Not sent. Try again on your phone.</string>
+    <string name="read_only">You can\'t reply to this conversation.</string>
+    <string name="media_photo">📷 Photo</string>
+    <string name="media_video">🎥 Video</string>
+    <string name="media_voice">🎤 Voice</string>
+    <string name="media_gif">GIF</string>
+    <string name="media_file">📄 File</string>
+    <string name="media_location">📍 Location</string>
+    <string name="media_contact">👤 Contact</string>
+    <string name="view_once">👁 View once — open it on your phone</string>
+    <string name="unread_count">%1$d unread</string>
+    <string name="unread_label">unread</string>
+    <string name="all_read">All read</string>
+    <string name="tile_open">Open OSHI</string>
+    <string name="tile_off">Turn on Smartwatch in OSHI on your phone</string>
+    <string name="tile_locked">Unlock OSHI on your phone</string>
+    <string name="qr_on_my_way">On my way</string>
+    <string name="qr_ok">OK 👍</string>
+    <string name="qr_call_later">I\'ll call you later</string>
+    <string name="qr_thanks">Thanks!</string>
+    <string name="qr_yes">Yes</string>
+    <string name="qr_no">No</string>
+    <string name="qr_busy">Can\'t talk now</string>
+    <string name="end_to_end">End-to-end encrypted by your phone</string>
+</resources>

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Explicitly remove call log / SMS permissions (not needed, avoids Google Play policy) -->
+    <!-- __SCREENSHOT_NOTICE_2026_11_18__ Activity.ScreenCaptureCallback (API 34+), normal permission. -->
+    <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" tools:node="remove" />
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_SMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.SEND_SMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" tools:node="remove" />
+
+    <!-- Network Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- devsync LAN (docs/OSHI_DEVICE_SYNC_DIRECT.md §5.1): WifiManager.MulticastLock while NSD discovers -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!-- WiFi Direct (P2P) for Mesh - iOS Compatible -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- __NO_BACKGROUND_LOCATION_2026_10_24__ ACCESS_BACKGROUND_LOCATION is REMOVED,
+         and `tools:node="remove"` keeps any dependency from merging it back in.
+
+         Why: Google Play rejected the app on 2026-10-24 for "Missing Prominent
+         Disclosure" — the Prominent Disclosure and Consent Requirement of the User
+         Data policy — because the app held this permission. It had been declared
+         since 17f64d6f (2026-02-06) for the armed check-in.
+
+         Why removing it costs almost nothing: on Android the capability "may keep
+         reading location while the user is elsewhere" is granted by a RUNNING
+         FOREGROUND SERVICE typed `location`, not by this permission. An armed
+         check-in starts CheckInLocationService while the app is on screen, so it
+         keeps receiving positions with the screen off, through the whole journey,
+         on the while-in-use grant alone. The permission only ever bought one extra
+         thing: fresh positions in a service the SYSTEM restarts from the background
+         after a low-memory kill (START_STICKY with a null intent). That narrow case
+         is not worth an annual sensitive-permission declaration, a demo video and a
+         standing risk of removal from the store.
+
+         The user-visible consequence is stated in the arming screen and repeated on
+         the ongoing notification (checkin_service_foreground_only): if OSHI is
+         swiped out of recent apps, or an OEM battery saver kills it, the check-in
+         stops with it. That was already the behaviour for every user who refused
+         "Allow all the time", which the two-step request made the common case.
+
+         Do NOT re-add this line without first filing the Play Console background
+         location declaration AND shipping an in-app prominent disclosure. -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="tiramisu" />
+
+    <!-- Bluetooth for Mesh Network -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="s" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Camera & Media -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <!-- __ATTACH_PANEL_2027_2026_11_16__ Android 14+ "Select photos": declared so a
+         partial grant is a real, lasting grant the attachment panel can read (without
+         it the system's compat mode drops the access as soon as the app is backgrounded). -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+
+    <!-- Audio/Microphone for Calls -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- Vibration & Notifications -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Telecom (ConnectionService / Android CallKit equivalent) -->
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+
+    <!-- Background Services -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Calendar (for exporting scheduled calls) -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
+    <!-- Exact alarms: ScheduledCallManager.setExactAndAllowWhileIdle() silently
+         degrades to an inexact alarm on API 31+ without these, so a scheduled
+         call reminder can fire minutes late or not at all. -->
+    <!-- SCHEDULE_EXACT_ALARM only. USE_EXACT_ALARM is restricted by Play to alarm
+         clocks and calendars; a messenger declaring it invites a policy rejection.
+         Scheduled-call reminders are user-initiated, which is exactly what
+         SCHEDULE_EXACT_ALARM is for. ScheduledCallManager already degrades to an
+         inexact alarm if the user withholds it. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <!-- Biometrics -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
+    <!-- Hardware Features -->
+    <uses-feature android:name="android.hardware.wifi.direct" android:required="false" />
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+
+    <!-- __KEYBOARD_PRIVACY_2026_10_01__ Package visibility (Android 11+) for input
+         methods only: without it the keyboard's ApplicationInfo / label are hidden,
+         so OSHI could not tell the built-in keyboard from a third-party one and warn
+         that the latter can read what is typed before it is encrypted. -->
+    <queries>
+        <intent>
+            <action android:name="android.view.InputMethod" />
+        </intent>
+    </queries>
+
+    <!-- __DEVICE_INTEGRITY_2026_10_01__ Package visibility (Android 11+) for the few
+         root managers / hooking frameworks DeviceIntegrity looks for — named one by
+         one (no QUERY_ALL_PACKAGES): without this getPackageInfo always says "not
+         installed" and the compromised-device warning could never fire. Keep in sync
+         with DeviceIntegrity.ROOT_MANAGER_PACKAGES / HOOK_PACKAGES. -->
+    <queries>
+        <package android:name="com.topjohnwu.magisk" />
+        <package android:name="eu.chainfire.supersu" />
+        <package android:name="com.koushikdutta.superuser" />
+        <package android:name="de.robv.android.xposed.installer" />
+        <package android:name="org.lsposed.manager" />
+    </queries>
+
+    <!-- android:enableOnBackInvokedCallback="false"
+         Predictive back is ON BY DEFAULT from targetSdk 35, and this tree targets 36.
+         Compose BOM 2023.10.01 / activity-compose 1.8.1 predate it: material3's
+         ModalBottomSheet dismisses by overriding the legacy window onBackPressed, which
+         the new OnBackInvokedCallback dispatch never calls. Verified on an Android 16
+         device — every sheet in the app (Bubble Appearance, Map "Search Places", …)
+         ignored Back, however many times it was pressed, and could only be closed by
+         tapping the scrim or swiping down. The app has zero BackHandler call sites, so
+         opting out costs only the predictive-back animation, which never worked here.
+         The real fix is the dependency bump (compose-bom 2026.08.00 and activity-compose
+         1.13.0 are already in the offline cache) — a deliberate migration across 245
+         Compose files with its own verification, not a line in a manifest. Remove this
+         attribute in the same change that lands it. -->
+    <application
+        android:name=".OSHIApplication"
+        android:enableOnBackInvokedCallback="false"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.OSHI"
+        android:networkSecurityConfig="@xml/network_security_config"
+        tools:targetApi="36">
+
+        <!--
+          Main Activity.
+
+          Rotation is the user's call, not ours. From targetSdk 36 Android
+          ignores android:screenOrientation on any display whose smallest width
+          is >= 600 dp, so a tablet or unfolded foldable rotates whether we ask
+          for portrait or not; keeping the old "portrait" lock would only have
+          meant shipping a landscape nobody had ever looked at. "fullUser"
+          allows every orientation the user's own rotation-lock setting allows,
+          which is what the Play large-screen quality guidelines ask for too.
+
+          uiMode / density / fontScale join the size keys in configChanges so
+          the activity is not recreated when a foldable enters desk mode, the
+          system flips to dark, or the user changes display size — recreation
+          mid-call would tear down the WebRTC session.
+        -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="fullUser"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden|uiMode|density|fontScale"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.OSHI.Launcher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Deep Links for OSHI protocol (custom scheme) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="oshi" />
+            </intent-filter>
+
+            <!-- App Links (https://oshi-messenger.com/group?gid=...&name=...&inviter=...).
+                 autoVerify requires assetlinks.json to be hosted at
+                 https://oshi-messenger.com/.well-known/assetlinks.json — ops task. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="oshi-messenger.com" android:pathPrefix="/group" />
+                <data android:scheme="https" android:host="oshi-messenger.com" android:pathPrefix="/add" />
+                <data android:scheme="https" android:host="oshi-messenger.com" android:pathPrefix="/chat" />
+                <data android:scheme="https" android:host="oshi-messenger.org" android:pathPrefix="/group" />
+                <data android:scheme="https" android:host="oshi-messenger.org" android:pathPrefix="/add" />
+                <data android:scheme="https" android:host="oshi-messenger.org" android:pathPrefix="/chat" />
+            </intent-filter>
+
+            <!-- Inbound share sheet (Android equivalent of the iOS OSHIShare
+                 Share Extension). The MIME set mirrors OSHIShare/Info.plist:27-39
+                 — images, movies, web URLs / plain text, and arbitrary files. -->
+            <intent-filter android:label="@string/share_target_label">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+                <data android:mimeType="audio/*" />
+                <data android:mimeType="application/*" />
+            </intent-filter>
+            <intent-filter android:label="@string/share_target_label">
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+                <data android:mimeType="audio/*" />
+                <data android:mimeType="application/*" />
+            </intent-filter>
+        </activity>
+
+        <!-- QR scanner, pinned to portrait. `setOrientationLocked(true)` at the call
+             site only freezes whatever orientation the activity STARTED in, so without
+             this the scanner could still open sideways — the "horizontal scan" that was
+             reported. targetSdk 36 ignores screenOrientation at >= 600 dp, so the layout
+             still has to cope on tablets. -->
+        <activity
+            android:name=".ui.scan.OshiScanActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+
+        <!-- Mesh Network Service -->
+        <service
+            android:name=".service.MeshNetworkService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
+
+        <!-- __LORA_BACKGROUND_NOTIFICATION_2026_11_03__ Holds the link to a paired
+             LoRa radio while OSHI is backgrounded. Without a running foreground
+             service of some type, Android dozes the process, the GATT link to the
+             node drops, and a message that reaches the radio reaches nothing else
+             until the user next opens the app — which is the one situation LoRa
+             exists for and the one where opening the app is least likely.
+             Lives exactly as long as the radio is READY (LoRaLinkService). -->
+        <service
+            android:name=".service.LoRaLinkService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
+
+        <!-- Message Sync Service -->
+        <service
+            android:name=".service.MessageSyncService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- Call Service (active call) -->
+        <service
+            android:name=".service.CallService"
+            android:exported="false"
+            android:foregroundServiceType="microphone|camera|phoneCall" />
+
+        <!-- "Hang up" action on the ongoing-call notification (CallHangUpNotification):
+             a way out of a call that does not depend on the call screen. -->
+        <receiver
+            android:name=".service.HangUpCallReceiver"
+            android:exported="false" />
+
+        <!-- Armed check-in (safety accompaniment). The ONLY foreground service
+             typed `location`: without it an armed check-in stopped receiving
+             positions as soon as the app was backgrounded, so neither arrival
+             detection nor the emergency escalation could fire. Started when a
+             check-in is armed, stopped on arrival / cancel / expiry — mirrors
+             OSHI/CheckInManager.swift:236-238 and :256. -->
+        <service
+            android:name=".service.CheckInLocationService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <!-- Live location sharing. iOS keeps positions flowing while backgrounded via
+             allowsBackgroundLocationUpdates (OSHI/LocationSharingManager.swift:459-462);
+             on Android that requires a running location-typed foreground service, which
+             grants continued access on the while-in-use permission alone. Lives exactly
+             as long as the share (LocationSharingManager.start/stopLiveSharing). -->
+        <service
+            android:name=".service.LiveLocationService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <!-- Incoming Call Service (ringing) -->
+        <service
+            android:name=".service.IncomingCallService"
+            android:exported="false"
+            android:foregroundServiceType="phoneCall" />
+
+        <!-- OSHI ConnectionService (Android CallKit equivalent) -->
+        <service
+            android:name=".service.OshiConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
+        </service>
+
+        <!-- Boot Receiver -->
+        <receiver
+            android:name=".service.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- WiFi Direct Broadcast Receiver -->
+        <!--
+          CSPN F-5 (2026-09-16): not exported. The real WiFi-Direct handling is the
+          runtime-registered receiver in MeshNetworkManager (registerReceiver at
+          MeshNetworkManager.kt:373); this manifest receiver is redundant and WiFi
+          P2P system broadcasts are not delivered to manifest receivers on modern
+          Android anyway. Removing the export drops the surface with no behaviour
+          change.
+        -->
+        <receiver
+            android:name=".network.mesh.WifiDirectReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.wifi.p2p.STATE_CHANGED" />
+                <action android:name="android.net.wifi.p2p.PEERS_CHANGED" />
+                <action android:name="android.net.wifi.p2p.CONNECTION_STATE_CHANGE" />
+                <action android:name="android.net.wifi.p2p.THIS_DEVICE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- __WEAR_BRIDGE_2026_11_17__ Answers the OSHI Wear OS app (list / thread /
+             send / react) over the Wearable Data Layer. Play services binds it only
+             for messages from our own watch app (same package + same signature);
+             it answers "disabled" while Settings → Smartwatch is off (default). -->
+        <service android:name=".service.wear.WearBridgeService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/oshi/wear/req" />
+            </intent-filter>
+        </service>
+
+        <!-- Notification Action Receiver (Quick Reply + Mark as Read) -->
+        <receiver android:name=".service.NotificationActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.oshi.messenger.ACTION_REPLY" />
+                <action android:name="com.oshi.messenger.ACTION_MARK_READ" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Scheduled call reminders. Was never declared, so every alarm
+             ScheduledCallManager set targeted an unresolvable component and no
+             reminder has ever fired. -->
+        <receiver android:name=".service.ScheduledCallReceiver"
+            android:exported="false" />
+
+        <!-- Check-in off-ramp: "I'm safe" / "I've arrived" / "+15 min" / "Stop"
+             pressed on a notification, plus the deadline alarm.
+
+             Declared, exported="false", with an explicit intent-filter: these
+             actions must be reachable when OSHI's process is DEAD (the realistic
+             case — the user answers the lock screen twenty minutes after arming a
+             check-in), and a BroadcastReceiver is the component Android will start a
+             fresh process for. Every sender also sets the package explicitly, so the
+             filter never makes these actions available to another app. -->
+<!-- 💓 __ALIVE_CHECK_IN_2026_11_04__ "I'm alive" from the notification shade.
+             Not exported: the only sender is our own PendingIntent, and an exported
+             receiver would let any app on the device confirm a check-in in the
+             user's name — which for this feature means switching someone else's
+             alarm off. -->
+        <receiver android:name=".service.AliveCheckInActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.oshi.messenger.action.ALIVE_CONFIRM" />
+            </intent-filter>
+        </receiver>
+
+                <receiver android:name=".service.CheckInActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.oshi.messenger.action.CHECKIN_SAFE" />
+                <action android:name="com.oshi.messenger.action.CHECKIN_ARRIVED" />
+                <action android:name="com.oshi.messenger.action.CHECKIN_EXTEND" />
+                <action android:name="com.oshi.messenger.action.CHECKIN_CANCEL" />
+                <action android:name="com.oshi.messenger.action.CHECKIN_DEADLINE_TICK" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Firebase Cloud Messaging Service (Push Notifications) -->
+        <service
+            android:name=".service.FCMService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- FCM Default Notification Channel -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="oshi_messages" />
+
+        <!-- FCM Auto-Init (enabled by default) -->
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="true" />
+
+        <!-- File Provider for sharing -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

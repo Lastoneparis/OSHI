@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Privacy disguise: cover transport (audit 2026-11-18) + "Disguise as photo" (docs/stego/STEGO-v1.md).
+     Every sentence here must stay TRUE: see the audit for what each one is allowed to claim. -->
+<resources>
+    <string name="cover_waiting_bubble">Waiting for disguised connection</string>
+    <string name="privacy_disguise_title">Privacy disguise</string>
+    <string name="privacy_disguise_subtitle">Disguise traffic · hide a message in a photo</string>
+    <string name="cover_switch_title">Disguise OSHI traffic</string>
+    <string name="cover_switch_caption">Your 1:1 messages and attachments travel inside padded requests that look like ordinary web analytics, so their size and timing are harder to tell apart. If the disguised connection fails, messages wait — they are never sent undisguised.</string>
+    <string name="cover_not_hidden">Still visible: that you connect to oshi-messenger.com (server name and TLS fingerprint), and group messages, calls, push wake-ups and checks for new mail, which are not disguised. This is not anonymity and does not get around a block of the OSHI server — for that, use Disguise as photo.</string>
+    <string name="disguise_photo_title">Disguise as photo</string>
+    <string name="disguise_photo_explainer">Hide an end-to-end encrypted message for one contact inside an ordinary-looking photo, then send the photo through any app, e-mail or cloud drive — useful when OSHI itself is blocked. In a 1:1 chat: + → Disguise as photo.</string>
+    <string name="disguise_reveal_button">Reveal a hidden message</string>
+    <string name="disguise_reveal_hint">You can also share a received photo to OSHI from any app.</string>
+    <string name="disguise_sheet_for">Only %1$s can read it.</string>
+    <string name="disguise_message_hint">Hidden message</string>
+    <string name="disguise_add_file">Add a small file (max 256 KB)</string>
+    <string name="disguise_remove_file">Remove %1$s</string>
+    <string name="disguise_file_too_large">File too large (max 256 KB)</string>
+    <string name="disguise_cover_generated">Generated landscape</string>
+    <string name="disguise_cover_photo">My photo</string>
+    <string name="disguise_capacity">Uses %1$s of %2$s available in this image</string>
+    <string name="disguise_too_big">Too long for this image. Shorten the message, remove the file or choose a larger photo.</string>
+    <string name="disguise_create_share">Create photo and share</string>
+    <string name="disguise_warning_recompress">Send it as a FILE or document. Apps that recompress photos (most social networks, WhatsApp, Signal or Telegram in photo mode, screenshots) erase the hidden message.</string>
+    <string name="disguise_warning_forensic">This hides the message from anyone looking at the photo. Forensic analysis can still detect that the photo carries hidden data, but cannot read it or tell who it is for.</string>
+    <string name="disguise_working">Creating photo…</string>
+    <string name="disguise_failed">Could not create the photo.</string>
+    <string name="reveal_title">Hidden message</string>
+    <string name="reveal_from">From %1$s</string>
+    <string name="reveal_hidden_on">Hidden on %1$s</string>
+    <string name="reveal_copy">Copy text</string>
+    <string name="reveal_open_file">Open %1$s</string>
+    <string name="reveal_checking">Looking for a hidden message…</string>
+    <string name="reveal_not_found">No hidden message for you in this image. If it was sent as a photo, the app that carried it may have recompressed it — ask for it as a file.</string>
+    <string name="reveal_damaged">This image was made for you by %1$s, but it was altered on the way and can no longer be read. Ask for it to be sent again as a file.</string>
+    <string name="reveal_unreadable">Could not read this file.</string>
+    <string name="disguise_photo_short">Disguise</string>
+</resources>

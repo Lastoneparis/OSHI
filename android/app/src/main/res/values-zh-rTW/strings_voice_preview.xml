@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources>
+    <string name="voice_preview_effect">變聲效果</string>
+    <string name="voice_preview_original">原聲</string>
+    <string name="voice_preview_processing">正在套用%1$s…</string>
+    <string name="voice_preview_failed">%1$s 失敗，已保留原聲</string>
+    <string name="voice_preview_view_once_hint">只能播放一次，之後即消失</string>
+    <string name="voice_preview_listening">正在播放…</string>
+</resources>

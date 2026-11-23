@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Passa aquesta ràdio a OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Gratuït i de codi obert. Conserva la teva regió, canals, claus i contactes, es manté a la xarxa Meshtastic i afegeix missatges llargs, confirmacions de lliurament i missatges guardats 72 h quan algú és fora de línia.</string>
+    <string name="oshimesh_upgrade_share">Envia l’enllaç de l’instal·lador a un ordinador</string>
+    <string name="oshimesh_upgrade_why">El que aporta OSHI Mesh</string>
+    <string name="oshimesh_upgrade_footer">L’instal·lador funciona a Chrome o Edge en un ordinador, per USB. Tria «Conserva la configuració» per actualitzar aquesta ràdio en un minut aproximadament.</string>
+</resources>

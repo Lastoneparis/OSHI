@@ -1,0 +1,9 @@
+===== OSHI call log — run started 2026-09-20T11:00:00.000Z (previous run: call_debug.prev.log) =====
+[2026-09-20T11:00:01.000Z] DIAG_TX_PRIMARY | none -> P2P_DIRECT
+[2026-09-20T11:00:01.500Z] DIAG_PATH | crlf-joined
+[2026-09-20T11:00:02.000Z] DIAG_DECRYPT_FAIL | reason=AEADBadTagException:null
+[2026-09-20T11:00:03.000Z] 📞 CallKit answer
+[2026-09-20T11:00:04.000Z] ❌ CALL FAILED | reason=timeout
+[2026-09-20T11:00:05.000Z] 🧭 P2P: state → CONNECTED
+[2026-09-20T11:00:06.000Z] DIAG_VIDEO_RX_HEALTH | stalled=false | fps=24
+[2026-09-20T11:00:07.000Z] DIAG_WS | event=audio_rx | count=5

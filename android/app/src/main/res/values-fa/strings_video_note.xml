@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">پیام ویدیویی</string>
+    <string name="video_note_title">پیام ویدیویی</string>
+    <string name="video_note_a11y" formatted="true">پیام ویدیویی، %1$s</string>
+    <string name="video_note_play">پخش</string>
+    <string name="video_note_pause">توقف</string>
+    <string name="video_note_record_button">ضبط پیام ویدیویی</string>
+    <string name="video_note_hint">برای ضبط ضربه بزنید یا نگه دارید · حداکثر ۱۵ ثانیه</string>
+    <string name="video_note_record">شروع ضبط</string>
+    <string name="video_note_stop">توقف ضبط</string>
+    <string name="video_note_flip">تعویض دوربین</string>
+    <string name="video_note_close">بستن</string>
+    <string name="video_note_review_title">پیام ویدیویی شما</string>
+    <string name="video_note_preparing">در حال آماده‌سازی…</string>
+    <string name="video_note_discard">حذف</string>
+    <string name="video_note_retake">ضبط دوباره</string>
+    <string name="video_note_send">ارسال پیام ویدیویی</string>
+    <string name="video_note_too_short">خیلی کوتاه است. برای ضبط ضربه بزنید یا دکمه را نگه دارید.</string>
+    <string name="video_note_camera_denied">برای ضبط پیام ویدیویی به دسترسی دوربین نیاز است.</string>
+</resources>

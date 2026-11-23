@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">खोज रहे हैं…</string>
+    <string name="peers_status_peers_found">डिवाइस मिले</string>
+    <string name="peers_status_permission_required">अनुमति चाहिए</string>
+    <string name="peers_subtitle_connected">कनेक्टेड: %1$d</string>
+    <string name="peers_subtitle_connected_cross">कनेक्टेड: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">कनेक्टेड: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">ब्लूटूथ बंद है — आस-पास के डिवाइस ढूँढ़ने के लिए इसे चालू करें</string>
+    <string name="peers_subtitle_permission_both">OSHI ब्लूटूथ का इस्तेमाल नहीं कर पा रहा — न आपको आस-पास के डिवाइस दिखते हैं, न उन्हें आप</string>
+    <string name="peers_subtitle_permission_advertise">आस-पास के डिवाइस आपको नहीं देख पा रहे — “आस-पास के डिवाइस” की अनुमति नहीं है</string>
+    <string name="peers_subtitle_permission_scan">OSHI आस-पास के डिवाइस नहीं खोज पा रहा — “आस-पास के डिवाइस” की अनुमति नहीं है</string>
+    <string name="peers_subtitle_ble_unsupported">यह फ़ोन ब्लूटूथ LE पर प्रसारित नहीं कर सकता</string>
+    <string name="peers_subtitle_ble_busy">ब्लूटूथ व्यस्त है — कोई दूसरा ऐप रेडियो इस्तेमाल कर रहा है</string>
+    <string name="peers_subtitle_ble_down">ब्लूटूथ खोज रुक गई — फिर से कोशिश हो रही है</string>
+    <string name="peers_subtitle_searching_lan">उसी Wi-Fi नेटवर्क पर लोगों को खोजा जा रहा है…</string>
+    <string name="peers_subtitle_disabled">मेश नेटवर्क बंद</string>
+    <string name="peers_subtitle_looking">आपके आस-पास के डिवाइस खोजे जा रहे हैं…</string>
+    <string name="peers_permission_card_title">आस-पास के डिवाइस खोजना चालू करें</string>
+    <string name="peers_permission_card_body">आपके आस-पास के फ़ोन ढूँढ़ने के लिए OSHI को “आस-पास के डिवाइस” की अनुमति चाहिए। इसके बिना हर संदेश इंटरनेट से जाता है।</string>
+    <string name="peers_permission_card_action">अनुमति दें</string>
+    <string name="peers_permission_card_settings">सेटिंग खोलें</string>
+    <string name="peers_permission_card_denied_body">अनुमति अस्वीकार कर दी गई, इसलिए OSHI आपके पास किसी को नहीं ढूँढ़ सकता। Android सेटिंग में OSHI के लिए “आस-पास के डिवाइस” चालू करें।</string>
+    <string name="peers_same_wifi_note">दोनों फ़ोन एक ही Wi-Fi नेटवर्क पर होने चाहिए। मोबाइल डेटा पर संदेश इंटरनेट से जाते हैं।</string>
+    <string name="peers_control_visible">दृश्यमान</string>
+    <string name="peers_control_scan">स्कैन</string>
+    <string name="peers_control_auto">स्वतः</string>
+    <string name="peers_section_devices">डिवाइस</string>
+    <string name="peers_action_connect">कनेक्ट करें</string>
+    <string name="peers_action_reconnect">फिर से कनेक्ट करें</string>
+    <string name="peers_info_reach_title">पहुँच</string>
+    <string name="peers_info_reach_desc">जहाँ तक आपका Wi-Fi नेटवर्क पहुँचता है। संदेश उसी नेटवर्क के दूसरे OSHI डिवाइस से होकर 50 हॉप तक जा सकते हैं।</string>
+    <string name="peers_info_connection_desc">ब्लूटूथ LE और Bonjour दो डिवाइस का परिचय कराते हैं और एक पता साझा करते हैं। संदेश खुद आपके लोकल नेटवर्क से जाते हैं।</string>
+    <string name="peers_info_tip1">दोनों फ़ोन एक ही Wi-Fi नेटवर्क पर रखें</string>
+    <string name="peers_info_tip2">ब्लूटूथ चालू रखें ताकि डिवाइस एक-दूसरे को ढूँढ़ सकें</string>
+    <string name="peers_info_tip3">बिना इंटरनेट के भी काम करता है — पर मोबाइल डेटा पर नहीं</string>
+</resources>

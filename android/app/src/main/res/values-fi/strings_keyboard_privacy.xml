@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Näppäimistö</string>
+    <string name="keyboard_incognito_title">Incognito-näppäimistö</string>
+    <string name="keyboard_incognito_subtitle">Pyydä näppäimistöä olemaan oppimatta kirjoittamaasi</string>
+    <string name="keyboard_status_title">Nykyinen näppäimistö</string>
+    <string name="keyboard_status_trusted">%1$s · Sisäänrakennettu näppäimistö</string>
+    <string name="keyboard_status_third_party">%1$s · Kolmannen osapuolen näppäimistö</string>
+    <string name="keyboard_status_unknown">Tuntematon näppäimistö</string>
+    <string name="keyboard_privacy_explainer">OSHI salaa tällä puhelimella, mutta kirjoittamasi kulkee ensin näppäimistön kautta. Incognito pyytää näppäimistöä olemaan oppimatta tai tallentamatta sanojasi — Android ei voi pakottaa näppäimistöä tottelemaan, vain pyytää. Kolmannen osapuolen näppäimistö voi silti lukea jokaisen näppäilyn, joten käytä mieluummin puhelimen sisäänrakennettua näppäimistöä. Jos itse puhelin on vaarantunut (vakoiluohjelma), mikään sovellus ei voi suojata kirjoittamaasi.</string>
+    <string name="keyboard_banner_title">Näppäimistösi voi lukea kirjoittamasi ennen kuin OSHI salaa sen</string>
+    <string name="keyboard_banner_body">%1$s on kolmannen osapuolen näppäimistö. Vaihda yksityisiä keskusteluja varten puhelimen sisäänrakennettuun näppäimistöön.</string>
+    <string name="keyboard_banner_switch">Vaihda näppäimistö</string>
+    <string name="keyboard_banner_dismiss">Sulje</string>
+</resources>

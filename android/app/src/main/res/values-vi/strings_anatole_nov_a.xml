@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Liên hệ mới</string>
+    <string name="conversation_open_contact">Mở liên hệ</string>
+    <string name="conversation_muted">Đã tắt thông báo</string>
+    <string name="fab_new_contact">Liên hệ mới</string>
+    <string name="fab_pick_contact_voice">Cuộc gọi thoại — chọn liên hệ</string>
+    <string name="fab_pick_contact_video">Cuộc gọi video — chọn liên hệ</string>
+    <string name="fab_pick_contact_empty">Chưa có liên hệ nào. Hãy thêm ai đó trước.</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">स्मार्टवॉच</string>
+    <string name="settings_smartwatch_subtitle">Wear OS घड़ी पर अपनी चैट पढ़ें और जवाब दें। एन्क्रिप्शन और भेजना इसी फ़ोन पर रहता है; घड़ी कुछ भी सहेजती नहीं।</string>
+</resources>

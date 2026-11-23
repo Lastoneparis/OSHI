@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Nâng cấp bộ đàm này lên OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Miễn phí và mã nguồn mở. Giữ nguyên khu vực, kênh, khóa và danh bạ của bạn, vẫn ở trên mạng Meshtastic, đồng thời thêm tin nhắn dài, xác nhận đã nhận và lưu tin nhắn 72 giờ khi người nhận ngoại tuyến.</string>
+    <string name="oshimesh_upgrade_share">Gửi liên kết trình nạp tới máy tính</string>
+    <string name="oshimesh_upgrade_why">OSHI Mesh mang lại gì</string>
+    <string name="oshimesh_upgrade_footer">Trình nạp chạy trên Chrome hoặc Edge ở máy tính, qua USB. Chọn “Giữ cài đặt của tôi” để cập nhật bộ đàm này trong khoảng một phút.</string>
+</resources>

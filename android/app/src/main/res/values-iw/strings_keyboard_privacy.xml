@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">מקלדת</string>
+    <string name="keyboard_incognito_title">מקלדת בגלישה בסתר</string>
+    <string name="keyboard_incognito_subtitle">לבקש מהמקלדת לא ללמוד את מה שאתה מקליד</string>
+    <string name="keyboard_status_title">המקלדת הנוכחית</string>
+    <string name="keyboard_status_trusted">%1$s · מקלדת מובנית</string>
+    <string name="keyboard_status_third_party">%1$s · מקלדת של צד שלישי</string>
+    <string name="keyboard_status_unknown">מקלדת לא ידועה</string>
+    <string name="keyboard_privacy_explainer">OSHI מצפינה בטלפון הזה, אבל מה שאתה מקליד עובר קודם דרך המקלדת. מצב גלישה בסתר מבקש מהמקלדת לא ללמוד ולא לשמור את המילים שלך — Android לא יכולה לחייב מקלדת לציית, רק לבקש. מקלדת של צד שלישי עדיין יכולה לקרוא כל הקשה, לכן עדיף להשתמש במקלדת המובנית של הטלפון. אם הטלפון עצמו נפרץ (רוגלה), שום אפליקציה לא יכולה להגן על מה שאתה מקליד.</string>
+    <string name="keyboard_banner_title">המקלדת שלך יכולה לקרוא את מה שאתה מקליד לפני ש-OSHI מצפינה אותו</string>
+    <string name="keyboard_banner_body">%1$s היא מקלדת של צד שלישי. לשיחות פרטיות, עבור למקלדת המובנית של הטלפון.</string>
+    <string name="keyboard_banner_switch">החלפת מקלדת</string>
+    <string name="keyboard_banner_dismiss">סגירה</string>
+</resources>

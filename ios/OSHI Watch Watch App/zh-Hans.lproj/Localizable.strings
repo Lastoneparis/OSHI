@@ -1,0 +1,136 @@
+/* OSHI Watch App - Simplified Chinese */
+
+/* Status */
+"watch.status.connected" = "已连接";
+"watch.status.not_reachable" = "无法连接iPhone";
+
+/* Navigation */
+"watch.open_iphone" = "在iPhone上打开OSHI";
+
+/* Common */
+"common.refresh" = "刷新";
+"common.cancel" = "取消";
+
+/* Messages */
+"watch.loading_messages" = "加载消息中…";
+"watch.no_messages" = "暂无消息";
+"watch.sending" = "发送中…";
+"watch.dictate" = "听写";
+"watch.voice_message" = "语音消息";
+"watch.reply" = "回复";
+"watch.media_attachment" = "媒体附件";
+
+/* Quick Replies */
+"watch.quick.yes" = "是";
+"watch.quick.no" = "否";
+"watch.quick.ok" = "好的";
+"watch.quick.later" = "稍后";
+"watch.quick.omw" = "我在路上！";
+"watch.quick.thanks" = "谢谢";
+
+/* Errors */
+"watch.error.send_failed" = "消息发送失败";
+"watch.send.queued" = "已排队待发送";
+"watch.error.not_reachable" = "无法连接iPhone";
+
+/* Calls */
+"watch.call.incoming_video" = "来电视频通话";
+"watch.call.incoming_voice" = "来电语音通话";
+"watch.call.video" = "视频通话";
+"watch.call.voice" = "语音通话";
+"watch.call.connecting" = "连接中…";
+"watch.call.ringing" = "响铃中…";
+"watch.call.in_call" = "通话中";
+"watch.call.ended" = "通话结束";
+"watch.call.start" = "开始通话";
+"watch.call.unknown" = "未知";
+
+/* Call Actions */
+"call.action.accept" = "接听";
+"call.action.decline" = "拒绝";
+
+/* Notifications */
+"watch.notification.new_message" = "新消息";
+
+/* Call Summary */
+"call.outgoing" = "去电";
+"call.incoming" = "来电";
+"call.no.answer" = "无人接听";
+"call.declined" = "已拒绝";
+"call.missed" = "未接来电";
+"call.video.outgoing" = "视频去电";
+"call.video.incoming" = "视频来电";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "回复";
+"send" = "发送";
+"type_message" = "输入消息";
+"notification.action.mark_read" = "标为已读";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "聊天";
+"w2.empty.title" = "暂无聊天";
+"w2.empty.body" = "你 iPhone 上的 OSHI 聊天会显示在这里。";
+"w2.disabled.title" = "智能手表已关闭";
+"w2.disabled.body" = "请在 iPhone 上的 OSHI 中开启：设置 › 已关联的设备 › 智能手表。";
+"w2.locked.title" = "OSHI 已锁定";
+"w2.locked.body" = "请在 iPhone 上解锁 OSHI，然后重试。";
+"w2.unavailable.title" = "OSHI 尚未就绪";
+"w2.unavailable.body" = "请在 iPhone 上打开一次 OSHI，然后重试。";
+"w2.nophone.title" = "无法连接 iPhone";
+"w2.nophone.body" = "请将装有 OSHI 的 iPhone 放在附近。";
+"w2.error.title" = "出了点问题";
+"w2.error.body" = "iPhone 没有响应。请重试。";
+"w2.notfound" = "此聊天已不在你的 iPhone 上。";
+"w2.retry" = "重试";
+"w2.reply" = "回复";
+"w2.you" = "你";
+"w2.you_prefix" = "你：%@";
+"w2.react" = "回应";
+"w2.speak_or_type" = "说话或输入";
+"w2.quick_replies" = "快速回复";
+"w2.sending" = "正在发送…";
+"w2.sent" = "已发送";
+"w2.send_failed" = "未发送。请在 iPhone 上重试。";
+"w2.read_only" = "你无法回复此聊天。";
+"w2.view_once" = "👁 仅查看一次 — 请在 iPhone 上打开";
+"w2.view_once_short" = "👁 仅查看一次";
+"w2.e2e" = "由你的 iPhone 端到端加密";
+"w2.replying_to" = "回复给";
+"w2.loading" = "正在载入…";
+"w2.unread_count" = "%d 条未读";
+"w2.all_read" = "全部已读";
+"w2.call" = "呼叫";
+"w2.media.photo" = "📷 照片";
+"w2.media.video" = "🎥 视频";
+"w2.media.voice" = "🎤 语音";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 文件";
+"w2.media.location" = "📍 位置";
+"w2.media.contact" = "👤 联系人";
+"w2.qr.on_my_way" = "在路上了";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "稍后给你打电话";
+"w2.qr.thanks" = "谢谢！";
+"w2.qr.yes" = "是";
+"w2.qr.no" = "否";
+"w2.qr.busy" = "现在不方便通话";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "喜欢";
+"w2.r.laugh" = "大笑";
+"w2.r.cry" = "难过";
+"w2.r.thumbs" = "点赞";
+"w2.r.wow" = "哇";
+"w2.r.fire" = "火";
+"w2.mute" = "静音";
+"w2.end_call" = "挂断";
+"w2.speaker" = "扬声器";
+"w2.widget.off" = "请在 iPhone 上的 OSHI 中开启智能手表";
+"w2.widget.off_short" = "已关闭";
+"w2.widget.locked" = "请在 iPhone 上解锁 OSHI";
+"w2.widget.locked_short" = "已锁定";
+"w2.widget.open" = "打开 OSHI";
+"w2.widget.name" = "OSHI 未读";
+"w2.widget.desc" = "未读数量和发送者 — 绝不显示消息内容。";

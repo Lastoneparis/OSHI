@@ -1,0 +1,136 @@
+/* OSHI Watch App - Catalan */
+
+/* Status */
+"watch.status.connected" = "Connectat";
+"watch.status.not_reachable" = "iPhone no accessible";
+
+/* Navigation */
+"watch.open_iphone" = "Obre OSHI a l'iPhone";
+
+/* Common */
+"common.refresh" = "Actualitza";
+"common.cancel" = "Cancel·la";
+
+/* Messages */
+"watch.loading_messages" = "Carregant missatges…";
+"watch.no_messages" = "No hi ha missatges";
+"watch.sending" = "Enviant…";
+"watch.dictate" = "Dicta";
+"watch.voice_message" = "Missatge de veu";
+"watch.reply" = "Respon";
+"watch.media_attachment" = "Fitxer adjunt";
+
+/* Quick Replies */
+"watch.quick.yes" = "Sí";
+"watch.quick.no" = "No";
+"watch.quick.ok" = "D'acord";
+"watch.quick.later" = "Més tard";
+"watch.quick.omw" = "De camí!";
+"watch.quick.thanks" = "Gràcies";
+
+/* Errors */
+"watch.error.send_failed" = "No s'ha pogut enviar el missatge";
+"watch.send.queued" = "En cua per a l'iPhone";
+"watch.error.not_reachable" = "iPhone no accessible";
+
+/* Calls */
+"watch.call.incoming_video" = "Videotrucada entrant";
+"watch.call.incoming_voice" = "Trucada de veu entrant";
+"watch.call.video" = "Videotrucada";
+"watch.call.voice" = "Trucada de veu";
+"watch.call.connecting" = "Connectant…";
+"watch.call.ringing" = "Sonant…";
+"watch.call.in_call" = "En trucada";
+"watch.call.ended" = "Trucada finalitzada";
+"watch.call.start" = "Inicia la trucada";
+"watch.call.unknown" = "Desconegut";
+
+/* Call Actions */
+"call.action.accept" = "Accepta";
+"call.action.decline" = "Rebutja";
+
+/* Notifications */
+"watch.notification.new_message" = "Missatge nou";
+
+/* Call Summary */
+"call.outgoing" = "Trucada sortint";
+"call.incoming" = "Trucada entrant";
+"call.no.answer" = "Sense resposta";
+"call.declined" = "Rebutjada";
+"call.missed" = "Trucada perduda";
+"call.video.outgoing" = "Videotrucada sortint";
+"call.video.incoming" = "Videotrucada entrant";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Respon";
+"send" = "Envia";
+"type_message" = "Escriu un missatge";
+"notification.action.mark_read" = "Marca com a llegit";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Xats";
+"w2.empty.title" = "Encara no hi ha xats";
+"w2.empty.body" = "Aquí apareixen els teus xats d'OSHI de l'iPhone.";
+"w2.disabled.title" = "Rellotge intel·ligent desactivat";
+"w2.disabled.body" = "Activa'l a OSHI a l'iPhone: Configuració › Dispositius enllaçats › Rellotge intel·ligent.";
+"w2.locked.title" = "OSHI està bloquejat";
+"w2.locked.body" = "Desbloqueja OSHI a l'iPhone i torna-ho a provar.";
+"w2.unavailable.title" = "OSHI no està a punt";
+"w2.unavailable.body" = "Obre OSHI un cop a l'iPhone i torna-ho a provar.";
+"w2.nophone.title" = "iPhone no disponible";
+"w2.nophone.body" = "Tingues l'iPhone a prop amb OSHI instal·lat.";
+"w2.error.title" = "Alguna cosa ha fallat";
+"w2.error.body" = "L'iPhone no ha respost. Torna-ho a provar.";
+"w2.notfound" = "Aquest xat ja no és a l'iPhone.";
+"w2.retry" = "Reintentar";
+"w2.reply" = "Respondre";
+"w2.you" = "Tu";
+"w2.you_prefix" = "Tu: %@";
+"w2.react" = "Reaccionar";
+"w2.speak_or_type" = "Dicta o escriu";
+"w2.quick_replies" = "Respostes ràpides";
+"w2.sending" = "Enviant…";
+"w2.sent" = "Enviat";
+"w2.send_failed" = "No enviat. Torna-ho a provar a l'iPhone.";
+"w2.read_only" = "No pots respondre en aquest xat.";
+"w2.view_once" = "👁 Visualització única: obre-ho a l'iPhone";
+"w2.view_once_short" = "👁 Visualització única";
+"w2.e2e" = "Xifrat d'extrem a extrem per l'iPhone";
+"w2.replying_to" = "En resposta a";
+"w2.loading" = "Carregant…";
+"w2.unread_count" = "%d sense llegir";
+"w2.all_read" = "Tot llegit";
+"w2.call" = "Trucar";
+"w2.media.photo" = "📷 Foto";
+"w2.media.video" = "🎥 Vídeo";
+"w2.media.voice" = "🎤 Àudio";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Fitxer";
+"w2.media.location" = "📍 Ubicació";
+"w2.media.contact" = "👤 Contacte";
+"w2.qr.on_my_way" = "Ja vinc";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Et trucaré més tard";
+"w2.qr.thanks" = "Gràcies!";
+"w2.qr.yes" = "Sí";
+"w2.qr.no" = "No";
+"w2.qr.busy" = "Ara no puc parlar";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "M'encanta";
+"w2.r.laugh" = "Riure";
+"w2.r.cry" = "Trist";
+"w2.r.thumbs" = "Polze amunt";
+"w2.r.wow" = "Uau";
+"w2.r.fire" = "Foc";
+"w2.mute" = "Silenciar";
+"w2.end_call" = "Penjar";
+"w2.speaker" = "Altaveu";
+"w2.widget.off" = "Activa Rellotge intel·ligent a OSHI a l'iPhone";
+"w2.widget.off_short" = "Desactivat";
+"w2.widget.locked" = "Desbloqueja OSHI a l'iPhone";
+"w2.widget.locked_short" = "Bloquejat";
+"w2.widget.open" = "Obrir OSHI";
+"w2.widget.name" = "OSHI sense llegir";
+"w2.widget.desc" = "Quants sense llegir i qui ha escrit, mai els missatges.";

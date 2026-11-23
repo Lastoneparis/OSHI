@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">गोल वीडियो संदेश, अधिकतम 15 सेकंड</string>
+    <string name="settings_panic_wipe_title">लोगो टैप करके मिटाएँ</string>
+    <string name="settings_panic_wipe_subtitle">OSHI लोगो पर तीन बार जल्दी टैप करने से इस फ़ोन के सभी संदेश, कुंजियाँ और फ़ाइलें बिना पुष्टि के मिट जाती हैं। जब तक आप इसे चालू नहीं करते, यह बंद रहता है।</string>
+    <string name="map_layer_title">मानचित्र प्रकार</string>
+    <string name="map_layer_standard">मानक</string>
+    <string name="map_layer_terrain">भू-भाग</string>
+    <string name="map_layer_satellite">सैटेलाइट</string>
+    <string name="map_layer_standard_desc">OSHI मानचित्र, डाउनलोड किए गए क्षेत्रों के साथ ऑफ़लाइन काम करता है</string>
+    <string name="map_layer_third_party_desc" formatted="true">केवल ऑनलाइन। सीधे %1$s से लोड होता है, जो आपके देखे जा रहे क्षेत्र को देख सकता है।</string>
+    <string name="map_layer_offline_only_note">“केवल ऑफ़लाइन मानचित्र” चालू है: यह परत केवल वही टाइलें दिखाती है जिन्हें आप पहले देख चुके हैं।</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Gekoppelde apparaten</string>
+    <string name="devsync_settings_subtitle">Synchroniseer je geschiedenis rechtstreeks tussen je apparaten</string>
+    <string name="devsync_status_on">Directe synchronisatie staat aan. Je geschiedenis gaat van apparaat naar apparaat; er wordt niets op de server opgeslagen.</string>
+    <string name="devsync_status_off">Directe synchronisatie staat uit op dit apparaat.</string>
+    <string name="devsync_this_device">Dit apparaat</string>
+    <string name="devsync_device_id">Apparaat-ID %1$s</string>
+    <string name="devsync_debug_override">Directe synchronisatie (debug-override)</string>
+    <string name="devsync_debug_override_desc">Directe apparaatsynchronisatie forceren voor deze installatie, wat de server ook zegt</string>
+    <string name="devsync_pending_title">Nieuw apparaat goedkeuren</string>
+    <string name="devsync_pending_body">%1$s (%2$s) wil je geschiedenis ontvangen. Controleer of het andere scherm dezelfde code toont.</string>
+    <string name="devsync_waiting_body">Wachten op goedkeuring op je andere apparaat. Controleer of het dezelfde code toont.</string>
+    <string name="devsync_peer_approved">Het andere apparaat heeft al goedgekeurd. Keur hier goed om af te ronden.</string>
+    <string name="devsync_allow">Toestaan</string>
+    <string name="devsync_deny">Weigeren</string>
+    <string name="devsync_linked_title">Gekoppelde apparaten</string>
+    <string name="devsync_none_linked">Nog geen apparaat gekoppeld. Open OSHI op je andere apparaat, op hetzelfde wifi-netwerk of tegelijk online.</string>
+    <string name="devsync_last_sync">Laatste synchronisatie: %1$s</string>
+    <string name="devsync_never">nooit</string>
+    <string name="devsync_syncing_now">Nu aan het synchroniseren (%1$s)</string>
+    <string name="devsync_remove">Verwijderen</string>
+    <string name="devsync_remove_confirm_title">%1$s verwijderen?</string>
+    <string name="devsync_remove_confirm_body">Het ontvangt je geschiedenis niet meer. Wat het al heeft, blijft behouden.</string>
+    <string name="devsync_sync_now">Nu synchroniseren</string>
+    <string name="devsync_cancel">Annuleren</string>
+    <string name="devsync_alert_unapproved">Een apparaat met je account probeerde te synchroniseren: %1$s</string>
+    <string name="devsync_alert_linked">Een nieuw apparaat, %1$s, kan nu je geschiedenis ontvangen</string>
+</resources>

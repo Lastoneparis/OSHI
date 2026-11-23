@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Αναμονή για χρόνο εκπομπής ραδιοφώνου (νόμιμο όριο κύκλου λειτουργίας)</string>
+    <string name="lora_jamming_title">Εντοπίστηκαν ραδιοπαρεμβολές — πιθανή παρεμβολή</string>
+    <string name="lora_jamming_detail">Τα μηνύματα θα σταλούν μέσω Bluetooth mesh ή διαδικτύου όταν είναι διαθέσιμα. Τα μηνύματα για τον πομπό διατηρούνται και θα σταλούν μέσω LoRa μόλις καθαρίσει το κανάλι.</string>
+    <string name="lora_jamming_send_anyway">Αποστολή μέσω LoRa ούτως ή άλλως</string>
+    <string name="lora_jamming_override_active">Αποστολή μέσω LoRa ούτως ή άλλως έως τις %1$s ή μέχρι να καθαρίσει το κανάλι. Τα μηνύματα ίσως δεν φτάσουν.</string>
+</resources>

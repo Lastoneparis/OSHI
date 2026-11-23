@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">Smartwatch</string>
+    <string name="settings_smartwatch_subtitle">Read and answer your chats on a Wear OS watch. Encryption and sending stay on this phone; the watch keeps nothing.</string>
+</resources>

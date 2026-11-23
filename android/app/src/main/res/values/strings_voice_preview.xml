@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VOICE_PREVIEW_2026_09_29__ voice-message preview sheet + view-once voice -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="voice_preview_effect">Voice effect</string>
+    <string name="voice_preview_original">Original voice</string>
+    <string name="voice_preview_processing">Applying %1$s…</string>
+    <string name="voice_preview_failed">%1$s didn\'t work, original kept</string>
+    <string name="voice_preview_view_once_hint">Can be played only once, then it\'s gone</string>
+    <string name="voice_preview_listening">Listening…</string>
+</resources>

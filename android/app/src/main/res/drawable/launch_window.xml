@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SPLASH_HANDOVER_2026_11_16__ API 26–30 starting window (no system
+     splash there): the splash ground and the same logo, at the same 200dp, at
+     the window centre, that LaunchScreen.kt draws first (LaunchMetrics.MASCOT_DP)
+     — so the first app frame replaces it without a flash. Was the plain
+     theme background (white on a light phone) then a purple launch screen. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque">
+    <item android:drawable="@color/launch_background" />
+    <item
+        android:width="200dp"
+        android:height="200dp"
+        android:gravity="center"
+        android:drawable="@drawable/mascot_launch_logo" />
+</layer-list>

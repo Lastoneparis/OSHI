@@ -1,0 +1,136 @@
+/* OSHI Watch App - Czech */
+
+/* Status */
+"watch.status.connected" = "Připojeno";
+"watch.status.not_reachable" = "iPhone nedostupný";
+
+/* Navigation */
+"watch.open_iphone" = "Otevřít OSHI na iPhonu";
+
+/* Common */
+"common.refresh" = "Obnovit";
+"common.cancel" = "Zrušit";
+
+/* Messages */
+"watch.loading_messages" = "Načítání zpráv…";
+"watch.no_messages" = "Žádné zprávy";
+"watch.sending" = "Odesílání…";
+"watch.dictate" = "Diktovat";
+"watch.voice_message" = "Hlasová zpráva";
+"watch.reply" = "Odpovědět";
+"watch.media_attachment" = "Příloha";
+
+/* Quick Replies */
+"watch.quick.yes" = "Ano";
+"watch.quick.no" = "Ne";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Později";
+"watch.quick.omw" = "Už jdu!";
+"watch.quick.thanks" = "Díky";
+
+/* Errors */
+"watch.error.send_failed" = "Zprávu se nepodařilo odeslat";
+"watch.send.queued" = "Ve frontě pro iPhone";
+"watch.error.not_reachable" = "iPhone je nedostupný";
+
+/* Calls */
+"watch.call.incoming_video" = "Příchozí videohovor";
+"watch.call.incoming_voice" = "Příchozí hlasový hovor";
+"watch.call.video" = "Videohovor";
+"watch.call.voice" = "Hlasový hovor";
+"watch.call.connecting" = "Připojování…";
+"watch.call.ringing" = "Vyzvánění…";
+"watch.call.in_call" = "V hovoru";
+"watch.call.ended" = "Hovor ukončen";
+"watch.call.start" = "Zahájit hovor";
+"watch.call.unknown" = "Neznámý";
+
+/* Call Actions */
+"call.action.accept" = "Přijmout";
+"call.action.decline" = "Odmítnout";
+
+/* Notifications */
+"watch.notification.new_message" = "Nová zpráva";
+
+/* Call Summary */
+"call.outgoing" = "Odchozí hovor";
+"call.incoming" = "Příchozí hovor";
+"call.no.answer" = "Bez odpovědi";
+"call.declined" = "Odmítnuto";
+"call.missed" = "Zmeškaný hovor";
+"call.video.outgoing" = "Odchozí videohovor";
+"call.video.incoming" = "Příchozí videohovor";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Odpovědět";
+"send" = "Odeslat";
+"type_message" = "Napište zprávu";
+"notification.action.mark_read" = "Přečteno";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Chaty";
+"w2.empty.title" = "Zatím žádné chaty";
+"w2.empty.body" = "Tady se zobrazí vaše chaty OSHI z iPhonu.";
+"w2.disabled.title" = "Chytré hodinky jsou vypnuté";
+"w2.disabled.body" = "Zapněte je v OSHI na iPhonu: Nastavení › Propojená zařízení › Chytré hodinky.";
+"w2.locked.title" = "OSHI je zamčené";
+"w2.locked.body" = "Odemkněte OSHI na iPhonu a zkuste to znovu.";
+"w2.unavailable.title" = "OSHI není připravené";
+"w2.unavailable.body" = "Otevřete OSHI jednou na iPhonu a zkuste to znovu.";
+"w2.nophone.title" = "iPhone není dostupný";
+"w2.nophone.body" = "Mějte iPhone s OSHI poblíž.";
+"w2.error.title" = "Něco se pokazilo";
+"w2.error.body" = "iPhone neodpověděl. Zkuste to znovu.";
+"w2.notfound" = "Tento chat už na iPhonu není.";
+"w2.retry" = "Zkusit znovu";
+"w2.reply" = "Odpovědět";
+"w2.you" = "Vy";
+"w2.you_prefix" = "Vy: %@";
+"w2.react" = "Reagovat";
+"w2.speak_or_type" = "Diktujte nebo pište";
+"w2.quick_replies" = "Rychlé odpovědi";
+"w2.sending" = "Odesílání…";
+"w2.sent" = "Odesláno";
+"w2.send_failed" = "Neodesláno. Zkuste to znovu na iPhonu.";
+"w2.read_only" = "Do tohoto chatu nemůžete odpovídat.";
+"w2.view_once" = "👁 Zobrazit jednou – otevřete na iPhonu";
+"w2.view_once_short" = "👁 Zobrazit jednou";
+"w2.e2e" = "Koncově šifrováno vaším iPhonem";
+"w2.replying_to" = "Odpověď na";
+"w2.loading" = "Načítání…";
+"w2.unread_count" = "Nepřečtené: %d";
+"w2.all_read" = "Vše přečteno";
+"w2.call" = "Volat";
+"w2.media.photo" = "📷 Fotka";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Hlasová zpráva";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Soubor";
+"w2.media.location" = "📍 Poloha";
+"w2.media.contact" = "👤 Kontakt";
+"w2.qr.on_my_way" = "Jsem na cestě";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Zavolám později";
+"w2.qr.thanks" = "Díky!";
+"w2.qr.yes" = "Ano";
+"w2.qr.no" = "Ne";
+"w2.qr.busy" = "Teď nemůžu mluvit";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Láska";
+"w2.r.laugh" = "Smích";
+"w2.r.cry" = "Smutek";
+"w2.r.thumbs" = "Palec nahoru";
+"w2.r.wow" = "Páni";
+"w2.r.fire" = "Oheň";
+"w2.mute" = "Ztlumit";
+"w2.end_call" = "Zavěsit";
+"w2.speaker" = "Reproduktor";
+"w2.widget.off" = "Zapněte Chytré hodinky v OSHI na iPhonu";
+"w2.widget.off_short" = "Vyp.";
+"w2.widget.locked" = "Odemkněte OSHI na iPhonu";
+"w2.widget.locked_short" = "Zamčeno";
+"w2.widget.open" = "Otevřít OSHI";
+"w2.widget.name" = "OSHI nepřečtené";
+"w2.widget.desc" = "Počet nepřečtených a kdo psal – nikdy zprávy.";

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Anatole, 13/11 (batch A): conversation-list sheet, FAB menu, saved contacts. -->
+<resources>
+    <!-- N18: preview line of a saved contact nobody has written to yet. -->
+    <string name="conversation_saved_contact_preview">New contact</string>
+    <!-- N8: long-press sheet on a conversation row. -->
+    <string name="conversation_open_contact">Open contact</string>
+    <string name="conversation_muted">Notifications off</string>
+    <!-- N4: the "New" button's menu. -->
+    <string name="fab_new_contact">New contact</string>
+    <string name="fab_pick_contact_voice">Voice call — choose a contact</string>
+    <string name="fab_pick_contact_video">Video call — choose a contact</string>
+    <string name="fab_pick_contact_empty">No contacts yet. Add someone first.</string>
+</resources>

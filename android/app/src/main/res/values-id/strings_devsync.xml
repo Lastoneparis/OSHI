@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Perangkat tertaut</string>
+    <string name="devsync_settings_subtitle">Sinkronkan riwayat Anda langsung antarperangkat</string>
+    <string name="devsync_status_on">Sinkronisasi langsung aktif. Riwayat Anda berpindah dari perangkat ke perangkat; tidak ada yang disimpan di server.</string>
+    <string name="devsync_status_off">Sinkronisasi langsung nonaktif di perangkat ini.</string>
+    <string name="devsync_this_device">Perangkat ini</string>
+    <string name="devsync_device_id">ID perangkat %1$s</string>
+    <string name="devsync_debug_override">Sinkronisasi langsung (override debug)</string>
+    <string name="devsync_debug_override_desc">Paksa sinkronisasi langsung untuk instalasi ini, apa pun kata server</string>
+    <string name="devsync_pending_title">Setujui perangkat baru</string>
+    <string name="devsync_pending_body">%1$s (%2$s) ingin menerima riwayat Anda. Pastikan layar lain menampilkan kode yang sama.</string>
+    <string name="devsync_waiting_body">Menunggu persetujuan di perangkat Anda yang lain. Pastikan perangkat itu menampilkan kode yang sama.</string>
+    <string name="devsync_peer_approved">Perangkat lain sudah menyetujui. Setujui di sini untuk menyelesaikan.</string>
+    <string name="devsync_allow">Izinkan</string>
+    <string name="devsync_deny">Tolak</string>
+    <string name="devsync_linked_title">Perangkat tertaut</string>
+    <string name="devsync_none_linked">Belum ada perangkat tertaut. Buka OSHI di perangkat Anda yang lain, di Wi-Fi yang sama atau online pada saat yang sama.</string>
+    <string name="devsync_last_sync">Sinkronisasi terakhir: %1$s</string>
+    <string name="devsync_never">tidak pernah</string>
+    <string name="devsync_syncing_now">Menyinkronkan (%1$s)</string>
+    <string name="devsync_remove">Hapus</string>
+    <string name="devsync_remove_confirm_title">Hapus %1$s?</string>
+    <string name="devsync_remove_confirm_body">Perangkat ini tidak akan menerima riwayat Anda lagi. Yang sudah ada tetap disimpan.</string>
+    <string name="devsync_sync_now">Sinkronkan sekarang</string>
+    <string name="devsync_cancel">Batal</string>
+    <string name="devsync_alert_unapproved">Perangkat yang memakai akun Anda mencoba menyinkronkan: %1$s</string>
+    <string name="devsync_alert_linked">Perangkat baru, %1$s, kini dapat menerima riwayat Anda</string>
+</resources>

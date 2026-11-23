@@ -1,0 +1,136 @@
+/* OSHI Watch App - Russian */
+
+/* Status */
+"watch.status.connected" = "Подключено";
+"watch.status.not_reachable" = "iPhone недоступен";
+
+/* Navigation */
+"watch.open_iphone" = "Открыть OSHI на iPhone";
+
+/* Common */
+"common.refresh" = "Обновить";
+"common.cancel" = "Отмена";
+
+/* Messages */
+"watch.loading_messages" = "Загрузка сообщений…";
+"watch.no_messages" = "Нет сообщений";
+"watch.sending" = "Отправка…";
+"watch.dictate" = "Диктовка";
+"watch.voice_message" = "Голосовое сообщение";
+"watch.reply" = "Ответить";
+"watch.media_attachment" = "Медиафайл";
+
+/* Quick Replies */
+"watch.quick.yes" = "Да";
+"watch.quick.no" = "Нет";
+"watch.quick.ok" = "ОК";
+"watch.quick.later" = "Позже";
+"watch.quick.omw" = "Уже еду!";
+"watch.quick.thanks" = "Спасибо";
+
+/* Errors */
+"watch.error.send_failed" = "Не удалось отправить сообщение";
+"watch.send.queued" = "В очереди на iPhone";
+"watch.error.not_reachable" = "iPhone недоступен";
+
+/* Calls */
+"watch.call.incoming_video" = "Входящий видеозвонок";
+"watch.call.incoming_voice" = "Входящий голосовой звонок";
+"watch.call.video" = "Видеозвонок";
+"watch.call.voice" = "Голосовой звонок";
+"watch.call.connecting" = "Подключение…";
+"watch.call.ringing" = "Звонок…";
+"watch.call.in_call" = "В звонке";
+"watch.call.ended" = "Звонок завершён";
+"watch.call.start" = "Начать звонок";
+"watch.call.unknown" = "Неизвестный";
+
+/* Call Actions */
+"call.action.accept" = "Принять";
+"call.action.decline" = "Отклонить";
+
+/* Notifications */
+"watch.notification.new_message" = "Новое сообщение";
+
+/* Call Summary */
+"call.outgoing" = "Исходящий звонок";
+"call.incoming" = "Входящий звонок";
+"call.no.answer" = "Нет ответа";
+"call.declined" = "Отклонено";
+"call.missed" = "Пропущенный звонок";
+"call.video.outgoing" = "Исходящий видеозвонок";
+"call.video.incoming" = "Входящий видеозвонок";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Ответить";
+"send" = "Отправить";
+"type_message" = "Введите сообщение";
+"notification.action.mark_read" = "Прочитано";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Чаты";
+"w2.empty.title" = "Чатов пока нет";
+"w2.empty.body" = "Здесь появятся ваши чаты OSHI с iPhone.";
+"w2.disabled.title" = "Смарт-часы выключены";
+"w2.disabled.body" = "Включите в OSHI на iPhone: Настройки › Связанные устройства › Смарт-часы.";
+"w2.locked.title" = "OSHI заблокирован";
+"w2.locked.body" = "Разблокируйте OSHI на iPhone и повторите попытку.";
+"w2.unavailable.title" = "OSHI не готов";
+"w2.unavailable.body" = "Откройте OSHI на iPhone хотя бы раз и повторите попытку.";
+"w2.nophone.title" = "iPhone недоступен";
+"w2.nophone.body" = "Держите рядом iPhone с установленным OSHI.";
+"w2.error.title" = "Что-то пошло не так";
+"w2.error.body" = "iPhone не ответил. Повторите попытку.";
+"w2.notfound" = "Этого чата больше нет на iPhone.";
+"w2.retry" = "Повторить";
+"w2.reply" = "Ответить";
+"w2.you" = "Вы";
+"w2.you_prefix" = "Вы: %@";
+"w2.react" = "Реакция";
+"w2.speak_or_type" = "Диктуйте или пишите";
+"w2.quick_replies" = "Быстрые ответы";
+"w2.sending" = "Отправка…";
+"w2.sent" = "Отправлено";
+"w2.send_failed" = "Не отправлено. Повторите на iPhone.";
+"w2.read_only" = "В этом чате нельзя отвечать.";
+"w2.view_once" = "👁 Одноразовый просмотр — откройте на iPhone";
+"w2.view_once_short" = "👁 Одноразовый просмотр";
+"w2.e2e" = "Сквозное шифрование на вашем iPhone";
+"w2.replying_to" = "В ответ на";
+"w2.loading" = "Загрузка…";
+"w2.unread_count" = "Непрочитанных: %d";
+"w2.all_read" = "Всё прочитано";
+"w2.call" = "Позвонить";
+"w2.media.photo" = "📷 Фото";
+"w2.media.video" = "🎥 Видео";
+"w2.media.voice" = "🎤 Голосовое";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Файл";
+"w2.media.location" = "📍 Геопозиция";
+"w2.media.contact" = "👤 Контакт";
+"w2.qr.on_my_way" = "Уже еду";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Перезвоню позже";
+"w2.qr.thanks" = "Спасибо!";
+"w2.qr.yes" = "Да";
+"w2.qr.no" = "Нет";
+"w2.qr.busy" = "Не могу говорить";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Люблю";
+"w2.r.laugh" = "Смех";
+"w2.r.cry" = "Грусть";
+"w2.r.thumbs" = "Класс";
+"w2.r.wow" = "Ух ты";
+"w2.r.fire" = "Огонь";
+"w2.mute" = "Без звука";
+"w2.end_call" = "Завершить";
+"w2.speaker" = "Динамик";
+"w2.widget.off" = "Включите «Смарт-часы» в OSHI на iPhone";
+"w2.widget.off_short" = "Выкл.";
+"w2.widget.locked" = "Разблокируйте OSHI на iPhone";
+"w2.widget.locked_short" = "Заблокировано";
+"w2.widget.open" = "Открыть OSHI";
+"w2.widget.name" = "OSHI: непрочитанные";
+"w2.widget.desc" = "Число непрочитанных и кто написал — без текста сообщений.";

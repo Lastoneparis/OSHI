@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Son</string>
+    <string name="attach_selected_count">%1$d seçildi</string>
+    <string name="attach_all_photos">Tüm fotoğraflar</string>
+    <string name="attach_collapse">Daralt</string>
+    <string name="attach_camera">Kamera</string>
+    <string name="attach_gallery">Galeri</string>
+    <string name="attach_file">Dosya</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Konum</string>
+    <string name="attach_contact">Kişi</string>
+    <string name="attach_poll">Anket</string>
+    <string name="attach_video_note">Video mesaj</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Zamanla</string>
+    <string name="attach_access_title">Son fotoğrafların burada</string>
+    <string name="attach_access_body">OSHI fotoğraflarını yalnızca bu panel açıkken okur. Sen göndermedikçe hiçbir şey telefonundan çıkmaz.</string>
+    <string name="attach_access_allow">Erişime izin ver</string>
+    <string name="attach_access_settings">Ayarları aç</string>
+    <string name="attach_access_browse">Galeriden seç</string>
+    <string name="attach_partial">OSHI ile yalnızca bazı fotoğrafları paylaştın.</string>
+    <string name="attach_partial_manage">Yönet</string>
+    <string name="attach_empty_title">Henüz fotoğraf yok</string>
+    <string name="attach_caption_hint">Açıklama ekle…</string>
+    <string name="attach_send_count">%1$d gönder</string>
+    <string name="attach_photo_a11y">Fotoğraf</string>
+    <string name="attach_video_a11y">Video, %1$s</string>
+    <string name="attach_limit">Bir seferde en fazla %1$d</string>
+</resources>

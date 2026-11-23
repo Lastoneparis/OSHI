@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (it) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI usa il Bluetooth per rilevare i dispositivi vicini e collegarsi a loro, per messaggi sicuri da dispositivo a dispositivo senza internet.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI ha bisogno del Bluetooth per ricevere i messaggi cifrati dai dispositivi vicini della tua rete mesh.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI può aggiungere le chiamate programmate al tuo calendario, così non ne perdi nessuna.";
+"NSCalendarsUsageDescription" = "OSHI può aggiungere le chiamate programmate al tuo calendario, così non ne perdi nessuna.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI può aggiungere le chiamate programmate al tuo calendario, così non ne perdi nessuna.";
+"NSCameraUsageDescription" = "OSHI ha bisogno della fotocamera per scansionare i codici QR e scattare foto per i messaggi cifrati.";
+"NSFaceIDUsageDescription" = "Usa Face ID per sbloccare in sicurezza i tuoi messaggi cifrati e proteggere la tua privacy.";
+"NSLocalNetworkUsageDescription" = "OSHI usa la rete locale per creare connessioni Wi-Fi Direct con i dispositivi vicini e inviare messaggi più velocemente.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI usa la tua posizione per condividerla in tempo reale con i contatti. La tua posizione è cifrata e viene condivisa solo se lo decidi tu.";
+"NSLocationAlwaysUsageDescription" = "OSHI usa la tua posizione per la condivisione in tempo reale con i contatti, anche quando l'app è in background. La tua posizione è cifrata e viene condivisa solo se lo decidi tu.";
+"NSLocationWhenInUseUsageDescription" = "OSHI usa la tua posizione per condividerla con i contatti. La tua posizione è cifrata e viene condivisa solo se lo decidi tu.";
+"NSMicrophoneUsageDescription" = "OSHI ha bisogno del microfono per registrare video con audio da inviare nei messaggi cifrati.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI può salvare le immagini ricevute nelle tue foto.";
+"NSPhotoLibraryUsageDescription" = "OSHI ha bisogno di accedere alle tue foto per scegliere le immagini da inviare come messaggi cifrati.";
+"NSSpeechRecognitionUsageDescription" = "OSHI usa il riconoscimento vocale sul dispositivo per farti dettare messaggi all'assistente IA. La tua voce viene trascritta interamente sul tuo iPhone e non lascia mai il dispositivo.";
+"NSUserNotificationsUsageDescription" = "OSHI ti avvisa quando ricevi nuovi messaggi cifrati, così non perdi comunicazioni importanti.";

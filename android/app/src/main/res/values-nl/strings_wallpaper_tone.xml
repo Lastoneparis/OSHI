@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Tint</string>
+    <string name="wallpaper_tone_automatic">Automatisch</string>
+    <string name="wallpaper_tone_light">Licht</string>
+    <string name="wallpaper_tone_dark">Donker</string>
+    <string name="wallpaper_tone_automatic_detail">Volgt de lichte en donkere modus.</string>
+    <string name="wallpaper_tone_light_detail">Wit met violet netwerk, ook in donkere modus. Berichten krijgen hun lichte kleuren en blijven goed leesbaar.</string>
+    <string name="wallpaper_tone_dark_detail">Zwart met violet netwerk, ook in lichte modus.</string>
+    <string name="wallpaper_tone_more">Kleuren, verlopen, emoji en eigen foto’s: open een chat, dan ⋯ → Achtergrond.</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">圓形視訊訊息，最長 15 秒</string>
+    <string name="settings_panic_wipe_title">點按標誌以清除</string>
+    <string name="settings_panic_wipe_subtitle">快速點按 OSHI 標誌三次，會清除此手機上的所有訊息、金鑰和檔案，且不經確認。除非您開啟，否則保持關閉。</string>
+    <string name="map_layer_title">地圖類型</string>
+    <string name="map_layer_standard">標準</string>
+    <string name="map_layer_terrain">地形</string>
+    <string name="map_layer_satellite">衛星</string>
+    <string name="map_layer_standard_desc">OSHI 地圖，可使用已下載的區域離線運作</string>
+    <string name="map_layer_third_party_desc" formatted="true">僅限線上。直接從 %1$s 載入，對方可以看到您正在檢視的區域。</string>
+    <string name="map_layer_offline_only_note">「僅使用離線地圖」已開啟：此圖層只顯示您已看過的圖磚。</string>
+</resources>

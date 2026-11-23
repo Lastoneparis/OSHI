@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Ponsel ini mungkin telah dimodifikasi</string>
+    <string name="device_integrity_dialog_body">OSHI mendeteksi tanda-tanda bahwa ponsel ini mungkin di-root atau dimodifikasi (%1$s). Di ponsel seperti itu, perangkat lunak lain dapat membaca apa yang ada di layar dan apa yang Anda ketik sebelum OSHI mengenkripsinya. OSHI tidak menghapus atau memblokir apa pun. Pemeriksaan ini bersifat heuristik: bisa keliru, dan root yang tersembunyi dengan baik dapat lolos darinya.</string>
+    <string name="device_integrity_dialog_ok">Saya mengerti</string>
+    <string name="device_integrity_status_title">Integritas perangkat</string>
+    <string name="device_integrity_status_flagged">OSHI mendeteksi tanda-tanda root atau modifikasi: %1$s</string>
+    <string name="device_integrity_finding_su">file su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">aplikasi pengelola root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">sistem yang ditandatangani kunci uji</string>
+    <string name="device_integrity_finding_debuggable">sistem yang dapat di-debug</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Ponsel yang di-root atau dimodifikasi: OSHI mencari tanda-tanda root yang umum (su, Magisk, Xposed/LSPosed, Frida, sistem yang ditandatangani kunci uji atau dapat di-debug) dan memperingatkan Anda jika menemukannya. Tidak menemukan apa pun tidak membuktikan bahwa ponsel bersih.</string>
+    <string name="clipboard_hygiene_explainer">Menyalin: pesan, terjemahan, kunci pemulihan, dan token bot yang Anda salin ditandai sebagai sensitif (Android 13+ menyembunyikan pratinjaunya). Jika masih ada di papan klip setelah 60 detik, OSHI menghapusnya: segera jika OSHI sedang terbuka, atau saat Anda membukanya lagi. Selama masih di papan klip, keyboard Anda dan aplikasi yang diizinkan membaca papan klip dapat melihatnya, dan keyboard atau fitur ponsel yang menyimpan riwayat papan klip mungkin menyimpan salinannya sendiri bahkan setelah dihapus.</string>
+</resources>

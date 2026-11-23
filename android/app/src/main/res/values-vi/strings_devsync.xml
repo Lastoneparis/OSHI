@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Thiết bị đã liên kết</string>
+    <string name="devsync_settings_subtitle">Đồng bộ lịch sử trực tiếp giữa các thiết bị của bạn</string>
+    <string name="devsync_status_on">Đồng bộ trực tiếp đang bật. Lịch sử của bạn chuyển từ thiết bị này sang thiết bị khác; không có gì được lưu trên máy chủ.</string>
+    <string name="devsync_status_off">Đồng bộ trực tiếp đang tắt trên thiết bị này.</string>
+    <string name="devsync_this_device">Thiết bị này</string>
+    <string name="devsync_device_id">ID thiết bị %1$s</string>
+    <string name="devsync_debug_override">Đồng bộ trực tiếp (ghi đè gỡ lỗi)</string>
+    <string name="devsync_debug_override_desc">Buộc bật đồng bộ trực tiếp cho bản cài đặt này, bất kể máy chủ nói gì</string>
+    <string name="devsync_pending_title">Phê duyệt thiết bị mới</string>
+    <string name="devsync_pending_body">%1$s (%2$s) muốn nhận lịch sử của bạn. Hãy kiểm tra màn hình kia hiển thị cùng một mã.</string>
+    <string name="devsync_waiting_body">Đang chờ phê duyệt trên thiết bị kia của bạn. Hãy kiểm tra nó hiển thị cùng một mã.</string>
+    <string name="devsync_peer_approved">Thiết bị kia đã phê duyệt. Phê duyệt tại đây để hoàn tất.</string>
+    <string name="devsync_allow">Cho phép</string>
+    <string name="devsync_deny">Từ chối</string>
+    <string name="devsync_linked_title">Thiết bị đã liên kết</string>
+    <string name="devsync_none_linked">Chưa có thiết bị nào được liên kết. Mở OSHI trên thiết bị kia của bạn, cùng Wi-Fi hoặc trực tuyến cùng lúc.</string>
+    <string name="devsync_last_sync">Đồng bộ lần cuối: %1$s</string>
+    <string name="devsync_never">chưa bao giờ</string>
+    <string name="devsync_syncing_now">Đang đồng bộ (%1$s)</string>
+    <string name="devsync_remove">Xóa</string>
+    <string name="devsync_remove_confirm_title">Xóa %1$s?</string>
+    <string name="devsync_remove_confirm_body">Thiết bị sẽ không nhận lịch sử của bạn nữa. Dữ liệu đã có vẫn được giữ lại.</string>
+    <string name="devsync_sync_now">Đồng bộ ngay</string>
+    <string name="devsync_cancel">Hủy</string>
+    <string name="devsync_alert_unapproved">Một thiết bị dùng tài khoản của bạn đã thử đồng bộ: %1$s</string>
+    <string name="devsync_alert_linked">Một thiết bị mới, %1$s, giờ có thể nhận lịch sử của bạn</string>
+</resources>

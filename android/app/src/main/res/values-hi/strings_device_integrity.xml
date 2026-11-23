@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">हो सकता है इस फ़ोन में बदलाव किया गया हो</string>
+    <string name="device_integrity_dialog_body">OSHI को ऐसे संकेत मिले हैं कि यह फ़ोन रूट किया गया या बदला गया हो सकता है (%1$s)। ऐसे फ़ोन पर दूसरे सॉफ़्टवेयर स्क्रीन पर दिख रही चीज़ें और आपका टाइप किया हुआ, OSHI के एन्क्रिप्ट करने से पहले पढ़ सकते हैं। OSHI ने कुछ भी मिटाया या ब्लॉक नहीं किया है। यह जाँच अनुमान पर आधारित है: यह गलत हो सकती है, और अच्छी तरह छिपा रूट इससे बच सकता है।</string>
+    <string name="device_integrity_dialog_ok">समझ गया</string>
+    <string name="device_integrity_status_title">डिवाइस की अखंडता</string>
+    <string name="device_integrity_status_flagged">OSHI को रूट या बदलाव के संकेत मिले: %1$s</string>
+    <string name="device_integrity_finding_su">su फ़ाइल</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">रूट मैनेजर ऐप</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">टेस्ट कुंजियों से साइन किया सिस्टम</string>
+    <string name="device_integrity_finding_debuggable">डीबग किया जा सकने वाला सिस्टम</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">रूट किए गए या बदले गए फ़ोन: OSHI रूट के आम संकेत (su, Magisk, Xposed/LSPosed, Frida, टेस्ट कुंजियों से साइन किया या डीबग किया जा सकने वाला सिस्टम) खोजता है और कोई मिलने पर आपको चेतावनी देता है। कुछ न मिलना यह साबित नहीं करता कि फ़ोन साफ़ है।</string>
+    <string name="clipboard_hygiene_explainer">कॉपी करना: आपके कॉपी किए गए मैसेज, अनुवाद, रिकवरी कुंजियाँ और बॉट टोकन संवेदनशील चिह्नित किए जाते हैं (Android 13+ प्रीव्यू छिपाता है)। अगर 60 सेकंड बाद भी वे क्लिपबोर्ड पर हों, तो OSHI उन्हें हटा देता है: OSHI खुला हो तो तुरंत, वरना अगली बार खोलने पर। जब तक वे क्लिपबोर्ड पर हैं, आपका कीबोर्ड और क्लिपबोर्ड पढ़ने की अनुमति वाले ऐप उन्हें देख सकते हैं, और क्लिपबोर्ड इतिहास रखने वाले कीबोर्ड या फ़ोन फ़ीचर हटाए जाने के बाद भी अपनी कॉपी रख सकते हैं।</string>
+</resources>

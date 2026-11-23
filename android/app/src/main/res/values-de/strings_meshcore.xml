@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore-Funkgerät</string>
+    <string name="meshcore_none">Kein MeshCore-Funkgerät</string>
+    <string name="meshcore_scan">Nach MeshCore-Funkgeräten suchen</string>
+    <string name="meshcore_ready">Verbunden — OSHI-Nachrichten nutzen #oshi-bridge</string>
+    <string name="meshcore_forget">Dieses MeshCore-Funkgerät entfernen</string>
+    <string name="meshcore_bridge">Brücke Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">Ein MeshCore-Funkgerät trägt deine OSHI-Nachrichten über MeshCore-Repeater. Es braucht die MeshCore-Companion-Firmware und fragt beim ersten Mal nach seiner PIN. OSHI fügt einen einzigen Kanal, #oshi-bridge, in einem freien Platz hinzu und ändert deine anderen Kanäle nie.</string>
+    <string name="meshcore_bridge_footer">Sind ein Meshtastic- und ein MeshCore-Funkgerät verbunden, leitet dieses Telefon OSHI-Nachrichten zwischen beiden Netzen weiter, solange OSHI läuft.</string>
+    <string name="meshcore_no_free_channel">Alle 8 Kanalplätze dieses Funkgeräts sind belegt. Gib in der MeshCore-App einen frei, damit OSHI #oshi-bridge hinzufügen kann.</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore telsizi</string>
+    <string name="meshcore_none">MeshCore telsizi yok</string>
+    <string name="meshcore_scan">MeshCore telsizlerini ara</string>
+    <string name="meshcore_ready">Bağlandı — OSHI mesajları #oshi-bridge kullanıyor</string>
+    <string name="meshcore_forget">Bu MeshCore telsizini unut</string>
+    <string name="meshcore_bridge">Köprü Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">Bir MeshCore telsizi OSHI mesajlarını MeshCore tekrarlayıcıları üzerinden taşır. MeshCore companion yazılımı çalıştırmalıdır ve ilk seferde PIN\'ini sorar. OSHI boş bir yuvaya yalnızca #oshi-bridge kanalını ekler ve diğer kanallarını asla değiştirmez.</string>
+    <string name="meshcore_bridge_footer">Bir Meshtastic ve bir MeshCore telsizi birlikte bağlıyken, OSHI açık olduğu sürece bu telefon OSHI mesajlarını iki ağ arasında aktarır.</string>
+    <string name="meshcore_no_free_channel">Bu telsizin 8 kanal yuvasının hepsi dolu. OSHI\'nin #oshi-bridge ekleyebilmesi için MeshCore uygulamasında birini boşalt.</string>
+</resources>

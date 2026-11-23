@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __OLED_SPLASH_2026_11_16__ The manifest theme's window background, as one
+     colour that follows the phone's mode, so ThemeBoot.kt can restore it after
+     painting the window black for OLED black. -->
+<resources>
+    <color name="window_background_default">@color/light_background</color>
+</resources>

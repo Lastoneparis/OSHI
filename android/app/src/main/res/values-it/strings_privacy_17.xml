@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Gli screenshot sono bloccati in OSHI per proteggere le tue conversazioni</string>
+    <string name="rn_hint_setting_title">Fai sapere ai contatti che sono su una rete limitata</string>
+    <string name="rn_hint_setting_caption">Mentre il traffico è camuffato, i tuoi messaggi portano un piccolo segnale cifrato end-to-end, così i contatti sanno che potresti essere su una rete censurata o sorvegliata. Lo vedono solo loro.</string>
+    <string name="rn_hint_chip">Inviato da una rete limitata</string>
+    <string name="rn_hint_explain_title">Rete limitata</string>
+    <string name="rn_hint_explain_body">Questa persona usa il camuffamento di OSHI ed è probabilmente su una rete censurata o sorvegliata. Rispondi normalmente: OSHI continua a camuffare il suo traffico. Scrivi messaggi brevi; foto e video possono essere lenti.</string>
+</resources>

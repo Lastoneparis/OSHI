@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Uppgradera den här radion till OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Gratis och öppen källkod. Behåller din region, dina kanaler, nycklar och kontakter, stannar i Meshtastic-nätet och lägger till långa meddelanden, leveranskvitton och meddelanden som sparas i 72 timmar när någon är offline.</string>
+    <string name="oshimesh_upgrade_share">Skicka länken till flashverktyget till en dator</string>
+    <string name="oshimesh_upgrade_why">Vad OSHI Mesh tillför</string>
+    <string name="oshimesh_upgrade_footer">Flashverktyget körs i Chrome eller Edge på en dator via USB. Välj ”Behåll mina inställningar” för att uppdatera radion på ungefär en minut.</string>
+</resources>

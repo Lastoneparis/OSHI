@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Parity strings added by the settings/platform parity pass (2026-08-13).
+  English values only — every key here still needs translating into the other
+  33 locales. Kept in a separate file from values/strings.xml on purpose so
+  concurrent edits to that file do not conflict.
+-->
+<resources>
+
+    <!-- ===================================================================
+         NOTIFICATION CHANNELS
+         Visible in the Android system Settings app in every locale. Previously
+         hardcoded English literals (FCMService.kt, CallService.kt,
+         IncomingCallService.kt, MeshNetworkService.kt, MessageSyncService.kt,
+         ScheduledCallReceiver.kt). iOS has no equivalent (no channels on iOS).
+         =================================================================== -->
+    <string name="channel_messages_name">Messages</string>
+    <string name="channel_messages_desc">New message notifications</string>
+    <string name="channel_calls_name">Calls</string>
+    <string name="channel_calls_desc">Incoming call notifications</string>
+    <string name="channel_system_name">System</string>
+    <string name="channel_system_desc">System notifications</string>
+    <!-- CallService.kt:71,74,104 -->
+    <string name="channel_ongoing_call_name">OSHI Calls</string>
+    <string name="channel_ongoing_call_desc">Active call notifications</string>
+    <string name="channel_ongoing_call_action">Tap to return to call</string>
+    <!-- IncomingCallService.kt:131,134 -->
+    <string name="channel_incoming_calls_name">Incoming Calls</string>
+    <string name="channel_incoming_calls_desc">Incoming call notifications</string>
+    <!-- MeshNetworkService.kt:53,56,66,67 -->
+    <string name="channel_mesh_name">OSHI Mesh Network</string>
+    <string name="channel_mesh_desc">Keeps mesh network active for offline messaging</string>
+    <string name="channel_mesh_status_title">OSHI Mesh Active</string>
+    <string name="channel_mesh_status_text">Connected for offline messaging</string>
+    <!-- MessageSyncService.kt:61,64,74,75 -->
+    <string name="channel_sync_name">OSHI Message Sync</string>
+    <string name="channel_sync_desc">Syncs messages in the background</string>
+    <string name="channel_sync_status_title">OSHI Sync</string>
+    <string name="channel_sync_status_text">Syncing messages…</string>
+    <!-- ScheduledCallReceiver.kt:26,34 -->
+    <string name="channel_scheduled_calls_name">Scheduled Calls</string>
+    <string name="channel_scheduled_calls_action">Tap to open OSHI</string>
+
+    <!-- ===================================================================
+         NOTIFICATION SOUND / VIBRATION — Android O+ owns these per channel.
+         An in-app switch cannot override a live channel, so the rows deep-link
+         to the system channel settings instead of lying.
+         =================================================================== -->
+    <string name="settings_notification_channel_settings">Sound &amp; vibration</string>
+    <string name="settings_notification_channel_settings_desc">Managed by Android per notification channel</string>
+
+    <!-- ===================================================================
+         ACCOUNT DELETION — mirrors iOS AccountDeletionView.swift
+         =================================================================== -->
+    <string name="account_delete_title">Delete account</string>
+    <string name="account_delete_row_subtitle">Erase your identity from this device and the OSHI servers</string>
+    <string name="account_delete_headline">This cannot be undone</string>
+    <string name="account_delete_body">Deleting your account erases your identity from this device and asks the OSHI servers to erase everything they still hold for it.</string>
+    <string name="account_delete_section_removed">What is removed</string>
+    <string name="account_delete_item_keys">Your published prekey bundle</string>
+    <string name="account_delete_item_sync">Your encrypted multi-device sync archive</string>
+    <string name="account_delete_item_queued">Envelopes still queued for delivery</string>
+    <string name="account_delete_item_media">Uncollected media blobs</string>
+    <string name="account_delete_item_push">Your push notification tokens</string>
+    <string name="account_delete_item_device">Every message, contact and call record on this device</string>
+    <string name="account_delete_section_kept">What we cannot remove</string>
+    <string name="account_delete_keeps_recipients">Messages already delivered to other people\'s devices</string>
+    <string name="account_delete_keeps_reports">Abuse reports filed against your key</string>
+    <string name="account_delete_section_kept_footer">OSHI cannot reach into other people\'s phones. Anything already delivered stays with its recipient.</string>
+    <string name="account_delete_section_confirm">Confirm</string>
+    <!-- The word the user must type. Translate it: "DELETE" is not a word in most of the 34 locales. -->
+    <string name="account_delete_confirm_word">DELETE</string>
+    <string name="account_delete_confirm_footer">Type %1$s to enable the button.</string>
+    <string name="account_delete_action">Delete my account</string>
+    <string name="account_delete_section_receipt">Receipt</string>
+    <string name="account_delete_done_complete">Erased everywhere we could reach</string>
+    <string name="account_delete_done_partial">Partially erased</string>
+    <string name="account_delete_receipt_keys">Prekey bundles erased</string>
+    <string name="account_delete_receipt_sync">Sync items erased</string>
+    <string name="account_delete_receipt_queued">Queued envelopes erased</string>
+    <string name="account_delete_receipt_media">Media blobs erased</string>
+    <string name="account_delete_receipt_outbound">Outbound blobs still held</string>
+    <string name="account_delete_receipt_unreachable">Could not be reached: %1$s</string>
+    <string name="account_delete_done_close">Close</string>
+    <string name="account_delete_failed_generic">The server could not be reached. Nothing was deleted — try again.</string>
+    <string name="account_delete_failed_detail">Deletion aborted: %1$s. Nothing was deleted from this device, so you can retry.</string>
+    <string name="account_delete_in_progress">Deleting…</string>
+
+    <!-- ===================================================================
+         MULTI-DEVICE SYNC — mirrors iOS MultiDeviceSyncSettingsView
+         (MultiDeviceSyncManager.swift:1250-1403). All the other multi_device_*
+         keys already exist (and are already translated) in values/strings.xml.
+         =================================================================== -->
+    <string name="multi_device_never">Never</string>
+
+</resources>

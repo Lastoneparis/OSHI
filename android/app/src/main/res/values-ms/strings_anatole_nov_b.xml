@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Mesej video bulat, maks. 15 s</string>
+    <string name="settings_panic_wipe_title">Padam dengan mengetik logo</string>
+    <string name="settings_panic_wipe_subtitle">Tiga ketikan pantas pada logo OSHI akan memadam semua mesej, kunci dan fail pada telefon ini tanpa pengesahan. Dimatikan melainkan anda menghidupkannya.</string>
+    <string name="map_layer_title">Jenis peta</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Rupa bumi</string>
+    <string name="map_layer_satellite">Satelit</string>
+    <string name="map_layer_standard_desc">Peta OSHI, berfungsi luar talian dengan kawasan yang dimuat turun</string>
+    <string name="map_layer_third_party_desc" formatted="true">Dalam talian sahaja. Dimuatkan terus daripada %1$s, yang dapat melihat kawasan yang anda lihat.</string>
+    <string name="map_layer_offline_only_note">“Peta luar talian sahaja” dihidupkan: lapisan ini hanya menunjukkan jubin yang telah anda lihat.</string>
+</resources>

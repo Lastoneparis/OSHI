@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">צילומי מסך חסומים ב-OSHI כדי להגן על השיחות שלך</string>
+    <string name="rn_hint_setting_title">ליידע את אנשי הקשר שאני ברשת מוגבלת</string>
+    <string name="rn_hint_setting_caption">כשהתעבורה מוסווית, ההודעות שלך נושאות סימן קטן, מוצפן מקצה לקצה, כדי שאנשי הקשר יידעו שייתכן שאת/ה ברשת מצונזרת או מנוטרת. רק הם רואים אותו.</string>
+    <string name="rn_hint_chip">נשלח מרשת מוגבלת</string>
+    <string name="rn_hint_explain_title">רשת מוגבלת</string>
+    <string name="rn_hint_explain_body">האדם הזה משתמש בהסוואה של OSHI וכנראה נמצא ברשת מצונזרת או מנוטרת. אפשר לענות כרגיל: OSHI ממשיך להסוות את הצד שלו. כדאי לכתוב הודעות קצרות; תמונות וסרטונים עלולים להיות איטיים.</string>
+</resources>

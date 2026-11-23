@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Ton</string>
+    <string name="wallpaper_tone_automatic">Automat</string>
+    <string name="wallpaper_tone_light">Luminos</string>
+    <string name="wallpaper_tone_dark">Întunecat</string>
+    <string name="wallpaper_tone_automatic_detail">Urmează modul luminos și cel întunecat.</string>
+    <string name="wallpaper_tone_light_detail">Alb cu rețea violet, chiar și în modul întunecat. Mesajele trec la culorile lor luminoase ca să rămână ușor de citit.</string>
+    <string name="wallpaper_tone_dark_detail">Negru cu rețea violet, chiar și în modul luminos.</string>
+    <string name="wallpaper_tone_more">Culori, degradeuri, emoji și propriile fotografii: deschide o conversație, apoi ⋯ → Fundal.</string>
+</resources>

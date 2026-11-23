@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">スマートウォッチ</string>
+    <string name="settings_smartwatch_subtitle">Wear OS ウォッチでチャットを読んで返信できます。暗号化と送信はこのスマートフォンで行われ、ウォッチには何も保存されません。</string>
+</resources>

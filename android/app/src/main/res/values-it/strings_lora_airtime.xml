@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">In attesa di tempo di trasmissione radio (limite legale di duty cycle)</string>
+    <string name="lora_jamming_title">Interferenze radio rilevate — possibile disturbo intenzionale</string>
+    <string name="lora_jamming_detail">I messaggi verranno inviati tramite mesh Bluetooth o internet appena possibile. I messaggi per la radio vengono conservati e partiranno via LoRa quando il canale sarà libero.</string>
+    <string name="lora_jamming_send_anyway">Invia comunque via LoRa</string>
+    <string name="lora_jamming_override_active">Invio via LoRa comunque fino alle %1$s, o finché il canale non si libera. I messaggi potrebbero non arrivare.</string>
+</resources>

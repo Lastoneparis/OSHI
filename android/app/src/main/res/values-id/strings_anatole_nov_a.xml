@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Kontak baru</string>
+    <string name="conversation_open_contact">Buka kontak</string>
+    <string name="conversation_muted">Notifikasi nonaktif</string>
+    <string name="fab_new_contact">Kontak baru</string>
+    <string name="fab_pick_contact_voice">Panggilan Suara — pilih kontak</string>
+    <string name="fab_pick_contact_video">Panggilan Video — pilih kontak</string>
+    <string name="fab_pick_contact_empty">Belum ada kontak. Tambahkan seseorang dulu.</string>
+</resources>

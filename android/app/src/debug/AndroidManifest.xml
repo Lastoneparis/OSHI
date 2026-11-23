@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DEBUG BUILDS ONLY. Local chat-history seeding for on-device scroll checks;
+     never merged into a release manifest. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <receiver
+            android:name=".debug.DebugChatSeedReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver"
+            xmlns:tools="http://schemas.android.com/tools">
+            <intent-filter>
+                <action android:name="com.oshi.messenger.debug.SEED" />
+                <action android:name="com.oshi.messenger.debug.INCOMING" />
+                <action android:name="com.oshi.messenger.debug.AVATARS" />
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name=".debug.DebugMailFixtureActivity"
+            android:exported="true"
+            android:theme="@style/Theme.OSHI"
+            tools:ignore="ExportedActivity"
+            xmlns:tools="http://schemas.android.com/tools" />
+    </application>
+</manifest>

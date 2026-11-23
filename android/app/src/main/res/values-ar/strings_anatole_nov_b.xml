@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">رسالة فيديو دائرية، 15 ث كحد أقصى</string>
+    <string name="settings_panic_wipe_title">المسح بالنقر على الشعار</string>
+    <string name="settings_panic_wipe_subtitle">ثلاث نقرات سريعة على شعار OSHI تمسح كل الرسائل والمفاتيح والملفات على هذا الهاتف دون تأكيد. يبقى معطّلًا ما لم تفعّله.</string>
+    <string name="map_layer_title">نوع الخريطة</string>
+    <string name="map_layer_standard">قياسية</string>
+    <string name="map_layer_terrain">تضاريس</string>
+    <string name="map_layer_satellite">قمر صناعي</string>
+    <string name="map_layer_standard_desc">خريطة OSHI، تعمل دون اتصال مع المناطق المنزّلة</string>
+    <string name="map_layer_third_party_desc" formatted="true">عبر الإنترنت فقط. تُحمَّل مباشرة من %1$s، الذي يرى المنطقة التي تنظر إليها.</string>
+    <string name="map_layer_offline_only_note">«خرائط دون اتصال فقط» مفعّل: تعرض هذه الطبقة البلاطات التي رأيتها من قبل فقط.</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Ten telefon może być zmodyfikowany</string>
+    <string name="device_integrity_dialog_body">OSHI wykrył oznaki, że ten telefon może mieć roota lub być zmodyfikowany (%1$s). Na takim telefonie inne oprogramowanie może odczytać to, co jest na ekranie, i to, co wpisujesz, zanim OSHI to zaszyfruje. OSHI niczego nie usunął ani nie zablokował. To sprawdzenie jest heurystyczne: może się mylić, a dobrze ukryty root może go uniknąć.</string>
+    <string name="device_integrity_dialog_ok">Rozumiem</string>
+    <string name="device_integrity_status_title">Integralność urządzenia</string>
+    <string name="device_integrity_status_flagged">OSHI wykrył oznaki roota lub modyfikacji: %1$s</string>
+    <string name="device_integrity_finding_su">plik su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">aplikacja do zarządzania rootem</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">system podpisany kluczami testowymi</string>
+    <string name="device_integrity_finding_debuggable">system z debugowaniem</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Telefony z rootem lub zmodyfikowane: OSHI szuka typowych oznak roota (su, Magisk, Xposed/LSPosed, Frida, system podpisany kluczami testowymi lub z debugowaniem) i ostrzega, jeśli jakieś znajdzie. Brak wyników nie dowodzi, że telefon jest czysty.</string>
+    <string name="clipboard_hygiene_explainer">Kopiowanie: wiadomości, tłumaczenia, klucze odzyskiwania i tokeny botów, które kopiujesz, są oznaczane jako poufne (Android 13+ ukrywa podgląd). Jeśli po 60 sekundach nadal są w schowku, OSHI je usuwa: od razu, gdy OSHI jest otwarte, a w przeciwnym razie przy jego następnym otwarciu. Dopóki są w schowku, może je zobaczyć Twoja klawiatura i aplikacje uprawnione do odczytu schowka, a klawiatury lub funkcje telefonu przechowujące historię schowka mogą zachować własną kopię nawet po usunięciu.</string>
+</resources>

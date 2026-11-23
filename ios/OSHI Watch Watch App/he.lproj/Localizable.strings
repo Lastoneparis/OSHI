@@ -1,0 +1,136 @@
+/* OSHI Watch App - Hebrew */
+
+/* Status */
+"watch.status.connected" = "מחובר";
+"watch.status.not_reachable" = "iPhone לא זמין";
+
+/* Navigation */
+"watch.open_iphone" = "פתח OSHI ב-iPhone";
+
+/* Common */
+"common.refresh" = "רענון";
+"common.cancel" = "ביטול";
+
+/* Messages */
+"watch.loading_messages" = "טוען הודעות…";
+"watch.no_messages" = "אין הודעות";
+"watch.sending" = "שולח…";
+"watch.dictate" = "הכתבה";
+"watch.voice_message" = "הודעה קולית";
+"watch.reply" = "השב";
+"watch.media_attachment" = "קובץ מצורף";
+
+/* Quick Replies */
+"watch.quick.yes" = "כן";
+"watch.quick.no" = "לא";
+"watch.quick.ok" = "אישור";
+"watch.quick.later" = "אחר כך";
+"watch.quick.omw" = "בדרך!";
+"watch.quick.thanks" = "תודה";
+
+/* Errors */
+"watch.error.send_failed" = "שליחת ההודעה נכשלה";
+"watch.send.queued" = "בתור לשליחה לאייפון";
+"watch.error.not_reachable" = "iPhone לא זמין";
+
+/* Calls */
+"watch.call.incoming_video" = "שיחת וידאו נכנסת";
+"watch.call.incoming_voice" = "שיחה קולית נכנסת";
+"watch.call.video" = "שיחת וידאו";
+"watch.call.voice" = "שיחה קולית";
+"watch.call.connecting" = "מתחבר…";
+"watch.call.ringing" = "מצלצל…";
+"watch.call.in_call" = "בשיחה";
+"watch.call.ended" = "השיחה הסתיימה";
+"watch.call.start" = "התחל שיחה";
+"watch.call.unknown" = "לא ידוע";
+
+/* Call Actions */
+"call.action.accept" = "קבל";
+"call.action.decline" = "דחה";
+
+/* Notifications */
+"watch.notification.new_message" = "הודעה חדשה";
+
+/* Call Summary */
+"call.outgoing" = "שיחה יוצאת";
+"call.incoming" = "שיחה נכנסת";
+"call.no.answer" = "אין מענה";
+"call.declined" = "נדחתה";
+"call.missed" = "שיחה שלא נענתה";
+"call.video.outgoing" = "שיחת וידאו יוצאת";
+"call.video.incoming" = "שיחת וידאו נכנסת";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "השב";
+"send" = "שלח";
+"type_message" = "כתוב הודעה";
+"notification.action.mark_read" = "סמן כנקרא";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "צ׳אטים";
+"w2.empty.title" = "אין צ׳אטים עדיין";
+"w2.empty.body" = "הצ׳אטים שלך ב-OSHI מה-iPhone יופיעו כאן.";
+"w2.disabled.title" = "השעון החכם כבוי";
+"w2.disabled.body" = "יש להפעיל ב-OSHI ב-iPhone: הגדרות › מכשירים מקושרים › שעון חכם.";
+"w2.locked.title" = "OSHI נעולה";
+"w2.locked.body" = "יש לבטל את נעילת OSHI ב-iPhone ולנסות שוב.";
+"w2.unavailable.title" = "OSHI לא מוכנה";
+"w2.unavailable.body" = "יש לפתוח את OSHI פעם אחת ב-iPhone ולנסות שוב.";
+"w2.nophone.title" = "אין חיבור ל-iPhone";
+"w2.nophone.body" = "יש להשאיר את ה-iPhone עם OSHI בקרבת מקום.";
+"w2.error.title" = "משהו השתבש";
+"w2.error.body" = "ה-iPhone לא ענה. יש לנסות שוב.";
+"w2.notfound" = "הצ׳אט הזה כבר לא נמצא ב-iPhone.";
+"w2.retry" = "ניסיון חוזר";
+"w2.reply" = "תשובה";
+"w2.you" = "את/ה";
+"w2.you_prefix" = "את/ה: %@";
+"w2.react" = "תגובה";
+"w2.speak_or_type" = "הכתבה או הקלדה";
+"w2.quick_replies" = "תשובות מהירות";
+"w2.sending" = "שולח…";
+"w2.sent" = "נשלח";
+"w2.send_failed" = "לא נשלח. יש לנסות שוב ב-iPhone.";
+"w2.read_only" = "אי אפשר להשיב בצ׳אט הזה.";
+"w2.view_once" = "👁 צפייה חד־פעמית — לפתוח ב-iPhone";
+"w2.view_once_short" = "👁 צפייה חד־פעמית";
+"w2.e2e" = "מוצפן מקצה לקצה על ידי ה-iPhone";
+"w2.replying_to" = "בתשובה ל";
+"w2.loading" = "טוען…";
+"w2.unread_count" = "%d שלא נקראו";
+"w2.all_read" = "הכול נקרא";
+"w2.call" = "שיחה";
+"w2.media.photo" = "📷 תמונה";
+"w2.media.video" = "🎥 וידאו";
+"w2.media.voice" = "🎤 קולי";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 קובץ";
+"w2.media.location" = "📍 מיקום";
+"w2.media.contact" = "👤 איש קשר";
+"w2.qr.on_my_way" = "אני בדרך";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "אתקשר אחר כך";
+"w2.qr.thanks" = "תודה!";
+"w2.qr.yes" = "כן";
+"w2.qr.no" = "לא";
+"w2.qr.busy" = "לא יכול/ה לדבר עכשיו";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "אהבה";
+"w2.r.laugh" = "צחוק";
+"w2.r.cry" = "עצב";
+"w2.r.thumbs" = "לייק";
+"w2.r.wow" = "וואו";
+"w2.r.fire" = "אש";
+"w2.mute" = "השתקה";
+"w2.end_call" = "ניתוק";
+"w2.speaker" = "רמקול";
+"w2.widget.off" = "יש להפעיל שעון חכם ב-OSHI ב-iPhone";
+"w2.widget.off_short" = "כבוי";
+"w2.widget.locked" = "יש לבטל את נעילת OSHI ב-iPhone";
+"w2.widget.locked_short" = "נעול";
+"w2.widget.open" = "פתיחת OSHI";
+"w2.widget.name" = "OSHI שלא נקראו";
+"w2.widget.desc" = "מספר שלא נקראו ומי כתב — אף פעם לא ההודעות.";

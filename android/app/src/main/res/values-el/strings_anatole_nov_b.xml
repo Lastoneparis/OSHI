@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Στρογγυλό βιντεομήνυμα, έως 15 δευτ.</string>
+    <string name="settings_panic_wipe_title">Διαγραφή με πάτημα στο λογότυπο</string>
+    <string name="settings_panic_wipe_subtitle">Τρία γρήγορα πατήματα στο λογότυπο OSHI διαγράφουν όλα τα μηνύματα, τα κλειδιά και τα αρχεία αυτού του τηλεφώνου, χωρίς επιβεβαίωση. Ανενεργό μέχρι να το ενεργοποιήσετε.</string>
+    <string name="map_layer_title">Τύπος χάρτη</string>
+    <string name="map_layer_standard">Τυπικός</string>
+    <string name="map_layer_terrain">Ανάγλυφο</string>
+    <string name="map_layer_satellite">Δορυφόρος</string>
+    <string name="map_layer_standard_desc">Χάρτης OSHI, λειτουργεί εκτός σύνδεσης με τις περιοχές που έχετε λάβει</string>
+    <string name="map_layer_third_party_desc" formatted="true">Μόνο online. Φορτώνεται απευθείας από %1$s, που βλέπει την περιοχή που κοιτάτε.</string>
+    <string name="map_layer_offline_only_note">Το «Μόνο offline χάρτες» είναι ενεργό: αυτό το επίπεδο δείχνει μόνο τα πλακίδια που έχετε ήδη δει.</string>
+</resources>

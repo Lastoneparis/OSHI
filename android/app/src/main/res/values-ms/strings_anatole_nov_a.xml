@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Kenalan baharu</string>
+    <string name="conversation_open_contact">Buka kenalan</string>
+    <string name="conversation_muted">Pemberitahuan dimatikan</string>
+    <string name="fab_new_contact">Kenalan baharu</string>
+    <string name="fab_pick_contact_voice">Panggilan Suara — pilih kenalan</string>
+    <string name="fab_pick_contact_video">Panggilan Video — pilih kenalan</string>
+    <string name="fab_pick_contact_empty">Belum ada kenalan. Tambah seseorang dahulu.</string>
+</resources>

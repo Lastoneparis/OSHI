@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "%d non letti";
+"w2.all_read" = "Tutto letto";
+"w2.widget.off" = "Attiva Smartwatch in OSHI sull'iPhone";
+"w2.widget.off_short" = "Disattivato";
+"w2.widget.locked" = "Sblocca OSHI sull'iPhone";
+"w2.widget.locked_short" = "Bloccato";
+"w2.widget.open" = "Apri OSHI";
+"w2.widget.name" = "OSHI non letti";
+"w2.widget.desc" = "Numero di non letti e chi ha scritto, mai i messaggi.";

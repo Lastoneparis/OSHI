@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">与 %s 通话</string>
+    <string name="schedule_call_when">时间</string>
+    <string name="schedule_call_duration">时长</string>
+    <string name="schedule_call_title_optional">标题（可选）</string>
+    <string name="schedule_call_title_placeholder">例如：每周同步</string>
+    <string name="schedule_call_other_date">其他日期</string>
+    <string name="schedule_call_schedule">预约</string>
+    <string name="schedule_call_timezone">您的时区：%1$s（UTC%2$s）</string>
+    <string name="chat_schedule_call">预约通话</string>
+</resources>

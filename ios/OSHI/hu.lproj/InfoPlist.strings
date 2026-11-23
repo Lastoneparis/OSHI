@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (hu) */
+
+"NSBluetoothAlwaysUsageDescription" = "Az OSHI Bluetooth-kapcsolattal keresi meg a közeli eszközöket és csatlakozik hozzájuk, hogy internet nélkül is biztonságosan küldhessen üzenetet.";
+"NSBluetoothPeripheralUsageDescription" = "Az OSHI-nak Bluetooth-ra van szüksége, hogy titkosított üzeneteket fogadjon a mesh hálózat közeli eszközeitől.";
+"NSCalendarsFullAccessUsageDescription" = "Az OSHI hozzáadhatja az ütemezett hívásokat a naptárához, így egyet sem mulaszt el.";
+"NSCalendarsUsageDescription" = "Az OSHI hozzáadhatja az ütemezett hívásokat a naptárához, így egyet sem mulaszt el.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "Az OSHI hozzáadhatja az ütemezett hívásokat a naptárához, így egyet sem mulaszt el.";
+"NSCameraUsageDescription" = "Az OSHI-nak kamerahozzáférés kell QR-kódok beolvasásához és fotók készítéséhez a titkosított üzenetekhez.";
+"NSFaceIDUsageDescription" = "A Face ID-val biztonságosan feloldhatja titkosított üzeneteit, és megvédheti a magánszféráját.";
+"NSLocalNetworkUsageDescription" = "Az OSHI a helyi hálózatot használja közvetlen Wi-Fi-kapcsolat létesítésére a közeli eszközökkel, hogy gyorsabban érkezzenek az üzenetek.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Az OSHI a tartózkodási helyét használja, hogy élőben megoszthassa a névjegyeivel. A helyadat titkosított, és csak akkor kerül megosztásra, ha Ön úgy dönt.";
+"NSLocationAlwaysUsageDescription" = "Az OSHI a tartózkodási helyét használja az élő megosztáshoz a névjegyeivel, akkor is, ha az alkalmazás a háttérben fut. A helyadat titkosított, és csak akkor kerül megosztásra, ha Ön úgy dönt.";
+"NSLocationWhenInUseUsageDescription" = "Az OSHI a tartózkodási helyét használja, hogy megoszthassa a névjegyeivel. A helyadat titkosított, és csak akkor kerül megosztásra, ha Ön úgy dönt.";
+"NSMicrophoneUsageDescription" = "Az OSHI-nak mikrofonhozzáférés kell hangos videók rögzítéséhez a titkosított üzenetekhez.";
+"NSPhotoLibraryAddUsageDescription" = "Az OSHI elmentheti a kapott képeket a fotókönyvtárába.";
+"NSPhotoLibraryUsageDescription" = "Az OSHI-nak hozzáférés kell a fotókönyvtárához, hogy kiválaszthassa a titkosított üzenetben küldött képeket.";
+"NSSpeechRecognitionUsageDescription" = "Az OSHI az eszközön futó beszédfelismerést használja, hogy üzeneteket diktálhasson az MI-asszisztensnek. A hangja teljes egészében az iPhone-on alakul szöveggé, és soha nem hagyja el a készüléket.";
+"NSUserNotificationsUsageDescription" = "Az OSHI értesítést küld az új titkosított üzenetekről, hogy ne maradjon le semmi fontosról.";

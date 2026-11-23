@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Mac Catalyst entitlements, applied only for the macosx SDK via
+	  CODE_SIGN_ENTITLEMENTS[sdk=macosx*]. OSHI.entitlements stays exactly as it
+	  is for iOS.
+
+	  It exists because the Mac App Store REQUIRES the sandbox and the shared
+	  iOS entitlements file has no sandbox key at all:
+
+	      App sandbox not enabled. The following executables must include the
+	      "com.apple.security.app-sandbox" entitlement ... : OSHI.app/Contents/MacOS/OSHI
+
+	  Every capability below is one OSHI actually uses; under the sandbox an
+	  absent key is a silently broken feature, not a warning.
+	-->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<!-- __KEYCHAIN_GROUPS_WERE_MISSING_ON_MAC_2026_10_19__ The iOS entitlements
+	     declare these two groups; this file did not, and under the sandbox the
+	     result is not a warning but a hard `errSecMissingEntitlement` (-34018)
+	     on every data-protection keychain call.
+	     Measured: the v2 router could not store its signing material, so the
+	     Mac published a bundle whose `signingKey` equals its `identityKey` and
+	     whose `caps` is 0 — which every peer reads as "cannot do v2/v3 groups".
+	     That is why group rosters added on another device never arrived here.
+	     Order matches OSHI.entitlements: the app's own group stays FIRST, since
+	     the first entry is the default for writes that name no group. -->
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)Moriceau-lab.Genesis</string>
+		<string>$(AppIdentifierPrefix)Moriceau-lab.Genesis.shared</string>
+	</array>
+
+	<!-- Outbound HTTPS: the v2 relay, blob store, prekeys, map tiles. -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<!-- Inbound: MultipeerConnectivity and the cross-platform mesh listener both
+	     accept connections from peers on the local network. -->
+	<key>com.apple.security.network.server</key>
+	<true/>
+
+	<!-- BLE: the mesh transport, and the LoRa node link. -->
+	<key>com.apple.security.device.bluetooth</key>
+	<true/>
+	<!-- Video calls and the QR scanner. -->
+	<key>com.apple.security.device.camera</key>
+	<true/>
+	<!-- Voice calls and voice messages. -->
+	<key>com.apple.security.device.audio-input</key>
+	<true/>
+
+	<!-- The document picker (attachments) and chat export. Read-write because
+	     export writes a file the user chose. -->
+	<key>com.apple.security.files.user-selected.read-write</key>
+	<true/>
+	<!-- Downloads is where an exported transcript lands by default. -->
+	<key>com.apple.security.files.downloads.read-write</key>
+	<true/>
+
+	<!-- Location sharing and the offline map's "where am I". -->
+	<key>com.apple.security.personal-information.location</key>
+	<true/>
+
+	<!-- Push, universal links and the shared container, carried over from the
+	     iOS entitlements. NOT carried over:
+	     com.apple.external-accessory.wireless-configuration, which is an
+	     iOS-only (Wireless Accessory Configuration) entitlement and would be
+	     rejected on macOS. -->
+	<key>aps-environment</key>
+	<string>production</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:oshi-messenger.com</string>
+		<string>applinks:oshi-messenger.org</string>
+	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.Moriceau-lab.Genesis</string>
+	</array>
+</dict>
+</plist>

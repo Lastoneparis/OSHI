@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Denne telefon kan være ændret</string>
+    <string name="device_integrity_dialog_body">OSHI har fundet tegn på, at denne telefon kan være rootet eller ændret (%1$s). På sådan en telefon kan anden software læse, hvad der står på skærmen, og hvad du skriver, før OSHI krypterer det. OSHI har ikke slettet eller blokeret noget. Kontrollen er heuristisk: den kan tage fejl, og godt skjult root kan undgå den.</string>
+    <string name="device_integrity_dialog_ok">Forstået</string>
+    <string name="device_integrity_status_title">Enhedsintegritet</string>
+    <string name="device_integrity_status_flagged">OSHI har fundet tegn på root eller ændringer: %1$s</string>
+    <string name="device_integrity_finding_su">su-fil</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">app til root-styring</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">system signeret med testnøgler</string>
+    <string name="device_integrity_finding_debuggable">system med fejlfinding aktiveret</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Rootede eller ændrede telefoner: OSHI leder efter almindelige tegn på root (su, Magisk, Xposed/LSPosed, Frida, system signeret med testnøgler eller med fejlfinding) og advarer dig, hvis den finder nogen. At intet findes, beviser ikke, at telefonen er ren.</string>
+    <string name="clipboard_hygiene_explainer">Kopiering: beskeder, oversættelser, gendannelsesnøgler og bot-tokens, du kopierer, markeres som følsomme (Android 13+ skjuler forhåndsvisningen). Ligger de stadig i udklipsholderen efter 60 sekunder, fjerner OSHI dem: med det samme, hvis OSHI er åben, ellers næste gang du åbner den. Så længe de ligger der, kan dit tastatur og apps med adgang til udklipsholderen se dem, og tastaturer eller telefonfunktioner med en udklipshistorik kan beholde deres egen kopi, også efter at de er fjernet.</string>
+</resources>

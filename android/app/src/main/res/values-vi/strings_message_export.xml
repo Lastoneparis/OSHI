@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Tệp được mã hóa, chỉ đọc được bằng khóa tài khoản của bạn</string>
+    <string name="settings_import_messages">Nhập tin nhắn</string>
+    <string name="settings_import_messages_desc">Khôi phục tệp .oshiexport đã mã hóa</string>
+    <string name="settings_importing">Đang nhập…</string>
+    <string name="export_media_skipped">%1$d tệp đính kèm quá lớn và đã bị bỏ qua khi xuất.</string>
+    <string name="import_messages_success">Đã nhập %1$d tin nhắn (%2$d đã có sẵn).</string>
+    <string name="import_error_wrong_account">Bản xuất này thuộc về một tài khoản OSHI khác. Hãy khôi phục khóa của tài khoản đó trước.</string>
+    <string name="import_error_damaged">Bản xuất này bị hỏng hoặc đã bị sửa đổi.</string>
+    <string name="import_error_other_platform">Bản xuất này được tạo bởi OSHI cho %1$s và chưa thể nhập tại đây.</string>
+    <string name="import_error_not_export">Tệp này không phải là bản xuất OSHI.</string>
+    <string name="import_error_version">Bản xuất này được tạo bởi phiên bản OSHI mới hơn. Hãy cập nhật ứng dụng và thử lại.</string>
+    <string name="import_error_no_key">Không có khóa tài khoản trên thiết bị này. Hãy khôi phục tài khoản của bạn trước.</string>
+    <string name="import_error_unreadable">Không thể đọc tệp.</string>
+</resources>

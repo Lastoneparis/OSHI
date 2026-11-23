@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Control-payload catalog labels, ported from iOS Localizable.strings.
+     call_generic is intentionally absent: iOS renders that label unlocalized,
+     so every locale falls back to the English default. -->
+<resources>
+    <string name="media_file">קובץ</string>
+    <!-- H-8. This held `%@ הגיב/ה %@ להודעתך` — the Objective-C / Swift specifier
+         `%@`, TWICE, in a key that takes no arguments. It is "%@ reacted %@ to your
+         message" from a different iOS key dropped into a slot whose English value is
+         the argument-free "Reacted to a message", and the resource merge warned about
+         it ("Multiple substitutions specified in non-positional format of string
+         resource string/notification_reaction"). It was invisible only because nothing
+         consumed the key; the surface pass wired it into OSHIControlPayload.labels(),
+         which would have printed `🔥 %@ הגיב/ה %@ להודעתך` on every Hebrew reaction row
+         and banner. OSHIControlPayload.noFormatSpecifiers still rejects any label
+         carrying a specifier and falls back to English — that guard stays; this
+         replaces the English fallback with real Hebrew. -->
+    <string name="notification_reaction">הגיב/ה להודעה</string>
+</resources>

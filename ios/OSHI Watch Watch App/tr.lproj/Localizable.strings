@@ -1,0 +1,134 @@
+/* OSHI Watch App - Turkish */
+
+/* Status */
+"watch.status.connected" = "Bağlı";
+"watch.status.not_reachable" = "iPhone'a ulaşılamıyor";
+
+/* Navigation */
+"watch.open_iphone" = "iPhone'da OSHI'yi Aç";
+
+/* Common */
+"common.refresh" = "Yenile";
+"common.cancel" = "İptal";
+
+/* Messages */
+"watch.loading_messages" = "Mesajlar yükleniyor…";
+"watch.no_messages" = "Mesaj Yok";
+"watch.sending" = "Gönderiliyor…";
+"watch.dictate" = "Dikte Et";
+"watch.voice_message" = "Sesli Mesaj";
+"watch.reply" = "Yanıtla";
+"watch.media_attachment" = "Ek";
+
+/* Quick Replies */
+"watch.quick.yes" = "Evet";
+"watch.quick.no" = "Hayır";
+"watch.quick.ok" = "Tamam";
+"watch.quick.later" = "Sonra";
+"watch.quick.omw" = "Yoldayım!";
+"watch.quick.thanks" = "Teşekkürler";
+
+/* Errors */
+"watch.error.send_failed" = "Gönderilemedi";
+"watch.send.queued" = "iPhone bekleniyor";
+"watch.error.not_reachable" = "iPhone'a ulaşılamıyor";
+
+/* Calls */
+"watch.call.incoming_video" = "Gelen Görüntülü Arama";
+"watch.call.incoming_voice" = "Gelen Sesli Arama";
+"watch.call.video" = "Görüntülü Arama";
+"watch.call.voice" = "Sesli Arama";
+"watch.call.connecting" = "Bağlanıyor…";
+"watch.call.ringing" = "Çalıyor…";
+"watch.call.in_call" = "Aramada";
+"watch.call.ended" = "Arama Bitti";
+"watch.call.start" = "Aramayı Başlat";
+"watch.call.unknown" = "Bilinmiyor";
+
+/* Call Actions */
+"call.action.accept" = "Kabul Et";
+"call.action.decline" = "Reddet";
+
+/* Notifications */
+"watch.notification.new_message" = "Yeni Mesaj";
+
+/* Call Summary */
+"call.outgoing" = "Giden arama";
+"call.incoming" = "Gelen arama";
+"call.no.answer" = "Yanıt yok";
+"call.declined" = "Reddedildi";
+"call.missed" = "Cevapsız arama";
+"call.video.outgoing" = "Giden görüntülü arama";
+"call.video.incoming" = "Gelen görüntülü arama";
+
+/* Actions de notification au poignet. */
+"notification.action.reply" = "Yanıtla";
+"send" = "Gönder";
+"type_message" = "Mesaj yazın";
+"notification.action.mark_read" = "Okundu";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Sohbetler";
+"w2.empty.title" = "Henüz sohbet yok";
+"w2.empty.body" = "iPhone'unuzdaki OSHI sohbetleri burada görünür.";
+"w2.disabled.title" = "Akıllı saat kapalı";
+"w2.disabled.body" = "iPhone'unuzda OSHI'de açın: Ayarlar › Bağlı cihazlar › Akıllı saat.";
+"w2.locked.title" = "OSHI kilitli";
+"w2.locked.body" = "iPhone'unuzda OSHI'nin kilidini açıp tekrar deneyin.";
+"w2.unavailable.title" = "OSHI hazır değil";
+"w2.unavailable.body" = "iPhone'unuzda OSHI'yi bir kez açıp tekrar deneyin.";
+"w2.nophone.title" = "iPhone'a ulaşılamıyor";
+"w2.nophone.body" = "OSHI yüklü iPhone'unuzu yakında tutun.";
+"w2.error.title" = "Bir sorun oluştu";
+"w2.error.body" = "iPhone'unuz yanıt vermedi. Tekrar deneyin.";
+"w2.notfound" = "Bu sohbet artık iPhone'unuzda yok.";
+"w2.retry" = "Tekrar dene";
+"w2.reply" = "Yanıtla";
+"w2.you" = "Siz";
+"w2.you_prefix" = "Siz: %@";
+"w2.react" = "Tepki ver";
+"w2.speak_or_type" = "Konuşun veya yazın";
+"w2.quick_replies" = "Hızlı yanıtlar";
+"w2.sending" = "Gönderiliyor…";
+"w2.sent" = "Gönderildi";
+"w2.send_failed" = "Gönderilemedi. iPhone'unuzda tekrar deneyin.";
+"w2.read_only" = "Bu sohbete yanıt veremezsiniz.";
+"w2.view_once" = "👁 Tek seferlik — iPhone'unuzda açın";
+"w2.view_once_short" = "👁 Tek seferlik";
+"w2.e2e" = "iPhone'unuz tarafından uçtan uca şifrelendi";
+"w2.replying_to" = "Yanıtlanan";
+"w2.loading" = "Yükleniyor…";
+"w2.unread_count" = "%d okunmamış";
+"w2.all_read" = "Tümü okundu";
+"w2.call" = "Ara";
+"w2.media.photo" = "📷 Fotoğraf";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Sesli";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Dosya";
+"w2.media.location" = "📍 Konum";
+"w2.media.contact" = "👤 Kişi";
+"w2.qr.on_my_way" = "Yoldayım";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Sonra ararım";
+"w2.qr.thanks" = "Teşekkürler!";
+"w2.qr.yes" = "Evet";
+"w2.qr.no" = "Hayır";
+"w2.qr.busy" = "Şu an konuşamam";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Sevgi";
+"w2.r.laugh" = "Kahkaha";
+"w2.r.cry" = "Üzgün";
+"w2.r.thumbs" = "Beğen";
+"w2.r.wow" = "Vay";
+"w2.r.fire" = "Ateş";
+"w2.mute" = "Sessiz";
+"w2.end_call" = "Kapat";
+"w2.speaker" = "Hoparlör";
+"w2.widget.off" = "iPhone'unuzda OSHI'de Akıllı saati açın";
+"w2.widget.off_short" = "Kapalı";
+"w2.widget.locked" = "iPhone'unuzda OSHI'nin kilidini açın";
+"w2.widget.locked_short" = "Kilitli";
+"w2.widget.open" = "OSHI'yi aç";
+"w2.widget.name" = "OSHI okunmamış";
+"w2.widget.desc" = "Okunmamış sayısı ve kimin yazdığı — mesajlar asla.";

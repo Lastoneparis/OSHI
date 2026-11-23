@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OSHI Brand Colors (matching iOS) -->
+    <color name="oshi_primary">#5616EC</color>
+    <color name="oshi_primary_variant">#3700B3</color>
+    <color name="oshi_secondary">#03DAC6</color>
+    <color name="oshi_secondary_variant">#018786</color>
+
+    <!-- Light Theme -->
+    <color name="light_background">#FFFFFF</color>
+    <color name="light_surface">#FFFFFF</color>
+    <color name="light_on_primary">#FFFFFF</color>
+    <color name="light_on_secondary">#000000</color>
+    <color name="light_on_background">#000000</color>
+    <color name="light_on_surface">#000000</color>
+
+    <!-- Dark Theme -->
+    <color name="dark_background">#121212</color>
+    <color name="dark_surface">#1E1E1E</color>
+    <color name="dark_on_primary">#000000</color>
+    <color name="dark_on_secondary">#000000</color>
+    <color name="dark_on_background">#FFFFFF</color>
+    <color name="dark_on_surface">#FFFFFF</color>
+
+    <!-- Message Bubbles -->
+    <color name="message_sent">#5616EC</color>
+    <color name="message_received">#E5E5EA</color>
+    <color name="message_sent_text">#FFFFFF</color>
+    <color name="message_received_text">#000000</color>
+
+    <!-- Status Colors -->
+    <color name="status_online">#4CAF50</color>
+    <color name="status_offline">#9E9E9E</color>
+    <color name="status_typing">#2196F3</color>
+
+    <!-- Call Colors -->
+    <color name="call_accept">#4CAF50</color>
+    <color name="call_decline">#F44336</color>
+    <color name="call_muted">#FF9800</color>
+</resources>

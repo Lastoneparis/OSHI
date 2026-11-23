@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Toetsenbord</string>
+    <string name="keyboard_incognito_title">Incognito-toetsenbord</string>
+    <string name="keyboard_incognito_subtitle">Vraag het toetsenbord niet te leren van wat je typt</string>
+    <string name="keyboard_status_title">Huidig toetsenbord</string>
+    <string name="keyboard_status_trusted">%1$s · Ingebouwd toetsenbord</string>
+    <string name="keyboard_status_third_party">%1$s · Toetsenbord van derden</string>
+    <string name="keyboard_status_unknown">Onbekend toetsenbord</string>
+    <string name="keyboard_privacy_explainer">OSHI versleutelt op deze telefoon, maar wat je typt gaat eerst door je toetsenbord. Incognito vraagt het toetsenbord je woorden niet te leren of te bewaren — Android kan een toetsenbord niet dwingen, alleen vragen. Een toetsenbord van derden kan nog steeds elke toetsaanslag lezen, gebruik dus liever het ingebouwde toetsenbord van je telefoon. Is de telefoon zelf gecompromitteerd (spyware), dan kan geen enkele app beschermen wat je typt.</string>
+    <string name="keyboard_banner_title">Je toetsenbord kan lezen wat je typt voordat OSHI het versleutelt</string>
+    <string name="keyboard_banner_body">%1$s is een toetsenbord van derden. Schakel voor privégesprekken over naar het ingebouwde toetsenbord van je telefoon.</string>
+    <string name="keyboard_banner_switch">Toetsenbord wisselen</string>
+    <string name="keyboard_banner_dismiss">Sluiten</string>
+</resources>

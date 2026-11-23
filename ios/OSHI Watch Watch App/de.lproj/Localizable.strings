@@ -1,0 +1,136 @@
+/* OSHI Watch App - German */
+
+/* Status */
+"watch.status.connected" = "Verbunden";
+"watch.status.not_reachable" = "iPhone nicht erreichbar";
+
+/* Navigation */
+"watch.open_iphone" = "OSHI auf iPhone öffnen";
+
+/* Common */
+"common.refresh" = "Aktualisieren";
+"common.cancel" = "Abbrechen";
+
+/* Messages */
+"watch.loading_messages" = "Nachrichten laden…";
+"watch.no_messages" = "Keine Nachrichten";
+"watch.sending" = "Senden…";
+"watch.dictate" = "Diktieren";
+"watch.voice_message" = "Sprachnachricht";
+"watch.reply" = "Antworten";
+"watch.media_attachment" = "Medienanhang";
+
+/* Quick Replies */
+"watch.quick.yes" = "Ja";
+"watch.quick.no" = "Nein";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Später";
+"watch.quick.omw" = "Bin unterwegs!";
+"watch.quick.thanks" = "Danke";
+
+/* Errors */
+"watch.error.send_failed" = "Nachricht konnte nicht gesendet werden";
+"watch.send.queued" = "Für iPhone eingereiht";
+"watch.error.not_reachable" = "iPhone ist nicht erreichbar";
+
+/* Calls */
+"watch.call.incoming_video" = "Eingehender Videoanruf";
+"watch.call.incoming_voice" = "Eingehender Sprachanruf";
+"watch.call.video" = "Videoanruf";
+"watch.call.voice" = "Sprachanruf";
+"watch.call.connecting" = "Verbinden…";
+"watch.call.ringing" = "Klingelt…";
+"watch.call.in_call" = "Im Anruf";
+"watch.call.ended" = "Anruf beendet";
+"watch.call.start" = "Anruf starten";
+"watch.call.unknown" = "Unbekannt";
+
+/* Call Actions */
+"call.action.accept" = "Annehmen";
+"call.action.decline" = "Ablehnen";
+
+/* Notifications */
+"watch.notification.new_message" = "Neue Nachricht";
+
+/* Call Summary */
+"call.outgoing" = "Ausgehender Anruf";
+"call.incoming" = "Eingehender Anruf";
+"call.no.answer" = "Keine Antwort";
+"call.declined" = "Abgelehnt";
+"call.missed" = "Verpasster Anruf";
+"call.video.outgoing" = "Ausgehender Videoanruf";
+"call.video.incoming" = "Eingehender Videoanruf";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Antworten";
+"send" = "Senden";
+"type_message" = "Nachricht schreiben";
+"notification.action.mark_read" = "Als gelesen markieren";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Chats";
+"w2.empty.title" = "Noch keine Chats";
+"w2.empty.body" = "Deine OSHI-Chats von deinem iPhone erscheinen hier.";
+"w2.disabled.title" = "Smartwatch ist aus";
+"w2.disabled.body" = "Aktiviere sie in OSHI auf deinem iPhone: Einstellungen › Verknüpfte Geräte › Smartwatch.";
+"w2.locked.title" = "OSHI ist gesperrt";
+"w2.locked.body" = "Entsperre OSHI auf deinem iPhone und versuche es erneut.";
+"w2.unavailable.title" = "OSHI ist nicht bereit";
+"w2.unavailable.body" = "Öffne OSHI einmal auf deinem iPhone und versuche es erneut.";
+"w2.nophone.title" = "iPhone nicht erreichbar";
+"w2.nophone.body" = "Halte dein iPhone mit installiertem OSHI in der Nähe.";
+"w2.error.title" = "Etwas ist schiefgelaufen";
+"w2.error.body" = "Dein iPhone hat nicht geantwortet. Versuche es erneut.";
+"w2.notfound" = "Dieser Chat ist nicht mehr auf deinem iPhone.";
+"w2.retry" = "Erneut versuchen";
+"w2.reply" = "Antworten";
+"w2.you" = "Du";
+"w2.you_prefix" = "Du: %@";
+"w2.react" = "Reagieren";
+"w2.speak_or_type" = "Sprechen oder tippen";
+"w2.quick_replies" = "Schnellantworten";
+"w2.sending" = "Wird gesendet …";
+"w2.sent" = "Gesendet";
+"w2.send_failed" = "Nicht gesendet. Versuche es auf deinem iPhone erneut.";
+"w2.read_only" = "Du kannst in diesem Chat nicht antworten.";
+"w2.view_once" = "👁 Einmal ansehen – öffne es auf deinem iPhone";
+"w2.view_once_short" = "👁 Einmal ansehen";
+"w2.e2e" = "Von deinem iPhone Ende-zu-Ende-verschlüsselt";
+"w2.replying_to" = "Antwort auf";
+"w2.loading" = "Wird geladen …";
+"w2.unread_count" = "%d ungelesen";
+"w2.all_read" = "Alles gelesen";
+"w2.call" = "Anrufen";
+"w2.media.photo" = "📷 Foto";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Sprachnachricht";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Datei";
+"w2.media.location" = "📍 Standort";
+"w2.media.contact" = "👤 Kontakt";
+"w2.qr.on_my_way" = "Bin unterwegs";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Ich rufe dich später an";
+"w2.qr.thanks" = "Danke!";
+"w2.qr.yes" = "Ja";
+"w2.qr.no" = "Nein";
+"w2.qr.busy" = "Kann gerade nicht sprechen";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Liebe";
+"w2.r.laugh" = "Lachen";
+"w2.r.cry" = "Traurig";
+"w2.r.thumbs" = "Daumen hoch";
+"w2.r.wow" = "Wow";
+"w2.r.fire" = "Feuer";
+"w2.mute" = "Stumm";
+"w2.end_call" = "Auflegen";
+"w2.speaker" = "Lautsprecher";
+"w2.widget.off" = "Aktiviere Smartwatch in OSHI auf deinem iPhone";
+"w2.widget.off_short" = "Aus";
+"w2.widget.locked" = "Entsperre OSHI auf deinem iPhone";
+"w2.widget.locked_short" = "Gesperrt";
+"w2.widget.open" = "OSHI öffnen";
+"w2.widget.name" = "OSHI ungelesen";
+"w2.widget.desc" = "Anzahl ungelesener Nachrichten und wer geschrieben hat – nie die Nachrichten.";

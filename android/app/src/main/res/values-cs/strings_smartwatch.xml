@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">Chytré hodinky</string>
+    <string name="settings_smartwatch_subtitle">Čtěte chaty a odpovídejte na ně z hodinek Wear OS. Šifrování i odesílání zůstává v tomto telefonu; hodinky nic neukládají.</string>
+</resources>

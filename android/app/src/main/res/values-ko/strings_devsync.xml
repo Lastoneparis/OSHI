@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">연결된 기기</string>
+    <string name="devsync_settings_subtitle">기기 간에 기록을 직접 동기화합니다</string>
+    <string name="devsync_status_on">직접 동기화가 켜져 있습니다. 기록은 기기에서 기기로 바로 이동하며 서버에는 아무것도 저장되지 않습니다.</string>
+    <string name="devsync_status_off">이 기기에서는 직접 동기화가 꺼져 있습니다.</string>
+    <string name="devsync_this_device">이 기기</string>
+    <string name="devsync_device_id">기기 ID %1$s</string>
+    <string name="devsync_debug_override">직접 동기화(디버그 재정의)</string>
+    <string name="devsync_debug_override_desc">서버 설정과 관계없이 이 설치에서 직접 동기화를 강제로 켭니다</string>
+    <string name="devsync_pending_title">새 기기 승인</string>
+    <string name="devsync_pending_body">%1$s(%2$s)이(가) 기록을 받으려고 합니다. 다른 화면에 같은 코드가 표시되는지 확인하세요.</string>
+    <string name="devsync_waiting_body">다른 기기에서 승인을 기다리는 중입니다. 같은 코드가 표시되는지 확인하세요.</string>
+    <string name="devsync_peer_approved">다른 기기에서 이미 승인했습니다. 여기서 승인하면 완료됩니다.</string>
+    <string name="devsync_allow">허용</string>
+    <string name="devsync_deny">거부</string>
+    <string name="devsync_linked_title">연결된 기기</string>
+    <string name="devsync_none_linked">아직 연결된 기기가 없습니다. 같은 Wi-Fi에서 또는 동시에 온라인 상태로 다른 기기에서 OSHI를 여세요.</string>
+    <string name="devsync_last_sync">마지막 동기화: %1$s</string>
+    <string name="devsync_never">없음</string>
+    <string name="devsync_syncing_now">동기화 중(%1$s)</string>
+    <string name="devsync_remove">제거</string>
+    <string name="devsync_remove_confirm_title">%1$s을(를) 제거할까요?</string>
+    <string name="devsync_remove_confirm_body">더 이상 기록을 받지 않습니다. 이미 받은 기록은 유지됩니다.</string>
+    <string name="devsync_sync_now">지금 동기화</string>
+    <string name="devsync_cancel">취소</string>
+    <string name="devsync_alert_unapproved">내 계정을 사용하는 기기가 동기화를 시도했습니다: %1$s</string>
+    <string name="devsync_alert_linked">새 기기 %1$s이(가) 이제 기록을 받을 수 있습니다</string>
+</resources>

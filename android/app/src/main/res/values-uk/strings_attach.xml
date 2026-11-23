@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Нещодавні</string>
+    <string name="attach_selected_count">Вибрано: %1$d</string>
+    <string name="attach_all_photos">Усі фото</string>
+    <string name="attach_collapse">Згорнути</string>
+    <string name="attach_camera">Камера</string>
+    <string name="attach_gallery">Галерея</string>
+    <string name="attach_file">Файл</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Геопозиція</string>
+    <string name="attach_contact">Контакт</string>
+    <string name="attach_poll">Опитування</string>
+    <string name="attach_video_note">Відеоповідомлення</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Запланувати</string>
+    <string name="attach_access_title">Тут ваші нещодавні фото</string>
+    <string name="attach_access_body">OSHI читає фото лише поки відкрита ця панель. Ніщо не залишає телефон, доки ви це не надішлете.</string>
+    <string name="attach_access_allow">Дозволити доступ</string>
+    <string name="attach_access_settings">Відкрити налаштування</string>
+    <string name="attach_access_browse">Вибрати в галереї</string>
+    <string name="attach_partial">Ви відкрили OSHI доступ лише до деяких фото.</string>
+    <string name="attach_partial_manage">Змінити</string>
+    <string name="attach_empty_title">Поки немає фото</string>
+    <string name="attach_caption_hint">Додати підпис…</string>
+    <string name="attach_send_count">Надіслати %1$d</string>
+    <string name="attach_photo_a11y">Фото</string>
+    <string name="attach_video_a11y">Відео, %1$s</string>
+    <string name="attach_limit">Не більше %1$d за раз</string>
+</resources>

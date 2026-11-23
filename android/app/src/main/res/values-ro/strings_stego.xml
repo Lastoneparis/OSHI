@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Se așteaptă conexiunea deghizată</string>
+    <string name="privacy_disguise_title">Deghizare pentru confidențialitate</string>
+    <string name="privacy_disguise_subtitle">Deghizează traficul · ascunde un mesaj într-o fotografie</string>
+    <string name="cover_switch_title">Deghizează traficul OSHI</string>
+    <string name="cover_switch_caption">Mesajele și atașamentele tale 1:1 călătoresc în cereri completate cu umplutură care arată ca niște statistici web obișnuite, astfel încât dimensiunea și momentul lor sunt mai greu de deosebit. Dacă conexiunea deghizată eșuează, mesajele așteaptă — nu sunt trimise niciodată nedeghizate.</string>
+    <string name="cover_not_hidden">Rămân vizibile: faptul că te conectezi la oshi-messenger.com (numele serverului și amprenta TLS), precum și mesajele de grup, apelurile, trezirile push și verificările de e-mail nou, care nu sunt deghizate. Aceasta nu este anonimitate și nu ocolește o blocare a serverului OSHI — pentru asta, folosește Deghizează ca fotografie.</string>
+    <string name="disguise_photo_title">Deghizează ca fotografie</string>
+    <string name="disguise_photo_explainer">Ascunde un mesaj criptat end-to-end pentru un singur contact într-o fotografie cu aspect obișnuit, apoi trimite fotografia prin orice aplicație, e-mail sau spațiu de stocare în cloud — util când OSHI însuși este blocat. Într-o conversație 1:1: + → Deghizează ca fotografie.</string>
+    <string name="disguise_reveal_button">Dezvăluie un mesaj ascuns</string>
+    <string name="disguise_reveal_hint">Poți și să partajezi o fotografie primită către OSHI din orice aplicație.</string>
+    <string name="disguise_sheet_for">Doar %1$s îl poate citi.</string>
+    <string name="disguise_message_hint">Mesaj ascuns</string>
+    <string name="disguise_add_file">Adaugă un fișier mic (max. 256 KB)</string>
+    <string name="disguise_remove_file">Elimină %1$s</string>
+    <string name="disguise_file_too_large">Fișier prea mare (max. 256 KB)</string>
+    <string name="disguise_cover_generated">Peisaj generat</string>
+    <string name="disguise_cover_photo">Fotografia mea</string>
+    <string name="disguise_capacity">Folosește %1$s din %2$s disponibili în această imagine</string>
+    <string name="disguise_too_big">Prea lung pentru această imagine. Scurtează mesajul, elimină fișierul sau alege o fotografie mai mare.</string>
+    <string name="disguise_create_share">Creează fotografia și partajează</string>
+    <string name="disguise_warning_recompress">Trimite-o ca FIȘIER sau document. Aplicațiile care recomprimă fotografiile (majoritatea rețelelor sociale, WhatsApp, Signal sau Telegram în modul foto, capturile de ecran) șterg mesajul ascuns.</string>
+    <string name="disguise_warning_forensic">Astfel mesajul este ascuns de oricine se uită la fotografie. O analiză criminalistică poate totuși detecta că fotografia conține date ascunse, dar nu le poate citi și nici nu poate afla cui îi sunt destinate.</string>
+    <string name="disguise_working">Se creează fotografia…</string>
+    <string name="disguise_failed">Fotografia nu a putut fi creată.</string>
+    <string name="reveal_title">Mesaj ascuns</string>
+    <string name="reveal_from">De la %1$s</string>
+    <string name="reveal_hidden_on">Ascuns pe %1$s</string>
+    <string name="reveal_copy">Copiază textul</string>
+    <string name="reveal_open_file">Deschide %1$s</string>
+    <string name="reveal_checking">Se caută un mesaj ascuns…</string>
+    <string name="reveal_not_found">Niciun mesaj ascuns pentru tine în această imagine. Dacă a fost trimisă ca fotografie, aplicația care a transportat-o poate să o fi recomprimat — cere-o ca fișier.</string>
+    <string name="reveal_damaged">Această imagine a fost creată pentru tine de %1$s, dar a fost modificată pe drum și nu mai poate fi citită. Cere să fie trimisă din nou ca fișier.</string>
+    <string name="reveal_unreadable">Acest fișier nu a putut fi citit.</string>
+    <string name="disguise_photo_short">Deghizează</string>
+</resources>

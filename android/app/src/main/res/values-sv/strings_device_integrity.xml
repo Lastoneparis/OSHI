@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Den här telefonen kan vara modifierad</string>
+    <string name="device_integrity_dialog_body">OSHI hittade tecken på att den här telefonen kan vara rootad eller modifierad (%1$s). På en sådan telefon kan annan programvara läsa det som visas på skärmen och det du skriver innan OSHI krypterar det. OSHI har inte raderat eller blockerat något. Kontrollen är heuristisk: den kan ha fel, och väl dold root kan undgå den.</string>
+    <string name="device_integrity_dialog_ok">Jag förstår</string>
+    <string name="device_integrity_status_title">Enhetsintegritet</string>
+    <string name="device_integrity_status_flagged">OSHI hittade tecken på root eller modifiering: %1$s</string>
+    <string name="device_integrity_finding_su">su-fil</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">app för root-hantering</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">system signerat med testnycklar</string>
+    <string name="device_integrity_finding_debuggable">felsökningsbart system</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Rootade eller modifierade telefoner: OSHI letar efter vanliga tecken på root (su, Magisk, Xposed/LSPosed, Frida, system signerat med testnycklar eller felsökningsbart) och varnar dig om det hittar något. Att inget hittas bevisar inte att telefonen är ren.</string>
+    <string name="clipboard_hygiene_explainer">Kopiering: meddelanden, översättningar, återställningsnycklar och bot-token som du kopierar markeras som känsliga (Android 13+ döljer förhandsvisningen). Ligger de kvar i urklipp efter 60 sekunder tar OSHI bort dem: direkt om OSHI är öppet, annars nästa gång du öppnar det. Så länge de ligger där kan ditt tangentbord och appar med åtkomst till urklipp se dem, och tangentbord eller telefonfunktioner som sparar en urklippshistorik kan behålla sin egen kopia även efter att de tagits bort.</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">กำลังค้นหา…</string>
+    <string name="peers_status_peers_found">พบอุปกรณ์แล้ว</string>
+    <string name="peers_status_permission_required">ต้องมีสิทธิ์</string>
+    <string name="peers_subtitle_connected">เชื่อมต่ออยู่: %1$d</string>
+    <string name="peers_subtitle_connected_cross">เชื่อมต่ออยู่: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">เชื่อมต่ออยู่: %1$d (Android %2$d, iOS %3$d)</string>
+    <string name="peers_subtitle_bluetooth_off">บลูทูธปิดอยู่ — เปิดเพื่อค้นหาอุปกรณ์รอบตัวคุณ</string>
+    <string name="peers_subtitle_permission_both">OSHI ใช้บลูทูธไม่ได้ — คุณไม่เห็นอุปกรณ์ใกล้เคียงและอุปกรณ์เหล่านั้นก็ไม่เห็นคุณ</string>
+    <string name="peers_subtitle_permission_advertise">อุปกรณ์ใกล้เคียงมองไม่เห็นคุณ — ไม่มีสิทธิ์ “อุปกรณ์ที่อยู่ใกล้เคียง”</string>
+    <string name="peers_subtitle_permission_scan">OSHI ค้นหาอุปกรณ์ใกล้เคียงไม่ได้ — ไม่มีสิทธิ์ “อุปกรณ์ที่อยู่ใกล้เคียง”</string>
+    <string name="peers_subtitle_ble_unsupported">โทรศัพท์เครื่องนี้กระจายสัญญาณผ่านบลูทูธ LE ไม่ได้</string>
+    <string name="peers_subtitle_ble_busy">บลูทูธไม่ว่าง — มีแอปอื่นกำลังใช้คลื่นวิทยุอยู่</string>
+    <string name="peers_subtitle_ble_down">การค้นหาผ่านบลูทูธหยุดไปแล้ว — กำลังลองใหม่</string>
+    <string name="peers_subtitle_searching_lan">กำลังค้นหาผู้คนบนเครือข่าย Wi-Fi เดียวกัน…</string>
+    <string name="peers_subtitle_disabled">ปิดเครือข่ายเมช</string>
+    <string name="peers_subtitle_looking">กำลังค้นหาอุปกรณ์รอบตัวคุณ…</string>
+    <string name="peers_permission_card_title">เปิดการค้นหาอุปกรณ์ใกล้เคียง</string>
+    <string name="peers_permission_card_body">OSHI ต้องใช้สิทธิ์ “อุปกรณ์ที่อยู่ใกล้เคียง” เพื่อค้นหาโทรศัพท์รอบตัวคุณ ถ้าไม่มี ข้อความทุกฉบับจะวิ่งผ่านอินเทอร์เน็ต</string>
+    <string name="peers_permission_card_action">อนุญาต</string>
+    <string name="peers_permission_card_settings">เปิดการตั้งค่า</string>
+    <string name="peers_permission_card_denied_body">สิทธิ์ถูกปฏิเสธ OSHI จึงหาใครรอบตัวคุณไม่พบ เปิด “อุปกรณ์ที่อยู่ใกล้เคียง” ให้ OSHI ในการตั้งค่า Android</string>
+    <string name="peers_same_wifi_note">โทรศัพท์ทั้งสองเครื่องต้องอยู่บนเครือข่าย Wi-Fi เดียวกัน หากใช้เน็ตมือถือ ข้อความจะวิ่งผ่านอินเทอร์เน็ตแทน</string>
+    <string name="peers_control_visible">มองเห็นได้</string>
+    <string name="peers_control_scan">สแกน</string>
+    <string name="peers_control_auto">อัตโนมัติ</string>
+    <string name="peers_section_devices">อุปกรณ์</string>
+    <string name="peers_action_connect">เชื่อมต่อ</string>
+    <string name="peers_action_reconnect">เชื่อมต่อใหม่</string>
+    <string name="peers_info_reach_title">ระยะครอบคลุม</string>
+    <string name="peers_info_reach_desc">ไกลเท่าที่เครือข่าย Wi-Fi ของคุณไปถึง ข้อความสามารถกระโดดผ่านอุปกรณ์ OSHI อื่นบนเครือข่ายเดียวกันได้สูงสุด 50 ฮอป</string>
+    <string name="peers_info_connection_desc">บลูทูธ LE และ Bonjour ทำหน้าที่แนะนำอุปกรณ์สองเครื่องให้รู้จักกันและแลกที่อยู่ ส่วนตัวข้อความเองวิ่งผ่านเครือข่ายภายในของคุณ</string>
+    <string name="peers_info_tip1">ต่อโทรศัพท์ทั้งสองเครื่องเข้ากับเครือข่าย Wi-Fi เดียวกัน</string>
+    <string name="peers_info_tip2">เปิดบลูทูธไว้เพื่อให้อุปกรณ์ค้นหากันเจอ</string>
+    <string name="peers_info_tip3">ใช้งานได้แม้ไม่มีอินเทอร์เน็ต — แต่ใช้กับเน็ตมือถือไม่ได้</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Ton</string>
+    <string name="wallpaper_tone_automatic">Automatisk</string>
+    <string name="wallpaper_tone_light">Ljus</string>
+    <string name="wallpaper_tone_dark">Mörk</string>
+    <string name="wallpaper_tone_automatic_detail">Följer ljust och mörkt läge.</string>
+    <string name="wallpaper_tone_light_detail">Vit med violett nät, även i mörkt läge. Meddelanden byter till sina ljusa färger så att de är lätta att läsa.</string>
+    <string name="wallpaper_tone_dark_detail">Svart med violett nät, även i ljust läge.</string>
+    <string name="wallpaper_tone_more">Färger, övertoningar, emoji och egna foton: öppna en chatt och sedan ⋯ → Bakgrund.</string>
+</resources>

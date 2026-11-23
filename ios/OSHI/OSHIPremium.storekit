@@ -1,0 +1,69 @@
+{
+  "identifier" : "A1B2C3D4",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+    "_applicationInternalID" : "6446075034",
+    "_developerTeamID" : "5B8V2WMNQ6",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 0,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "22389336",
+      "localizations" : [],
+      "name" : "OSHI Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "2.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6812695930",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "20 GB drive, 2 GB mail, 1000 sends/mo",
+              "displayName" : "OSHI Premium Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "oshi.premium.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "OSHI Premium Monthly",
+          "subscriptionGroupID" : "22389336",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "24.90",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6812695821",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "20 GB drive, 2 GB mail, 1000 sends/mo",
+              "displayName" : "OSHI Premium Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "oshi.premium.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "OSHI Premium Yearly",
+          "subscriptionGroupID" : "22389336",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

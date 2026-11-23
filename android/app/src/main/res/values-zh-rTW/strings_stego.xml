@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">正在等待偽裝連線</string>
+    <string name="privacy_disguise_title">隱私偽裝</string>
+    <string name="privacy_disguise_subtitle">偽裝流量 · 將訊息藏進相片</string>
+    <string name="cover_switch_title">偽裝 OSHI 流量</string>
+    <string name="cover_switch_caption">你的一對一訊息和附件會放在經過填充、看起來像一般網站分析資料的請求中傳輸，因此其大小和時間更難區分。如果偽裝連線失敗，訊息會等待——絕不會在未偽裝的情況下送出。</string>
+    <string name="cover_not_hidden">仍然可見：你連線到 oshi-messenger.com 這件事（伺服器名稱和 TLS 指紋），以及未經偽裝的群組訊息、通話、推播喚醒和新郵件檢查。這不是匿名，也無法繞過對 OSHI 伺服器的封鎖——如需繞過，請使用「偽裝成相片」。</string>
+    <string name="disguise_photo_title">偽裝成相片</string>
+    <string name="disguise_photo_explainer">將一則傳給某位聯絡人的端對端加密訊息藏進一張看起來普通的相片中，再透過任何 App、電子郵件或雲端硬碟傳送這張相片——在 OSHI 本身遭到封鎖時很有用。在一對一聊天中：+ → 偽裝成相片。</string>
+    <string name="disguise_reveal_button">顯示隱藏訊息</string>
+    <string name="disguise_reveal_hint">你也可以從任何 App 將收到的相片分享到 OSHI。</string>
+    <string name="disguise_sheet_for">只有 %1$s 能讀取。</string>
+    <string name="disguise_message_hint">隱藏訊息</string>
+    <string name="disguise_add_file">加入小型檔案（最大 256 KB）</string>
+    <string name="disguise_remove_file">移除 %1$s</string>
+    <string name="disguise_file_too_large">檔案過大（最大 256 KB）</string>
+    <string name="disguise_cover_generated">產生的風景圖</string>
+    <string name="disguise_cover_photo">我的相片</string>
+    <string name="disguise_capacity">已使用此圖片可用的 %2$s 中的 %1$s</string>
+    <string name="disguise_too_big">內容對這張圖片來說過長。請縮短訊息、移除檔案或選擇更大的相片。</string>
+    <string name="disguise_create_share">建立相片並分享</string>
+    <string name="disguise_warning_recompress">請以檔案或文件形式傳送。會重新壓縮相片的 App（大多數社群網路、相片模式下的 WhatsApp、Signal 或 Telegram、螢幕截圖）會抹除隱藏的訊息。</string>
+    <string name="disguise_warning_forensic">這能讓查看相片的任何人看不到訊息。但鑑識分析仍可能偵測出相片帶有隱藏資料，只是無法讀取其內容，也無法判斷是給誰的。</string>
+    <string name="disguise_working">正在建立相片…</string>
+    <string name="disguise_failed">無法建立相片。</string>
+    <string name="reveal_title">隱藏訊息</string>
+    <string name="reveal_from">來自 %1$s</string>
+    <string name="reveal_hidden_on">隱藏於 %1$s</string>
+    <string name="reveal_copy">拷貝文字</string>
+    <string name="reveal_open_file">開啟 %1$s</string>
+    <string name="reveal_checking">正在尋找隱藏訊息…</string>
+    <string name="reveal_not_found">此圖片中沒有給你的隱藏訊息。如果它是以相片形式傳送的，傳送它的 App 可能已將其重新壓縮——請對方以檔案形式傳送。</string>
+    <string name="reveal_damaged">這張圖片是 %1$s 為你製作的，但在傳送途中遭到修改，已無法讀取。請對方以檔案形式重新傳送。</string>
+    <string name="reveal_unreadable">無法讀取此檔案。</string>
+    <string name="disguise_photo_short">偽裝</string>
+</resources>

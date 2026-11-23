@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Berichten en groepen samenvoegen</string>
+    <string name="chats_merged_setting_desc">Eén lijst voor al je chats, met filters voor personen en groepen.</string>
+    <string name="chats_merged_filter_all">Alle</string>
+    <string name="chats_merged_filter_unread">Ongelezen</string>
+    <string name="chats_merged_filter_groups">Groepen</string>
+    <string name="chats_merged_filter_people">Personen</string>
+    <string name="chats_merged_new_title">Nieuw</string>
+    <string name="chats_merged_new_chat">Nieuwe chat</string>
+    <string name="chats_merged_new_chat_desc">Voeg iemand toe via QR-code, link of sleutel</string>
+    <string name="chats_merged_new_group">Nieuwe groep</string>
+    <string name="chats_merged_new_group_desc">Start een groep met je contacten</string>
+    <string name="chats_merged_discover">Openbare kanalen ontdekken</string>
+    <string name="chats_merged_discover_desc">Word lid van openbare groepen in je buurt</string>
+    <string name="chats_merged_scan_invite">Uitnodiging scannen</string>
+    <string name="chats_merged_scan_invite_desc">Word lid van een groep of voeg een contact toe via een QR-code</string>
+    <string name="chats_merged_scan_not_invite">Deze QR-code is geen OSHI-uitnodiging</string>
+    <string name="chats_merged_calls_header">Iemand bellen</string>
+    <string name="chats_merged_teaser_title">Word lid van een openbaar kanaal</string>
+    <string name="chats_merged_teaser_body">Openbare groepen in de buurt werken zelfs zonder internet. Kijk wie er in je buurt is.</string>
+    <string name="chats_merged_teaser_cta">Ontdekken</string>
+    <string name="chats_merged_nearby_title">Groep in de buurt</string>
+    <string name="chats_merged_empty_unread">Je bent helemaal bij</string>
+    <string name="chats_merged_empty_people">Nog geen gesprekken</string>
+    <string name="chats_merged_group_a11y">Groep</string>
+</resources>

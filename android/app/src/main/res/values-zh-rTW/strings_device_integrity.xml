@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">這支手機可能已被改動</string>
+    <string name="device_integrity_dialog_body">OSHI 偵測到這支手機可能已被 root 或改動的跡象（%1$s）。在這樣的手機上，其他軟體可以在 OSHI 加密之前讀取螢幕內容和你輸入的內容。OSHI 沒有刪除或封鎖任何內容。此檢查屬於啟發式判斷：可能出錯，隱藏良好的 root 也可能逃過偵測。</string>
+    <string name="device_integrity_dialog_ok">我瞭解了</string>
+    <string name="device_integrity_status_title">裝置完整性</string>
+    <string name="device_integrity_status_flagged">OSHI 偵測到 root 或改動的跡象：%1$s</string>
+    <string name="device_integrity_finding_su">su 檔案</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">root 管理應用程式</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">以測試金鑰簽署的系統</string>
+    <string name="device_integrity_finding_debuggable">可偵錯的系統</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">已 root 或被改動的手機：OSHI 會尋找常見的 root 跡象（su、Magisk、Xposed/LSPosed、Frida、以測試金鑰簽署或可偵錯的系統），發現時會提醒你。沒有發現並不能證明手機是乾淨的。</string>
+    <string name="clipboard_hygiene_explainer">複製：你複製的訊息、翻譯、復原金鑰和機器人權杖會被標示為敏感內容（Android 13+ 會隱藏預覽）。若 60 秒後仍在剪貼簿中，OSHI 會將其清除：OSHI 開啟時立即清除，否則在你下次開啟時清除。在剪貼簿中期間，你的鍵盤和獲准讀取剪貼簿的應用程式都能看到它們，而會保留剪貼簿紀錄的鍵盤或手機功能，即使在清除後仍可能保留自己的副本。</string>
+</resources>

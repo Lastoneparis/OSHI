@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Se așteaptă timp de emisie radio (limita legală a ciclului de funcționare)</string>
+    <string name="lora_jamming_title">Interferențe radio detectate — posibil bruiaj</string>
+    <string name="lora_jamming_detail">Mesajele vor fi trimise prin rețeaua Bluetooth mesh sau prin internet când este posibil. Mesajele pentru radio sunt păstrate și pleacă prin LoRa când canalul se eliberează.</string>
+    <string name="lora_jamming_send_anyway">Trimite oricum prin LoRa</string>
+    <string name="lora_jamming_override_active">Se trimite oricum prin LoRa până la %1$s sau până se eliberează canalul. Este posibil ca mesajele să nu ajungă.</string>
+</resources>

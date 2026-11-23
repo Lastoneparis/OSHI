@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">To</string>
+    <string name="wallpaper_tone_automatic">Automàtic</string>
+    <string name="wallpaper_tone_light">Clar</string>
+    <string name="wallpaper_tone_dark">Fosc</string>
+    <string name="wallpaper_tone_automatic_detail">Segueix el mode clar i el fosc.</string>
+    <string name="wallpaper_tone_light_detail">Blanc amb malla violeta, fins i tot en mode fosc. Els missatges passen als colors clars per llegir-se bé.</string>
+    <string name="wallpaper_tone_dark_detail">Negre amb malla violeta, fins i tot en mode clar.</string>
+    <string name="wallpaper_tone_more">Colors, degradats, emoji i les teves fotos: obre un xat i després ⋯ → Fons de pantalla.</string>
+</resources>

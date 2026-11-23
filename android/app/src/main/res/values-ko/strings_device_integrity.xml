@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">이 휴대폰은 변조되었을 수 있습니다</string>
+    <string name="device_integrity_dialog_body">OSHI가 이 휴대폰이 루팅되었거나 변조되었을 수 있다는 징후를 감지했습니다(%1$s). 이런 휴대폰에서는 OSHI가 암호화하기 전에 다른 소프트웨어가 화면 내용과 입력 내용을 읽을 수 있습니다. OSHI는 아무것도 삭제하거나 차단하지 않았습니다. 이 검사는 추정에 기반하므로 틀릴 수 있으며, 잘 숨겨진 루팅은 감지하지 못할 수 있습니다.</string>
+    <string name="device_integrity_dialog_ok">알겠습니다</string>
+    <string name="device_integrity_status_title">기기 무결성</string>
+    <string name="device_integrity_status_flagged">OSHI가 루팅 또는 변조 징후를 감지했습니다: %1$s</string>
+    <string name="device_integrity_finding_su">su 바이너리</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">루팅 관리 앱</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">테스트 키로 서명된 시스템</string>
+    <string name="device_integrity_finding_debuggable">디버깅 가능한 시스템</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">루팅되거나 변조된 휴대폰: OSHI는 일반적인 루팅 징후(su, Magisk, Xposed/LSPosed, Frida, 테스트 키로 서명되었거나 디버깅 가능한 시스템)를 찾아 발견하면 경고합니다. 아무것도 발견되지 않았다고 해서 휴대폰이 안전하다는 증거는 아닙니다.</string>
+    <string name="clipboard_hygiene_explainer">복사: 복사한 메시지, 번역, 복구 키, 봇 토큰은 민감한 정보로 표시됩니다(Android 13 이상은 미리보기를 숨김). 60초 후에도 클립보드에 남아 있으면 OSHI가 삭제합니다. OSHI가 열려 있으면 즉시, 아니면 다음에 열 때 삭제됩니다. 클립보드에 있는 동안에는 키보드와 클립보드 읽기가 허용된 앱이 볼 수 있으며, 클립보드 기록을 보관하는 키보드나 휴대폰 기능은 삭제 후에도 자체 사본을 보관할 수 있습니다.</string>
+</resources>

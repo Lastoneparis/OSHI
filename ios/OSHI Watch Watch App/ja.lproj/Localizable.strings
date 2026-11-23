@@ -1,0 +1,136 @@
+/* OSHI Watch App - Japanese */
+
+/* Status */
+"watch.status.connected" = "接続済み";
+"watch.status.not_reachable" = "iPhoneに接続できません";
+
+/* Navigation */
+"watch.open_iphone" = "iPhoneでOSHIを開く";
+
+/* Common */
+"common.refresh" = "更新";
+"common.cancel" = "キャンセル";
+
+/* Messages */
+"watch.loading_messages" = "メッセージを読み込み中…";
+"watch.no_messages" = "メッセージなし";
+"watch.sending" = "送信中…";
+"watch.dictate" = "音声入力";
+"watch.voice_message" = "ボイスメッセージ";
+"watch.reply" = "返信";
+"watch.media_attachment" = "メディア添付";
+
+/* Quick Replies */
+"watch.quick.yes" = "はい";
+"watch.quick.no" = "いいえ";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "あとで";
+"watch.quick.omw" = "向かっています！";
+"watch.quick.thanks" = "ありがとう";
+
+/* Errors */
+"watch.error.send_failed" = "メッセージの送信に失敗しました";
+"watch.send.queued" = "iPhoneへ送信待ち";
+"watch.error.not_reachable" = "iPhoneに接続できません";
+
+/* Calls */
+"watch.call.incoming_video" = "ビデオ通話着信";
+"watch.call.incoming_voice" = "音声通話着信";
+"watch.call.video" = "ビデオ通話";
+"watch.call.voice" = "音声通話";
+"watch.call.connecting" = "接続中…";
+"watch.call.ringing" = "呼び出し中…";
+"watch.call.in_call" = "通話中";
+"watch.call.ended" = "通話終了";
+"watch.call.start" = "通話を開始";
+"watch.call.unknown" = "不明";
+
+/* Call Actions */
+"call.action.accept" = "応答";
+"call.action.decline" = "拒否";
+
+/* Notifications */
+"watch.notification.new_message" = "新着メッセージ";
+
+/* Call Summary */
+"call.outgoing" = "発信通話";
+"call.incoming" = "着信通話";
+"call.no.answer" = "応答なし";
+"call.declined" = "拒否";
+"call.missed" = "不在着信";
+"call.video.outgoing" = "発信ビデオ通話";
+"call.video.incoming" = "着信ビデオ通話";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "返信";
+"send" = "送信";
+"type_message" = "メッセージを入力";
+"notification.action.mark_read" = "既読にする";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "チャット";
+"w2.empty.title" = "チャットはまだありません";
+"w2.empty.body" = "iPhoneのOSHIのチャットがここに表示されます。";
+"w2.disabled.title" = "スマートウォッチはオフです";
+"w2.disabled.body" = "iPhoneのOSHIでオンにしてください：設定 › リンク済みデバイス › スマートウォッチ。";
+"w2.locked.title" = "OSHIはロック中です";
+"w2.locked.body" = "iPhoneでOSHIのロックを解除してから、もう一度お試しください。";
+"w2.unavailable.title" = "OSHIの準備ができていません";
+"w2.unavailable.body" = "iPhoneでOSHIを一度開いてから、もう一度お試しください。";
+"w2.nophone.title" = "iPhoneに接続できません";
+"w2.nophone.body" = "OSHIが入ったiPhoneを近くに置いてください。";
+"w2.error.title" = "問題が発生しました";
+"w2.error.body" = "iPhoneが応答しませんでした。もう一度お試しください。";
+"w2.notfound" = "このチャットはiPhoneにありません。";
+"w2.retry" = "再試行";
+"w2.reply" = "返信";
+"w2.you" = "自分";
+"w2.you_prefix" = "自分: %@";
+"w2.react" = "リアクション";
+"w2.speak_or_type" = "音声入力または入力";
+"w2.quick_replies" = "クイック返信";
+"w2.sending" = "送信中…";
+"w2.sent" = "送信済み";
+"w2.send_failed" = "送信できませんでした。iPhoneでもう一度お試しください。";
+"w2.read_only" = "このチャットには返信できません。";
+"w2.view_once" = "👁 1回のみ表示 — iPhoneで開いてください";
+"w2.view_once_short" = "👁 1回のみ表示";
+"w2.e2e" = "iPhoneでエンドツーエンド暗号化";
+"w2.replying_to" = "返信先";
+"w2.loading" = "読み込み中…";
+"w2.unread_count" = "未読 %d件";
+"w2.all_read" = "すべて既読";
+"w2.call" = "発信";
+"w2.media.photo" = "📷 写真";
+"w2.media.video" = "🎥 ビデオ";
+"w2.media.voice" = "🎤 音声";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 ファイル";
+"w2.media.location" = "📍 位置情報";
+"w2.media.contact" = "👤 連絡先";
+"w2.qr.on_my_way" = "向かっています";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "あとで電話します";
+"w2.qr.thanks" = "ありがとう！";
+"w2.qr.yes" = "はい";
+"w2.qr.no" = "いいえ";
+"w2.qr.busy" = "今は話せません";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "大好き";
+"w2.r.laugh" = "笑い";
+"w2.r.cry" = "悲しい";
+"w2.r.thumbs" = "いいね";
+"w2.r.wow" = "すごい";
+"w2.r.fire" = "炎";
+"w2.mute" = "消音";
+"w2.end_call" = "終了";
+"w2.speaker" = "スピーカー";
+"w2.widget.off" = "iPhoneのOSHIでスマートウォッチをオンにしてください";
+"w2.widget.off_short" = "オフ";
+"w2.widget.locked" = "iPhoneでOSHIのロックを解除";
+"w2.widget.locked_short" = "ロック中";
+"w2.widget.open" = "OSHIを開く";
+"w2.widget.name" = "OSHI 未読";
+"w2.widget.desc" = "未読数と送信者のみ — メッセージは表示しません。";

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">Panggilan dengan %s</string>
+    <string name="schedule_call_when">Bila</string>
+    <string name="schedule_call_duration">Tempoh</string>
+    <string name="schedule_call_title_optional">Tajuk (Pilihan)</string>
+    <string name="schedule_call_title_placeholder">cth., Penyegerakan Mingguan</string>
+    <string name="schedule_call_other_date">Tarikh lain</string>
+    <string name="schedule_call_schedule">Jadualkan</string>
+    <string name="schedule_call_timezone">Zon waktu anda: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">Jadualkan Panggilan</string>
+</resources>

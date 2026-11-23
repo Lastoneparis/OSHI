@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The small icon for CALL notifications (incoming, ongoing, scheduled).
+
+    __NOTIFICATION_ICON_WAS_A_SHIELD_2026_11_02__ The call services used to pass
+    `android.R.drawable.ic_menu_call` — a FRAMEWORK icon, drawn in whatever
+    style the OEM's build of that resource happens to use, and visibly foreign
+    next to every other OSHI notification. Same geometry as `ic_call.xml`,
+    which is the handset the app already draws in its own UI.
+
+    Alpha-only by contract: the framework paints the small icon with the
+    notification accent colour and reads nothing but this path's coverage, so
+    `ic_call.xml`'s green would have been discarded anyway. White is simply
+    "opaque"; there is no tint attribute on purpose.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M20.01,15.38c-1.23,0 -2.42,-0.2 -3.53,-0.56 -0.35,-0.12 -0.74,-0.03 -1.01,0.24l-1.57,1.97c-2.83,-1.35 -5.48,-3.9 -6.89,-6.83l1.95,-1.66c0.27,-0.28 0.35,-0.67 0.24,-1.02 -0.37,-1.11 -0.56,-2.3 -0.56,-3.53 0,-0.54 -0.45,-0.99 -0.99,-0.99H4.19C3.65,3 3,3.24 3,3.99 3,13.28 10.73,21 20.01,21c0.71,0 0.99,-0.63 0.99,-1.18v-3.45c0,-0.54 -0.45,-0.99 -0.99,-0.99z"/>
+</vector>

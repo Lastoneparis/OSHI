@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Συνδεδεμένες συσκευές</string>
+    <string name="devsync_settings_subtitle">Συγχρονίστε το ιστορικό σας απευθείας μεταξύ των συσκευών σας</string>
+    <string name="devsync_status_on">Ο άμεσος συγχρονισμός είναι ενεργός. Το ιστορικό σας μεταφέρεται από συσκευή σε συσκευή· τίποτα δεν αποθηκεύεται στον διακομιστή.</string>
+    <string name="devsync_status_off">Ο άμεσος συγχρονισμός είναι ανενεργός σε αυτή τη συσκευή.</string>
+    <string name="devsync_this_device">Αυτή η συσκευή</string>
+    <string name="devsync_device_id">Αναγνωριστικό συσκευής %1$s</string>
+    <string name="devsync_debug_override">Άμεσος συγχρονισμός (παράκαμψη debug)</string>
+    <string name="devsync_debug_override_desc">Επιβολή άμεσου συγχρονισμού συσκευών για αυτή την εγκατάσταση, ό,τι κι αν λέει ο διακομιστής</string>
+    <string name="devsync_pending_title">Έγκριση νέας συσκευής</string>
+    <string name="devsync_pending_body">Η συσκευή %1$s (%2$s) θέλει να λάβει το ιστορικό σας. Ελέγξτε ότι η άλλη οθόνη δείχνει τον ίδιο κωδικό.</string>
+    <string name="devsync_waiting_body">Αναμονή έγκρισης στην άλλη συσκευή σας. Ελέγξτε ότι δείχνει τον ίδιο κωδικό.</string>
+    <string name="devsync_peer_approved">Η άλλη συσκευή έχει ήδη εγκρίνει. Εγκρίνετε εδώ για ολοκλήρωση.</string>
+    <string name="devsync_allow">Αποδοχή</string>
+    <string name="devsync_deny">Απόρριψη</string>
+    <string name="devsync_linked_title">Συνδεδεμένες συσκευές</string>
+    <string name="devsync_none_linked">Δεν υπάρχει ακόμη συνδεδεμένη συσκευή. Ανοίξτε το OSHI στην άλλη συσκευή σας, στο ίδιο Wi-Fi ή online την ίδια στιγμή.</string>
+    <string name="devsync_last_sync">Τελευταίος συγχρονισμός: %1$s</string>
+    <string name="devsync_never">ποτέ</string>
+    <string name="devsync_syncing_now">Συγχρονισμός σε εξέλιξη (%1$s)</string>
+    <string name="devsync_remove">Αφαίρεση</string>
+    <string name="devsync_remove_confirm_title">Αφαίρεση της συσκευής %1$s;</string>
+    <string name="devsync_remove_confirm_body">Δεν θα λαμβάνει πλέον το ιστορικό σας. Διατηρεί ό,τι έχει ήδη.</string>
+    <string name="devsync_sync_now">Συγχρονισμός τώρα</string>
+    <string name="devsync_cancel">Ακύρωση</string>
+    <string name="devsync_alert_unapproved">Μια συσκευή με τον λογαριασμό σας προσπάθησε να συγχρονιστεί: %1$s</string>
+    <string name="devsync_alert_linked">Μια νέα συσκευή, %1$s, μπορεί πλέον να λαμβάνει το ιστορικό σας</string>
+</resources>

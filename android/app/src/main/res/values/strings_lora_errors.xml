@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LoRa driver errors that had no string resource, so the radio layer was emitting
+     bare English (or a raw dotted key) straight onto the screen. English only —
+     these need the next translation pass. -->
+<resources>
+    <string name="lora_error_scan_failed">Bluetooth scan failed (code %1$s). Turn Bluetooth off and on again.</string>
+    <string name="lora_error_service_missing">This device answered, but it isn\'t running Meshtastic firmware.</string>
+    <string name="lora_error_characteristics_missing">The radio\'s Meshtastic service is incomplete. Update its firmware and try again.</string>
+    <string name="lora_error_write_failed">Couldn\'t send to the radio (code %1$s). Move closer and try again.</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">صفحه‌کلید</string>
+    <string name="keyboard_incognito_title">صفحه‌کلید ناشناس</string>
+    <string name="keyboard_incognito_subtitle">از صفحه‌کلید بخواهید آنچه را تایپ می‌کنید یاد نگیرد</string>
+    <string name="keyboard_status_title">صفحه‌کلید فعلی</string>
+    <string name="keyboard_status_trusted">%1$s · صفحه‌کلید داخلی</string>
+    <string name="keyboard_status_third_party">%1$s · صفحه‌کلید شخص ثالث</string>
+    <string name="keyboard_status_unknown">صفحه‌کلید ناشناخته</string>
+    <string name="keyboard_privacy_explainer">OSHI روی همین گوشی رمزگذاری می‌کند، اما آنچه تایپ می‌کنید ابتدا از صفحه‌کلید عبور می‌کند. حالت ناشناس از صفحه‌کلید می‌خواهد کلمات شما را یاد نگیرد و نگه ندارد — Android نمی‌تواند صفحه‌کلید را مجبور به اطاعت کند، فقط می‌تواند درخواست کند. صفحه‌کلید شخص ثالث همچنان می‌تواند هر ضربهٔ کلید را بخواند، پس بهتر است از صفحه‌کلید داخلی گوشی استفاده کنید. اگر خود گوشی آلوده باشد (جاسوس‌افزار)، هیچ برنامه‌ای نمی‌تواند از آنچه تایپ می‌کنید محافظت کند.</string>
+    <string name="keyboard_banner_title">صفحه‌کلید شما می‌تواند پیش از رمزگذاری OSHI آنچه را تایپ می‌کنید بخواند</string>
+    <string name="keyboard_banner_body">%1$s یک صفحه‌کلید شخص ثالث است. برای گفتگوهای خصوصی، به صفحه‌کلید داخلی گوشی تغییر دهید.</string>
+    <string name="keyboard_banner_switch">تغییر صفحه‌کلید</string>
+    <string name="keyboard_banner_dismiss">بستن</string>
+</resources>

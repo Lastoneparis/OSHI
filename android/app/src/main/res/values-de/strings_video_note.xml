@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videonachricht</string>
+    <string name="video_note_title">Videonachricht</string>
+    <string name="video_note_a11y" formatted="true">Videonachricht, %1$s</string>
+    <string name="video_note_play">Abspielen</string>
+    <string name="video_note_pause">Pause</string>
+    <string name="video_note_record_button">Videonachricht aufnehmen</string>
+    <string name="video_note_hint">Tippen zum Aufnehmen oder gedrückt halten · max. 15 s</string>
+    <string name="video_note_record">Aufnahme starten</string>
+    <string name="video_note_stop">Aufnahme beenden</string>
+    <string name="video_note_flip">Kamera wechseln</string>
+    <string name="video_note_close">Schließen</string>
+    <string name="video_note_review_title">Deine Videonachricht</string>
+    <string name="video_note_preparing">Wird vorbereitet…</string>
+    <string name="video_note_discard">Löschen</string>
+    <string name="video_note_retake">Neu aufnehmen</string>
+    <string name="video_note_send">Videonachricht senden</string>
+    <string name="video_note_too_short">Zu kurz. Tippe zum Aufnehmen oder halte die Taste gedrückt.</string>
+    <string name="video_note_camera_denied">Für Videonachrichten wird Zugriff auf die Kamera benötigt.</string>
+</resources>

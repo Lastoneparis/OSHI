@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Contacte nou</string>
+    <string name="conversation_open_contact">Obre el contacte</string>
+    <string name="conversation_muted">Notificacions desactivades</string>
+    <string name="fab_new_contact">Contacte nou</string>
+    <string name="fab_pick_contact_voice">Trucada de veu — tria un contacte</string>
+    <string name="fab_pick_contact_video">Videotrucada — tria un contacte</string>
+    <string name="fab_pick_contact_empty">Encara no hi ha contactes. Primer afegeix algú.</string>
+</resources>

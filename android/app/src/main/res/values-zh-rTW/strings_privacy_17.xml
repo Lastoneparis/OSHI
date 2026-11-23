@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">為保護你的對話，OSHI 已封鎖螢幕截圖</string>
+    <string name="rn_hint_setting_title">讓聯絡人知道我在受限網路上</string>
+    <string name="rn_hint_setting_caption">流量偽裝期間，你的訊息會帶有經端對端加密的小標記，讓聯絡人知道你可能在受審查或受監控的網路上。只有他們看得到。</string>
+    <string name="rn_hint_chip">透過受限網路傳送</string>
+    <string name="rn_hint_explain_title">受限網路</string>
+    <string name="rn_hint_explain_body">此人正在使用 OSHI 的隱私偽裝，可能在受審查或受監控的網路上。照常回覆即可：OSHI 會繼續偽裝對方的流量。訊息請盡量簡短；相片和影片可能較慢。</string>
+</resources>

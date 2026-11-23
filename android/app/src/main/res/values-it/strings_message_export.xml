@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">File cifrato, leggibile solo con la chiave del tuo account</string>
+    <string name="settings_import_messages">Importa messaggi</string>
+    <string name="settings_import_messages_desc">Ripristina un file cifrato .oshiexport</string>
+    <string name="settings_importing">Importazione…</string>
+    <string name="export_media_skipped">%1$d allegati erano troppo grandi e sono stati esclusi dall\'esportazione.</string>
+    <string name="import_messages_success">%1$d messaggi importati (%2$d già presenti).</string>
+    <string name="import_error_wrong_account">Questa esportazione appartiene a un altro account OSHI. Ripristina prima la chiave di quell\'account.</string>
+    <string name="import_error_damaged">Questa esportazione è danneggiata o è stata modificata.</string>
+    <string name="import_error_other_platform">Questa esportazione è stata creata da OSHI per %1$s e non può ancora essere importata qui.</string>
+    <string name="import_error_not_export">Questo file non è un\'esportazione OSHI.</string>
+    <string name="import_error_version">Questa esportazione è stata creata da una versione più recente di OSHI. Aggiorna l\'app e riprova.</string>
+    <string name="import_error_no_key">Nessuna chiave dell\'account su questo dispositivo. Ripristina prima il tuo account.</string>
+    <string name="import_error_unreadable">Impossibile leggere il file.</string>
+</resources>

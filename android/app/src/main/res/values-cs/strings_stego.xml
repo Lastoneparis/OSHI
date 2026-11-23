@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Čeká se na maskované připojení</string>
+    <string name="privacy_disguise_title">Maskování</string>
+    <string name="privacy_disguise_subtitle">Maskovat provoz · skrýt zprávu ve fotce</string>
+    <string name="cover_switch_title">Maskovat provoz OSHI</string>
+    <string name="cover_switch_caption">Vaše zprávy a přílohy 1:1 putují uvnitř doplněných požadavků, které vypadají jako běžná webová analytika, takže jejich velikost a načasování se hůře rozlišují. Pokud maskované připojení selže, zprávy počkají – nikdy se neodešlou nemaskované.</string>
+    <string name="cover_not_hidden">Stále viditelné: to, že se připojujete k oshi-messenger.com (název serveru a otisk TLS), a také skupinové zprávy, hovory, push probuzení a kontroly nové pošty, které maskované nejsou. Nejde o anonymitu a neobchází to blokování serveru OSHI – k tomu použijte „Maskovat jako fotku“.</string>
+    <string name="disguise_photo_title">Maskovat jako fotku</string>
+    <string name="disguise_photo_explainer">Skryjte koncově šifrovanou zprávu pro jeden kontakt do obyčejně vypadající fotky a pak fotku pošlete libovolnou aplikací, e-mailem nebo přes cloudové úložiště – užitečné, když je zablokováno samotné OSHI. V chatu 1:1: + → Maskovat jako fotku.</string>
+    <string name="disguise_reveal_button">Odhalit skrytou zprávu</string>
+    <string name="disguise_reveal_hint">Přijatou fotku můžete do OSHI sdílet také z jakékoli aplikace.</string>
+    <string name="disguise_sheet_for">Přečíst ji může jen %1$s.</string>
+    <string name="disguise_message_hint">Skrytá zpráva</string>
+    <string name="disguise_add_file">Přidat malý soubor (max. 256 KB)</string>
+    <string name="disguise_remove_file">Odebrat %1$s</string>
+    <string name="disguise_file_too_large">Soubor je příliš velký (max. 256 KB)</string>
+    <string name="disguise_cover_generated">Vygenerovaná krajina</string>
+    <string name="disguise_cover_photo">Moje fotka</string>
+    <string name="disguise_capacity">Využito %1$s z %2$s dostupných v tomto obrázku</string>
+    <string name="disguise_too_big">Pro tento obrázek je to příliš dlouhé. Zkraťte zprávu, odeberte soubor nebo zvolte větší fotku.</string>
+    <string name="disguise_create_share">Vytvořit fotku a sdílet</string>
+    <string name="disguise_warning_recompress">Pošlete ji jako SOUBOR nebo dokument. Aplikace, které fotky znovu komprimují (většina sociálních sítí, WhatsApp, Signal nebo Telegram v režimu fotky, snímky obrazovky), skrytou zprávu vymažou.</string>
+    <string name="disguise_warning_forensic">Zpráva je tak skrytá před každým, kdo se na fotku dívá. Forenzní analýza však stále může zjistit, že fotka obsahuje skrytá data, ale nedokáže je přečíst ani zjistit, pro koho jsou určena.</string>
+    <string name="disguise_working">Vytváří se fotka…</string>
+    <string name="disguise_failed">Fotku se nepodařilo vytvořit.</string>
+    <string name="reveal_title">Skrytá zpráva</string>
+    <string name="reveal_from">Od: %1$s</string>
+    <string name="reveal_hidden_on">Skryto: %1$s</string>
+    <string name="reveal_copy">Kopírovat text</string>
+    <string name="reveal_open_file">Otevřít %1$s</string>
+    <string name="reveal_checking">Hledá se skrytá zpráva…</string>
+    <string name="reveal_not_found">V tomto obrázku pro vás není žádná skrytá zpráva. Pokud byl odeslán jako fotka, aplikace, která ho přenesla, ho mohla znovu zkomprimovat – požádejte o zaslání jako soubor.</string>
+    <string name="reveal_damaged">Tento obrázek pro vás vytvořil(a) %1$s, ale cestou byl pozměněn a už ho nelze přečíst. Požádejte o opětovné zaslání jako soubor.</string>
+    <string name="reveal_unreadable">Tento soubor se nepodařilo přečíst.</string>
+    <string name="disguise_photo_short">Maskovat</string>
+</resources>

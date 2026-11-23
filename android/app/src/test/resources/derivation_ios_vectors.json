@@ -1,0 +1,12 @@
+{
+  "chainClassical" : "K7jtTa1pShIN51E\/y79GaLSRb+sXPB\/2FvsBw3Vz2y4=",
+  "chainHybrid" : "S9UnjhejH9u3aEGj8ulEcxYY9GXAILxuRO8+trYRNBQ=",
+  "infoChainClassical" : "InitialChain",
+  "infoChainHybrid" : "InitialChain-XWing-v1",
+  "infoRootClassical" : "RootKey",
+  "infoRootHybrid" : "RootKey-XWing-v1",
+  "pqSecret" : "yMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqk=",
+  "rootClassical" : "GEJAprvYQ+q3KKOdKQ0GeVq52sE5dfF5OboK9blKon0=",
+  "rootHybrid" : "LYC3rItfkrtGT68Vf7Vtxn9in8wbbOeKbMr1qP8iFmc=",
+  "sharedSecret" : "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8="
+}

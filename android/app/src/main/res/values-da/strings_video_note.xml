@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videobesked</string>
+    <string name="video_note_title">Videobesked</string>
+    <string name="video_note_a11y" formatted="true">Videobesked, %1$s</string>
+    <string name="video_note_play">Afspil</string>
+    <string name="video_note_pause">Pause</string>
+    <string name="video_note_record_button">Optag en videobesked</string>
+    <string name="video_note_hint">Tryk for at optage, eller hold nede · maks. 15 sek.</string>
+    <string name="video_note_record">Start optagelse</string>
+    <string name="video_note_stop">Stop optagelse</string>
+    <string name="video_note_flip">Skift kamera</string>
+    <string name="video_note_close">Luk</string>
+    <string name="video_note_review_title">Din videobesked</string>
+    <string name="video_note_preparing">Forbereder…</string>
+    <string name="video_note_discard">Slet</string>
+    <string name="video_note_retake">Optag igen</string>
+    <string name="video_note_send">Send videobesked</string>
+    <string name="video_note_too_short">For kort. Tryk for at optage, eller hold knappen nede.</string>
+    <string name="video_note_camera_denied">Der kræves adgang til kameraet for at optage en videobesked.</string>
+</resources>

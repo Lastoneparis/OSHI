@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Pesan video bulat, maks. 15 dtk</string>
+    <string name="settings_panic_wipe_title">Hapus dengan mengetuk logo</string>
+    <string name="settings_panic_wipe_subtitle">Tiga ketukan cepat pada logo OSHI akan menghapus semua pesan, kunci, dan file di ponsel ini tanpa konfirmasi. Nonaktif kecuali Anda mengaktifkannya.</string>
+    <string name="map_layer_title">Jenis peta</string>
+    <string name="map_layer_standard">Standar</string>
+    <string name="map_layer_terrain">Medan</string>
+    <string name="map_layer_satellite">Satelit</string>
+    <string name="map_layer_standard_desc">Peta OSHI, berfungsi luring dengan wilayah yang diunduh</string>
+    <string name="map_layer_third_party_desc" formatted="true">Hanya daring. Dimuat langsung dari %1$s, yang dapat melihat area yang Anda lihat.</string>
+    <string name="map_layer_offline_only_note">“Hanya peta luring” aktif: lapisan ini hanya menampilkan petak yang sudah Anda lihat.</string>
+</resources>

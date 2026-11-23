@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Zet deze radio over op OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Gratis en open source. Behoudt je regio, kanalen, sleutels en contacten, blijft op het Meshtastic-netwerk en voegt lange berichten, ontvangstbevestigingen en berichten die 72 uur wachten als iemand offline is toe.</string>
+    <string name="oshimesh_upgrade_share">Stuur de flasherlink naar een computer</string>
+    <string name="oshimesh_upgrade_why">Wat OSHI Mesh toevoegt</string>
+    <string name="oshimesh_upgrade_footer">De flasher werkt in Chrome of Edge op een computer, via USB. Kies ‘Mijn instellingen behouden’ om deze radio in ongeveer een minuut bij te werken.</string>
+</resources>

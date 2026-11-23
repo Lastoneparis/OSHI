@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __REPORT_OUTCOME_2026_09_23__ Report result + group report. Separate file so the
+     shared strings.xml (edited by other work in flight) is untouched. English fallback for
+     locales without a translation yet. -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="report_queued_confirmation">Report saved on this device. It will be sent when the server can be reached (Settings › Privacy › Reported items).</string>
+    <string name="report_rejected_confirmation">The server refused this report. It is kept in Settings › Privacy › Reported items.</string>
+    <string name="chat_report_group">Report group</string>
+    <string name="report_group_dialog_title">Report this group</string>
+    <string name="report_group_already_filed">You already reported this group.</string>
+</resources>

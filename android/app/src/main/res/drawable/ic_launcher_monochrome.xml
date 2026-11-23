@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    OSHI themed (monochrome) launcher layer — Android 13+ tints this with the wallpaper.
+
+    Geometry was traced from mipmap-xxxhdpi/ic_launcher_foreground.png, the foreground the
+    app actually ships, NOT from drawable/ic_launcher_foreground.xml, which is a stale,
+    unused vector of an older "O + padlock" mark that is not what users see.
+
+    The shipped mark is a bold "O" ring with a speech-bubble tail at the lower left
+    (ring inner/outer radius ratio 0.558; reproduced here as 15/27 = 0.556).
+
+    Rules this layer obeys:
+      - 108x108 viewport, matching the adaptive icon.
+      - Exactly ONE fill colour (#FFFFFF); the system replaces it with the wallpaper
+        tint. No gradients, no alpha, no second colour.
+      - The whole glyph stays inside the 66dp safe circle (radius 33 about 54,54) so no
+        launcher mask can crop it. Furthest point is the tail tip, at radius 32.5.
+      - The ring band is 12 units thick (~17% of the visible icon width), so it stays
+        solid once tinted. The source PNG's tail is a ~1dp hairline whisker that would
+        vanish entirely at launcher size, so it is redrawn here as a solid wedge.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+        The "O". Outer circle r=27 and inner circle r=15, both centred at (54,50),
+        each drawn as four quadrant arcs in the same direction; fillType="evenOdd"
+        punches the counter out of the disc.
+    -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M54,23 A27,27 0 0 1 81,50 A27,27 0 0 1 54,77 A27,27 0 0 1 27,50 A27,27 0 0 1 54,23 Z M54,35 A15,15 0 0 1 69,50 A15,15 0 0 1 54,65 A15,15 0 0 1 39,50 A15,15 0 0 1 54,35 Z"/>
+
+    <!--
+        Speech-bubble tail. Its base sits on the ring's outer edge between 100 deg and
+        140 deg (measured y-down from +x about the ring centre 54,50); the tip reaches
+        r=36 at 118 deg, i.e. 9 units clear of the ring. The return control point sits
+        at r=23, inside the ring band, so the tail merges into the ring instead of
+        carving a notch out of its silhouette.
+
+        Kept as its own path: two paths union, whereas folding it into the evenOdd
+        path above would cancel wherever it overlaps the ring.
+    -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M49.31,76.59 Q43.80,81.38 37.10,81.79 Q39.84,68.12 33.32,67.36 Z"/>
+</vector>

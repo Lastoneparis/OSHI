@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WEAR_BRIDGE_2026_11_17__ Settings → Linked devices → Smartwatch (Wear OS bridge, opt-in). -->
+<resources>
+    <string name="settings_smartwatch_title">الساعة الذكية</string>
+    <string name="settings_smartwatch_subtitle">اقرأ محادثاتك وردّ عليها من ساعة Wear OS. يبقى التشفير والإرسال على هذا الهاتف، ولا تحتفظ الساعة بأي شيء.</string>
+</resources>

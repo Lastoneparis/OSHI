@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">OSHI chặn chụp màn hình để bảo vệ các cuộc trò chuyện của bạn</string>
+    <string name="rn_hint_setting_title">Cho liên hệ biết tôi đang ở mạng bị hạn chế</string>
+    <string name="rn_hint_setting_caption">Khi lưu lượng được ngụy trang, tin nhắn của bạn mang một dấu hiệu nhỏ được mã hóa đầu cuối để liên hệ biết bạn có thể đang ở mạng bị kiểm duyệt hoặc giám sát. Chỉ họ thấy được.</string>
+    <string name="rn_hint_chip">Gửi từ mạng bị hạn chế</string>
+    <string name="rn_hint_explain_title">Mạng bị hạn chế</string>
+    <string name="rn_hint_explain_body">Người này dùng tính năng ngụy trang của OSHI và có lẽ đang ở mạng bị kiểm duyệt hoặc giám sát. Cứ trả lời bình thường: OSHI vẫn tiếp tục ngụy trang phía họ. Hãy nhắn ngắn; ảnh và video có thể chậm.</string>
+</resources>

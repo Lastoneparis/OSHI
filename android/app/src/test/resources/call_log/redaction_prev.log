@@ -1,0 +1,21 @@
+===== OSHI call log — run started 2026-09-20T10:00:00.000Z (previous run: call_debug.prev.log) =====
+[2026-09-20T10:00:01.000Z] DIAG_PATH | route=relay
+[2026-09-20T10:00:02.000Z] DIAG_MSG_DECRYPT_OK | preview=never-exported
+[2026-09-20T10:00:03.000Z] 🔄 STATE CHANGE: ringing → inCall
+[2026-09-20T10:00:04.000Z] MSGMATRIX_SEND | to=abcdef
+[2026-09-20T10:00:05.000Z] DIAG_V2_GIVEUP | mid=12345678
+[2026-09-20T10:00:06.000Z]  	 DIAG_JITTER | leading spaces and tab 	 
+[2026-09-20T10:00:07.000Z] DIAG_VUPGRADE_RX | peer=Alice-never-exported
+[2026-09-20T10:00:08.000Z] ⚠️ acceptCall: fast path failed
+[2026-09-20T10:00:09.000Z] 📹 First captured frame — camera live
+[2026-09-20T10:00:10.000Z] DIAG_ICE_PING_RX | from=203.0.113.7:4242
+DIAG_CODEC | role=caller | no timestamp at all
+DIAG_ACCEPT [bracket] inside a line without timestamp
+[2026-09-20T10:00:11.000Z]
+[2026-09-20T10:00:12.000Z] DIAG_MSG_RX_ENTRY | preview=[secret] DIAG_PATH never-exported
+📞 CALL ENDED - hungUp
+
+
+[2026-09-20T10:00:13.000Z] DIAG_PATHX | prefix match is a prefix match
+[2026-09-20T10:00:14.000Z] DIAG_SNAP | em-space lead, nbsp tail 
+[2026-09-20T10:00:15.000Z] DIAG_AUTH_FAIL | count=3

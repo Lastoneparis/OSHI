@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Новий контакт</string>
+    <string name="conversation_open_contact">Відкрити контакт</string>
+    <string name="conversation_muted">Сповіщення вимкнено</string>
+    <string name="fab_new_contact">Новий контакт</string>
+    <string name="fab_pick_contact_voice">Голосовий виклик — виберіть контакт</string>
+    <string name="fab_pick_contact_video">Відеовиклик — виберіть контакт</string>
+    <string name="fab_pick_contact_empty">Контактів поки немає. Спершу додайте когось.</string>
+</resources>

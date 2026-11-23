@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">مخاطب جدید</string>
+    <string name="conversation_open_contact">باز کردن مخاطب</string>
+    <string name="conversation_muted">اعلان‌ها خاموش</string>
+    <string name="fab_new_contact">مخاطب جدید</string>
+    <string name="fab_pick_contact_voice">تماس صوتی — یک مخاطب انتخاب کنید</string>
+    <string name="fab_pick_contact_video">تماس تصویری — یک مخاطب انتخاب کنید</string>
+    <string name="fab_pick_contact_empty">هنوز مخاطبی ندارید. ابتدا کسی را اضافه کنید.</string>
+</resources>

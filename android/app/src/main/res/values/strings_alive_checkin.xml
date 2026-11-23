@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  __ALIVE_CHECK_IN_2026_11_04__ "I'm alive" — the recurring liveness check-in.
+
+  Every string here is written against one rule, stated in
+  AliveCheckInPolicy.OVERDUE_IS_NOT_PROOF: a missed check-in means a
+  confirmation did not arrive, and nothing else. There is no copy in this file
+  that says "in danger", "missing" or "emergency", and none should be added:
+  the app cannot know any of those, and a user who reads one of them at 3 a.m.
+  because their friend's phone ran out of battery will never trust the feature
+  again.
+-->
+<resources>
+
+    <!-- Conversation-row and notification summaries (OSHIControlPayload.Labels) -->
+    <string name="alive_summary_started">Safety check-in started</string>
+    <string name="alive_summary_confirmed">Confirmed alive</string>
+    <string name="alive_summary_stopped">Safety check-in stopped</string>
+
+    <!-- Notification channel. Separate from Messages so muting a chat cannot
+         mute a safety reminder, and separate from the journey check-in so the
+         two can be tuned apart. -->
+    <string name="alive_channel_name">Safety check-ins</string>
+    <string name="alive_channel_description">Reminders for your own check-ins, and notices when someone you watch has not answered theirs.</string>
+
+    <!-- Notifications -->
+    <string name="alive_notification_overdue_title">No check-in from %1$s</string>
+    <string name="alive_notification_overdue_body">Their check-in was due %1$s ago. This only means no confirmation has arrived.</string>
+    <string name="alive_notification_mine_due_title">Your check-in is due</string>
+    <string name="alive_notification_mine_due_body">Confirm you are alive so %1$s is not left waiting.</string>
+    <string name="alive_action_im_alive">I\'m alive</string>
+    <string name="alive_action_message_them">Message</string>
+    <string name="alive_unknown_peer">this contact</string>
+
+    <!-- Durations. Compact units, because this text sits beside a name and a
+         timestamp in a conversation row. -->
+    <string name="alive_duration_days_hours">%1$dd %2$dh</string>
+    <string name="alive_duration_hours_minutes">%1$dh %2$dm</string>
+    <string name="alive_duration_minutes">%1$dm</string>
+    <string name="alive_duration_now">under a minute</string>
+    <string name="alive_interval_every">every %1$s</string>
+
+    <!-- The in-chat bar -->
+    <string name="alive_title">Safety check-in</string>
+    <string name="alive_lane_you">You</string>
+    <string name="alive_state_due_in">due in %1$s</string>
+    <string name="alive_state_overdue_by">no response for %1$s</string>
+    <string name="alive_state_confirmed_ago">confirmed %1$s ago</string>
+    <string name="alive_state_not_set">not set up</string>
+    <string name="alive_bar_open_settings">Check-in settings</string>
+
+    <!-- The settings sheet -->
+    <string name="alive_sheet_explainer">Confirm you are alive on a schedule. %1$s sees your countdown, and is told when it passes with no answer.</string>
+    <string name="alive_sheet_mine_switch">Check in with %1$s</string>
+    <string name="alive_sheet_interval">How often</string>
+    <string name="alive_interval_24h">Every 24 hours</string>
+    <string name="alive_interval_48h">Every 48 hours</string>
+    <string name="alive_interval_72h">Every 72 hours</string>
+    <string name="alive_interval_custom">Custom</string>
+    <string name="alive_interval_custom_hours">Every %1$d hours</string>
+    <string name="alive_sheet_their_section">%1$s\'s check-in</string>
+    <string name="alive_sheet_their_none">%1$s has not set up a check-in here.</string>
+    <string name="alive_sheet_their_next">Next expected %1$s</string>
+    <string name="alive_sheet_stop">Stop checking in</string>
+
+    <!-- The two honest notes. Not fine print: they are the difference between a
+         safety feature and a promise the app cannot keep. -->
+    <string name="alive_note_no_location">No location is shared. A check-in carries one timestamp and nothing else.</string>
+    <string name="alive_note_delivery">Reminders and notices depend on your network and on notification permission. A missed check-in means no confirmation arrived, nothing more.</string>
+
+    <!-- Accessibility -->
+    <string name="alive_a11y_confirmed">Check-in confirmed</string>
+    <string name="alive_a11y_overdue">Check-in overdue</string>
+    <string name="alive_a11y_neutral">No check-in configured</string>
+    <string name="alive_confirmed_toast">Check-in sent</string>
+
+</resources>

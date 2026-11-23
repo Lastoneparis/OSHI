@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">ممکن است این گوشی دستکاری شده باشد</string>
+    <string name="device_integrity_dialog_body">OSHI نشانه‌هایی یافت که این گوشی ممکن است روت یا دستکاری شده باشد (%1$s). در چنین گوشی‌ای، نرم‌افزارهای دیگر می‌توانند آنچه روی صفحه است و آنچه تایپ می‌کنید را پیش از رمزگذاری توسط OSHI بخوانند. OSHI چیزی را حذف یا مسدود نکرده است. این بررسی تخمینی است: ممکن است اشتباه کند و روتِ خوب پنهان‌شده از آن بگریزد.</string>
+    <string name="device_integrity_dialog_ok">متوجه شدم</string>
+    <string name="device_integrity_status_title">یکپارچگی دستگاه</string>
+    <string name="device_integrity_status_flagged">OSHI نشانه‌های روت یا دستکاری یافت: %1$s</string>
+    <string name="device_integrity_finding_su">فایل su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">برنامهٔ مدیریت روت</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">سیستم امضاشده با کلیدهای آزمایشی</string>
+    <string name="device_integrity_finding_debuggable">سیستم قابل اشکال‌زدایی</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">گوشی‌های روت یا دستکاری‌شده: OSHI نشانه‌های رایج روت (su، Magisk، Xposed/LSPosed، Frida، سیستم امضاشده با کلیدهای آزمایشی یا قابل اشکال‌زدایی) را جست‌وجو می‌کند و اگر چیزی بیابد به شما هشدار می‌دهد. پیدا نشدن چیزی ثابت نمی‌کند که گوشی سالم است.</string>
+    <string name="clipboard_hygiene_explainer">کپی: پیام‌ها، ترجمه‌ها، کلیدهای بازیابی و توکن‌های ربات که کپی می‌کنید حساس علامت‌گذاری می‌شوند (Android 13+ پیش‌نمایش را پنهان می‌کند). اگر پس از ۶۰ ثانیه هنوز در کلیپ‌بورد باشند، OSHI آن‌ها را حذف می‌کند: فوراً اگر OSHI باز باشد، وگرنه دفعهٔ بعد که آن را باز کنید. تا زمانی که در کلیپ‌بورد هستند، صفحه‌کلید شما و برنامه‌هایی که اجازهٔ خواندن کلیپ‌بورد دارند می‌توانند آن‌ها را ببینند، و صفحه‌کلیدها یا قابلیت‌های گوشی که تاریخچهٔ کلیپ‌بورد نگه می‌دارند ممکن است حتی پس از حذف، نسخهٔ خودشان را نگه دارند.</string>
+</resources>

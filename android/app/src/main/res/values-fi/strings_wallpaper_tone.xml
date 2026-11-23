@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Sävy</string>
+    <string name="wallpaper_tone_automatic">Automaattinen</string>
+    <string name="wallpaper_tone_light">Vaalea</string>
+    <string name="wallpaper_tone_dark">Tumma</string>
+    <string name="wallpaper_tone_automatic_detail">Seuraa vaaleaa ja tummaa tilaa.</string>
+    <string name="wallpaper_tone_light_detail">Valkoinen violetilla verkolla myös tummassa tilassa. Viestit vaihtavat vaaleisiin väreihinsä ja pysyvät helppolukuisina.</string>
+    <string name="wallpaper_tone_dark_detail">Musta violetilla verkolla myös vaaleassa tilassa.</string>
+    <string name="wallpaper_tone_more">Värit, liukuvärit, emojit ja omat kuvat: avaa keskustelu ja sitten ⋯ → Taustakuva.</string>
+</resources>

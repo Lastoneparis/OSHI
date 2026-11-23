@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">MeshCore 電台</string>
+    <string name="meshcore_none">沒有 MeshCore 電台</string>
+    <string name="meshcore_scan">搜尋 MeshCore 電台</string>
+    <string name="meshcore_ready">已連線 — OSHI 訊息使用 #oshi-bridge</string>
+    <string name="meshcore_forget">忘記此 MeshCore 電台</string>
+    <string name="meshcore_bridge">橋接 Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">MeshCore 電台透過 MeshCore 中繼傳送你的 OSHI 訊息。它需要執行 MeshCore companion 韌體，首次連線時會要求輸入 PIN。OSHI 只會在空位新增一個頻道 #oshi-bridge，絕不會更動你的其他頻道。</string>
+    <string name="meshcore_bridge_footer">當 Meshtastic 電台和 MeshCore 電台都已連線時，只要 OSHI 在執行，這支手機就會在兩個網路之間轉送 OSHI 訊息。</string>
+    <string name="meshcore_no_free_channel">此電台的 8 個頻道位置都已占用。請在 MeshCore App 中空出一個，讓 OSHI 能新增 #oshi-bridge。</string>
+</resources>

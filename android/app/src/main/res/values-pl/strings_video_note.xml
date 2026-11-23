@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Wiadomość wideo</string>
+    <string name="video_note_title">Wiadomość wideo</string>
+    <string name="video_note_a11y" formatted="true">Wiadomość wideo, %1$s</string>
+    <string name="video_note_play">Odtwórz</string>
+    <string name="video_note_pause">Wstrzymaj</string>
+    <string name="video_note_record_button">Nagraj wiadomość wideo</string>
+    <string name="video_note_hint">Dotknij, aby nagrać, lub przytrzymaj · maks. 15 s</string>
+    <string name="video_note_record">Rozpocznij nagrywanie</string>
+    <string name="video_note_stop">Zatrzymaj nagrywanie</string>
+    <string name="video_note_flip">Przełącz aparat</string>
+    <string name="video_note_close">Zamknij</string>
+    <string name="video_note_review_title">Twoja wiadomość wideo</string>
+    <string name="video_note_preparing">Przygotowywanie…</string>
+    <string name="video_note_discard">Usuń</string>
+    <string name="video_note_retake">Nagraj ponownie</string>
+    <string name="video_note_send">Wyślij wiadomość wideo</string>
+    <string name="video_note_too_short">Za krótkie. Dotknij, aby nagrać, lub przytrzymaj przycisk.</string>
+    <string name="video_note_camera_denied">Do nagrania wiadomości wideo potrzebny jest dostęp do aparatu.</string>
+</resources>

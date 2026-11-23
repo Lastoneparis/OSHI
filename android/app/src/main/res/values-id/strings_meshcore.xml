@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">Radio MeshCore</string>
+    <string name="meshcore_none">Tidak ada radio MeshCore</string>
+    <string name="meshcore_scan">Cari radio MeshCore</string>
+    <string name="meshcore_ready">Terhubung — pesan OSHI memakai #oshi-bridge</string>
+    <string name="meshcore_forget">Lupakan radio MeshCore ini</string>
+    <string name="meshcore_bridge">Jembatan Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">Radio MeshCore membawa pesan OSHI Anda lewat repeater MeshCore. Radio harus memakai firmware MeshCore companion dan meminta PIN-nya pertama kali. OSHI menambahkan satu kanal, #oshi-bridge, di slot kosong dan tidak pernah mengubah kanal Anda yang lain.</string>
+    <string name="meshcore_bridge_footer">Jika radio Meshtastic dan MeshCore sama-sama terhubung, ponsel ini meneruskan pesan OSHI antara kedua jaringan selama OSHI terbuka.</string>
+    <string name="meshcore_no_free_channel">Kedelapan slot kanal di radio ini terpakai. Kosongkan satu di aplikasi MeshCore agar OSHI bisa menambahkan #oshi-bridge.</string>
+</resources>

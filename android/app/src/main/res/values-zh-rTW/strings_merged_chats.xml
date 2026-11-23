@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">合併訊息與群組</string>
+    <string name="chats_merged_setting_desc">所有聊天集中在一個列表，可依聯絡人和群組篩選。</string>
+    <string name="chats_merged_filter_all">全部</string>
+    <string name="chats_merged_filter_unread">未讀</string>
+    <string name="chats_merged_filter_groups">群組</string>
+    <string name="chats_merged_filter_people">聯絡人</string>
+    <string name="chats_merged_new_title">新增</string>
+    <string name="chats_merged_new_chat">新聊天</string>
+    <string name="chats_merged_new_chat_desc">透過 QR 碼、連結或金鑰新增聯絡人</string>
+    <string name="chats_merged_new_group">新群組</string>
+    <string name="chats_merged_new_group_desc">與你的聯絡人建立群組</string>
+    <string name="chats_merged_discover">探索公開頻道</string>
+    <string name="chats_merged_discover_desc">加入你附近的公開群組</string>
+    <string name="chats_merged_scan_invite">掃描邀請</string>
+    <string name="chats_merged_scan_invite_desc">透過 QR 碼加入群組或新增聯絡人</string>
+    <string name="chats_merged_scan_not_invite">此 QR 碼不是 OSHI 邀請</string>
+    <string name="chats_merged_calls_header">打電話</string>
+    <string name="chats_merged_teaser_title">加入公開頻道</string>
+    <string name="chats_merged_teaser_body">附近的公開群組即使沒有網路也能使用。看看你周圍有誰。</string>
+    <string name="chats_merged_teaser_cta">探索</string>
+    <string name="chats_merged_nearby_title">附近的群組</string>
+    <string name="chats_merged_empty_unread">你已全部讀完</string>
+    <string name="chats_merged_empty_people">還沒有對話</string>
+    <string name="chats_merged_group_a11y">群組</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Terbaru</string>
+    <string name="attach_selected_count">%1$d dipilih</string>
+    <string name="attach_all_photos">Semua foto</string>
+    <string name="attach_collapse">Ciutkan</string>
+    <string name="attach_camera">Kamera</string>
+    <string name="attach_gallery">Galeri</string>
+    <string name="attach_file">File</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Lokasi</string>
+    <string name="attach_contact">Kontak</string>
+    <string name="attach_poll">Polling</string>
+    <string name="attach_video_note">Pesan video</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Jadwalkan</string>
+    <string name="attach_access_title">Foto terbaru Anda di sini</string>
+    <string name="attach_access_body">OSHI hanya membaca foto Anda selama panel ini terbuka. Tidak ada yang keluar dari ponsel kecuali Anda mengirimnya.</string>
+    <string name="attach_access_allow">Izinkan akses</string>
+    <string name="attach_access_settings">Buka setelan</string>
+    <string name="attach_access_browse">Pilih dari galeri</string>
+    <string name="attach_partial">Anda hanya membagikan beberapa foto ke OSHI.</string>
+    <string name="attach_partial_manage">Kelola</string>
+    <string name="attach_empty_title">Belum ada foto</string>
+    <string name="attach_caption_hint">Tambahkan keterangan…</string>
+    <string name="attach_send_count">Kirim %1$d</string>
+    <string name="attach_photo_a11y">Foto</string>
+    <string name="attach_video_a11y">Video, %1$s</string>
+    <string name="attach_limit">Maksimal %1$d sekaligus</string>
+</resources>

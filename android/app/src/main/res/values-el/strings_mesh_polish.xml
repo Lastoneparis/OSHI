@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Αναζήτηση…</string>
+    <string name="peers_status_peers_found">Βρέθηκαν συσκευές</string>
+    <string name="peers_status_permission_required">Απαιτείται άδεια</string>
+    <string name="peers_subtitle_connected">Συνδεδεμένες: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Συνδεδεμένες: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Συνδεδεμένες: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Το Bluetooth είναι απενεργοποιημένο — ενεργοποιήστε το για να βρείτε συσκευές γύρω σας</string>
+    <string name="peers_subtitle_permission_both">Το OSHI δεν μπορεί να χρησιμοποιήσει Bluetooth — δεν βλέπετε κοντινές συσκευές και δεν σας βλέπουν</string>
+    <string name="peers_subtitle_permission_advertise">Οι κοντινές συσκευές δεν μπορούν να σας δουν — λείπει η άδεια Κοντινές συσκευές</string>
+    <string name="peers_subtitle_permission_scan">Το OSHI δεν μπορεί να αναζητήσει κοντινές συσκευές — λείπει η άδεια Κοντινές συσκευές</string>
+    <string name="peers_subtitle_ble_unsupported">Αυτό το τηλέφωνο δεν μπορεί να εκπέμψει μέσω Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">Το Bluetooth είναι απασχολημένο — άλλη εφαρμογή χρησιμοποιεί τον πομπό</string>
+    <string name="peers_subtitle_ble_down">Η ανίχνευση Bluetooth σταμάτησε — γίνεται νέα προσπάθεια</string>
+    <string name="peers_subtitle_searching_lan">Αναζήτηση ατόμων στο ίδιο δίκτυο Wi-Fi…</string>
+    <string name="peers_subtitle_disabled">Το δίκτυο mesh είναι ανενεργό</string>
+    <string name="peers_subtitle_looking">Αναζήτηση συσκευών γύρω σας…</string>
+    <string name="peers_permission_card_title">Ενεργοποίηση εντοπισμού κοντινών συσκευών</string>
+    <string name="peers_permission_card_body">Το OSHI χρειάζεται την άδεια Κοντινές συσκευές για να βρει τηλέφωνα γύρω σας. Χωρίς αυτήν, κάθε μήνυμα περνά από το διαδίκτυο.</string>
+    <string name="peers_permission_card_action">Να επιτρέπεται</string>
+    <string name="peers_permission_card_settings">Άνοιγμα ρυθμίσεων</string>
+    <string name="peers_permission_card_denied_body">Η άδεια απορρίφθηκε, οπότε το OSHI δεν βρίσκει κανέναν κοντά σας. Ενεργοποιήστε τις Κοντινές συσκευές για το OSHI στις ρυθμίσεις Android.</string>
+    <string name="peers_same_wifi_note">Και τα δύο τηλέφωνα πρέπει να είναι στο ίδιο δίκτυο Wi-Fi. Με δεδομένα κινητής, τα μηνύματα περνούν από το διαδίκτυο.</string>
+    <string name="peers_control_visible">Ορατό</string>
+    <string name="peers_control_scan">Σάρωση</string>
+    <string name="peers_control_auto">Αυτόματο</string>
+    <string name="peers_section_devices">Συσκευές</string>
+    <string name="peers_action_connect">Σύνδεση</string>
+    <string name="peers_action_reconnect">Επανασύνδεση</string>
+    <string name="peers_info_reach_title">Εμβέλεια</string>
+    <string name="peers_info_reach_desc">Όσο φτάνει το δίκτυό σας Wi-Fi. Τα μηνύματα μπορούν να περνούν μέσα από άλλες συσκευές OSHI στο ίδιο δίκτυο, έως 50 άλματα.</string>
+    <string name="peers_info_connection_desc">Το Bluetooth LE και το Bonjour συστήνουν δύο συσκευές και ανταλλάσσουν μια διεύθυνση. Τα ίδια τα μηνύματα ταξιδεύουν στο τοπικό σας δίκτυο.</string>
+    <string name="peers_info_tip1">Βάλτε και τα δύο τηλέφωνα στο ίδιο δίκτυο Wi-Fi</string>
+    <string name="peers_info_tip2">Αφήστε το Bluetooth ανοιχτό για να βρίσκονται οι συσκευές</string>
+    <string name="peers_info_tip3">Λειτουργεί χωρίς πρόσβαση στο διαδίκτυο — αλλά όχι με δεδομένα κινητής</string>
+</resources>

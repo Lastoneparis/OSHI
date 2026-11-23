@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">リンク済みデバイス</string>
+    <string name="devsync_settings_subtitle">履歴をデバイス間で直接同期します</string>
+    <string name="devsync_status_on">直接同期はオンです。履歴はデバイスからデバイスへ直接移動し、サーバーには何も保存されません。</string>
+    <string name="devsync_status_off">このデバイスでは直接同期はオフです。</string>
+    <string name="devsync_this_device">このデバイス</string>
+    <string name="devsync_device_id">デバイスID %1$s</string>
+    <string name="devsync_debug_override">直接同期（デバッグ用上書き）</string>
+    <string name="devsync_debug_override_desc">サーバーの設定に関係なく、このインストールで直接同期を強制的にオンにします</string>
+    <string name="devsync_pending_title">新しいデバイスを承認</string>
+    <string name="devsync_pending_body">%1$s（%2$s）があなたの履歴の受信を求めています。もう一方の画面に同じコードが表示されていることを確認してください。</string>
+    <string name="devsync_waiting_body">もう一方のデバイスでの承認を待っています。同じコードが表示されていることを確認してください。</string>
+    <string name="devsync_peer_approved">もう一方のデバイスは承認済みです。ここで承認すると完了します。</string>
+    <string name="devsync_allow">許可</string>
+    <string name="devsync_deny">拒否</string>
+    <string name="devsync_linked_title">リンク済みデバイス</string>
+    <string name="devsync_none_linked">リンク済みのデバイスはまだありません。同じWi-Fi上で、または同時にオンラインの状態で、もう一方のデバイスでOSHIを開いてください。</string>
+    <string name="devsync_last_sync">最終同期: %1$s</string>
+    <string name="devsync_never">なし</string>
+    <string name="devsync_syncing_now">同期中（%1$s）</string>
+    <string name="devsync_remove">削除</string>
+    <string name="devsync_remove_confirm_title">%1$sを削除しますか？</string>
+    <string name="devsync_remove_confirm_body">今後あなたの履歴は受信されません。すでに受信した分は残ります。</string>
+    <string name="devsync_sync_now">今すぐ同期</string>
+    <string name="devsync_cancel">キャンセル</string>
+    <string name="devsync_alert_unapproved">あなたのアカウントを使うデバイスが同期を試みました: %1$s</string>
+    <string name="devsync_alert_linked">新しいデバイス「%1$s」があなたの履歴を受信できるようになりました</string>
+</resources>

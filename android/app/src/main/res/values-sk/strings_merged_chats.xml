@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Zlúčiť správy a skupiny</string>
+    <string name="chats_merged_setting_desc">Jeden zoznam všetkých vašich chatov s filtrami pre ľudí a skupiny.</string>
+    <string name="chats_merged_filter_all">Všetky</string>
+    <string name="chats_merged_filter_unread">Neprečítané</string>
+    <string name="chats_merged_filter_groups">Skupiny</string>
+    <string name="chats_merged_filter_people">Ľudia</string>
+    <string name="chats_merged_new_title">Nový</string>
+    <string name="chats_merged_new_chat">Nový chat</string>
+    <string name="chats_merged_new_chat_desc">Pridajte niekoho cez QR kód, odkaz alebo kľúč</string>
+    <string name="chats_merged_new_group">Nová skupina</string>
+    <string name="chats_merged_new_group_desc">Založte skupinu so svojimi kontaktmi</string>
+    <string name="chats_merged_discover">Objaviť verejné kanály</string>
+    <string name="chats_merged_discover_desc">Pripojte sa k verejným skupinám vo vašom okolí</string>
+    <string name="chats_merged_scan_invite">Naskenovať pozvánku</string>
+    <string name="chats_merged_scan_invite_desc">Pripojte sa ku skupine alebo pridajte kontakt z QR kódu</string>
+    <string name="chats_merged_scan_not_invite">Tento QR kód nie je pozvánka OSHI</string>
+    <string name="chats_merged_calls_header">Zavolať niekomu</string>
+    <string name="chats_merged_teaser_title">Pripojte sa k verejnému kanálu</string>
+    <string name="chats_merged_teaser_body">Verejné skupiny v okolí fungujú aj bez internetu. Pozrite sa, kto je okolo vás.</string>
+    <string name="chats_merged_teaser_cta">Objaviť</string>
+    <string name="chats_merged_nearby_title">Skupina nablízku</string>
+    <string name="chats_merged_empty_unread">Máte všetko prečítané</string>
+    <string name="chats_merged_empty_people">Zatiaľ žiadne konverzácie</string>
+    <string name="chats_merged_group_a11y">Skupina</string>
+</resources>

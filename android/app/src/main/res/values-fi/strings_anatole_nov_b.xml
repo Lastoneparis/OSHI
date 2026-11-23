@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Pyöreä videoviesti, enintään 15 s</string>
+    <string name="settings_panic_wipe_title">Tyhjennä napauttamalla logoa</string>
+    <string name="settings_panic_wipe_subtitle">Kolme nopeaa napautusta OSHI-logoon poistaa kaikki viestit, avaimet ja tiedostot tästä puhelimesta ilman vahvistusta. Pois päältä, ellet ota sitä käyttöön.</string>
+    <string name="map_layer_title">Karttatyyppi</string>
+    <string name="map_layer_standard">Vakio</string>
+    <string name="map_layer_terrain">Maasto</string>
+    <string name="map_layer_satellite">Satelliitti</string>
+    <string name="map_layer_standard_desc">OSHI-kartta, toimii offline-tilassa ladatuilla alueilla</string>
+    <string name="map_layer_third_party_desc" formatted="true">Vain verkossa. Ladataan suoraan palvelusta %1$s, joka näkee katsomasi alueen.</string>
+    <string name="map_layer_offline_only_note">”Vain offline-kartat” on käytössä: tämä taso näyttää vain jo katsomasi ruudut.</string>
+</resources>

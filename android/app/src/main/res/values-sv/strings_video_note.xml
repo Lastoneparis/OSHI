@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videomeddelande</string>
+    <string name="video_note_title">Videomeddelande</string>
+    <string name="video_note_a11y" formatted="true">Videomeddelande, %1$s</string>
+    <string name="video_note_play">Spela upp</string>
+    <string name="video_note_pause">Pausa</string>
+    <string name="video_note_record_button">Spela in ett videomeddelande</string>
+    <string name="video_note_hint">Tryck för att spela in eller håll ned · max 15 s</string>
+    <string name="video_note_record">Starta inspelning</string>
+    <string name="video_note_stop">Stoppa inspelning</string>
+    <string name="video_note_flip">Byt kamera</string>
+    <string name="video_note_close">Stäng</string>
+    <string name="video_note_review_title">Ditt videomeddelande</string>
+    <string name="video_note_preparing">Förbereder…</string>
+    <string name="video_note_discard">Radera</string>
+    <string name="video_note_retake">Spela in igen</string>
+    <string name="video_note_send">Skicka videomeddelande</string>
+    <string name="video_note_too_short">För kort. Tryck för att spela in eller håll ned knappen.</string>
+    <string name="video_note_camera_denied">Kameraåtkomst krävs för att spela in ett videomeddelande.</string>
+</resources>

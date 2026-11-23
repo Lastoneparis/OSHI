@@ -1,0 +1,134 @@
+/* OSHI Watch App - Swedish */
+
+/* Status */
+"watch.status.connected" = "Ansluten";
+"watch.status.not_reachable" = "iPhone inte nåbar";
+
+/* Navigation */
+"watch.open_iphone" = "Öppna OSHI på iPhone";
+
+/* Common */
+"common.refresh" = "Uppdatera";
+"common.cancel" = "Avbryt";
+
+/* Messages */
+"watch.loading_messages" = "Laddar meddelanden…";
+"watch.no_messages" = "Inga meddelanden";
+"watch.sending" = "Skickar…";
+"watch.dictate" = "Diktera";
+"watch.voice_message" = "Röstmeddelande";
+"watch.reply" = "Svara";
+"watch.media_attachment" = "Bilaga";
+
+/* Quick Replies */
+"watch.quick.yes" = "Ja";
+"watch.quick.no" = "Nej";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Senare";
+"watch.quick.omw" = "På väg!";
+"watch.quick.thanks" = "Tack";
+
+/* Errors */
+"watch.error.send_failed" = "Kunde inte skickas";
+"watch.send.queued" = "Väntar på iPhone";
+"watch.error.not_reachable" = "iPhone inte nåbar";
+
+/* Calls */
+"watch.call.incoming_video" = "Inkommande videosamtal";
+"watch.call.incoming_voice" = "Inkommande röstsamtal";
+"watch.call.video" = "Videosamtal";
+"watch.call.voice" = "Röstsamtal";
+"watch.call.connecting" = "Ansluter…";
+"watch.call.ringing" = "Ringer…";
+"watch.call.in_call" = "I samtal";
+"watch.call.ended" = "Samtal avslutat";
+"watch.call.start" = "Starta samtal";
+"watch.call.unknown" = "Okänd";
+
+/* Call Actions */
+"call.action.accept" = "Acceptera";
+"call.action.decline" = "Avvisa";
+
+/* Notifications */
+"watch.notification.new_message" = "Nytt meddelande";
+
+/* Call Summary */
+"call.outgoing" = "Utgående samtal";
+"call.incoming" = "Inkommande samtal";
+"call.no.answer" = "Inget svar";
+"call.declined" = "Avvisat";
+"call.missed" = "Missat samtal";
+"call.video.outgoing" = "Utgående videosamtal";
+"call.video.incoming" = "Inkommande videosamtal";
+
+/* Actions de notification au poignet. */
+"notification.action.reply" = "Svara";
+"send" = "Skicka";
+"type_message" = "Skriv ett meddelande";
+"notification.action.mark_read" = "Markera läst";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Chattar";
+"w2.empty.title" = "Inga chattar än";
+"w2.empty.body" = "Dina OSHI-chattar från iPhone visas här.";
+"w2.disabled.title" = "Smartklocka är av";
+"w2.disabled.body" = "Aktivera det i OSHI på din iPhone: Inställningar › Länkade enheter › Smartklocka.";
+"w2.locked.title" = "OSHI är låst";
+"w2.locked.body" = "Lås upp OSHI på din iPhone och försök igen.";
+"w2.unavailable.title" = "OSHI är inte redo";
+"w2.unavailable.body" = "Öppna OSHI en gång på din iPhone och försök igen.";
+"w2.nophone.title" = "iPhone kan inte nås";
+"w2.nophone.body" = "Ha din iPhone med OSHI i närheten.";
+"w2.error.title" = "Något gick fel";
+"w2.error.body" = "Din iPhone svarade inte. Försök igen.";
+"w2.notfound" = "Den här chatten finns inte längre på din iPhone.";
+"w2.retry" = "Försök igen";
+"w2.reply" = "Svara";
+"w2.you" = "Du";
+"w2.you_prefix" = "Du: %@";
+"w2.react" = "Reagera";
+"w2.speak_or_type" = "Tala eller skriv";
+"w2.quick_replies" = "Snabbsvar";
+"w2.sending" = "Skickar …";
+"w2.sent" = "Skickat";
+"w2.send_failed" = "Inte skickat. Försök igen på din iPhone.";
+"w2.read_only" = "Du kan inte svara i den här chatten.";
+"w2.view_once" = "👁 Visa en gång – öppna den på din iPhone";
+"w2.view_once_short" = "👁 Visa en gång";
+"w2.e2e" = "Totalsträckskrypterat av din iPhone";
+"w2.replying_to" = "Svarar på";
+"w2.loading" = "Läser in …";
+"w2.unread_count" = "%d olästa";
+"w2.all_read" = "Allt läst";
+"w2.call" = "Ring";
+"w2.media.photo" = "📷 Bild";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Röst";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Fil";
+"w2.media.location" = "📍 Plats";
+"w2.media.contact" = "👤 Kontakt";
+"w2.qr.on_my_way" = "Jag är på väg";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Jag ringer dig senare";
+"w2.qr.thanks" = "Tack!";
+"w2.qr.yes" = "Ja";
+"w2.qr.no" = "Nej";
+"w2.qr.busy" = "Kan inte prata nu";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Älskar";
+"w2.r.laugh" = "Skratt";
+"w2.r.cry" = "Ledsen";
+"w2.r.thumbs" = "Tummen upp";
+"w2.r.wow" = "Wow";
+"w2.r.fire" = "Eld";
+"w2.mute" = "Ljud av";
+"w2.end_call" = "Lägg på";
+"w2.speaker" = "Högtalare";
+"w2.widget.off" = "Aktivera Smartklocka i OSHI på din iPhone";
+"w2.widget.off_short" = "Av";
+"w2.widget.locked" = "Lås upp OSHI på din iPhone";
+"w2.widget.locked_short" = "Låst";
+"w2.widget.open" = "Öppna OSHI";
+"w2.widget.name" = "OSHI olästa";
+"w2.widget.desc" = "Antal olästa och vem som skrev – aldrig meddelandena.";

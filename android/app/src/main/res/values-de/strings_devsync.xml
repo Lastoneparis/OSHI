@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Verknüpfte Geräte</string>
+    <string name="devsync_settings_subtitle">Synchronisiere deinen Verlauf direkt zwischen deinen Geräten</string>
+    <string name="devsync_status_on">Direkte Synchronisierung ist an. Dein Verlauf wandert von Gerät zu Gerät; auf dem Server wird nichts gespeichert.</string>
+    <string name="devsync_status_off">Direkte Synchronisierung ist auf diesem Gerät aus.</string>
+    <string name="devsync_this_device">Dieses Gerät</string>
+    <string name="devsync_device_id">Geräte-ID %1$s</string>
+    <string name="devsync_debug_override">Direkte Synchronisierung (Debug-Override)</string>
+    <string name="devsync_debug_override_desc">Direkte Gerätesynchronisierung für diese Installation erzwingen, egal was der Server sagt</string>
+    <string name="devsync_pending_title">Neues Gerät bestätigen</string>
+    <string name="devsync_pending_body">%1$s (%2$s) möchte deinen Verlauf empfangen. Prüfe, ob der andere Bildschirm denselben Code zeigt.</string>
+    <string name="devsync_waiting_body">Warte auf Bestätigung auf deinem anderen Gerät. Prüfe, ob es denselben Code zeigt.</string>
+    <string name="devsync_peer_approved">Das andere Gerät hat bereits bestätigt. Bestätige hier, um abzuschließen.</string>
+    <string name="devsync_allow">Erlauben</string>
+    <string name="devsync_deny">Ablehnen</string>
+    <string name="devsync_linked_title">Verknüpfte Geräte</string>
+    <string name="devsync_none_linked">Noch kein Gerät verknüpft. Öffne OSHI auf deinem anderen Gerät, im selben WLAN oder gleichzeitig online.</string>
+    <string name="devsync_last_sync">Letzte Synchronisierung: %1$s</string>
+    <string name="devsync_never">nie</string>
+    <string name="devsync_syncing_now">Synchronisiert gerade (%1$s)</string>
+    <string name="devsync_remove">Entfernen</string>
+    <string name="devsync_remove_confirm_title">%1$s entfernen?</string>
+    <string name="devsync_remove_confirm_body">Es erhält deinen Verlauf nicht mehr. Was es schon hat, bleibt erhalten.</string>
+    <string name="devsync_sync_now">Jetzt synchronisieren</string>
+    <string name="devsync_cancel">Abbrechen</string>
+    <string name="devsync_alert_unapproved">Ein Gerät mit deinem Konto hat versucht zu synchronisieren: %1$s</string>
+    <string name="devsync_alert_linked">Ein neues Gerät, %1$s, kann jetzt deinen Verlauf empfangen</string>
+</resources>

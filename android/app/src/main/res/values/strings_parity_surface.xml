@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Parity strings added by the SURFACE pass (2026-08-23): "no raw payload may
+  reach a human, and a notification must say the right thing".
+
+  Every key here replaced a hardcoded English literal that was reaching a user
+  in all 34 locales — a notification body, a conversation-list row, or the
+  catalog's own fallback labels. English values only; the other 33 locales still
+  need these translated.
+
+  Kept in its own file, like strings_parity_settings.xml, so concurrent edits to
+  values/strings.xml from other passes do not conflict.
+-->
+<resources>
+
+    <!-- NOTE — the three labels the catalog's own TODO asked for
+         (`call_generic`, `notification_reaction`, `media_file`) already exist in
+         values/strings_parity_chat.xml. They were never WIRED into
+         OSHIControlPayload.labels(), so the catalog kept returning its English
+         defaults even with a Context in hand; this pass wired them. No new key
+         was needed and none is declared here.
+
+         ===================================================================
+         Preview safety nets — what a LIST ROW or a NOTIFICATION shows for a
+         payload no catalog entry claims. These were literals inside
+         ConversationsScreen.formatPreviewText ("💬 Message",
+         "🔒 Encrypted message", "📞 Connecting..."), which meant the group
+         list and the notification had no equivalent at all.
+         =================================================================== -->
+    <!-- Ciphertext / ratchet envelope that reached a preview surface. -->
+    <string name="preview_encrypted_message">Encrypted message</string>
+    <!-- Any other machine payload we cannot name. Never the raw JSON. -->
+    <string name="preview_opaque_message">Message</string>
+
+    <!-- ===================================================================
+         Notification bodies and titles (service/FCMService.kt). Every one of
+         these was an English literal on the banner itself.
+         =================================================================== -->
+    <!-- Body when the preview is empty but the message is real. iOS uses
+         "sent_attachment".localized() at PushNotificationManager.swift:110. -->
+    <string name="notification_sent_attachment">Sent an attachment</string>
+    <!-- Body when the user turned "Message Preview" off, and the lock-screen
+         public version. -->
+    <string name="notification_new_message">New message</string>
+    <!-- Body fallback for a new-mail banner when the push carries no subject/sender. -->
+    <string name="notification_mail_new">New mail</string>
+    <!-- Title fallback when the push carries no group name. -->
+    <string name="notification_group_fallback">Group</string>
+    <!-- "Alice: Hello" — group banner, sender then preview. -->
+    <string name="notification_group_body" translatable="false">%1$s: %2$s</string>
+    <!-- Incoming-call banner subtitle, by call type. -->
+    <string name="notification_incoming_voice_call">Incoming voice call</string>
+    <string name="notification_incoming_video_call">Incoming video call</string>
+    <!-- Caller name fallback on a push that carries none. -->
+    <string name="notification_unknown_caller">Incoming call</string>
+
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Warte auf Funk-Sendezeit (gesetzliches Duty-Cycle-Limit)</string>
+    <string name="lora_jamming_title">Funkstörung erkannt — mögliche Störsendung</string>
+    <string name="lora_jamming_detail">Nachrichten werden über Bluetooth-Mesh oder Internet gesendet, sobald verfügbar. Nachrichten für das Funkgerät werden aufbewahrt und über LoRa gesendet, sobald der Kanal frei ist.</string>
+    <string name="lora_jamming_send_anyway">Trotzdem über LoRa senden</string>
+    <string name="lora_jamming_override_active">Sendet trotzdem über LoRa bis %1$s oder bis der Kanal frei ist. Nachrichten kommen eventuell nicht an.</string>
+</resources>

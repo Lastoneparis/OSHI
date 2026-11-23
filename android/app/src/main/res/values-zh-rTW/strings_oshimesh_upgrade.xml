@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">將此電台升級為 OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">免費且開源。保留你的地區、頻道、金鑰和聯絡人，仍在 Meshtastic 網路中，並新增長訊息、送達回執，以及在對方離線時保存 72 小時的訊息。</string>
+    <string name="oshimesh_upgrade_share">將燒錄工具連結傳送到電腦</string>
+    <string name="oshimesh_upgrade_why">OSHI Mesh 帶來什麼</string>
+    <string name="oshimesh_upgrade_footer">燒錄工具在電腦上的 Chrome 或 Edge 中透過 USB 執行。選擇「保留我的設定」，約一分鐘即可更新此電台。</string>
+</resources>

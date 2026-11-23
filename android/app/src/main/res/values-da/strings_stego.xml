@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Venter på forklædt forbindelse</string>
+    <string name="privacy_disguise_title">Forklædning</string>
+    <string name="privacy_disguise_subtitle">Forklæd trafik · skjul en besked i et foto</string>
+    <string name="cover_switch_title">Forklæd OSHI-trafik</string>
+    <string name="cover_switch_caption">Dine 1:1-beskeder og vedhæftede filer sendes inde i udfyldte forespørgsler, der ligner almindelig webstatistik, så deres størrelse og timing er sværere at skelne. Hvis den forklædte forbindelse fejler, venter beskederne – de sendes aldrig uforklædt.</string>
+    <string name="cover_not_hidden">Stadig synligt: at du forbinder til oshi-messenger.com (servernavn og TLS-fingeraftryk) samt gruppebeskeder, opkald, push-vækninger og tjek for ny post, som ikke forklædes. Dette er ikke anonymitet og omgår ikke en blokering af OSHI-serveren – brug i stedet „Forklæd som foto“.</string>
+    <string name="disguise_photo_title">Forklæd som foto</string>
+    <string name="disguise_photo_explainer">Skjul en end-to-end-krypteret besked til én kontakt i et almindeligt udseende foto, og send derefter fotoet via en hvilken som helst app, e-mail eller cloudlager – nyttigt, når selve OSHI er blokeret. I en 1:1-chat: + → Forklæd som foto.</string>
+    <string name="disguise_reveal_button">Afslør en skjult besked</string>
+    <string name="disguise_reveal_hint">Du kan også dele et modtaget foto til OSHI fra en hvilken som helst app.</string>
+    <string name="disguise_sheet_for">Kun %1$s kan læse den.</string>
+    <string name="disguise_message_hint">Skjult besked</string>
+    <string name="disguise_add_file">Tilføj en lille fil (maks. 256 KB)</string>
+    <string name="disguise_remove_file">Fjern %1$s</string>
+    <string name="disguise_file_too_large">Filen er for stor (maks. 256 KB)</string>
+    <string name="disguise_cover_generated">Genereret landskab</string>
+    <string name="disguise_cover_photo">Mit foto</string>
+    <string name="disguise_capacity">Bruger %1$s af %2$s tilgængeligt i dette billede</string>
+    <string name="disguise_too_big">For langt til dette billede. Forkort beskeden, fjern filen eller vælg et større foto.</string>
+    <string name="disguise_create_share">Opret foto og del</string>
+    <string name="disguise_warning_recompress">Send det som FIL eller dokument. Apps, der genkomprimerer fotos (de fleste sociale netværk, WhatsApp, Signal eller Telegram i fototilstand, skærmbilleder), sletter den skjulte besked.</string>
+    <string name="disguise_warning_forensic">Dette skjuler beskeden for alle, der ser på fotoet. En retsteknisk analyse kan stadig opdage, at fotoet indeholder skjulte data, men kan ikke læse dem eller se, hvem de er til.</string>
+    <string name="disguise_working">Opretter foto…</string>
+    <string name="disguise_failed">Fotoet kunne ikke oprettes.</string>
+    <string name="reveal_title">Skjult besked</string>
+    <string name="reveal_from">Fra %1$s</string>
+    <string name="reveal_hidden_on">Skjult den %1$s</string>
+    <string name="reveal_copy">Kopiér tekst</string>
+    <string name="reveal_open_file">Åbn %1$s</string>
+    <string name="reveal_checking">Leder efter en skjult besked…</string>
+    <string name="reveal_not_found">Ingen skjult besked til dig i dette billede. Hvis det blev sendt som foto, kan appen, der overførte det, have genkomprimeret det – bed om at få det som fil.</string>
+    <string name="reveal_damaged">Dette billede blev lavet til dig af %1$s, men det blev ændret undervejs og kan ikke længere læses. Bed om at få det sendt igen som fil.</string>
+    <string name="reveal_unreadable">Filen kunne ikke læses.</string>
+    <string name="disguise_photo_short">Forklæd</string>
+</resources>

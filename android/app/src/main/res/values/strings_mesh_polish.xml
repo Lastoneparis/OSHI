@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Nearby Peers — status card, permission card and controls.
+
+    Everything here used to be an English string literal inside
+    PeersViewModel.kt / PeersScreen.kt, in an app that ships in 34 locales. The
+    status card is the only explanation a user ever gets for a mesh that is not
+    working, so it was the worst possible place to be English-only.
+
+    Two copy decisions worth keeping:
+
+      • "Searching…" is never shown for a mesh that is not actually searching.
+        The permission subtitles name WHICH half is down, because being
+        invisible to an iPhone and being blind to one are different problems.
+
+      • The searching copy says "on the same Wi-Fi network", not "nearby". BLE
+        carries no message data on either platform — both GATT characteristics
+        are read-only and hand over an ip and a port — and every byte of mesh
+        traffic is TCP/IP. Two phones side by side on mobile data cannot mesh.
+        Saying "nearby" invited exactly the wrong conclusion.
+-->
+<resources>
+
+    <!-- ══ Status card titles ════════════════════════════════════════════════
+         CONNECTED reuses mesh_status_connected and OFFLINE reuses
+         mesh_status_offline; both are already translated everywhere. -->
+    <string name="peers_status_searching">Searching…</string>
+    <string name="peers_status_peers_found">Devices found</string>
+    <string name="peers_status_permission_required">Permission needed</string>
+
+    <!-- ══ Status card subtitles ═════════════════════════════════════════════ -->
+    <!-- %1$d = total connected -->
+    <string name="peers_subtitle_connected">Connected: %1$d</string>
+    <!-- %1$d = total connected, all of them iOS -->
+    <string name="peers_subtitle_connected_cross">Connected: %1$d (iOS)</string>
+    <!-- %1$d = total, %2$d = Android, %3$d = iOS -->
+    <string name="peers_subtitle_connected_mixed">Connected: %1$d (%2$d Android, %3$d iOS)</string>
+
+    <string name="peers_subtitle_bluetooth_off">Bluetooth is off — turn it on to find devices around you</string>
+    <string name="peers_subtitle_permission_both">OSHI cannot use Bluetooth — you cannot see nearby devices and they cannot see you</string>
+    <string name="peers_subtitle_permission_advertise">Nearby devices cannot see you — the Nearby devices permission is missing</string>
+    <string name="peers_subtitle_permission_scan">OSHI cannot look for nearby devices — the Nearby devices permission is missing</string>
+    <string name="peers_subtitle_ble_unsupported">This phone cannot advertise over Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth is busy — another app is using the radio</string>
+    <string name="peers_subtitle_ble_down">Bluetooth discovery is down — retrying</string>
+    <string name="peers_subtitle_searching_lan">Looking for people on the same Wi-Fi network…</string>
+    <string name="peers_subtitle_disabled">Mesh network off</string>
+    <string name="peers_subtitle_looking">Looking for devices around you…</string>
+
+    <!-- ══ Permission card ═══════════════════════════════════════════════════ -->
+    <string name="peers_permission_card_title">Turn on nearby discovery</string>
+    <string name="peers_permission_card_body">OSHI needs the Nearby devices permission to find phones around you. Without it, every message travels over the internet.</string>
+    <string name="peers_permission_card_action">Allow</string>
+    <string name="peers_permission_card_settings">Open settings</string>
+    <string name="peers_permission_card_denied_body">Permission was denied, so OSHI cannot find anyone around you. Turn on Nearby devices for OSHI in Android settings.</string>
+
+    <!-- ══ What the mesh actually needs ══════════════════════════════════════ -->
+    <string name="peers_same_wifi_note">Both phones must be on the same Wi-Fi network. On mobile data, messages go through the internet instead.</string>
+
+    <!-- ══ Controls and list labels ══════════════════════════════════════════ -->
+    <string name="peers_control_visible">Visible</string>
+    <string name="peers_control_scan">Scan</string>
+    <string name="peers_control_auto">Auto</string>
+    <string name="peers_section_devices">Devices</string>
+    <string name="peers_action_connect">Connect</string>
+    <string name="peers_action_reconnect">Reconnect</string>
+    <string name="peers_tag_ios" translatable="false">iOS</string>
+
+    <!-- ══ Mesh info sheet — what the mesh ACTUALLY does ══════════════════════
+         Replaces peers_mesh_info_range_desc ("Up to ~10km via multi-hop relay
+         (200m per hop, max 50 hops)"), peers_mesh_info_connection_desc ("Uses
+         Bluetooth LE and WiFi Direct for peer discovery and DATA TRANSFER") and
+         peers_mesh_info_tip3 ("Works even without cellular or internet
+         connection"). All three described a radio mesh this app does not have:
+         no byte of message data crosses BLE on either platform. -->
+    <string name="peers_info_reach_title">Reach</string>
+    <string name="peers_info_reach_desc">As far as your Wi-Fi network reaches. Messages can hop through other OSHI devices on the same network, up to 50 hops.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE and Bonjour introduce two devices and exchange an address. The messages themselves travel over your local network.</string>
+    <string name="peers_info_tip1">Put both phones on the same Wi-Fi network</string>
+    <string name="peers_info_tip2">Keep Bluetooth on so devices can find each other</string>
+    <string name="peers_info_tip3">Works with no internet access — but not over mobile data</string>
+
+</resources>

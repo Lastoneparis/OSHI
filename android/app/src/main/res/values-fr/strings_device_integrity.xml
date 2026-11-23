@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Ce téléphone est peut-être modifié</string>
+    <string name="device_integrity_dialog_body">OSHI a détecté des signes indiquant que ce téléphone est peut-être rooté ou modifié (%1$s). Sur un tel téléphone, d\'autres logiciels peuvent lire ce qui s\'affiche à l\'écran et ce que vous tapez avant qu\'OSHI ne le chiffre. OSHI n\'a rien supprimé ni bloqué. Cette vérification est heuristique : elle peut se tromper, et un root bien caché peut lui échapper.</string>
+    <string name="device_integrity_dialog_ok">J\'ai compris</string>
+    <string name="device_integrity_status_title">Intégrité de l\'appareil</string>
+    <string name="device_integrity_status_flagged">OSHI a détecté des signes de root ou de modification : %1$s</string>
+    <string name="device_integrity_finding_su">binaire su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">app de gestion du root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">système signé avec des clés de test</string>
+    <string name="device_integrity_finding_debuggable">système débogable</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Téléphones rootés ou modifiés : OSHI recherche les signes courants de root (su, Magisk, Xposed/LSPosed, Frida, système signé avec des clés de test ou débogable) et vous avertit s\'il en trouve. Ne rien trouver ne prouve pas que le téléphone est sain.</string>
+    <string name="clipboard_hygiene_explainer">Copie : les messages, traductions, clés de récupération et jetons de bot que vous copiez sont marqués comme sensibles (Android 13+ masque l\'aperçu). S\'ils sont encore dans le presse-papiers après 60 secondes, OSHI les retire : immédiatement si OSHI est ouvert, sinon à sa prochaine ouverture. Tant qu\'ils y sont, votre clavier et les apps autorisées à lire le presse-papiers peuvent les voir, et les claviers ou fonctions du téléphone qui gardent un historique du presse-papiers peuvent en conserver leur propre copie même après le retrait.</string>
+</resources>

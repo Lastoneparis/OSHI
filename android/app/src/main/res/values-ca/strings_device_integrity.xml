@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">És possible que aquest telèfon estigui modificat</string>
+    <string name="device_integrity_dialog_body">L\'OSHI ha detectat indicis que aquest telèfon pot estar rootejat o modificat (%1$s). En un telèfon així, altre programari pot llegir el que es veu a la pantalla i el que escrius abans que l\'OSHI ho xifri. L\'OSHI no ha esborrat ni bloquejat res. Aquesta comprovació és heurística: es pot equivocar, i un root ben amagat se\'n pot escapar.</string>
+    <string name="device_integrity_dialog_ok">Entesos</string>
+    <string name="device_integrity_status_title">Integritat del dispositiu</string>
+    <string name="device_integrity_status_flagged">L\'OSHI ha detectat indicis de root o modificació: %1$s</string>
+    <string name="device_integrity_finding_su">binari su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">app de gestió de root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">sistema signat amb claus de prova</string>
+    <string name="device_integrity_finding_debuggable">sistema depurable</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Telèfons rootejats o modificats: l\'OSHI busca indicis habituals de root (su, Magisk, Xposed/LSPosed, Frida, sistema signat amb claus de prova o depurable) i t\'avisa si en troba. No trobar-ne cap no demostra que el telèfon estigui net.</string>
+    <string name="clipboard_hygiene_explainer">Copiar: els missatges, traduccions, claus de recuperació i tokens de bot que copies es marquen com a sensibles (l\'Android 13+ n\'amaga la previsualització). Si encara són al porta-retalls al cap de 60 segons, l\'OSHI els elimina: de seguida si l\'OSHI és obert, o si no la propera vegada que l\'obris. Mentre hi són, el teclat i les apps autoritzades a llegir el porta-retalls els poden veure, i els teclats o funcions del telèfon que desen un historial del porta-retalls en poden conservar la seva pròpia còpia fins i tot després d\'eliminar-los.</string>
+</resources>

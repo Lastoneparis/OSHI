@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Teclat</string>
+    <string name="keyboard_incognito_title">Teclat d\'incògnit</string>
+    <string name="keyboard_incognito_subtitle">Demana al teclat que no aprengui el que escrius</string>
+    <string name="keyboard_status_title">Teclat actual</string>
+    <string name="keyboard_status_trusted">%1$s · Teclat integrat</string>
+    <string name="keyboard_status_third_party">%1$s · Teclat de tercers</string>
+    <string name="keyboard_status_unknown">Teclat desconegut</string>
+    <string name="keyboard_privacy_explainer">OSHI xifra en aquest telèfon, però el que escrius passa primer pel teclat. El mode d\'incògnit li demana que no aprengui ni guardi les teves paraules: Android no pot obligar un teclat a obeir, només demanar-li-ho. Un teclat de tercers encara pot llegir cada pulsació, així que és millor fer servir el teclat integrat del telèfon. Si el mateix telèfon està compromès (programari espia), cap aplicació no pot protegir el que escrius.</string>
+    <string name="keyboard_banner_title">El teclat pot llegir el que escrius abans que OSHI ho xifri</string>
+    <string name="keyboard_banner_body">%1$s és un teclat de tercers. Per a les converses privades, canvia al teclat integrat del telèfon.</string>
+    <string name="keyboard_banner_switch">Canvia de teclat</string>
+    <string name="keyboard_banner_dismiss">Descarta</string>
+</resources>

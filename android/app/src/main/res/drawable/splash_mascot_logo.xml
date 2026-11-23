@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __O_BUBBLE_MASCOT_2026_11_16__ Android 12+ system splash icon: the plain
+     OSHI mark (launch/logo_1024.png). The splash draws an icon without a
+     background in a 288dp box, visible inside a 192dp circle; the 1024 canvas
+     is inset 15.28% per side so it lands at 200dp (logo reaches 0.41 of the
+     canvas from its centre = 82dp < 96dp, never clipped). LaunchScreen.kt draws
+     the SAME image at 200dp at the window centre (LaunchMetrics.MASCOT_DP), so
+     the hand-over to the in-app crossfade does not move a pixel. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/mascot_launch_logo"
+    android:inset="15.28%" />

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Runde Videonachricht, max. 15 s</string>
+    <string name="settings_panic_wipe_title">Durch Tippen aufs Logo löschen</string>
+    <string name="settings_panic_wipe_subtitle">Dreimal schnell auf das OSHI-Logo tippen löscht alle Nachrichten, Schlüssel und Dateien auf diesem Telefon – ohne Rückfrage. Aus, solange du es nicht einschaltest.</string>
+    <string name="map_layer_title">Kartentyp</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Gelände</string>
+    <string name="map_layer_satellite">Satellit</string>
+    <string name="map_layer_standard_desc">OSHI-Karte, funktioniert offline mit heruntergeladenen Regionen</string>
+    <string name="map_layer_third_party_desc" formatted="true">Nur online. Wird direkt von %1$s geladen, das den angezeigten Bereich sieht.</string>
+    <string name="map_layer_offline_only_note">„Nur Offline-Karten“ ist aktiv: Diese Ebene zeigt nur bereits angesehene Kacheln.</string>
+</resources>

@@ -1,0 +1,5 @@
+# __CALL_LOG_AT_REST_2026_09_23__ Byte-exact cross-platform fixtures: the inputs carry
+# deliberate CRLFs (Swift treats "\r\n" as one Character, so it is NOT a line break in
+# iOS redact()) and the expected output is compared byte for byte. autocrlf on a
+# Windows runner would rewrite them and fail the test for the machine, not the code.
+* -text

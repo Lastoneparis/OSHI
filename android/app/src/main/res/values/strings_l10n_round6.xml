@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Round 6 of the localisation sweep (2026-08-28).
+
+    Every string here was previously a hardcoded English literal sitting in a
+    Composable, so it rendered in English in all 33 languages. The audit that
+    found them looks at every user-visible sink — Text(), label=, title=,
+    placeholder=, contentDescription=, supportingText=, actionLabel= and
+    Toast.makeText — not just Text(), because a linter that only knows one
+    shape reports "all accounted for" while the other shapes leak.
+
+    Deliberately NOT resourced, and why:
+      - "OSHI"                          brand name, 5 sites
+      - emoji-only labels               nothing to translate
+      - "buf:", "1280x720 @ 30fps"      developer overlay in VideoCallScreen
+      - "© OpenStreetMap contributors"  attribution must appear verbatim
+-->
+<resources>
+
+    <!-- Forward picker section headers -->
+    <string name="forward_picker_groups">GROUPS</string>
+    <string name="forward_picker_contacts">CONTACTS</string>
+
+    <!-- Smart replies -->
+    <string name="smart_replies_title">AI Quick Replies</string>
+
+    <!-- On-device AI -->
+    <string name="ai_badge_on_device">100% on-device</string>
+    <string name="ai_badge_on_device_caps">100% On-Device</string>
+    <string name="ai_chats_title">Chats</string>
+    <string name="ai_no_conversations">No conversations yet</string>
+    <string name="ai_download_model">Download AI Model</string>
+    <string name="ai_not_enough_storage">Not enough storage space.</string>
+    <string name="ai_on_device_detail">100% on-device — no internet needed after download</string>
+    <string name="ai_alternative_gemini">Alternative: Gemini Nano</string>
+
+    <!-- Group creation and visibility -->
+    <string name="groups_added_members">ADDED MEMBERS (%1$d)</string>
+    <string name="groups_visibility_public">Public</string>
+
+    <!-- Itinerary / route planner -->
+    <string name="itinerary_use_my_location">Use my location</string>
+    <string name="itinerary_swap">Swap</string>
+    <string name="itinerary_mode_drive">Drive</string>
+    <string name="itinerary_mode_walk">Walk</string>
+    <string name="itinerary_mode_bike">Bike</string>
+    <string name="itinerary_distance">Distance</string>
+    <string name="itinerary_duration">Duration</string>
+    <string name="itinerary_steps">Steps (%1$d)</string>
+    <string name="itinerary_more_steps">+ %1$d more steps</string>
+    <string name="itinerary_enter_destination">Enter a destination to plan your route</string>
+
+    <!-- Media viewer -->
+    <string name="media_pdf_render_failed">Unable to render PDF</string>
+
+    <!-- Chat wallpaper: apply to every conversation -->
+    <string name="wallpaper_set_default_all">Set as Default for All Chats</string>
+    <string name="wallpaper_set_default_confirm_title">Use in every chat?</string>
+    <string name="wallpaper_set_default_confirm_message">This background becomes the default for new chats and replaces the background in every conversation you have already set.</string>
+    <string name="wallpaper_set_default_confirm_action">Set for All Chats</string>
+    <string name="wallpaper_set_default_done">Default applied to all chats</string>
+
+    <!--
+        "Enjoying OSHI?" pre-ask (EnjoyingOshiSheet.kt).
+
+        Shown once the user has sent a few messages, in front of Google Play's
+        in-app review flow, which has a finite per-user quota. Keep the tone
+        light and the two answers unmistakably opposite: only the positive one
+        opens the store review, the negative one opens the help page.
+
+        "OSHI" is the brand name and stays untranslated inside the title.
+    -->
+    <string name="review_preask_title">Enjoying OSHI?</string>
+    <string name="review_preask_message">You\'ve been chatting for a while now. How is it going so far?</string>
+    <string name="review_preask_positive">Yes, I like it</string>
+    <string name="review_preask_negative">Not really</string>
+
+</resources>

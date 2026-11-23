@@ -1,0 +1,136 @@
+/* OSHI Watch App - Dutch */
+
+/* Status */
+"watch.status.connected" = "Verbonden";
+"watch.status.not_reachable" = "iPhone niet bereikbaar";
+
+/* Navigation */
+"watch.open_iphone" = "Open OSHI op iPhone";
+
+/* Common */
+"common.refresh" = "Vernieuwen";
+"common.cancel" = "Annuleren";
+
+/* Messages */
+"watch.loading_messages" = "Berichten laden…";
+"watch.no_messages" = "Geen berichten";
+"watch.sending" = "Verzenden…";
+"watch.dictate" = "Dicteren";
+"watch.voice_message" = "Spraakbericht";
+"watch.reply" = "Antwoorden";
+"watch.media_attachment" = "Mediabijlage";
+
+/* Quick Replies */
+"watch.quick.yes" = "Ja";
+"watch.quick.no" = "Nee";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Later";
+"watch.quick.omw" = "Ik ben onderweg!";
+"watch.quick.thanks" = "Bedankt";
+
+/* Errors */
+"watch.error.send_failed" = "Bericht verzenden mislukt";
+"watch.send.queued" = "Wacht op iPhone";
+"watch.error.not_reachable" = "iPhone niet bereikbaar";
+
+/* Calls */
+"watch.call.incoming_video" = "Inkomende video-oproep";
+"watch.call.incoming_voice" = "Inkomende spraakoproep";
+"watch.call.video" = "Video-oproep";
+"watch.call.voice" = "Spraakoproep";
+"watch.call.connecting" = "Verbinden…";
+"watch.call.ringing" = "Gaat over…";
+"watch.call.in_call" = "In gesprek";
+"watch.call.ended" = "Oproep beëindigd";
+"watch.call.start" = "Oproep starten";
+"watch.call.unknown" = "Onbekend";
+
+/* Call Actions */
+"call.action.accept" = "Aannemen";
+"call.action.decline" = "Weigeren";
+
+/* Notifications */
+"watch.notification.new_message" = "Nieuw bericht";
+
+/* Call Summary */
+"call.outgoing" = "Uitgaand gesprek";
+"call.incoming" = "Inkomend gesprek";
+"call.no.answer" = "Geen antwoord";
+"call.declined" = "Geweigerd";
+"call.missed" = "Gemiste oproep";
+"call.video.outgoing" = "Uitgaande video-oproep";
+"call.video.incoming" = "Inkomende video-oproep";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Antwoorden";
+"send" = "Verzenden";
+"type_message" = "Typ een bericht";
+"notification.action.mark_read" = "Markeer gelezen";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Chats";
+"w2.empty.title" = "Nog geen chats";
+"w2.empty.body" = "Je OSHI-chats van je iPhone verschijnen hier.";
+"w2.disabled.title" = "Smartwatch staat uit";
+"w2.disabled.body" = "Zet het aan in OSHI op je iPhone: Instellingen › Gekoppelde apparaten › Smartwatch.";
+"w2.locked.title" = "OSHI is vergrendeld";
+"w2.locked.body" = "Ontgrendel OSHI op je iPhone en probeer het opnieuw.";
+"w2.unavailable.title" = "OSHI is niet klaar";
+"w2.unavailable.body" = "Open OSHI één keer op je iPhone en probeer het opnieuw.";
+"w2.nophone.title" = "iPhone niet bereikbaar";
+"w2.nophone.body" = "Houd je iPhone met OSHI in de buurt.";
+"w2.error.title" = "Er ging iets mis";
+"w2.error.body" = "Je iPhone reageerde niet. Probeer het opnieuw.";
+"w2.notfound" = "Deze chat staat niet meer op je iPhone.";
+"w2.retry" = "Opnieuw";
+"w2.reply" = "Antwoord";
+"w2.you" = "Jij";
+"w2.you_prefix" = "Jij: %@";
+"w2.react" = "Reageer";
+"w2.speak_or_type" = "Spreek of typ";
+"w2.quick_replies" = "Snelle antwoorden";
+"w2.sending" = "Versturen…";
+"w2.sent" = "Verstuurd";
+"w2.send_failed" = "Niet verstuurd. Probeer het opnieuw op je iPhone.";
+"w2.read_only" = "Je kunt niet antwoorden in deze chat.";
+"w2.view_once" = "👁 Eenmalig bekijken – open op je iPhone";
+"w2.view_once_short" = "👁 Eenmalig bekijken";
+"w2.e2e" = "End-to-end versleuteld door je iPhone";
+"w2.replying_to" = "Antwoord op";
+"w2.loading" = "Laden…";
+"w2.unread_count" = "%d ongelezen";
+"w2.all_read" = "Alles gelezen";
+"w2.call" = "Bel";
+"w2.media.photo" = "📷 Foto";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Spraak";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Bestand";
+"w2.media.location" = "📍 Locatie";
+"w2.media.contact" = "👤 Contact";
+"w2.qr.on_my_way" = "Ik kom eraan";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Ik bel je later";
+"w2.qr.thanks" = "Bedankt!";
+"w2.qr.yes" = "Ja";
+"w2.qr.no" = "Nee";
+"w2.qr.busy" = "Kan nu niet praten";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Liefde";
+"w2.r.laugh" = "Lachen";
+"w2.r.cry" = "Verdrietig";
+"w2.r.thumbs" = "Duim omhoog";
+"w2.r.wow" = "Wauw";
+"w2.r.fire" = "Vuur";
+"w2.mute" = "Dempen";
+"w2.end_call" = "Ophangen";
+"w2.speaker" = "Luidspreker";
+"w2.widget.off" = "Zet Smartwatch aan in OSHI op je iPhone";
+"w2.widget.off_short" = "Uit";
+"w2.widget.locked" = "Ontgrendel OSHI op je iPhone";
+"w2.widget.locked_short" = "Vergrendeld";
+"w2.widget.open" = "Open OSHI";
+"w2.widget.name" = "OSHI ongelezen";
+"w2.widget.desc" = "Aantal ongelezen en wie schreef – nooit de berichten.";

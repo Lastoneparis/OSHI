@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto Backup rules (Android <= 11).
+
+  SECURITY (CSPN 2026-09): OSHI is an E2E messenger. The manifest now sets
+  android:allowBackup="false", so this file is not exercised — but we keep the
+  rules correct as defence-in-depth in case backup is ever re-enabled.
+
+  We EXCLUDE every store that holds identity private keys, session/ratchet
+  state or message plaintext:
+    • oshi_identity_backup.xml — legacy plaintext 64-byte recovery key.
+    • oshi_secure_keys.xml     — EncryptedSharedPreferences (KeyStore-wrapped).
+    • oshi_db_key.xml          — SQLCipher DB passphrase (KeyStore-wrapped).
+    • key_rotation.xml         — rotation key store.
+    • oshi_database (+ -wal/-shm/-journal) — Room DB with messages/metadata.
+
+  2026-09-22 — NOTHING IS BACKED UP OR TRANSFERRED ANY MORE (catch-all excludes).
+  The per-file list below was incomplete: allowBackup="false" does NOT stop
+  device-to-device transfer for apps targeting API 31+, and outside the listed
+  files the sandbox still holds plaintext message material — large attachments
+  (files/media/*.dat, files/groups/media/*.dat), scheduled_messages.json,
+  pending V2 envelopes / push retry queue, plus EncryptedSharedPreferences files
+  whose Keystore master key cannot follow them (they would be unreadable on the
+  new device anyway). The SQLCipher DB key lives only in this device's Keystore.
+  Moving history to a new device is done with Settings → Export Messages, which
+  produces an .oshiexport sealed with the ACCOUNT key (MessageExportManager).
+-->
+<full-backup-content>
+    <exclude domain="root" path="." />
+    <exclude domain="file" path="." />
+    <exclude domain="database" path="." />
+    <exclude domain="sharedpref" path="." />
+    <exclude domain="external" path="." />
+    <exclude domain="device_root" path="." />
+    <exclude domain="device_file" path="." />
+    <exclude domain="device_database" path="." />
+    <exclude domain="device_sharedpref" path="." />
+    <exclude domain="sharedpref" path="oshi_identity_backup.xml" />
+    <exclude domain="sharedpref" path="oshi_secure_keys.xml" />
+    <exclude domain="sharedpref" path="oshi_db_key.xml" />
+    <exclude domain="sharedpref" path="key_rotation.xml" />
+    <exclude domain="database" path="oshi_database" />
+    <exclude domain="database" path="oshi_database-journal" />
+    <exclude domain="database" path="oshi_database-wal" />
+    <exclude domain="database" path="oshi_database-shm" />
+    <!-- __CALL_LOG_AT_REST_2026_09_23__ sealed call log + its wrapped key (already under the catch-alls) -->
+    <exclude domain="file" path="call_logs/" />
+    <exclude domain="sharedpref" path="oshi_call_log_key.xml" />
+</full-backup-content>

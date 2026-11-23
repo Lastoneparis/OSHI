@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">Gần đây</string>
+    <string name="attach_selected_count">Đã chọn %1$d</string>
+    <string name="attach_all_photos">Tất cả ảnh</string>
+    <string name="attach_collapse">Thu gọn</string>
+    <string name="attach_camera">Máy ảnh</string>
+    <string name="attach_gallery">Thư viện</string>
+    <string name="attach_file">Tệp</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">Vị trí</string>
+    <string name="attach_contact">Liên hệ</string>
+    <string name="attach_poll">Bình chọn</string>
+    <string name="attach_video_note">Tin nhắn video</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">Hẹn giờ</string>
+    <string name="attach_access_title">Ảnh gần đây của bạn ở đây</string>
+    <string name="attach_access_body">OSHI chỉ đọc ảnh khi bảng này đang mở. Không gì rời khỏi điện thoại trừ khi bạn gửi.</string>
+    <string name="attach_access_allow">Cho phép truy cập</string>
+    <string name="attach_access_settings">Mở cài đặt</string>
+    <string name="attach_access_browse">Chọn từ thư viện</string>
+    <string name="attach_partial">Bạn chỉ chia sẻ một số ảnh với OSHI.</string>
+    <string name="attach_partial_manage">Quản lý</string>
+    <string name="attach_empty_title">Chưa có ảnh</string>
+    <string name="attach_caption_hint">Thêm chú thích…</string>
+    <string name="attach_send_count">Gửi %1$d</string>
+    <string name="attach_photo_a11y">Ảnh</string>
+    <string name="attach_video_a11y">Video, %1$s</string>
+    <string name="attach_limit">Tối đa %1$d mỗi lần</string>
+</resources>

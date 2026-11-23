@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Điện thoại này có thể đã bị sửa đổi</string>
+    <string name="device_integrity_dialog_body">OSHI phát hiện dấu hiệu cho thấy điện thoại này có thể đã bị root hoặc sửa đổi (%1$s). Trên điện thoại như vậy, phần mềm khác có thể đọc nội dung trên màn hình và những gì bạn gõ trước khi OSHI mã hóa. OSHI không xóa hay chặn gì cả. Việc kiểm tra này mang tính phỏng đoán: có thể sai, và root được giấu kỹ có thể lọt qua.</string>
+    <string name="device_integrity_dialog_ok">Tôi đã hiểu</string>
+    <string name="device_integrity_status_title">Tính toàn vẹn của thiết bị</string>
+    <string name="device_integrity_status_flagged">OSHI phát hiện dấu hiệu root hoặc sửa đổi: %1$s</string>
+    <string name="device_integrity_finding_su">tệp su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">ứng dụng quản lý root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">hệ thống ký bằng khóa thử nghiệm</string>
+    <string name="device_integrity_finding_debuggable">hệ thống có thể gỡ lỗi</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Điện thoại đã root hoặc sửa đổi: OSHI tìm các dấu hiệu root phổ biến (su, Magisk, Xposed/LSPosed, Frida, hệ thống ký bằng khóa thử nghiệm hoặc có thể gỡ lỗi) và cảnh báo bạn nếu tìm thấy. Không tìm thấy gì không chứng minh rằng điện thoại sạch.</string>
+    <string name="clipboard_hygiene_explainer">Sao chép: tin nhắn, bản dịch, khóa khôi phục và mã token bot bạn sao chép được đánh dấu là nhạy cảm (Android 13+ ẩn bản xem trước). Nếu sau 60 giây chúng vẫn còn trong bộ nhớ tạm, OSHI sẽ xóa chúng: ngay lập tức nếu OSHI đang mở, nếu không thì vào lần tới bạn mở ứng dụng. Khi chúng còn trong bộ nhớ tạm, bàn phím của bạn và các ứng dụng được phép đọc bộ nhớ tạm có thể thấy chúng, và các bàn phím hoặc tính năng điện thoại lưu lịch sử bộ nhớ tạm có thể giữ bản sao riêng ngay cả sau khi đã xóa.</string>
+</resources>

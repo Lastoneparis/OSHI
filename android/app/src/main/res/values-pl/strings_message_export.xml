@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Zaszyfrowany plik, czytelny tylko przy użyciu klucza Twojego konta</string>
+    <string name="settings_import_messages">Importuj wiadomości</string>
+    <string name="settings_import_messages_desc">Przywróć zaszyfrowany plik .oshiexport</string>
+    <string name="settings_importing">Importowanie…</string>
+    <string name="export_media_skipped">Liczba załączników pominiętych jako zbyt duże: %1$d.</string>
+    <string name="import_messages_success">Zaimportowano wiadomości: %1$d (już obecne: %2$d).</string>
+    <string name="import_error_wrong_account">Ten eksport należy do innego konta OSHI. Najpierw przywróć klucz tego konta.</string>
+    <string name="import_error_damaged">Ten eksport jest uszkodzony lub został zmodyfikowany.</string>
+    <string name="import_error_other_platform">Ten eksport został utworzony przez OSHI dla %1$s i nie można go jeszcze tutaj zaimportować.</string>
+    <string name="import_error_not_export">Ten plik nie jest eksportem OSHI.</string>
+    <string name="import_error_version">Ten eksport został utworzony przez nowszą wersję OSHI. Zaktualizuj aplikację i spróbuj ponownie.</string>
+    <string name="import_error_no_key">Brak klucza konta na tym urządzeniu. Najpierw przywróć swoje konto.</string>
+    <string name="import_error_unreadable">Nie udało się odczytać pliku.</string>
+</resources>

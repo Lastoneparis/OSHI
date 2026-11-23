@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- OSHI Logo - Letter O with shield/lock symbol -->
+    <group
+        android:translateX="27"
+        android:translateY="27">
+
+        <!-- Outer Circle (O) -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M27,0 C41.912,0 54,12.088 54,27 C54,41.912 41.912,54 27,54 C12.088,54 0,41.912 0,27 C0,12.088 12.088,0 27,0 Z M27,8 C16.507,8 8,16.507 8,27 C8,37.493 16.507,46 27,46 C37.493,46 46,37.493 46,27 C46,16.507 37.493,8 27,8 Z"/>
+
+        <!-- Lock/Shield Symbol in center -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M27,14 C30.866,14 34,17.134 34,21 L34,24 L36,24 C37.105,24 38,24.895 38,26 L38,38 C38,39.105 37.105,40 36,40 L18,40 C16.895,40 16,39.105 16,38 L16,26 C16,24.895 16.895,24 18,24 L20,24 L20,21 C20,17.134 23.134,14 27,14 Z M27,17 C24.791,17 23,18.791 23,21 L23,24 L31,24 L31,21 C31,18.791 29.209,17 27,17 Z M27,29 C25.343,29 24,30.343 24,32 C24,33.657 25.343,35 27,35 C28.657,35 30,33.657 30,32 C30,30.343 28.657,29 27,29 Z"/>
+    </group>
+</vector>

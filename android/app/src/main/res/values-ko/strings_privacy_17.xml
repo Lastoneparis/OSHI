@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">대화를 보호하기 위해 OSHI에서는 스크린샷이 차단됩니다</string>
+    <string name="rn_hint_setting_title">제한된 네트워크에 있음을 연락처에 알리기</string>
+    <string name="rn_hint_setting_caption">트래픽이 위장되는 동안 메시지에 종단 간 암호화된 작은 표시가 붙어, 연락처가 내가 검열되거나 감시되는 네트워크에 있을 수 있음을 알 수 있습니다. 상대방만 볼 수 있습니다.</string>
+    <string name="rn_hint_chip">제한된 네트워크에서 보냄</string>
+    <string name="rn_hint_explain_title">제한된 네트워크</string>
+    <string name="rn_hint_explain_body">이 사람은 OSHI의 프라이버시 위장을 사용하며 검열되거나 감시되는 네트워크에 있을 가능성이 높습니다. 평소처럼 답장하세요. OSHI가 상대방 쪽 트래픽을 계속 위장합니다. 메시지는 짧게 보내세요. 사진과 동영상은 느릴 수 있습니다.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Yeni kişi</string>
+    <string name="conversation_open_contact">Kişiyi aç</string>
+    <string name="conversation_muted">Bildirimler kapalı</string>
+    <string name="fab_new_contact">Yeni kişi</string>
+    <string name="fab_pick_contact_voice">Sesli Arama — bir kişi seçin</string>
+    <string name="fab_pick_contact_video">Görüntülü Arama — bir kişi seçin</string>
+    <string name="fab_pick_contact_empty">Henüz kişi yok. Önce birini ekleyin.</string>
+</resources>

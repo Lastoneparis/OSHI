@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Tastatur</string>
+    <string name="keyboard_incognito_title">Inkognito-tastatur</string>
+    <string name="keyboard_incognito_subtitle">Bed tastaturet om ikke at lære af det, du skriver</string>
+    <string name="keyboard_status_title">Nuværende tastatur</string>
+    <string name="keyboard_status_trusted">%1$s · Indbygget tastatur</string>
+    <string name="keyboard_status_third_party">%1$s · Tredjepartstastatur</string>
+    <string name="keyboard_status_unknown">Ukendt tastatur</string>
+    <string name="keyboard_privacy_explainer">OSHI krypterer på denne telefon, men det, du skriver, går først gennem dit tastatur. Inkognito beder tastaturet om ikke at lære eller gemme dine ord — Android kan ikke tvinge et tastatur til at adlyde, kun bede om det. Et tredjepartstastatur kan stadig læse hvert tastetryk, så brug hellere telefonens indbyggede tastatur. Hvis selve telefonen er kompromitteret (spyware), kan ingen app beskytte det, du skriver.</string>
+    <string name="keyboard_banner_title">Dit tastatur kan læse det, du skriver, før OSHI krypterer det</string>
+    <string name="keyboard_banner_body">%1$s er et tredjepartstastatur. Skift til telefonens indbyggede tastatur til private samtaler.</string>
+    <string name="keyboard_banner_switch">Skift tastatur</string>
+    <string name="keyboard_banner_dismiss">Luk</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Tastiera</string>
+    <string name="keyboard_incognito_title">Tastiera in incognito</string>
+    <string name="keyboard_incognito_subtitle">Chiedi alla tastiera di non imparare ciò che scrivi</string>
+    <string name="keyboard_status_title">Tastiera attuale</string>
+    <string name="keyboard_status_trusted">%1$s · Tastiera integrata</string>
+    <string name="keyboard_status_third_party">%1$s · Tastiera di terze parti</string>
+    <string name="keyboard_status_unknown">Tastiera sconosciuta</string>
+    <string name="keyboard_privacy_explainer">OSHI cifra su questo telefono, ma ciò che scrivi passa prima dalla tastiera. La modalità incognito le chiede di non imparare né conservare le tue parole: Android non può obbligare una tastiera a obbedire, può solo chiederlo. Una tastiera di terze parti può comunque leggere ogni tasto premuto, quindi preferisci la tastiera integrata del telefono. Se il telefono stesso è compromesso (spyware), nessuna app può proteggere ciò che scrivi.</string>
+    <string name="keyboard_banner_title">La tua tastiera può leggere ciò che scrivi prima che OSHI lo cifri</string>
+    <string name="keyboard_banner_body">%1$s è una tastiera di terze parti. Per le conversazioni private, passa alla tastiera integrata del telefono.</string>
+    <string name="keyboard_banner_switch">Cambia tastiera</string>
+    <string name="keyboard_banner_dismiss">Ignora</string>
+</resources>

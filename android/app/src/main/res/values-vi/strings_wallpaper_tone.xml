@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Tông màu</string>
+    <string name="wallpaper_tone_automatic">Tự động</string>
+    <string name="wallpaper_tone_light">Sáng</string>
+    <string name="wallpaper_tone_dark">Tối</string>
+    <string name="wallpaper_tone_automatic_detail">Theo chế độ sáng và tối.</string>
+    <string name="wallpaper_tone_light_detail">Trắng với lưới tím, kể cả ở chế độ tối. Tin nhắn chuyển sang màu sáng để luôn dễ đọc.</string>
+    <string name="wallpaper_tone_dark_detail">Đen với lưới tím, kể cả ở chế độ sáng.</string>
+    <string name="wallpaper_tone_more">Màu, dải màu, emoji và ảnh của bạn: mở một cuộc trò chuyện, rồi ⋯ → Hình nền.</string>
+</resources>

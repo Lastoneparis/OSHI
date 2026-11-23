@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (pt-PT) */
+
+"NSBluetoothAlwaysUsageDescription" = "O OSHI usa o Bluetooth para encontrar dispositivos próximos e ligar-se a eles, permitindo mensagens seguras entre dispositivos sem Internet.";
+"NSBluetoothPeripheralUsageDescription" = "O OSHI precisa do Bluetooth para receber mensagens encriptadas dos dispositivos próximos na sua rede mesh.";
+"NSCalendarsFullAccessUsageDescription" = "O OSHI pode adicionar as chamadas agendadas ao seu calendário para não perder nenhuma.";
+"NSCalendarsUsageDescription" = "O OSHI pode adicionar as chamadas agendadas ao seu calendário para não perder nenhuma.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "O OSHI pode adicionar as chamadas agendadas ao seu calendário para não perder nenhuma.";
+"NSCameraUsageDescription" = "O OSHI precisa da câmara para ler códigos QR e tirar fotografias para mensagens encriptadas.";
+"NSFaceIDUsageDescription" = "Use o Face ID para desbloquear as suas mensagens encriptadas em segurança e proteger a sua privacidade.";
+"NSLocalNetworkUsageDescription" = "O OSHI usa a rede local para estabelecer ligações Wi-Fi Direct com dispositivos próximos e enviar mensagens mais depressa.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "O OSHI usa a sua localização para partilhar a sua posição em tempo real com os contactos. A sua localização é encriptada e só é partilhada quando quiser.";
+"NSLocationAlwaysUsageDescription" = "O OSHI usa a sua localização para partilha em tempo real com os contactos, mesmo com a aplicação em segundo plano. A sua localização é encriptada e só é partilhada quando quiser.";
+"NSLocationWhenInUseUsageDescription" = "O OSHI usa a sua localização para partilhar a sua posição com os contactos. A sua localização é encriptada e só é partilhada quando quiser.";
+"NSMicrophoneUsageDescription" = "O OSHI precisa do microfone para gravar vídeos com som para mensagens encriptadas.";
+"NSPhotoLibraryAddUsageDescription" = "O OSHI pode guardar as imagens recebidas na sua biblioteca de fotografias.";
+"NSPhotoLibraryUsageDescription" = "O OSHI precisa de aceder à sua biblioteca de fotografias para escolher imagens a enviar como mensagens encriptadas.";
+"NSSpeechRecognitionUsageDescription" = "O OSHI usa reconhecimento de voz no próprio dispositivo para ditar mensagens ao assistente de IA. A sua voz é transcrita inteiramente no seu iPhone e nunca sai do dispositivo.";
+"NSUserNotificationsUsageDescription" = "O OSHI envia notificações quando recebe novas mensagens encriptadas, para não perder comunicações importantes.";

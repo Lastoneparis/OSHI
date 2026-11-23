@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">جارٍ البحث…</string>
+    <string name="peers_status_peers_found">تم العثور على أجهزة</string>
+    <string name="peers_status_permission_required">الإذن مطلوب</string>
+    <string name="peers_subtitle_connected">متصل: %1$d</string>
+    <string name="peers_subtitle_connected_cross">متصل: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">متصل: %1$d (%2$d أندرويد، %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">البلوتوث مُطفأ — شغّله للعثور على الأجهزة القريبة منك</string>
+    <string name="peers_subtitle_permission_both">لا يستطيع OSHI استخدام البلوتوث — لا ترى الأجهزة القريبة ولا تراك هي</string>
+    <string name="peers_subtitle_permission_advertise">الأجهزة القريبة لا تستطيع رؤيتك — إذن «الأجهزة القريبة» مفقود</string>
+    <string name="peers_subtitle_permission_scan">لا يستطيع OSHI البحث عن أجهزة قريبة — إذن «الأجهزة القريبة» مفقود</string>
+    <string name="peers_subtitle_ble_unsupported">لا يستطيع هذا الهاتف البث عبر بلوتوث LE</string>
+    <string name="peers_subtitle_ble_busy">البلوتوث مشغول — تطبيق آخر يستخدم الراديو</string>
+    <string name="peers_subtitle_ble_down">توقف اكتشاف البلوتوث — تجري إعادة المحاولة</string>
+    <string name="peers_subtitle_searching_lan">جارٍ البحث عن أشخاص على شبكة Wi‑Fi نفسها…</string>
+    <string name="peers_subtitle_disabled">شبكة mesh مُطفأة</string>
+    <string name="peers_subtitle_looking">جارٍ البحث عن أجهزة قريبة منك…</string>
+    <string name="peers_permission_card_title">تشغيل اكتشاف الأجهزة القريبة</string>
+    <string name="peers_permission_card_body">يحتاج OSHI إلى إذن «الأجهزة القريبة» للعثور على الهواتف من حولك. بدونه تمر كل رسالة عبر الإنترنت.</string>
+    <string name="peers_permission_card_action">السماح</string>
+    <string name="peers_permission_card_settings">فتح الإعدادات</string>
+    <string name="peers_permission_card_denied_body">تم رفض الإذن، لذا لا يستطيع OSHI العثور على أحد بجوارك. فعّل «الأجهزة القريبة» لتطبيق OSHI من إعدادات أندرويد.</string>
+    <string name="peers_same_wifi_note">يجب أن يكون الهاتفان على شبكة Wi‑Fi نفسها. على بيانات الجوال تمر الرسائل عبر الإنترنت بدلاً من ذلك.</string>
+    <string name="peers_control_visible">مرئي</string>
+    <string name="peers_control_scan">مسح</string>
+    <string name="peers_control_auto">تلقائي</string>
+    <string name="peers_section_devices">الأجهزة</string>
+    <string name="peers_action_connect">اتصال</string>
+    <string name="peers_action_reconnect">إعادة الاتصال</string>
+    <string name="peers_info_reach_title">المدى</string>
+    <string name="peers_info_reach_desc">بقدر ما تصل إليه شبكة Wi‑Fi لديك. يمكن للرسائل أن تنتقل عبر أجهزة OSHI أخرى على الشبكة نفسها، حتى 50 قفزة.</string>
+    <string name="peers_info_connection_desc">يتولى بلوتوث LE وBonjour التعريف بين جهازين وتبادل عنوان. أما الرسائل نفسها فتمر عبر شبكتك المحلية.</string>
+    <string name="peers_info_tip1">ضع الهاتفين على شبكة Wi‑Fi نفسها</string>
+    <string name="peers_info_tip2">أبقِ البلوتوث مشغّلاً كي تعثر الأجهزة على بعضها</string>
+    <string name="peers_info_tip3">يعمل بدون اتصال بالإنترنت — لكن ليس على بيانات الجوال</string>
+</resources>

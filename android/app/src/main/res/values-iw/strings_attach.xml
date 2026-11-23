@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">אחרונים</string>
+    <string name="attach_selected_count">%1$d נבחרו</string>
+    <string name="attach_all_photos">כל התמונות</string>
+    <string name="attach_collapse">כיווץ</string>
+    <string name="attach_camera">מצלמה</string>
+    <string name="attach_gallery">גלריה</string>
+    <string name="attach_file">קובץ</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">מיקום</string>
+    <string name="attach_contact">איש קשר</string>
+    <string name="attach_poll">סקר</string>
+    <string name="attach_video_note">הודעת וידאו</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">תזמון</string>
+    <string name="attach_access_title">התמונות האחרונות שלך כאן</string>
+    <string name="attach_access_body">OSHI קוראת את התמונות שלך רק כשהחלונית הזו פתוחה. שום דבר לא יוצא מהטלפון אלא אם תשלח אותו.</string>
+    <string name="attach_access_allow">מתן גישה</string>
+    <string name="attach_access_settings">פתיחת ההגדרות</string>
+    <string name="attach_access_browse">בחירה מהגלריה</string>
+    <string name="attach_partial">שיתפת עם OSHI רק חלק מהתמונות.</string>
+    <string name="attach_partial_manage">ניהול</string>
+    <string name="attach_empty_title">אין עדיין תמונות</string>
+    <string name="attach_caption_hint">הוספת כיתוב…</string>
+    <string name="attach_send_count">שליחת %1$d</string>
+    <string name="attach_photo_a11y">תמונה</string>
+    <string name="attach_video_a11y">וידאו, %1$s</string>
+    <string name="attach_limit">עד %1$d בכל פעם</string>
+</resources>

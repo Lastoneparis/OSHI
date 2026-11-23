@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ATTACH_PANEL_2027_2026_11_16__ the shared attachment panel (ui/components/attach). -->
+<resources>
+    <string name="attach_recent">हाल के</string>
+    <string name="attach_selected_count">%1$d चुने गए</string>
+    <string name="attach_all_photos">सभी फ़ोटो</string>
+    <string name="attach_collapse">छोटा करें</string>
+    <string name="attach_camera">कैमरा</string>
+    <string name="attach_gallery">गैलरी</string>
+    <string name="attach_file">फ़ाइल</string>
+    <string name="attach_gif">GIF</string>
+    <string name="attach_location">लोकेशन</string>
+    <string name="attach_contact">संपर्क</string>
+    <string name="attach_poll">पोल</string>
+    <string name="attach_video_note">वीडियो संदेश</string>
+    <string name="attach_checkin">Check-In</string>
+    <string name="attach_bitcoin">Bitcoin</string>
+    <string name="attach_schedule">शेड्यूल</string>
+    <string name="attach_access_title">आपकी हाल की फ़ोटो यहाँ</string>
+    <string name="attach_access_body">OSHI आपकी फ़ोटो केवल तभी पढ़ता है जब यह पैनल खुला हो। जब तक आप न भेजें, कुछ भी आपके फ़ोन से बाहर नहीं जाता।</string>
+    <string name="attach_access_allow">अनुमति दें</string>
+    <string name="attach_access_settings">सेटिंग खोलें</string>
+    <string name="attach_access_browse">गैलरी से चुनें</string>
+    <string name="attach_partial">आपने OSHI के साथ केवल कुछ फ़ोटो साझा की हैं।</string>
+    <string name="attach_partial_manage">प्रबंधित करें</string>
+    <string name="attach_empty_title">अभी कोई फ़ोटो नहीं</string>
+    <string name="attach_caption_hint">कैप्शन जोड़ें…</string>
+    <string name="attach_send_count">%1$d भेजें</string>
+    <string name="attach_photo_a11y">फ़ोटो</string>
+    <string name="attach_video_a11y">वीडियो, %1$s</string>
+    <string name="attach_limit">एक बार में %1$d तक</string>
+</resources>

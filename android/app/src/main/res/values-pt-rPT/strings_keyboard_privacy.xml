@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Teclado</string>
+    <string name="keyboard_incognito_title">Teclado anónimo</string>
+    <string name="keyboard_incognito_subtitle">Pedir ao teclado que não aprenda o que escreve</string>
+    <string name="keyboard_status_title">Teclado atual</string>
+    <string name="keyboard_status_trusted">%1$s · Teclado integrado</string>
+    <string name="keyboard_status_third_party">%1$s · Teclado de terceiros</string>
+    <string name="keyboard_status_unknown">Teclado desconhecido</string>
+    <string name="keyboard_privacy_explainer">O OSHI cifra neste telemóvel, mas o que escreve passa primeiro pelo teclado. O modo anónimo pede ao teclado que não aprenda nem guarde as suas palavras — o Android não pode obrigar um teclado a obedecer, apenas pedir. Um teclado de terceiros continua a poder ler cada tecla, por isso prefira o teclado integrado do telemóvel. Se o próprio telemóvel estiver comprometido (spyware), nenhuma aplicação consegue proteger o que escreve.</string>
+    <string name="keyboard_banner_title">O seu teclado pode ler o que escreve antes de o OSHI o cifrar</string>
+    <string name="keyboard_banner_body">%1$s é um teclado de terceiros. Para conversas privadas, mude para o teclado integrado do telemóvel.</string>
+    <string name="keyboard_banner_switch">Mudar de teclado</string>
+    <string name="keyboard_banner_dismiss">Ignorar</string>
+</resources>

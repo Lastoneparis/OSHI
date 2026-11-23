@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Strings for the persistent dataSync foreground-service notification.
+
+  Kept in their own file rather than added to strings_parity_settings.xml so this
+  change cannot collide with a parallel edit to that file.
+
+  The old text was "OSHI Sync" / "Syncing messages…" on android.R.drawable.ic_popup_sync,
+  ongoing, and therefore permanently in the shade — on Android 14+ an ongoing FGS
+  notification cannot be swiped away while the service runs. That is a notification
+  that claims the app is syncing 24 hours a day, and it is the literal answer to the
+  tester's "it's loading all the time": the app was TELLING them it was loading, all
+  the time. The replacement says what is actually true — the app is ready to receive —
+  and makes no progress claim.
+-->
+<resources>
+    <string name="channel_sync_ready_title" translatable="false">OSHI</string>
+    <string name="channel_sync_ready_text">Ready to receive messages and calls</string>
+</resources>

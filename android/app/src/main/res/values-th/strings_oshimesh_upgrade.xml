@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">อัปเกรดวิทยุนี้เป็น OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">ฟรีและโอเพนซอร์ส เก็บภูมิภาค ช่องสัญญาณ กุญแจ และรายชื่อติดต่อของคุณไว้ ยังอยู่บนเครือข่าย Meshtastic และเพิ่มข้อความยาว การยืนยันการส่งถึง และการเก็บข้อความไว้ 72 ชั่วโมงเมื่ออีกฝ่ายออฟไลน์</string>
+    <string name="oshimesh_upgrade_share">ส่งลิงก์เครื่องมือแฟลชไปยังคอมพิวเตอร์</string>
+    <string name="oshimesh_upgrade_why">สิ่งที่ OSHI Mesh เพิ่มให้</string>
+    <string name="oshimesh_upgrade_footer">เครื่องมือแฟลชทำงานใน Chrome หรือ Edge บนคอมพิวเตอร์ผ่าน USB เลือก “เก็บการตั้งค่าของฉัน” เพื่ออัปเดตวิทยุนี้ในเวลาประมาณหนึ่งนาที</string>
+</resources>

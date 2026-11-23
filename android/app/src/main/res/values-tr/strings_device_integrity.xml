@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Bu telefon değiştirilmiş olabilir</string>
+    <string name="device_integrity_dialog_body">OSHI bu telefonun rootlu veya değiştirilmiş olabileceğine dair işaretler tespit etti (%1$s). Böyle bir telefonda başka yazılımlar, OSHI şifrelemeden önce ekranda görüneni ve yazdıklarınızı okuyabilir. OSHI hiçbir şeyi silmedi veya engellemedi. Bu kontrol sezgiseldir: yanılabilir ve iyi gizlenmiş root bundan kaçabilir.</string>
+    <string name="device_integrity_dialog_ok">Anladım</string>
+    <string name="device_integrity_status_title">Cihaz bütünlüğü</string>
+    <string name="device_integrity_status_flagged">OSHI root veya değişiklik işaretleri tespit etti: %1$s</string>
+    <string name="device_integrity_finding_su">su dosyası</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">root yönetim uygulaması</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">test anahtarlarıyla imzalanmış sistem</string>
+    <string name="device_integrity_finding_debuggable">hata ayıklanabilir sistem</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Rootlu veya değiştirilmiş telefonlar: OSHI yaygın root işaretlerini (su, Magisk, Xposed/LSPosed, Frida, test anahtarlarıyla imzalanmış veya hata ayıklanabilir sistem) arar ve bulursa sizi uyarır. Hiçbir şey bulunmaması telefonun temiz olduğunu kanıtlamaz.</string>
+    <string name="clipboard_hygiene_explainer">Kopyalama: kopyaladığınız mesajlar, çeviriler, kurtarma anahtarları ve bot jetonları hassas olarak işaretlenir (Android 13+ önizlemeyi gizler). 60 saniye sonra hâlâ panodaysa OSHI bunları kaldırır: OSHI açıksa hemen, değilse bir sonraki açışınızda. Panoda oldukları sürece klavyeniz ve panoyu okuma izni olan uygulamalar bunları görebilir; pano geçmişi tutan klavyeler veya telefon özellikleri kaldırıldıktan sonra bile kendi kopyalarını saklayabilir.</string>
+</resources>

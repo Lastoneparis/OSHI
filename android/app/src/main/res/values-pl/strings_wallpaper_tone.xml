@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Odcień</string>
+    <string name="wallpaper_tone_automatic">Automatyczny</string>
+    <string name="wallpaper_tone_light">Jasny</string>
+    <string name="wallpaper_tone_dark">Ciemny</string>
+    <string name="wallpaper_tone_automatic_detail">Podąża za trybem jasnym i ciemnym.</string>
+    <string name="wallpaper_tone_light_detail">Biel z fioletową siecią, także w trybie ciemnym. Wiadomości przechodzą na jasne kolory, by pozostać czytelne.</string>
+    <string name="wallpaper_tone_dark_detail">Czerń z fioletową siecią, także w trybie jasnym.</string>
+    <string name="wallpaper_tone_more">Kolory, gradienty, emoji i własne zdjęcia: otwórz czat, potem ⋯ → Tapeta.</string>
+</resources>

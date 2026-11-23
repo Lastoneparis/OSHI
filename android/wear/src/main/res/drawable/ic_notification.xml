@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The small icon every OSHI notification carries into the status bar and the
+    shade.
+
+    __NOTIFICATION_ICON_WAS_A_SHIELD_2026_11_02__ What this replaced, and why:
+    the previous drawing was a generic padlock-shield, kept here since the first
+    notification shipped. It is not the OSHI mark, it is not on any store
+    listing, and it is not on the launcher — so a notification arrived under a
+    symbol the user had never seen anywhere else in the app. Reported from an
+    Android phone as "the app logo does not appear, it shows the default one".
+
+    Geometry is the SAME glyph as `drawable/ic_launcher_monochrome.xml` — the
+    bold "O" ring with the speech-bubble tail at the lower left, traced there
+    from `mipmap-xxxhdpi/ic_launcher_foreground.png`, the foreground the app
+    actually ships. Both layers must stay the same shape: the launcher icon and
+    the notification icon are the two places a user sees OSHI without reading a
+    word, and two different marks read as two different apps.
+
+    Rules a notification small icon obeys, which differ from a launcher icon:
+      - The framework uses the ALPHA channel only and paints the result with the
+        notification accent colour. A fill colour is therefore just "opaque";
+        no tint attribute, no second colour, no gradient — any of those render
+        as a white block on some OEM shades.
+      - 24x24dp canvas. The glyph is fitted into the central 22x22 with ~1dp of
+        clearance, which is what the system expects to be able to inset.
+
+    The 108-viewport source is mapped in with scale 0.3742 about the origin and
+    the translate below; that places the glyph's bounding box (x 27..81,
+    y 23..81.79 in the source) at 1.89..22.10 by 1.00..23.00 here.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <group
+        android:pivotX="0"
+        android:pivotY="0"
+        android:scaleX="0.3742"
+        android:scaleY="0.3742"
+        android:translateX="-8.2068"
+        android:translateY="-7.6064">
+
+        <!--
+            The "O". Outer circle r=27 and inner circle r=15, both centred at
+            (54,50), each drawn as four quadrant arcs in the same direction;
+            fillType="evenOdd" punches the counter out of the disc.
+        -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="M54,23 A27,27 0 0 1 81,50 A27,27 0 0 1 54,77 A27,27 0 0 1 27,50 A27,27 0 0 1 54,23 Z M54,35 A15,15 0 0 1 69,50 A15,15 0 0 1 54,65 A15,15 0 0 1 39,50 A15,15 0 0 1 54,35 Z"/>
+
+        <!--
+            Speech-bubble tail. Kept as its own path: two paths union, whereas
+            folding it into the evenOdd path above would cancel wherever it
+            overlaps the ring and carve a notch out of the silhouette.
+        -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M49.31,76.59 Q43.80,81.38 37.10,81.79 Q39.84,68.12 33.32,67.36 Z"/>
+    </group>
+</vector>

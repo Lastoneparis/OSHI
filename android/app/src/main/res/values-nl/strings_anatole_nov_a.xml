@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Nieuw contact</string>
+    <string name="conversation_open_contact">Contact openen</string>
+    <string name="conversation_muted">Meldingen uit</string>
+    <string name="fab_new_contact">Nieuw contact</string>
+    <string name="fab_pick_contact_voice">Spraakoproep — kies een contact</string>
+    <string name="fab_pick_contact_video">Video-oproep — kies een contact</string>
+    <string name="fab_pick_contact_empty">Nog geen contacten. Voeg eerst iemand toe.</string>
+</resources>

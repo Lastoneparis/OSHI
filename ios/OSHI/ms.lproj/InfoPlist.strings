@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (ms) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI menggunakan Bluetooth untuk mencari dan menyambung ke peranti berdekatan supaya anda boleh menghantar mesej selamat terus antara peranti tanpa internet.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI memerlukan Bluetooth untuk menerima mesej tersulit daripada peranti berdekatan dalam rangkaian mesh anda.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI boleh menambah panggilan berjadual ke kalendar anda supaya anda tidak terlepas sebarang panggilan.";
+"NSCalendarsUsageDescription" = "OSHI boleh menambah panggilan berjadual ke kalendar anda supaya anda tidak terlepas sebarang panggilan.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI boleh menambah panggilan berjadual ke kalendar anda supaya anda tidak terlepas sebarang panggilan.";
+"NSCameraUsageDescription" = "OSHI memerlukan akses kamera untuk mengimbas kod QR dan mengambil foto bagi mesej tersulit.";
+"NSFaceIDUsageDescription" = "Gunakan Face ID untuk membuka mesej tersulit anda dengan selamat dan melindungi privasi anda.";
+"NSLocalNetworkUsageDescription" = "OSHI menggunakan rangkaian tempatan untuk membuat sambungan Wi-Fi Direct dengan peranti berdekatan supaya mesej sampai lebih cepat.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI menggunakan lokasi anda untuk berkongsi kedudukan anda secara langsung dengan kenalan. Lokasi anda disulitkan dan hanya dikongsi apabila anda memilihnya.";
+"NSLocationAlwaysUsageDescription" = "OSHI menggunakan lokasi anda untuk perkongsian langsung dengan kenalan, walaupun apl berjalan di latar belakang. Lokasi anda disulitkan dan hanya dikongsi apabila anda memilihnya.";
+"NSLocationWhenInUseUsageDescription" = "OSHI menggunakan lokasi anda untuk berkongsi kedudukan anda dengan kenalan. Lokasi anda disulitkan dan hanya dikongsi apabila anda memilihnya.";
+"NSMicrophoneUsageDescription" = "OSHI memerlukan akses mikrofon untuk merakam video berserta audio bagi mesej tersulit.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI boleh menyimpan imej yang diterima ke pustaka foto anda.";
+"NSPhotoLibraryUsageDescription" = "OSHI memerlukan akses ke pustaka foto supaya anda boleh memilih imej untuk dihantar sebagai mesej tersulit.";
+"NSSpeechRecognitionUsageDescription" = "OSHI menggunakan pengecaman pertuturan pada peranti supaya anda boleh mengimlakkan mesej kepada pembantu AI. Suara anda ditranskripsi sepenuhnya pada iPhone anda dan tidak pernah keluar dari peranti.";
+"NSUserNotificationsUsageDescription" = "OSHI menghantar pemberitahuan apabila anda menerima mesej tersulit baharu supaya tiada perkara penting terlepas.";

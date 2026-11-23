@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">वीडियो संदेश</string>
+    <string name="video_note_title">वीडियो संदेश</string>
+    <string name="video_note_a11y" formatted="true">वीडियो संदेश, %1$s</string>
+    <string name="video_note_play">चलाएँ</string>
+    <string name="video_note_pause">रोकें</string>
+    <string name="video_note_record_button">वीडियो संदेश रिकॉर्ड करें</string>
+    <string name="video_note_hint">रिकॉर्ड करने के लिए टैप करें या दबाए रखें · अधिकतम 15 सेकंड</string>
+    <string name="video_note_record">रिकॉर्डिंग शुरू करें</string>
+    <string name="video_note_stop">रिकॉर्डिंग रोकें</string>
+    <string name="video_note_flip">कैमरा बदलें</string>
+    <string name="video_note_close">बंद करें</string>
+    <string name="video_note_review_title">आपका वीडियो संदेश</string>
+    <string name="video_note_preparing">तैयार हो रहा है…</string>
+    <string name="video_note_discard">हटाएँ</string>
+    <string name="video_note_retake">फिर से रिकॉर्ड करें</string>
+    <string name="video_note_send">वीडियो संदेश भेजें</string>
+    <string name="video_note_too_short">बहुत छोटा है। रिकॉर्ड करने के लिए टैप करें या बटन दबाए रखें।</string>
+    <string name="video_note_camera_denied">वीडियो संदेश रिकॉर्ड करने के लिए कैमरा की अनुमति चाहिए।</string>
+</resources>

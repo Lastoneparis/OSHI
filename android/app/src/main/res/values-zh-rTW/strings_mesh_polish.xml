@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">搜尋中…</string>
+    <string name="peers_status_peers_found">已找到裝置</string>
+    <string name="peers_status_permission_required">需要權限</string>
+    <string name="peers_subtitle_connected">已連線：%1$d</string>
+    <string name="peers_subtitle_connected_cross">已連線：%1$d（iOS）</string>
+    <string name="peers_subtitle_connected_mixed">已連線：%1$d（%2$d 台 Android，%3$d 台 iOS）</string>
+    <string name="peers_subtitle_bluetooth_off">藍牙已關閉 — 開啟後才能找到附近的裝置</string>
+    <string name="peers_subtitle_permission_both">OSHI 無法使用藍牙 — 你看不到附近的裝置，別人也看不到你</string>
+    <string name="peers_subtitle_permission_advertise">附近的裝置看不到你 — 缺少「附近的裝置」權限</string>
+    <string name="peers_subtitle_permission_scan">OSHI 無法搜尋附近的裝置 — 缺少「附近的裝置」權限</string>
+    <string name="peers_subtitle_ble_unsupported">這支手機無法透過藍牙 LE 廣播</string>
+    <string name="peers_subtitle_ble_busy">藍牙忙碌中 — 另一個應用程式正在使用射頻</string>
+    <string name="peers_subtitle_ble_down">藍牙搜尋已停止 — 正在重試</string>
+    <string name="peers_subtitle_searching_lan">正在同一個 Wi-Fi 網路中尋找其他人…</string>
+    <string name="peers_subtitle_disabled">網狀網路已關閉</string>
+    <string name="peers_subtitle_looking">正在搜尋附近的裝置…</string>
+    <string name="peers_permission_card_title">開啟附近裝置探索</string>
+    <string name="peers_permission_card_body">OSHI 需要「附近的裝置」權限才能找到你周圍的手機。沒有它，每則訊息都會經由網際網路傳送。</string>
+    <string name="peers_permission_card_action">允許</string>
+    <string name="peers_permission_card_settings">開啟設定</string>
+    <string name="peers_permission_card_denied_body">權限遭拒，OSHI 找不到你附近的任何人。請在 Android 設定中為 OSHI 開啟「附近的裝置」。</string>
+    <string name="peers_same_wifi_note">兩支手機必須連在同一個 Wi-Fi 網路上。使用行動數據時，訊息會改走網際網路。</string>
+    <string name="peers_control_visible">可見</string>
+    <string name="peers_control_scan">掃描</string>
+    <string name="peers_control_auto">自動</string>
+    <string name="peers_section_devices">裝置</string>
+    <string name="peers_action_connect">連線</string>
+    <string name="peers_action_reconnect">重新連線</string>
+    <string name="peers_info_reach_title">涵蓋範圍</string>
+    <string name="peers_info_reach_desc">取決於你的 Wi-Fi 網路能涵蓋多遠。訊息可經由同一網路上的其他 OSHI 裝置轉送，最多 50 跳。</string>
+    <string name="peers_info_connection_desc">藍牙 LE 和 Bonjour 負責讓兩台裝置互相認識並交換一個位址。訊息本身走的是你的本機網路。</string>
+    <string name="peers_info_tip1">把兩支手機連到同一個 Wi-Fi 網路</string>
+    <string name="peers_info_tip2">保持藍牙開啟，裝置之間才能互相探索</string>
+    <string name="peers_info_tip3">沒有網際網路也能用 — 但行動數據不行</string>
+</resources>

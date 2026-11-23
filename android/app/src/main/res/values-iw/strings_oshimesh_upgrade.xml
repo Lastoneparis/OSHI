@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">שדרגו את הרדיו הזה ל-OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">חינמי ובקוד פתוח. שומר את האזור, הערוצים, המפתחות ואנשי הקשר שלכם, נשאר ברשת Meshtastic ומוסיף הודעות ארוכות, אישורי מסירה והודעות שנשמרות 72 שעות כשמישהו לא מחובר.</string>
+    <string name="oshimesh_upgrade_share">שליחת קישור הצורב למחשב</string>
+    <string name="oshimesh_upgrade_why">מה OSHI Mesh מוסיף</string>
+    <string name="oshimesh_upgrade_footer">הצורב פועל ב-Chrome או ב-Edge במחשב, דרך USB. בחרו „שמור את ההגדרות שלי” כדי לעדכן את הרדיו בתוך כדקה.</string>
+</resources>

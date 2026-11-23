@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">色調</string>
+    <string name="wallpaper_tone_automatic">自動</string>
+    <string name="wallpaper_tone_light">淺色</string>
+    <string name="wallpaper_tone_dark">深色</string>
+    <string name="wallpaper_tone_automatic_detail">跟隨淺色和深色模式。</string>
+    <string name="wallpaper_tone_light_detail">白底紫色網格，即使在深色模式下也是如此。訊息會切換為淺色配色，保持清晰易讀。</string>
+    <string name="wallpaper_tone_dark_detail">黑底紫色網格，即使在淺色模式下也是如此。</string>
+    <string name="wallpaper_tone_more">顏色、漸層、表情符號和你自己的照片：打開聊天，然後點 ⋯ → 背景圖片。</string>
+</resources>

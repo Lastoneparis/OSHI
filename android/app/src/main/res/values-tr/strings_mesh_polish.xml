@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Aranıyor…</string>
+    <string name="peers_status_peers_found">Cihazlar bulundu</string>
+    <string name="peers_status_permission_required">İzin gerekiyor</string>
+    <string name="peers_subtitle_connected">Bağlı: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Bağlı: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Bağlı: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth kapalı — çevrenizdeki cihazları bulmak için açın</string>
+    <string name="peers_subtitle_permission_both">OSHI Bluetooth’u kullanamıyor — yakındaki cihazları göremiyorsunuz, onlar da sizi göremiyor</string>
+    <string name="peers_subtitle_permission_advertise">Yakındaki cihazlar sizi göremiyor — Yakındaki cihazlar izni eksik</string>
+    <string name="peers_subtitle_permission_scan">OSHI yakındaki cihazları arayamıyor — Yakındaki cihazlar izni eksik</string>
+    <string name="peers_subtitle_ble_unsupported">Bu telefon Bluetooth LE üzerinden yayın yapamıyor</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth meşgul — radyoyu başka bir uygulama kullanıyor</string>
+    <string name="peers_subtitle_ble_down">Bluetooth taraması durdu — yeniden deneniyor</string>
+    <string name="peers_subtitle_searching_lan">Aynı Wi-Fi ağındaki kişiler aranıyor…</string>
+    <string name="peers_subtitle_disabled">Mesh ağı kapalı</string>
+    <string name="peers_subtitle_looking">Çevrenizdeki cihazlar aranıyor…</string>
+    <string name="peers_permission_card_title">Yakındakileri keşfetmeyi aç</string>
+    <string name="peers_permission_card_body">OSHI’nin çevrenizdeki telefonları bulabilmesi için Yakındaki cihazlar iznine ihtiyacı var. O olmadan her mesaj internet üzerinden gider.</string>
+    <string name="peers_permission_card_action">İzin ver</string>
+    <string name="peers_permission_card_settings">Ayarları aç</string>
+    <string name="peers_permission_card_denied_body">İzin reddedildi, bu yüzden OSHI çevrenizde kimseyi bulamıyor. Android ayarlarından OSHI için Yakındaki cihazlar iznini açın.</string>
+    <string name="peers_same_wifi_note">Her iki telefon da aynı Wi-Fi ağında olmalı. Mobil veride mesajlar internet üzerinden gider.</string>
+    <string name="peers_control_visible">Görünür</string>
+    <string name="peers_control_scan">Tara</string>
+    <string name="peers_control_auto">Oto</string>
+    <string name="peers_section_devices">Cihazlar</string>
+    <string name="peers_action_connect">Bağlan</string>
+    <string name="peers_action_reconnect">Yeniden bağlan</string>
+    <string name="peers_info_reach_title">Menzil</string>
+    <string name="peers_info_reach_desc">Wi-Fi ağınız nereye ulaşıyorsa oraya kadar. Mesajlar aynı ağdaki diğer OSHI cihazları üzerinden 50 sıçramaya kadar atlayabilir.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE ve Bonjour iki cihazı tanıştırır ve bir adres alışverişi yapar. Mesajların kendisi yerel ağınız üzerinden gider.</string>
+    <string name="peers_info_tip1">Her iki telefonu da aynı Wi-Fi ağına bağlayın</string>
+    <string name="peers_info_tip2">Cihazların birbirini bulabilmesi için Bluetooth’u açık bırakın</string>
+    <string name="peers_info_tip3">İnternet erişimi olmadan çalışır — ama mobil veride çalışmaz</string>
+</resources>

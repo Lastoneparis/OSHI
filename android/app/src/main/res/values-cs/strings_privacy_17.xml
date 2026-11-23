@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Snímky obrazovky jsou v OSHI blokovány kvůli ochraně vašich konverzací</string>
+    <string name="rn_hint_setting_title">Dát kontaktům vědět, že jsem v omezené síti</string>
+    <string name="rn_hint_setting_caption">Když je provoz maskovaný, nesou vaše zprávy malý end-to-end šifrovaný příznak, aby kontakty věděly, že můžete být v cenzurované nebo sledované síti. Vidí ho jen oni.</string>
+    <string name="rn_hint_chip">Odesláno z omezené sítě</string>
+    <string name="rn_hint_explain_title">Omezená síť</string>
+    <string name="rn_hint_explain_body">Tento člověk používá maskování OSHI a je pravděpodobně v cenzurované nebo sledované síti. Odpovídejte normálně: OSHI dál maskuje jeho provoz. Pište krátce; fotky a videa mohou jít pomalu.</string>
+</resources>

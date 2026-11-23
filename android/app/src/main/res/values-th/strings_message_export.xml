@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">ไฟล์ที่เข้ารหัส อ่านได้ด้วยคีย์บัญชีของคุณเท่านั้น</string>
+    <string name="settings_import_messages">นำเข้าข้อความ</string>
+    <string name="settings_import_messages_desc">กู้คืนไฟล์ .oshiexport ที่เข้ารหัส</string>
+    <string name="settings_importing">กำลังนำเข้า…</string>
+    <string name="export_media_skipped">ไฟล์แนบ %1$d รายการมีขนาดใหญ่เกินไปและไม่ได้รวมอยู่ในการส่งออก</string>
+    <string name="import_messages_success">นำเข้าข้อความแล้ว %1$d รายการ (มีอยู่แล้ว %2$d รายการ)</string>
+    <string name="import_error_wrong_account">การส่งออกนี้เป็นของบัญชี OSHI อื่น โปรดกู้คืนคีย์ของบัญชีนั้นก่อน</string>
+    <string name="import_error_damaged">การส่งออกนี้เสียหายหรือถูกแก้ไข</string>
+    <string name="import_error_other_platform">การส่งออกนี้สร้างโดย OSHI สำหรับ %1$s และยังนำเข้าที่นี่ไม่ได้</string>
+    <string name="import_error_not_export">ไฟล์นี้ไม่ใช่การส่งออกของ OSHI</string>
+    <string name="import_error_version">การส่งออกนี้สร้างโดย OSHI เวอร์ชันที่ใหม่กว่า โปรดอัปเดตแอปแล้วลองอีกครั้ง</string>
+    <string name="import_error_no_key">ไม่มีคีย์บัญชีในอุปกรณ์นี้ โปรดกู้คืนบัญชีของคุณก่อน</string>
+    <string name="import_error_unreadable">ไม่สามารถอ่านไฟล์ได้</string>
+</resources>

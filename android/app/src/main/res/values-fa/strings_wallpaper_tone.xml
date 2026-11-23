@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">رنگ‌مایه</string>
+    <string name="wallpaper_tone_automatic">خودکار</string>
+    <string name="wallpaper_tone_light">روشن</string>
+    <string name="wallpaper_tone_dark">تیره</string>
+    <string name="wallpaper_tone_automatic_detail">از حالت روشن و تیره پیروی می‌کند.</string>
+    <string name="wallpaper_tone_light_detail">سفید با شبکهٔ بنفش، حتی در حالت تیره. پیام‌ها به رنگ‌های روشن خود می‌روند تا خوانا بمانند.</string>
+    <string name="wallpaper_tone_dark_detail">مشکی با شبکهٔ بنفش، حتی در حالت روشن.</string>
+    <string name="wallpaper_tone_more">رنگ‌ها، گرادیان‌ها، ایموجی و عکس‌های خودتان: یک گفتگو را باز کنید، سپس ⋯ ← کاغذدیواری.</string>
+</resources>

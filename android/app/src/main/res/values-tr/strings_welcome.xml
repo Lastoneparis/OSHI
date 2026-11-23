@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The welcome conversation seeded for a brand-new identity.
+
+  PORT OF iOS `WelcomeMessageManager.swift` + `<lproj>/Localizable.strings`
+  keys `welcome.message.body` / `welcome.message.card_caption`
+  (en.lproj/Localizable.strings:4785-4787).
+
+  The text is COPIED from the shipping iOS catalogue rather than re-translated,
+  so the two platforms say the same thing in the same words. Its own file, not
+  `strings.xml`, so a re-import of either catalogue cannot silently drop it.
+-->
+<resources>
+    <string name="welcome_message_body">OSHI’ye hoş geldiniz. Mesajlarınız uçtan uca şifreli ve telefon numarası ya da hesap olmadan kaydoldunuz — burada olduğunuz kimseye bildirilmedi.\n\nOSHI internet olmadan da çalışır: yakındaki telefonlarla Bluetooth ve Wi-Fi üzerinden, LoRa telsiziyle kilometrelerce uzağa.\n\nSorunuz mu var, bir şey mi bozuk? Aşağıya dokunun ve bana doğrudan yazın.</string>
+    <string name="welcome_message_card_caption">Benimle sohbet başlatmak için dokunun</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Propojená zařízení</string>
+    <string name="devsync_settings_subtitle">Synchronizujte historii přímo mezi svými zařízeními</string>
+    <string name="devsync_status_on">Přímá synchronizace je zapnutá. Historie se přenáší ze zařízení na zařízení; na serveru se nic neukládá.</string>
+    <string name="devsync_status_off">Přímá synchronizace je na tomto zařízení vypnutá.</string>
+    <string name="devsync_this_device">Toto zařízení</string>
+    <string name="devsync_device_id">ID zařízení %1$s</string>
+    <string name="devsync_debug_override">Přímá synchronizace (ladicí přepis)</string>
+    <string name="devsync_debug_override_desc">Vynutit přímou synchronizaci zařízení pro tuto instalaci bez ohledu na server</string>
+    <string name="devsync_pending_title">Schválit nové zařízení</string>
+    <string name="devsync_pending_body">%1$s (%2$s) chce přijímat vaši historii. Zkontrolujte, že druhá obrazovka ukazuje stejný kód.</string>
+    <string name="devsync_waiting_body">Čeká se na schválení na vašem druhém zařízení. Zkontrolujte, že ukazuje stejný kód.</string>
+    <string name="devsync_peer_approved">Druhé zařízení již schválilo. Dokončete schválením zde.</string>
+    <string name="devsync_allow">Povolit</string>
+    <string name="devsync_deny">Odmítnout</string>
+    <string name="devsync_linked_title">Propojená zařízení</string>
+    <string name="devsync_none_linked">Zatím žádné propojené zařízení. Otevřete OSHI na druhém zařízení, ve stejné Wi-Fi nebo online ve stejnou dobu.</string>
+    <string name="devsync_last_sync">Poslední synchronizace: %1$s</string>
+    <string name="devsync_never">nikdy</string>
+    <string name="devsync_syncing_now">Probíhá synchronizace (%1$s)</string>
+    <string name="devsync_remove">Odebrat</string>
+    <string name="devsync_remove_confirm_title">Odebrat %1$s?</string>
+    <string name="devsync_remove_confirm_body">Přestane přijímat vaši historii. Co už má, si ponechá.</string>
+    <string name="devsync_sync_now">Synchronizovat</string>
+    <string name="devsync_cancel">Zrušit</string>
+    <string name="devsync_alert_unapproved">Zařízení s vaším účtem se pokusilo synchronizovat: %1$s</string>
+    <string name="devsync_alert_linked">Nové zařízení %1$s nyní může přijímat vaši historii</string>
+</resources>

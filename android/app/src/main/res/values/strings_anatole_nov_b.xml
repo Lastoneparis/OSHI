@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Anatole feedback, 13/11/2026 (N2, N6, N17). -->
+<resources>
+    <!-- N17: the round video note, now in the attachment sheet -->
+    <string name="chat_video_note_desc">Round video message, 15 s max</string>
+
+    <!-- N6: panic wipe on the logo is opt-in -->
+    <string name="settings_panic_wipe_title">Erase by tapping the logo</string>
+    <string name="settings_panic_wipe_subtitle">Three quick taps on the OSHI logo erase every message, key and file on this phone, with no confirmation. Off unless you turn it on.</string>
+
+    <!-- N2: map layers -->
+    <string name="map_layer_title">Map type</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Terrain</string>
+    <string name="map_layer_satellite">Satellite</string>
+    <string name="map_layer_standard_desc">OSHI map, works offline with downloaded regions</string>
+    <string name="map_layer_third_party_desc" formatted="true">Online only. Loaded directly from %1$s, which sees the area you look at.</string>
+    <string name="map_layer_offline_only_note">“Offline maps only” is on: this layer shows only the tiles you have already seen.</string>
+</resources>

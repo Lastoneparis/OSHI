@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Lehet, hogy ezt a telefont módosították</string>
+    <string name="device_integrity_dialog_body">Az OSHI jeleket észlelt arra, hogy ez a telefon rootolt vagy módosított lehet (%1$s). Egy ilyen telefonon más szoftverek elolvashatják, ami a képernyőn látszik, és amit begépelsz, mielőtt az OSHI titkosítaná. Az OSHI semmit sem törölt és semmit sem tiltott le. Ez az ellenőrzés heurisztikus: tévedhet, és a jól elrejtett root elkerülheti.</string>
+    <string name="device_integrity_dialog_ok">Értem</string>
+    <string name="device_integrity_status_title">Eszközintegritás</string>
+    <string name="device_integrity_status_flagged">Az OSHI root vagy módosítás jeleit észlelte: %1$s</string>
+    <string name="device_integrity_finding_su">su fájl</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">root-kezelő alkalmazás</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">tesztkulcsokkal aláírt rendszer</string>
+    <string name="device_integrity_finding_debuggable">hibakereshető rendszer</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Rootolt vagy módosított telefonok: az OSHI a root gyakori jeleit keresi (su, Magisk, Xposed/LSPosed, Frida, tesztkulcsokkal aláírt vagy hibakereshető rendszer), és figyelmeztet, ha talál ilyet. Ha nem talál semmit, az nem bizonyítja, hogy a telefon tiszta.</string>
+    <string name="clipboard_hygiene_explainer">Másolás: a kimásolt üzenetek, fordítások, helyreállítási kulcsok és bot-tokenek bizalmasként vannak megjelölve (az Android 13+ elrejti az előnézetet). Ha 60 másodperc után még a vágólapon vannak, az OSHI eltávolítja őket: azonnal, ha az OSHI nyitva van, különben a következő megnyitáskor. Amíg a vágólapon vannak, a billentyűzeted és a vágólap olvasására jogosult alkalmazások láthatják őket, a vágólap-előzményeket tároló billentyűzetek vagy telefonfunkciók pedig az eltávolítás után is megtarthatják a saját másolatukat.</string>
+</resources>

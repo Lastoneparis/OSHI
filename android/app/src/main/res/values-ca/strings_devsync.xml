@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Dispositius enllaçats</string>
+    <string name="devsync_settings_subtitle">Sincronitza el teu historial directament entre els teus dispositius</string>
+    <string name="devsync_status_on">La sincronització directa està activada. El teu historial passa d\'un dispositiu a l\'altre; no es desa res al servidor.</string>
+    <string name="devsync_status_off">La sincronització directa està desactivada en aquest dispositiu.</string>
+    <string name="devsync_this_device">Aquest dispositiu</string>
+    <string name="devsync_device_id">ID del dispositiu %1$s</string>
+    <string name="devsync_debug_override">Sincronització directa (forçat de depuració)</string>
+    <string name="devsync_debug_override_desc">Força la sincronització directa en aquesta instal·lació, digui el que digui el servidor</string>
+    <string name="devsync_pending_title">Aprova un dispositiu nou</string>
+    <string name="devsync_pending_body">%1$s (%2$s) vol rebre el teu historial. Comprova que l\'altra pantalla mostra el mateix codi.</string>
+    <string name="devsync_waiting_body">Esperant l\'aprovació a l\'altre dispositiu. Comprova que mostra el mateix codi.</string>
+    <string name="devsync_peer_approved">L\'altre dispositiu ja ho ha aprovat. Aprova-ho aquí per acabar.</string>
+    <string name="devsync_allow">Permet</string>
+    <string name="devsync_deny">Denega</string>
+    <string name="devsync_linked_title">Dispositius enllaçats</string>
+    <string name="devsync_none_linked">Encara no hi ha cap dispositiu enllaçat. Obre OSHI a l\'altre dispositiu, a la mateixa Wi-Fi o en línia al mateix temps.</string>
+    <string name="devsync_last_sync">Última sincronització: %1$s</string>
+    <string name="devsync_never">mai</string>
+    <string name="devsync_syncing_now">Sincronitzant ara (%1$s)</string>
+    <string name="devsync_remove">Elimina</string>
+    <string name="devsync_remove_confirm_title">Vols eliminar %1$s?</string>
+    <string name="devsync_remove_confirm_body">Deixarà de rebre el teu historial. Conserva el que ja té.</string>
+    <string name="devsync_sync_now">Sincronitza ara</string>
+    <string name="devsync_cancel">Cancel·la</string>
+    <string name="devsync_alert_unapproved">Un dispositiu que fa servir el teu compte ha intentat sincronitzar-se: %1$s</string>
+    <string name="devsync_alert_linked">Un dispositiu nou, %1$s, ja pot rebre el teu historial</string>
+</resources>

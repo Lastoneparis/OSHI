@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">Opkald med %s</string>
+    <string name="schedule_call_when">Hvornår</string>
+    <string name="schedule_call_duration">Varighed</string>
+    <string name="schedule_call_title_optional">Titel (valgfri)</string>
+    <string name="schedule_call_title_placeholder">f.eks. Ugentlig synkronisering</string>
+    <string name="schedule_call_other_date">Anden dato</string>
+    <string name="schedule_call_schedule">Planlæg</string>
+    <string name="schedule_call_timezone">Din tidszone: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">Planlæg et opkald</string>
+</resources>

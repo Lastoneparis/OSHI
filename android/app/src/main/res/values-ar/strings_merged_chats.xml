@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">دمج الرسائل والمجموعات</string>
+    <string name="chats_merged_setting_desc">قائمة واحدة لكل محادثاتك، مع عوامل تصفية للأشخاص والمجموعات.</string>
+    <string name="chats_merged_filter_all">الكل</string>
+    <string name="chats_merged_filter_unread">غير مقروءة</string>
+    <string name="chats_merged_filter_groups">المجموعات</string>
+    <string name="chats_merged_filter_people">الأشخاص</string>
+    <string name="chats_merged_new_title">جديد</string>
+    <string name="chats_merged_new_chat">محادثة جديدة</string>
+    <string name="chats_merged_new_chat_desc">أضف شخصًا عبر رمز QR أو رابط أو مفتاح</string>
+    <string name="chats_merged_new_group">مجموعة جديدة</string>
+    <string name="chats_merged_new_group_desc">ابدأ مجموعة مع جهات اتصالك</string>
+    <string name="chats_merged_discover">اكتشف القنوات العامة</string>
+    <string name="chats_merged_discover_desc">انضم إلى المجموعات العامة من حولك</string>
+    <string name="chats_merged_scan_invite">مسح دعوة</string>
+    <string name="chats_merged_scan_invite_desc">انضم إلى مجموعة أو أضف جهة اتصال من رمز QR</string>
+    <string name="chats_merged_scan_not_invite">رمز QR هذا ليس دعوة OSHI</string>
+    <string name="chats_merged_calls_header">اتصل بشخص ما</string>
+    <string name="chats_merged_teaser_title">انضم إلى قناة عامة</string>
+    <string name="chats_merged_teaser_body">المجموعات العامة القريبة تعمل حتى بدون إنترنت. اكتشف من حولك.</string>
+    <string name="chats_merged_teaser_cta">اكتشف</string>
+    <string name="chats_merged_nearby_title">مجموعة قريبة</string>
+    <string name="chats_merged_empty_unread">لقد قرأت كل شيء</string>
+    <string name="chats_merged_empty_people">لا توجد محادثات بعد</string>
+    <string name="chats_merged_group_a11y">مجموعة</string>
+</resources>

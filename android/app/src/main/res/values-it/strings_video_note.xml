@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Videomessaggio</string>
+    <string name="video_note_title">Videomessaggio</string>
+    <string name="video_note_a11y" formatted="true">Videomessaggio, %1$s</string>
+    <string name="video_note_play">Riproduci</string>
+    <string name="video_note_pause">Pausa</string>
+    <string name="video_note_record_button">Registra un videomessaggio</string>
+    <string name="video_note_hint">Tocca per registrare o tieni premuto · max 15 s</string>
+    <string name="video_note_record">Avvia registrazione</string>
+    <string name="video_note_stop">Interrompi registrazione</string>
+    <string name="video_note_flip">Cambia fotocamera</string>
+    <string name="video_note_close">Chiudi</string>
+    <string name="video_note_review_title">Il tuo videomessaggio</string>
+    <string name="video_note_preparing">Preparazione…</string>
+    <string name="video_note_discard">Elimina</string>
+    <string name="video_note_retake">Rifai</string>
+    <string name="video_note_send">Invia videomessaggio</string>
+    <string name="video_note_too_short">Troppo breve. Tocca per registrare o tieni premuto il pulsante.</string>
+    <string name="video_note_camera_denied">Per registrare un videomessaggio serve l\'accesso alla fotocamera.</string>
+</resources>

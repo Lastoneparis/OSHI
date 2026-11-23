@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Bağlı cihazlar</string>
+    <string name="devsync_settings_subtitle">Geçmişinizi cihazlarınız arasında doğrudan eşitleyin</string>
+    <string name="devsync_status_on">Doğrudan eşitleme açık. Geçmişiniz cihazdan cihaza aktarılır; sunucuda hiçbir şey saklanmaz.</string>
+    <string name="devsync_status_off">Doğrudan eşitleme bu cihazda kapalı.</string>
+    <string name="devsync_this_device">Bu cihaz</string>
+    <string name="devsync_device_id">Cihaz kimliği %1$s</string>
+    <string name="devsync_debug_override">Doğrudan eşitleme (hata ayıklama geçersiz kılma)</string>
+    <string name="devsync_debug_override_desc">Sunucu ne derse desin bu kurulum için doğrudan cihaz eşitlemesini zorla</string>
+    <string name="devsync_pending_title">Yeni bir cihazı onaylayın</string>
+    <string name="devsync_pending_body">%1$s (%2$s) geçmişinizi almak istiyor. Diğer ekranda aynı kodun göründüğünü kontrol edin.</string>
+    <string name="devsync_waiting_body">Diğer cihazınızda onay bekleniyor. Aynı kodu gösterdiğini kontrol edin.</string>
+    <string name="devsync_peer_approved">Diğer cihaz zaten onayladı. Tamamlamak için burada onaylayın.</string>
+    <string name="devsync_allow">İzin ver</string>
+    <string name="devsync_deny">Reddet</string>
+    <string name="devsync_linked_title">Bağlı cihazlar</string>
+    <string name="devsync_none_linked">Henüz bağlı cihaz yok. OSHI’yi diğer cihazınızda aynı Wi-Fi’da veya aynı anda çevrimiçiyken açın.</string>
+    <string name="devsync_last_sync">Son eşitleme: %1$s</string>
+    <string name="devsync_never">hiç</string>
+    <string name="devsync_syncing_now">Şimdi eşitleniyor (%1$s)</string>
+    <string name="devsync_remove">Kaldır</string>
+    <string name="devsync_remove_confirm_title">%1$s kaldırılsın mı?</string>
+    <string name="devsync_remove_confirm_body">Artık geçmişinizi almayacak. Zaten sahip olduklarını korur.</string>
+    <string name="devsync_sync_now">Şimdi eşitle</string>
+    <string name="devsync_cancel">İptal</string>
+    <string name="devsync_alert_unapproved">Hesabınızı kullanan bir cihaz eşitlemeyi denedi: %1$s</string>
+    <string name="devsync_alert_linked">Yeni bir cihaz, %1$s, artık geçmişinizi alabilir</string>
+</resources>

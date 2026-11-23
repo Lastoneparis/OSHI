@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">已关联设备</string>
+    <string name="devsync_settings_subtitle">在你的设备之间直接同步历史记录</string>
+    <string name="devsync_status_on">直接同步已开启。历史记录在设备之间直接传输，服务器上不存储任何内容。</string>
+    <string name="devsync_status_off">此设备上的直接同步已关闭。</string>
+    <string name="devsync_this_device">此设备</string>
+    <string name="devsync_device_id">设备 ID %1$s</string>
+    <string name="devsync_debug_override">直接同步（调试覆盖）</string>
+    <string name="devsync_debug_override_desc">无论服务器如何设置，都在此安装上强制开启直接设备同步</string>
+    <string name="devsync_pending_title">批准新设备</string>
+    <string name="devsync_pending_body">%1$s（%2$s）想要接收你的历史记录。请确认另一块屏幕显示相同的代码。</string>
+    <string name="devsync_waiting_body">正在等待另一台设备批准。请确认其显示相同的代码。</string>
+    <string name="devsync_peer_approved">另一台设备已批准。在此批准即可完成。</string>
+    <string name="devsync_allow">允许</string>
+    <string name="devsync_deny">拒绝</string>
+    <string name="devsync_linked_title">已关联设备</string>
+    <string name="devsync_none_linked">尚未关联任何设备。请在另一台设备上打开 OSHI，连接同一 Wi-Fi 或同时在线。</string>
+    <string name="devsync_last_sync">上次同步：%1$s</string>
+    <string name="devsync_never">从未</string>
+    <string name="devsync_syncing_now">正在同步（%1$s）</string>
+    <string name="devsync_remove">移除</string>
+    <string name="devsync_remove_confirm_title">移除 %1$s？</string>
+    <string name="devsync_remove_confirm_body">它将不再接收你的历史记录，但会保留已有的内容。</string>
+    <string name="devsync_sync_now">立即同步</string>
+    <string name="devsync_cancel">取消</string>
+    <string name="devsync_alert_unapproved">一台使用你账号的设备尝试同步：%1$s</string>
+    <string name="devsync_alert_linked">新设备 %1$s 现在可以接收你的历史记录</string>
+</resources>

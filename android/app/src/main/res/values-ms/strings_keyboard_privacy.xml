@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Papan kekunci</string>
+    <string name="keyboard_incognito_title">Papan kekunci inkognito</string>
+    <string name="keyboard_incognito_subtitle">Minta papan kekunci supaya tidak mempelajari apa yang anda taip</string>
+    <string name="keyboard_status_title">Papan kekunci semasa</string>
+    <string name="keyboard_status_trusted">%1$s · Papan kekunci terbina dalam</string>
+    <string name="keyboard_status_third_party">%1$s · Papan kekunci pihak ketiga</string>
+    <string name="keyboard_status_unknown">Papan kekunci tidak diketahui</string>
+    <string name="keyboard_privacy_explainer">OSHI menyulitkan pada telefon ini, tetapi apa yang anda taip melalui papan kekunci terlebih dahulu. Mod inkognito meminta papan kekunci supaya tidak mempelajari atau menyimpan perkataan anda — Android tidak boleh memaksa papan kekunci untuk patuh, hanya meminta. Papan kekunci pihak ketiga masih boleh membaca setiap ketukan kekunci, jadi lebih baik gunakan papan kekunci terbina dalam telefon anda. Jika telefon itu sendiri telah dikompromi (perisian intip), tiada apl yang dapat melindungi apa yang anda taip.</string>
+    <string name="keyboard_banner_title">Papan kekunci anda boleh membaca apa yang anda taip sebelum OSHI menyulitkannya</string>
+    <string name="keyboard_banner_body">%1$s ialah papan kekunci pihak ketiga. Untuk perbualan peribadi, tukar kepada papan kekunci terbina dalam telefon anda.</string>
+    <string name="keyboard_banner_switch">Tukar papan kekunci</string>
+    <string name="keyboard_banner_dismiss">Tutup</string>
+</resources>

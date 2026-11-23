@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Konuşmalarınızı korumak için OSHI\'de ekran görüntüsü engellenir</string>
+    <string name="rn_hint_setting_title">Kişilerime kısıtlı bir ağda olduğumu bildir</string>
+    <string name="rn_hint_setting_caption">Trafik gizlendiği sürece mesajlarınız uçtan uca şifreli küçük bir işaret taşır; böylece kişileriniz sansürlü veya izlenen bir ağda olabileceğinizi bilir. Bunu yalnızca onlar görür.</string>
+    <string name="rn_hint_chip">Kısıtlı bir ağdan gönderildi</string>
+    <string name="rn_hint_explain_title">Kısıtlı ağ</string>
+    <string name="rn_hint_explain_body">Bu kişi OSHI\'nin gizlilik kamuflajını kullanıyor ve büyük olasılıkla sansürlü veya izlenen bir ağda. Normal şekilde yanıt verin: OSHI onun tarafını gizlemeye devam eder. Mesajları kısa tutun; fotoğraf ve videolar yavaş olabilir.</string>
+</resources>

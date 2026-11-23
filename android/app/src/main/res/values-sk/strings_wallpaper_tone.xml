@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Tón</string>
+    <string name="wallpaper_tone_automatic">Automaticky</string>
+    <string name="wallpaper_tone_light">Svetlý</string>
+    <string name="wallpaper_tone_dark">Tmavý</string>
+    <string name="wallpaper_tone_automatic_detail">Riadi sa svetlým a tmavým režimom.</string>
+    <string name="wallpaper_tone_light_detail">Biela s fialovou sieťou aj v tmavom režime. Správy prejdú na svetlé farby, aby zostali dobre čitateľné.</string>
+    <string name="wallpaper_tone_dark_detail">Čierna s fialovou sieťou aj vo svetlom režime.</string>
+    <string name="wallpaper_tone_more">Farby, prechody, emoji a vlastné fotky: otvorte chat a potom ⋯ → Tapeta.</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">ビデオメッセージ</string>
+    <string name="video_note_title">ビデオメッセージ</string>
+    <string name="video_note_a11y" formatted="true">ビデオメッセージ、%1$s</string>
+    <string name="video_note_play">再生</string>
+    <string name="video_note_pause">一時停止</string>
+    <string name="video_note_record_button">ビデオメッセージを録画</string>
+    <string name="video_note_hint">タップで録画、または長押し · 最大15秒</string>
+    <string name="video_note_record">録画を開始</string>
+    <string name="video_note_stop">録画を停止</string>
+    <string name="video_note_flip">カメラを切り替え</string>
+    <string name="video_note_close">閉じる</string>
+    <string name="video_note_review_title">あなたのビデオメッセージ</string>
+    <string name="video_note_preparing">準備中…</string>
+    <string name="video_note_discard">削除</string>
+    <string name="video_note_retake">撮り直す</string>
+    <string name="video_note_send">ビデオメッセージを送信</string>
+    <string name="video_note_too_short">短すぎます。タップで録画するか、ボタンを長押ししてください。</string>
+    <string name="video_note_camera_denied">ビデオメッセージを録画するにはカメラへのアクセスが必要です。</string>
+</resources>

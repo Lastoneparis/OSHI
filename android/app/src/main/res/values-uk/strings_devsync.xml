@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Пов’язані пристрої</string>
+    <string name="devsync_settings_subtitle">Синхронізуйте історію напряму між своїми пристроями</string>
+    <string name="devsync_status_on">Пряму синхронізацію увімкнено. Історія передається з пристрою на пристрій; на сервері нічого не зберігається.</string>
+    <string name="devsync_status_off">Пряму синхронізацію на цьому пристрої вимкнено.</string>
+    <string name="devsync_this_device">Цей пристрій</string>
+    <string name="devsync_device_id">ID пристрою %1$s</string>
+    <string name="devsync_debug_override">Пряма синхронізація (налагоджувальне перевизначення)</string>
+    <string name="devsync_debug_override_desc">Примусово ввімкнути пряму синхронізацію для цього встановлення незалежно від сервера</string>
+    <string name="devsync_pending_title">Підтвердьте новий пристрій</string>
+    <string name="devsync_pending_body">%1$s (%2$s) хоче отримати вашу історію. Переконайтеся, що на іншому екрані той самий код.</string>
+    <string name="devsync_waiting_body">Очікування підтвердження на іншому пристрої. Переконайтеся, що на ньому той самий код.</string>
+    <string name="devsync_peer_approved">Інший пристрій уже підтвердив. Підтвердьте тут, щоб завершити.</string>
+    <string name="devsync_allow">Дозволити</string>
+    <string name="devsync_deny">Відхилити</string>
+    <string name="devsync_linked_title">Пов’язані пристрої</string>
+    <string name="devsync_none_linked">Пов’язаних пристроїв ще немає. Відкрийте OSHI на іншому пристрої — в тій самій мережі Wi-Fi або онлайн одночасно.</string>
+    <string name="devsync_last_sync">Остання синхронізація: %1$s</string>
+    <string name="devsync_never">ніколи</string>
+    <string name="devsync_syncing_now">Триває синхронізація (%1$s)</string>
+    <string name="devsync_remove">Видалити</string>
+    <string name="devsync_remove_confirm_title">Видалити %1$s?</string>
+    <string name="devsync_remove_confirm_body">Він більше не отримуватиме вашу історію. Те, що вже має, залишиться.</string>
+    <string name="devsync_sync_now">Синхронізувати</string>
+    <string name="devsync_cancel">Скасувати</string>
+    <string name="devsync_alert_unapproved">Пристрій із вашим акаунтом намагався синхронізуватися: %1$s</string>
+    <string name="devsync_alert_linked">Новий пристрій %1$s тепер може отримувати вашу історію</string>
+</resources>

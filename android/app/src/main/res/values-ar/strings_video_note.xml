@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">رسالة فيديو</string>
+    <string name="video_note_title">رسالة فيديو</string>
+    <string name="video_note_a11y" formatted="true">رسالة فيديو، %1$s</string>
+    <string name="video_note_play">تشغيل</string>
+    <string name="video_note_pause">إيقاف مؤقت</string>
+    <string name="video_note_record_button">تسجيل رسالة فيديو</string>
+    <string name="video_note_hint">انقر للتسجيل أو اضغط مطولًا · 15 ث كحد أقصى</string>
+    <string name="video_note_record">بدء التسجيل</string>
+    <string name="video_note_stop">إيقاف التسجيل</string>
+    <string name="video_note_flip">تبديل الكاميرا</string>
+    <string name="video_note_close">إغلاق</string>
+    <string name="video_note_review_title">رسالة الفيديو الخاصة بك</string>
+    <string name="video_note_preparing">جارٍ التحضير…</string>
+    <string name="video_note_discard">حذف</string>
+    <string name="video_note_retake">إعادة التسجيل</string>
+    <string name="video_note_send">إرسال رسالة الفيديو</string>
+    <string name="video_note_too_short">قصيرة جدًا. انقر للتسجيل أو اضغط مطولًا على الزر.</string>
+    <string name="video_note_camera_denied">يلزم الوصول إلى الكاميرا لتسجيل رسالة فيديو.</string>
+</resources>

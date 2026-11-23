@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Dieses Telefon ist möglicherweise verändert</string>
+    <string name="device_integrity_dialog_body">OSHI hat Anzeichen erkannt, dass dieses Telefon gerootet oder verändert sein könnte (%1$s). Auf einem solchen Telefon kann andere Software lesen, was auf dem Bildschirm steht und was du tippst, bevor OSHI es verschlüsselt. OSHI hat nichts gelöscht oder blockiert. Diese Prüfung ist heuristisch: Sie kann sich irren, und gut verstecktes Root kann ihr entgehen.</string>
+    <string name="device_integrity_dialog_ok">Verstanden</string>
+    <string name="device_integrity_status_title">Geräteintegrität</string>
+    <string name="device_integrity_status_flagged">OSHI hat Anzeichen von Root oder Veränderung erkannt: %1$s</string>
+    <string name="device_integrity_finding_su">su-Binärdatei</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">Root-Verwaltungs-App</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">mit Testschlüsseln signiertes System</string>
+    <string name="device_integrity_finding_debuggable">debugfähiges System</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Gerootete oder veränderte Telefone: OSHI sucht nach üblichen Root-Anzeichen (su, Magisk, Xposed/LSPosed, Frida, mit Testschlüsseln signiertes oder debugfähiges System) und warnt dich, wenn es welche findet. Wird nichts gefunden, beweist das nicht, dass das Telefon sauber ist.</string>
+    <string name="clipboard_hygiene_explainer">Kopieren: Nachrichten, Übersetzungen, Wiederherstellungsschlüssel und Bot-Tokens, die du kopierst, werden als vertraulich markiert (Android 13+ blendet die Vorschau aus). Sind sie nach 60 Sekunden noch in der Zwischenablage, entfernt OSHI sie: sofort, wenn OSHI geöffnet ist, sonst beim nächsten Öffnen. Solange sie dort sind, können deine Tastatur und Apps mit Zugriff auf die Zwischenablage sie sehen, und Tastaturen oder Telefonfunktionen mit einem Zwischenablage-Verlauf können ihre eigene Kopie auch nach dem Entfernen behalten.</string>
+</resources>

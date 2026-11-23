@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">トーン</string>
+    <string name="wallpaper_tone_automatic">自動</string>
+    <string name="wallpaper_tone_light">ライト</string>
+    <string name="wallpaper_tone_dark">ダーク</string>
+    <string name="wallpaper_tone_automatic_detail">ライト／ダークモードに合わせます。</string>
+    <string name="wallpaper_tone_light_detail">ダークモードでも、紫のメッシュ入りの白。メッセージもライトの配色に切り替わり、読みやすさを保ちます。</string>
+    <string name="wallpaper_tone_dark_detail">ライトモードでも、紫のメッシュ入りの黒。</string>
+    <string name="wallpaper_tone_more">カラー、グラデーション、絵文字、自分の写真：チャットを開いて ⋯ → 壁紙。</string>
+</resources>

@@ -1,0 +1,641 @@
+{
+  "name": "OSHI O-bubble mascot",
+  "version": 2,
+  "generated": "2026-11-16",
+  "canvas": {
+    "frames_px": 128,
+    "webp_px": 256,
+    "gif_px": 240,
+    "background": "transparent"
+  },
+  "loop": "infinite",
+  "reaction_bar_order": [
+    "love",
+    "laugh",
+    "thumbs",
+    "cry",
+    "wow",
+    "angry"
+  ],
+  "animations": [
+    {
+      "name": "love",
+      "emoji": "❤️",
+      "codepoints": [
+        "U+2764",
+        "U+FE0F"
+      ],
+      "aliases": [
+        "❤",
+        "♥️",
+        "💜",
+        "🩷",
+        "🧡",
+        "💛",
+        "💚",
+        "💙",
+        "🤍",
+        "🖤"
+      ],
+      "label": "love",
+      "fps": 20,
+      "frames": 32,
+      "duration_ms": 1600,
+      "still_frame": 3,
+      "files": {
+        "webp": "webp/love.webp",
+        "gif": "gif/love.gif",
+        "frames": "frames/love/",
+        "frame_pattern": "frames/love/%02d.png",
+        "static": {
+          "32": "static/love_32.png",
+          "64": "static/love_64.png",
+          "128": "static/love_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 233728,
+        "gif": 195982
+      }
+    },
+    {
+      "name": "laugh",
+      "emoji": "😂",
+      "codepoints": [
+        "U+1F602"
+      ],
+      "aliases": [
+        "🤣"
+      ],
+      "label": "laughing to tears",
+      "fps": 20,
+      "frames": 24,
+      "duration_ms": 1200,
+      "still_frame": 2,
+      "files": {
+        "webp": "webp/laugh.webp",
+        "gif": "gif/laugh.gif",
+        "frames": "frames/laugh/",
+        "frame_pattern": "frames/laugh/%02d.png",
+        "static": {
+          "32": "static/laugh_32.png",
+          "64": "static/laugh_64.png",
+          "128": "static/laugh_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 187496,
+        "gif": 165903
+      }
+    },
+    {
+      "name": "thumbs",
+      "emoji": "👍",
+      "codepoints": [
+        "U+1F44D"
+      ],
+      "aliases": [],
+      "label": "thumbs up",
+      "fps": 20,
+      "frames": 28,
+      "duration_ms": 1400,
+      "still_frame": 15,
+      "files": {
+        "webp": "webp/thumbs.webp",
+        "gif": "gif/thumbs.gif",
+        "frames": "frames/thumbs/",
+        "frame_pattern": "frames/thumbs/%02d.png",
+        "static": {
+          "32": "static/thumbs_32.png",
+          "64": "static/thumbs_64.png",
+          "128": "static/thumbs_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 128584,
+        "gif": 172503
+      }
+    },
+    {
+      "name": "cry",
+      "emoji": "😭",
+      "codepoints": [
+        "U+1F62D"
+      ],
+      "aliases": [
+        "😢"
+      ],
+      "label": "loud crying",
+      "fps": 20,
+      "frames": 32,
+      "duration_ms": 1600,
+      "still_frame": 8,
+      "files": {
+        "webp": "webp/cry.webp",
+        "gif": "gif/cry.gif",
+        "frames": "frames/cry/",
+        "frame_pattern": "frames/cry/%02d.png",
+        "static": {
+          "32": "static/cry_32.png",
+          "64": "static/cry_64.png",
+          "128": "static/cry_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 283112,
+        "gif": 242545
+      }
+    },
+    {
+      "name": "wow",
+      "emoji": "😮",
+      "codepoints": [
+        "U+1F62E"
+      ],
+      "aliases": [
+        "😯",
+        "😲",
+        "😱"
+      ],
+      "label": "wow",
+      "fps": 20,
+      "frames": 32,
+      "duration_ms": 1600,
+      "still_frame": 14,
+      "files": {
+        "webp": "webp/wow.webp",
+        "gif": "gif/wow.gif",
+        "frames": "frames/wow/",
+        "frame_pattern": "frames/wow/%02d.png",
+        "static": {
+          "32": "static/wow_32.png",
+          "64": "static/wow_64.png",
+          "128": "static/wow_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 245632,
+        "gif": 220369
+      }
+    },
+    {
+      "name": "angry",
+      "emoji": "😡",
+      "codepoints": [
+        "U+1F621"
+      ],
+      "aliases": [
+        "😠",
+        "🤬"
+      ],
+      "label": "angry",
+      "fps": 20,
+      "frames": 28,
+      "duration_ms": 1400,
+      "still_frame": 8,
+      "files": {
+        "webp": "webp/angry.webp",
+        "gif": "gif/angry.gif",
+        "frames": "frames/angry/",
+        "frame_pattern": "frames/angry/%02d.png",
+        "static": {
+          "32": "static/angry_32.png",
+          "64": "static/angry_64.png",
+          "128": "static/angry_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 253666,
+        "gif": 204247
+      }
+    },
+    {
+      "name": "pray",
+      "emoji": "🙏",
+      "codepoints": [
+        "U+1F64F"
+      ],
+      "aliases": [],
+      "label": "thank you / please",
+      "fps": 20,
+      "frames": 36,
+      "duration_ms": 1800,
+      "still_frame": 16,
+      "files": {
+        "webp": "webp/pray.webp",
+        "gif": "gif/pray.gif",
+        "frames": "frames/pray/",
+        "frame_pattern": "frames/pray/%02d.png",
+        "static": {
+          "32": "static/pray_32.png",
+          "64": "static/pray_64.png",
+          "128": "static/pray_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 127376,
+        "gif": 173417
+      }
+    },
+    {
+      "name": "fire",
+      "emoji": "🔥",
+      "codepoints": [
+        "U+1F525"
+      ],
+      "aliases": [],
+      "label": "on fire",
+      "fps": 20,
+      "frames": 24,
+      "duration_ms": 1200,
+      "still_frame": 6,
+      "files": {
+        "webp": "webp/fire.webp",
+        "gif": "gif/fire.gif",
+        "frames": "frames/fire/",
+        "frame_pattern": "frames/fire/%02d.png",
+        "static": {
+          "32": "static/fire_32.png",
+          "64": "static/fire_64.png",
+          "128": "static/fire_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 250120,
+        "gif": 204334
+      }
+    },
+    {
+      "name": "party",
+      "emoji": "🎉",
+      "codepoints": [
+        "U+1F389"
+      ],
+      "aliases": [
+        "🥳",
+        "🎊"
+      ],
+      "label": "party",
+      "fps": 20,
+      "frames": 36,
+      "duration_ms": 1800,
+      "still_frame": 11,
+      "files": {
+        "webp": "webp/party.webp",
+        "gif": "gif/party.gif",
+        "frames": "frames/party/",
+        "frame_pattern": "frames/party/%02d.png",
+        "static": {
+          "32": "static/party_32.png",
+          "64": "static/party_64.png",
+          "128": "static/party_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 313522,
+        "gif": 269975
+      }
+    },
+    {
+      "name": "hearteyes",
+      "emoji": "😍",
+      "codepoints": [
+        "U+1F60D"
+      ],
+      "aliases": [
+        "🥰"
+      ],
+      "label": "heart eyes",
+      "fps": 20,
+      "frames": 28,
+      "duration_ms": 1400,
+      "still_frame": 3,
+      "files": {
+        "webp": "webp/hearteyes.webp",
+        "gif": "gif/hearteyes.gif",
+        "frames": "frames/hearteyes/",
+        "frame_pattern": "frames/hearteyes/%02d.png",
+        "static": {
+          "32": "static/hearteyes_32.png",
+          "64": "static/hearteyes_64.png",
+          "128": "static/hearteyes_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 207942,
+        "gif": 181612
+      }
+    },
+    {
+      "name": "kiss",
+      "emoji": "😘",
+      "codepoints": [
+        "U+1F618"
+      ],
+      "aliases": [
+        "😗",
+        "😚",
+        "😙"
+      ],
+      "label": "blowing a kiss",
+      "fps": 20,
+      "frames": 36,
+      "duration_ms": 1800,
+      "still_frame": 20,
+      "files": {
+        "webp": "webp/kiss.webp",
+        "gif": "gif/kiss.gif",
+        "frames": "frames/kiss/",
+        "frame_pattern": "frames/kiss/%02d.png",
+        "static": {
+          "32": "static/kiss_32.png",
+          "64": "static/kiss_64.png",
+          "128": "static/kiss_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 153336,
+        "gif": 196558
+      }
+    },
+    {
+      "name": "clap",
+      "emoji": "👏",
+      "codepoints": [
+        "U+1F44F"
+      ],
+      "aliases": [
+        "🙌"
+      ],
+      "label": "clapping",
+      "fps": 20,
+      "frames": 24,
+      "duration_ms": 1200,
+      "still_frame": 0,
+      "files": {
+        "webp": "webp/clap.webp",
+        "gif": "gif/clap.gif",
+        "frames": "frames/clap/",
+        "frame_pattern": "frames/clap/%02d.png",
+        "static": {
+          "32": "static/clap_32.png",
+          "64": "static/clap_64.png",
+          "128": "static/clap_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 162320,
+        "gif": 147039
+      }
+    },
+    {
+      "name": "thinking",
+      "emoji": "🤔",
+      "codepoints": [
+        "U+1F914"
+      ],
+      "aliases": [
+        "🧐"
+      ],
+      "label": "thinking",
+      "fps": 20,
+      "frames": 40,
+      "duration_ms": 2000,
+      "still_frame": 20,
+      "files": {
+        "webp": "webp/thinking.webp",
+        "gif": "gif/thinking.gif",
+        "frames": "frames/thinking/",
+        "frame_pattern": "frames/thinking/%02d.png",
+        "static": {
+          "32": "static/thinking_32.png",
+          "64": "static/thinking_64.png",
+          "128": "static/thinking_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 275668,
+        "gif": 260296
+      }
+    },
+    {
+      "name": "cool",
+      "emoji": "😎",
+      "codepoints": [
+        "U+1F60E"
+      ],
+      "aliases": [],
+      "label": "cool",
+      "fps": 20,
+      "frames": 40,
+      "duration_ms": 2000,
+      "still_frame": 22,
+      "files": {
+        "webp": "webp/cool.webp",
+        "gif": "gif/cool.gif",
+        "frames": "frames/cool/",
+        "frame_pattern": "frames/cool/%02d.png",
+        "static": {
+          "32": "static/cool_32.png",
+          "64": "static/cool_64.png",
+          "128": "static/cool_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 238682,
+        "gif": 245247
+      }
+    },
+    {
+      "name": "sleep",
+      "emoji": "😴",
+      "codepoints": [
+        "U+1F634"
+      ],
+      "aliases": [
+        "💤",
+        "😪"
+      ],
+      "label": "sleeping",
+      "fps": 20,
+      "frames": 40,
+      "duration_ms": 2000,
+      "still_frame": 14,
+      "files": {
+        "webp": "webp/sleep.webp",
+        "gif": "gif/sleep.gif",
+        "frames": "frames/sleep/",
+        "frame_pattern": "frames/sleep/%02d.png",
+        "static": {
+          "32": "static/sleep_32.png",
+          "64": "static/sleep_64.png",
+          "128": "static/sleep_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 292150,
+        "gif": 262334
+      }
+    },
+    {
+      "name": "ok",
+      "emoji": "✅",
+      "codepoints": [
+        "U+2705"
+      ],
+      "aliases": [
+        "✔️",
+        "☑️",
+        "👌"
+      ],
+      "label": "done / OK",
+      "fps": 20,
+      "frames": 32,
+      "duration_ms": 1600,
+      "still_frame": 16,
+      "files": {
+        "webp": "webp/ok.webp",
+        "gif": "gif/ok.gif",
+        "frames": "frames/ok/",
+        "frame_pattern": "frames/ok/%02d.png",
+        "static": {
+          "32": "static/ok_32.png",
+          "64": "static/ok_64.png",
+          "128": "static/ok_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 128430,
+        "gif": 162685
+      }
+    },
+    {
+      "name": "hundred",
+      "emoji": "💯",
+      "codepoints": [
+        "U+1F4AF"
+      ],
+      "aliases": [],
+      "label": "hundred",
+      "fps": 20,
+      "frames": 32,
+      "duration_ms": 1600,
+      "still_frame": 14,
+      "files": {
+        "webp": "webp/hundred.webp",
+        "gif": "gif/hundred.gif",
+        "frames": "frames/hundred/",
+        "frame_pattern": "frames/hundred/%02d.png",
+        "static": {
+          "32": "static/hundred_32.png",
+          "64": "static/hundred_64.png",
+          "128": "static/hundred_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 230170,
+        "gif": 221855
+      }
+    },
+    {
+      "name": "wave",
+      "emoji": "👋",
+      "codepoints": [
+        "U+1F44B"
+      ],
+      "aliases": [
+        "🙋"
+      ],
+      "label": "hi / wave",
+      "fps": 20,
+      "frames": 40,
+      "duration_ms": 2000,
+      "still_frame": 17,
+      "files": {
+        "webp": "webp/wave.webp",
+        "gif": "gif/wave.gif",
+        "frames": "frames/wave/",
+        "frame_pattern": "frames/wave/%02d.png",
+        "static": {
+          "32": "static/wave_32.png",
+          "64": "static/wave_64.png",
+          "128": "static/wave_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 222258,
+        "gif": 217568
+      }
+    },
+    {
+      "name": "peek",
+      "emoji": "🫣",
+      "codepoints": [
+        "U+1FAE3"
+      ],
+      "aliases": [
+        "🙈"
+      ],
+      "label": "peeking",
+      "fps": 20,
+      "frames": 40,
+      "duration_ms": 2000,
+      "still_frame": 20,
+      "files": {
+        "webp": "webp/peek.webp",
+        "gif": "gif/peek.gif",
+        "frames": "frames/peek/",
+        "frame_pattern": "frames/peek/%02d.png",
+        "static": {
+          "32": "static/peek_32.png",
+          "64": "static/peek_64.png",
+          "128": "static/peek_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 242330,
+        "gif": 241092
+      }
+    },
+    {
+      "name": "tearsmile",
+      "emoji": "🥲",
+      "codepoints": [
+        "U+1F972"
+      ],
+      "aliases": [],
+      "label": "smiling with a tear",
+      "fps": 20,
+      "frames": 40,
+      "duration_ms": 2000,
+      "still_frame": 25,
+      "files": {
+        "webp": "webp/tearsmile.webp",
+        "gif": "gif/tearsmile.gif",
+        "frames": "frames/tearsmile/",
+        "frame_pattern": "frames/tearsmile/%02d.png",
+        "static": {
+          "32": "static/tearsmile_32.png",
+          "64": "static/tearsmile_64.png",
+          "128": "static/tearsmile_128.png"
+        }
+      },
+      "bytes": {
+        "webp": 257366,
+        "gif": 257152
+      }
+    }
+  ],
+  "launch": {
+    "logo": "launch/logo_1024.png",
+    "logo_outlined": "launch/logo_outlined_1024.png",
+    "neutral": "launch/neutral_1024.png",
+    "wave_frames": "launch/wave_512/",
+    "frame_pattern": "launch/wave_512/%02d.png",
+    "px": 512,
+    "fps": 20,
+    "frames": 40,
+    "duration_ms": 2000,
+    "note": "All launch images share one canvas: the ring+tail sits at identical pixels in logo, logo_outlined, neutral and wave frame 00 (= neutral). Crossfade logo -> logo_outlined -> neutral, then play wave_512 once (it starts and ends on neutral)."
+  }
+}

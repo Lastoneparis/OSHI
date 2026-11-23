@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">Відеоповідомлення</string>
+    <string name="video_note_title">Відеоповідомлення</string>
+    <string name="video_note_a11y" formatted="true">Відеоповідомлення, %1$s</string>
+    <string name="video_note_play">Відтворити</string>
+    <string name="video_note_pause">Пауза</string>
+    <string name="video_note_record_button">Записати відеоповідомлення</string>
+    <string name="video_note_hint">Торкніться, щоб записати, або утримуйте · до 15 с</string>
+    <string name="video_note_record">Почати запис</string>
+    <string name="video_note_stop">Зупинити запис</string>
+    <string name="video_note_flip">Змінити камеру</string>
+    <string name="video_note_close">Закрити</string>
+    <string name="video_note_review_title">Ваше відеоповідомлення</string>
+    <string name="video_note_preparing">Підготовка…</string>
+    <string name="video_note_discard">Видалити</string>
+    <string name="video_note_retake">Перезняти</string>
+    <string name="video_note_send">Надіслати відеоповідомлення</string>
+    <string name="video_note_too_short">Занадто коротко. Торкніться, щоб записати, або утримуйте кнопку.</string>
+    <string name="video_note_camera_denied">Для запису відеоповідомлення потрібен доступ до камери.</string>
+</resources>

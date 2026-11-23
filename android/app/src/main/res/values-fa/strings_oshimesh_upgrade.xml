@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">این رادیو را به OSHI Mesh ارتقا دهید</string>
+    <string name="oshimesh_upgrade_body">رایگان و متن‌باز. منطقه، کانال‌ها، کلیدها و مخاطبان شما را نگه می‌دارد، روی شبکهٔ Meshtastic می‌ماند و پیام‌های بلند، رسید تحویل و نگه‌داشتن پیام تا ۷۲ ساعت برای کسی که آفلاین است را اضافه می‌کند.</string>
+    <string name="oshimesh_upgrade_share">فرستادن پیوند ابزار نصب به رایانه</string>
+    <string name="oshimesh_upgrade_why">آنچه OSHI Mesh اضافه می‌کند</string>
+    <string name="oshimesh_upgrade_footer">ابزار نصب در Chrome یا Edge روی رایانه و از طریق USB کار می‌کند. «نگه‌داشتن تنظیمات» را انتخاب کنید تا این رادیو در حدود یک دقیقه به‌روز شود.</string>
+</resources>

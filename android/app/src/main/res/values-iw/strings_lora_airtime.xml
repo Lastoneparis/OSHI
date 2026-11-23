@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">ממתין לזמן שידור ברדיו (מגבלת מחזור עבודה חוקית)</string>
+    <string name="lora_jamming_title">זוהתה הפרעת רדיו — ייתכן שיבוש מכוון</string>
+    <string name="lora_jamming_detail">ההודעות יישלחו דרך רשת Bluetooth או האינטרנט כשיהיו זמינים. הודעות לרדיו נשמרות ויישלחו ב-LoRa כשהערוץ יתפנה.</string>
+    <string name="lora_jamming_send_anyway">שלח ב-LoRa בכל זאת</string>
+    <string name="lora_jamming_override_active">שולח ב-LoRa בכל זאת עד %1$s, או עד שהערוץ יתפנה. ייתכן שההודעות לא יגיעו.</string>
+</resources>

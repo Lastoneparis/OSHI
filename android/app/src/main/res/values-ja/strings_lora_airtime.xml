@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">無線の送信時間を待っています（法定デューティサイクル制限）</string>
+    <string name="lora_jamming_title">無線干渉を検出 — 妨害の可能性</string>
+    <string name="lora_jamming_detail">メッセージは利用可能になり次第 Bluetooth メッシュまたはインターネットで送信されます。無線向けのメッセージは保持され、チャンネルが空いたら LoRa で送信されます。</string>
+    <string name="lora_jamming_send_anyway">それでも LoRa で送信</string>
+    <string name="lora_jamming_override_active">%1$s まで、またはチャンネルが空くまで LoRa で送信します。メッセージが届かない可能性があります。</string>
+</resources>

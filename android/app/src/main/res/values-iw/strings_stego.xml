@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">ממתין לחיבור מוסווה</string>
+    <string name="privacy_disguise_title">הסוואת פרטיות</string>
+    <string name="privacy_disguise_subtitle">הסוואת תעבורה · הסתרת הודעה בתמונה</string>
+    <string name="cover_switch_title">הסוואת תעבורת OSHI</string>
+    <string name="cover_switch_caption">ההודעות והקבצים המצורפים שלך בצ׳אטים אישיים עוברים בתוך בקשות מרופדות שנראות כמו ניתוח נתוני אתרים רגיל, כך שקשה יותר להבחין בגודלם ובתזמון שלהם. אם החיבור המוסווה נכשל, ההודעות ממתינות – הן אף פעם לא נשלחות ללא הסוואה.</string>
+    <string name="cover_not_hidden">עדיין גלוי: העובדה שאתה מתחבר ל-oshi-messenger.com (שם השרת וטביעת האצבע של TLS), וכן הודעות קבוצתיות, שיחות, התראות push להתעוררות ובדיקות דואר חדש, שאינם מוסווים. זו אינה אנונימיות, וזה לא עוקף חסימה של שרת OSHI – לשם כך, השתמש ב„הסוואה כתמונה”.</string>
+    <string name="disguise_photo_title">הסוואה כתמונה</string>
+    <string name="disguise_photo_explainer">הסתר הודעה מוצפנת מקצה לקצה עבור איש קשר אחד בתוך תמונה שנראית רגילה, ואז שלח את התמונה דרך כל אפליקציה, דוא״ל או שירות ענן – שימושי כאשר OSHI עצמה חסומה. בצ׳אט אישי: + → הסוואה כתמונה.</string>
+    <string name="disguise_reveal_button">חשיפת הודעה מוסתרת</string>
+    <string name="disguise_reveal_hint">אפשר גם לשתף ל-OSHI תמונה שהתקבלה מכל אפליקציה.</string>
+    <string name="disguise_sheet_for">רק %1$s יכול/ה לקרוא אותה.</string>
+    <string name="disguise_message_hint">הודעה מוסתרת</string>
+    <string name="disguise_add_file">הוספת קובץ קטן (עד 256 KB)</string>
+    <string name="disguise_remove_file">הסרת %1$s</string>
+    <string name="disguise_file_too_large">הקובץ גדול מדי (עד 256 KB)</string>
+    <string name="disguise_cover_generated">נוף שנוצר</string>
+    <string name="disguise_cover_photo">התמונה שלי</string>
+    <string name="disguise_capacity">משתמש ב-%1$s מתוך %2$s הזמינים בתמונה זו</string>
+    <string name="disguise_too_big">ארוך מדי עבור תמונה זו. קצר את ההודעה, הסר את הקובץ או בחר תמונה גדולה יותר.</string>
+    <string name="disguise_create_share">יצירת תמונה ושיתוף</string>
+    <string name="disguise_warning_recompress">שלח אותה כקובץ או כמסמך. אפליקציות שדוחסות תמונות מחדש (רוב הרשתות החברתיות, WhatsApp,‏ Signal או Telegram במצב תמונה, צילומי מסך) מוחקות את ההודעה המוסתרת.</string>
+    <string name="disguise_warning_forensic">זה מסתיר את ההודעה מכל מי שמסתכל על התמונה. ניתוח פורנזי עדיין יכול לזהות שהתמונה מכילה נתונים מוסתרים, אבל לא יכול לקרוא אותם או לדעת למי הם מיועדים.</string>
+    <string name="disguise_working">יוצר תמונה…</string>
+    <string name="disguise_failed">לא ניתן היה ליצור את התמונה.</string>
+    <string name="reveal_title">הודעה מוסתרת</string>
+    <string name="reveal_from">מאת %1$s</string>
+    <string name="reveal_hidden_on">הוסתרה ב-%1$s</string>
+    <string name="reveal_copy">העתקת טקסט</string>
+    <string name="reveal_open_file">פתיחת %1$s</string>
+    <string name="reveal_checking">מחפש הודעה מוסתרת…</string>
+    <string name="reveal_not_found">אין בתמונה זו הודעה מוסתרת עבורך. אם היא נשלחה כתמונה, ייתכן שהאפליקציה שהעבירה אותה דחסה אותה מחדש – בקש לקבל אותה כקובץ.</string>
+    <string name="reveal_damaged">התמונה הזו נוצרה עבורך על ידי %1$s, אבל היא שונתה בדרך ולא ניתן עוד לקרוא אותה. בקש שתישלח שוב כקובץ.</string>
+    <string name="reveal_unreadable">לא ניתן היה לקרוא את הקובץ הזה.</string>
+    <string name="disguise_photo_short">הסוואה</string>
+</resources>

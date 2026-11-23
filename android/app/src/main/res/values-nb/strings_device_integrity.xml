@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Denne telefonen kan være endret</string>
+    <string name="device_integrity_dialog_body">OSHI fant tegn på at denne telefonen kan være rootet eller endret (%1$s). På en slik telefon kan annen programvare lese det som vises på skjermen og det du skriver, før OSHI krypterer det. OSHI har ikke slettet eller blokkert noe. Sjekken er heuristisk: den kan ta feil, og godt skjult root kan slippe unna.</string>
+    <string name="device_integrity_dialog_ok">Jeg forstår</string>
+    <string name="device_integrity_status_title">Enhetsintegritet</string>
+    <string name="device_integrity_status_flagged">OSHI fant tegn på root eller endringer: %1$s</string>
+    <string name="device_integrity_finding_su">su-fil</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">app for root-styring</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">system signert med testnøkler</string>
+    <string name="device_integrity_finding_debuggable">system med feilsøking aktivert</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Rootede eller endrede telefoner: OSHI ser etter vanlige tegn på root (su, Magisk, Xposed/LSPosed, Frida, system signert med testnøkler eller med feilsøking) og varsler deg hvis den finner noen. At ingenting blir funnet, beviser ikke at telefonen er ren.</string>
+    <string name="clipboard_hygiene_explainer">Kopiering: meldinger, oversettelser, gjenopprettingsnøkler og bot-tokener du kopierer, merkes som sensitive (Android 13+ skjuler forhåndsvisningen). Ligger de fortsatt på utklippstavlen etter 60 sekunder, fjerner OSHI dem: med en gang hvis OSHI er åpen, ellers neste gang du åpner den. Så lenge de ligger der, kan tastaturet ditt og apper med tilgang til utklippstavlen se dem, og tastaturer eller telefonfunksjoner som lagrer en utklippshistorikk, kan beholde sin egen kopi også etter at de er fjernet.</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Зашифрованный файл, читается только ключом вашего аккаунта</string>
+    <string name="settings_import_messages">Импорт сообщений</string>
+    <string name="settings_import_messages_desc">Восстановить зашифрованный файл .oshiexport</string>
+    <string name="settings_importing">Импорт…</string>
+    <string name="export_media_skipped">Вложений пропущено из-за размера: %1$d.</string>
+    <string name="import_messages_success">Импортировано сообщений: %1$d (уже было: %2$d).</string>
+    <string name="import_error_wrong_account">Этот экспорт принадлежит другому аккаунту OSHI. Сначала восстановите ключ того аккаунта.</string>
+    <string name="import_error_damaged">Этот экспорт повреждён или был изменён.</string>
+    <string name="import_error_other_platform">Этот экспорт создан OSHI для %1$s и пока не может быть импортирован здесь.</string>
+    <string name="import_error_not_export">Этот файл не является экспортом OSHI.</string>
+    <string name="import_error_version">Этот экспорт создан более новой версией OSHI. Обновите приложение и повторите попытку.</string>
+    <string name="import_error_no_key">На этом устройстве нет ключа аккаунта. Сначала восстановите аккаунт.</string>
+    <string name="import_error_unreadable">Не удалось прочитать файл.</string>
+</resources>

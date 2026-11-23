@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Zrzuty ekranu są zablokowane w OSHI, aby chronić Twoje rozmowy</string>
+    <string name="rn_hint_setting_title">Informuj kontakty, że jestem w ograniczonej sieci</string>
+    <string name="rn_hint_setting_caption">Gdy ruch jest maskowany, Twoje wiadomości niosą mały, szyfrowany end-to-end znacznik, by kontakty wiedziały, że możesz być w sieci cenzurowanej lub monitorowanej. Widzą go tylko one.</string>
+    <string name="rn_hint_chip">Wysłano z ograniczonej sieci</string>
+    <string name="rn_hint_explain_title">Ograniczona sieć</string>
+    <string name="rn_hint_explain_body">Ta osoba korzysta z maskowania OSHI i prawdopodobnie jest w sieci cenzurowanej lub monitorowanej. Odpowiadaj normalnie: OSHI dalej maskuje jej ruch. Pisz krótko; zdjęcia i filmy mogą iść wolno.</string>
+</resources>

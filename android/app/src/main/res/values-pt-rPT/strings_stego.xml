@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">A aguardar ligação disfarçada</string>
+    <string name="privacy_disguise_title">Disfarce de privacidade</string>
+    <string name="privacy_disguise_subtitle">Disfarçar o tráfego · esconder uma mensagem numa fotografia</string>
+    <string name="cover_switch_title">Disfarçar o tráfego do OSHI</string>
+    <string name="cover_switch_caption">As suas mensagens e anexos 1:1 viajam dentro de pedidos preenchidos que parecem análises web comuns, pelo que o seu tamanho e momento são mais difíceis de distinguir. Se a ligação disfarçada falhar, as mensagens ficam à espera — nunca são enviadas sem disfarce.</string>
+    <string name="cover_not_hidden">Continua visível: que se liga a oshi-messenger.com (nome do servidor e impressão digital TLS), bem como mensagens de grupo, chamadas, despertares push e verificações de novo correio, que não são disfarçados. Isto não é anonimato e não contorna um bloqueio do servidor OSHI — para isso, use Disfarçar como fotografia.</string>
+    <string name="disguise_photo_title">Disfarçar como fotografia</string>
+    <string name="disguise_photo_explainer">Esconda uma mensagem encriptada ponto a ponto para um contacto numa fotografia de aspeto comum e envie a fotografia por qualquer app, e-mail ou armazenamento na nuvem — útil quando o próprio OSHI está bloqueado. Numa conversa 1:1: + → Disfarçar como fotografia.</string>
+    <string name="disguise_reveal_button">Revelar uma mensagem oculta</string>
+    <string name="disguise_reveal_hint">Também pode partilhar uma fotografia recebida com o OSHI a partir de qualquer app.</string>
+    <string name="disguise_sheet_for">Só %1$s a pode ler.</string>
+    <string name="disguise_message_hint">Mensagem oculta</string>
+    <string name="disguise_add_file">Adicionar um ficheiro pequeno (máx. 256 KB)</string>
+    <string name="disguise_remove_file">Remover %1$s</string>
+    <string name="disguise_file_too_large">Ficheiro demasiado grande (máx. 256 KB)</string>
+    <string name="disguise_cover_generated">Paisagem gerada</string>
+    <string name="disguise_cover_photo">A minha fotografia</string>
+    <string name="disguise_capacity">Usa %1$s de %2$s disponíveis nesta imagem</string>
+    <string name="disguise_too_big">Demasiado longo para esta imagem. Encurte a mensagem, remova o ficheiro ou escolha uma fotografia maior.</string>
+    <string name="disguise_create_share">Criar fotografia e partilhar</string>
+    <string name="disguise_warning_recompress">Envie-a como FICHEIRO ou documento. As apps que recomprimem fotografias (a maioria das redes sociais, WhatsApp, Signal ou Telegram em modo de fotografia, capturas de ecrã) apagam a mensagem oculta.</string>
+    <string name="disguise_warning_forensic">Isto esconde a mensagem de quem olha para a fotografia. Uma análise forense pode ainda assim detetar que a fotografia contém dados ocultos, mas não os consegue ler nem saber a quem se destinam.</string>
+    <string name="disguise_working">A criar a fotografia…</string>
+    <string name="disguise_failed">Não foi possível criar a fotografia.</string>
+    <string name="reveal_title">Mensagem oculta</string>
+    <string name="reveal_from">De %1$s</string>
+    <string name="reveal_hidden_on">Ocultada a %1$s</string>
+    <string name="reveal_copy">Copiar texto</string>
+    <string name="reveal_open_file">Abrir %1$s</string>
+    <string name="reveal_checking">A procurar uma mensagem oculta…</string>
+    <string name="reveal_not_found">Nenhuma mensagem oculta para si nesta imagem. Se foi enviada como fotografia, a app que a transportou pode tê-la recomprimido — peça que lha enviem como ficheiro.</string>
+    <string name="reveal_damaged">Esta imagem foi criada para si por %1$s, mas foi alterada pelo caminho e já não pode ser lida. Peça que a enviem novamente como ficheiro.</string>
+    <string name="reveal_unreadable">Não foi possível ler este ficheiro.</string>
+    <string name="disguise_photo_short">Disfarçar</string>
+</resources>

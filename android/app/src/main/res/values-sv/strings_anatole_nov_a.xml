@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Ny kontakt</string>
+    <string name="conversation_open_contact">Öppna kontakt</string>
+    <string name="conversation_muted">Aviseringar av</string>
+    <string name="fab_new_contact">Ny kontakt</string>
+    <string name="fab_pick_contact_voice">Röstsamtal — välj en kontakt</string>
+    <string name="fab_pick_contact_video">Videosamtal — välj en kontakt</string>
+    <string name="fab_pick_contact_empty">Inga kontakter än. Lägg till någon först.</string>
+</resources>

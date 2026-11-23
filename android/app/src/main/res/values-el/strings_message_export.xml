@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Κρυπτογραφημένο αρχείο, αναγνώσιμο μόνο με το κλειδί του λογαριασμού σας</string>
+    <string name="settings_import_messages">Εισαγωγή μηνυμάτων</string>
+    <string name="settings_import_messages_desc">Επαναφορά κρυπτογραφημένου αρχείου .oshiexport</string>
+    <string name="settings_importing">Εισαγωγή…</string>
+    <string name="export_media_skipped">%1$d συνημμένα ήταν πολύ μεγάλα και παραλείφθηκαν από την εξαγωγή.</string>
+    <string name="import_messages_success">Εισήχθησαν %1$d μηνύματα (%2$d υπήρχαν ήδη).</string>
+    <string name="import_error_wrong_account">Αυτή η εξαγωγή ανήκει σε άλλον λογαριασμό OSHI. Επαναφέρετε πρώτα το κλειδί εκείνου του λογαριασμού.</string>
+    <string name="import_error_damaged">Αυτή η εξαγωγή είναι κατεστραμμένη ή έχει τροποποιηθεί.</string>
+    <string name="import_error_other_platform">Αυτή η εξαγωγή δημιουργήθηκε από το OSHI για %1$s και δεν μπορεί ακόμη να εισαχθεί εδώ.</string>
+    <string name="import_error_not_export">Αυτό το αρχείο δεν είναι εξαγωγή OSHI.</string>
+    <string name="import_error_version">Αυτή η εξαγωγή δημιουργήθηκε από νεότερη έκδοση του OSHI. Ενημερώστε την εφαρμογή και δοκιμάστε ξανά.</string>
+    <string name="import_error_no_key">Δεν υπάρχει κλειδί λογαριασμού σε αυτήν τη συσκευή. Επαναφέρετε πρώτα τον λογαριασμό σας.</string>
+    <string name="import_error_unreadable">Δεν ήταν δυνατή η ανάγνωση του αρχείου.</string>
+</resources>

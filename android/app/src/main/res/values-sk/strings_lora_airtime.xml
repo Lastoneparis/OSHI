@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __LORA_AIRTIME_HINT_2026_11_18__ / __ANTI_JAMMING_L10N_2026_11_18__ -->
+<resources>
+    <string name="lora_waiting_airtime">Čaká sa na vysielací čas rádia (zákonný limit pracovného cyklu)</string>
+    <string name="lora_jamming_title">Zistené rádiové rušenie — možné úmyselné rušenie</string>
+    <string name="lora_jamming_detail">Správy sa odošlú cez Bluetooth mesh alebo internet, keď to bude možné. Správy pre rádio sa uchovajú a odídu cez LoRa, keď sa kanál uvoľní.</string>
+    <string name="lora_jamming_send_anyway">Aj tak odoslať cez LoRa</string>
+    <string name="lora_jamming_override_active">Odosiela sa cez LoRa aj tak do %1$s alebo kým sa kanál neuvoľní. Správy nemusia doraziť.</string>
+</resources>

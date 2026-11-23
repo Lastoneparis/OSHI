@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (nb) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI bruker Bluetooth for å finne enheter i nærheten og koble til dem, slik at du kan sende sikre meldinger direkte uten internett.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI trenger Bluetooth for å motta krypterte meldinger fra enheter i nærheten i mesh-nettverket ditt.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI kan legge planlagte samtaler inn i kalenderen din, så du ikke går glipp av noen.";
+"NSCalendarsUsageDescription" = "OSHI kan legge planlagte samtaler inn i kalenderen din, så du ikke går glipp av noen.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI kan legge planlagte samtaler inn i kalenderen din, så du ikke går glipp av noen.";
+"NSCameraUsageDescription" = "OSHI trenger tilgang til kameraet for å skanne QR-koder og ta bilder til krypterte meldinger.";
+"NSFaceIDUsageDescription" = "Bruk Face ID til å låse opp de krypterte meldingene dine trygt og beskytte personvernet ditt.";
+"NSLocalNetworkUsageDescription" = "OSHI bruker det lokale nettverket til å opprette direkte Wi-Fi-tilkoblinger med enheter i nærheten, slik at meldinger kommer raskere fram.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI bruker posisjonen din for å dele den direkte med kontaktene dine. Posisjonen er kryptert og deles bare når du selv velger det.";
+"NSLocationAlwaysUsageDescription" = "OSHI bruker posisjonen din til direktedeling med kontaktene dine, også når appen kjører i bakgrunnen. Posisjonen er kryptert og deles bare når du selv velger det.";
+"NSLocationWhenInUseUsageDescription" = "OSHI bruker posisjonen din for å dele den med kontaktene dine. Posisjonen er kryptert og deles bare når du selv velger det.";
+"NSMicrophoneUsageDescription" = "OSHI trenger tilgang til mikrofonen for å ta opp videoer med lyd til krypterte meldinger.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI kan lagre mottatte bilder i bildebiblioteket ditt.";
+"NSPhotoLibraryUsageDescription" = "OSHI trenger tilgang til bildebiblioteket ditt så du kan velge bilder å sende som krypterte meldinger.";
+"NSSpeechRecognitionUsageDescription" = "OSHI bruker talegjenkjenning på selve enheten, slik at du kan diktere meldinger til AI-assistenten. Stemmen din gjøres om til tekst kun på iPhonen din og forlater aldri enheten.";
+"NSUserNotificationsUsageDescription" = "OSHI varsler deg når du får nye krypterte meldinger, så du ikke går glipp av noe viktig.";

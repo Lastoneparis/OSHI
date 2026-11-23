@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Check-in OFF-RAMP strings (added 2026-08-24, feature-check fix).
+
+    Own file, per locale, deliberately: `values-*/strings.xml` is co-owned by
+    several passes in flight and appending 34 copies of the same keys to it is how
+    two sessions clobber each other. Nothing else references this file.
+
+    These are the words on the only controls a user has for ending their own
+    check-in: three notification buttons, an in-chat banner and the "Are you okay?"
+    dialog. Before this pass those controls did not exist and every overdue check-in
+    escalated to an emergency alert sent to a contact.
+-->
+<resources>
+    <!-- Notification action + banner button: extend the deadline by a quarter hour.
+         iOS: "checkin.extend_15" (NotificationManager.swift:174). -->
+    <string name="checkin_extend_15">+15 min</string>
+
+    <!-- Body of the in-app "Are you okay?" dialog.
+         iOS: "checkin.warning.message" (CheckInView.swift:900). -->
+    <string name="checkin_warning_message">Tu n’es pas encore arrivé à destination. Ton contact sera prévenu si tu ne réponds pas.</string>
+
+    <!-- Trip-duration picker in the check-in sheet. This IS the deadline the
+         emergency escalation is measured against; it used to be hardcoded to
+         30 minutes with the comment "For demo". -->
+    <string name="checkin_duration">Combien de temps ça va prendre ?</string>
+    <string name="checkin_duration_min">%1$d min</string>
+
+    <!-- Under the destination field: what a resolved / unresolved place means. -->
+    <string name="checkin_dest_hint">OSHI verra que tu es arrivé et clôturera l’accompagnement tout seul.</string>
+    <string name="checkin_dest_no_fix">Aucun lieu sélectionné — OSHI ne pourra pas détecter ton arrivée : il faudra appuyer toi-même sur « Je suis arrivé ».</string>
+</resources>

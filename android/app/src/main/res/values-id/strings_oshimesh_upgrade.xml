@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Tingkatkan radio ini ke OSHI Mesh</string>
+    <string name="oshimesh_upgrade_body">Gratis dan sumber terbuka. Mempertahankan wilayah, kanal, kunci, dan kontak Anda, tetap di jaringan Meshtastic, dan menambahkan pesan panjang, tanda terima pengiriman, serta pesan yang disimpan 72 jam saat seseorang sedang offline.</string>
+    <string name="oshimesh_upgrade_share">Kirim tautan flasher ke komputer</string>
+    <string name="oshimesh_upgrade_why">Yang ditambahkan OSHI Mesh</string>
+    <string name="oshimesh_upgrade_footer">Flasher berjalan di Chrome atau Edge pada komputer, lewat USB. Pilih “Pertahankan pengaturan saya” untuk memperbarui radio ini dalam sekitar satu menit.</string>
+</resources>

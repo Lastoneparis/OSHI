@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">วิทยุ MeshCore</string>
+    <string name="meshcore_none">ไม่มีวิทยุ MeshCore</string>
+    <string name="meshcore_scan">ค้นหาวิทยุ MeshCore</string>
+    <string name="meshcore_ready">เชื่อมต่อแล้ว — ข้อความ OSHI ใช้ #oshi-bridge</string>
+    <string name="meshcore_forget">ลืมวิทยุ MeshCore นี้</string>
+    <string name="meshcore_bridge">สะพาน Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">วิทยุ MeshCore จะส่งข้อความ OSHI ของคุณผ่านตัวทวนสัญญาณ MeshCore ต้องใช้เฟิร์มแวร์ MeshCore companion และจะขอ PIN ในครั้งแรก OSHI เพิ่มเพียงช่องเดียวคือ #oshi-bridge ในช่องว่าง และไม่เปลี่ยนช่องอื่นของคุณเลย</string>
+    <string name="meshcore_bridge_footer">เมื่อเชื่อมต่อวิทยุ Meshtastic และ MeshCore ทั้งคู่ โทรศัพท์นี้จะส่งต่อข้อความ OSHI ระหว่างสองเครือข่ายตราบที่ OSHI เปิดอยู่</string>
+    <string name="meshcore_no_free_channel">ช่องสัญญาณทั้ง 8 ช่องของวิทยุนี้ถูกใช้หมดแล้ว โปรดว่างไว้หนึ่งช่องในแอป MeshCore เพื่อให้ OSHI เพิ่ม #oshi-bridge ได้</string>
+</resources>

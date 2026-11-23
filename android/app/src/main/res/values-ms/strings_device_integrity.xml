@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Telefon ini mungkin telah diubah suai</string>
+    <string name="device_integrity_dialog_body">OSHI mengesan tanda bahawa telefon ini mungkin telah di-root atau diubah suai (%1$s). Pada telefon sedemikian, perisian lain boleh membaca apa yang dipaparkan pada skrin dan apa yang anda taip sebelum OSHI menyulitkannya. OSHI tidak memadam atau menyekat apa-apa. Semakan ini bersifat heuristik: ia boleh tersilap, dan root yang disembunyikan dengan baik boleh terlepas daripadanya.</string>
+    <string name="device_integrity_dialog_ok">Saya faham</string>
+    <string name="device_integrity_status_title">Integriti peranti</string>
+    <string name="device_integrity_status_flagged">OSHI mengesan tanda root atau ubah suai: %1$s</string>
+    <string name="device_integrity_finding_su">fail su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">apl pengurus root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">sistem ditandatangani dengan kunci ujian</string>
+    <string name="device_integrity_finding_debuggable">sistem boleh nyahpepijat</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Telefon yang di-root atau diubah suai: OSHI mencari tanda root yang biasa (su, Magisk, Xposed/LSPosed, Frida, sistem ditandatangani dengan kunci ujian atau boleh nyahpepijat) dan memberi amaran jika menemuinya. Tiada penemuan tidak membuktikan bahawa telefon itu bersih.</string>
+    <string name="clipboard_hygiene_explainer">Menyalin: mesej, terjemahan, kunci pemulihan dan token bot yang anda salin ditanda sebagai sensitif (Android 13+ menyembunyikan pratonton). Jika masih ada dalam papan keratan selepas 60 saat, OSHI membuangnya: serta-merta jika OSHI sedang dibuka, atau apabila anda membukanya kali seterusnya. Selagi ia berada dalam papan keratan, papan kekunci anda dan apl yang dibenarkan membaca papan keratan boleh melihatnya, dan papan kekunci atau ciri telefon yang menyimpan sejarah papan keratan mungkin menyimpan salinan sendiri walaupun selepas ia dibuang.</string>
+</resources>

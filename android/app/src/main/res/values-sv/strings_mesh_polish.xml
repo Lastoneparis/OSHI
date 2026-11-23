@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Söker…</string>
+    <string name="peers_status_peers_found">Enheter hittade</string>
+    <string name="peers_status_permission_required">Behörighet krävs</string>
+    <string name="peers_subtitle_connected">Anslutna: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Anslutna: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Anslutna: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth är avstängt — slå på det för att hitta enheter omkring dig</string>
+    <string name="peers_subtitle_permission_both">OSHI kan inte använda Bluetooth — du ser inga enheter i närheten och de ser inte dig</string>
+    <string name="peers_subtitle_permission_advertise">Enheter i närheten kan inte se dig — behörigheten Enheter i närheten saknas</string>
+    <string name="peers_subtitle_permission_scan">OSHI kan inte söka efter enheter i närheten — behörigheten Enheter i närheten saknas</string>
+    <string name="peers_subtitle_ble_unsupported">Den här telefonen kan inte sända över Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth är upptaget — en annan app använder radion</string>
+    <string name="peers_subtitle_ble_down">Bluetooth-sökningen har stannat — försöker igen</string>
+    <string name="peers_subtitle_searching_lan">Söker efter personer på samma Wi-Fi-nätverk…</string>
+    <string name="peers_subtitle_disabled">Mesh-nätverk av</string>
+    <string name="peers_subtitle_looking">Söker efter enheter omkring dig…</string>
+    <string name="peers_permission_card_title">Slå på upptäckt i närheten</string>
+    <string name="peers_permission_card_body">OSHI behöver behörigheten Enheter i närheten för att hitta telefoner omkring dig. Utan den går varje meddelande över internet.</string>
+    <string name="peers_permission_card_action">Tillåt</string>
+    <string name="peers_permission_card_settings">Öppna inställningar</string>
+    <string name="peers_permission_card_denied_body">Behörigheten nekades, så OSHI hittar ingen i din närhet. Slå på Enheter i närheten för OSHI i Android-inställningarna.</string>
+    <string name="peers_same_wifi_note">Båda telefonerna måste vara på samma Wi-Fi-nätverk. På mobildata går meddelanden över internet i stället.</string>
+    <string name="peers_control_visible">Synlig</string>
+    <string name="peers_control_scan">Sök</string>
+    <string name="peers_control_auto">Auto</string>
+    <string name="peers_section_devices">Enheter</string>
+    <string name="peers_action_connect">Anslut</string>
+    <string name="peers_action_reconnect">Återanslut</string>
+    <string name="peers_info_reach_title">Räckvidd</string>
+    <string name="peers_info_reach_desc">Så långt som ditt Wi-Fi-nätverk räcker. Meddelanden kan hoppa via andra OSHI-enheter på samma nätverk, upp till 50 hopp.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE och Bonjour presenterar två enheter för varandra och utbyter en adress. Själva meddelandena går över ditt lokala nätverk.</string>
+    <string name="peers_info_tip1">Sätt båda telefonerna på samma Wi-Fi-nätverk</string>
+    <string name="peers_info_tip2">Låt Bluetooth vara på så att enheterna hittar varandra</string>
+    <string name="peers_info_tip3">Fungerar utan internetanslutning — men inte på mobildata</string>
+</resources>

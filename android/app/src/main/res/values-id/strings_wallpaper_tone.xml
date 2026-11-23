@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">Nada</string>
+    <string name="wallpaper_tone_automatic">Otomatis</string>
+    <string name="wallpaper_tone_light">Terang</string>
+    <string name="wallpaper_tone_dark">Gelap</string>
+    <string name="wallpaper_tone_automatic_detail">Mengikuti mode terang dan gelap.</string>
+    <string name="wallpaper_tone_light_detail">Putih dengan jaring ungu, bahkan dalam mode gelap. Pesan beralih ke warna terangnya agar tetap mudah dibaca.</string>
+    <string name="wallpaper_tone_dark_detail">Hitam dengan jaring ungu, bahkan dalam mode terang.</string>
+    <string name="wallpaper_tone_more">Warna, gradasi, emoji, dan foto Anda sendiri: buka obrolan, lalu ⋯ → Wallpaper.</string>
+</resources>

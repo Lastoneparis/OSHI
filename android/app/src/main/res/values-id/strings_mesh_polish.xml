@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Mencari…</string>
+    <string name="peers_status_peers_found">Perangkat ditemukan</string>
+    <string name="peers_status_permission_required">Perlu izin</string>
+    <string name="peers_subtitle_connected">Terhubung: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Terhubung: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Terhubung: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth mati — nyalakan untuk menemukan perangkat di sekitar Anda</string>
+    <string name="peers_subtitle_permission_both">OSHI tidak bisa memakai Bluetooth — Anda tidak melihat perangkat di sekitar dan mereka tidak melihat Anda</string>
+    <string name="peers_subtitle_permission_advertise">Perangkat di sekitar tidak bisa melihat Anda — izin Perangkat di Sekitar belum ada</string>
+    <string name="peers_subtitle_permission_scan">OSHI tidak bisa mencari perangkat di sekitar — izin Perangkat di Sekitar belum ada</string>
+    <string name="peers_subtitle_ble_unsupported">Ponsel ini tidak bisa memancar lewat Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth sedang sibuk — aplikasi lain memakai radionya</string>
+    <string name="peers_subtitle_ble_down">Pemindaian Bluetooth berhenti — mencoba lagi</string>
+    <string name="peers_subtitle_searching_lan">Mencari orang di jaringan Wi-Fi yang sama…</string>
+    <string name="peers_subtitle_disabled">Jaringan mesh mati</string>
+    <string name="peers_subtitle_looking">Mencari perangkat di sekitar Anda…</string>
+    <string name="peers_permission_card_title">Aktifkan penemuan perangkat di sekitar</string>
+    <string name="peers_permission_card_body">OSHI perlu izin Perangkat di Sekitar untuk menemukan ponsel di sekeliling Anda. Tanpa itu, setiap pesan lewat internet.</string>
+    <string name="peers_permission_card_action">Izinkan</string>
+    <string name="peers_permission_card_settings">Buka setelan</string>
+    <string name="peers_permission_card_denied_body">Izin ditolak, jadi OSHI tidak menemukan siapa pun di dekat Anda. Aktifkan Perangkat di Sekitar untuk OSHI di setelan Android.</string>
+    <string name="peers_same_wifi_note">Kedua ponsel harus berada di jaringan Wi-Fi yang sama. Dengan data seluler, pesan justru lewat internet.</string>
+    <string name="peers_control_visible">Terlihat</string>
+    <string name="peers_control_scan">Pindai</string>
+    <string name="peers_control_auto">Otomatis</string>
+    <string name="peers_section_devices">Perangkat</string>
+    <string name="peers_action_connect">Hubungkan</string>
+    <string name="peers_action_reconnect">Hubungkan lagi</string>
+    <string name="peers_info_reach_title">Jangkauan</string>
+    <string name="peers_info_reach_desc">Sejauh jaringan Wi-Fi Anda menjangkau. Pesan bisa melompat lewat perangkat OSHI lain di jaringan yang sama, hingga 50 lompatan.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE dan Bonjour memperkenalkan dua perangkat dan bertukar alamat. Pesannya sendiri lewat jaringan lokal Anda.</string>
+    <string name="peers_info_tip1">Sambungkan kedua ponsel ke jaringan Wi-Fi yang sama</string>
+    <string name="peers_info_tip2">Biarkan Bluetooth menyala agar perangkat bisa saling menemukan</string>
+    <string name="peers_info_tip3">Bekerja tanpa akses internet — tetapi tidak dengan data seluler</string>
+</resources>

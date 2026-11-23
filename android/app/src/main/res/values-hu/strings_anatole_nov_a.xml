@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Új névjegy</string>
+    <string name="conversation_open_contact">Névjegy megnyitása</string>
+    <string name="conversation_muted">Értesítések kikapcsolva</string>
+    <string name="fab_new_contact">Új névjegy</string>
+    <string name="fab_pick_contact_voice">Hanghívás — válasszon névjegyet</string>
+    <string name="fab_pick_contact_video">Videohívás — válasszon névjegyet</string>
+    <string name="fab_pick_contact_empty">Még nincsenek névjegyek. Először adjon hozzá valakit.</string>
+</resources>

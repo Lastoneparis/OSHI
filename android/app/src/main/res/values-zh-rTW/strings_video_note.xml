@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __VIDEO_NOTE_2026_09_24__ Round video messages (docs/VIDEO_NOTE_SPEC.md). -->
+<resources>
+    <string name="video_note_preview">影片訊息</string>
+    <string name="video_note_title">影片訊息</string>
+    <string name="video_note_a11y" formatted="true">影片訊息，%1$s</string>
+    <string name="video_note_play">播放</string>
+    <string name="video_note_pause">暫停</string>
+    <string name="video_note_record_button">錄製影片訊息</string>
+    <string name="video_note_hint">輕觸錄製或長按 · 最長 15 秒</string>
+    <string name="video_note_record">開始錄製</string>
+    <string name="video_note_stop">停止錄製</string>
+    <string name="video_note_flip">切換鏡頭</string>
+    <string name="video_note_close">關閉</string>
+    <string name="video_note_review_title">你的影片訊息</string>
+    <string name="video_note_preparing">準備中…</string>
+    <string name="video_note_discard">刪除</string>
+    <string name="video_note_retake">重拍</string>
+    <string name="video_note_send">傳送影片訊息</string>
+    <string name="video_note_too_short">太短了。輕觸錄製，或長按按鈕。</string>
+    <string name="video_note_camera_denied">錄製影片訊息需要相機權限。</string>
+</resources>

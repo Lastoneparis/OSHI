@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">Runt videomeddelande, max 15 s</string>
+    <string name="settings_panic_wipe_title">Radera genom att trycka på logotypen</string>
+    <string name="settings_panic_wipe_subtitle">Tre snabba tryck på OSHI-logotypen raderar alla meddelanden, nycklar och filer på den här telefonen, utan bekräftelse. Av tills du slår på det.</string>
+    <string name="map_layer_title">Karttyp</string>
+    <string name="map_layer_standard">Standard</string>
+    <string name="map_layer_terrain">Terräng</string>
+    <string name="map_layer_satellite">Satellit</string>
+    <string name="map_layer_standard_desc">OSHI-karta, fungerar offline med nedladdade regioner</string>
+    <string name="map_layer_third_party_desc" formatted="true">Endast online. Läses in direkt från %1$s, som ser området du tittar på.</string>
+    <string name="map_layer_offline_only_note">”Endast offlinekartor” är på: det här lagret visar bara rutor du redan har sett.</string>
+</resources>

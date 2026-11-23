@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (ar) */
+
+"NSBluetoothAlwaysUsageDescription" = "يستخدم OSHI البلوتوث لاكتشاف الأجهزة القريبة والاتصال بها لتبادل الرسائل الآمنة مباشرةً دون إنترنت.";
+"NSBluetoothPeripheralUsageDescription" = "يحتاج OSHI إلى البلوتوث لاستقبال الرسائل المشفّرة من الأجهزة القريبة في شبكتك المتداخلة.";
+"NSCalendarsFullAccessUsageDescription" = "يمكن لـ OSHI إضافة المكالمات المجدولة إلى تقويمك حتى لا تفوتك أي مكالمة.";
+"NSCalendarsUsageDescription" = "يمكن لـ OSHI إضافة المكالمات المجدولة إلى تقويمك حتى لا تفوتك أي مكالمة.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "يمكن لـ OSHI إضافة المكالمات المجدولة إلى تقويمك حتى لا تفوتك أي مكالمة.";
+"NSCameraUsageDescription" = "يحتاج OSHI إلى الوصول للكاميرا لمسح رموز QR والتقاط الصور للرسائل المشفّرة.";
+"NSFaceIDUsageDescription" = "استخدم Face ID لفتح رسائلك المشفّرة بأمان وحماية خصوصيتك.";
+"NSLocalNetworkUsageDescription" = "يستخدم OSHI الشبكة المحلية لإنشاء اتصالات Wi-Fi مباشرة مع الأجهزة القريبة لتسريع إرسال الرسائل.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "يستخدم OSHI موقعك لمشاركته مباشرةً مع جهات اتصالك. موقعك مشفّر ولا تتم مشاركته إلا عندما تختار ذلك.";
+"NSLocationAlwaysUsageDescription" = "يستخدم OSHI موقعك للمشاركة المباشرة مع جهات اتصالك حتى عندما يعمل التطبيق في الخلفية. موقعك مشفّر ولا تتم مشاركته إلا عندما تختار ذلك.";
+"NSLocationWhenInUseUsageDescription" = "يستخدم OSHI موقعك لمشاركة مكانك مع جهات اتصالك. موقعك مشفّر ولا تتم مشاركته إلا عندما تختار ذلك.";
+"NSMicrophoneUsageDescription" = "يحتاج OSHI إلى الوصول للميكروفون لتسجيل مقاطع فيديو بالصوت للرسائل المشفّرة.";
+"NSPhotoLibraryAddUsageDescription" = "يمكن لـ OSHI حفظ الصور المستلمة في مكتبة صورك.";
+"NSPhotoLibraryUsageDescription" = "يحتاج OSHI إلى الوصول لمكتبة الصور لاختيار الصور وإرسالها كرسائل مشفّرة.";
+"NSSpeechRecognitionUsageDescription" = "يستخدم OSHI التعرّف على الكلام على الجهاز نفسه لتتمكن من إملاء الرسائل على مساعد الذكاء الاصطناعي. يتم تحويل صوتك إلى نص بالكامل على iPhone ولا يغادر جهازك أبداً.";
+"NSUserNotificationsUsageDescription" = "يرسل OSHI إشعارات عند وصول رسائل مشفّرة جديدة حتى لا تفوتك أي مراسلات مهمة.";

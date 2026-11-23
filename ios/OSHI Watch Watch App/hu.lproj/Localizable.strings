@@ -1,0 +1,136 @@
+/* OSHI Watch App - Hungarian */
+
+/* Status */
+"watch.status.connected" = "Csatlakozva";
+"watch.status.not_reachable" = "iPhone nem érhető el";
+
+/* Navigation */
+"watch.open_iphone" = "OSHI megnyitása iPhone-on";
+
+/* Common */
+"common.refresh" = "Frissítés";
+"common.cancel" = "Mégse";
+
+/* Messages */
+"watch.loading_messages" = "Üzenetek betöltése…";
+"watch.no_messages" = "Nincsenek üzenetek";
+"watch.sending" = "Küldés…";
+"watch.dictate" = "Diktálás";
+"watch.voice_message" = "Hangüzenet";
+"watch.reply" = "Válasz";
+"watch.media_attachment" = "Melléklet";
+
+/* Quick Replies */
+"watch.quick.yes" = "Igen";
+"watch.quick.no" = "Nem";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Később";
+"watch.quick.omw" = "Úton vagyok!";
+"watch.quick.thanks" = "Köszönöm";
+
+/* Errors */
+"watch.error.send_failed" = "Az üzenet küldése sikertelen";
+"watch.send.queued" = "iPhone-ra várakozik";
+"watch.error.not_reachable" = "Az iPhone nem érhető el";
+
+/* Calls */
+"watch.call.incoming_video" = "Bejövő videohívás";
+"watch.call.incoming_voice" = "Bejövő hanghívás";
+"watch.call.video" = "Videohívás";
+"watch.call.voice" = "Hanghívás";
+"watch.call.connecting" = "Csatlakozás…";
+"watch.call.ringing" = "Csengetés…";
+"watch.call.in_call" = "Hívásban";
+"watch.call.ended" = "Hívás vége";
+"watch.call.start" = "Hívás indítása";
+"watch.call.unknown" = "Ismeretlen";
+
+/* Call Actions */
+"call.action.accept" = "Fogadás";
+"call.action.decline" = "Elutasítás";
+
+/* Notifications */
+"watch.notification.new_message" = "Új üzenet";
+
+/* Call Summary */
+"call.outgoing" = "Kimenő hívás";
+"call.incoming" = "Bejövő hívás";
+"call.no.answer" = "Nincs válasz";
+"call.declined" = "Elutasítva";
+"call.missed" = "Nem fogadott hívás";
+"call.video.outgoing" = "Kimenő videohívás";
+"call.video.incoming" = "Bejövő videohívás";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Válasz";
+"send" = "Küldés";
+"type_message" = "Írjon üzenetet";
+"notification.action.mark_read" = "Olvasott";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Csevegések";
+"w2.empty.title" = "Még nincs csevegés";
+"w2.empty.body" = "Az iPhone-od OSHI-csevegései itt jelennek meg.";
+"w2.disabled.title" = "Az okosóra ki van kapcsolva";
+"w2.disabled.body" = "Kapcsold be az iPhone-on az OSHI-ban: Beállítások › Összekapcsolt eszközök › Okosóra.";
+"w2.locked.title" = "Az OSHI zárolva van";
+"w2.locked.body" = "Oldd fel az OSHI-t az iPhone-on, majd próbáld újra.";
+"w2.unavailable.title" = "Az OSHI nem áll készen";
+"w2.unavailable.body" = "Nyisd meg egyszer az OSHI-t az iPhone-on, majd próbáld újra.";
+"w2.nophone.title" = "Az iPhone nem érhető el";
+"w2.nophone.body" = "Tartsd a közelben az iPhone-t, rajta az OSHI-val.";
+"w2.error.title" = "Hiba történt";
+"w2.error.body" = "Az iPhone nem válaszolt. Próbáld újra.";
+"w2.notfound" = "Ez a csevegés már nincs az iPhone-on.";
+"w2.retry" = "Újra";
+"w2.reply" = "Válasz";
+"w2.you" = "Te";
+"w2.you_prefix" = "Te: %@";
+"w2.react" = "Reagálás";
+"w2.speak_or_type" = "Diktálj vagy írj";
+"w2.quick_replies" = "Gyors válaszok";
+"w2.sending" = "Küldés…";
+"w2.sent" = "Elküldve";
+"w2.send_failed" = "Nem sikerült elküldeni. Próbáld újra az iPhone-on.";
+"w2.read_only" = "Erre a csevegésre nem válaszolhatsz.";
+"w2.view_once" = "👁 Egyszeri megtekintés – nyisd meg az iPhone-on";
+"w2.view_once_short" = "👁 Egyszeri megtekintés";
+"w2.e2e" = "Végpontok közötti titkosítás az iPhone-on";
+"w2.replying_to" = "Válasz erre";
+"w2.loading" = "Betöltés…";
+"w2.unread_count" = "%d olvasatlan";
+"w2.all_read" = "Minden elolvasva";
+"w2.call" = "Hívás";
+"w2.media.photo" = "📷 Fotó";
+"w2.media.video" = "🎥 Videó";
+"w2.media.voice" = "🎤 Hang";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Fájl";
+"w2.media.location" = "📍 Helyzet";
+"w2.media.contact" = "👤 Névjegy";
+"w2.qr.on_my_way" = "Úton vagyok";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Később hívlak";
+"w2.qr.thanks" = "Köszi!";
+"w2.qr.yes" = "Igen";
+"w2.qr.no" = "Nem";
+"w2.qr.busy" = "Most nem tudok beszélni";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Imádom";
+"w2.r.laugh" = "Nevetés";
+"w2.r.cry" = "Szomorú";
+"w2.r.thumbs" = "Tetszik";
+"w2.r.wow" = "Hűha";
+"w2.r.fire" = "Tűz";
+"w2.mute" = "Némítás";
+"w2.end_call" = "Befejezés";
+"w2.speaker" = "Hangszóró";
+"w2.widget.off" = "Kapcsold be az Okosórát az OSHI-ban az iPhone-on";
+"w2.widget.off_short" = "Ki";
+"w2.widget.locked" = "Oldd fel az OSHI-t az iPhone-on";
+"w2.widget.locked_short" = "Zárolva";
+"w2.widget.open" = "OSHI megnyitása";
+"w2.widget.name" = "OSHI olvasatlan";
+"w2.widget.desc" = "Olvasatlanok száma és ki írt – az üzenetek soha.";

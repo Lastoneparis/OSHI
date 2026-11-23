@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Tätä puhelinta on ehkä muokattu</string>
+    <string name="device_integrity_dialog_body">OSHI havaitsi merkkejä siitä, että tämä puhelin voi olla rootattu tai muokattu (%1$s). Tällaisessa puhelimessa muut ohjelmat voivat lukea näytön sisällön ja kirjoittamasi tekstin ennen kuin OSHI salaa sen. OSHI ei poistanut eikä estänyt mitään. Tarkistus on heuristinen: se voi erehtyä, ja hyvin piilotettu root voi välttää sen.</string>
+    <string name="device_integrity_dialog_ok">Selvä</string>
+    <string name="device_integrity_status_title">Laitteen eheys</string>
+    <string name="device_integrity_status_flagged">OSHI havaitsi merkkejä rootista tai muokkauksesta: %1$s</string>
+    <string name="device_integrity_finding_su">su-tiedosto</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">root-hallintasovellus</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">testiavaimilla allekirjoitettu järjestelmä</string>
+    <string name="device_integrity_finding_debuggable">vianetsittävä järjestelmä</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Rootatut tai muokatut puhelimet: OSHI etsii yleisiä rootin merkkejä (su, Magisk, Xposed/LSPosed, Frida, testiavaimilla allekirjoitettu tai vianetsittävä järjestelmä) ja varoittaa, jos löytää niitä. Se, ettei mitään löydy, ei todista puhelimen olevan puhdas.</string>
+    <string name="clipboard_hygiene_explainer">Kopiointi: kopioimasi viestit, käännökset, palautusavaimet ja bottien tunnukset merkitään arkaluonteisiksi (Android 13+ piilottaa esikatselun). Jos ne ovat yhä leikepöydällä 60 sekunnin kuluttua, OSHI poistaa ne: heti, jos OSHI on auki, muuten kun avaat sen seuraavan kerran. Niin kauan kuin ne ovat leikepöydällä, näppäimistösi ja sovellukset, joilla on lupa lukea leikepöytää, voivat nähdä ne, ja leikepöytähistoriaa säilyttävät näppäimistöt tai puhelimen toiminnot voivat pitää oman kopionsa poistamisen jälkeenkin.</string>
+</resources>

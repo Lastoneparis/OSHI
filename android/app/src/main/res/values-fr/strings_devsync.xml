@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Appareils liés</string>
+    <string name="devsync_settings_subtitle">Synchronisez votre historique directement entre vos appareils</string>
+    <string name="devsync_status_on">La synchronisation directe est activée. Votre historique passe d\'un appareil à l\'autre ; rien n\'est stocké sur le serveur.</string>
+    <string name="devsync_status_off">La synchronisation directe est désactivée sur cet appareil.</string>
+    <string name="devsync_this_device">Cet appareil</string>
+    <string name="devsync_device_id">ID de l\'appareil %1$s</string>
+    <string name="devsync_debug_override">Synchronisation directe (forçage debug)</string>
+    <string name="devsync_debug_override_desc">Force la synchronisation directe sur cette installation, quoi qu\'indique le serveur</string>
+    <string name="devsync_pending_title">Approuver un nouvel appareil</string>
+    <string name="devsync_pending_body">%1$s (%2$s) veut recevoir votre historique. Vérifiez que l\'autre écran affiche le même code.</string>
+    <string name="devsync_waiting_body">En attente d\'approbation sur votre autre appareil. Vérifiez qu\'il affiche le même code.</string>
+    <string name="devsync_peer_approved">L\'autre appareil a déjà approuvé. Approuvez ici pour terminer.</string>
+    <string name="devsync_allow">Autoriser</string>
+    <string name="devsync_deny">Refuser</string>
+    <string name="devsync_linked_title">Appareils liés</string>
+    <string name="devsync_none_linked">Aucun appareil lié pour l\'instant. Ouvrez OSHI sur votre autre appareil, sur le même Wi-Fi ou en ligne au même moment.</string>
+    <string name="devsync_last_sync">Dernière synchro : %1$s</string>
+    <string name="devsync_never">jamais</string>
+    <string name="devsync_syncing_now">Synchronisation en cours (%1$s)</string>
+    <string name="devsync_remove">Retirer</string>
+    <string name="devsync_remove_confirm_title">Retirer %1$s ?</string>
+    <string name="devsync_remove_confirm_body">Il ne recevra plus votre historique. Il conserve ce qu\'il a déjà.</string>
+    <string name="devsync_sync_now">Synchroniser</string>
+    <string name="devsync_cancel">Annuler</string>
+    <string name="devsync_alert_unapproved">Un appareil utilisant votre compte a tenté de se synchroniser : %1$s</string>
+    <string name="devsync_alert_linked">Un nouvel appareil, %1$s, peut désormais recevoir votre historique</string>
+</resources>

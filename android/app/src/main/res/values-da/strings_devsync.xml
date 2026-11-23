@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Tilknyttede enheder</string>
+    <string name="devsync_settings_subtitle">Synkroniser din historik direkte mellem dine enheder</string>
+    <string name="devsync_status_on">Direkte synkronisering er slået til. Din historik flyttes fra enhed til enhed; intet gemmes på serveren.</string>
+    <string name="devsync_status_off">Direkte synkronisering er slået fra på denne enhed.</string>
+    <string name="devsync_this_device">Denne enhed</string>
+    <string name="devsync_device_id">Enheds-id %1$s</string>
+    <string name="devsync_debug_override">Direkte synkronisering (debug-tilsidesættelse)</string>
+    <string name="devsync_debug_override_desc">Gennemtving direkte enhedssynkronisering for denne installation, uanset hvad serveren siger</string>
+    <string name="devsync_pending_title">Godkend en ny enhed</string>
+    <string name="devsync_pending_body">%1$s (%2$s) vil modtage din historik. Tjek, at den anden skærm viser den samme kode.</string>
+    <string name="devsync_waiting_body">Venter på godkendelse på din anden enhed. Tjek, at den viser den samme kode.</string>
+    <string name="devsync_peer_approved">Den anden enhed har allerede godkendt. Godkend her for at afslutte.</string>
+    <string name="devsync_allow">Tillad</string>
+    <string name="devsync_deny">Afvis</string>
+    <string name="devsync_linked_title">Tilknyttede enheder</string>
+    <string name="devsync_none_linked">Ingen enheder tilknyttet endnu. Åbn OSHI på din anden enhed, på samme Wi-Fi eller online samtidig.</string>
+    <string name="devsync_last_sync">Sidste synkronisering: %1$s</string>
+    <string name="devsync_never">aldrig</string>
+    <string name="devsync_syncing_now">Synkroniserer nu (%1$s)</string>
+    <string name="devsync_remove">Fjern</string>
+    <string name="devsync_remove_confirm_title">Fjern %1$s?</string>
+    <string name="devsync_remove_confirm_body">Den modtager ikke længere din historik. Den beholder det, den allerede har.</string>
+    <string name="devsync_sync_now">Synkroniser nu</string>
+    <string name="devsync_cancel">Annuller</string>
+    <string name="devsync_alert_unapproved">En enhed med din konto forsøgte at synkronisere: %1$s</string>
+    <string name="devsync_alert_linked">En ny enhed, %1$s, kan nu modtage din historik</string>
+</resources>

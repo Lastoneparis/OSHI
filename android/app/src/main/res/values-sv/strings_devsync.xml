@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync ("Linked devices"). -->
+<resources>
+    <string name="devsync_title">Länkade enheter</string>
+    <string name="devsync_settings_subtitle">Synka din historik direkt mellan dina enheter</string>
+    <string name="devsync_status_on">Direktsynk är på. Din historik flyttas från enhet till enhet; inget sparas på servern.</string>
+    <string name="devsync_status_off">Direktsynk är av på den här enheten.</string>
+    <string name="devsync_this_device">Den här enheten</string>
+    <string name="devsync_device_id">Enhets-ID %1$s</string>
+    <string name="devsync_debug_override">Direktsynk (debug-åsidosättning)</string>
+    <string name="devsync_debug_override_desc">Tvinga direktsynk mellan enheter för den här installationen, oavsett vad servern säger</string>
+    <string name="devsync_pending_title">Godkänn en ny enhet</string>
+    <string name="devsync_pending_body">%1$s (%2$s) vill ta emot din historik. Kontrollera att den andra skärmen visar samma kod.</string>
+    <string name="devsync_waiting_body">Väntar på godkännande på din andra enhet. Kontrollera att den visar samma kod.</string>
+    <string name="devsync_peer_approved">Den andra enheten har redan godkänt. Godkänn här för att slutföra.</string>
+    <string name="devsync_allow">Tillåt</string>
+    <string name="devsync_deny">Neka</string>
+    <string name="devsync_linked_title">Länkade enheter</string>
+    <string name="devsync_none_linked">Ingen enhet länkad än. Öppna OSHI på din andra enhet, på samma wifi eller online samtidigt.</string>
+    <string name="devsync_last_sync">Senaste synk: %1$s</string>
+    <string name="devsync_never">aldrig</string>
+    <string name="devsync_syncing_now">Synkar nu (%1$s)</string>
+    <string name="devsync_remove">Ta bort</string>
+    <string name="devsync_remove_confirm_title">Ta bort %1$s?</string>
+    <string name="devsync_remove_confirm_body">Den slutar ta emot din historik. Den behåller det den redan har.</string>
+    <string name="devsync_sync_now">Synka nu</string>
+    <string name="devsync_cancel">Avbryt</string>
+    <string name="devsync_alert_unapproved">En enhet som använder ditt konto försökte synka: %1$s</string>
+    <string name="devsync_alert_linked">En ny enhet, %1$s, kan nu ta emot din historik</string>
+</resources>

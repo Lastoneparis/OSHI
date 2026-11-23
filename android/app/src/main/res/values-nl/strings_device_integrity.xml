@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Deze telefoon is mogelijk aangepast</string>
+    <string name="device_integrity_dialog_body">OSHI heeft aanwijzingen gevonden dat deze telefoon geroot of aangepast kan zijn (%1$s). Op zo\'n telefoon kan andere software lezen wat er op het scherm staat en wat je typt, voordat OSHI het versleutelt. OSHI heeft niets verwijderd of geblokkeerd. Deze controle is heuristisch: ze kan zich vergissen, en goed verborgen root kan eraan ontsnappen.</string>
+    <string name="device_integrity_dialog_ok">Begrepen</string>
+    <string name="device_integrity_status_title">Apparaatintegriteit</string>
+    <string name="device_integrity_status_flagged">OSHI heeft aanwijzingen voor root of aanpassing gevonden: %1$s</string>
+    <string name="device_integrity_finding_su">su-bestand</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">root-beheerapp</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">met testsleutels ondertekend systeem</string>
+    <string name="device_integrity_finding_debuggable">debugbaar systeem</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Geroote of aangepaste telefoons: OSHI zoekt naar gangbare aanwijzingen voor root (su, Magisk, Xposed/LSPosed, Frida, met testsleutels ondertekend of debugbaar systeem) en waarschuwt je als het er een vindt. Niets vinden bewijst niet dat de telefoon schoon is.</string>
+    <string name="clipboard_hygiene_explainer">Kopiëren: berichten, vertalingen, herstelsleutels en bottokens die je kopieert, worden als gevoelig gemarkeerd (Android 13+ verbergt het voorbeeld). Staan ze na 60 seconden nog op het klembord, dan haalt OSHI ze weg: meteen als OSHI open is, anders de volgende keer dat je het opent. Zolang ze op het klembord staan, kunnen je toetsenbord en apps die het klembord mogen lezen ze zien, en toetsenborden of telefoonfuncties met een klembordgeschiedenis kunnen hun eigen kopie bewaren, ook nadat ze zijn weggehaald.</string>
+</resources>

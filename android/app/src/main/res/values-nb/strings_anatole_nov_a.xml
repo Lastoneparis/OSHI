@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">Ny kontakt</string>
+    <string name="conversation_open_contact">Åpne kontakt</string>
+    <string name="conversation_muted">Varsler av</string>
+    <string name="fab_new_contact">Ny kontakt</string>
+    <string name="fab_pick_contact_voice">Taleanrop — velg en kontakt</string>
+    <string name="fab_pick_contact_video">Videoanrop — velg en kontakt</string>
+    <string name="fab_pick_contact_empty">Ingen kontakter ennå. Legg til noen først.</string>
+</resources>

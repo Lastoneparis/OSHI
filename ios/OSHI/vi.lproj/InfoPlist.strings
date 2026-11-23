@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (vi) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI dùng Bluetooth để tìm và kết nối với các thiết bị gần đó, giúp bạn nhắn tin an toàn trực tiếp mà không cần internet.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI cần Bluetooth để nhận tin nhắn mã hóa từ các thiết bị gần đó trong mạng mesh của bạn.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI có thể thêm các cuộc gọi đã lên lịch vào lịch của bạn để bạn không bỏ lỡ cuộc nào.";
+"NSCalendarsUsageDescription" = "OSHI có thể thêm các cuộc gọi đã lên lịch vào lịch của bạn để bạn không bỏ lỡ cuộc nào.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI có thể thêm các cuộc gọi đã lên lịch vào lịch của bạn để bạn không bỏ lỡ cuộc nào.";
+"NSCameraUsageDescription" = "OSHI cần quyền dùng camera để quét mã QR và chụp ảnh cho tin nhắn mã hóa.";
+"NSFaceIDUsageDescription" = "Dùng Face ID để mở khóa tin nhắn mã hóa một cách an toàn và bảo vệ quyền riêng tư của bạn.";
+"NSLocalNetworkUsageDescription" = "OSHI dùng mạng cục bộ để kết nối Wi-Fi trực tiếp với các thiết bị gần đó, giúp tin nhắn đến nhanh hơn.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI dùng vị trí của bạn để chia sẻ trực tiếp với người liên hệ. Vị trí được mã hóa và chỉ chia sẻ khi bạn cho phép.";
+"NSLocationAlwaysUsageDescription" = "OSHI dùng vị trí của bạn để chia sẻ trực tiếp với người liên hệ, kể cả khi ứng dụng chạy nền. Vị trí được mã hóa và chỉ chia sẻ khi bạn cho phép.";
+"NSLocationWhenInUseUsageDescription" = "OSHI dùng vị trí của bạn để chia sẻ với người liên hệ. Vị trí được mã hóa và chỉ chia sẻ khi bạn cho phép.";
+"NSMicrophoneUsageDescription" = "OSHI cần quyền dùng micro để quay video có âm thanh cho tin nhắn mã hóa.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI có thể lưu ảnh nhận được vào thư viện ảnh của bạn.";
+"NSPhotoLibraryUsageDescription" = "OSHI cần quyền truy cập thư viện ảnh để bạn chọn ảnh gửi dưới dạng tin nhắn mã hóa.";
+"NSSpeechRecognitionUsageDescription" = "OSHI dùng nhận dạng giọng nói ngay trên máy để bạn đọc tin nhắn cho trợ lý AI. Giọng nói của bạn được chuyển thành văn bản hoàn toàn trên iPhone và không bao giờ rời khỏi thiết bị.";
+"NSUserNotificationsUsageDescription" = "OSHI gửi thông báo khi bạn nhận tin nhắn mã hóa mới để bạn không bỏ lỡ điều quan trọng.";

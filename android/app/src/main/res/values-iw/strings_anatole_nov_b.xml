@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_video_note_desc">הודעת וידאו עגולה, עד 15 שנ׳</string>
+    <string name="settings_panic_wipe_title">מחיקה בהקשה על הלוגו</string>
+    <string name="settings_panic_wipe_subtitle">שלוש הקשות מהירות על הלוגו של OSHI מוחקות את כל ההודעות, המפתחות והקבצים בטלפון הזה, ללא אישור. כבוי עד להפעלה ידנית.</string>
+    <string name="map_layer_title">סוג מפה</string>
+    <string name="map_layer_standard">רגילה</string>
+    <string name="map_layer_terrain">פני השטח</string>
+    <string name="map_layer_satellite">לוויין</string>
+    <string name="map_layer_standard_desc">מפת OSHI, עובדת במצב לא מקוון עם אזורים שהורדו</string>
+    <string name="map_layer_third_party_desc" formatted="true">מקוון בלבד. נטען ישירות מ-%1$s, שרואה את האזור שמוצג לך.</string>
+    <string name="map_layer_offline_only_note">\"מפות לא מקוונות בלבד\" מופעל: השכבה הזו מציגה רק אריחים שכבר נצפו.</string>
+</resources>

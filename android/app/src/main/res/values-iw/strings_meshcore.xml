@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meshcore_title">רדיו MeshCore</string>
+    <string name="meshcore_none">אין רדיו MeshCore</string>
+    <string name="meshcore_scan">חיפוש מכשירי רדיו MeshCore</string>
+    <string name="meshcore_ready">מחובר — הודעות OSHI עוברות ב-#oshi-bridge</string>
+    <string name="meshcore_forget">שכח את רדיו ה-MeshCore הזה</string>
+    <string name="meshcore_bridge">גשר Meshtastic ↔ MeshCore</string>
+    <string name="meshcore_footer">רדיו MeshCore מעביר את הודעות ה-OSHI שלכם דרך ממסרי MeshCore. עליו להריץ קושחת MeshCore companion והוא מבקש את קוד ה-PIN שלו בפעם הראשונה. OSHI מוסיף ערוץ אחד בלבד, #oshi-bridge, במקום פנוי ולעולם לא משנה את הערוצים האחרים שלכם.</string>
+    <string name="meshcore_bridge_footer">כשרדיו Meshtastic ורדיו MeshCore מחוברים שניהם, הטלפון הזה מעביר הודעות OSHI בין שתי הרשתות כל עוד OSHI פתוח.</string>
+    <string name="meshcore_no_free_channel">כל 8 מקומות הערוצים ברדיו הזה תפוסים. פנו אחד באפליקציית MeshCore כדי ש-OSHI יוכל להוסיף את #oshi-bridge.</string>
+</resources>

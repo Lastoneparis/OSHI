@@ -1,0 +1,136 @@
+/* OSHI Watch App - Malay */
+
+/* Status */
+"watch.status.connected" = "Disambung";
+"watch.status.not_reachable" = "iPhone tidak boleh dihubungi";
+
+/* Navigation */
+"watch.open_iphone" = "Buka OSHI pada iPhone";
+
+/* Common */
+"common.refresh" = "Segar Semula";
+"common.cancel" = "Batal";
+
+/* Messages */
+"watch.loading_messages" = "Memuatkan mesej…";
+"watch.no_messages" = "Tiada mesej";
+"watch.sending" = "Menghantar…";
+"watch.dictate" = "Imlak";
+"watch.voice_message" = "Mesej Suara";
+"watch.reply" = "Balas";
+"watch.media_attachment" = "Lampiran media";
+
+/* Quick Replies */
+"watch.quick.yes" = "Ya";
+"watch.quick.no" = "Tidak";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Kemudian";
+"watch.quick.omw" = "Dalam perjalanan!";
+"watch.quick.thanks" = "Terima kasih";
+
+/* Errors */
+"watch.error.send_failed" = "Gagal menghantar mesej";
+"watch.send.queued" = "Menunggu iPhone";
+"watch.error.not_reachable" = "iPhone tidak boleh dihubungi";
+
+/* Calls */
+"watch.call.incoming_video" = "Panggilan Video Masuk";
+"watch.call.incoming_voice" = "Panggilan Suara Masuk";
+"watch.call.video" = "Panggilan Video";
+"watch.call.voice" = "Panggilan Suara";
+"watch.call.connecting" = "Menyambung…";
+"watch.call.ringing" = "Berdering…";
+"watch.call.in_call" = "Dalam Panggilan";
+"watch.call.ended" = "Panggilan Tamat";
+"watch.call.start" = "Mula Panggilan";
+"watch.call.unknown" = "Tidak Diketahui";
+
+/* Call Actions */
+"call.action.accept" = "Terima";
+"call.action.decline" = "Tolak";
+
+/* Notifications */
+"watch.notification.new_message" = "Mesej Baharu";
+
+/* Call Summary */
+"call.outgoing" = "Panggilan keluar";
+"call.incoming" = "Panggilan masuk";
+"call.no.answer" = "Tiada jawapan";
+"call.declined" = "Ditolak";
+"call.missed" = "Panggilan terlepas";
+"call.video.outgoing" = "Panggilan video keluar";
+"call.video.incoming" = "Panggilan video masuk";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Balas";
+"send" = "Hantar";
+"type_message" = "Taip mesej";
+"notification.action.mark_read" = "Tandakan Dibaca";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Sembang";
+"w2.empty.title" = "Belum ada sembang";
+"w2.empty.body" = "Sembang OSHI daripada iPhone anda dipaparkan di sini.";
+"w2.disabled.title" = "Jam tangan pintar dimatikan";
+"w2.disabled.body" = "Hidupkan dalam OSHI pada iPhone: Tetapan › Peranti dipaut › Jam tangan pintar.";
+"w2.locked.title" = "OSHI dikunci";
+"w2.locked.body" = "Buka kunci OSHI pada iPhone, kemudian cuba lagi.";
+"w2.unavailable.title" = "OSHI belum sedia";
+"w2.unavailable.body" = "Buka OSHI sekali pada iPhone, kemudian cuba lagi.";
+"w2.nophone.title" = "iPhone tidak dapat dicapai";
+"w2.nophone.body" = "Simpan iPhone dengan OSHI dipasang berdekatan.";
+"w2.error.title" = "Berlaku masalah";
+"w2.error.body" = "iPhone tidak menjawab. Cuba lagi.";
+"w2.notfound" = "Sembang ini tiada lagi pada iPhone anda.";
+"w2.retry" = "Cuba lagi";
+"w2.reply" = "Balas";
+"w2.you" = "Anda";
+"w2.you_prefix" = "Anda: %@";
+"w2.react" = "Beri reaksi";
+"w2.speak_or_type" = "Cakap atau taip";
+"w2.quick_replies" = "Balasan pantas";
+"w2.sending" = "Menghantar…";
+"w2.sent" = "Dihantar";
+"w2.send_failed" = "Tidak dihantar. Cuba lagi pada iPhone.";
+"w2.read_only" = "Anda tidak boleh membalas dalam sembang ini.";
+"w2.view_once" = "👁 Lihat sekali — buka pada iPhone";
+"w2.view_once_short" = "👁 Lihat sekali";
+"w2.e2e" = "Disulitkan hujung ke hujung oleh iPhone anda";
+"w2.replying_to" = "Membalas kepada";
+"w2.loading" = "Memuatkan…";
+"w2.unread_count" = "%d belum dibaca";
+"w2.all_read" = "Semua dibaca";
+"w2.call" = "Panggil";
+"w2.media.photo" = "📷 Foto";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Suara";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 Fail";
+"w2.media.location" = "📍 Lokasi";
+"w2.media.contact" = "👤 Kenalan";
+"w2.qr.on_my_way" = "Dalam perjalanan";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "Nanti saya telefon";
+"w2.qr.thanks" = "Terima kasih!";
+"w2.qr.yes" = "Ya";
+"w2.qr.no" = "Tidak";
+"w2.qr.busy" = "Tak boleh bercakap sekarang";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Suka";
+"w2.r.laugh" = "Ketawa";
+"w2.r.cry" = "Sedih";
+"w2.r.thumbs" = "Ibu jari";
+"w2.r.wow" = "Wah";
+"w2.r.fire" = "Api";
+"w2.mute" = "Senyap";
+"w2.end_call" = "Tamatkan";
+"w2.speaker" = "Pembesar suara";
+"w2.widget.off" = "Hidupkan Jam tangan pintar dalam OSHI pada iPhone";
+"w2.widget.off_short" = "Mati";
+"w2.widget.locked" = "Buka kunci OSHI pada iPhone";
+"w2.widget.locked_short" = "Dikunci";
+"w2.widget.open" = "Buka OSHI";
+"w2.widget.name" = "OSHI belum dibaca";
+"w2.widget.desc" = "Bilangan belum dibaca dan siapa yang menulis — bukan mesejnya.";

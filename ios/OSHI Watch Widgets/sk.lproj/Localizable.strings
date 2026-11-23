@@ -1,0 +1,11 @@
+/* OSHI Watch Widgets */
+/* __APPLE_WATCH_2027__ Complication / Smart Stack */
+"w2.unread_count" = "Neprečítané: %d";
+"w2.all_read" = "Všetko prečítané";
+"w2.widget.off" = "Zapnite Inteligentné hodinky v OSHI na iPhone";
+"w2.widget.off_short" = "Vyp.";
+"w2.widget.locked" = "Odomknite OSHI na iPhone";
+"w2.widget.locked_short" = "Zamknuté";
+"w2.widget.open" = "Otvoriť OSHI";
+"w2.widget.name" = "OSHI neprečítané";
+"w2.widget.desc" = "Počet neprečítaných a kto písal – nikdy nie správy.";

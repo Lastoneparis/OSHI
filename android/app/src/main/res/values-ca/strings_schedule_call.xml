@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __SCHEDULE_CALL_REDESIGN_2026_09_29__ (from the iOS catalog) -->
+<resources>
+    <string name="schedule_call_with">Trucada amb %s</string>
+    <string name="schedule_call_when">Quan</string>
+    <string name="schedule_call_duration">Durada</string>
+    <string name="schedule_call_title_optional">Títol (opcional)</string>
+    <string name="schedule_call_title_placeholder">p. ex., Sincronització setmanal</string>
+    <string name="schedule_call_other_date">Una altra data</string>
+    <string name="schedule_call_schedule">Programa</string>
+    <string name="schedule_call_timezone">La teva zona horària: %1$s (UTC%2$s)</string>
+    <string name="chat_schedule_call">Programa una trucada</string>
+</resources>

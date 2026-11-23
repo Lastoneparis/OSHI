@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Hľadanie…</string>
+    <string name="peers_status_peers_found">Zariadenia nájdené</string>
+    <string name="peers_status_permission_required">Vyžaduje sa povolenie</string>
+    <string name="peers_subtitle_connected">Pripojené: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Pripojené: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Pripojené: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth je vypnutý — zapnite ho, aby ste našli zariadenia okolo seba</string>
+    <string name="peers_subtitle_permission_both">OSHI nemôže použiť Bluetooth — nevidíte žiadne zariadenia v okolí a ony nevidia vás</string>
+    <string name="peers_subtitle_permission_advertise">Zariadenia v okolí vás nevidia — chýba povolenie Zariadenia v okolí</string>
+    <string name="peers_subtitle_permission_scan">OSHI nemôže hľadať zariadenia v okolí — chýba povolenie Zariadenia v okolí</string>
+    <string name="peers_subtitle_ble_unsupported">Tento telefón nedokáže vysielať cez Bluetooth LE</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth je obsadený — rádio používa iná aplikácia</string>
+    <string name="peers_subtitle_ble_down">Vyhľadávanie cez Bluetooth sa zastavilo — skúšam znova</string>
+    <string name="peers_subtitle_searching_lan">Hľadám ľudí v tej istej sieti Wi-Fi…</string>
+    <string name="peers_subtitle_disabled">Sieť mesh je vypnutá</string>
+    <string name="peers_subtitle_looking">Hľadám zariadenia okolo vás…</string>
+    <string name="peers_permission_card_title">Zapnúť vyhľadávanie v okolí</string>
+    <string name="peers_permission_card_body">OSHI potrebuje povolenie Zariadenia v okolí, aby našlo telefóny okolo vás. Bez neho ide každá správa cez internet.</string>
+    <string name="peers_permission_card_action">Povoliť</string>
+    <string name="peers_permission_card_settings">Otvoriť nastavenia</string>
+    <string name="peers_permission_card_denied_body">Povolenie bolo zamietnuté, takže OSHI nikoho v okolí nenájde. Zapnite Zariadenia v okolí pre OSHI v nastaveniach Androidu.</string>
+    <string name="peers_same_wifi_note">Oba telefóny musia byť v tej istej sieti Wi-Fi. Cez mobilné dáta idú správy internetom.</string>
+    <string name="peers_control_visible">Viditeľný</string>
+    <string name="peers_control_scan">Hľadať</string>
+    <string name="peers_control_auto">Automaticky</string>
+    <string name="peers_section_devices">Zariadenia</string>
+    <string name="peers_action_connect">Pripojiť</string>
+    <string name="peers_action_reconnect">Znova pripojiť</string>
+    <string name="peers_info_reach_title">Dosah</string>
+    <string name="peers_info_reach_desc">Tak ďaleko, kam dosiahne vaša sieť Wi-Fi. Správy môžu preskakovať cez ďalšie zariadenia OSHI v tej istej sieti, až 50 skokov.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE a Bonjour predstavia dve zariadenia a vymenia si adresu. Samotné správy idú vašou lokálnou sieťou.</string>
+    <string name="peers_info_tip1">Dajte oba telefóny do tej istej siete Wi-Fi</string>
+    <string name="peers_info_tip2">Nechajte Bluetooth zapnutý, nech sa zariadenia nájdu</string>
+    <string name="peers_info_tip3">Funguje bez prístupu na internet — ale nie cez mobilné dáta</string>
+</resources>

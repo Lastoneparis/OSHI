@@ -1,0 +1,136 @@
+/* OSHI Watch App - English */
+
+/* Status */
+"watch.status.connected" = "Connected";
+"watch.status.not_reachable" = "iPhone not reachable";
+
+/* Navigation */
+"watch.open_iphone" = "Open OSHI on iPhone";
+
+/* Common */
+"common.refresh" = "Refresh";
+"common.cancel" = "Cancel";
+
+/* Messages */
+"watch.loading_messages" = "Loading messages…";
+"watch.no_messages" = "No messages";
+"watch.sending" = "Sending…";
+"watch.dictate" = "Dictate";
+"watch.voice_message" = "Voice Message";
+"watch.reply" = "Reply";
+"watch.media_attachment" = "Media attachment";
+
+/* Quick Replies */
+"watch.quick.yes" = "Yes";
+"watch.quick.no" = "No";
+"watch.quick.ok" = "OK";
+"watch.quick.later" = "Later";
+"watch.quick.omw" = "On my way!";
+"watch.quick.thanks" = "Thanks";
+
+/* Errors */
+"watch.error.send_failed" = "Failed to send message";
+"watch.send.queued" = "Queued for iPhone";
+"watch.error.not_reachable" = "iPhone is not reachable";
+
+/* Calls */
+"watch.call.incoming_video" = "Incoming Video Call";
+"watch.call.incoming_voice" = "Incoming Voice Call";
+"watch.call.video" = "Video Call";
+"watch.call.voice" = "Voice Call";
+"watch.call.connecting" = "Connecting…";
+"watch.call.ringing" = "Ringing…";
+"watch.call.in_call" = "In Call";
+"watch.call.ended" = "Call Ended";
+"watch.call.start" = "Start Call";
+"watch.call.unknown" = "Unknown";
+
+/* Call Actions */
+"call.action.accept" = "Accept";
+"call.action.decline" = "Decline";
+
+/* Notifications */
+"watch.notification.new_message" = "New Message";
+
+/* Call Summary */
+"call.outgoing" = "Outgoing call";
+"call.incoming" = "Incoming call";
+"call.no.answer" = "No answer";
+"call.declined" = "Declined";
+"call.missed" = "Missed call";
+"call.video.outgoing" = "Outgoing video call";
+"call.video.incoming" = "Incoming video call";
+
+/* Actions de notification au poignet. Ces 4 cles n'existaient
+   dans AUCUN .strings, anglais compris: NSLocalizedString rendait
+   donc la CLE BRUTE a l'ecran, dans les 34 langues. */
+"notification.action.reply" = "Reply";
+"send" = "Send";
+"type_message" = "Type a message";
+"notification.action.mark_read" = "Mark Read";
+
+/* __APPLE_WATCH_2027__ Watch UI (bridge to the iPhone). Keys w2.* */
+"w2.chats" = "Chats";
+"w2.empty.title" = "No conversations yet";
+"w2.empty.body" = "Your OSHI chats from your iPhone show up here.";
+"w2.disabled.title" = "Smartwatch is off";
+"w2.disabled.body" = "Turn it on in OSHI on your iPhone: Settings › Linked devices › Smartwatch.";
+"w2.locked.title" = "OSHI is locked";
+"w2.locked.body" = "Unlock OSHI on your iPhone, then try again.";
+"w2.unavailable.title" = "OSHI isn't ready";
+"w2.unavailable.body" = "Open OSHI once on your iPhone, then try again.";
+"w2.nophone.title" = "iPhone not reachable";
+"w2.nophone.body" = "Keep your iPhone nearby with OSHI installed.";
+"w2.error.title" = "Something went wrong";
+"w2.error.body" = "Your iPhone didn't answer. Try again.";
+"w2.notfound" = "This conversation is no longer on your iPhone.";
+"w2.retry" = "Retry";
+"w2.reply" = "Reply";
+"w2.you" = "You";
+"w2.you_prefix" = "You: %@";
+"w2.react" = "React";
+"w2.speak_or_type" = "Speak or type";
+"w2.quick_replies" = "Quick replies";
+"w2.sending" = "Sending…";
+"w2.sent" = "Sent";
+"w2.send_failed" = "Not sent. Try again on your iPhone.";
+"w2.read_only" = "You can't reply to this conversation.";
+"w2.view_once" = "👁 View once — open it on your iPhone";
+"w2.view_once_short" = "👁 View once";
+"w2.e2e" = "End-to-end encrypted by your iPhone";
+"w2.replying_to" = "Replying to";
+"w2.loading" = "Loading…";
+"w2.unread_count" = "%d unread";
+"w2.all_read" = "All read";
+"w2.call" = "Call";
+"w2.media.photo" = "📷 Photo";
+"w2.media.video" = "🎥 Video";
+"w2.media.voice" = "🎤 Voice";
+"w2.media.gif" = "GIF";
+"w2.media.file" = "📄 File";
+"w2.media.location" = "📍 Location";
+"w2.media.contact" = "👤 Contact";
+"w2.qr.on_my_way" = "On my way";
+"w2.qr.ok" = "OK 👍";
+"w2.qr.call_later" = "I'll call you later";
+"w2.qr.thanks" = "Thanks!";
+"w2.qr.yes" = "Yes";
+"w2.qr.no" = "No";
+"w2.qr.busy" = "Can't talk now";
+"w2.r.oshi" = "OSHI";
+"w2.r.love" = "Love";
+"w2.r.laugh" = "Laugh";
+"w2.r.cry" = "Sad";
+"w2.r.thumbs" = "Thumbs up";
+"w2.r.wow" = "Wow";
+"w2.r.fire" = "Fire";
+"w2.mute" = "Mute";
+"w2.end_call" = "End call";
+"w2.speaker" = "Speaker";
+"w2.widget.off" = "Turn on Smartwatch in OSHI on your iPhone";
+"w2.widget.off_short" = "Off";
+"w2.widget.locked" = "Unlock OSHI on your iPhone";
+"w2.widget.locked_short" = "Locked";
+"w2.widget.open" = "Open OSHI";
+"w2.widget.name" = "OSHI unread";
+"w2.widget.desc" = "Unread count and who wrote — never the messages.";

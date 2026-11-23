@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- OSHI does not track users across apps or websites. -->
+    <key>NSPrivacyTracking</key>
+    <false/>
+
+    <!-- No third-party tracking domains are contacted from the app. -->
+    <key>NSPrivacyTrackingDomains</key>
+    <array/>
+
+    <!-- We do not collect data on Apple's "Data Type" list (no analytics SDKs,
+         no user-identifier collection, no advertising). -->
+    <key>NSPrivacyCollectedDataTypes</key>
+    <array/>
+
+    <!-- Apple's required-reason API declarations. We use only the most
+         minimal categories — every value below corresponds to a real,
+         non-tracking, on-device use case. -->
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+        <!-- UserDefaults: standard local settings persistence. -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <string>CA92.1</string>
+            </array>
+        </dict>
+        <!-- File timestamp: we read modification dates of cached
+             attachments to decide whether to re-fetch. -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <string>C617.1</string>
+            </array>
+        </dict>
+        <!-- Disk space: we check available storage before downloading
+             offline maps so we don't fill the user's device. -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryDiskSpace</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <string>E174.1</string>
+            </array>
+        </dict>
+        <!-- System boot time: used by call-quality diagnostics so two
+             samples on the same device can be ordered without leaking
+             a wall-clock timestamp. -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategorySystemBootTime</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <string>35F9.1</string>
+            </array>
+        </dict>
+    </array>
+</dict>
+</plist>

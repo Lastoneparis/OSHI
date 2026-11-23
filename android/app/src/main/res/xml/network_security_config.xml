@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      OSHI Messenger domain (HTTPS only) + certificate pinning.
+
+      SECURITY (CSPN 2026-09): SPKI SHA-256 pins computed from the LIVE cert
+      chain of oshi-messenger.com (Let's Encrypt). We pin the LEAF plus the
+      intermediate AND its issuing root as BACKUP pins so a routine leaf (and
+      even intermediate) rotation cannot brick installed clients:
+        • 0nAG9HjNRcCEVoDETqe5BKVXl97VZqmyVK+VikDj1r4=  leaf   CN=oshi-messenger.com
+        • s/tdAOmUzd8syaTuqfgGvFcn6DzA5Cmb+Vby1ST+U3Y=  inter  Let's Encrypt YE2
+        • sCkq5UWXjg+7mKu9lMhhYF5bGLsy7VI/UNW3tccdR7w=  root   ISRG Root YE
+      The <pin-set expiration> is a safety valve: Let's Encrypt rotates its
+      chain, and if pins are not refreshed before this date the app falls back
+      to system trust anchors rather than becoming permanently unreachable.
+      System trust anchors remain in force and cleartext stays disabled.
+    -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">oshi-messenger.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+        <pin-set expiration="2027-06-01">
+            <pin digest="SHA-256">0nAG9HjNRcCEVoDETqe5BKVXl97VZqmyVK+VikDj1r4=</pin>
+            <pin digest="SHA-256">s/tdAOmUzd8syaTuqfgGvFcn6DzA5Cmb+Vby1ST+U3Y=</pin>
+            <pin digest="SHA-256">sCkq5UWXjg+7mKu9lMhhYF5bGLsy7VI/UNW3tccdR7w=</pin>
+        </pin-set>
+    </domain-config>
+
+    <!-- Pinata gateway -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">gateway.pinata.cloud</domain>
+    </domain-config>
+
+    <!-- Default: require HTTPS -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oshimesh_upgrade_title">Bu telsizi OSHI Mesh\'e yükselt</string>
+    <string name="oshimesh_upgrade_body">Ücretsiz ve açık kaynak. Bölgeni, kanallarını, anahtarlarını ve kişilerini korur, Meshtastic ağında kalır; uzun mesajlar, teslim onayları ve biri çevrimdışıyken 72 saat saklanan mesajlar ekler.</string>
+    <string name="oshimesh_upgrade_share">Yükleyici bağlantısını bir bilgisayara gönder</string>
+    <string name="oshimesh_upgrade_why">OSHI Mesh neler katıyor</string>
+    <string name="oshimesh_upgrade_footer">Yükleyici bir bilgisayarda Chrome veya Edge\'de, USB üzerinden çalışır. Bu telsizi yaklaşık bir dakikada güncellemek için “Ayarlarımı koru”yu seç.</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nearby Peers status card, permission card and controls. See values/strings_mesh_polish.xml. -->
+<resources>
+    <string name="peers_status_searching">Etsitään…</string>
+    <string name="peers_status_peers_found">Laitteita löytyi</string>
+    <string name="peers_status_permission_required">Lupa tarvitaan</string>
+    <string name="peers_subtitle_connected">Yhdistetty: %1$d</string>
+    <string name="peers_subtitle_connected_cross">Yhdistetty: %1$d (iOS)</string>
+    <string name="peers_subtitle_connected_mixed">Yhdistetty: %1$d (%2$d Android, %3$d iOS)</string>
+    <string name="peers_subtitle_bluetooth_off">Bluetooth on pois päältä — kytke se päälle löytääksesi lähellä olevat laitteet</string>
+    <string name="peers_subtitle_permission_both">OSHI ei voi käyttää Bluetoothia — et näe lähellä olevia laitteita etkä näy niille</string>
+    <string name="peers_subtitle_permission_advertise">Lähellä olevat laitteet eivät näe sinua — Lähellä olevat laitteet -lupa puuttuu</string>
+    <string name="peers_subtitle_permission_scan">OSHI ei voi etsiä lähellä olevia laitteita — Lähellä olevat laitteet -lupa puuttuu</string>
+    <string name="peers_subtitle_ble_unsupported">Tämä puhelin ei osaa lähettää Bluetooth LE:llä</string>
+    <string name="peers_subtitle_ble_busy">Bluetooth on varattu — toinen sovellus käyttää radiota</string>
+    <string name="peers_subtitle_ble_down">Bluetooth-haku on pysähtynyt — yritetään uudelleen</string>
+    <string name="peers_subtitle_searching_lan">Etsitään ihmisiä samasta Wi-Fi-verkosta…</string>
+    <string name="peers_subtitle_disabled">Mesh-verkko pois päältä</string>
+    <string name="peers_subtitle_looking">Etsitään laitteita ympäriltäsi…</string>
+    <string name="peers_permission_card_title">Ota lähellä olevien laitteiden haku käyttöön</string>
+    <string name="peers_permission_card_body">OSHI tarvitsee Lähellä olevat laitteet -luvan löytääkseen puhelimet ympäriltäsi. Ilman sitä jokainen viesti kulkee internetin kautta.</string>
+    <string name="peers_permission_card_action">Salli</string>
+    <string name="peers_permission_card_settings">Avaa asetukset</string>
+    <string name="peers_permission_card_denied_body">Lupa evättiin, joten OSHI ei löydä ketään lähistöltäsi. Ota Lähellä olevat laitteet käyttöön OSHI:lle Androidin asetuksissa.</string>
+    <string name="peers_same_wifi_note">Molempien puhelimien on oltava samassa Wi-Fi-verkossa. Mobiilidatalla viestit kulkevat internetin kautta.</string>
+    <string name="peers_control_visible">Näkyvissä</string>
+    <string name="peers_control_scan">Etsi</string>
+    <string name="peers_control_auto">Automaattinen</string>
+    <string name="peers_section_devices">Laitteet</string>
+    <string name="peers_action_connect">Yhdistä</string>
+    <string name="peers_action_reconnect">Yhdistä uudelleen</string>
+    <string name="peers_info_reach_title">Kantama</string>
+    <string name="peers_info_reach_desc">Niin pitkälle kuin Wi-Fi-verkkosi kantaa. Viestit voivat hypätä muiden samassa verkossa olevien OSHI-laitteiden kautta, enintään 50 hyppyä.</string>
+    <string name="peers_info_connection_desc">Bluetooth LE ja Bonjour esittelevät kaksi laitetta toisilleen ja vaihtavat osoitteen. Itse viestit kulkevat paikallisverkossasi.</string>
+    <string name="peers_info_tip1">Laita molemmat puhelimet samaan Wi-Fi-verkkoon</string>
+    <string name="peers_info_tip2">Pidä Bluetooth päällä, jotta laitteet löytävät toisensa</string>
+    <string name="peers_info_tip3">Toimii ilman internetyhteyttä — mutta ei mobiilidatalla</string>
+</resources>

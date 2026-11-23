@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">This phone may be modified</string>
+    <string name="device_integrity_dialog_body">OSHI detected signs that this phone may be rooted or modified (%1$s). On such a phone, other software can read what is on screen and what you type before OSHI encrypts it. OSHI has not deleted or blocked anything. This check is a heuristic: it can be wrong, and well-hidden root can escape it.</string>
+    <string name="device_integrity_dialog_ok">I understand</string>
+    <string name="device_integrity_status_title">Device integrity</string>
+    <string name="device_integrity_status_flagged">OSHI detected signs of root or modification: %1$s</string>
+    <string name="device_integrity_finding_su">su binary</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">root manager app</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">test-signed system</string>
+    <string name="device_integrity_finding_debuggable">debuggable system</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Rooted or modified phones: OSHI looks for common signs of root (su, Magisk, Xposed/LSPosed, Frida, test-signed or debuggable system) and warns you if it finds any. Not finding them does not prove the phone is clean.</string>
+    <string name="clipboard_hygiene_explainer">Copying: messages, translations, recovery keys and bot tokens you copy are marked sensitive (Android 13+ hides the preview). If they are still on the clipboard after 60 seconds, OSHI removes them: right away if OSHI is open, otherwise the next time you open it. While they are on the clipboard, your keyboard and apps allowed to read it can see them, and keyboards or phone features that keep a clipboard history may keep their own copy even after it is removed.</string>
+</resources>

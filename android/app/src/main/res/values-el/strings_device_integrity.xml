@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __DEVICE_INTEGRITY_2026_10_01__ / __CLIPBOARD_HYGIENE_2026_10_01__ compromised-device warning + clipboard hygiene. -->
+<resources>
+    <string name="device_integrity_dialog_title">Αυτό το τηλέφωνο ίσως είναι τροποποιημένο</string>
+    <string name="device_integrity_dialog_body">Το OSHI εντόπισε ενδείξεις ότι αυτό το τηλέφωνο ίσως έχει root ή είναι τροποποιημένο (%1$s). Σε τέτοιο τηλέφωνο, άλλο λογισμικό μπορεί να διαβάσει ό,τι εμφανίζεται στην οθόνη και ό,τι πληκτρολογείτε πριν το κρυπτογραφήσει το OSHI. Το OSHI δεν διέγραψε ούτε μπλόκαρε τίποτα. Ο έλεγχος είναι ευρετικός: μπορεί να κάνει λάθος, και ένα καλά κρυμμένο root μπορεί να του ξεφύγει.</string>
+    <string name="device_integrity_dialog_ok">Κατάλαβα</string>
+    <string name="device_integrity_status_title">Ακεραιότητα συσκευής</string>
+    <string name="device_integrity_status_flagged">Το OSHI εντόπισε ενδείξεις root ή τροποποίησης: %1$s</string>
+    <string name="device_integrity_finding_su">αρχείο su</string>
+    <string name="device_integrity_finding_magisk">Magisk</string>
+    <string name="device_integrity_finding_root_app">εφαρμογή διαχείρισης root</string>
+    <string name="device_integrity_finding_hook">Xposed/LSPosed</string>
+    <string name="device_integrity_finding_test_keys">σύστημα υπογεγραμμένο με δοκιμαστικά κλειδιά</string>
+    <string name="device_integrity_finding_debuggable">σύστημα με αποσφαλμάτωση</string>
+    <string name="device_integrity_finding_frida">Frida</string>
+    <string name="device_integrity_explainer">Τηλέφωνα με root ή τροποποιημένα: το OSHI αναζητά συνήθεις ενδείξεις root (su, Magisk, Xposed/LSPosed, Frida, σύστημα με δοκιμαστικά κλειδιά ή με αποσφαλμάτωση) και σας προειδοποιεί αν βρει κάποια. Αν δεν βρει τίποτα, αυτό δεν αποδεικνύει ότι το τηλέφωνο είναι καθαρό.</string>
+    <string name="clipboard_hygiene_explainer">Αντιγραφή: τα μηνύματα, οι μεταφράσεις, τα κλειδιά ανάκτησης και τα tokens bot που αντιγράφετε επισημαίνονται ως ευαίσθητα (το Android 13+ κρύβει την προεπισκόπηση). Αν βρίσκονται ακόμη στο πρόχειρο μετά από 60 δευτερόλεπτα, το OSHI τα αφαιρεί: αμέσως αν το OSHI είναι ανοιχτό, αλλιώς την επόμενη φορά που θα το ανοίξετε. Όσο βρίσκονται στο πρόχειρο, το πληκτρολόγιό σας και οι εφαρμογές με πρόσβαση στο πρόχειρο μπορούν να τα δουν, και πληκτρολόγια ή λειτουργίες του τηλεφώνου που κρατούν ιστορικό προχείρου μπορεί να διατηρούν δικό τους αντίγραφο ακόμη και μετά την αφαίρεση.</string>
+</resources>

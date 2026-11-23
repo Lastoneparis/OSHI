@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover_waiting_bubble">Ожидание замаскированного соединения</string>
+    <string name="privacy_disguise_title">Маскировка</string>
+    <string name="privacy_disguise_subtitle">Маскировка трафика · сообщение, спрятанное в фото</string>
+    <string name="cover_switch_title">Маскировать трафик OSHI</string>
+    <string name="cover_switch_caption">Ваши личные сообщения и вложения передаются внутри дополненных запросов, похожих на обычную веб-аналитику, поэтому их размер и время отправки сложнее различить. Если замаскированное соединение не удаётся, сообщения ждут — они никогда не отправляются без маскировки.</string>
+    <string name="cover_not_hidden">По-прежнему видно: то, что вы подключаетесь к oshi-messenger.com (имя сервера и отпечаток TLS), а также групповые сообщения, звонки, push-пробуждения и проверки новой почты — они не маскируются. Это не анонимность, и это не обходит блокировку сервера OSHI — для этого используйте «Замаскировать под фото».</string>
+    <string name="disguise_photo_title">Замаскировать под фото</string>
+    <string name="disguise_photo_explainer">Спрячьте сообщение со сквозным шифрованием для одного контакта внутри обычной на вид фотографии, затем отправьте фото через любое приложение, почту или облачное хранилище — полезно, когда заблокирован сам OSHI. В личном чате: + → Замаскировать под фото.</string>
+    <string name="disguise_reveal_button">Открыть скрытое сообщение</string>
+    <string name="disguise_reveal_hint">Вы также можете поделиться полученным фото с OSHI из любого приложения.</string>
+    <string name="disguise_sheet_for">Прочитать его сможет только %1$s.</string>
+    <string name="disguise_message_hint">Скрытое сообщение</string>
+    <string name="disguise_add_file">Добавить небольшой файл (макс. 256 КБ)</string>
+    <string name="disguise_remove_file">Удалить %1$s</string>
+    <string name="disguise_file_too_large">Файл слишком большой (макс. 256 КБ)</string>
+    <string name="disguise_cover_generated">Сгенерированный пейзаж</string>
+    <string name="disguise_cover_photo">Моё фото</string>
+    <string name="disguise_capacity">Занято %1$s из %2$s, доступных в этом изображении</string>
+    <string name="disguise_too_big">Слишком длинно для этого изображения. Сократите сообщение, удалите файл или выберите фото побольше.</string>
+    <string name="disguise_create_share">Создать фото и поделиться</string>
+    <string name="disguise_warning_recompress">Отправляйте его как ФАЙЛ или документ. Приложения, которые пережимают фото (большинство соцсетей, WhatsApp, Signal или Telegram в режиме фото, скриншоты), стирают скрытое сообщение.</string>
+    <string name="disguise_warning_forensic">Это скрывает сообщение от любого, кто смотрит на фото. Криминалистический анализ всё же может обнаружить, что фото содержит скрытые данные, но не может их прочитать или узнать, кому они предназначены.</string>
+    <string name="disguise_working">Создание фото…</string>
+    <string name="disguise_failed">Не удалось создать фото.</string>
+    <string name="reveal_title">Скрытое сообщение</string>
+    <string name="reveal_from">От %1$s</string>
+    <string name="reveal_hidden_on">Спрятано %1$s</string>
+    <string name="reveal_copy">Копировать текст</string>
+    <string name="reveal_open_file">Открыть %1$s</string>
+    <string name="reveal_checking">Поиск скрытого сообщения…</string>
+    <string name="reveal_not_found">В этом изображении нет скрытого сообщения для вас. Если его отправили как фото, приложение, через которое оно пришло, могло его пережать — попросите прислать его файлом.</string>
+    <string name="reveal_damaged">Это изображение создал(а) для вас %1$s, но по пути оно было изменено и больше не читается. Попросите отправить его ещё раз файлом.</string>
+    <string name="reveal_unreadable">Не удалось прочитать этот файл.</string>
+    <string name="disguise_photo_short">Замаскировать</string>
+</resources>

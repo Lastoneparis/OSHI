@@ -1,0 +1,18 @@
+/* OSHI - iOS permission purpose strings (de) */
+
+"NSBluetoothAlwaysUsageDescription" = "OSHI verwendet Bluetooth, um Geräte in der Nähe zu finden und sichere Nachrichten ohne Internet direkt zwischen den Geräten auszutauschen.";
+"NSBluetoothPeripheralUsageDescription" = "OSHI benötigt Bluetooth, um verschlüsselte Nachrichten von Geräten in der Nähe in Ihrem Mesh-Netzwerk zu empfangen.";
+"NSCalendarsFullAccessUsageDescription" = "OSHI kann geplante Anrufe zu Ihrem Kalender hinzufügen, damit Sie keinen Anruf verpassen.";
+"NSCalendarsUsageDescription" = "OSHI kann geplante Anrufe zu Ihrem Kalender hinzufügen, damit Sie keinen Anruf verpassen.";
+"NSCalendarsWriteOnlyAccessUsageDescription" = "OSHI kann geplante Anrufe zu Ihrem Kalender hinzufügen, damit Sie keinen Anruf verpassen.";
+"NSCameraUsageDescription" = "OSHI benötigt Zugriff auf die Kamera, um QR-Codes zu scannen und Fotos für verschlüsselte Nachrichten aufzunehmen.";
+"NSFaceIDUsageDescription" = "Verwenden Sie Face ID, um Ihre verschlüsselten Nachrichten sicher zu entsperren und Ihre Privatsphäre zu schützen.";
+"NSLocalNetworkUsageDescription" = "OSHI verwendet das lokale Netzwerk, um WLAN-Direktverbindungen zu Geräten in der Nähe herzustellen und Nachrichten schneller zu übertragen.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "OSHI verwendet Ihren Standort, um Ihre Position live mit Kontakten zu teilen. Ihr Standort ist verschlüsselt und wird nur geteilt, wenn Sie es möchten.";
+"NSLocationAlwaysUsageDescription" = "OSHI verwendet Ihren Standort für die Live-Standortfreigabe mit Kontakten, auch wenn die App im Hintergrund läuft. Ihr Standort ist verschlüsselt und wird nur geteilt, wenn Sie es möchten.";
+"NSLocationWhenInUseUsageDescription" = "OSHI verwendet Ihren Standort, um Ihre Position mit Kontakten zu teilen. Ihr Standort ist verschlüsselt und wird nur geteilt, wenn Sie es möchten.";
+"NSMicrophoneUsageDescription" = "OSHI benötigt Zugriff auf das Mikrofon, um Videos mit Ton für verschlüsselte Nachrichten aufzunehmen.";
+"NSPhotoLibraryAddUsageDescription" = "OSHI kann empfangene Bilder in Ihrer Fotomediathek sichern.";
+"NSPhotoLibraryUsageDescription" = "OSHI benötigt Zugriff auf Ihre Fotomediathek, um Bilder auszuwählen, die als verschlüsselte Nachricht gesendet werden.";
+"NSSpeechRecognitionUsageDescription" = "OSHI nutzt Spracherkennung direkt auf dem Gerät, damit Sie dem KI-Assistenten Nachrichten diktieren können. Ihre Stimme wird vollständig auf Ihrem iPhone in Text umgewandelt und verlässt Ihr Gerät nie.";
+"NSUserNotificationsUsageDescription" = "OSHI benachrichtigt Sie über neue verschlüsselte Nachrichten, damit Sie nichts Wichtiges verpassen.";

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __KEYBOARD_PRIVACY_2026_10_01__ incognito keyboard + third-party keyboard warning -->
+<resources>
+    <string name="keyboard_privacy_section_title">Klawiatura</string>
+    <string name="keyboard_incognito_title">Klawiatura incognito</string>
+    <string name="keyboard_incognito_subtitle">Poproś klawiaturę, by nie uczyła się tego, co piszesz</string>
+    <string name="keyboard_status_title">Bieżąca klawiatura</string>
+    <string name="keyboard_status_trusted">%1$s · Klawiatura wbudowana</string>
+    <string name="keyboard_status_third_party">%1$s · Klawiatura innej firmy</string>
+    <string name="keyboard_status_unknown">Nieznana klawiatura</string>
+    <string name="keyboard_privacy_explainer">OSHI szyfruje na tym telefonie, ale to, co piszesz, najpierw przechodzi przez klawiaturę. Tryb incognito prosi klawiaturę, by nie uczyła się ani nie zapisywała Twoich słów — Android nie może zmusić klawiatury do posłuszeństwa, może tylko poprosić. Klawiatura innej firmy nadal może odczytać każde naciśnięcie klawisza, dlatego lepiej używać wbudowanej klawiatury telefonu. Jeśli sam telefon jest zainfekowany (oprogramowanie szpiegujące), żadna aplikacja nie ochroni tego, co piszesz.</string>
+    <string name="keyboard_banner_title">Twoja klawiatura może odczytać to, co piszesz, zanim OSHI to zaszyfruje</string>
+    <string name="keyboard_banner_body">%1$s to klawiatura innej firmy. Do prywatnych rozmów przełącz się na wbudowaną klawiaturę telefonu.</string>
+    <string name="keyboard_banner_switch">Zmień klawiaturę</string>
+    <string name="keyboard_banner_dismiss">Zamknij</string>
+</resources>

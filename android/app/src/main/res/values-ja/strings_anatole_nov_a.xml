@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_saved_contact_preview">新しい連絡先</string>
+    <string name="conversation_open_contact">連絡先を開く</string>
+    <string name="conversation_muted">通知オフ</string>
+    <string name="fab_new_contact">新しい連絡先</string>
+    <string name="fab_pick_contact_voice">音声通話 — 連絡先を選択</string>
+    <string name="fab_pick_contact_video">ビデオ通話 — 連絡先を選択</string>
+    <string name="fab_pick_contact_empty">まだ連絡先がありません。まず誰かを追加してください。</string>
+</resources>

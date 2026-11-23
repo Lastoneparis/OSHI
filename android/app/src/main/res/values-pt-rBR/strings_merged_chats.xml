@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes » (Settings › Appearance). -->
+<resources>
+    <string name="chats_merged_setting_title">Combinar mensagens e grupos</string>
+    <string name="chats_merged_setting_desc">Uma só lista para todas as suas conversas, com filtros de pessoas e grupos.</string>
+    <string name="chats_merged_filter_all">Todas</string>
+    <string name="chats_merged_filter_unread">Não lidas</string>
+    <string name="chats_merged_filter_groups">Grupos</string>
+    <string name="chats_merged_filter_people">Pessoas</string>
+    <string name="chats_merged_new_title">Novo</string>
+    <string name="chats_merged_new_chat">Nova conversa</string>
+    <string name="chats_merged_new_chat_desc">Adicione alguém por QR code, link ou chave</string>
+    <string name="chats_merged_new_group">Novo grupo</string>
+    <string name="chats_merged_new_group_desc">Crie um grupo com seus contatos</string>
+    <string name="chats_merged_discover">Descobrir canais públicos</string>
+    <string name="chats_merged_discover_desc">Entre em grupos públicos perto de você</string>
+    <string name="chats_merged_scan_invite">Escanear um convite</string>
+    <string name="chats_merged_scan_invite_desc">Entre em um grupo ou adicione um contato por QR code</string>
+    <string name="chats_merged_scan_not_invite">Este QR code não é um convite do OSHI</string>
+    <string name="chats_merged_calls_header">Ligar para alguém</string>
+    <string name="chats_merged_teaser_title">Entre em um canal público</string>
+    <string name="chats_merged_teaser_body">Grupos públicos por perto funcionam até sem internet. Veja quem está ao seu redor.</string>
+    <string name="chats_merged_teaser_cta">Descobrir</string>
+    <string name="chats_merged_nearby_title">Grupo por perto</string>
+    <string name="chats_merged_empty_unread">Você está em dia</string>
+    <string name="chats_merged_empty_people">Nenhuma conversa ainda</string>
+    <string name="chats_merged_group_a11y">Grupo</string>
+</resources>

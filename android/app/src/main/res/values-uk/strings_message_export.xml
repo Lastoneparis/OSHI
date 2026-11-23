@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_export_encrypted_desc">Зашифрований файл, читається лише ключем вашого облікового запису</string>
+    <string name="settings_import_messages">Імпорт повідомлень</string>
+    <string name="settings_import_messages_desc">Відновити зашифрований файл .oshiexport</string>
+    <string name="settings_importing">Імпорт…</string>
+    <string name="export_media_skipped">Вкладень пропущено через розмір: %1$d.</string>
+    <string name="import_messages_success">Імпортовано повідомлень: %1$d (вже було: %2$d).</string>
+    <string name="import_error_wrong_account">Цей експорт належить іншому обліковому запису OSHI. Спочатку відновіть ключ того облікового запису.</string>
+    <string name="import_error_damaged">Цей експорт пошкоджено або змінено.</string>
+    <string name="import_error_other_platform">Цей експорт створено OSHI для %1$s, і його поки не можна імпортувати тут.</string>
+    <string name="import_error_not_export">Цей файл не є експортом OSHI.</string>
+    <string name="import_error_version">Цей експорт створено новішою версією OSHI. Оновіть застосунок і спробуйте ще раз.</string>
+    <string name="import_error_no_key">На цьому пристрої немає ключа облікового запису. Спочатку відновіть обліковий запис.</string>
+    <string name="import_error_unreadable">Не вдалося прочитати файл.</string>
+</resources>

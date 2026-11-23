@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_TONE_2026_09_24__ chat wallpaper tone (light / dark / automatic) -->
+<resources>
+    <string name="wallpaper_tone_section">톤</string>
+    <string name="wallpaper_tone_automatic">자동</string>
+    <string name="wallpaper_tone_light">라이트</string>
+    <string name="wallpaper_tone_dark">다크</string>
+    <string name="wallpaper_tone_automatic_detail">라이트 및 다크 모드를 따릅니다.</string>
+    <string name="wallpaper_tone_light_detail">다크 모드에서도 보라색 메시가 있는 흰색. 메시지는 라이트 색상으로 바뀌어 읽기 쉽게 유지됩니다.</string>
+    <string name="wallpaper_tone_dark_detail">라이트 모드에서도 보라색 메시가 있는 검은색.</string>
+    <string name="wallpaper_tone_more">색상, 그라데이션, 이모지, 내 사진: 채팅을 열고 ⋯ → 배경화면.</string>
+</resources>

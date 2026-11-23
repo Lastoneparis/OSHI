@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.7.0: screenshot notice (__SCREENSHOT_NOTICE_2026_11_18__) and restricted-network hint (docs/RESTRICTED_NETWORK_HINT.md). -->
+<resources>
+    <string name="screenshot_blocked_notice">Τα στιγμιότυπα οθόνης αποκλείονται στο OSHI για την προστασία των συνομιλιών σας</string>
+    <string name="rn_hint_setting_title">Να ξέρουν οι επαφές ότι είμαι σε περιορισμένο δίκτυο</string>
+    <string name="rn_hint_setting_caption">Όταν η κίνηση είναι συγκαλυμμένη, τα μηνύματά σας φέρουν μια μικρή ένδειξη, κρυπτογραφημένη από άκρο σε άκρο, ώστε οι επαφές να ξέρουν ότι ίσως είστε σε λογοκριμένο ή παρακολουθούμενο δίκτυο. Μόνο αυτές τη βλέπουν.</string>
+    <string name="rn_hint_chip">Στάλθηκε από περιορισμένο δίκτυο</string>
+    <string name="rn_hint_explain_title">Περιορισμένο δίκτυο</string>
+    <string name="rn_hint_explain_body">Αυτό το άτομο χρησιμοποιεί τη συγκάλυψη του OSHI και πιθανότατα βρίσκεται σε λογοκριμένο ή παρακολουθούμενο δίκτυο. Απαντήστε κανονικά: το OSHI συνεχίζει να συγκαλύπτει την πλευρά του. Κρατήστε τα μηνύματα σύντομα· φωτογραφίες και βίντεο μπορεί να αργούν.</string>
+</resources>
