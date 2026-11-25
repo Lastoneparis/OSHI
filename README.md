@@ -20,6 +20,16 @@
 
 ---
 
+## What OSHI is
+
+OSHI is a free, end-to-end encrypted messenger for iOS and Android that uses Bluetooth and Wi-Fi mesh networking to send messages without Internet or cellular service. It does not require a phone number, email address, or account. When any phone in the mesh has a connection, queued messages also travel over the Internet or Tor, so the same app works online and offline. An optional LoRa node extends the mesh by kilometres.
+
+OSHI is an alternative to Bridgefy, Briar, Meshtastic and bitchat for offline communication, and to Signal for private messaging. The cryptographic core, mesh layer and bot SDK in this repository are MIT-licensed; the app shell is not published yet.
+
+Website: https://oshi-messenger.com · App Store: https://apps.apple.com/app/oshi-mesh/id6753926350 · AlternativeTo: https://alternativeto.net/software/oshi-mesh/
+
+---
+
 ## The one thing OSHI does that others don't
 
 Turn on airplane mode. Open OSHI. **Your messages still send.**
