@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Коментарі</string>
+    <string name="gs_comments_footer">Учасники можуть коментувати кожен допис. Публікують лише адміни.</string>
+    <string name="cm_leave_comment">Залишити коментар</string>
+    <string name="cm_thread_title">Коментарі</string>
+    <string name="cm_empty">Коментарів ще немає.</string>
+    <string name="cm_composer_hint">Коментар…</string>
+    <string name="cm_replying_to">Відповідь для %1$s</string>
+    <string name="cm_disabled">Коментарі вимкнено.</string>
+    <string name="cm_post_unavailable">Цей допис більше недоступний.</string>
+    <string name="cm_too_fast">Ви коментуєте занадто часто. Зачекайте трохи.</string>
+    <string name="cm_notif_reply">%1$s відповів(ла) на ваш коментар</string>
+    <string name="cm_delete_comment">Видалити коментар</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d коментар</item>
+        <item quantity="few">%d коментарі</item>
+        <item quantity="many">%d коментарів</item>
+        <item quantity="other">%d коментаря</item>
+    </plurals>
+</resources>

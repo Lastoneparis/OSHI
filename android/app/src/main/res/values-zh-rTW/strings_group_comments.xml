@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">留言</string>
+    <string name="gs_comments_footer">成員可以在每則貼文下留言。只有管理員可以發文。</string>
+    <string name="cm_leave_comment">留言</string>
+    <string name="cm_thread_title">留言</string>
+    <string name="cm_empty">還沒有留言。</string>
+    <string name="cm_composer_hint">留言…</string>
+    <string name="cm_replying_to">回覆 %1$s</string>
+    <string name="cm_disabled">留言已關閉。</string>
+    <string name="cm_post_unavailable">此貼文已無法使用。</string>
+    <string name="cm_too_fast">你留言得太快了，請稍候。</string>
+    <string name="cm_notif_reply">%1$s 回覆了你的留言</string>
+    <string name="cm_delete_comment">刪除留言</string>
+    <plurals name="cm_comments_count">
+        <item quantity="other">%d 則留言</item>
+    </plurals>
+</resources>

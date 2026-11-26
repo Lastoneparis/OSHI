@@ -80,8 +80,20 @@ struct GroupSettings: Codable, Equatable {
     /// `postPolicy == .admins`. MUST be parsed and re-emitted (§2.1 rule 2: a save
     /// by code that dropped it would reset it to false on every receiver).
     var comments: Bool = false
+    /// __CHANNEL_WEB_2026_11_26__ PUBLIC_CHANNEL_WEB_SPEC §9.1: "Public web preview"
+    /// is on for this channel (an admin's devices publish a cleartext copy of each
+    /// NEW post at oshi-messenger.com/c/<handle>). Travels in the E2E settings so
+    /// co-admins see it and readers can offer "Copy link". Same re-emit rule as
+    /// `comments` (a device that drops it resets it on receivers).
+    var webPreview: Bool = false
+    /// `searchIndexing` of `PUT /v2/c/<handle>`; meaningful only with `webPreview`.
+    var webIndexing: Bool = false
 
     init() {}
+
+    /// The preview can only exist for a channel (`postPolicy == admins`) that owns a
+    /// public handle (spec §1 hard rules).
+    var webPreviewActive: Bool { webPreview && postPolicy == .admins && isPublic }
 
     /// §2.12.1 Active ⇔ channel mode AND comments on.
     var commentsActive: Bool { postPolicy == .admins && comments }
@@ -172,6 +184,8 @@ struct GroupSettings: Codable, Equatable {
         adminDMs = o["adminDMs"]?.bool ?? true
         dissolved = o["dissolved"]?.bool ?? false
         comments = o["comments"]?.bool ?? false
+        webPreview = o["webPreview"]?.bool ?? false
+        webIndexing = o["webIndexing"]?.bool ?? false
     }
 
     init(from decoder: Decoder) throws {
@@ -182,6 +196,7 @@ struct GroupSettings: Codable, Equatable {
     private enum K: String, CodingKey {
         case v, visibility, handle, showPreview, inviteToken, reactions, allowedReactions
         case welcome, postPolicy, adminDMs, dissolved, comments
+        case webPreview, webIndexing
     }
 
     /// Every subkey is emitted (absent ≠ default for a reader that predates a key);
@@ -200,6 +215,8 @@ struct GroupSettings: Codable, Equatable {
         try c.encode(adminDMs, forKey: .adminDMs)
         try c.encode(dissolved, forKey: .dissolved)
         try c.encode(comments, forKey: .comments)
+        try c.encode(webPreview, forKey: .webPreview)
+        try c.encode(webIndexing, forKey: .webIndexing)
     }
 }
 
@@ -409,6 +426,9 @@ enum GroupAdminLog {
         if a.postPolicy != b.postPolicy { add("post_policy_changed", b.postPolicy.rawValue) }
         if a.adminDMs != b.adminDMs { add("admin_dms_changed") }
         if a.comments != b.comments { add("comments_changed", b.comments ? "on" : "off") }
+        if a.webPreview != b.webPreview || a.webIndexing != b.webIndexing {
+            add("web_preview_changed", b.webPreview ? "on" : "off")
+        }
         if !a.dissolved && b.dissolved { add("dissolved") }
         return out
     }

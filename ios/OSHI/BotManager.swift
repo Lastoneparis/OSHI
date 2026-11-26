@@ -14,7 +14,8 @@ import CryptoKit
 
 struct OSHIBot: Identifiable, Codable, Hashable {
     let id: UUID
-    let token: String          // Unique bot token (like Telegram bot token)
+    /// `var` since __BOTS_PHASE1_2026_11_24__: "Revoke token" replaces it.
+    var token: String          // Unique bot token (like Telegram bot token)
     var name: String
     var username: String       // @username for bot
     var description: String
@@ -30,6 +31,19 @@ struct OSHIBot: Identifiable, Codable, Hashable {
     var lastActivity: Date?
     var messagesSent: Int
     var ownerPublicKey: String // Creator's public key
+    // __BOTS_PHASE1_2026_11_24__ public profile + per-group rights. Optional so
+    // bots saved by older builds decode unchanged.
+    /// One line under the name on the profile sheet (≤ 120).
+    var about: String? = nil
+    /// Found by search when true.
+    var isPublic: Bool? = nil
+    /// The `@username` the SERVER accepted (setMyProfile succeeded). `username`
+    /// is what the owner typed; links are only shared for this one.
+    var publishedUsername: String? = nil
+    /// What each group/channel granted the bot, by group UUID string.
+    var groupPermissions: [String: BotGroupPermissions]? = nil
+    /// The server's botId, kept once learned (it survives a token revoke).
+    var publicBotId: String? = nil
 
     static func == (lhs: OSHIBot, rhs: OSHIBot) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
@@ -67,6 +81,11 @@ struct BotTrigger: Identifiable, Codable, Hashable {
     var condition: String      // Keyword, cron expression, event name
     var responseTemplate: String // Template for bot response
     var isActive: Bool
+    /// __BOT_COMMANDS_2026_11_24__ For a `.command` trigger: the short line the
+    /// `/` menu shows under `/name` (≤ 256, like Telegram's `BotCommand`).
+    /// Optional so bots saved by older builds decode unchanged and a trigger
+    /// without one encodes byte-identical to before (see BotCommands.swift).
+    var commandDescription: String? = nil
 
     enum TriggerType: String, Codable, CaseIterable {
         case keyword = "keyword"      // Message contains keyword
@@ -933,71 +952,96 @@ final class BotManager: ObservableObject {
             unregisterBotFromServer(bot)
             return
         }
-        Task {
-            // 🔴 __BOT_PARTIAL_SYNC_2026_08_22__ Ce `compactMap` a coupé le canal
-            // AI pendant plus d'une journée, et voici comment.
-            //
-            // `/api/bot/update-groups` fait `bot.groups = groups` — un
-            // REMPLACEMENT INTÉGRAL, pas une fusion. Ce qu'on envoie devient la
-            // vérité côté serveur.
-            //
-            // Or ce `compactMap` rend `nil`, en silence, pour tout groupe assigné
-            // que cet appareil ne trouve pas dans `MessageGroupManager.shared.groups`
-            // à l'instant précis de l'appel — juste après le lancement, avant que
-            // les groupes soient chargés, ou pendant une reconstruction. Une liste
-            // AMPUTÉE part alors, et le serveur oublie les groupes manquants.
-            //
-            // Constaté le 2026-08-22: le bot du pont Telegram n'avait plus qu'un
-            // seul groupe côté serveur, et le canal AI recevait
-            // « HTTP 403 Bot is not assigned to this group » toutes les deux
-            // minutes — 6 300 fois. Telegram recevait, OSHI non.
-            //
-            // La règle: une liste dont on SAIT qu'elle est incomplète ne doit
-            // jamais devenir la vérité. On préfère ne rien envoyer et réessayer
-            // plus tard — l'ancienne liste, elle, est correcte.
-            let groups: [[String: Any]] = bot.assignedGroups.compactMap { groupId in
-                guard let group = MessageGroupManager.shared.groups.first(where: { $0.id == groupId }) else { return nil }
-                return [
-                    "id": groupId.uuidString,
-                    "name": group.name,
-                    "members": group.members.map { $0.publicKey }
-                ]
-            }
+        Task { await registerBotWithServerNow(bot) }
+    }
 
-            guard groups.count == bot.assignedGroups.count else {
-                let missing = bot.assignedGroups.count - groups.count
-                OshiLog.ai.info("🤖 ⛔️ Synchro du bot « \(bot.name) » ANNULÉE: \(missing) groupe(s) assigné(s) introuvable(s) localement. Envoyer cette liste effacerait ces groupes côté serveur.")
-                return
-            }
-
-            let payload: [String: Any] = [
-                "token": bot.token,
-                "botName": bot.name,
-                "ownerPublicKey": bot.ownerPublicKey,
-                "groups": groups
+    /// __BOTS_PHASE1_2026_11_24__ The same registration, awaitable — BotFather
+    /// needs the record to exist before it can claim a `@username` on it.
+    /// `true` when the server answered 2xx.
+    @discardableResult
+    func registerBotWithServerNow(_ bot: OSHIBot) async -> Bool {
+        guard BotManager.needsServerRegistration(bot) else { return false }
+        // 🔴 __BOT_PARTIAL_SYNC_2026_08_22__ Ce `compactMap` a coupé le canal
+        // AI pendant plus d'une journée, et voici comment.
+        //
+        // `/api/bot/update-groups` fait `bot.groups = groups` — un
+        // REMPLACEMENT INTÉGRAL, pas une fusion. Ce qu'on envoie devient la
+        // vérité côté serveur.
+        //
+        // Or ce `compactMap` rend `nil`, en silence, pour tout groupe assigné
+        // que cet appareil ne trouve pas dans `MessageGroupManager.shared.groups`
+        // à l'instant précis de l'appel — juste après le lancement, avant que
+        // les groupes soient chargés, ou pendant une reconstruction. Une liste
+        // AMPUTÉE part alors, et le serveur oublie les groupes manquants.
+        //
+        // Constaté le 2026-08-22: le bot du pont Telegram n'avait plus qu'un
+        // seul groupe côté serveur, et le canal AI recevait
+        // « HTTP 403 Bot is not assigned to this group » toutes les deux
+        // minutes — 6 300 fois. Telegram recevait, OSHI non.
+        //
+        // La règle: une liste dont on SAIT qu'elle est incomplète ne doit
+        // jamais devenir la vérité. On préfère ne rien envoyer et réessayer
+        // plus tard — l'ancienne liste, elle, est correcte.
+        let groups: [[String: Any]] = bot.assignedGroups.compactMap { groupId in
+            guard let group = MessageGroupManager.shared.groups.first(where: { $0.id == groupId }) else { return nil }
+            return [
+                "id": groupId.uuidString,
+                "name": group.name,
+                "members": group.members.map { $0.publicKey },
+                // __BOTS_PHASE1_2026_11_24__ the rights granted at add time.
+                "kind": group.groupType == .adminOnly ? "channel" : "group",
+                "permissions": (bot.groupPermissions?[groupId.uuidString] ?? BotGroupPermissions()).wire
             ]
+        }
 
-            guard let url = URL(string: "https://oshi-messenger.com/api/bot/register"),
-                  let body = try? JSONSerialization.data(withJSONObject: payload) else { return }
+        guard groups.count == bot.assignedGroups.count else {
+            let missing = bot.assignedGroups.count - groups.count
+            OshiLog.ai.info("🤖 ⛔️ Synchro du bot « \(bot.name) » ANNULÉE: \(missing) groupe(s) assigné(s) introuvable(s) localement. Envoyer cette liste effacerait ces groupes côté serveur.")
+            return false
+        }
 
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = body
-            request.timeoutInterval = 10
+        let payload: [String: Any] = [
+            "token": bot.token,
+            "botName": bot.name,
+            "ownerPublicKey": bot.ownerPublicKey,
+            "groups": groups
+        ]
 
-            do {
-                let (data, response) = try await URLSession.shared.data(for: request)
-                if let httpResponse = response as? HTTPURLResponse {
-                    OshiLog.ai.info("🤖 Bot server register: \(httpResponse.statusCode)")
-                    if let result = String(data: data, encoding: .utf8) {
-                        OshiLog.ai.info("   Response: \(result)")
+        guard let url = URL(string: "https://oshi-messenger.com/api/bot/register"),
+              let body = try? JSONSerialization.data(withJSONObject: payload) else { return false }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        request.timeoutInterval = 10
+
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            if let httpResponse = response as? HTTPURLResponse {
+                OshiLog.ai.info("🤖 Bot server register: \(httpResponse.statusCode)")
+                if let result = String(data: data, encoding: .utf8) {
+                    OshiLog.ai.info("   Response: \(result)")
+                }
+                // __BOT_COMMANDS_2026_11_24__ `/api/bot/register` REPLACES the
+                // record (`botRegistry.set(token, record)`), which drops the
+                // `commands` that `setMyCommands` stored on it. Every group
+                // change re-registers, so without this a bot's `/` menu would
+                // empty itself server-side each time it joined a group.
+                let commands = BotCommandList.commands(of: bot)
+                if (200..<300).contains(httpResponse.statusCode), !commands.isEmpty {
+                    do {
+                        try await HTTPBotCommandsService().setCommands(commands, token: bot.token)
+                    } catch {
+                        OshiLog.ai.info("⚠️ setMyCommands after register failed: \(String(describing: error))")
                     }
                 }
-            } catch {
-                OshiLog.ai.info("⚠️ Bot server register failed: \(error.localizedDescription)")
+                return (200..<300).contains(httpResponse.statusCode)
             }
+        } catch {
+            OshiLog.ai.info("⚠️ Bot server register failed: \(error.localizedDescription)")
         }
+        return false
     }
 
     /// Re-register all bots assigned to a group (call when group membership changes)
@@ -1493,6 +1537,13 @@ extension BotManager {
         saveReplyMarkups()
     }
 
+    /// __BOTS_PHASE1_2026_11_24__ The bot removed its buttons, or the post.
+    func removeReplyMarkup(forMessageId id: String) {
+        guard replyMarkups.removeValue(forKey: id) != nil else { return }
+        replyMarkupOrder.removeAll { $0 == id }
+        saveReplyMarkups()
+    }
+
     func isCallbackInFlight(messageId: String, row: Int, column: Int) -> Bool {
         callbacksInFlight.contains(BotManager.slotKey(messageId: messageId, row: row, column: column))
     }
@@ -1757,6 +1808,21 @@ extension BotManager {
         }
     }
 
+    /// Ed25519 request signature (the `/v2/*` key, `CallPushSigner`), sent;
+    /// on `401 signature_required` signed again (fresh timestamp) and retried
+    /// ONCE. A 403 is returned as is — never looped on.
+    static func signedSend(_ unsigned: URLRequest,
+                           transport: (URLRequest) async throws -> (Data, URLResponse) = { try await URLSession.shared.data(for: $0) },
+                           sign: (inout URLRequest) -> Bool = { CallPushSigner.sign(&$0) }) async throws -> (Data, URLResponse) {
+        var request = unsigned
+        _ = sign(&request)
+        let first = try await transport(request)
+        guard (first.1 as? HTTPURLResponse)?.statusCode == 401 else { return first }
+        var again = unsigned
+        guard sign(&again) else { return first }
+        return try await transport(again)
+    }
+
     private static func postDispatch(credential: BotCredential,
                                      kind: String,
                                      groupId: String,
@@ -1784,7 +1850,9 @@ extension BotManager {
         request.timeoutInterval = 15
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            // __BOTS_PHASE1_2026_11_24__ signed (contract "night" amendment):
+            // identity = fromPublicKey; a 401 is re-signed and retried once.
+            let (data, response) = try await signedSend(request)
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0
             // 403 and 404 are the server telling us something a user can act on —
             // you are not in a group this bot serves, or this bot is gone. Folding
@@ -1828,7 +1896,8 @@ extension BotManager {
         request.timeoutInterval = 15
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            // __BOTS_PHASE1_2026_11_24__ signed, identity = userPublicKey.
+            let (data, response) = try await signedSend(request)
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0
             // Same two precise answers as dispatch — see `BotDispatchOutcome`.
             if status == 403 { return .failure(.notMember) }

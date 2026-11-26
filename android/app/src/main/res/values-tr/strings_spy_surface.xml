@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">OSHI\'yi okuyabilen uygulamalar</string>
+    <string name="spy_surface_dialog_body">Bu telefondaki şu uygulamalar ekranınızda veya bildirimlerinizde görünenleri, OSHI şifrelerini çözdükten sonra mesajlarınız da dahil, okuyabilir:\n\n%1$s\n\nBunlardan birini kendiniz yüklemediyseniz veya izin vermediyseniz casus yazılım olabilir. İznini Android Ayarları\'ndan kapatın veya kaldırın. OSHI hiçbir şeyi engellemedi.</string>
+    <string name="spy_surface_power_accessibility">ekran ve yazma (erişilebilirlik)</string>
+    <string name="spy_surface_power_notifications">bildirimler</string>
+    <string name="spy_surface_power_admin">cihaz yöneticisi</string>
+</resources>

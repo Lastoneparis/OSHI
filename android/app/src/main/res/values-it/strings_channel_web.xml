@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Anteprima web pubblica</string>
+    <string name="cw_toggle">Pubblica i post sul web</string>
+    <string name="cw_footer">I nuovi post vengono pubblicati anche come pagina web pubblica su oshi-messenger.com/c/%1$s. Chiunque può leggerli, compresi i motori di ricerca e le anteprime dei link. La crittografia end-to-end non si applica alla copia web.</string>
+    <string name="cw_needs_link">Prima dai a questo canale un link pubblico: l\'anteprima web usa il suo nome.</string>
+    <string name="cw_create_link">Crea link pubblico</string>
+    <string name="cw_enable_title">Pubblicare i post sul web?</string>
+    <string name="cw_enable_confirm">I post di questo canale saranno visibili a chiunque sul web su oshi-messenger.com/c/%1$s. Solo i nuovi post. Anche le anteprime dei link (WhatsApp, X, Telegram…) possono leggerli e la crittografia end-to-end non si applica alla copia web.</string>
+    <string name="cw_enable_action">Pubblica</string>
+    <string name="cw_disable_title">Disattivare l\'anteprima web?</string>
+    <string name="cw_disable_confirm">Tutti i post e le immagini pubblicati su oshi-messenger.com/c/%1$s verranno rimossi dal web. I tuoi post nell\'app restano invariati.</string>
+    <string name="cw_disable_action">Disattiva</string>
+    <string name="cw_indexing">Consenti motori di ricerca</string>
+    <string name="cw_indexing_footer">Se disattivato, le pagine chiedono ai motori di ricerca di non indicizzarle.</string>
+    <string name="cw_embed_code">Codice di incorporamento</string>
+    <string name="cw_embed_title">Incorpora questo post</string>
+    <string name="cw_embed_hint">Incolla questo codice nel tuo sito dove deve apparire il post.</string>
+    <string name="cw_embed_dark">Tema scuro</string>
+    <string name="cw_copy_code">Copia codice</string>
+    <string name="cw_code_copied">Codice copiato</string>
+    <string name="cw_not_on_web">Questo post non è sul web. Vengono pubblicati solo i post inviati dopo l\'attivazione dell\'anteprima web.</string>
+    <string name="cw_error">Impossibile modificare l\'anteprima web. Controlla la connessione e riprova.</string>
+</resources>

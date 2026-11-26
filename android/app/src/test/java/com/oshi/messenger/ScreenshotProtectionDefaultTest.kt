@@ -135,4 +135,17 @@ class ScreenshotProtectionDefaultTest {
         val body = mgr.substringAfter("fun applyDebugCaptureOverride(").substringBefore("\n    }\n")
         assertTrue(body.contains("if (!com.oshi.messenger.BuildConfig.DEBUG"))
     }
+
+    // __ANTI_STALKERWARE_2026_11_20__ the accessibility shield follows the same switch.
+    @org.junit.Test
+    fun `accessibility data is marked sensitive exactly when protection is on`() {
+        org.junit.Assert.assertEquals(
+            android.view.View.ACCESSIBILITY_DATA_SENSITIVE_YES,
+            com.oshi.messenger.service.ScreenshotProtectionPolicy.accessibilityDataSensitive(true)
+        )
+        org.junit.Assert.assertEquals(
+            android.view.View.ACCESSIBILITY_DATA_SENSITIVE_AUTO,
+            com.oshi.messenger.service.ScreenshotProtectionPolicy.accessibilityDataSensitive(false)
+        )
+    }
 }

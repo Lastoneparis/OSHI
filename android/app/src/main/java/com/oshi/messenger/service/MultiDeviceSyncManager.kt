@@ -46,6 +46,8 @@ class MultiDeviceSyncManager @Inject constructor(
         private const val DEVICE_LINK_PREFIX = "\uD83D\uDD17LINK\uD83D\uDD17"  // 🔗LINK🔗
         private const val SYNC_INTERVAL_MS = 30000L  // 30 seconds
 
+        const val MAX_LINK_CODE_ATTEMPTS = DeviceLinkPolicy.MAX_LINK_CODE_ATTEMPTS
+
         /**
          * How often the "last synced" timestamp is actually committed to disk.
          * See the comment at the write site: persisting it every cycle was a
@@ -346,12 +348,13 @@ class MultiDeviceSyncManager @Inject constructor(
      * Generate link code for another device
      */
     fun generateLinkCode(): DeviceLinkCode {
-        val code = (100000..999999).random().toString()
+        val code = DeviceLinkPolicy.newLinkCode()
         val expiry = System.currentTimeMillis() + (5 * 60 * 1000)  // 5 minutes
 
         prefs.edit()
             .putString("pending_link_code", code)
             .putLong("pending_link_expiry", expiry)
+            .putInt("pending_link_attempts", 0)
             .apply()
 
         return DeviceLinkCode(
@@ -649,8 +652,19 @@ class MultiDeviceSyncManager @Inject constructor(
         val pendingCode = prefs.getString("pending_link_code", null)
         val pendingExpiry = prefs.getLong("pending_link_expiry", 0)
 
-        if (code != pendingCode) {
+        if (!DeviceLinkPolicy.linkCodeMatches(code, pendingCode)) {
             Log.w(TAG, "Invalid link code")
+            // __DEVICE_LINK_AUTHZ_2026_11_20__ burn the code after a few misses.
+            if (pendingCode != null) {
+                val attempts = prefs.getInt("pending_link_attempts", 0) + 1
+                if (attempts >= MAX_LINK_CODE_ATTEMPTS) {
+                    prefs.edit().remove("pending_link_code").remove("pending_link_expiry")
+                        .remove("pending_link_attempts").apply()
+                    Log.w(TAG, "Link code burned after $attempts wrong attempts")
+                } else {
+                    prefs.edit().putInt("pending_link_attempts", attempts).apply()
+                }
+            }
             return
         }
 
@@ -706,6 +720,20 @@ class MultiDeviceSyncManager @Inject constructor(
     }
 
     private fun handleLinkAccepted(json: JSONObject, senderPublicKey: String) {
+        // __DEVICE_LINK_AUTHZ_2026_11_20__ unsolicited accepts are ignored. This build
+        // never sends a link_request itself ([linkDevice] is a stub), so nothing sets
+        // the pending target and every accept is refused — which is the point.
+        if (!DeviceLinkPolicy.isExpectedLinkAccept(
+                senderPublicKey,
+                prefs.getString("pending_outgoing_link_target", null),
+                prefs.getLong("pending_outgoing_link_expiry", 0L),
+                System.currentTimeMillis()
+            )
+        ) {
+            Log.w(TAG, "Ignoring unsolicited link_accept")
+            return
+        }
+        prefs.edit().remove("pending_outgoing_link_target").remove("pending_outgoing_link_expiry").apply()
         val acceptedDeviceId = json.getString("deviceId")
         val acceptedDeviceName = json.getString("deviceName")
 
@@ -731,6 +759,10 @@ class MultiDeviceSyncManager @Inject constructor(
     }
 
     private fun handleUnlink(json: JSONObject, senderPublicKey: String) {
+        if (!DeviceLinkPolicy.mayUnlink(senderPublicKey, _linkedDevices.value.map { it.publicKey })) {
+            Log.w(TAG, "Ignoring unlink from a device that is not linked")
+            return
+        }
         val unlinkingDeviceId = json.getString("deviceId")
 
         val current = _linkedDevices.value.toMutableList()

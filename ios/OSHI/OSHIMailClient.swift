@@ -158,6 +158,25 @@ extension OSHIMailMessage.Envelope {
     }
 }
 
+/// `GET /mail/v1/inbox/status` (ServerPatches/mail_inbox_status). Counts and a
+/// fingerprint only — nothing sealed, nothing the server did not already index.
+struct OSHIMailInboxStatus: Codable, Equatable {
+    let inboxUnread: Int
+    let inboxTotal: Int
+    let latestInboxId: String?
+    let latestInboxAt: String?
+    let fingerprint: String
+
+    /// sha256 hex of the rows' `id:seen(0|1):folder` lines, sorted, joined by "\n" —
+    /// byte-for-byte the server's `inbox_status.js fingerprint()`. Order-independent so
+    /// the client's newest-first list and the server's append-order index agree.
+    static func fingerprint(_ rows: [(id: String, seen: Bool, folder: String)]) -> String {
+        let lines = rows.map { "\($0.id):\($0.seen ? 1 : 0):\($0.folder)" }.sorted()
+        let digest = SHA256.hash(data: Data(lines.joined(separator: "\n").utf8))
+        return digest.map { String(format: "%02x", $0) }.joined()
+    }
+}
+
 enum OSHIMailError: LocalizedError {
     case notSignedIn
     case noMailbox
@@ -185,6 +204,72 @@ enum OSHIMailError: LocalizedError {
         case .server(let st, let code): return String(format: "mail.err.server".localized, st, code)
         case .transport(let e):       return e.localizedDescription
         }
+    }
+}
+
+// MARK: - Account cache (__MAIL_OFFLINE_NOT_SETUP_2026_11_25__)
+
+/// Where the last server-confirmed `OSHIMailAccount` is kept, per identity.
+protocol OSHIMailAccountStore {
+    func load(scope: String) -> OSHIMailAccount?
+    func save(_ account: OSHIMailAccount, scope: String)
+    func clear(scope: String)
+}
+
+/// Keychain-backed: same service as the mail key, one item per identity, this device
+/// only. `PanicWipe` empties every keychain class, so a wipe takes it too.
+struct OSHIMailKeychainAccountStore: OSHIMailAccountStore {
+    static let service = "com.oshi.messenger.mail"
+
+    /// The identity public key is hashed so the keychain item name does not carry it.
+    static func itemAccount(scope: String) -> String {
+        let digest = SHA256.hash(data: Data(scope.utf8))
+        return "mail-account-cache." + digest.prefix(16).map { String(format: "%02x", $0) }.joined()
+    }
+
+    private func baseQuery(_ scope: String) -> [String: Any] {
+        [kSecClass as String: kSecClassGenericPassword,
+         kSecAttrService as String: Self.service,
+         kSecAttrAccount as String: Self.itemAccount(scope: scope)]
+    }
+
+    func load(scope: String) -> OSHIMailAccount? {
+        var q = baseQuery(scope)
+        q[kSecReturnData as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        guard SecItemCopyMatching(q as CFDictionary, &item) == errSecSuccess,
+              let data = item as? Data else { return nil }
+        return try? JSONDecoder().decode(OSHIMailAccount.self, from: data)
+    }
+
+    func save(_ account: OSHIMailAccount, scope: String) {
+        guard let data = try? JSONEncoder().encode(account) else { return }
+        SecItemDelete(baseQuery(scope) as CFDictionary)
+        var q = baseQuery(scope)
+        q[kSecValueData as String] = data
+        q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        SecItemAdd(q as CFDictionary, nil)
+    }
+
+    func clear(scope: String) {
+        SecItemDelete(baseQuery(scope) as CFDictionary)
+    }
+}
+
+/// What the Email screen shows. Only a DEFINITIVE `no-mailbox` from the server may
+/// lead to the claim-an-address form; any other failure without a known account is
+/// "can't reach mail", never "you have no mailbox".
+enum MailScreenState: Equatable {
+    case loading
+    case mailbox
+    case setup
+    case unreachable
+
+    static func resolve(isLoading: Bool, hasAccount: Bool, confirmedNoMailbox: Bool) -> MailScreenState {
+        if hasAccount { return .mailbox }
+        if isLoading { return .loading }
+        return confirmedNoMailbox ? .setup : .unreachable
     }
 }
 
@@ -274,14 +359,85 @@ final class OSHIMailClient: ObservableObject {
     }
 
     init(baseURL: URL = URL(string: "https://oshi-messenger.com")!,
-         session: URLSession = .shared) {
+         session: URLSession = .shared,
+         accountStore: OSHIMailAccountStore = OSHIMailKeychainAccountStore()) {
         self.baseURL = baseURL
         self.session = session
+        self.accountStore = accountStore
     }
 
     /// Called by the mail UI with the identity the app already holds. Idempotent.
     func configure(identity: IdentityManager) {
         self.identity = identity
+        seedAccountFromCache(scope: identity.publicKey)
+    }
+
+    // MARK: Account cache (__MAIL_OFFLINE_NOT_SETUP_2026_11_25__)
+
+    /// The last account the server confirmed, kept on disk so that a cold start with
+    /// no network still knows this identity HAS a mailbox. Without it `account` was
+    /// memory-only: offline, `refreshAccount()` threw, `account` stayed nil, and the
+    /// mail screen offered "claim an address" to someone who already owns one.
+    ///
+    /// Scoped by the identity's public key, so another identity on this device never
+    /// sees it. Cleared only by the server's explicit `no-mailbox` answer — never by
+    /// a timeout, an offline error or a 5xx, which say nothing about the mailbox.
+    private let accountStore: OSHIMailAccountStore
+
+    /// The identity scope `account` currently belongs to (nil before `configure`).
+    private(set) var accountScope: String?
+
+    /// Seeds `account` from the cache for `scope`. Switching to a different identity
+    /// drops whatever the previous one had in memory first.
+    func seedAccountFromCache(scope: String) {
+        guard !scope.isEmpty else { return }
+        #if DEBUG
+        if debugFixtureAccount != nil { return }
+        #endif
+        if accountScope != scope {
+            accountScope = scope
+            account = accountStore.load(scope: scope)
+        } else if account == nil {
+            account = accountStore.load(scope: scope)
+        }
+    }
+
+    /// The live identity wins over the remembered scope, so a result fetched after an
+    /// identity switch is never filed under the previous identity.
+    private var currentScope: String? {
+        if let key = identity?.publicKey, !key.isEmpty { return key }
+        return accountScope
+    }
+
+    /// Records a server-confirmed account: in memory and in the per-identity cache.
+    private func adoptAccount(_ acct: OSHIMailAccount) {
+        account = acct
+        if let scope = currentScope {
+            accountScope = scope
+            accountStore.save(acct, scope: scope)
+        }
+    }
+
+    /// The server said this identity has no mailbox: the only thing that may forget one.
+    private func forgetAccount() {
+        account = nil
+        if let scope = currentScope {
+            accountStore.clear(scope: scope)
+        }
+    }
+
+    /// Applies the outcome of an account fetch to memory and the cache. Split out so
+    /// the seed/clear rules are testable without a network.
+    func applyAccountFetch(_ result: Result<OSHIMailAccount, Error>) {
+        switch result {
+        case .success(let acct):
+            adoptAccount(acct)
+        case .failure(OSHIMailError.noMailbox):
+            forgetAccount()
+        case .failure:
+            // Offline / timeout / 5xx: keep whatever we had, and say it is stale.
+            lastRefreshFailed = true
+        }
     }
 
     // MARK: Mail key (X25519)
@@ -512,7 +668,7 @@ final class OSHIMailClient: ObservableObject {
             throw decodeError(data, status: http.statusCode)
         }
         let acct = try JSONDecoder().decode(Wrapper.self, from: data).account
-        self.account = acct
+        adoptAccount(acct)
         return acct
     }
 
@@ -521,11 +677,17 @@ final class OSHIMailClient: ObservableObject {
         #if DEBUG
         if let fixture = debugFixtureAccount { return fixture }
         #endif
-        let (data, http) = try await send(try request("GET", "/mail/v1/account"))
-        guard http.statusCode == 200 else { throw decodeError(data, status: http.statusCode) }
-        let acct = try JSONDecoder().decode(Wrapper.self, from: data).account
-        self.account = acct
-        return acct
+        if let key = identity?.publicKey { seedAccountFromCache(scope: key) }
+        do {
+            let (data, http) = try await send(try request("GET", "/mail/v1/account"))
+            guard http.statusCode == 200 else { throw decodeError(data, status: http.statusCode) }
+            let acct = try JSONDecoder().decode(Wrapper.self, from: data).account
+            applyAccountFetch(.success(acct))
+            return acct
+        } catch {
+            applyAccountFetch(.failure(error))
+            throw error
+        }
     }
 
     private struct Wrapper: Codable { let account: OSHIMailAccount }
@@ -546,7 +708,7 @@ final class OSHIMailClient: ObservableObject {
         let (data, http) = try await send(try request("POST", "/mail/v1/premium/redeem", body: body))
         guard http.statusCode == 200 else { throw decodeError(data, status: http.statusCode) }
         let acct = try JSONDecoder().decode(Wrapper.self, from: data).account
-        self.account = acct
+        adoptAccount(acct)
         return acct
     }
 
@@ -605,6 +767,47 @@ final class OSHIMailClient: ObservableObject {
         }
         self.messages = opened
         return opened
+    }
+
+    // MARK: Inbox status (__MAIL_UNREAD_REFRESH_2026_11_22__)
+
+    /// Whether a signed request can be made at all. `MailUnreadRefresher` checks this
+    /// before asking, so an app that has not finished loading its identity does not
+    /// burn its backoff on `.notSignedIn`.
+    var canSign: Bool { identity != nil }
+
+    /// Ever refreshed in this process. Until then the local list proves nothing and a
+    /// status that "matches" an empty list must not be trusted.
+    var hasSyncedOnce: Bool { lastSyncedAt != nil }
+
+    /// `GET /mail/v1/inbox/status` — a few hundred bytes from the server's index (no
+    /// sealed blob is read): unread count and a fingerprint of the rows `/inbox` would
+    /// list. Returns nil when the route is not deployed (404 `not-found`), so the caller
+    /// falls back to the full listing; `no-mailbox` and every other error throw.
+    func fetchInboxStatus() async throws -> OSHIMailInboxStatus? {
+        #if DEBUG
+        if debugFixtureAccount != nil { return nil }
+        #endif
+        let (data, http) = try await send(try request("GET", "/mail/v1/inbox/status"))
+        if http.statusCode == 404 {
+            let err = decodeError(data, status: 404)
+            if case .server(_, let code) = err, code == "not-found" { return nil }
+            throw err
+        }
+        guard http.statusCode == 200 else { throw decodeError(data, status: http.statusCode) }
+        return try JSONDecoder().decode(OSHIMailInboxStatus.self, from: data)
+    }
+
+    /// The same fingerprint the server computes over the rows it would list, from the
+    /// rows this device holds. Equal ⇒ nothing arrived, was read, moved or deleted.
+    var localInboxFingerprint: String {
+        OSHIMailInboxStatus.fingerprint(messages.map { ($0.id, $0.seen, $0.folder) })
+    }
+
+    /// Unread Inbox rows, newest first — what a "new mail" banner may be about.
+    var unreadInboxMessages: [OSHIMailMessage] {
+        messages.filter { $0.folder == "inbox" && !$0.seen }
+                .sorted { $0.receivedAt > $1.receivedAt }
     }
 
     /// The full RFC822 message, decrypted on this device.

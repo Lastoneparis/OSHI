@@ -56,6 +56,8 @@ class ReportManager @Inject constructor(
     private val prefs get() = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     private val client = OkHttpClient.Builder()
+        // __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ learn the offset; re-sign once on a clock 401/403.
+        .addInterceptor(com.oshi.messenger.network.auth.ServerClock.interceptor)
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build()

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">進階聊天隱私</string>
+    <string name="adv_privacy_subtitle">禁止此聊天中的所有人儲存媒體、匯出聊天或對訊息使用 AI</string>
+    <string name="adv_privacy_learn_more">瞭解詳情</string>
+    <string name="adv_privacy_notice_on">%1$s 開啟了進階聊天隱私。任何人都無法自動儲存媒體、匯出聊天或對此聊天中的訊息使用 AI。</string>
+    <string name="adv_privacy_notice_off">%1$s 關閉了進階聊天隱私。儲存媒體、匯出聊天和 AI 功能已恢復可用。</string>
+    <string name="adv_privacy_notice_on_you">你開啟了進階聊天隱私。任何人都無法自動儲存媒體、匯出聊天或對此聊天中的訊息使用 AI。</string>
+    <string name="adv_privacy_notice_off_you">你關閉了進階聊天隱私。儲存媒體、匯出聊天和 AI 功能已恢復可用。</string>
+    <string name="adv_privacy_summary_on">已開啟進階聊天隱私</string>
+    <string name="adv_privacy_summary_off">已關閉進階聊天隱私</string>
+    <string name="adv_privacy_sheet_intro">只要有人開啟，就會對此聊天中的所有人生效：</string>
+    <string name="adv_privacy_sheet_point_save">此聊天中的媒體無法儲存到相簿或「下載」中。</string>
+    <string name="adv_privacy_sheet_point_export">此聊天不會包含在聊天匯出中。</string>
+    <string name="adv_privacy_sheet_point_ai">OSHI 的裝置端 AI 無法讀取此聊天：沒有建議回覆、沒有翻譯，寫作助理也沒有上下文。</string>
+    <string name="adv_privacy_sheet_point_screen">此聊天的螢幕截圖和螢幕錄影已被封鎖。</string>
+    <string name="adv_privacy_sheet_limits">聊天中的任何人都可以開啟或關閉。它無法阻止別人拍攝自己的螢幕，也不影響使用舊版 OSHI 的人。</string>
+    <string name="adv_privacy_blocked_toast">此聊天已開啟進階隱私</string>
+    <string name="adv_privacy_older_members">使用舊版 OSHI、更新前不會套用此設定的成員：%1$d</string>
+</resources>

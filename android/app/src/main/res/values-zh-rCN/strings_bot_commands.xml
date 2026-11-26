@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">命令</string>
+    <string name="bot_cmd_send_a11y">发送 %1$s</string>
+    <string name="bot_cmd_sheet_title">机器人命令</string>
+    <string name="bot_cmd_tap_to_send">点按命令即可发送。</string>
+    <string name="bot_cmd_empty_none_title">这里还没有机器人</string>
+    <string name="bot_cmd_empty_none_body">创建一个机器人并把它加入这个群组。它的命令会显示在这里，输入 / 时也会出现。</string>
+    <string name="bot_cmd_empty_bot">这个机器人还没有命令。</string>
+    <string name="bot_cmd_setup">设置命令</string>
+    <string name="bot_cmd_section">命令</string>
+    <string name="bot_cmd_section_hint">机器人所在群组的成员输入 / 或点按“命令”时会看到这些。</string>
+    <string name="bot_cmd_add">添加</string>
+    <string name="bot_cmd_add_title">新命令</string>
+    <string name="bot_cmd_edit_title">编辑命令</string>
+    <string name="bot_cmd_field_name">命令</string>
+    <string name="bot_cmd_field_description">说明（显示在菜单中）</string>
+    <string name="bot_cmd_field_reply">回复</string>
+    <string name="bot_cmd_field_reply_hint">机器人的回复内容。可以使用 {{input}}、{{bot_name}} 和 {{date}}。</string>
+    <string name="bot_cmd_webhook_note">发送到你的 webhook，由它回复。</string>
+    <string name="bot_cmd_empty_owner">还没有命令。添加一个，比如 /start 或 /help，让大家知道这个机器人能做什么。</string>
+    <string name="bot_cmd_err_empty">请输入命令名称。</string>
+    <string name="bot_cmd_err_invalid">只能使用小写字母、数字和 _。</string>
+    <string name="bot_cmd_err_too_long">最多 32 个字符。</string>
+    <string name="bot_cmd_err_duplicate">这个机器人已经有这个命令了。</string>
+    <string name="bot_cmd_err_too_many">一个机器人最多有 100 个命令。</string>
+    <string name="bot_cmd_err_description">说明太长（最多 256 个字符）。</string>
+    <string name="bot_cmd_sync_local">已保存在运行该机器人的这部手机上。</string>
+    <string name="bot_cmd_sync_syncing">正在更新服务器…</string>
+    <string name="bot_cmd_sync_synced">服务器上的菜单已更新。</string>
+    <string name="bot_cmd_sync_failed">无法更新服务器。你的命令已保存在这部手机上。</string>
+    <string name="bot_profile_edit">编辑资料</string>
+    <string name="bot_profile_name">名称</string>
+    <string name="bot_profile_description">说明</string>
+    <string name="bot_profile_avatar">头像</string>
+    <string name="bot_profile_err_name_empty">给你的机器人起个名字。</string>
+    <string name="bot_profile_err_name_long">名称太长（最多 64 个字符）。</string>
+    <string name="bot_profile_err_desc_long">说明太长（最多 512 个字符）。</string>
+    <string name="bot_connect_title">连接方式</string>
+    <string name="bot_connect_local">这个机器人在这部手机上运行：请保留 OSHI 并保持机器人开启。把它加入群组后，成员就能在群里使用它的命令。</string>
+    <string name="bot_connect_webhook">每条命令都会发送到你的 webhook 地址，你的服务器用 JSON {\"text\": \"…\"} 回复。你的服务器也可以用下方的令牌调用 OSHI 机器人 API。</string>
+    <string name="bot_connect_token_warning">请妥善保管令牌：任何拿到它的人都能以你的机器人身份发言。</string>
+    <string name="bot_connect_groups">群组：%1$s</string>
+    <string name="bot_connect_no_groups">还不在任何群组中，所以没人能使用它的命令。</string>
+</resources>

@@ -40,6 +40,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -142,6 +143,13 @@ fun MailScreen(
         MailBackdrop(title = "Mail", onBack = onBack) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
         }
+        return
+    }
+
+    // __MAIL_OFFLINE_KEEPS_MAILBOX_2026_11_25__ "could not ask the server" is not "no
+    // mailbox": without network the address form used to appear for people who have one.
+    if (!state.hasMailbox && state.unreachable) {
+        MailBackdrop(title = "Mail", onBack = onBack) { MailUnreachable(onRetry = viewModel::refresh) }
         return
     }
 
@@ -482,7 +490,7 @@ internal fun MessageReader(
                         }
                         MailHtmlBody(html, message.attachments, allowRemote = !remoteBlocked, onLink = { pendingLink = it })
                     } else {
-                        androidx.compose.foundation.text.selection.SelectionContainer {
+                        StrictSelectionContainer {
                             MailTextBody(
                                 message.body,
                                 onLink = { openExternalLink(context, it) },
@@ -1136,5 +1144,28 @@ fun MailAccountSheet(viewModel: MailViewModel, onDismiss: () -> Unit) {
 
             message?.let { Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall) }
         }
+    }
+}
+
+@Composable
+private fun MailUnreachable(onRetry: () -> Unit) {
+    var retrying by remember { mutableStateOf(false) }
+    Column(
+        Modifier.fillMaxSize().padding(32.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(Icons.Outlined.CloudOff, contentDescription = null, modifier = Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Spacer(Modifier.height(16.dp))
+        Text("Can't reach mail", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "Check your connection. Your mailbox will appear as soon as OSHI can reach it.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(20.dp))
+        Button(onClick = { retrying = true; onRetry() }) { Text(if (retrying) "Retrying…" else "Retry") }
     }
 }

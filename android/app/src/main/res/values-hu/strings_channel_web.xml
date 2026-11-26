@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Nyilvános webes előnézet</string>
+    <string name="cw_toggle">Bejegyzések közzététele a weben</string>
+    <string name="cw_footer">Az új bejegyzések nyilvános weboldalként is megjelennek itt: oshi-messenger.com/c/%1$s. Bárki olvashatja őket, a keresőmotorok és a linkelőnézetek is. A végponttól végpontig titkosítás nem vonatkozik a webes másolatra.</string>
+    <string name="cw_needs_link">Először adj nyilvános linket a csatornának: a webes előnézet annak a nevét használja.</string>
+    <string name="cw_create_link">Nyilvános link létrehozása</string>
+    <string name="cw_enable_title">Közzéteszed a bejegyzéseket a weben?</string>
+    <string name="cw_enable_confirm">A csatorna bejegyzései bárki számára láthatók lesznek a weben itt: oshi-messenger.com/c/%1$s. Csak az új bejegyzések. A linkelőnézetek (WhatsApp, X, Telegram…) is olvashatják őket, és a végponttól végpontig titkosítás nem vonatkozik a webes másolatra.</string>
+    <string name="cw_enable_action">Közzététel</string>
+    <string name="cw_disable_title">Kikapcsolod a webes előnézetet?</string>
+    <string name="cw_disable_confirm">A(z) oshi-messenger.com/c/%1$s címen közzétett összes bejegyzés és kép eltűnik a webről. Az appban lévő bejegyzéseid változatlanok maradnak.</string>
+    <string name="cw_disable_action">Kikapcsolás</string>
+    <string name="cw_indexing">Keresőmotorok engedélyezése</string>
+    <string name="cw_indexing_footer">Kikapcsolva az oldalak arra kérik a keresőmotorokat, hogy ne indexeljék őket.</string>
+    <string name="cw_embed_code">Beágyazási kód</string>
+    <string name="cw_embed_title">Bejegyzés beágyazása</string>
+    <string name="cw_embed_hint">Illeszd be ezt a kódot a weboldaladba oda, ahol a bejegyzésnek meg kell jelennie.</string>
+    <string name="cw_embed_dark">Sötét téma</string>
+    <string name="cw_copy_code">Kód másolása</string>
+    <string name="cw_code_copied">Kód másolva</string>
+    <string name="cw_not_on_web">Ez a bejegyzés nincs a weben. Csak a webes előnézet bekapcsolása után küldött bejegyzések jelennek meg.</string>
+    <string name="cw_error">Nem sikerült módosítani a webes előnézetet. Ellenőrizd a kapcsolatot, és próbáld újra.</string>
+</resources>

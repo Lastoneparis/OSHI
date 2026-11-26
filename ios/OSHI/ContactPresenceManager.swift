@@ -184,6 +184,60 @@ enum SharedNickname {
         return nil
     }
 
+    /// __LAUNCH_LAG_2026_11_22__ The same answer as `nickname(for:in:)`, in O(1).
+    ///
+    /// MEASURED on the owner's iPhone 17 Pro Max (1.0.49 b206, Time Profiler,
+    /// cold launch): the main thread was pegged from 1.2 s to ~8 s, and
+    /// `MessagesListView.conversationsList` was ~4.8 s of it. 2 s of that was
+    /// this table being JSON-decoded once PER ROW, PER BODY PASS, and then —
+    /// for every contact who never shared a nickname, i.e. most of them —
+    /// `nickname(for:in:)` walking the WHOLE map and folding every key
+    /// (`normalizeAliasKey`: two trims + two replaces) to find nothing. Rows ×
+    /// map size, re-run on every publish of the launch poll burst; the splash
+    /// mascot, whose clock only advances on rendered frames, stalled with it.
+    ///
+    /// The table folds every key ONCE, so a row costs one hash lookup. An
+    /// exact-spelling key wins over a folded one, as in `nickname(for:in:)`.
+    struct Table {
+        let raw: [String: String]
+        private let folded: [String: String]
+
+        init(_ map: [String: String]) {
+            raw = map
+            var f: [String: String] = [:]
+            var exact = Set<String>()
+            for (k, v) in map where !v.isEmpty {
+                let nk = MessageManager.normalizeAliasKey(k)
+                guard !nk.isEmpty else { continue }
+                if k == nk { f[nk] = v; exact.insert(nk) }
+                else if !exact.contains(nk), f[nk] == nil { f[nk] = v }
+            }
+            folded = f
+        }
+
+        func nickname(for publicKey: String) -> String? {
+            guard !folded.isEmpty else { return nil }
+            let wanted = MessageManager.normalizeAliasKey(publicKey)
+            guard !wanted.isEmpty else { return nil }
+            return folded[wanted]
+        }
+    }
+
+    private static let tableLock = NSLock()
+    nonisolated(unsafe) private static var cachedTableData: Data?
+    nonisolated(unsafe) private static var cachedTable = Table([:])
+
+    /// The decoded + folded table for these bytes, memoised on the bytes
+    /// themselves (no invalidation to forget: new bytes, new table).
+    static func table(_ data: Data?) -> Table {
+        let data = data ?? Data()
+        tableLock.lock(); defer { tableLock.unlock() }
+        if let previous = cachedTableData, previous == data { return cachedTable }
+        cachedTableData = data
+        cachedTable = Table(decode(data))
+        return cachedTable
+    }
+
     /// Le pseudo partage par ce contact (lecture UserDefaults synchrone).
     static func nickname(for publicKey: String) -> String? {
         nickname(for: publicKey, in: decode(UserDefaults.standard.data(forKey: defaultsKey)))
@@ -211,6 +265,22 @@ enum SharedNickname {
     /// Notre propre pseudo, tel qu'il part sur le fil (nil = on n'en dit rien).
     static func ownForWire() -> String? {
         sanitize(UserDefaults.standard.string(forKey: "userName"))
+    }
+}
+
+/// __LAUNCH_LAG_2026_11_22__ `contactAliases` decoded once per distinct byte
+/// string instead of once per conversation row per body pass.
+enum ContactAliasesMemo {
+    private static let lock = NSLock()
+    nonisolated(unsafe) private static var cachedData: Data?
+    nonisolated(unsafe) private static var cachedMap: [String: String] = [:]
+
+    static func map(_ data: Data) -> [String: String] {
+        lock.lock(); defer { lock.unlock() }
+        if let previous = cachedData, previous == data { return cachedMap }
+        cachedData = data
+        cachedMap = (try? JSONDecoder().decode([String: String].self, from: data)) ?? [:]
+        return cachedMap
     }
 }
 

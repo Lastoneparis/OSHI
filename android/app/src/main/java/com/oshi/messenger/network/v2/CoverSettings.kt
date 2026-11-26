@@ -26,7 +26,13 @@ class CoverSettings @Inject constructor(
      * The ONE interceptor every v2 OkHttp client installs. Outermost: Oblivious HTTP
      * ("Privacy relay (beta)", see OhttpInterceptor) — when active it handles eligible
      * /v2/ calls itself and fails closed; everything else falls to the cover transport.
+     *
+     * __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ wrapped by ServerClock.sampling: every /v2/
+     * answer teaches the clock offset, and a request refused for the clock is re-signed
+     * once and re-sent through the same transport.
      */
     fun interceptor(): okhttp3.Interceptor =
-        com.oshi.messenger.network.ohttp.OhttpInterceptor(ohttpSettings::transport, CoverInterceptor(::mode))
+        com.oshi.messenger.network.auth.ServerClock.sampling(
+            com.oshi.messenger.network.ohttp.OhttpInterceptor(ohttpSettings::transport, CoverInterceptor(::mode))
+        )
 }

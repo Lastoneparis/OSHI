@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">टिप्पणियाँ</string>
+    <string name="gs_comments_footer">सदस्य हर पोस्ट के नीचे टिप्पणी कर सकते हैं। पोस्ट केवल एडमिन करते हैं।</string>
+    <string name="cm_leave_comment">टिप्पणी करें</string>
+    <string name="cm_thread_title">टिप्पणियाँ</string>
+    <string name="cm_empty">अभी कोई टिप्पणी नहीं।</string>
+    <string name="cm_composer_hint">टिप्पणी…</string>
+    <string name="cm_replying_to">%1$s को जवाब</string>
+    <string name="cm_disabled">टिप्पणियाँ बंद हैं।</string>
+    <string name="cm_post_unavailable">यह पोस्ट अब उपलब्ध नहीं है।</string>
+    <string name="cm_too_fast">आप बहुत तेज़ी से टिप्पणी कर रहे हैं। थोड़ा रुकें।</string>
+    <string name="cm_notif_reply">%1$s ने आपकी टिप्पणी का जवाब दिया</string>
+    <string name="cm_delete_comment">टिप्पणी हटाएँ</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d टिप्पणी</item>
+        <item quantity="other">%d टिप्पणियाँ</item>
+    </plurals>
+</resources>

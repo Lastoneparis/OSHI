@@ -116,6 +116,7 @@ class OshiConnection(
                             Intent.FLAG_ACTIVITY_SINGLE_TOP
                     )
                     putExtra("incoming_call", true)
+                    com.oshi.messenger.service.IncomingCallLaunchToken.stamp(this)
                     putExtra(IncomingCallService.EXTRA_CALLER_KEY, peerKey)
                     putExtra(IncomingCallService.EXTRA_CALL_ID, callId)
                     putExtra(IncomingCallService.EXTRA_CALLER_NAME, peerName)

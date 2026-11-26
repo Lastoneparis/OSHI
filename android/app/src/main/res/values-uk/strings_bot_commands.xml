@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Команди</string>
+    <string name="bot_cmd_send_a11y">Надіслати %1$s</string>
+    <string name="bot_cmd_sheet_title">Команди бота</string>
+    <string name="bot_cmd_tap_to_send">Торкніться команди, щоб надіслати її.</string>
+    <string name="bot_cmd_empty_none_title">Тут ще немає ботів</string>
+    <string name="bot_cmd_empty_none_body">Створіть бота й додайте його до цієї групи. Його команди з’являться тут і коли ви введете /.</string>
+    <string name="bot_cmd_empty_bot">У цього бота ще немає команд.</string>
+    <string name="bot_cmd_setup">Налаштувати команди</string>
+    <string name="bot_cmd_section">Команди</string>
+    <string name="bot_cmd_section_hint">Учасники груп бота бачать їх, коли вводять / або торкаються «Команди».</string>
+    <string name="bot_cmd_add">Додати</string>
+    <string name="bot_cmd_add_title">Нова команда</string>
+    <string name="bot_cmd_edit_title">Змінити команду</string>
+    <string name="bot_cmd_field_name">Команда</string>
+    <string name="bot_cmd_field_description">Опис (показується в меню)</string>
+    <string name="bot_cmd_field_reply">Відповідь</string>
+    <string name="bot_cmd_field_reply_hint">Що відповідає бот. Можна використовувати {{input}}, {{bot_name}} і {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Надсилається на ваш вебхук, який і відповідає.</string>
+    <string name="bot_cmd_empty_owner">Команд ще немає. Додайте, наприклад, /start або /help, щоб усі знали, що вміє цей бот.</string>
+    <string name="bot_cmd_err_empty">Введіть назву команди.</string>
+    <string name="bot_cmd_err_invalid">Лише малі латинські літери, цифри та _.</string>
+    <string name="bot_cmd_err_too_long">Не більше 32 символів.</string>
+    <string name="bot_cmd_err_duplicate">У цього бота вже є така команда.</string>
+    <string name="bot_cmd_err_too_many">Бот може мати не більше 100 команд.</string>
+    <string name="bot_cmd_err_description">Задовгий опис (не більше 256 символів).</string>
+    <string name="bot_cmd_sync_local">Збережено на цьому телефоні, де працює бот.</string>
+    <string name="bot_cmd_sync_syncing">Оновлення сервера…</string>
+    <string name="bot_cmd_sync_synced">Меню оновлено на сервері.</string>
+    <string name="bot_cmd_sync_failed">Не вдалося оновити сервер. Ваші команди збережено на цьому телефоні.</string>
+    <string name="bot_profile_edit">Змінити профіль</string>
+    <string name="bot_profile_name">Ім’я</string>
+    <string name="bot_profile_description">Опис</string>
+    <string name="bot_profile_avatar">Аватар</string>
+    <string name="bot_profile_err_name_empty">Дайте ботові ім’я.</string>
+    <string name="bot_profile_err_name_long">Задовге ім’я (не більше 64 символів).</string>
+    <string name="bot_profile_err_desc_long">Задовгий опис (не більше 512 символів).</string>
+    <string name="bot_connect_title">Як він під’єднаний</string>
+    <string name="bot_connect_local">Цей бот працює на цьому телефоні: не видаляйте OSHI й не вимикайте бота. Додайте його до групи, і її учасники зможуть користуватися його командами.</string>
+    <string name="bot_connect_webhook">Кожна команда надсилається на URL вашого вебхука, а ваш сервер відповідає у форматі JSON {\"text\": \"…\"}. Ваш сервер також може використовувати токен нижче з API ботів OSHI.</string>
+    <string name="bot_connect_token_warning">Тримайте токен у таємниці: будь-хто, хто його має, може писати від імені вашого бота.</string>
+    <string name="bot_connect_groups">Групи: %1$s</string>
+    <string name="bot_connect_no_groups">Ще не в жодній групі — ніхто не може користуватися його командами.</string>
+</resources>

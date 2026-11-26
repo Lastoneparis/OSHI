@@ -94,8 +94,8 @@ fun PhotoMarkupDialog(
 
     // __OLED_GLASS_2026_11_16__ OLED black: the toolbars are glass bars on the
     // black ground (no #1A1A1A slabs) and the chosen pen glows.
-    val glass = com.oshi.messenger.ui.theme.glassOn()
-    val barFill = if (glass) com.oshi.messenger.ui.theme.GlassTier.Bar.opaque else Color(0xFF1A1A1A)
+    val glass = com.oshi.messenger.ui.theme.oledGlassOn()
+    val barFill = if (glass) com.oshi.messenger.ui.theme.glassOpaque(com.oshi.messenger.ui.theme.GlassTier.Bar) else Color(0xFF1A1A1A)
     val navInset = androidx.compose.foundation.layout.WindowInsets.navigationBars
         .asPaddingValues().calculateBottomPadding()
     val navClearance = if (navInset > 0.dp) navInset else 28.dp

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · sem criptografia de ponta a ponta do OSHI</string>
+    <string name="meshcore_error_not_connected">Nenhum rádio MeshCore conectado</string>
+    <string name="meshcore_channels_title">Canais do MeshCore</string>
+    <string name="meshcore_channel_public">Público · legível por quem souber o nome</string>
+    <string name="meshcore_channel_private">Privado · chave secreta</string>
+    <string name="meshcore_join_hashtag">Entrar em um canal hashtag</string>
+    <string name="meshcore_join_private">Entrar em um canal privado</string>
+    <string name="meshcore_contacts_title">Contatos do MeshCore</string>
+    <string name="meshcore_refresh_contacts">Atualizar contatos</string>
+    <string name="meshcore_join_refused">O rádio recusou este canal.</string>
+    <string name="meshcore_join_no_slot">Nenhum slot de canal livre neste rádio.</string>
+    <string name="meshcore_join_bad_name">Digite um nome de canal válido (máx. 31 bytes, sem espaços para um canal hashtag).</string>
+    <string name="meshcore_join_bad_secret">O segredo deve ter 16 bytes: 32 caracteres hexadecimais ou base64.</string>
+    <string name="meshcore_hashtag_hint">A chave é derivada do nome: quem souber o nome pode ler o canal.</string>
+    <string name="meshcore_private_hint">Digite o nome do canal e o segredo compartilhado pelos membros.</string>
+    <string name="meshcore_channel_name">Nome do canal</string>
+    <string name="meshcore_channel_secret">Segredo (hex ou base64)</string>
+    <string name="meshcore_join">Entrar</string>
+    <string name="meshcore_note_dm">Criptografado pelo MeshCore entre os rádios, não de ponta a ponta pelo OSHI.</string>
+    <string name="meshcore_note_public">Canal público: qualquer pessoa que saiba o nome pode lê-lo.</string>
+    <string name="meshcore_note_private">Canal privado: qualquer pessoa com o segredo pode lê-lo.</string>
+    <string name="meshcore_radio_offline">Rádio MeshCore não conectado. As mensagens ficam aqui como não entregues.</string>
+    <string name="meshcore_connect">Conectar</string>
+    <string name="meshcore_parts">%1$d mensagens</string>
+    <string name="meshcore_sending">Aguardando o rádio</string>
+    <string name="meshcore_failed_dm">Sem resposta do rádio da pessoa (fora de alcance?). Toque para tentar de novo.</string>
+    <string name="meshcore_error_pairing">O pareamento falhou. Confira o PIN e tente de novo. Se o rádio foi redefinido, remova-o primeiro nas configurações de Bluetooth do Android.</string>
+    <string name="meshcore_error_no_answer">O rádio não respondeu. Confira se ele usa o firmware MeshCore companion para Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Conexão perdida. Reconectando quando o rádio voltar ao alcance…</string>
+    <string name="meshcore_state_pin">Digite o PIN do rádio no aviso do Android</string>
+    <string name="meshcore_state_reading">Lendo contatos e canais…</string>
+    <string name="meshcore_state_connecting">Conectando…</string>
+    <string name="meshcore_seen_as">Conectado · usuários do MeshCore veem você como %1$s</string>
+    <string name="meshcore_connected">Conectado</string>
+    <string name="meshcore_footer_users">Converse com usuários do MeshCore (mensagens diretas e canais) e leve mensagens do OSHI pelos repetidores MeshCore. Requer o firmware MeshCore companion para Bluetooth. O OSHI adiciona um canal, #oshi-bridge, em um espaço livre e nunca altera seus outros canais.</string>
+    <string name="meshcore_scan_below">Rádios MeshCore aparecem abaixo em Rádios próximos, marcados como MeshCore.</string>
+    <string name="meshcore_contacts_footer">Toque em alguém para escrever. As mensagens são criptografadas pelo MeshCore, não de ponta a ponta pelo OSHI.</string>
+    <string name="meshcore_no_contacts">Ninguém ouvido ainda. Usuários do MeshCore aparecem aqui quando o rádio deles se anuncia. Anuncie o seu para que encontrem você.</string>
+    <string name="meshcore_heard">Ouvido %1$s</string>
+    <string name="meshcore_announce">Me anunciar</string>
+    <string name="meshcore_announce_done">Anunciado. Usuários do MeshCore ao alcance agora podem adicionar você e escrever para você.</string>
+    <string name="meshcore_announce_failed">O rádio não conseguiu enviar o anúncio.</string>
+    <string name="meshcore_channels_footer">Toque em um canal para abri-lo. Canais públicos e de hashtag podem ser lidos por quem souber o nome.</string>
+    <string name="meshcore_pin_title">Parear com %1$s</string>
+    <string name="meshcore_pin_body">O Android vai pedir agora o PIN do rádio. Se o rádio tiver tela, o PIN aparece nela.</string>
+    <string name="meshcore_pin_default">Sem tela? O PIN é 123456, a menos que tenha sido alterado no app MeshCore.</string>
+    <string name="meshcore_pin_continue">Continuar</string>
+    <string name="meshcore_no_free_channel_chat">Os 8 espaços de canal estão ocupados. Você ainda pode conversar com usuários do MeshCore; libere um espaço no app MeshCore para que as mensagens do OSHI usem #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">Usuário do MeshCore</string>
+    <string name="meshcore_too_long">Longo demais: máx. %1$d mensagens</string>
+</resources>

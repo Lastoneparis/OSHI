@@ -126,6 +126,14 @@ class ChatViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     /**
+     * __MESHCORE_INTEROP_2026_11_25__ A MeshCore user (`meshcore!…`) or channel (`mcchan!…`): written to
+     * through the MeshCore radio, NOT OSHI end-to-end encrypted. ChatScreen labels it.
+     */
+    val isMeshCoreThread: StateFlow<Boolean> = _publicKey
+        .map { com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(it) }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+    /**
      * Refuse a send into the system thread and say why, in the user's language.
      * Returns true when the caller must stop.
      */
@@ -665,6 +673,15 @@ class ChatViewModel @Inject constructor(
             }
             return
         }
+        // __MESHCORE_INTEROP_2026_11_25__ Same for a MeshCore user or channel: plain text only (a MeshCore
+        // app cannot read OSHI's reply envelope); sendTextMessage routes the key to the MeshCore radio.
+        if (com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(pk)) {
+            _replyingToMessage.value = null
+            viewModelScope.launch {
+                reportSendResult(messageRepository.sendTextMessage(pk, content))
+            }
+            return
+        }
 
         val replyMsg = _replyingToMessage.value
         if (replyMsg != null) {
@@ -799,6 +816,39 @@ class ChatViewModel @Inject constructor(
         val req = com.oshi.messenger.data.model.OfflineOnlyRequest.create(on)
         viewModelScope.launch {
             reportSendResult(messageRepository.sendTextMessage(pk, req.toMessageString()))
+        }
+    }
+
+    /**
+     * 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Turn advanced chat privacy on or off for
+     * this conversation, for both sides.
+     *
+     * Local state first (it is true the moment the user flips the switch), then
+     * the payload goes out through [MessageRepository.sendTextMessage] so it is
+     * also OUR row in the thread ("You turned on …") — but only to a peer that
+     * reads the sentinel ([com.oshi.messenger.service.AdvancedChatPrivacyReaders]:
+     * bundle cap bit 16, or it sent us one). Otherwise the row is stored locally
+     * and nothing is sent.
+     */
+    fun setAdvancedChatPrivacy(on: Boolean) {
+        val pk = _publicKey.value
+        if (pk.isEmpty()) return
+        if (refuseIfSystemThread(pk)) return
+        val store = com.oshi.messenger.service.AdvancedChatPrivacyStore
+        store.attach(appContext)
+        val change = com.oshi.messenger.data.model.AdvancedChatPrivacyChange.create(on)
+        store.setLocal(change, com.oshi.messenger.data.repository.MessageRepository.canonicalIdentity(pk))
+        val readers = com.oshi.messenger.service.AdvancedChatPrivacyReaders
+        readers.attach(appContext)
+        viewModelScope.launch {
+            if (readers.peerReadsNow(pk)) {
+                reportSendResult(messageRepository.sendTextMessage(pk, change.toMessageString()))
+            } else {
+                // The peer's build does not read the sentinel (no bundle bit 16 and
+                // it never sent us one): applied here, our own notice shown, nothing
+                // sent — a send would be a raw JSON bubble on their side.
+                messageRepository.recordLocalOutgoingNotice(pk, change.toMessageString())
+            }
         }
     }
 
@@ -1258,11 +1308,13 @@ class ChatViewModel @Inject constructor(
             // - If contact missing: addContact() creates it
             // - If contact present and we have a non-blank alias: update it
             //   (no-op if user already has a custom alias they prefer)
-            val resolvedAlias = alias?.takeIf { it.isNotBlank() }
-                ?: (publicKey.take(8) + "...")
             runCatching {
                 val existing = messageRepository.getContact(publicKey).first()
                 if (existing == null) {
+                    // __CONTACT_CARD_ALIAS_2026_11_20__ the card's name is the SENDER's
+                    // choice: never a duplicate of another contact's name.
+                    val others = messageRepository.getAllContacts().first().map { it.alias }
+                    val resolvedAlias = com.oshi.messenger.util.ContactCardAlias.safeAlias(alias, publicKey, others)
                     messageRepository.addContact(publicKey, resolvedAlias)
                 }
             }
@@ -1507,14 +1559,19 @@ class ChatViewModel @Inject constructor(
     // which is Mesh for anyone who never picked one, as on iOS — instead of
     // flat beige. A wallpaper someone explicitly chose (per chat or global,
     // "Default" included) is stored and still wins.
+    // __WALLPAPER_PERSIST_2026_11_21__ then the wallpaper persisted for this
+    // chat (the in-memory map is empty after a restart), then the default.
     val currentWallpaper: StateFlow<ChatWallpaper> = combine(
         messageRepository.wallpapers,
         _publicKey,
-        wallpaperManager.globalWallpaper
-    ) { wallpaperMap, pk, global ->
+        wallpaperManager.globalWallpaper,
+        wallpaperManager.revision
+    ) { wallpaperMap, pk, global, _ ->
         val data = wallpaperMap[pk]
-        if (data != null) chatWallpaperFromBytes(data) else global
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), wallpaperManager.globalWallpaper.value)
+        if (data != null) chatWallpaperFromBytes(data)
+        else wallpaperManager.storedWallpaper(pk) ?: global
+    }.flowOn(kotlinx.coroutines.Dispatchers.Default)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), wallpaperManager.globalWallpaper.value)
 
     /**
      * Set wallpaper for the current conversation and broadcast to recipient.
@@ -1579,6 +1636,11 @@ class ChatViewModel @Inject constructor(
      */
     fun setWallpaperForAllChats(wallpaper: ChatWallpaper) {
         viewModelScope.launch {
+            // Persisted overrides shadow the default exactly like the in-memory
+            // ones below, and after a restart they are the only ones there are.
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                wallpaperManager.clearAllConversationWallpapers()
+            }
             wallpaperManager.setGlobalWallpaper(wallpaper)
 
             val syncJson = wallpaper.toSyncBytes()

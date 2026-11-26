@@ -183,3 +183,83 @@ fun reactionDrawable(code: String): Int? = when (code.replace("️", "")) {
     "🔥" -> R.drawable.mascot_fire
     else -> null
 }
+
+// ---- __WEAR_POLISH_2026_11_25__ ------------------------------------------
+
+/** Amber for "messages wait on your phone" (no way out right now). */
+val OfflineAmber = Color(0xFFFFC266)
+
+/** A short time for a row or a bubble: "14:32" today, "Tue" this week, "12 Nov" before. */
+fun shortTime(context: android.content.Context, ts: Long, now: Long = System.currentTimeMillis()): String {
+    if (ts <= 0L) return ""
+    val day = 24 * 60 * 60 * 1000L
+    return when {
+        sameDay(ts, now) -> android.text.format.DateFormat.getTimeFormat(context).format(java.util.Date(ts))
+        now - ts < 6 * day -> android.text.format.DateUtils.formatDateTime(
+            context, ts, android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY or android.text.format.DateUtils.FORMAT_ABBREV_WEEKDAY,
+        )
+        else -> android.text.format.DateUtils.formatDateTime(
+            context, ts, android.text.format.DateUtils.FORMAT_SHOW_DATE or android.text.format.DateUtils.FORMAT_ABBREV_MONTH or
+                android.text.format.DateUtils.FORMAT_NO_YEAR,
+        )
+    }
+}
+
+private fun sameDay(a: Long, b: Long): Boolean {
+    val ca = java.util.Calendar.getInstance().apply { timeInMillis = a }
+    val cb = java.util.Calendar.getInstance().apply { timeInMillis = b }
+    return ca.get(java.util.Calendar.YEAR) == cb.get(java.util.Calendar.YEAR) &&
+        ca.get(java.util.Calendar.DAY_OF_YEAR) == cb.get(java.util.Calendar.DAY_OF_YEAR)
+}
+
+/**
+ * The compact age for a list row, where width is scarce: "3m", "2h" today
+ * (ICU narrow units, localized: "3 min" in French), then the short weekday /
+ * date as [shortTime]. Never "3:04 PM", which squeezes the name on 192 dp.
+ */
+fun rowTime(context: android.content.Context, ts: Long, now: Long = System.currentTimeMillis()): String {
+    if (ts <= 0L) return ""
+    val age = (now - ts).coerceAtLeast(0L)
+    if (!sameDay(ts, now) || age >= 12 * 60 * 60 * 1000L) return shortTime(context, ts, now)
+    val fmt = android.icu.text.MeasureFormat.getInstance(
+        context.resources.configuration.locales[0], android.icu.text.MeasureFormat.FormatWidth.NARROW,
+    )
+    val minutes = (age / 60_000L).coerceAtLeast(1L)
+    return if (minutes < 60) fmt.format(android.icu.util.Measure(minutes, android.icu.util.MeasureUnit.MINUTE))
+    else fmt.format(android.icu.util.Measure(minutes / 60, android.icu.util.MeasureUnit.HOUR))
+}
+
+/** "0:14". */
+fun clock(seconds: Int): String = "${seconds / 60}:${(seconds % 60).toString().padStart(2, '0')}"
+
+/** A small push-pin, drawn (no icon font on the watch). */
+@Composable
+fun PinGlyph(modifier: Modifier = Modifier, color: Color = OshiColors.BrandInk) {
+    androidx.compose.foundation.Canvas(modifier.size(10.dp)) {
+        val w = size.width
+        drawCircle(color, radius = w * 0.28f, center = Offset(w * 0.62f, w * 0.38f))
+        drawLine(color, Offset(w * 0.52f, w * 0.48f), Offset(w * 0.14f, w * 0.86f), strokeWidth = w * 0.14f,
+            cap = androidx.compose.ui.graphics.StrokeCap.Round)
+    }
+}
+
+/** A small microphone, drawn. */
+@Composable
+fun MicGlyph(size: Dp = 18.dp, color: Color = Color.White, modifier: Modifier = Modifier) {
+    androidx.compose.foundation.Canvas(modifier.size(size)) {
+        val w = this.size.width
+        val stroke = w * 0.1f
+        drawRoundRect(
+            color, topLeft = Offset(w * 0.35f, w * 0.06f), size = Size(w * 0.30f, w * 0.52f),
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(w * 0.15f),
+        )
+        drawArc(
+            color, startAngle = 0f, sweepAngle = 180f, useCenter = false,
+            topLeft = Offset(w * 0.22f, w * 0.22f), size = Size(w * 0.56f, w * 0.50f),
+            style = Stroke(width = stroke, cap = androidx.compose.ui.graphics.StrokeCap.Round),
+        )
+        drawLine(color, Offset(w * 0.5f, w * 0.72f), Offset(w * 0.5f, w * 0.90f), strokeWidth = stroke)
+        drawLine(color, Offset(w * 0.32f, w * 0.92f), Offset(w * 0.68f, w * 0.92f), strokeWidth = stroke,
+            cap = androidx.compose.ui.graphics.StrokeCap.Round)
+    }
+}

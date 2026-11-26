@@ -4,6 +4,7 @@ import com.oshi.messenger.ui.theme.glassDialogRim
 import com.oshi.messenger.ui.theme.thenIf
 import com.oshi.messenger.ui.theme.OshiFilterChip
 import com.oshi.messenger.ui.theme.glassHairline
+import com.oshi.messenger.ui.theme.glassLift
 import com.oshi.messenger.ui.theme.glassGlow
 import com.oshi.messenger.ui.components.bubbleClickable
 import com.oshi.messenger.ui.theme.OshiModalBottomSheet
@@ -126,6 +127,10 @@ import com.oshi.messenger.service.audio.VoiceEffectProcessor.VoiceEffect
 import com.oshi.messenger.ui.components.AIQuickBar
 import com.oshi.messenger.ui.components.SmartRepliesBar
 import com.oshi.messenger.ui.components.ChatWallpaper
+import com.oshi.messenger.ui.components.emojiPattern
+import com.oshi.messenger.ui.components.frostedBackdropSource
+import com.oshi.messenger.ui.components.extendUp
+import androidx.compose.ui.platform.LocalLayoutDirection
 import com.oshi.messenger.ui.components.OshiDynamicStyle
 import com.oshi.messenger.ui.components.OshiDynamicWallpaperView
 import com.oshi.messenger.ui.components.LinkPreviewCard
@@ -176,6 +181,7 @@ import com.oshi.messenger.ui.theme.OSHIRed
 import com.oshi.messenger.ui.theme.brandInk
 import com.oshi.messenger.ui.theme.isDarkScheme
 import com.oshi.messenger.ui.theme.Oshi
+import com.oshi.messenger.ui.media.bleed
 import org.json.JSONObject
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -241,6 +247,8 @@ private fun hasPhysicalInternet(context: android.content.Context): Boolean {
 @Composable
 fun ChatScreen(
     publicKey: String,
+    /** __CHAT_BACKDROP_BLUR_2026_11_21__ the status-bar strip the host padded us out of. */
+    statusBarUnderlap: androidx.compose.ui.unit.Dp = 0.dp,
     onBack: () -> Unit,
     onCallClick: (Boolean) -> Unit,
     onNavigateToMap: () -> Unit = {},
@@ -257,6 +265,8 @@ fun ChatScreen(
      * or the overflow entry is inert.
      */
     onOpenSafetyNumber: (theirPublicKey: String) -> Unit = {},
+    /** __MESHCORE_INTEROP_2026_11_25__ The radio settings, from a MeshCore thread whose radio is not connected. */
+    onOpenRadioSettings: () -> Unit = {},
     viewModel: ChatViewModel = hiltViewModel(),
     nlpViewModel: NLPViewModel = hiltViewModel()
 ) {
@@ -348,8 +358,13 @@ fun ChatScreen(
         }
     }
 
+    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Observed: a peer's change flips every gate
+    // below (AI, save, FLAG_SECURE) without reopening the chat.
+    val advPrivacy = com.oshi.messenger.ui.components.rememberAdvancedChatPrivacy(publicKey)
+    com.oshi.messenger.ui.components.AdvancedChatPrivacyWindowGuard(publicKey, advPrivacy)
+
     // Build conversation context for AI and trigger smart replies on new received messages
-    val conversationContext = remember(messages.size) {
+    val conversationContext = remember(messages.size, advPrivacy) {
         // F-16. This was a hand-rolled 7-prefix copy of the catalog, and one of
         // its entries could never match (pushpin + U+FE0F where the wire prefix
         // has the bare codepoint), so every shared location went verbatim into
@@ -366,14 +381,25 @@ fun ChatScreen(
             .take(5)
             .reversed()
             .map { Pair(it.isFromMe, it.content) }
-        nlpViewModel.buildConversationContext(readableMessages)
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ nothing from a protected chat reaches the model.
+        nlpViewModel.buildConversationContext(
+            com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.aiReadable(advPrivacy, readableMessages)
+        )
     }
 
     // Trigger smart replies when the newest message is from the other party.
     // `getMessagesForContact` is ORDER BY timestamp DESC (MessageDao:436), so the
     // newest row is index 0 - this read `lastOrNull()`, i.e. the OLDEST message
     // in the whole conversation, and generated replies to it.
+    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ no smart replies on a protected chat, and
+    // any already on screen go the moment it is switched on.
+    LaunchedEffect(advPrivacy) {
+        if (!com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.aiAllowed(advPrivacy)) {
+            nlpViewModel.clearSmartReplies()
+        }
+    }
     LaunchedEffect(messages.size) {
+        if (!com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.aiAllowed(advPrivacy)) return@LaunchedEffect
         // H-5. F-16 fixed the CONTEXT builder above and left this trigger raw, so
         // when the newest received message was a shared location or a call summary
         // the on-device LLM was handed `📍LOCATION📍{"latitude":48.85,…}` verbatim
@@ -504,6 +530,22 @@ fun ChatScreen(
     // interop reply lane), so it drives a marker, not a banner that hides the
     // composer. See ChatViewModel.isLoRaInteropThread.
     val isLoRaInteropThread by viewModel.isLoRaInteropThread.collectAsState()
+
+    // __MESHCORE_INTEROP_2026_11_25__ A MeshCore user or channel: never "E2E", always the MeshCore label;
+    // a public / hashtag channel also says that anyone who knows its name reads it.
+    val isMeshCoreThread by viewModel.isMeshCoreThread.collectAsState()
+    val isMeshCoreKey = remember(publicKey) { com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(publicKey) }
+    val isMeshCoreChannel = remember(publicKey) { com.oshi.messenger.service.lora.MeshCoreThread.isChannelKey(publicKey) }
+    // Collected only in a MeshCore thread (the key never changes for this screen), so an ordinary chat never
+    // starts the MeshCore radio manager.
+    val meshCore = if (isMeshCoreKey) {
+        remember { com.oshi.messenger.service.lora.MeshCoreManager.getInstance(context.applicationContext) }
+    } else null
+    val meshCoreChannels by (meshCore?.channels ?: remember { kotlinx.coroutines.flow.MutableStateFlow(emptyList<com.oshi.messenger.service.lora.MeshCore.ChannelInfo>()) }).collectAsState()
+    val meshCoreChatReady by (meshCore?.chatReady ?: remember { kotlinx.coroutines.flow.MutableStateFlow(false) }).collectAsState()
+    val meshCoreSelfName by (meshCore?.selfName ?: remember { kotlinx.coroutines.flow.MutableStateFlow<String?>(null) }).collectAsState()
+    val meshCorePending by (meshCore?.pendingTexts ?: remember { kotlinx.coroutines.flow.MutableStateFlow(emptySet<String>()) }).collectAsState()
+    val meshCoreNote = if (isMeshCoreThread) MeshCoreUi.threadNote(publicKey, meshCoreChannels) else null
 
     // Pinned message state (6A.6)
     val pinnedMessage by viewModel.pinnedMessage.collectAsState()
@@ -1118,7 +1160,9 @@ fun ChatScreen(
             },
             // (N5) the line the top bar no longer carries; a LoRa interop thread
             // gets its own warning instead, never an E2E claim.
-            encryptionLabel = if (isLoRaInteropThread) {
+            encryptionLabel = if (isMeshCoreThread) {
+                stringResource(R.string.meshcore_not_e2e)
+            } else if (isLoRaInteropThread) {
                 stringResource(R.string.lora_interop_unverified)
             } else {
                 stringResource(R.string.encryption_e2e)
@@ -1249,8 +1293,8 @@ fun ChatScreen(
                 if (displayContent.isNotEmpty()) {
                     val textWithLink = "$displayContent\n\n--- Sent via OSHI Messenger\nhttps://oshimessenger.com"
                     // __CLIPBOARD_HYGIENE_2026_10_01__ decrypted message ⇒ sensitive clip, cleared after 60 s.
-                    com.oshi.messenger.security.SensitiveClipboard.copy(context, textWithLink)
-                    Toast.makeText(context, context.getString(R.string.chat_copied), Toast.LENGTH_SHORT).show()
+                    if (com.oshi.messenger.security.SensitiveClipboard.copyMessageText(context, textWithLink))
+                        Toast.makeText(context, context.getString(R.string.chat_copied), Toast.LENGTH_SHORT).show()
                 }
                 showMessageActions = false
                 selectedMessage = null
@@ -1276,6 +1320,13 @@ fun ChatScreen(
                 try { textFieldFocusRequester.requestFocus() } catch (_: Exception) {}
             },
             onTranslate = {
+              // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ translation runs the message through
+              // on-device AI (Gemini Nano / local LLM / ML Kit): not in a protected chat.
+              if (advPrivacy) {
+                Toast.makeText(context, context.getString(R.string.adv_privacy_blocked_toast), Toast.LENGTH_SHORT).show()
+                showMessageActions = false
+                selectedMessage = null
+              } else {
                 // Surface #11, the third H-6 site. The sheet shows this string as
                 // "original text" AND sends it to the translator; raw, a shared
                 // location asked the model to translate its own coordinate JSON.
@@ -1292,6 +1343,7 @@ fun ChatScreen(
                 showMessageActions = false
                 selectedMessage = null
                 showTranslateSheet = true
+              }
             },
             onDeleteForMe = {
                 viewModel.deleteMessage(selectedMessage!!.id)
@@ -1303,7 +1355,11 @@ fun ChatScreen(
                 showMessageActions = false
                 selectedMessage = null
             },
-            onSave = selectedMessage?.let { msg ->
+            onSave = selectedMessage?.takeIf {
+                com.oshi.messenger.security.StrictModeGate.mediaExportAllowed &&  // 🛡 __STRICT_MODE_2026_11_22__
+                    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ others' media stays in OSHI.
+                    com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.mediaSaveAllowed(advPrivacy, it.isFromMe)
+            }?.let { msg ->
                 // __CHAT_OPEN_PERF_2026_11_14__ The thread's rows carry attachments
                 // only up to 64 KB now, so the bytes are read on tap (off Main) when
                 // the row does not have them. Deleted-for-everyone rows have none.
@@ -1339,8 +1395,8 @@ fun ChatScreen(
             onRetry = { viewModel.translateMessage(translateMessageContent) },
             onCopy = if (blockForwardCopy) null else { translated ->
                 // __CLIPBOARD_HYGIENE_2026_10_01__ a translation is the message in clear ⇒ same hygiene.
-                com.oshi.messenger.security.SensitiveClipboard.copy(context, translated)
-                Toast.makeText(context, context.getString(R.string.chat_copied), Toast.LENGTH_SHORT).show()
+                if (com.oshi.messenger.security.SensitiveClipboard.copyMessageText(context, translated))
+                    Toast.makeText(context, context.getString(R.string.chat_copied), Toast.LENGTH_SHORT).show()
             },
             onDismiss = {
                 showTranslateSheet = false
@@ -1822,14 +1878,24 @@ fun ChatScreen(
         WallpaperTonePrefs.tone(chatToneContext, publicKey),
         isDarkScheme()
     ).contentDark
-    CompositionLocalProvider(LocalBubbleAppearance provides bubbleAppearance) {
+    // __CHAT_BACKDROP_BLUR_2026_11_21__ live frost of the thread under the bars
+    // (API 31+, no battery saver / high contrast / low-RAM device).
+    val liveBackdrop = com.oshi.messenger.ui.components.rememberLiveChatBackdrop()
+    CompositionLocalProvider(
+        LocalBubbleAppearance provides bubbleAppearance,
+        com.oshi.messenger.ui.components.LocalAdvancedChatPrivacy provides advPrivacy,
+    ) {
     WithChatScheme(dark = chatDark) {
+    // __MESHCORE_INTEROP_2026_11_25__ the bubbles' clock and "out of range?" read the radio through this.
+    CompositionLocalProvider(LocalMeshCoreBubbles provides MeshCoreBubbleState(meshCorePending, meshCoreChatReady)) {
     Scaffold(
         // Transparent, so the Scaffold cannot paint a strip of its own container
         // colour between the frosted bar and the thread. The ground is painted
         // once, below, from the single scheme resolved above.
         containerColor = androidx.compose.ui.graphics.Color.Transparent,
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier
+            .extendUp(statusBarUnderlap)
+            .background(MaterialTheme.colorScheme.surface),
         topBar = {
             // __FROSTED_BARS_2026_11_02__ (N12) The wallpaper runs under the bar,
             // softened, instead of stopping at an opaque band. The backdrop is a
@@ -1842,8 +1908,11 @@ fun ChatScreen(
             com.oshi.messenger.ui.components.FrostedChatBarBackdrop(
                 wallpaper = currentWallpaper,
                 scrimColor = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.matchParentSize()
+                modifier = Modifier.matchParentSize(),
+                live = liveBackdrop
             )
+            Column {
+            Spacer(modifier = Modifier.height(statusBarUnderlap))
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = androidx.compose.ui.graphics.Color.Transparent,
@@ -1951,7 +2020,7 @@ fun ChatScreen(
                             // thread and on the contact card. What stays is what
                             // DIFFERS per thread: the unsigned-radio warning and the
                             // mesh-only state — so the row only exists for those.
-                            if (isLoRaInteropThread || offlineOnly) Row(
+                            if (isLoRaInteropThread || isMeshCoreThread || offlineOnly) Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.padding(top = 1.dp)
                             ) {
@@ -1967,7 +2036,11 @@ fun ChatScreen(
                                 // precisely the one subtitle spot a user checks to tell
                                 // "my friend" from "a stranger's radio", so it must never
                                 // say "🔒 E2E" for a packet nobody signed.
-                                if (isLoRaInteropThread) {
+                                // __MESHCORE_INTEROP_2026_11_25__ MeshCore: a fact, in the subtitle's own
+                                // quiet ink (it IS encrypted, by MeshCore): red read as "danger".
+                                if (isMeshCoreThread) {
+                                    MeshCoreThreadSubtitle()
+                                } else if (isLoRaInteropThread) {
                                     Text(
                                         text = stringResource(R.string.lora_interop_unverified),
                                         fontSize = 10.sp,
@@ -2233,6 +2306,16 @@ fun ChatScreen(
                                     )
                                 }
                             )
+                            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ A toggle with a subtitle
+                            // saying what it does, for both sides of the conversation.
+                            com.oshi.messenger.ui.components.AdvancedChatPrivacyToggle(
+                                on = advPrivacy,
+                                onToggle = { on ->
+                                    showMoreMenu = false
+                                    viewModel.setAdvancedChatPrivacy(on)
+                                },
+                                modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+                            )
                             // Reset Session (6B.12)
                             ChatSheetItem(
                                 text = { Text(stringResource(R.string.chat_reset_session)) },
@@ -2319,14 +2402,10 @@ fun ChatScreen(
                     }
                 }
             )
-            }
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
+            // __CHAT_BACKDROP_BLUR_2026_11_21__ The banners that sat between the bar and
+            // the thread (check-in, search, pinned message, live location, version
+            // notices) now belong to the frosted top band: the thread scrolls under
+            // the bar AND them, which is what lets the messages show through.
             // 💓 __ALIVE_CHECK_IN_2026_11_04__ The liveness strip, above the search
             // bar and the pinned-message banner, and present ONLY once a check-in
             // exists in one direction or the other. The way IN when there is none
@@ -2593,6 +2672,646 @@ fun ChatScreen(
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
             )
 
+            }
+            }
+        },
+        bottomBar = {
+            // __CHAT_BACKDROP_BLUR_2026_11_21__ Everything under the thread — progress,
+            // reply / edit banners, notices, the composer — is one frosted band the
+            // thread scrolls under. The insets are taken HERE, once (the composer's
+            // own `navigationBarsPadding().imePadding()` find them consumed).
+            Box {
+            com.oshi.messenger.ui.components.FrostedChatBarBackdrop(
+                wallpaper = currentWallpaper,
+                scrimColor = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.matchParentSize(),
+                edgeOnTop = true,
+                live = liveBackdrop
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .imePadding()
+            ) {
+            // Upload/compression progress indicator.
+            //
+            // __PICKER_LATENCY_2026_09_18__ It now also covers the step BEFORE
+            // compression — reading the picked file out of the content provider —
+            // which for a video is the slow one and used to show nothing at all.
+            // That read reports no progress, so while it runs both indicators are
+            // INDETERMINATE: a determinate bar frozen at 0% says "stuck", which is
+            // the exact impression this is here to remove.
+            AnimatedVisibility(visible = isMediaProcessing || isPreparingMedia) {
+                val indeterminate = isPreparingMedia && !isMediaProcessing
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.9f))
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        if (indeterminate) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp,
+                                color = brandInk()
+                            )
+                        } else {
+                            CircularProgressIndicator(
+                                progress = compressionProgress.toFloat(),
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp,
+                                color = brandInk()
+                            )
+                        }
+                        Text(
+                            text = stringResource(
+                                if (indeterminate) R.string.chat_preparing_media else R.string.loading
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    val barModifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp)
+                        .height(3.dp)
+                        .clip(RoundedCornerShape(1.5.dp))
+                    if (indeterminate) {
+                        LinearProgressIndicator(modifier = barModifier, color = brandInk())
+                    } else {
+                        LinearProgressIndicator(
+                            progress = compressionProgress.toFloat(),
+                            modifier = barModifier,
+                            color = brandInk()
+                        )
+                    }
+                }
+            }
+
+            // Reply Preview Banner (above input, below messages)
+            AnimatedVisibility(
+                visible = replyingToMessage != null,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                replyingToMessage?.let { replyMsg ->
+                    ReplyPreviewBanner(
+                        message = replyMsg,
+                        contact = contact,
+                        messageActionsManager = messageActionsManager,
+                        onDismiss = { viewModel.clearReplyingTo() }
+                    )
+                }
+            }
+
+            // Editing message banner (shown above input when editing)
+            AnimatedVisibility(
+                visible = editingMessage != null,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                editingMessage?.let {
+                    Surface(
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Edit,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.message_editing),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                                // __SHOW_WHAT_IS_BEING_EDITED_2026_11_05__ The
+                                // BEFORE text, and only once the draft has
+                                // actually diverged from it. Printing it while
+                                // they match showed the same sentence twice.
+                                //
+                                // Two lines rather than 50 characters: the case
+                                // this banner exists for is a long message, and
+                                // 50 characters of a long message is not enough
+                                // to check a change against.
+                                //
+                                // H-6. Routed through the control-payload
+                                // catalog so prose comes back unchanged while a
+                                // sentinel never shows raw.
+                                if (messageText != editingOriginal && editingOriginal.isNotEmpty()) {
+                                    Text(
+                                        text = com.oshi.messenger.util.MessageFormatting.strip(OSHIControlPayload
+                                            .previewText(editingOriginal, controlLabels)),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f),
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                            IconButton(
+                                onClick = {
+                                    editingMessage = null
+                                    messageText = ""
+                                    editingOriginal = ""
+                                },
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Close,
+                                    contentDescription = stringResource(R.string.cancel),
+                                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Blocked contact banner (shown above input area, replaces input when blocked)
+            if (isContactBlocked) {
+                Surface(
+                    color = OSHIRed,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Block,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = stringResource(R.string.chat_contact_blocked),
+                                color = Color.White,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp
+                            )
+                        }
+                        TextButton(
+                            onClick = { viewModel.toggleBlockContact() }
+                        ) {
+                            Text(
+                                text = stringResource(R.string.chat_unblock),
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Welcome-thread notice (replaces the input, like the blocked banner).
+            // Without this the user can type into a thread whose recipient is not a
+            // key; the send throws and every bubble goes "Not delivered". That is
+            // what Play's reviewer saw on 2026-09-16.
+            if (isSystemThread) {
+                Surface(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.Info,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(R.string.chat_system_thread_readonly),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+            }
+
+            // Typing indicator (matching iOS)
+            if (peerIsTyping) {
+                val typingInk = brandInk()
+                // The translated string is "%1$s is typing…" — the three animated dots
+                // ARE the ellipsis, so the static one is trimmed off rather than shown
+                // twice. Only trailing ellipsis/period/space glyphs are removed, so a
+                // locale that ends its sentence differently keeps its own punctuation.
+                val typingLabel = stringResource(
+                    R.string.chat_is_typing,
+                    contactDisplayName ?: contact?.alias ?: stringResource(R.string.chat_peer)
+                ).trimEnd('…', '.', '。', ' ')
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+                ) {
+                    Text(
+                        text = typingLabel,
+                        fontSize = 12.sp,
+                        color = typingInk,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    TypingBouncingDots(tint = typingInk)
+                }
+            }
+
+            // __WELCOME_IS_A_REAL_CONVERSATION_2026_11_08__ Who actually answers.
+            // Sits ABOVE a WORKING composer — the point is that this message can
+            // be replied to, by a person. The greeting is written by the app but
+            // goes to the author's real account, and saying so plainly is a
+            // better answer to that than an unreachable sender was.
+            if (isWelcomeThread && !isContactBlocked) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(horizontal = 14.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        Icons.Default.VerifiedUser,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        stringResource(R.string.chat_welcome_creator_notice),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
+            // 📡 Reminder right above the box the user is about to type into —
+            // sending here is allowed (see ChatViewModel.sendMessage's
+            // `lora!` branch), but it is NOT the same thing as texting an
+            // OSHI contact, and the compose box is the last place to say so
+            // before the message is gone.
+            if (meshCoreNote != null && !isContactBlocked) {
+                // __MESHCORE_INTEROP_2026_11_25__ One calm line (or "radio not connected · Connect"), with the
+                // counter for one radio message (133 characters) once the text nears it.
+                val count = remember(messageText, isMeshCoreChannel, meshCoreSelfName) {
+                    MeshCoreUi.composerCount(messageText, isMeshCoreChannel, meshCoreSelfName)
+                }
+                MeshCoreComposerNote(
+                    note = meshCoreNote,
+                    count = count,
+                    radioConnected = meshCoreChatReady,
+                    onConnect = onOpenRadioSettings,
+                )
+            } else if (isLoRaInteropThread && !isContactBlocked) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.errorContainer)
+                        .padding(horizontal = 16.dp, vertical = 6.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Info,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onErrorContainer,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = stringResource(R.string.lora_interop_unverified_detail),
+                        fontSize = 11.sp,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
+            }
+
+            // Message input or Recording UI (hidden when the contact is blocked,
+            // and for a LEGACY un-migrated welcome row, which has no real recipient)
+            if (!isContactBlocked && !isSystemThread) {
+            // __FROSTED_BARS_2026_11_02__ (N12) the composer, same treatment as
+            // the top bar: the wallpaper continues under it, softened.
+            // __CHAT_BACKDROP_BLUR_2026_11_21__ the frosted backdrop now spans the
+            // whole bottom bar (reply / edit banners included), see `bottomBar`.
+            Box(modifier = Modifier.fillMaxWidth()) {
+            Surface(
+                color = androidx.compose.ui.graphics.Color.Transparent,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .imePadding()  // Move input up when keyboard shows
+            ) {
+                AnimatedContent(
+                    targetState = isRecording,
+                    transitionSpec = {
+                        fadeIn() togetherWith fadeOut()
+                    },
+                    label = "input_mode"
+                ) { recording ->
+                    if (recording) {
+                        // Recording UI
+                        VoiceRecordingBar(
+                            duration = recordingDuration,
+                            amplitudes = waveformAmplitudes,
+                            cancelOffset = recordingCancelOffset,
+                            selectedEffect = selectedEffect,
+                            availableEffects = audioRecorder.getAvailableEffects(),
+                            onEffectSelected = { effect -> audioRecorder.setVoiceEffect(effect) },
+                            onCancel = {
+                                audioRecorder.cancelRecording()
+                                isRecording = false
+                                recordingCancelOffset = 0f
+                            },
+                            onSend = {
+                                // __VOICE_PREVIEW_2026_09_29__ Stop → preview sheet (hear it,
+                                // change the voice, view once) → send. Like iOS.
+                                val clip = audioRecorder.stopRecordingForPreview()
+                                isRecording = false
+                                recordingCancelOffset = 0f
+                                pendingVoice = clip
+                            },
+                            onDrag = { offset ->
+                                recordingCancelOffset = offset
+                                if (offset < -150f) {
+                                    audioRecorder.cancelRecording()
+                                    isRecording = false
+                                    recordingCancelOffset = 0f
+                                }
+                            }
+                        )
+                    } else {
+                        Column {
+                            // __KEYBOARD_PRIVACY_2026_10_01__ Third-party keyboard warning: it can read
+                            // what is typed here before OSHI encrypts it. Renders nothing when trusted.
+                            com.oshi.messenger.ui.keyboard.ThirdPartyKeyboardBanner()
+                            // 🛡 __STRICT_MODE_2026_11_22__ strict mode on + an app that can read/drive the screen.
+                            StrictModeThreatBanner()
+                            // Smart Replies Bar (shown when text field is empty and replies available)
+                            if (messageText.isEmpty() && !advPrivacy) {
+                                SmartRepliesBar(
+                                    replies = nlpState.smartReplies,
+                                    onReplySelected = { reply ->
+                                        messageText = reply
+                                        nlpViewModel.clearSmartReplies()
+                                    }
+                                )
+                            }
+                            // AI Quick Bar
+                            AIQuickBar(
+                                messageText = messageText,
+                                isProcessing = aiProcessingAction != null && nlpState.isLoading,
+                                onCorrect = {
+                                    aiProcessingAction = NLPViewModel.AIAction.CORRECT
+                                    nlpViewModel.setOriginalText(messageText)
+                                    nlpViewModel.selectAction(NLPViewModel.AIAction.CORRECT)
+                                    nlpViewModel.processCurrentAction()
+                                },
+                                onImprove = {
+                                    aiProcessingAction = NLPViewModel.AIAction.IMPROVE
+                                    nlpViewModel.setOriginalText(messageText)
+                                    nlpViewModel.selectAction(NLPViewModel.AIAction.IMPROVE)
+                                    nlpViewModel.selectStyle(com.oshi.messenger.service.NLPManager.ImprovementStyle.CASUAL)
+                                    nlpViewModel.processCurrentAction()
+                                },
+                                onOpenFullAI = { showAISheet = true }
+                            )
+                            // __CASHU_2026_10_25__ The `/` menu, above the field as
+                            // iOS draws it. It is what makes `/pay` findable at all:
+                            // before this the only way to know the command existed
+                            // was to be told. Draws nothing unless the message
+                            // starts with `/`.
+                            SlashCommandBar(
+                                text = messageText,
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            ) { completion -> messageText = completion }
+                            // Normal message input
+                            Row(
+                                modifier = Modifier
+                                    // __COMPOSER_HEIGHT_2026_11_07__ (Anatole N10: a
+                                    // shorter, more compact bar.) 8dp all round becomes
+                                    // 8 horizontal / 2 vertical: 12dp of height handed
+                                    // back to the thread, horizontal rhythm untouched.
+                                    //
+                                    // It stops there on purpose. The field keeps
+                                    // Material's minimum height because that minimum IS
+                                    // the touch target — shaving it would buy a few
+                                    // pixels of thread by making the control harder to
+                                    // hit, a bad trade on a phone held one-handed.
+                                    //
+                                    // The blur he asked for is already here: the
+                                    // composer sits on `FrostedChatBarBackdrop` (N12),
+                                    // and the text field keeps its own opaque container,
+                                    // so the blur stays BEHIND it — "sauf dans la case
+                                    // de texte", which is exactly what he asked for.
+                                    .padding(horizontal = 8.dp, vertical = 2.dp)
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // __VIDEO_NOTE_2026_09_24__ While typing, the "+" and the
+                            // video-note shortcut step aside (spring shrink + fade) and the
+                            // field grows into the row and up to 6 lines; they spring back
+                            // when the field is cleared. `ComposerShortcuts` is the rule.
+                            val shortcutsVisible = com.oshi.messenger.service.media.ComposerShortcuts
+                                .visible(messageText, isEditing = editingMessage != null)
+                            val composerGlass = com.oshi.messenger.ui.theme.glassOn()
+
+                            // __COMPOSER_PILL_2026_11_23__ "+", the field and the camera share ONE
+                            // pill (Google-app style); mic / send is the round button beside it.
+                            com.oshi.messenger.ui.components.ComposerPill(
+                                glass = composerGlass,
+                                modifier = Modifier.weight(1f).animateContentSize()
+                            ) {
+                            // Single "+" entry point — opens attachment menu (iOS parity).
+                            // Location, schedule, check-in, contact, document, gallery all live there
+                            // so the text field gets the full available width.
+                            ComposerShortcut(visible = shortcutsVisible) {
+                                IconButton(onClick = { showAttachmentMenu = true }) {
+                                    Icon(
+                                        Icons.Default.Add,
+                                        contentDescription = stringResource(R.string.chat_attach),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                            if (!shortcutsVisible) Spacer(modifier = Modifier.width(10.dp))
+
+                            // __TEXT_FORMATTING_2026_11_24__ Bold / Underline in the selection menu.
+                            com.oshi.messenger.ui.components.FormattingComposerField(
+                                text = messageText,
+                                onTextChange = {
+                                    messageText = it
+                                    viewModel.onTextChanged(it)
+                                },
+                            ) { fieldValue, onFieldValueChange ->
+                            OutlinedTextField(
+                                value = fieldValue,
+                                onValueChange = onFieldValueChange,
+                                placeholder = { Text(stringResource(R.string.message_placeholder)) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .focusRequester(textFieldFocusRequester),
+                                shape = com.oshi.messenger.ui.components.ComposerPillDefaults.Shape,
+                                // The pill carries fill, outline and glass; the field is bare.
+                                colors = com.oshi.messenger.ui.components.composerPillFieldColors(),
+                                maxLines = com.oshi.messenger.service.media.ComposerShortcuts
+                                    .maxLines(messageText, isEditing = editingMessage != null)
+                            )
+                            }
+
+                            // (N17, Anatole 13/11) Take a PHOTO — where nearly every
+                            // messenger puts the camera, beside the mic. This slot used to
+                            // open the round video-note recorder, which now lives in the
+                            // attachment sheet. Same permission path as the sheet's own
+                            // "Take photo" row. Visible only while the field is empty.
+                            ComposerShortcut(visible = shortcutsVisible) {
+                                IconButton(onClick = {
+                                    if (androidx.core.content.ContextCompat.checkSelfPermission(
+                                            context, android.Manifest.permission.CAMERA
+                                        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        launchPhotoCapture()
+                                    } else {
+                                        cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+                                    }
+                                }) {
+                                    Icon(
+                                        Icons.Default.PhotoCamera,
+                                        contentDescription = stringResource(R.string.profile_take_photo),
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                            } // __COMPOSER_PILL_2026_11_23__ end pill
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            // Send or Mic button
+                            if (messageText.isNotBlank()) {
+                                // __OLED_GLASS_2026_11_16__ the one lit thing in the bar.
+                                com.oshi.messenger.ui.components.ComposerRoundButton(
+                                    primary = true,
+                                    glass = composerGlass,
+                                    onClick = {
+                                        val editing = editingMessage
+                                        if (editing != null) {
+                                            // Edit mode: update existing message
+                                            viewModel.editMessage(editing.id, messageText)
+                                            editingMessage = null
+                                        } else if (CashuPayCommand.handles(messageText)) {
+                                            // __CASHU_2026_10_24__ `/pay <token>`.
+                                            // Nothing that fails to decode goes on
+                                            // the wire: a typo in a pasted token is
+                                            // money thrown away, and neither side
+                                            // would ever learn why.
+                                            // __CASHU_SEND_READY_2026_11_09__ A decoded
+                                            // token opens the send sheet, which reads
+                                            // the amount and mint back BEFORE it leaves
+                                            // (as the guide promises); `/pay` alone
+                                            // opens it empty. A refusal KEEPS the text —
+                                            // it used to be wiped below with the token in it.
+                                            when (val r = CashuPayCommand.parse(messageText, isGroup = false)) {
+                                                is CashuPayCommand.Outcome.Send -> {
+                                                    cashuDraft = r.token.raw
+                                                    messageText = ""
+                                                }
+                                                CashuPayCommand.Outcome.Usage -> {
+                                                    cashuDraft = ""
+                                                    messageText = ""
+                                                }
+                                                CashuPayCommand.Outcome.NotAToken ->
+                                                    cashuToast(context, context.getString(R.string.cashu_pay_not_token))
+                                                CashuPayCommand.Outcome.Invalid ->
+                                                    cashuToast(context, context.getString(R.string.cashu_pay_invalid))
+                                                // A 1:1 thread never asks for the
+                                                // `public` word; this branch cannot
+                                                // be reached with isGroup = false.
+                                                is CashuPayCommand.Outcome.NeedsPublicConfirm -> Unit
+                                            }
+                                            return@ComposerRoundButton
+                                        } else if (isMeshCoreKey &&
+                                            MeshCoreUi.composerCount(messageText, isMeshCoreChannel, meshCoreSelfName).tooLong
+                                        ) {
+                                            // __MESHCORE_INTEROP_2026_11_25__ more than 20 radio messages: kept in the
+                                            // field (the counter already says "too long"), nothing sent.
+                                            android.widget.Toast.makeText(
+                                                context,
+                                                context.getString(R.string.meshcore_too_long, com.oshi.messenger.service.lora.MeshCoreText.MAX_PARTS),
+                                                android.widget.Toast.LENGTH_SHORT,
+                                            ).show()
+                                            return@ComposerRoundButton
+                                        } else {
+                                            // Normal send
+                                            viewModel.sendMessage(messageText)
+                                        }
+                                        messageText = ""
+                                    }
+                                ) {
+                                    Icon(
+                                        if (editingMessage != null) Icons.Default.Check else Icons.Default.Send,
+                                        contentDescription = stringResource(R.string.chat_send)
+                                    )
+                                }
+                            } else {
+                                com.oshi.messenger.ui.components.ComposerRoundButton(
+                                    primary = false,
+                                    glass = composerGlass,
+                                    onClick = {
+                                        // Recording hint overlay (6B.14) - show once per install
+                                        if (!recordingHintShown && !showRecordingHint) {
+                                            showRecordingHint = true
+                                            return@ComposerRoundButton
+                                        }
+                                        if (audioRecorder.hasRecordPermission()) {
+                                            isRecording = audioRecorder.startRecording()
+                                        } else {
+                                            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                                        }
+                                    }
+                                ) {
+                                    Icon(Icons.Default.Mic, contentDescription = stringResource(R.string.chat_record_voice))
+                                }
+                            }
+                        }
+                        }
+                    }
+                }
+            }
+            } // __FROSTED_BARS_2026_11_02__ end composer frosted Box
+            } // end if (!isContactBlocked && !isSystemThread)
+            }
+            }
+        }
+    ) { padding ->
+        Box(modifier = Modifier.fillMaxSize()) {
             // Messages list with wallpaper background + pull-to-refresh (6B.13)
             val wallpaper = currentWallpaper
             val pullRefreshState = rememberPullRefreshState(
@@ -2608,11 +3327,29 @@ fun ChatScreen(
                 WallpaperTonePrefs.tone(toneContext, publicKey),
                 isDarkScheme()
             ).contentDark
-            val threadWeight = Modifier.weight(1f)
+            // __CHAT_BACKDROP_BLUR_2026_11_21__ The thread fills the WHOLE screen,
+            // under both bars; `padding` (the bars' heights) moves into the list's
+            // content padding and the overlays, and the bars frost what passes
+            // under them. The band heights are read at draw time.
+            val density = LocalDensity.current
+            val barTopPx = with(density) { padding.calculateTopPadding().toPx() }
+            val barBottomPx = with(density) { padding.calculateBottomPadding().toPx() }
+            val imeInsets = WindowInsets.ime
+            val navInsets = WindowInsets.navigationBars
+            val layoutDir = LocalLayoutDirection.current
             WithChatScheme(dark = threadDark) {
                 Box(
-                    modifier = threadWeight
-                        .fillMaxWidth()
+                    modifier = Modifier
+                        .frostedBackdropSource(
+                            enabled = liveBackdrop,
+                            topPx = { barTopPx },
+                            bottomPx = { barBottomPx },
+                            // The keyboard covers this part of the bottom band.
+                            bottomCoveredPx = {
+                                (imeInsets.getBottom(density) - navInsets.getBottom(density)).toFloat().coerceAtLeast(0f)
+                            }
+                        )
+                        .fillMaxSize()
                         .pullRefresh(pullRefreshState)
                         .then(
                             when (wallpaper) {
@@ -2656,6 +3393,11 @@ fun ChatScreen(
                     // 🌌 Animated OSHI backdrop. It sits BEHIND the thread and draws
                     // itself; bubbles need no change because they are already opaque
                     // for exactly this reason (`ui/theme/Tokens.kt:150-165`).
+                    // __WALLPAPER_PERSIST_2026_11_21__ the emoji of a pattern wallpaper
+                    // (only its background colour was ever drawn).
+                    if (wallpaper is ChatWallpaper.EmojiPattern) {
+                        Box(Modifier.fillMaxSize().emojiPattern(wallpaper.emoji))
+                    }
                     if (wallpaper is ChatWallpaper.OshiDynamic) {
                         OshiDynamicWallpaperView(
                             style = OshiDynamicStyle.fromId(wallpaper.styleId)
@@ -2714,6 +3456,7 @@ fun ChatScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
+                                .padding(padding)
                                 .padding(horizontal = 24.dp)
                                 .padding(bottom = emptyStateBottomBias),
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -2795,7 +3538,12 @@ fun ChatScreen(
                             },
                         state = listState,
                         reverseLayout = true,
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                        contentPadding = PaddingValues(
+                            start = 16.dp + padding.calculateStartPadding(layoutDir),
+                            end = 16.dp + padding.calculateEndPadding(layoutDir),
+                            top = 8.dp + padding.calculateTopPadding(),
+                            bottom = 8.dp + padding.calculateBottomPadding()
+                        )
                     ) {
                         // Rows come from `threadItems` (ChatThreadItems.build), which is
                         // also what every scroll target is resolved against — the whole
@@ -2905,8 +3653,14 @@ fun ChatScreen(
                                             if (message.isFromMe) -revealProgress * revealShiftPx else 0f
                                     }
                                 ) {
+                                // __MESHCORE_INTEROP_2026_11_25__ A MeshCore channel row keeps the
+                                // "<name>: " its sender's app wrote; the name goes above the bubble
+                                // like a LoRa channel's speaker, the text inside it.
+                                val meshCoreSpeaker = if (isMeshCoreChannel && !message.isFromMe) {
+                                    remember(message.content) { MeshCoreUi.channelSpeaker(message.content) }
+                                } else null
                                 MessageBubble(
-                                    message = message,
+                                    message = if (meshCoreSpeaker?.first != null) message.copy(content = meshCoreSpeaker.second) else message,
                                     // Only the last bubble of a run is tailed.
                                     isTail = entry.isTail,
                                     // __LORA_CHANNEL_IS_A_ROOM_2026_11_04__ In a
@@ -2914,7 +3668,7 @@ fun ChatScreen(
                                     // elsewhere the name is the screen title.
                                     senderLabel = if (isLoRaChannel) {
                                         loRaSpeakerName(message.senderPublicKey, loRaNodes)
-                                    } else null,
+                                    } else meshCoreSpeaker?.first,
                                     messageActionsManager = messageActionsManager,
                                     contact = contact,
                                     allMessages = messages,
@@ -3082,7 +3836,7 @@ fun ChatScreen(
                         exit = fadeOut(animationSpec = tween(300)),
                         modifier = Modifier
                             .align(Alignment.TopCenter)
-                            .padding(top = 8.dp)
+                            .padding(top = 8.dp + padding.calculateTopPadding())
                     ) {
                         Surface(
                             color = Color.Black.copy(alpha = 0.6f),
@@ -3108,6 +3862,7 @@ fun ChatScreen(
                         exit = fadeOut() + scaleOut(),
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
+                            .padding(bottom = padding.calculateBottomPadding())
                             .padding(16.dp)
                     ) {
                         FloatingActionButton(
@@ -3136,592 +3891,15 @@ fun ChatScreen(
                     PullRefreshIndicator(
                         refreshing = isRefreshing,
                         state = pullRefreshState,
-                        modifier = Modifier.align(Alignment.TopCenter),
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(top = padding.calculateTopPadding()),
                         contentColor = OSHIPurple
                     )
                 }
             }
-
-            // Upload/compression progress indicator.
-            //
-            // __PICKER_LATENCY_2026_09_18__ It now also covers the step BEFORE
-            // compression — reading the picked file out of the content provider —
-            // which for a video is the slow one and used to show nothing at all.
-            // That read reports no progress, so while it runs both indicators are
-            // INDETERMINATE: a determinate bar frozen at 0% says "stuck", which is
-            // the exact impression this is here to remove.
-            AnimatedVisibility(visible = isMediaProcessing || isPreparingMedia) {
-                val indeterminate = isPreparingMedia && !isMediaProcessing
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.9f))
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        if (indeterminate) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                strokeWidth = 2.dp,
-                                color = brandInk()
-                            )
-                        } else {
-                            CircularProgressIndicator(
-                                progress = compressionProgress.toFloat(),
-                                modifier = Modifier.size(20.dp),
-                                strokeWidth = 2.dp,
-                                color = brandInk()
-                            )
-                        }
-                        Text(
-                            text = stringResource(
-                                if (indeterminate) R.string.chat_preparing_media else R.string.loading
-                            ),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                    val barModifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp)
-                        .height(3.dp)
-                        .clip(RoundedCornerShape(1.5.dp))
-                    if (indeterminate) {
-                        LinearProgressIndicator(modifier = barModifier, color = brandInk())
-                    } else {
-                        LinearProgressIndicator(
-                            progress = compressionProgress.toFloat(),
-                            modifier = barModifier,
-                            color = brandInk()
-                        )
-                    }
-                }
-            }
-
-            // Reply Preview Banner (above input, below messages)
-            AnimatedVisibility(
-                visible = replyingToMessage != null,
-                enter = expandVertically() + fadeIn(),
-                exit = shrinkVertically() + fadeOut()
-            ) {
-                replyingToMessage?.let { replyMsg ->
-                    ReplyPreviewBanner(
-                        message = replyMsg,
-                        contact = contact,
-                        messageActionsManager = messageActionsManager,
-                        onDismiss = { viewModel.clearReplyingTo() }
-                    )
-                }
-            }
-
-            // Editing message banner (shown above input when editing)
-            AnimatedVisibility(
-                visible = editingMessage != null,
-                enter = expandVertically() + fadeIn(),
-                exit = shrinkVertically() + fadeOut()
-            ) {
-                editingMessage?.let {
-                    Surface(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                Icons.Default.Edit,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = stringResource(R.string.message_editing),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer
-                                )
-                                // __SHOW_WHAT_IS_BEING_EDITED_2026_11_05__ The
-                                // BEFORE text, and only once the draft has
-                                // actually diverged from it. Printing it while
-                                // they match showed the same sentence twice.
-                                //
-                                // Two lines rather than 50 characters: the case
-                                // this banner exists for is a long message, and
-                                // 50 characters of a long message is not enough
-                                // to check a change against.
-                                //
-                                // H-6. Routed through the control-payload
-                                // catalog so prose comes back unchanged while a
-                                // sentinel never shows raw.
-                                if (messageText != editingOriginal && editingOriginal.isNotEmpty()) {
-                                    Text(
-                                        text = OSHIControlPayload
-                                            .previewText(editingOriginal, controlLabels),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f),
-                                        maxLines = 2,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
-                            }
-                            IconButton(
-                                onClick = {
-                                    editingMessage = null
-                                    messageText = ""
-                                    editingOriginal = ""
-                                },
-                                modifier = Modifier.size(32.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.Close,
-                                    contentDescription = stringResource(R.string.cancel),
-                                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Blocked contact banner (shown above input area, replaces input when blocked)
-            if (isContactBlocked) {
-                Surface(
-                    color = OSHIRed,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                Icons.Default.Block,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = stringResource(R.string.chat_contact_blocked),
-                                color = Color.White,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 14.sp
-                            )
-                        }
-                        TextButton(
-                            onClick = { viewModel.toggleBlockContact() }
-                        ) {
-                            Text(
-                                text = stringResource(R.string.chat_unblock),
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp
-                            )
-                        }
-                    }
-                }
-            }
-
-            // Welcome-thread notice (replaces the input, like the blocked banner).
-            // Without this the user can type into a thread whose recipient is not a
-            // key; the send throws and every bubble goes "Not delivered". That is
-            // what Play's reviewer saw on 2026-09-16.
-            if (isSystemThread) {
-                Surface(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.Info,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(R.string.chat_system_thread_readonly),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 13.sp
-                        )
-                    }
-                }
-            }
-
-            // Typing indicator (matching iOS)
-            if (peerIsTyping) {
-                val typingInk = brandInk()
-                // The translated string is "%1$s is typing…" — the three animated dots
-                // ARE the ellipsis, so the static one is trimmed off rather than shown
-                // twice. Only trailing ellipsis/period/space glyphs are removed, so a
-                // locale that ends its sentence differently keeps its own punctuation.
-                val typingLabel = stringResource(
-                    R.string.chat_is_typing,
-                    contactDisplayName ?: contact?.alias ?: stringResource(R.string.chat_peer)
-                ).trimEnd('…', '.', '。', ' ')
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
-                ) {
-                    Text(
-                        text = typingLabel,
-                        fontSize = 12.sp,
-                        color = typingInk,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    TypingBouncingDots(tint = typingInk)
-                }
-            }
-
-            // __WELCOME_IS_A_REAL_CONVERSATION_2026_11_08__ Who actually answers.
-            // Sits ABOVE a WORKING composer — the point is that this message can
-            // be replied to, by a person. The greeting is written by the app but
-            // goes to the author's real account, and saying so plainly is a
-            // better answer to that than an unreachable sender was.
-            if (isWelcomeThread && !isContactBlocked) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(horizontal = 14.dp, vertical = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        Icons.Default.VerifiedUser,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(18.dp),
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        stringResource(R.string.chat_welcome_creator_notice),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-
-            // 📡 Reminder right above the box the user is about to type into —
-            // sending here is allowed (see ChatViewModel.sendMessage's
-            // `lora!` branch), but it is NOT the same thing as texting an
-            // OSHI contact, and the compose box is the last place to say so
-            // before the message is gone.
-            if (isLoRaInteropThread && !isContactBlocked) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.errorContainer)
-                        .padding(horizontal = 16.dp, vertical = 6.dp)
-                ) {
-                    Icon(
-                        Icons.Default.Info,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier.size(14.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = stringResource(R.string.lora_interop_unverified_detail),
-                        fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onErrorContainer
-                    )
-                }
-            }
-
-            // Message input or Recording UI (hidden when the contact is blocked,
-            // and for a LEGACY un-migrated welcome row, which has no real recipient)
-            if (!isContactBlocked && !isSystemThread) {
-            // __FROSTED_BARS_2026_11_02__ (N12) the composer, same treatment as
-            // the top bar: the wallpaper continues under it, softened.
-            Box(modifier = Modifier.fillMaxWidth()) {
-            com.oshi.messenger.ui.components.FrostedChatBarBackdrop(
-                wallpaper = currentWallpaper,
-                scrimColor = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.matchParentSize(),
-                edgeOnTop = true
-            )
-            Surface(
-                color = androidx.compose.ui.graphics.Color.Transparent,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding()
-                    .imePadding()  // Move input up when keyboard shows
-            ) {
-                AnimatedContent(
-                    targetState = isRecording,
-                    transitionSpec = {
-                        fadeIn() togetherWith fadeOut()
-                    },
-                    label = "input_mode"
-                ) { recording ->
-                    if (recording) {
-                        // Recording UI
-                        VoiceRecordingBar(
-                            duration = recordingDuration,
-                            amplitudes = waveformAmplitudes,
-                            cancelOffset = recordingCancelOffset,
-                            selectedEffect = selectedEffect,
-                            availableEffects = audioRecorder.getAvailableEffects(),
-                            onEffectSelected = { effect -> audioRecorder.setVoiceEffect(effect) },
-                            onCancel = {
-                                audioRecorder.cancelRecording()
-                                isRecording = false
-                                recordingCancelOffset = 0f
-                            },
-                            onSend = {
-                                // __VOICE_PREVIEW_2026_09_29__ Stop → preview sheet (hear it,
-                                // change the voice, view once) → send. Like iOS.
-                                val clip = audioRecorder.stopRecordingForPreview()
-                                isRecording = false
-                                recordingCancelOffset = 0f
-                                pendingVoice = clip
-                            },
-                            onDrag = { offset ->
-                                recordingCancelOffset = offset
-                                if (offset < -150f) {
-                                    audioRecorder.cancelRecording()
-                                    isRecording = false
-                                    recordingCancelOffset = 0f
-                                }
-                            }
-                        )
-                    } else {
-                        Column {
-                            // __KEYBOARD_PRIVACY_2026_10_01__ Third-party keyboard warning: it can read
-                            // what is typed here before OSHI encrypts it. Renders nothing when trusted.
-                            com.oshi.messenger.ui.keyboard.ThirdPartyKeyboardBanner()
-                            // Smart Replies Bar (shown when text field is empty and replies available)
-                            if (messageText.isEmpty()) {
-                                SmartRepliesBar(
-                                    replies = nlpState.smartReplies,
-                                    onReplySelected = { reply ->
-                                        messageText = reply
-                                        nlpViewModel.clearSmartReplies()
-                                    }
-                                )
-                            }
-                            // AI Quick Bar
-                            AIQuickBar(
-                                messageText = messageText,
-                                isProcessing = aiProcessingAction != null && nlpState.isLoading,
-                                onCorrect = {
-                                    aiProcessingAction = NLPViewModel.AIAction.CORRECT
-                                    nlpViewModel.setOriginalText(messageText)
-                                    nlpViewModel.selectAction(NLPViewModel.AIAction.CORRECT)
-                                    nlpViewModel.processCurrentAction()
-                                },
-                                onImprove = {
-                                    aiProcessingAction = NLPViewModel.AIAction.IMPROVE
-                                    nlpViewModel.setOriginalText(messageText)
-                                    nlpViewModel.selectAction(NLPViewModel.AIAction.IMPROVE)
-                                    nlpViewModel.selectStyle(com.oshi.messenger.service.NLPManager.ImprovementStyle.CASUAL)
-                                    nlpViewModel.processCurrentAction()
-                                },
-                                onOpenFullAI = { showAISheet = true }
-                            )
-                            // __CASHU_2026_10_25__ The `/` menu, above the field as
-                            // iOS draws it. It is what makes `/pay` findable at all:
-                            // before this the only way to know the command existed
-                            // was to be told. Draws nothing unless the message
-                            // starts with `/`.
-                            SlashCommandBar(
-                                text = messageText,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            ) { completion -> messageText = completion }
-                            // Normal message input
-                            Row(
-                                modifier = Modifier
-                                    // __COMPOSER_HEIGHT_2026_11_07__ (Anatole N10: a
-                                    // shorter, more compact bar.) 8dp all round becomes
-                                    // 8 horizontal / 2 vertical: 12dp of height handed
-                                    // back to the thread, horizontal rhythm untouched.
-                                    //
-                                    // It stops there on purpose. The field keeps
-                                    // Material's minimum height because that minimum IS
-                                    // the touch target — shaving it would buy a few
-                                    // pixels of thread by making the control harder to
-                                    // hit, a bad trade on a phone held one-handed.
-                                    //
-                                    // The blur he asked for is already here: the
-                                    // composer sits on `FrostedChatBarBackdrop` (N12),
-                                    // and the text field keeps its own opaque container,
-                                    // so the blur stays BEHIND it — "sauf dans la case
-                                    // de texte", which is exactly what he asked for.
-                                    .padding(horizontal = 8.dp, vertical = 2.dp)
-                                    .fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // __VIDEO_NOTE_2026_09_24__ While typing, the "+" and the
-                            // video-note shortcut step aside (spring shrink + fade) and the
-                            // field grows into the row and up to 6 lines; they spring back
-                            // when the field is cleared. `ComposerShortcuts` is the rule.
-                            val shortcutsVisible = com.oshi.messenger.service.media.ComposerShortcuts
-                                .visible(messageText, isEditing = editingMessage != null)
-                            val composerGlass = com.oshi.messenger.ui.theme.glassOn()
-
-                            // Single "+" entry point — opens attachment menu (iOS parity).
-                            // Location, schedule, check-in, contact, document, gallery all live there
-                            // so the text field gets the full available width.
-                            ComposerShortcut(visible = shortcutsVisible) {
-                                IconButton(onClick = { showAttachmentMenu = true }) {
-                                    Icon(
-                                        Icons.Default.Add,
-                                        contentDescription = stringResource(R.string.chat_attach),
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            }
-                            if (!shortcutsVisible) Spacer(modifier = Modifier.width(4.dp))
-
-                            OutlinedTextField(
-                                value = messageText,
-                                onValueChange = {
-                                    messageText = it
-                                    viewModel.onTextChanged(it)
-                                },
-                                placeholder = { Text(stringResource(R.string.message_placeholder)) },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .animateContentSize()
-                                    // __OLED_GLASS_2026_11_16__ glass pill under OLED black.
-                                    .thenIf(composerGlass) { glassHairline(RoundedCornerShape(24.dp)) }
-                                    .focusRequester(textFieldFocusRequester),
-                                shape = RoundedCornerShape(24.dp),
-                                colors = if (composerGlass) com.oshi.messenger.ui.theme.glassTextFieldColors()
-                                    else OutlinedTextFieldDefaults.colors(),
-                                maxLines = com.oshi.messenger.service.media.ComposerShortcuts
-                                    .maxLines(messageText, isEditing = editingMessage != null)
-                            )
-
-                            // (N17, Anatole 13/11) Take a PHOTO — where nearly every
-                            // messenger puts the camera, beside the mic. This slot used to
-                            // open the round video-note recorder, which now lives in the
-                            // attachment sheet. Same permission path as the sheet's own
-                            // "Take photo" row. Visible only while the field is empty.
-                            ComposerShortcut(visible = shortcutsVisible) {
-                                IconButton(onClick = {
-                                    if (androidx.core.content.ContextCompat.checkSelfPermission(
-                                            context, android.Manifest.permission.CAMERA
-                                        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-                                    ) {
-                                        launchPhotoCapture()
-                                    } else {
-                                        cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-                                    }
-                                }) {
-                                    Icon(
-                                        Icons.Default.PhotoCamera,
-                                        contentDescription = stringResource(R.string.profile_take_photo),
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.width(8.dp))
-
-                            // Send or Mic button
-                            if (messageText.isNotBlank()) {
-                                FilledIconButton(
-                                    // __OLED_GLASS_2026_11_16__ the one lit thing in the bar.
-                                    modifier = Modifier.thenIf(composerGlass) { glassGlow() },
-                                    onClick = {
-                                        val editing = editingMessage
-                                        if (editing != null) {
-                                            // Edit mode: update existing message
-                                            viewModel.editMessage(editing.id, messageText)
-                                            editingMessage = null
-                                        } else if (CashuPayCommand.handles(messageText)) {
-                                            // __CASHU_2026_10_24__ `/pay <token>`.
-                                            // Nothing that fails to decode goes on
-                                            // the wire: a typo in a pasted token is
-                                            // money thrown away, and neither side
-                                            // would ever learn why.
-                                            // __CASHU_SEND_READY_2026_11_09__ A decoded
-                                            // token opens the send sheet, which reads
-                                            // the amount and mint back BEFORE it leaves
-                                            // (as the guide promises); `/pay` alone
-                                            // opens it empty. A refusal KEEPS the text —
-                                            // it used to be wiped below with the token in it.
-                                            when (val r = CashuPayCommand.parse(messageText, isGroup = false)) {
-                                                is CashuPayCommand.Outcome.Send -> {
-                                                    cashuDraft = r.token.raw
-                                                    messageText = ""
-                                                }
-                                                CashuPayCommand.Outcome.Usage -> {
-                                                    cashuDraft = ""
-                                                    messageText = ""
-                                                }
-                                                CashuPayCommand.Outcome.NotAToken ->
-                                                    cashuToast(context, context.getString(R.string.cashu_pay_not_token))
-                                                CashuPayCommand.Outcome.Invalid ->
-                                                    cashuToast(context, context.getString(R.string.cashu_pay_invalid))
-                                                // A 1:1 thread never asks for the
-                                                // `public` word; this branch cannot
-                                                // be reached with isGroup = false.
-                                                is CashuPayCommand.Outcome.NeedsPublicConfirm -> Unit
-                                            }
-                                            return@FilledIconButton
-                                        } else {
-                                            // Normal send
-                                            viewModel.sendMessage(messageText)
-                                        }
-                                        messageText = ""
-                                    }
-                                ) {
-                                    Icon(
-                                        if (editingMessage != null) Icons.Default.Check else Icons.Default.Send,
-                                        contentDescription = stringResource(R.string.chat_send)
-                                    )
-                                }
-                            } else {
-                                FilledIconButton(
-                                    onClick = {
-                                        // Recording hint overlay (6B.14) - show once per install
-                                        if (!recordingHintShown && !showRecordingHint) {
-                                            showRecordingHint = true
-                                            return@FilledIconButton
-                                        }
-                                        if (audioRecorder.hasRecordPermission()) {
-                                            isRecording = audioRecorder.startRecording()
-                                        } else {
-                                            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                                        }
-                                    }
-                                ) {
-                                    Icon(Icons.Default.Mic, contentDescription = stringResource(R.string.chat_record_voice))
-                                }
-                            }
-                        }
-                        }
-                    }
-                }
-            }
-            } // __FROSTED_BARS_2026_11_02__ end composer frosted Box
-            } // end if (!isContactBlocked && !isSystemThread)
         }
+    }
     }
 
     pendingVoice?.let { clip ->
@@ -3853,7 +4031,9 @@ fun ChatScreen(
             mediaData = data,
             mediaType = type,
             caption = caption,
-            onBack = { galleryViewerMedia = null }
+            onBack = { galleryViewerMedia = null },
+            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ the gallery does not know who sent it.
+            allowSave = !advPrivacy
         )
     }
     } // WithChatScheme(chatDark) — __ONE_SCHEME_FOR_THE_WHOLE_CHAT_2026_11_07__
@@ -4550,6 +4730,18 @@ internal fun MessageBubble(
         } else null
     }
 
+    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ a centred notice naming who switched it.
+    if (controlPrefix == OSHIControlPayload.ADV_PRIVACY) {
+        val change = remember(rawContent) {
+            com.oshi.messenger.data.model.AdvancedChatPrivacyChange.fromMessageString(rawContent)
+        }
+        com.oshi.messenger.ui.components.AdvancedChatPrivacyNotice(
+            on = change?.on ?: true,
+            actorName = if (isFromMe) null else (bubbleContactName ?: stringResource(R.string.chat_unknown)),
+        )
+        return
+    }
+
     // --- System Info Bubble (6B.11): centered capsule, no avatar/timestamp/reactions ---
     if (systemMessageType != null) {
         SystemInfoBubble(type = systemMessageType)
@@ -4618,7 +4810,8 @@ internal fun MessageBubble(
             Text(
                 text = senderLabel,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
+                // Brand purple on the dark wallpaper was too faint for a 11 sp name (design shots).
+                color = meshCoreAccent(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(start = 12.dp, bottom = 2.dp)
@@ -4802,7 +4995,7 @@ internal fun MessageBubble(
             // column that touches down once (BubbleStyleManager.swift:296-304).
             val bubbleShape = bubbleStyle.bubbleShape(isFromMe = isFromMe, isTail = isTail)
             val bubbleBrush = if (isFromMe)
-                appearance.accent.brush
+                appearance.accent.surfaceBrush(darkScheme)
             else
                 // Not a flat `surfaceVariant`: iOS blends the brand INTO the
                 // system surface so a received bubble belongs to this app rather
@@ -4813,19 +5006,42 @@ internal fun MessageBubble(
                 SolidColor(Oshi.Bubble.received(darkScheme, com.oshi.messenger.ui.theme.isOledScheme()))
             // Hairline rim: a pale bubble must not vanish over a photo wallpaper
             // (BubbleStyleManager.swift:307-323). It also inks the markings.
-            val bubbleRim = Oshi.Bubble.rimInk(outgoing = isFromMe, darkTheme = darkScheme)
+            val tonal = isFromMe && appearance.accent.isTonal(darkScheme)
+            val bubbleRim = Oshi.Bubble.rimInk(outgoing = isFromMe, darkTheme = darkScheme, tonal = tonal)
+            // __BUBBLE_MEDIA_2026_11_21__ A photo SIZES the bubble (BUBBLE_MEDIA_SPEC §1).
+            // Before: `fillMaxWidth().heightIn(max = 250.dp)` + `ContentScale.Fit` inside a
+            // 12 dp-padded column — a portrait photo was letterboxed, with a band of bubble
+            // colour left and right of it, plus the padding frame all round. Now the box
+            // has the picture's aspect, the bubble is exactly that wide and the picture
+            // bleeds to its edges. The natural size is hoisted here (the bubble's width
+            // depends on it) and filled in by ImageMessageContent when lazily-hydrated
+            // bytes land.
+            val edgeMedia = appearance.silhouette == null && !message.isViewOnce &&
+                message.mediaType == MediaType.IMAGE && !message.isDeletedForEveryone
+            var mediaNatural by remember(message.id) {
+                mutableStateOf(
+                    if (!edgeMedia) null
+                    else com.oshi.messenger.ui.media.MediaNaturalSize.cached(message.id)
+                        ?: message.mediaData?.let { com.oshi.messenger.ui.media.MediaNaturalSize.read(message.id, it) }
+                )
+            }
+            val mediaSize = if (edgeMedia) com.oshi.messenger.ui.media.rememberBubbleMediaSize(mediaNatural, channel = false) else null
             Box(
                 modifier = Modifier
-                    .widthIn(max = Oshi.Bubble.maxWidth(androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp))
+                    .then(
+                        if (mediaSize != null) Modifier.width(mediaSize.widthDp.dp)
+                        else Modifier.widthIn(max = Oshi.Bubble.maxWidth(androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp))
+                    )
                     .bubbleSurface(
                         silhouette = appearance.silhouette,
                         brush = bubbleBrush,
                         fallbackShape = bubbleShape,
                         rim = bubbleRim,
-                        rimAlpha = Oshi.Bubble.rimAlpha(outgoing = isFromMe, darkTheme = darkScheme),
+                        rimAlpha = Oshi.Bubble.rimAlpha(outgoing = isFromMe, darkTheme = darkScheme, tonal = tonal),
                         gloss = isFromMe,
-                        glass = !isFromMe && com.oshi.messenger.ui.theme.isOledScheme()
+                        glass = !isFromMe && com.oshi.messenger.ui.theme.oledGlassOn()
                     )
+                    .then(if (appearance.silhouette == null) Modifier.clip(bubbleShape) else Modifier)
                     .then(
                         if (isSearchHighlighted)
                             Modifier.border(2.dp, Color(0xFFFFD700), bubbleShape)
@@ -4843,7 +5059,7 @@ internal fun MessageBubble(
                                 Icons.Default.Forward,
                                 contentDescription = null,
                                 tint = if (isFromMe)
-                                    LocalBubbleAppearance.current.accent.onAccent.copy(alpha = 0.7f)
+                                    LocalBubbleAppearance.current.accent.ink(isDarkScheme()).copy(alpha = 0.7f)
                                 else
                                     MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 modifier = Modifier.size(12.dp)
@@ -4854,7 +5070,7 @@ internal fun MessageBubble(
                                 fontSize = 11.sp,
                                 fontStyle = FontStyle.Italic,
                                 color = if (isFromMe)
-                                    LocalBubbleAppearance.current.accent.onAccent.copy(alpha = 0.7f)
+                                    LocalBubbleAppearance.current.accent.ink(isDarkScheme()).copy(alpha = 0.7f)
                                 else
                                     MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                             )
@@ -4891,7 +5107,7 @@ internal fun MessageBubble(
                                 // YOUR OWN bubble it is worse still — the ground
                                 // is the accent gradient itself.
                                 val quoteInk = if (isFromMe)
-                                    appearance.accent.onAccent
+                                    appearance.accent.ink(isDarkScheme())
                                 else
                                     brandInk()
                                 // Purple left accent bar
@@ -4917,14 +5133,14 @@ internal fun MessageBubble(
                                         // (MessageActionsManager.swift:66-72), so a
                                         // quoted call summary reads "Outgoing call •
                                         // 1:23" rather than a stripped sentinel.
-                                        text = OSHIControlPayload
-                                            .previewText(replyData.originalContent, controlLabels)
+                                        text = com.oshi.messenger.util.MessageFormatting.strip(OSHIControlPayload
+                                            .previewText(replyData.originalContent, controlLabels))
                                             .take(80),
                                         fontSize = 12.sp,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                         color = if (isFromMe)
-                                            LocalBubbleAppearance.current.accent.onAccent.copy(alpha = 0.8f)
+                                            LocalBubbleAppearance.current.accent.ink(isDarkScheme()).copy(alpha = 0.8f)
                                         else
                                             MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                                     )
@@ -5001,7 +5217,13 @@ internal fun MessageBubble(
                                 imageData = mediaBytes,
                                 caption = displayContent.takeIf { !it.startsWith("[") },
                                 state = mediaState,
-                                onRetryLoad = { mediaState.retry() }
+                                onRetryLoad = { mediaState.retry() },
+                                size = mediaSize,
+                                hasHeader = forwardInfo != null || replyData != null,
+                                captionColor = if (isFromMe) appearance.accent.ink(darkScheme)
+                                    else MaterialTheme.colorScheme.onSurface,
+                                linkColor = if (isFromMe) appearance.accent.linkInk(darkScheme) else null,
+                                onNaturalSize = { if (mediaNatural == null) mediaNatural = it }
                             )
                         }
                         MediaType.VIDEO -> {
@@ -5067,7 +5289,7 @@ internal fun MessageBubble(
                                     // keeps them agreeing. `onAccent` belongs to the accent
                                     // that is actually painted.
                                     color = if (isFromMe)
-                                        appearance.accent.onAccent
+                                        appearance.accent.ink(isDarkScheme())
                                     else
                                         MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -5101,7 +5323,7 @@ internal fun MessageBubble(
                                     // keeps them agreeing. `onAccent` belongs to the accent
                                     // that is actually painted.
                                     color = if (isFromMe)
-                                        appearance.accent.onAccent
+                                        appearance.accent.ink(isDarkScheme())
                                     else
                                         MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -5148,10 +5370,11 @@ internal fun MessageBubble(
                                     // keeps them agreeing. `onAccent` belongs to the accent
                                     // that is actually painted.
                                     color = if (isFromMe)
-                                        appearance.accent.onAccent
+                                        appearance.accent.ink(isDarkScheme())
                                     else
                                         MaterialTheme.colorScheme.onSurface,
-                                    fontWeight = if (appearance.boldText) FontWeight.SemiBold else null
+                                    fontWeight = if (appearance.boldText) FontWeight.SemiBold else null,
+                                    linkColor = if (isFromMe) appearance.accent.linkInk(isDarkScheme()) else null
                                 )
                             }
                         }
@@ -5274,8 +5497,11 @@ internal fun MessageBubble(
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
+                // __MESHCORE_INTEROP_2026_11_25__ A MeshCore DM unanswered 4 times: say "out of range?".
+                val meshCoreFailed = com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(message.recipientPublicKey)
+                val radioUp = meshCoreFailed && LocalMeshCoreBubbles.current.radioUp
                 Text(
-                    text = stringResource(R.string.chat_not_delivered),
+                    text = stringResource(if (meshCoreFailed) MeshCoreUi.failedText(message, radioUp) else R.string.chat_not_delivered),
                     color = Color.Red,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
@@ -5806,14 +6032,14 @@ private fun VoiceMessageContent(
                 .size(40.dp)
                 .clip(CircleShape)
                 .background(
-                    if (isFromMe) LocalBubbleAppearance.current.accent.onAccent.copy(alpha = 0.2f)
+                    if (isFromMe) LocalBubbleAppearance.current.accent.ink(isDarkScheme()).copy(alpha = 0.2f)
                     else MaterialTheme.colorScheme.primary.copy(alpha = Oshi.ContainerTintAlpha)
                 )
         ) {
             Icon(
                 if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
                 contentDescription = if (isPlaying) stringResource(R.string.chat_pause) else stringResource(R.string.chat_play),
-                tint = if (isFromMe) LocalBubbleAppearance.current.accent.onAccent else brandInk()
+                tint = if (isFromMe) LocalBubbleAppearance.current.accent.ink(isDarkScheme()) else brandInk()
             )
         }
 
@@ -5832,7 +6058,7 @@ private fun VoiceMessageContent(
                 storedDurationMs = null,
                 legacyBody = null
             )
-            val activeColor = if (isFromMe) LocalBubbleAppearance.current.accent.onAccent
+            val activeColor = if (isFromMe) LocalBubbleAppearance.current.accent.ink(isDarkScheme())
                               else MaterialTheme.colorScheme.primary
             if (analysis != null) {
                 com.oshi.messenger.ui.media.VoiceWaveform(
@@ -5881,7 +6107,7 @@ private fun VoiceMessageContent(
             Text(
                 text = formatDuration((shownDuration * 1000).toLong()),
                 fontSize = 12.sp,
-                color = if (isFromMe) LocalBubbleAppearance.current.accent.onAccent.copy(alpha = 0.7f)
+                color = if (isFromMe) LocalBubbleAppearance.current.accent.ink(isDarkScheme()).copy(alpha = 0.7f)
                         else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
         }
@@ -5898,7 +6124,7 @@ private fun VoiceMessageContent(
                         if (isSpeakerOn) Icons.Default.VolumeUp else Icons.Default.HearingDisabled,
                         contentDescription = if (isSpeakerOn) stringResource(R.string.speaker_on) else stringResource(R.string.speaker_off),
                         modifier = Modifier.size(18.dp),
-                        tint = if (isFromMe) LocalBubbleAppearance.current.accent.onAccent.copy(alpha = 0.7f)
+                        tint = if (isFromMe) LocalBubbleAppearance.current.accent.ink(isDarkScheme()).copy(alpha = 0.7f)
                                else MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
                     )
                 }
@@ -5920,7 +6146,7 @@ private fun VoiceMessageContent(
                     text = label,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (isFromMe) LocalBubbleAppearance.current.accent.onAccent
+                    color = if (isFromMe) LocalBubbleAppearance.current.accent.ink(isDarkScheme())
                             else MaterialTheme.colorScheme.primary
                 )
             }
@@ -6259,19 +6485,62 @@ private fun ImageMessageContent(
     imageData: ByteArray?,
     caption: String?,
     state: BubbleMediaState = BubbleMediaState.Unavailable(),
-    onRetryLoad: () -> Unit = {}
+    onRetryLoad: () -> Unit = {},
+    /** __BUBBLE_MEDIA_2026_11_21__ display box; null = legacy layout (silhouette bubbles). */
+    size: com.oshi.messenger.ui.media.MediaBubbleSizing.Size? = null,
+    /** Something (forward badge, reply quote) sits above the picture inside the bubble. */
+    hasHeader: Boolean = false,
+    captionColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    linkColor: Color? = null,
+    onNaturalSize: (IntArray) -> Unit = {}
 ) {
     var showFullScreen by remember { mutableStateOf(false) }
+    val hasCaption = !caption.isNullOrBlank()
 
     Column {
         // 📎 M-17: the budget's degradation is now VISIBLE. It used to render an
         // empty Column — a bubble with nothing in it and no way to tell whether the
         // photo was loading, gone, or never there.
         if (imageData == null) {
-            MediaPlaceholder(state = state, onRetry = onRetryLoad)
+            if (size != null) {
+                // Same box the picture will take, so the thread does not jump.
+                com.oshi.messenger.ui.media.MediaBox(
+                    size = size,
+                    modifier = Modifier
+                        .bleed(start = 12.dp, end = 12.dp, top = if (hasHeader) 0.dp else 12.dp,
+                            bottom = if (hasCaption) 0.dp else 12.dp)
+                        .background(captionColor.copy(alpha = 0.08f))
+                ) {
+                    Box(Modifier.align(Alignment.Center).padding(12.dp)) {
+                        MediaPlaceholder(state = state, onRetry = onRetryLoad)
+                    }
+                }
+            } else MediaPlaceholder(state = state, onRetry = onRetryLoad)
         }
         imageData?.let { data ->
-            com.oshi.messenger.ui.media.BubbleAsyncImage(
+            if (size != null) {
+                val natural = remember(messageId, data.size) {
+                    com.oshi.messenger.ui.media.MediaNaturalSize.read(messageId, data)
+                }
+                SideEffect { natural?.let(onNaturalSize) }
+                com.oshi.messenger.ui.media.MediaBox(
+                    size = size,
+                    modifier = Modifier
+                        .bleed(start = 12.dp, end = 12.dp, top = if (hasHeader) 0.dp else 12.dp,
+                            bottom = if (hasCaption) 0.dp else 12.dp)
+                        .bubbleClickable { showFullScreen = true }
+                ) {
+                    com.oshi.messenger.ui.media.BubbleAsyncImage(
+                        messageId = messageId,
+                        data = data,
+                        contentDescription = stringResource(R.string.chat_photo),
+                        modifier = Modifier.fillMaxSize(),
+                        // The box already has the picture's aspect: Crop only bites where
+                        // MediaBubbleSizing clamped a very tall / very wide picture.
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            } else com.oshi.messenger.ui.media.BubbleAsyncImage(
                 messageId = messageId,
                 data = data,
                 contentDescription = stringResource(R.string.chat_photo),
@@ -6287,10 +6556,7 @@ private fun ImageMessageContent(
         caption?.let {
             if (it.isNotBlank()) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = it,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                LinkifyText(text = it, color = captionColor, linkColor = linkColor)
             }
         }
     }
@@ -6312,6 +6578,8 @@ private fun FullScreenImageViewer(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ no Download from a protected chat.
+    val advPrivacyHere = com.oshi.messenger.ui.components.LocalAdvancedChatPrivacy.current
 
     // 🔍 Pinch-to-zoom. The gallery-reached viewer has had it since
     // `MediaViewerScreen.kt:112`; the in-chat one — the one people actually reach,
@@ -6438,7 +6706,7 @@ private fun FullScreenImageViewer(
                 }
 
                 // Save button
-                IconButton(
+                if (!advPrivacyHere) IconButton(
                     onClick = { saveImageToDownloads(context, imageData) }
                 ) {
                     Surface(
@@ -6459,6 +6727,11 @@ private fun FullScreenImageViewer(
 }
 
 private fun shareImage(context: Context, imageData: ByteArray) {
+    // 🛡 __STRICT_MODE_2026_11_22__ nothing decrypted leaves OSHI while strict mode is on.
+    if (!com.oshi.messenger.security.StrictModeGate.mediaExportAllowed) {
+        Toast.makeText(context, context.getString(R.string.strict_blocked_toast), Toast.LENGTH_SHORT).show()
+        return
+    }
     try {
         val filename = "OSHI_${System.currentTimeMillis()}.jpg"
         // __PLAINTEXT_LEFTOVERS_2026_09_24__ Dedicated share dir, purged at the next share
@@ -6478,6 +6751,10 @@ private fun shareImage(context: Context, imageData: ByteArray) {
 }
 
 private fun saveImageToDownloads(context: Context, imageData: ByteArray) {
+    if (!com.oshi.messenger.security.StrictModeGate.mediaExportAllowed) {
+        Toast.makeText(context, context.getString(R.string.strict_blocked_toast), Toast.LENGTH_SHORT).show()
+        return
+    }
     try {
         val filename = "OSHI_${System.currentTimeMillis()}.jpg"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -7172,7 +7449,7 @@ private fun ReplyPreviewBanner(
             messageActionsManager.parseReply(message.content)
         } else null
         val raw = replyData?.replyContent ?: message.content
-        OSHIControlPayload.previewText(raw, controlLabels)
+        com.oshi.messenger.util.MessageFormatting.strip(OSHIControlPayload.previewText(raw, controlLabels))
     }
 
     val senderName = if (message.isFromMe) {
@@ -8000,7 +8277,11 @@ private fun BubbleMetaRow(message: Message, isFromMe: Boolean, dark: Boolean) {
             fontSize = 11.sp,
             color = metaInk
         )
-        DeliveryMethodBadge(
+        val meshCoreRow = com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(message.senderPublicKey) ||
+            com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(message.recipientPublicKey)
+        // A MeshCore bubble names its transport in words below (its amber "LoRa · unverified" dot would be a
+        // second, wrong name); a failed one keeps the failed chip.
+        if (!meshCoreRow || message.isFailed) DeliveryMethodBadge(
             deliveryMethod = message.deliveryMethod,
             isFromMe = isFromMe,
             isFailed = message.isFailed
@@ -8010,7 +8291,12 @@ private fun BubbleMetaRow(message: Message, isFromMe: Boolean, dark: Boolean) {
         // reply has no OSHI key to encrypt to — see
         // MessageRepository.sendLoRaInteropReply), so every bubble in such a thread,
         // both directions, says so. iOS says it via `.loraPlaintext` on this same row.
-        if (LoRaNodeIdentityMap.isFallbackConversationKey(message.senderPublicKey) ||
+        // __MESHCORE_INTEROP_2026_11_25__ A MeshCore bubble says only where it went, in the meta ink: the
+        // thread's subtitle and the note above the composer carry the encryption fact once, not per bubble.
+        if (meshCoreRow) {
+            Text(text = "MeshCore", fontSize = 10.sp, color = metaInk)
+        } else if (
+            LoRaNodeIdentityMap.isFallbackConversationKey(message.senderPublicKey) ||
             LoRaNodeIdentityMap.isFallbackConversationKey(message.recipientPublicKey)
         ) {
             Text(
@@ -8038,7 +8324,12 @@ private fun BubbleMetaRow(message: Message, isFromMe: Boolean, dark: Boolean) {
             ) {
                 // __COVER_WAITING_CLOCK_2026_11_18__ same rule as the other tick site.
                 val coverParked by com.oshi.messenger.service.CoverOutbox.awaiting.collectAsState()
-                val tick = com.oshi.messenger.ui.components.OutgoingTick.of(read, message.isDelivered, message.id in coverParked)
+                // __MESHCORE_INTEROP_2026_11_25__ queued for the MeshCore radio, not on the air yet ⇒ clock.
+                val meshCorePending = if (meshCoreRow) LocalMeshCoreBubbles.current.pending else emptySet()
+                val tick = com.oshi.messenger.ui.components.OutgoingTick.of(
+                    read, message.isDelivered,
+                    message.id in coverParked || MeshCoreUi.bubbleStatus(message, meshCorePending) == MeshCoreUi.BubbleStatus.SENDING,
+                )
                 Icon(
                     when (tick) {
                         com.oshi.messenger.ui.components.OutgoingTick.WAITING -> Icons.Default.Schedule
@@ -8048,7 +8339,8 @@ private fun BubbleMetaRow(message: Message, isFromMe: Boolean, dark: Boolean) {
                     contentDescription = when (tick) {
                         com.oshi.messenger.ui.components.OutgoingTick.READ -> stringResource(R.string.message_read)
                         com.oshi.messenger.ui.components.OutgoingTick.DELIVERED -> stringResource(R.string.message_delivered)
-                        com.oshi.messenger.ui.components.OutgoingTick.WAITING -> stringResource(R.string.cover_waiting_bubble)
+                        com.oshi.messenger.ui.components.OutgoingTick.WAITING ->
+                            stringResource(if (meshCoreRow) R.string.meshcore_sending else R.string.cover_waiting_bubble)
                         else -> stringResource(R.string.message_sent)
                     },
                     modifier = Modifier.size(14.dp),

@@ -729,7 +729,8 @@ internal fun groupRowPreview(
             // half-parsed `v2file` key message prints as itself under the
             // group name. The 1:1 list had these nets inline; the catalog
             // owns them now, so both lists answer the same way.
-            else -> OSHIControlPayload.listPreview(lastMessage.content, controlLabels)
+            // __TEXT_FORMATTING_2026_11_24__ markers stripped on the row.
+            else -> com.oshi.messenger.util.MessageFormatting.strip(OSHIControlPayload.listPreview(lastMessage.content, controlLabels))
                 .takeIf { it.isNotBlank() }
         }
     }

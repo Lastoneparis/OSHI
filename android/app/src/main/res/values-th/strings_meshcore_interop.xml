@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · ไม่ได้เข้ารหัสแบบต้นทางถึงปลายทางโดย OSHI</string>
+    <string name="meshcore_error_not_connected">ไม่มีวิทยุ MeshCore ที่เชื่อมต่อ</string>
+    <string name="meshcore_channels_title">ช่อง MeshCore</string>
+    <string name="meshcore_channel_public">สาธารณะ · ใครที่รู้ชื่อก็อ่านได้</string>
+    <string name="meshcore_channel_private">ส่วนตัว · คีย์ลับ</string>
+    <string name="meshcore_join_hashtag">เข้าร่วมช่องแฮชแท็ก</string>
+    <string name="meshcore_join_private">เข้าร่วมช่องส่วนตัว</string>
+    <string name="meshcore_contacts_title">ผู้ติดต่อ MeshCore</string>
+    <string name="meshcore_refresh_contacts">รีเฟรชผู้ติดต่อ</string>
+    <string name="meshcore_join_refused">วิทยุปฏิเสธช่องนี้</string>
+    <string name="meshcore_join_no_slot">ไม่มีช่องว่างสำหรับช่องสัญญาณบนวิทยุนี้</string>
+    <string name="meshcore_join_bad_name">ป้อนชื่อช่องที่ถูกต้อง (สูงสุด 31 ไบต์ ไม่มีช่องว่างสำหรับช่องแฮชแท็ก)</string>
+    <string name="meshcore_join_bad_secret">รหัสลับต้องยาว 16 ไบต์: อักขระฐานสิบหก 32 ตัวหรือ base64</string>
+    <string name="meshcore_hashtag_hint">คีย์ได้มาจากชื่อ: ใครที่รู้ชื่อก็อ่านช่องได้</string>
+    <string name="meshcore_private_hint">ป้อนชื่อช่องและรหัสลับที่สมาชิกใช้ร่วมกัน</string>
+    <string name="meshcore_channel_name">ชื่อช่อง</string>
+    <string name="meshcore_channel_secret">รหัสลับ (hex หรือ base64)</string>
+    <string name="meshcore_join">เข้าร่วม</string>
+    <string name="meshcore_note_dm">เข้ารหัสโดย MeshCore ระหว่างวิทยุ ไม่ใช่การเข้ารหัสต้นทางถึงปลายทางของ OSHI</string>
+    <string name="meshcore_note_public">ช่องสาธารณะ: ใครก็ตามที่รู้ชื่อช่องสามารถอ่านได้</string>
+    <string name="meshcore_note_private">ช่องส่วนตัว: ใครก็ตามที่มีรหัสลับของช่องสามารถอ่านได้</string>
+    <string name="meshcore_radio_offline">ไม่ได้เชื่อมต่อวิทยุ MeshCore ข้อความจะรออยู่ที่นี่ในสถานะยังไม่ส่งถึง</string>
+    <string name="meshcore_connect">เชื่อมต่อ</string>
+    <string name="meshcore_parts">%1$d ข้อความ</string>
+    <string name="meshcore_sending">กำลังรอวิทยุ</string>
+    <string name="meshcore_failed_dm">ไม่มีการตอบรับจากวิทยุของอีกฝ่าย (อยู่นอกระยะ?) แตะเพื่อลองอีกครั้ง</string>
+    <string name="meshcore_error_pairing">การจับคู่ล้มเหลว ตรวจสอบ PIN แล้วลองอีกครั้ง หากวิทยุถูกรีเซ็ต ให้ลบออกในการตั้งค่าบลูทูธของ Android ก่อน</string>
+    <string name="meshcore_error_no_answer">วิทยุไม่ตอบสนอง ตรวจสอบว่าใช้เฟิร์มแวร์ MeshCore companion สำหรับบลูทูธ</string>
+    <string name="meshcore_state_reconnecting">การเชื่อมต่อขาดหาย จะเชื่อมต่อใหม่เมื่อวิทยุกลับมาอยู่ในระยะ…</string>
+    <string name="meshcore_state_pin">พิมพ์ PIN ของวิทยุในหน้าต่างของ Android</string>
+    <string name="meshcore_state_reading">กำลังอ่านรายชื่อและช่อง…</string>
+    <string name="meshcore_state_connecting">กำลังเชื่อมต่อ…</string>
+    <string name="meshcore_seen_as">เชื่อมต่อแล้ว · ผู้ใช้ MeshCore เห็นคุณเป็น %1$s</string>
+    <string name="meshcore_connected">เชื่อมต่อแล้ว</string>
+    <string name="meshcore_footer_users">แชทกับผู้ใช้ MeshCore (ข้อความโดยตรงและช่อง) และส่งข้อความ OSHI ผ่านรีพีตเตอร์ MeshCore ต้องใช้เฟิร์มแวร์ MeshCore companion สำหรับบลูทูธ OSHI จะเพิ่มช่องเดียวคือ #oshi-bridge ในช่องว่าง และไม่เปลี่ยนช่องอื่นของคุณเลย</string>
+    <string name="meshcore_scan_below">วิทยุ MeshCore จะแสดงด้านล่างในวิทยุใกล้เคียง พร้อมป้าย MeshCore</string>
+    <string name="meshcore_contacts_footer">แตะที่บุคคลเพื่อเขียนถึงเขา ข้อความเข้ารหัสโดย MeshCore ไม่ใช่การเข้ารหัสต้นทางถึงปลายทางของ OSHI</string>
+    <string name="meshcore_no_contacts">ยังไม่ได้ยินใคร ผู้ใช้ MeshCore จะปรากฏที่นี่เมื่อวิทยุของพวกเขาประกาศตัว ประกาศวิทยุของคุณเพื่อให้พวกเขาพบคุณ</string>
+    <string name="meshcore_heard">ได้ยิน %1$s</string>
+    <string name="meshcore_announce">ประกาศตัวฉัน</string>
+    <string name="meshcore_announce_done">ประกาศแล้ว ผู้ใช้ MeshCore ในระยะสามารถเพิ่มและเขียนถึงคุณได้แล้ว</string>
+    <string name="meshcore_announce_failed">วิทยุส่งการประกาศไม่สำเร็จ</string>
+    <string name="meshcore_channels_footer">แตะช่องเพื่อเปิด ช่องสาธารณะและช่องแฮชแท็กอ่านได้โดยใครก็ตามที่รู้ชื่อ</string>
+    <string name="meshcore_pin_title">จับคู่กับ %1$s</string>
+    <string name="meshcore_pin_body">Android จะขอ PIN ของวิทยุ หากวิทยุมีหน้าจอ PIN จะแสดงบนหน้าจอนั้น</string>
+    <string name="meshcore_pin_default">ไม่มีหน้าจอ? PIN คือ 123456 เว้นแต่จะถูกเปลี่ยนในแอป MeshCore</string>
+    <string name="meshcore_pin_continue">ดำเนินการต่อ</string>
+    <string name="meshcore_no_free_channel_chat">ช่องทั้ง 8 ช่องถูกใช้หมดแล้ว คุณยังแชทกับผู้ใช้ MeshCore ได้ ให้เคลียร์ช่องหนึ่งในแอป MeshCore เพื่อให้ข้อความ OSHI ใช้ #oshi-bridge ได้</string>
+    <string name="meshcore_contact_kind">ผู้ใช้ MeshCore</string>
+    <string name="meshcore_too_long">ยาวเกินไป: สูงสุด %1$d ข้อความ</string>
+</resources>

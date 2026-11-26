@@ -4,10 +4,7 @@
     <string name="app_tagline">Безпечний Mesh-месенджер</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">Ласкаво просимо до OSHI</string>
-    <string name="onboarding_description">Наскрізне шифрування, що працює навіть без інтернету</string>
     <string name="onboarding_create_identity">Створити особистість</string>
-    <string name="onboarding_restore_identity">Відновити особистість</string>
 
     <!-- Messages -->
     <string name="messages_title">Повідомлення</string>
@@ -61,6 +58,8 @@
     <string name="settings_theme_dark">Темна</string>
     <string name="settings_theme_oled_black">Чорний OLED</string>
     <string name="settings_theme_oled_black_desc">Повністю чорне тло для OLED-екранів. Діє, коли ввімкнено темну тему.</string>
+    <string name="appearance_glass_effect">Ефект скла</string>
+    <string name="appearance_glass_effect_footer">Напівпрозорі панелі, картки й меню, як матове скло. Працює зі світлою, темною темою та Чорним OLED.</string>
     <string name="settings_backup">Резервне копіювання ключів</string>
     <string name="settings_about">Про додаток</string>
     <string name="settings_version">Версія %s</string>
@@ -385,22 +384,9 @@
     <string name="video_switch_to_voice">Переключити на голос</string>
 
     <!-- Onboarding - Additional -->
-    <string name="onboarding_subtitle">Безпечні, приватні повідомлення, що працюють навіть без інтернету</string>
-    <string name="onboarding_key_features">Ключові функції</string>
-    <string name="onboarding_e2e_title">Наскрізне шифрування</string>
-    <string name="onboarding_e2e_desc">Усі повідомлення зашифровані. Лише ви та одержувач можете їх прочитати.</string>
-    <string name="onboarding_mesh_title">Mesh-мережа</string>
-    <string name="onboarding_mesh_desc">Надсилайте повідомлення безпосередньо близьким користувачам, навіть без інтернету.</string>
-    <string name="onboarding_calls_title">Безпечні виклики</string>
-    <string name="onboarding_calls_desc">Голосові та відеовиклики з повним шифруванням.</string>
-    <string name="onboarding_cross_platform_title">Кросплатформність</string>
-    <string name="onboarding_cross_platform_desc">Безперешкодна робота з пристроями iOS та Android.</string>
-    <string name="onboarding_create_your_identity">Створіть свою особистість</string>
-    <string name="onboarding_choose_display_name">Виберіть ім\'я для відображення вашим контактам</string>
     <string name="onboarding_display_name">Ім\'я для відображення</string>
     <string name="onboarding_key_info">Для вас буде згенеровано унікальну пару ключів шифрування. Не забудьте створити резервну копію ключів пізніше.</string>
     <string name="onboarding_back">Назад</string>
-    <string name="onboarding_next">Далі</string>
     <string name="onboarding_creating">Створення…</string>
     <string name="onboarding_error_create">Не вдалося створити особистість: %s</string>
 
@@ -820,8 +806,6 @@
     <string name="faq_q6_answer">Перейдіть до Нове повідомлення та відскануйте QR-код контакту, поділіться своїм QR-кодом або вставте його публічний ключ.</string>
 
     <!-- Onboarding Disclaimer -->
-    <string name="onboarding_disclaimer_title">Важливе повідомлення</string>
-    <string name="onboarding_disclaimer_subtitle">Будь ласка, прочитайте перед використанням OSHI</string>
     <string name="onboarding_disclaimer_audit_title">Аудит безпеки ще не проведено</string>
     <string name="onboarding_disclaimer_audit_desc">Цей додаток ще не пройшов професійний аудит безпеки. Хоча ми використовуємо надійне шифрування, використовуйте на власний розсуд.</string>
     <string name="onboarding_disclaimer_anonymous_title">Конфіденційність передусім</string>
@@ -2147,24 +2131,10 @@
     <string name="new_message_sent">Повідомлення надіслано!</string>
     <string name="onboarding_conduct_subtitle">OSHI побудований на довірі та повазі. Дотримуйтесь цих правил:</string>
     <string name="onboarding_conduct_title">Правила спільноти</string>
-    <string name="onboarding_message_description">З\'єднайтеся з кимось, скануючи їхній QR-код або вводячи публічний ключ.</string>
-    <string name="onboarding_message_title">Надішліть перше повідомлення</string>
-    <string name="onboarding_method_paste_title">Спосіб 2: Копіювати/Вставити публічний ключ</string>
-    <string name="onboarding_method_qr_title">Спосіб 1: Сканувати QR-код</string>
     <string name="onboarding_reach_disclaimer">Офлайн-mesh має малий радіус дії. Щоб знайти одне одного, на обох телефонах має бути відкритий OSHI: приблизно 100 м на відкритій місцевості й значно менше крізь стіни. Далі повідомлення йде лише тоді, коли в інших людей поблизу теж відкритий OSHI і вони передають його далі. Якщо поруч нікого немає, OSHI надсилає через інтернет.</string>
-    <string name="onboarding_reach_offline_body">Немає інтернету? Повідомлення стрибають з телефону на телефон через людей поблизу з відкритим OSHI.</string>
-    <string name="onboarding_reach_offline_title">Офлайн (mesh)</string>
-    <string name="onboarding_reach_online_body">З інтернетом миттєво зв\'яжіться з будь-ким у світі.</string>
-    <string name="onboarding_reach_online_title">Онлайн</string>
     <string name="onboarding_reach_range1_dist">~100 м</string>
-    <string name="onboarding_reach_range1_label">Телефон до телефону, напряму</string>
     <string name="onboarding_reach_range2_dist">~500 м</string>
-    <string name="onboarding_reach_range2_label">Далі, коли інші ретранслюють між ними</string>
     <string name="onboarding_reach_range3_dist">~30 км</string>
-    <string name="onboarding_reach_range3_label">З радіо Meshtastic LoRa через Bluetooth</string>
-    <string name="onboarding_reach_subtitle">OSHI працює двома способами — з інтернетом і без нього.</string>
-    <string name="onboarding_reach_tip">Офлайн-режиму потрібні інші люди поблизу з відкритим OSHI. Що більше людей, то далі йде повідомлення.</string>
-    <string name="onboarding_reach_title">Як подорожують ваші повідомлення</string>
     <string name="onboarding_rule_backup">Безпечно зберігайте резервні копії ключів</string>
     <string name="onboarding_rule_no_abuse">Без переслідувань та зловживань</string>
     <string name="onboarding_rule_no_illegal">Без нелегального контенту</string>
@@ -2579,6 +2549,7 @@
     <string name="gif_picker_title">GIF і стікери</string>
     <string name="gif_tab_gifs">GIF</string>
     <string name="gif_tab_stickers">Стікери</string>
+    <string name="gif_oshi_hint">Анімовані наліпки OSHI — виберіть одну, щоб надіслати</string>
     <string name="linked_device_alert_body">До вашого облікового запису OSHI щойно прив\'язано пристрій. Якщо це були не ви, відкрийте «Прив\'язані пристрої» й видаліть його зараз.</string>
     <string name="linked_device_alert_body_plural">До вашого облікового запису OSHI щойно прив\'язано пристроїв: %1$d. Якщо це були не ви, відкрийте «Прив\'язані пристрої» й видаліть їх зараз.</string>
     <string name="linked_device_alert_title">До вашого облікового запису прив\'язано новий пристрій</string>
@@ -2787,4 +2758,66 @@
     <string name="settings_animated_reactions">Анімовані реакції OSHI</string>
     <string name="settings_animated_reactions_desc">Вимк.: звичайні емодзі</string>
     <string name="reactions_new_hint">Нове: на iPhone зі старою версією вони можуть показуватися як 👍</string>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="accessibility_updates">Оновлення та обслуговування</string>
+    <string name="ai_download_failed_network">Не вдалося завантажити — перевірте з\'єднання й натисніть «Повторити».</string>
+    <string name="ai_download_failed_server">Сервер завантаження не відповів. Натисніть «Повторити» або спробуйте пізніше.</string>
+    <string name="chat_welcome_creator_notice">Написано OSHI, і це повідомлення дійде до Hugo, який його створив. Він читає відповіді.</string>
+    <string name="conversation_pin">Закріпити вгорі</string>
+    <string name="conversation_unpin">Відкріпити</string>
+    <string name="group_block_member">Заблокувати учасника</string>
+    <string name="group_member_blocked">Заблоковано. Повідомлення цього учасника в групі більше не надходитимуть вам.</string>
+    <string name="group_member_unblocked">Розблоковано.</string>
+    <string name="group_report_member">Поскаржитися на учасника</string>
+    <string name="group_unblock_member">Розблокувати учасника</string>
+    <string name="groups_show_fewer_members">Показати менше</string>
+    <string name="lora_error_channel_unknown">Цього каналу немає на під\'єднаній рації — його могли перейменувати, перемістити або видалити. Нічого не надіслано.</string>
+    <string name="lora_node_message">Написати цьому вузлу</string>
+    <string name="map_pois_hide">Сховати місця</string>
+    <string name="map_pois_show">Показати місця</string>
+    <string name="map_regions_insufficient_space">На цьому пристрої недостатньо вільного місця для встановлення цього регіону.</string>
+    <string name="markup_done">Готово</string>
+    <string name="markup_draw">Малювати</string>
+    <string name="markup_undo">Скасувати</string>
+    <string name="mesh_blocked_bluetooth">Bluetooth вимкнено</string>
+    <string name="mesh_blocked_permission">Дозвіл «Пристрої поблизу» вимкнено</string>
+    <string name="mesh_blocked_wifi">Wi‑Fi вимкнено</string>
+    <string name="new_message_fab">Нове</string>
+    <string name="peers_connect_already">%1$s вже під\'єднано</string>
+    <string name="peers_connect_dialing">Під\'єднання до %1$s…</string>
+    <string name="peers_connect_searching">Адреси %1$s ще немає — шукаємо знову…</string>
+    <string name="report_member_already_filed">Ви вже поскаржилися на цього учасника.</string>
+    <string name="report_member_dialog_title">Поскаржитися на учасника</string>
+    <string name="updates_available">Доступна новіша версія OSHI.</string>
+    <string name="updates_checking">Пошук новішої версії…</string>
+    <string name="updates_current_version">У вас OSHI %1$s</string>
+    <string name="updates_news_action">Читати нотатки до випуску</string>
+    <string name="updates_news_body">З кожним випуском публікуються нові функції, виправлення та повідомлення про обслуговування.</string>
+    <string name="updates_title">Оновлення та обслуговування</string>
+    <string name="updates_up_to_date">У вас найновіша відома нам версія.</string>
+    <string name="inapp_update_title">Доступне оновлення</string>
+    <string name="inapp_update_body">У Google Play вийшла нова версія OSHI. Вона завантажується у фоні, тож можна й далі користуватися застосунком.</string>
+    <string name="inapp_update_now">Оновити</string>
+    <string name="inapp_update_later">Пізніше</string>
+    <string name="inapp_update_ready">Оновлення готове</string>
+    <string name="inapp_update_restart">Перезапустити</string>
+    <!-- __CALL_WAKE_2026_11_22__ -->
+    <string name="call_state_calling">Виклик…</string>
+    <string name="call_reach_unreachable">Зараз недоступний</string>
+    <string name="call_readiness_title">Вхідні дзвінки можуть не дзвонити</string>
+    <string name="call_readiness_notifications">Сповіщення OSHI вимкнено — торкніться, щоб дозволити</string>
+    <string name="call_readiness_channel">Сповіщення «Вхідні дзвінки» вимкнено — торкніться, щоб увімкнути</string>
+    <string name="call_readiness_full_screen">Повноекранні сповіщення про дзвінки заборонено — торкніться, щоб дозволити</string>
+    <string name="call_readiness_background">Android обмежує OSHI у фоні — торкніться й виберіть для батареї «Без обмежень»</string>
+    <string name="composer_format_bold">Жирний</string>
+    <string name="composer_format_underline">Підкреслений</string>
+    <!-- __GROUP_HEADER_ISLAND_2026_11_24__ floating group header -->
+    <string name="group_header_info_a11y">Інформація про групу, %1$s</string>
+    <string name="group_header_search_a11y">Пошук у розмові</string>
+    <plurals name="group_header_subscribers">
+        <item quantity="one">%1$d підписник</item>
+        <item quantity="few">%1$d підписники</item>
+        <item quantity="many">%1$d підписників</item>
+        <item quantity="other">%1$d підписника</item>
+    </plurals>
 </resources>

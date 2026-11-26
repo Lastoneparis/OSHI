@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Публичный веб-просмотр</string>
+    <string name="cw_toggle">Публиковать посты в интернете</string>
+    <string name="cw_footer">Новые посты также публикуются как общедоступная веб-страница по адресу oshi-messenger.com/c/%1$s. Их может прочитать любой, включая поисковые системы и превью ссылок. Сквозное шифрование не распространяется на веб-копию.</string>
+    <string name="cw_needs_link">Сначала создайте для канала публичную ссылку: веб-просмотр использует её имя.</string>
+    <string name="cw_create_link">Создать публичную ссылку</string>
+    <string name="cw_enable_title">Публиковать посты в интернете?</string>
+    <string name="cw_enable_confirm">Посты этого канала будут видны всем в интернете по адресу oshi-messenger.com/c/%1$s. Только новые посты. Превью ссылок (WhatsApp, X, Telegram…) тоже смогут их прочитать, а сквозное шифрование не распространяется на веб-копию.</string>
+    <string name="cw_enable_action">Опубликовать</string>
+    <string name="cw_disable_title">Отключить веб-просмотр?</string>
+    <string name="cw_disable_confirm">Все посты и изображения, опубликованные по адресу oshi-messenger.com/c/%1$s, будут удалены из интернета. Ваши посты в приложении не изменятся.</string>
+    <string name="cw_disable_action">Отключить</string>
+    <string name="cw_indexing">Разрешить поисковые системы</string>
+    <string name="cw_indexing_footer">Если выключено, страницы просят поисковые системы не индексировать их.</string>
+    <string name="cw_embed_code">Код для вставки</string>
+    <string name="cw_embed_title">Встроить этот пост</string>
+    <string name="cw_embed_hint">Вставьте этот код на свой сайт в то место, где должен появиться пост.</string>
+    <string name="cw_embed_dark">Тёмная тема</string>
+    <string name="cw_copy_code">Копировать код</string>
+    <string name="cw_code_copied">Код скопирован</string>
+    <string name="cw_not_on_web">Этого поста нет в интернете. Публикуются только посты, отправленные после включения веб-просмотра.</string>
+    <string name="cw_error">Не удалось изменить веб-просмотр. Проверьте подключение и повторите попытку.</string>
+</resources>

@@ -800,8 +800,14 @@ struct WallpaperPickerView: View {
     /// __WALLPAPER_TONE_2026_09_24__ Light / dark / automatic for this chat.
     @State private var selectedTone: ChatWallpaperTone
     
-    init(conversationId: String) {
+    /// __WALLPAPER_FOR_EVERY_MEMBER_2026_11_21__ false: keep the choice on this
+    /// device only (a member without the group's wallpaper permission — an
+    /// admin-only group or a channel). The group-wide one would be refused.
+    let broadcast: Bool
+
+    init(conversationId: String, broadcast: Bool = true) {
         self.conversationId = conversationId
+        self.broadcast = broadcast
         _selectedWallpaper = State(initialValue: ChatWallpaperManager.shared.getWallpaper(for: conversationId))
         _selectedTone = State(initialValue: ChatWallpaperManager.shared.tone(for: conversationId))
     }
@@ -883,12 +889,14 @@ struct WallpaperPickerView: View {
                     wallpaperManager.setWallpaper(selectedWallpaper, for: conversationId)
                     wallpaperManager.setTone(selectedTone, for: conversationId)
                     // 🎨 Broadcast wallpaper change to conversation participants
-                    let senderName = UserDefaults.standard.string(forKey: "userName") ?? UserDefaults.standard.string(forKey: "displayName")
-                    wallpaperManager.broadcastWallpaperUpdate(
-                        wallpaper: selectedWallpaper,
-                        conversationId: conversationId,
-                        senderName: senderName
-                    )
+                    if broadcast {
+                        let senderName = UserDefaults.standard.string(forKey: "userName") ?? UserDefaults.standard.string(forKey: "displayName")
+                        wallpaperManager.broadcastWallpaperUpdate(
+                            wallpaper: selectedWallpaper,
+                            conversationId: conversationId,
+                            senderName: senderName
+                        )
+                    }
                     dismiss()
                 }
                 .fontWeight(.semibold)

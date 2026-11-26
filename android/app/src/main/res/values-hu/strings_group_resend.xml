@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">Elküldve %2$d tagból %1$d tagnak</string>
+    <string name="group_sent_partial_body">Még nem kézbesítve %1$d tagnak. Az OSHI 7 napig automatikusan újrapróbálja.</string>
+    <string name="group_sent_partial_gave_up">7 nap után sincs kézbesítve %1$d tagnak.</string>
+    <string name="group_retry_now">Újrapróbálás most</string>
+</resources>

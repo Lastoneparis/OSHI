@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">ส่งถึง %1$d จาก %2$d คน</string>
+    <string name="group_sent_partial_body">ยังไม่ถึงสมาชิก %1$d คน OSHI จะลองส่งใหม่อัตโนมัติเป็นเวลา 7 วัน</string>
+    <string name="group_sent_partial_gave_up">ผ่านไป 7 วันแล้วยังไม่ถึงสมาชิก %1$d คน</string>
+    <string name="group_retry_now">ลองใหม่ตอนนี้</string>
+</resources>

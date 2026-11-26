@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">خصوصية الدردشة المتقدمة</string>
+    <string name="adv_privacy_subtitle">تمنع الجميع في هذه الدردشة من حفظ الوسائط أو تصدير الدردشة أو استخدام الذكاء الاصطناعي على رسائلها</string>
+    <string name="adv_privacy_learn_more">معرفة المزيد</string>
+    <string name="adv_privacy_notice_on">فعّل %1$s خصوصية الدردشة المتقدمة. لا يمكن لأحد حفظ الوسائط تلقائيًا أو تصدير الدردشة أو استخدام الذكاء الاصطناعي على الرسائل في هذه الدردشة.</string>
+    <string name="adv_privacy_notice_off">أوقف %1$s خصوصية الدردشة المتقدمة. أصبح حفظ الوسائط وتصدير الدردشة وميزات الذكاء الاصطناعي متاحة مجددًا.</string>
+    <string name="adv_privacy_notice_on_you">فعّلت خصوصية الدردشة المتقدمة. لا يمكن لأحد حفظ الوسائط تلقائيًا أو تصدير الدردشة أو استخدام الذكاء الاصطناعي على الرسائل في هذه الدردشة.</string>
+    <string name="adv_privacy_notice_off_you">أوقفت خصوصية الدردشة المتقدمة. أصبح حفظ الوسائط وتصدير الدردشة وميزات الذكاء الاصطناعي متاحة مجددًا.</string>
+    <string name="adv_privacy_summary_on">تم تفعيل خصوصية الدردشة المتقدمة</string>
+    <string name="adv_privacy_summary_off">تم إيقاف خصوصية الدردشة المتقدمة</string>
+    <string name="adv_privacy_sheet_intro">عندما يفعّلها أي شخص، تنطبق على الجميع في هذه الدردشة:</string>
+    <string name="adv_privacy_sheet_point_save">لا يمكن حفظ وسائط هذه الدردشة في المعرض أو في التنزيلات.</string>
+    <string name="adv_privacy_sheet_point_export">تُستبعد هذه الدردشة من عمليات تصدير الدردشات.</string>
+    <string name="adv_privacy_sheet_point_ai">لا يستطيع الذكاء الاصطناعي المدمج في OSHI قراءة هذه الدردشة: لا ردود مقترحة ولا ترجمة ولا سياق لمساعد الكتابة.</string>
+    <string name="adv_privacy_sheet_point_screen">لقطات الشاشة وتسجيل الشاشة لهذه الدردشة محظورة.</string>
+    <string name="adv_privacy_sheet_limits">يمكن لأي شخص في الدردشة تفعيلها أو إيقافها. لا تمنع أحدًا من تصوير شاشته، ولا تؤثر على من يستخدمون إصدارًا أقدم من OSHI.</string>
+    <string name="adv_privacy_blocked_toast">خصوصية الدردشة المتقدمة مفعّلة في هذه الدردشة</string>
+    <string name="adv_privacy_older_members">أعضاء يستخدمون إصدارًا أقدم من OSHI ولن يطبّقوها حتى يحدّثوا: %1$d</string>
+</resources>

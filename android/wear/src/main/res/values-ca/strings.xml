@@ -48,4 +48,27 @@
     <string name="qr_no">No</string>
     <string name="qr_busy">Ara no puc parlar</string>
     <string name="end_to_end">Xifrat d\'extrem a extrem pel teu telèfon</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Fixada</string>
+    <string name="net_internet">Internet</string>
+    <string name="net_nearby">%1$d a prop</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Telèfon fora de línia · els missatges esperen al telèfon</string>
+    <string name="net_offline_short">Telèfon fora de línia</string>
+    <string name="voice_message">Missatge de veu</string>
+    <string name="voice_send">Envia el missatge de veu</string>
+    <string name="voice_cancel">Cancel·la</string>
+    <string name="voice_permission">Permet el micròfon per gravar missatges de veu. No es desa res al rellotge.</string>
+    <string name="voice_mic_busy">El micròfon està ocupat. Torna-ho a provar.</string>
+    <string name="voice_too_short">Massa curt. Parla una mica més.</string>
+    <string name="voice_not_sent">No enviat. Tingues el telèfon a prop i torna-ho a provar.</string>
+    <string name="send_emoji">Envia un emoji</string>
+    <string name="delivery_sending">Enviant</string>
+    <string name="delivery_sent">Enviat</string>
+    <string name="delivery_delivered">Lliurat</string>
+    <string name="delivery_read">Llegit</string>
+    <string name="delivery_failed">No lliurat</string>
+    <string name="complication_none">Cap missatge no llegit</string>
+    <string name="tile_reply_to">Respon a %1$s</string>
+    <string name="tile_chat_unread">%1$s, %2$d no llegits</string>
 </resources>

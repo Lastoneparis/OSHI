@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Расширенная конфиденциальность чата</string>
+    <string name="adv_privacy_subtitle">Запрещает всем в этом чате сохранять медиафайлы, экспортировать чат и применять ИИ к сообщениям</string>
+    <string name="adv_privacy_learn_more">Подробнее</string>
+    <string name="adv_privacy_notice_on">%1$s включает расширенную конфиденциальность чата. Никто не может автоматически сохранять медиафайлы, экспортировать чат или применять ИИ к сообщениям в этом чате.</string>
+    <string name="adv_privacy_notice_off">%1$s отключает расширенную конфиденциальность чата. Сохранение медиафайлов, экспорт чата и функции ИИ снова доступны.</string>
+    <string name="adv_privacy_notice_on_you">Вы включили расширенную конфиденциальность чата. Никто не может автоматически сохранять медиафайлы, экспортировать чат или применять ИИ к сообщениям в этом чате.</string>
+    <string name="adv_privacy_notice_off_you">Вы отключили расширенную конфиденциальность чата. Сохранение медиафайлов, экспорт чата и функции ИИ снова доступны.</string>
+    <string name="adv_privacy_summary_on">Расширенная конфиденциальность чата включена</string>
+    <string name="adv_privacy_summary_off">Расширенная конфиденциальность чата отключена</string>
+    <string name="adv_privacy_sheet_intro">Когда кто-либо её включает, она действует для всех в этом чате:</string>
+    <string name="adv_privacy_sheet_point_save">Медиафайлы из этого чата нельзя сохранить в галерею или в «Загрузки».</string>
+    <string name="adv_privacy_sheet_point_export">Этот чат не включается в экспорт чатов.</string>
+    <string name="adv_privacy_sheet_point_ai">Встроенный ИИ OSHI не может читать этот чат: нет предложенных ответов, перевода и контекста для помощника по написанию.</string>
+    <string name="adv_privacy_sheet_point_screen">Снимки экрана и запись экрана в этом чате заблокированы.</string>
+    <string name="adv_privacy_sheet_limits">Любой участник чата может включить или отключить её. Она не помешает сфотографировать экран и не действует для тех, кто пользуется старой версией OSHI.</string>
+    <string name="adv_privacy_blocked_toast">В этом чате включена расширенная конфиденциальность</string>
+    <string name="adv_privacy_older_members">Участники со старой версией OSHI, которые не применят её до обновления: %1$d</string>
+</resources>

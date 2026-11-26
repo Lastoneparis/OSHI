@@ -27,6 +27,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -130,7 +131,17 @@ fun WallpaperPickerSheet(
     // globally (and so existing 4-argument call sites keep compiling). When it
     // is supplied, the sheet grows a confirmed "apply everywhere" action under
     // the per-chat save button — the only entry point to the app-wide default.
-    onSetAsDefaultForAllChats: ((ChatWallpaper) -> Unit)? = null
+    onSetAsDefaultForAllChats: ((ChatWallpaper) -> Unit)? = null,
+    /**
+     * __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper: the sheet edits
+     * the app-wide default itself. The tone row then edits the default tone, and
+     * the button is a plain "Done" (there is no "this chat").
+     */
+    globalMode: Boolean = false,
+    /** One line under the title (groups: "only you see this"). */
+    note: String? = null,
+    /** When set, a "Reset to Default" action that drops this chat's own choice. */
+    onReset: (() -> Unit)? = null,
 ) {
     // Opens on OSHI, as iOS does (`ChatWallpaperManager.swift:730`): the animated
     // backdrops are the app's own look, and the tab that shows them should not be
@@ -157,7 +168,9 @@ fun WallpaperPickerSheet(
                 val imageData = inputStream?.readBytes()
                 inputStream?.close()
                 if (imageData != null) {
-                    onSelectWallpaper(ChatWallpaper.ImageWallpaper(imageData))
+                    // A camera photo is 4-12 MB; it is decoded behind every chat,
+                    // persisted and synced. 1920 px is more than the screen.
+                    onSelectWallpaper(ChatWallpaper.ImageWallpaper(downscaleWallpaperImage(imageData)))
                 }
             } catch (e: Exception) {
                 Toast.makeText(context, context.getString(R.string.wallpaper_load_failed), Toast.LENGTH_SHORT).show()
@@ -191,12 +204,21 @@ fun WallpaperPickerSheet(
                 text = stringResource(R.string.wallpaper_chat_wallpaper),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = if (note != null) 4.dp else 16.dp)
             )
+            if (note != null) {
+                Text(
+                    text = note,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            }
 
             // __WALLPAPER_TONE_2026_09_24__ this chat's tone (light / dark /
             // automatic). Applied on tap, like the wallpaper tiles below.
-            val chatTone = WallpaperTonePrefs.tone(context, conversationId)
+            val chatTone = if (globalMode) WallpaperTonePrefs.defaultTone(context)
+                else WallpaperTonePrefs.tone(context, conversationId)
             val previewDark = WallpaperToneResolver.resolve(
                 currentWallpaper, chatTone, isDarkScheme()
             ).contentDark
@@ -216,6 +238,7 @@ fun WallpaperPickerSheet(
                                 Brush.linearGradient(currentWallpaper.colors)
                             )
                             is ChatWallpaper.EmojiPattern -> Modifier.background(currentWallpaper.backgroundColor)
+                                .emojiPattern(currentWallpaper.emoji)
                             is ChatWallpaper.OshiDynamic -> Modifier
                             is ChatWallpaper.ImageWallpaper -> Modifier
                         }
@@ -283,7 +306,10 @@ fun WallpaperPickerSheet(
                     style = OshiDynamicStyle.fromId(currentWallpaper.styleId) ?: OshiDynamicStyle.DEFAULT,
                     selected = chatTone,
                     cardHeight = 76.dp
-                ) { WallpaperTonePrefs.setTone(context, conversationId, it) }
+                ) {
+                    if (globalMode) WallpaperTonePrefs.setDefaultTone(context, it)
+                    else WallpaperTonePrefs.setTone(context, conversationId, it)
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -493,7 +519,17 @@ fun WallpaperPickerSheet(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = BrandColor)
             ) {
-                Text(stringResource(R.string.wallpaper_save_chat))
+                Text(stringResource(if (globalMode) R.string.done else R.string.wallpaper_save_chat))
+            }
+
+            if (onReset != null) {
+                Spacer(modifier = Modifier.height(4.dp))
+                TextButton(
+                    onClick = { onReset(); onDismiss() },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.wallpaper_reset))
+                }
             }
 
             // 🌍 The app-wide default. WallpaperManager.setGlobalWallpaper existed
@@ -502,7 +538,7 @@ fun WallpaperPickerSheet(
             // It sits UNDER the per-chat save — same column, secondary weight — so
             // it reads as the deliberate, wider version of what the user just did,
             // not as a sixth tab and not as a second primary button.
-            if (onSetAsDefaultForAllChats != null) {
+            if (onSetAsDefaultForAllChats != null && !globalMode) {
                 Spacer(modifier = Modifier.height(4.dp))
                 TextButton(
                     onClick = { confirmApplyToAllChats = true },
@@ -708,6 +744,7 @@ fun ChatWallpaperBackground(
                     Brush.linearGradient(wallpaper.colors)
                 )
                 is ChatWallpaper.EmojiPattern -> Modifier.background(wallpaper.backgroundColor)
+                    .emojiPattern(wallpaper.emoji)
                 is ChatWallpaper.OshiDynamic -> Modifier
                 is ChatWallpaper.ImageWallpaper -> Modifier
             }
@@ -1024,4 +1061,65 @@ private fun Color.luminance(): Float {
     val g = green
     val b = blue
     return 0.299f * r + 0.587f * g + 0.114f * b
+}
+
+/**
+ * __WALLPAPER_PERSIST_2026_11_21__ The emoji of an [ChatWallpaper.EmojiPattern],
+ * tiled. The pattern wallpapers drew their background colour only — the emoji
+ * existed on the picker tile and nowhere else, so "🌸" looked like a plain
+ * lavender. One tile is rendered once per size into a bitmap and repeated by a
+ * shader: a single draw call, whatever the screen size.
+ */
+fun Modifier.emojiPattern(emoji: String, alpha: Float = 0.28f): Modifier = this.drawWithCache {
+    val tile = 72.dp.toPx().toInt().coerceAtLeast(8)
+    val bitmap = android.graphics.Bitmap.createBitmap(tile, tile, android.graphics.Bitmap.Config.ARGB_8888)
+    val canvas = android.graphics.Canvas(bitmap)
+    val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+        textSize = tile * 0.30f
+        textAlign = android.graphics.Paint.Align.CENTER
+        this.alpha = (alpha * 255).toInt().coerceIn(0, 255)
+    }
+    // Two per tile, offset by half a tile: a brick lay, not a grid.
+    val baseline = -(paint.ascent() + paint.descent()) / 2f
+    canvas.drawText(emoji, tile * 0.25f, tile * 0.25f + baseline, paint)
+    canvas.drawText(emoji, tile * 0.75f, tile * 0.75f + baseline, paint)
+    val brush = androidx.compose.ui.graphics.ShaderBrush(
+        androidx.compose.ui.graphics.ImageShader(
+            bitmap.asImageBitmap(),
+            androidx.compose.ui.graphics.TileMode.Repeated,
+            androidx.compose.ui.graphics.TileMode.Repeated
+        )
+    )
+    onDrawBehind { drawRect(brush) }
+}
+
+/**
+ * __WALLPAPER_PERSIST_2026_11_21__ A picked photo, re-encoded to at most
+ * [maxDim] px on its long side (JPEG 85). Small images are returned untouched;
+ * anything that does not decode is returned as is.
+ */
+fun downscaleWallpaperImage(data: ByteArray, maxDim: Int = 1920): ByteArray {
+    return try {
+        val bounds = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        android.graphics.BitmapFactory.decodeByteArray(data, 0, data.size, bounds)
+        val longSide = maxOf(bounds.outWidth, bounds.outHeight)
+        if (longSide <= 0) return data
+        if (longSide <= maxDim && data.size <= 1_500_000) return data
+        var sample = 1
+        while (longSide / (sample * 2) >= maxDim) sample *= 2
+        val decoded = android.graphics.BitmapFactory.decodeByteArray(
+            data, 0, data.size, android.graphics.BitmapFactory.Options().apply { inSampleSize = sample }
+        ) ?: return data
+        val scale = maxDim.toFloat() / maxOf(decoded.width, decoded.height)
+        val scaled = if (scale < 1f) android.graphics.Bitmap.createScaledBitmap(
+            decoded, (decoded.width * scale).toInt().coerceAtLeast(1), (decoded.height * scale).toInt().coerceAtLeast(1), true
+        ) else decoded
+        val out = java.io.ByteArrayOutputStream()
+        scaled.compress(android.graphics.Bitmap.CompressFormat.JPEG, 85, out)
+        if (scaled !== decoded) scaled.recycle()
+        decoded.recycle()
+        out.toByteArray()
+    } catch (_: Throwable) {
+        data
+    }
 }

@@ -191,6 +191,7 @@ class IncomingCallService : Service() {
                 val activityIntent = Intent(this, MainActivity::class.java).apply {
                     setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     putExtra("incoming_call", true)
+                    com.oshi.messenger.service.IncomingCallLaunchToken.stamp(this)
                     putExtra(EXTRA_CALLER_KEY, callerKey)
                     putExtra(EXTRA_CALL_ID, callId)
                     putExtra(EXTRA_CALLER_NAME, callerName)
@@ -331,6 +332,7 @@ class IncomingCallService : Service() {
         val fullScreenIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("incoming_call", true)
+                    com.oshi.messenger.service.IncomingCallLaunchToken.stamp(this)
             putExtra(EXTRA_CALLER_KEY, callerKey)
             putExtra(EXTRA_CALL_ID, callId)
             putExtra(EXTRA_CALLER_NAME, callerName)

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware (rýchle spojenie nablízku)</string>
+    <string name="settings_wifi_aware_subtitle">Priame spojenie s telefónmi OSHI v blízkosti, bez smerovača. Vaše Wi-Fi zostane pripojené.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

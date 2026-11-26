@@ -19,6 +19,8 @@ import com.oshi.messenger.ui.viewmodel.SettingsViewModel
 import com.oshi.messenger.ui.viewmodel.dataStore
 import com.oshi.wearbridge.WearConvKind
 import com.oshi.wearbridge.WearConversation
+import com.oshi.wearbridge.WearDelivery
+import com.oshi.wearbridge.WearNet
 import com.oshi.wearbridge.WearMedia
 import com.oshi.wearbridge.WearMessage
 import com.oshi.wearbridge.WearProtocol
@@ -56,6 +58,7 @@ class PhoneWearBackend(
     private val groups: GroupManager,
     private val reactions: MessageReactionManager,
     private val crypto: CryptoManager,
+    private val mesh: com.oshi.messenger.network.mesh.MeshNetworkManager? = null,
 ) : WearBridgeBackend {
 
     @EntryPoint
@@ -65,6 +68,7 @@ class PhoneWearBackend(
         fun groupManager(): GroupManager
         fun reactionManager(): MessageReactionManager
         fun cryptoManager(): CryptoManager
+        fun meshNetworkManager(): com.oshi.messenger.network.mesh.MeshNetworkManager
     }
 
     companion object {
@@ -78,6 +82,7 @@ class PhoneWearBackend(
             return PhoneWearBackend(
                 context.applicationContext, d.messageRepository(), d.groupManager(),
                 d.reactionManager(), d.cryptoManager(),
+                runCatching { d.meshNetworkManager() }.getOrNull(),
             )
         }
 
@@ -155,7 +160,15 @@ class PhoneWearBackend(
 
     private fun canReplyDirect(key: String): Boolean = key != WelcomeMessage.LEGACY_SYSTEM_SENDER_KEY
 
+    /** Same store and keys as ConversationsViewModel (`pinned_conversation_ids`). */
+    private suspend fun pinnedIds(): Set<String> = runCatching {
+        context.dataStore.data.first()[
+            androidx.datastore.preferences.core.stringSetPreferencesKey("pinned_conversation_ids")
+        ]
+    }.getOrNull().orEmpty()
+
     override suspend fun conversations(limit: Int): List<WearConversation> {
+        val pinned = pinnedIds()
         val dms = withTimeout(5_000) { repo.getConversations().first() }
             .filter { it.hasMessages }
             .map { c ->
@@ -172,6 +185,7 @@ class PhoneWearBackend(
                     avatarKey = AvatarIdentity.contactKey(c.participantPublicKey),
                     lastFromMe = m.isFromMe,
                     canReply = canReplyDirect(c.participantPublicKey),
+                    pinned = com.oshi.messenger.data.model.ConversationPinOrder.isPinned(c.participantPublicKey, pinned),
                 )
             }
         val grp = groups.groupConversations.value.map { gc ->
@@ -188,9 +202,13 @@ class PhoneWearBackend(
                 timestamp = m?.timestamp ?: gc.group.createdAt,
                 avatarKey = AvatarIdentity.groupKey(gc.group.id),
                 lastFromMe = m?.isFromMe == true,
+                pinned = com.oshi.messenger.data.model.ConversationPinOrder.isPinned(
+                    com.oshi.messenger.data.model.ChatListMerge.pinKeyForGroup(gc.group.id), pinned,
+                ),
             )
         }
-        return (dms + grp).sortedByDescending { it.timestamp }.take(limit)
+        // Recency first, then the phone's pins on top (stable sort), as the phone list does.
+        return (dms + grp).sortedByDescending { it.timestamp }.sortedBy { if (it.pinned) 0 else 1 }.take(limit)
     }
 
     private fun String?.isGifName(): Boolean = this?.lowercase()?.endsWith(".gif") == true
@@ -225,6 +243,9 @@ class PhoneWearBackend(
                             timestamp = m.timestamp,
                             reactions = summary.reactions.filterValues { it.isNotEmpty() }.keys.take(3),
                             myReaction = summary.myReaction,
+                            delivery = if (m.isFromMe) deliveryOf(m) else null,
+                            hasThumb = !m.isViewOnce && media == WearMedia.PHOTO,
+                            durationSec = if (media == WearMedia.VOICE) WearVoiceDuration.fromCaption(m.content) else 0,
                         )
                     }.toList().takeLast(limit)
                 WearBridgeBackend.Thread(dmName(conv.participantAlias, key), canReplyDirect(key), msgs)
@@ -250,6 +271,8 @@ class PhoneWearBackend(
                             timestamp = m.timestamp,
                             reactions = m.reactions.values.filter { it.isNotBlank() }.distinct().take(3),
                             myReaction = m.reactions.entries.firstOrNull { it.key.equals(me, ignoreCase = true) }?.value,
+                            hasThumb = media == WearMedia.PHOTO,
+                            durationSec = if (media == WearMedia.VOICE) ((m.mediaDurationMs ?: 0L) / 1000L).toInt() else 0,
                         )
                     }.toList().takeLast(limit)
                 WearBridgeBackend.Thread(group.name, true, msgs)
@@ -320,5 +343,140 @@ class PhoneWearBackend(
                 WearStatus.OK
             }
         }
+    }
+
+    // ---- __WEAR_POLISH_2026_11_25__ read / preview / voice / network ---------
+
+    private fun deliveryOf(m: com.oshi.messenger.data.model.Message): WearDelivery = when {
+        m.isFailed -> WearDelivery.FAILED
+        m.isRead -> WearDelivery.READ
+        m.isDelivered -> WearDelivery.DELIVERED
+        else -> WearDelivery.SENT
+    }
+
+    override suspend fun markRead(kind: WearConvKind, id: String): WearStatus = when (kind) {
+        WearConvKind.DIRECT -> {
+            val conv = findDirect(id)
+            if (conv == null) WearStatus.NOT_FOUND else {
+                // The same call as opening the chat on the phone (and the notification's
+                // "Mark as read"): flips the rows, clears the banner, sends the receipt.
+                repo.markConversationAsRead(conv.participantPublicKey)
+                WearStatus.OK
+            }
+        }
+        WearConvKind.GROUP -> {
+            val group = groups.getGroupById(id)
+            if (group == null) WearStatus.NOT_FOUND else {
+                groups.markGroupMessagesAsRead(group.id)
+                WearStatus.OK
+            }
+        }
+    }
+
+    override suspend fun thumbnail(kind: WearConvKind, id: String, messageId: String): ByteArray? {
+        val bytes: ByteArray = when (kind) {
+            WearConvKind.DIRECT -> {
+                val conv = findDirect(id) ?: return null
+                val rows = withTimeout(5_000) { repo.getThreadMessagesForContact(conv.participantPublicKey).first() }
+                // Only a message of THIS conversation, only a photo, NEVER a view-once one.
+                val m = rows.firstOrNull { it.id == messageId } ?: return null
+                if (m.isViewOnce || m.isDeleted || m.isDeletedForEveryone) return null
+                if (mediaOf(m.mediaType, GifBytes.isGif(m.mediaData), m.isVideoNote) != WearMedia.PHOTO) return null
+                repo.loadMediaData(m.id) ?: return null
+            }
+            WearConvKind.GROUP -> {
+                val group = groups.getGroupById(id) ?: return null
+                val m = groups.groupMessages.value.entries
+                    .firstOrNull { it.key.equals(group.id, ignoreCase = true) }?.value.orEmpty()
+                    .firstOrNull { it.id.equals(messageId, ignoreCase = true) } ?: return null
+                if (m.isDeleted || m.mediaType != MediaType.IMAGE) return null
+                m.mediaData ?: kotlinx.coroutines.withContext(Dispatchers.IO) { groups.loadMediaBytes(m.id) } ?: return null
+            }
+        }
+        return kotlinx.coroutines.withContext(Dispatchers.Default) { WearThumbnail.jpeg(bytes) }
+    }
+
+    override suspend fun sendVoice(kind: WearConvKind, id: String, audio: ByteArray, durationMs: Long): WearStatus {
+        if (!com.oshi.wearbridge.WearVoiceFrame.looksLikeM4a(audio) || audio.size > WearProtocol.MAX_VOICE_BYTES) {
+            return WearStatus.INVALID
+        }
+        val ms = durationMs.coerceIn(WearProtocol.MIN_VOICE_MS, WearProtocol.MAX_VOICE_MS)
+        return when (kind) {
+            WearConvKind.DIRECT -> {
+                val conv = findDirect(id) ?: return WearStatus.NOT_FOUND
+                val key = conv.participantPublicKey
+                if (!canReplyDirect(key)) return WearStatus.READ_ONLY
+                // A radio thread is text-only (the radio cannot carry audio): Meshtastic node
+                // (`lora!`), LoRa channel, and — release 1.7.4 integration — MeshCore user/channel,
+                // which the phone's own composer also keeps text-only (ChatViewModel).
+                if (!WearVoiceRoute.carriesAudio(key)) return WearStatus.READ_ONLY
+                val job = sendScope.async {
+                    // ChatViewModel.sendVoiceMessage, same call and caption shape.
+                    val result = repo.sendMediaMessage(
+                        recipientPublicKey = key,
+                        mediaType = MediaType.AUDIO,
+                        mediaData = audio,
+                        caption = "[AUDIO] " + WearVoiceDuration.caption(ms),
+                    )
+                    runCatching { repo.markConversationAsRead(key) }
+                    result.isSuccess
+                }
+                when (withTimeoutOrNull(SEND_WAIT_MS) { job.await() }) {
+                    false -> WearStatus.ERROR
+                    else -> WearStatus.OK
+                }
+            }
+            WearConvKind.GROUP -> {
+                val group = groups.getGroupById(id) ?: return WearStatus.NOT_FOUND
+                // GroupChatViewModel.sendVoiceMessage: empty body, duration in its own column.
+                groups.sendGroupMessage(
+                    groupId = group.id, content = "", mediaType = MediaType.AUDIO,
+                    mediaData = audio, mediaDurationMs = ms,
+                )
+                groups.markGroupMessagesAsRead(group.id)
+                WearStatus.OK
+            }
+        }
+    }
+
+    override fun strictGlance(): Boolean = com.oshi.messenger.service.MessageBanner.anonymous(context)
+
+    override fun network(): WearNet? = runCatching {
+        val cm = context.getSystemService(android.net.ConnectivityManager::class.java)
+        val caps = cm?.getNetworkCapabilities(cm.activeNetwork)
+        val internet = caps?.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
+        val lora = runCatching {
+            com.oshi.messenger.service.lora.MeshtasticManager.getInstance(context).state.value ==
+                com.oshi.messenger.service.lora.MeshtasticManager.ConnState.READY
+        }.getOrDefault(false) ||
+            // Release 1.7.4 integration: a MeshCore radio alone is a ready radio too.
+            com.oshi.messenger.service.lora.MeshCoreManager.instanceOrNull?.isReady == true
+        // Release 1.7.4 integration: a phone reached over Nearby AND Wi-Fi Aware is listed twice
+        // in connectedPeers ("aware:<key>" + the Nearby endpoint); count people, not links.
+        val peers = mesh?.connectedPeers?.value?.distinctBy { it.publicKey.ifEmpty { it.id } }?.size ?: 0
+        WearNet(internet = internet, meshPeers = peers, lora = lora)
+    }.getOrNull()
+}
+
+/** Whether a 1:1 thread key can take a voice message from the watch (radio-only threads cannot). */
+object WearVoiceRoute {
+    fun carriesAudio(key: String): Boolean =
+        !LoRaNodeIdentityMap.isFallbackConversationKey(key) &&
+            !com.oshi.messenger.service.lora.LoRaChannelThread.isChannelKey(key) &&
+            !com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(key)
+}
+
+/** "[AUDIO] M:SS" — the 1:1 voice caption the phone has always written (ChatViewModel). */
+object WearVoiceDuration {
+    private val CAPTION = Regex("""\[AUDIO]\s*(\d+):(\d{2})""")
+
+    fun caption(ms: Long): String {
+        val s = (ms / 1000L).coerceAtLeast(0L)
+        return "${s / 60}:${(s % 60).toString().padStart(2, '0')}"
+    }
+
+    fun fromCaption(content: String?): Int {
+        val m = CAPTION.find(content ?: return 0) ?: return 0
+        return m.groupValues[1].toInt() * 60 + m.groupValues[2].toInt()
     }
 }

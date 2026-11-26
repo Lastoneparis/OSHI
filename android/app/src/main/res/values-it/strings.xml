@@ -4,10 +4,7 @@
     <string name="app_tagline">Messaggistica Mesh Sicura</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">Benvenuto su OSHI</string>
-    <string name="onboarding_description">Messaggistica crittografata end-to-end che funziona anche senza internet</string>
     <string name="onboarding_create_identity">Crea identità</string>
-    <string name="onboarding_restore_identity">Ripristina identità</string>
 
     <!-- Messages -->
     <string name="messages_title">Messaggi</string>
@@ -61,6 +58,8 @@
     <string name="settings_theme_dark">Scuro</string>
     <string name="settings_theme_oled_black">Nero OLED</string>
     <string name="settings_theme_oled_black_desc">Sfondi nero puro per schermi OLED. Si applica quando il tema scuro è attivo.</string>
+    <string name="appearance_glass_effect">Effetto vetro</string>
+    <string name="appearance_glass_effect_footer">Barre, schede e menu traslucidi, come vetro smerigliato. Funziona con Chiaro, Scuro e Nero OLED.</string>
     <string name="settings_backup">Backup chiavi</string>
     <string name="settings_about">Info</string>
     <string name="settings_version">Versione %s</string>
@@ -385,22 +384,9 @@
     <string name="video_switch_to_voice">Passa a voce</string>
 
     <!-- Onboarding - Additional -->
-    <string name="onboarding_subtitle">Messaggistica sicura e privata che funziona anche senza internet</string>
-    <string name="onboarding_key_features">Funzionalità principali</string>
-    <string name="onboarding_e2e_title">Crittografia end-to-end</string>
-    <string name="onboarding_e2e_desc">Tutti i messaggi sono crittografati. Solo tu e il destinatario potete leggerli.</string>
-    <string name="onboarding_mesh_title">Rete Mesh</string>
-    <string name="onboarding_mesh_desc">Invia messaggi direttamente agli utenti vicini, anche senza internet.</string>
-    <string name="onboarding_calls_title">Chiamate sicure</string>
-    <string name="onboarding_calls_desc">Chiamate vocali e video con crittografia completa.</string>
-    <string name="onboarding_cross_platform_title">Multipiattaforma</string>
-    <string name="onboarding_cross_platform_desc">Funziona con dispositivi iOS e Android senza problemi.</string>
-    <string name="onboarding_create_your_identity">Crea la tua identità</string>
-    <string name="onboarding_choose_display_name">Scegli un nome da mostrare ai tuoi contatti</string>
     <string name="onboarding_display_name">Nome visualizzato</string>
     <string name="onboarding_key_info">Verrà generata una coppia di chiavi di crittografia unica per te. Assicurati di eseguire il backup delle chiavi in seguito.</string>
     <string name="onboarding_back">Indietro</string>
-    <string name="onboarding_next">Avanti</string>
     <string name="onboarding_creating">Creazione…</string>
     <string name="onboarding_error_create">Impossibile creare l\'identità: %s</string>
 
@@ -820,8 +806,6 @@
     <string name="faq_q6_answer">Vai a Nuovo Messaggio e scansiona il codice QR del tuo contatto, condividi il tuo codice QR o incolla la sua chiave pubblica.</string>
 
     <!-- Onboarding Disclaimer -->
-    <string name="onboarding_disclaimer_title">Avviso Importante</string>
-    <string name="onboarding_disclaimer_subtitle">Leggi prima di usare OSHI</string>
     <string name="onboarding_disclaimer_audit_title">Nessun Audit di Sicurezza</string>
     <string name="onboarding_disclaimer_audit_desc">Questa app non ha ancora subito un audit di sicurezza professionale. Sebbene utilizziamo una crittografia forte, usala a tua discrezione.</string>
     <string name="onboarding_disclaimer_anonymous_title">Privacy prima di tutto</string>
@@ -2144,24 +2128,10 @@ Cerca, naviga ed esplora senza Internet.</string>
     <string name="new_message_sent">Messaggio inviato!</string>
     <string name="onboarding_conduct_subtitle">OSHI si basa sulla fiducia e sul rispetto. Si prega di seguire queste linee guida:</string>
     <string name="onboarding_conduct_title">Linee Guida della Comunità</string>
-    <string name="onboarding_message_description">Connettiti con qualcuno scansionando il suo codice QR o inserendo la sua chiave pubblica.</string>
-    <string name="onboarding_message_title">Invia il Tuo Primo Messaggio</string>
-    <string name="onboarding_method_paste_title">Metodo 2: Copia/Incolla Chiave Pubblica</string>
-    <string name="onboarding_method_qr_title">Metodo 1: Scansiona Codice QR</string>
     <string name="onboarding_reach_disclaimer">Il mesh offline ha un raggio limitato. Entrambi i telefoni devono avere OSHI aperto per trovarsi, a circa 100 m all\'aperto e molto meno attraverso i muri. Arriva più lontano solo quando anche altre persone vicine hanno OSHI aperto per far passare il messaggio. Se non c\'è nessuno nel raggio, OSHI invia invece via internet.</string>
-    <string name="onboarding_reach_offline_body">Niente Internet? I messaggi saltano di telefono in telefono tra le persone vicine con OSHI aperto.</string>
-    <string name="onboarding_reach_offline_title">Offline (mesh)</string>
-    <string name="onboarding_reach_online_body">Con Internet raggiungi chiunque nel mondo all\'istante.</string>
-    <string name="onboarding_reach_online_title">Online</string>
     <string name="onboarding_reach_range1_dist">~100 m</string>
-    <string name="onboarding_reach_range1_label">Da telefono a telefono, diretto</string>
     <string name="onboarding_reach_range2_dist">~500 m</string>
-    <string name="onboarding_reach_range2_label">Più lontano, quando altri fanno da ponte</string>
     <string name="onboarding_reach_range3_dist">~30 km</string>
-    <string name="onboarding_reach_range3_label">Con una radio LoRa Meshtastic via Bluetooth</string>
-    <string name="onboarding_reach_subtitle">OSHI funziona in due modi: con o senza Internet.</string>
-    <string name="onboarding_reach_tip">L\'offline richiede altre persone vicine con OSHI aperto. Più persone ci sono, più lontano arriva il messaggio.</string>
-    <string name="onboarding_reach_title">Come viaggiano i messaggi</string>
     <string name="onboarding_rule_backup">Esegui il backup delle tue chiavi in modo sicuro</string>
     <string name="onboarding_rule_no_abuse">Niente molestie o abusi</string>
     <string name="onboarding_rule_no_illegal">Niente contenuti illegali</string>
@@ -2577,6 +2547,7 @@ Cerca, naviga ed esplora senza Internet.</string>
     <string name="gif_picker_title">GIF e sticker</string>
     <string name="gif_tab_gifs">GIF</string>
     <string name="gif_tab_stickers">Sticker</string>
+    <string name="gif_oshi_hint">Sticker animati OSHI — scegline uno per inviarlo</string>
     <string name="linked_device_alert_body">Un dispositivo è appena stato collegato al tuo account OSHI. Se non sei stato tu, apri Dispositivi collegati e rimuovilo subito.</string>
     <string name="linked_device_alert_body_plural">%1$d dispositivi sono appena stati collegati al tuo account OSHI. Se non sei stato tu, apri Dispositivi collegati e rimuovili subito.</string>
     <string name="linked_device_alert_title">Nuovo dispositivo collegato al tuo account</string>
@@ -2785,4 +2756,64 @@ Cerca, naviga ed esplora senza Internet.</string>
     <string name="settings_animated_reactions">Reazioni OSHI animate</string>
     <string name="settings_animated_reactions_desc">Disattivato: emoji standard</string>
     <string name="reactions_new_hint">Novità: gli iPhone con una versione precedente potrebbero mostrarle come 👍</string>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="accessibility_updates">Aggiornamenti e manutenzione</string>
+    <string name="ai_download_failed_network">Download non riuscito: controlla la connessione e tocca Riprova.</string>
+    <string name="ai_download_failed_server">Il server di download non ha risposto. Tocca Riprova o riprova più tardi.</string>
+    <string name="chat_welcome_creator_notice">Scritto da OSHI: arriva a Hugo, che l\'ha creata. Legge le risposte.</string>
+    <string name="conversation_pin">Fissa in alto</string>
+    <string name="conversation_unpin">Togli fissaggio</string>
+    <string name="group_block_member">Blocca questo membro</string>
+    <string name="group_member_blocked">Bloccato. I suoi messaggi in questo gruppo non ti arriveranno più.</string>
+    <string name="group_member_unblocked">Sbloccato.</string>
+    <string name="group_report_member">Segnala questo membro</string>
+    <string name="group_unblock_member">Sblocca questo membro</string>
+    <string name="groups_show_fewer_members">Mostra meno</string>
+    <string name="lora_error_channel_unknown">Questo canale non è sulla radio collegata: potrebbe essere stato rinominato, spostato o rimosso. Non è stato inviato nulla.</string>
+    <string name="lora_node_message">Scrivi a questo nodo</string>
+    <string name="map_pois_hide">Nascondi luoghi</string>
+    <string name="map_pois_show">Mostra luoghi</string>
+    <string name="map_regions_insufficient_space">Spazio libero insufficiente su questo dispositivo per installare questa regione.</string>
+    <string name="markup_done">Fatto</string>
+    <string name="markup_draw">Disegna</string>
+    <string name="markup_undo">Annulla</string>
+    <string name="mesh_blocked_bluetooth">Bluetooth disattivato</string>
+    <string name="mesh_blocked_permission">Permesso Dispositivi nelle vicinanze disattivato</string>
+    <string name="mesh_blocked_wifi">Wi‑Fi disattivato</string>
+    <string name="new_message_fab">Nuovo</string>
+    <string name="peers_connect_already">%1$s è già connesso</string>
+    <string name="peers_connect_dialing">Connessione a %1$s…</string>
+    <string name="peers_connect_searching">Ancora nessun indirizzo per %1$s: nuova ricerca…</string>
+    <string name="report_member_already_filed">Hai già segnalato questo membro.</string>
+    <string name="report_member_dialog_title">Segnala questo membro</string>
+    <string name="updates_available">È disponibile una versione più recente di OSHI.</string>
+    <string name="updates_checking">Ricerca di una versione più recente…</string>
+    <string name="updates_current_version">Stai usando OSHI %1$s</string>
+    <string name="updates_news_action">Leggi le note di rilascio</string>
+    <string name="updates_news_body">Novità, correzioni e avvisi di manutenzione vengono pubblicati a ogni versione.</string>
+    <string name="updates_title">Aggiornamenti e manutenzione</string>
+    <string name="updates_up_to_date">Hai l\'ultima versione che conosciamo.</string>
+    <string name="inapp_update_title">Aggiornamento disponibile</string>
+    <string name="inapp_update_body">Su Google Play è disponibile una nuova versione di OSHI. Si scarica in background, così puoi continuare a usare l\'app.</string>
+    <string name="inapp_update_now">Aggiorna</string>
+    <string name="inapp_update_later">Più tardi</string>
+    <string name="inapp_update_ready">Aggiornamento pronto</string>
+    <string name="inapp_update_restart">Riavvia</string>
+    <!-- __CALL_WAKE_2026_11_22__ -->
+    <string name="call_state_calling">Chiamata in corso…</string>
+    <string name="call_reach_unreachable">Non raggiungibile al momento</string>
+    <string name="call_readiness_title">Le chiamate in arrivo potrebbero non squillare</string>
+    <string name="call_readiness_notifications">Le notifiche di OSHI sono disattivate: tocca per consentirle</string>
+    <string name="call_readiness_channel">Le notifiche «Chiamate in arrivo» sono disattivate: tocca per attivarle</string>
+    <string name="call_readiness_full_screen">Gli avvisi di chiamata a schermo intero non sono consentiti: tocca per consentirli</string>
+    <string name="call_readiness_background">Android limita OSHI in background: tocca e imposta la batteria su Senza restrizioni</string>
+    <string name="composer_format_bold">Grassetto</string>
+    <string name="composer_format_underline">Sottolineato</string>
+    <!-- __GROUP_HEADER_ISLAND_2026_11_24__ floating group header -->
+    <string name="group_header_info_a11y">Info gruppo, %1$s</string>
+    <string name="group_header_search_a11y">Cerca nella conversazione</string>
+    <plurals name="group_header_subscribers">
+        <item quantity="one">%1$d iscritto</item>
+        <item quantity="other">%1$d iscritti</item>
+    </plurals>
 </resources>

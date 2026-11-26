@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">कमांड</string>
+    <string name="bot_cmd_send_a11y">%1$s भेजें</string>
+    <string name="bot_cmd_sheet_title">बॉट कमांड</string>
+    <string name="bot_cmd_tap_to_send">भेजने के लिए किसी कमांड पर टैप करें।</string>
+    <string name="bot_cmd_empty_none_title">यहाँ अभी कोई बॉट नहीं है</string>
+    <string name="bot_cmd_empty_none_body">एक बॉट बनाएँ और उसे इस ग्रुप में जोड़ें। उसकी कमांड यहाँ और / टाइप करने पर दिखेंगी।</string>
+    <string name="bot_cmd_empty_bot">इस बॉट की अभी कोई कमांड नहीं है।</string>
+    <string name="bot_cmd_setup">कमांड सेट करें</string>
+    <string name="bot_cmd_section">कमांड</string>
+    <string name="bot_cmd_section_hint">बॉट के ग्रुप के सदस्य / टाइप करने या ‘कमांड’ पर टैप करने पर इन्हें देखते हैं।</string>
+    <string name="bot_cmd_add">जोड़ें</string>
+    <string name="bot_cmd_add_title">नई कमांड</string>
+    <string name="bot_cmd_edit_title">कमांड बदलें</string>
+    <string name="bot_cmd_field_name">कमांड</string>
+    <string name="bot_cmd_field_description">विवरण (मेनू में दिखता है)</string>
+    <string name="bot_cmd_field_reply">जवाब</string>
+    <string name="bot_cmd_field_reply_hint">बॉट क्या जवाब देगा। आप {{input}}, {{bot_name}} और {{date}} का उपयोग कर सकते हैं।</string>
+    <string name="bot_cmd_webhook_note">आपके webhook को भेजी जाती है, जो जवाब देता है।</string>
+    <string name="bot_cmd_empty_owner">अभी कोई कमांड नहीं है। /start या /help जैसी कोई कमांड जोड़ें ताकि सबको पता चले कि यह बॉट क्या करता है।</string>
+    <string name="bot_cmd_err_empty">कमांड का नाम लिखें।</string>
+    <string name="bot_cmd_err_invalid">सिर्फ़ छोटे अंग्रेज़ी अक्षर, अंक और _।</string>
+    <string name="bot_cmd_err_too_long">ज़्यादा से ज़्यादा 32 अक्षर।</string>
+    <string name="bot_cmd_err_duplicate">इस बॉट में यह कमांड पहले से है।</string>
+    <string name="bot_cmd_err_too_many">एक बॉट में ज़्यादा से ज़्यादा 100 कमांड हो सकती हैं।</string>
+    <string name="bot_cmd_err_description">विवरण बहुत लंबा है (ज़्यादा से ज़्यादा 256 अक्षर)।</string>
+    <string name="bot_cmd_sync_local">इस फ़ोन पर सेव किया गया, जो बॉट चलाता है।</string>
+    <string name="bot_cmd_sync_syncing">सर्वर अपडेट हो रहा है…</string>
+    <string name="bot_cmd_sync_synced">सर्वर पर मेनू अपडेट हो गया।</string>
+    <string name="bot_cmd_sync_failed">सर्वर अपडेट नहीं हो सका। आपकी कमांड इस फ़ोन पर सेव हैं।</string>
+    <string name="bot_profile_edit">प्रोफ़ाइल बदलें</string>
+    <string name="bot_profile_name">नाम</string>
+    <string name="bot_profile_description">विवरण</string>
+    <string name="bot_profile_avatar">अवतार</string>
+    <string name="bot_profile_err_name_empty">अपने बॉट को एक नाम दें।</string>
+    <string name="bot_profile_err_name_long">नाम बहुत लंबा है (ज़्यादा से ज़्यादा 64 अक्षर)।</string>
+    <string name="bot_profile_err_desc_long">विवरण बहुत लंबा है (ज़्यादा से ज़्यादा 512 अक्षर)।</string>
+    <string name="bot_connect_title">यह कैसे जुड़ता है</string>
+    <string name="bot_connect_local">यह बॉट इसी फ़ोन पर चलता है: OSHI इंस्टॉल रखें और बॉट चालू रखें। इसे किसी ग्रुप में जोड़ें, फिर सदस्य वहाँ इसकी कमांड इस्तेमाल कर सकेंगे।</string>
+    <string name="bot_connect_webhook">हर कमांड आपके webhook URL पर भेजी जाती है और आपका सर्वर JSON {\"text\": \"…\"} में जवाब देता है। आपका सर्वर नीचे दिए टोकन को OSHI बॉट API के साथ भी इस्तेमाल कर सकता है।</string>
+    <string name="bot_connect_token_warning">टोकन गुप्त रखें: जिसके पास यह है, वह आपके बॉट की ओर से बोल सकता है।</string>
+    <string name="bot_connect_groups">ग्रुप: %1$s</string>
+    <string name="bot_connect_no_groups">अभी किसी ग्रुप में नहीं है, इसलिए कोई इसकी कमांड इस्तेमाल नहीं कर सकता।</string>
+</resources>

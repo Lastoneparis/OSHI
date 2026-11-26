@@ -7,6 +7,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import coil.request.ImageRequest
@@ -106,6 +108,9 @@ class StickerGifPickerInstrumentedTest {
                 StickerGifPicker(onSelected = { _, _ -> }, onDismiss = { })
             }
         }
+        // __OSHI_MASCOT_STICKERS_2026_11_21__ The picker opens on the OSHI tab now.
+        compose.onNodeWithTag("gif-tab-gifs").performClick()
+        compose.waitForIdle()
         val reserved = compose.onAllNodesWithTag(GIPHY_PLACEHOLDER_TAG).fetchSemanticsNodes()
         assertTrue(
             "aucune case réservée à l'ouverture: le paquet local occupe le haut et " +
@@ -138,6 +143,9 @@ class StickerGifPickerInstrumentedTest {
                 StickerGifPicker(onSelected = { _, _ -> }, onDismiss = { })
             }
         }
+        // __OSHI_MASCOT_STICKERS_2026_11_21__ The picker opens on the OSHI tab now.
+        compose.onNodeWithTag("gif-tab-gifs").performClick()
+        compose.waitForIdle()
         compose.onNodeWithText("GIFs & Stickers").assertExists()
         compose.onNodeWithText("Stickers").assertExists()
         compose.onNodeWithText("All").assertExists()
@@ -183,5 +191,49 @@ class StickerGifPickerInstrumentedTest {
                 Thread.sleep(200)
             }
         }
+    }
+
+    /**
+     * __OSHI_MASCOT_STICKERS_2026_11_21__ The picker OPENS on the OSHI tab: its hint, the
+     * 20 mascot cells, no GIPHY placeholder (no call spent), and a tap hands the bundled
+     * GIF89a `oshi_<name>.gif` to `onSelected` — the ordinary GIF send path.
+     *
+     * Screenshot from the host while it holds:
+     *   adb -s emulator-5554 shell am instrument -w \
+     *     -e class com.oshi.messenger.ui.StickerGifPickerInstrumentedTest#theOshiTabOpensFirstAndSendsTheMascotGif \
+     *     -e holdForScreenshot true -e holdMillis 20000 \
+     *     com.oshi.messenger.test/androidx.test.runner.AndroidJUnitRunner &
+     *   sleep 12 && adb -s emulator-5554 exec-out screencap -p > oshi-tab.png
+     */
+    @Test
+    fun theOshiTabOpensFirstAndSendsTheMascotGif() {
+        var sent: Pair<ByteArray, String>? = null
+        compose.setContent {
+            MaterialTheme {
+                StickerGifPicker(onSelected = { b, n -> sent = b to n }, onDismiss = { })
+            }
+        }
+        compose.onNodeWithTag(com.oshi.messenger.ui.components.TAG_MASCOT_SECTION).assertExists()
+        compose.onNodeWithTag("gif-mascot-love").assertExists()
+        assertTrue(
+            "the OSHI tab must not reserve GIPHY cells",
+            compose.onAllNodesWithTag(GIPHY_PLACEHOLDER_TAG).fetchSemanticsNodes().isEmpty()
+        )
+
+        val args = InstrumentationRegistry.getArguments()
+        if (args.getString("holdForScreenshot") == "true") {
+            val until = System.currentTimeMillis() + (args.getString("holdMillis")?.toLongOrNull() ?: 12_000L)
+            while (System.currentTimeMillis() < until) {
+                compose.mainClock.advanceTimeBy(500)
+                compose.waitForIdle()
+                Thread.sleep(200)
+            }
+        }
+
+        compose.onNodeWithTag("gif-mascot-love").performClick()
+        compose.waitUntil(5_000) { sent != null }
+        val (bytes, name) = sent!!
+        assertTrue("oshi_love.gif" == name)
+        assertTrue("the sticker sent is not a GIF", GifBytes.isGif(bytes))
     }
 }

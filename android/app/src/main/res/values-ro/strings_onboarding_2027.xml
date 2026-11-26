@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Omite</string>
+    <string name="ob27_continue">Continuă</string>
+    <string name="ob27_page_of">Pagina %1$d din %2$d</string>
+    <string name="ob27_private_title">Doar tu și ei</string>
+    <string name="ob27_private_body">Mesajele și apelurile sunt criptate end-to-end pe telefonul tău. Nimeni de pe traseu nu le poate citi — nici măcar OSHI.</string>
+    <string name="ob27_offline_title">Merge fără internet</string>
+    <string name="ob27_offline_body">Fără rețea? Mesajele sar din telefon în telefon prin oamenii din apropiere care au OSHI deschis. Un radio LoRa le duce și mai departe.</string>
+    <string name="ob27_range_direct">direct</string>
+    <string name="ob27_range_relayed">retransmis</string>
+    <string name="ob27_range_lora">radio LoRa</string>
+    <string name="ob27_anon_title">Fără număr de telefon</string>
+    <string name="ob27_anon_body">Fără cont, fără e-mail, fără număr pentru înregistrare. Identitatea ta este o cheie creată pe acest telefon.</string>
+    <string name="ob27_together_title">Adu-ți oamenii</string>
+    <string name="ob27_together_body">Discută în doi sau în grupuri. Adaugă pe cineva scanându-i codul QR sau trimițându-i un link de invitație.</string>
+    <string name="ob27_rules_title">Înainte să începi</string>
+    <string name="ob27_rules_subtitle">Câteva reguli ale casei și ce poate și ce nu poate încă OSHI.</string>
+    <string name="ob27_rules_do">Fă așa</string>
+    <string name="ob27_rules_dont">Niciodată</string>
+    <string name="ob27_good_to_know">Bine de știut</string>
+    <string name="ob27_show_details">Arată detaliile</string>
+    <string name="ob27_hide_details">Ascunde detaliile</string>
+    <string name="ob27_agree">Am înțeles</string>
+    <string name="ob27_notif_title">Nu rata mesajele</string>
+    <string name="ob27_notif_body">Permite notificările ca să vezi mesajele și apelurile noi. Le poți dezactiva oricând din Setări.</string>
+    <string name="ob27_notif_allow">Permite notificările</string>
+    <string name="ob27_not_now">Nu acum</string>
+    <string name="ob27_identity_title">Alege un nume</string>
+    <string name="ob27_identity_body">Este numele pe care îl văd contactele tale. Îl poți schimba mai târziu.</string>
+    <string name="ob27_already">Folosești deja OSHI?</string>
+</resources>

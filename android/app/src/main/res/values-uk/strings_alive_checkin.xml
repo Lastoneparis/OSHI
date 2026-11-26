@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Перевірку підтверджено</string>
+    <string name="alive_a11y_neutral">Перевірку не налаштовано</string>
+    <string name="alive_a11y_overdue">Перевірку прострочено</string>
+    <string name="alive_action_im_alive">Я живий</string>
+    <string name="alive_action_message_them">Написати</string>
+    <string name="alive_bar_open_settings">Налаштування перевірки</string>
+    <string name="alive_channel_description">Нагадування про ваші перевірки та сповіщення, коли людина, за якою ви стежите, не відповіла на свою.</string>
+    <string name="alive_channel_name">Перевірки безпеки</string>
+    <string name="alive_confirmed_toast">Підтвердження надіслано</string>
+    <string name="alive_duration_days_hours">%1$d д %2$d год</string>
+    <string name="alive_duration_hours_minutes">%1$d год %2$d хв</string>
+    <string name="alive_duration_minutes">%1$d хв</string>
+    <string name="alive_duration_now">менше хвилини</string>
+    <string name="alive_interval_24h">Кожні 24 години</string>
+    <string name="alive_interval_48h">Кожні 48 годин</string>
+    <string name="alive_interval_72h">Кожні 72 години</string>
+    <string name="alive_interval_custom">Власний</string>
+    <string name="alive_interval_custom_hours">Кожні %1$d год</string>
+    <string name="alive_interval_every">кожні %1$s</string>
+    <string name="alive_lane_you">Ви</string>
+    <string name="alive_note_delivery">Нагадування й сповіщення залежать від мережі та дозволу на сповіщення. Пропущена перевірка означає лише те, що підтвердження не надійшло.</string>
+    <string name="alive_note_no_location">Місцезнаходження не передається. Перевірка містить лише одну позначку часу.</string>
+    <string name="alive_notification_mine_due_body">Підтвердьте, що ви живі, щоб %1$s не чекав марно.</string>
+    <string name="alive_notification_mine_due_title">Час вашої перевірки</string>
+    <string name="alive_notification_overdue_body">Перевірка мала відбутися %1$s тому. Це означає лише, що підтвердження не надійшло.</string>
+    <string name="alive_notification_overdue_title">Немає підтвердження від %1$s</string>
+    <string name="alive_sheet_explainer">Підтверджуйте за розкладом, що ви живі. %1$s бачить зворотний відлік і отримає сповіщення, якщо час мине без відповіді.</string>
+    <string name="alive_sheet_interval">Як часто</string>
+    <string name="alive_sheet_mine_switch">Перевірка з %1$s</string>
+    <string name="alive_sheet_stop">Припинити перевірки</string>
+    <string name="alive_sheet_their_next">Наступна очікується %1$s</string>
+    <string name="alive_sheet_their_none">%1$s не налаштував(-ла) тут перевірку.</string>
+    <string name="alive_sheet_their_section">Перевірка: %1$s</string>
+    <string name="alive_state_confirmed_ago">підтверджено %1$s тому</string>
+    <string name="alive_state_due_in">через %1$s</string>
+    <string name="alive_state_not_set">не налаштовано</string>
+    <string name="alive_state_overdue_by">немає відповіді вже %1$s</string>
+    <string name="alive_summary_confirmed">Підтвердив, що живий</string>
+    <string name="alive_summary_started">Перевірку безпеки розпочато</string>
+    <string name="alive_summary_stopped">Перевірку безпеки зупинено</string>
+    <string name="alive_title">Перевірка безпеки</string>
+    <string name="alive_unknown_peer">цей контакт</string>
+</resources>

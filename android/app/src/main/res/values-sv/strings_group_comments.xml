@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Kommentarer</string>
+    <string name="gs_comments_footer">Medlemmar kan kommentera under varje inlägg. Bara administratörer kan posta.</string>
+    <string name="cm_leave_comment">Skriv en kommentar</string>
+    <string name="cm_thread_title">Kommentarer</string>
+    <string name="cm_empty">Inga kommentarer än.</string>
+    <string name="cm_composer_hint">Kommentar…</string>
+    <string name="cm_replying_to">Svarar %1$s</string>
+    <string name="cm_disabled">Kommentarer är avstängda.</string>
+    <string name="cm_post_unavailable">Inlägget är inte längre tillgängligt.</string>
+    <string name="cm_too_fast">Du kommenterar för snabbt. Vänta en stund.</string>
+    <string name="cm_notif_reply">%1$s svarade på din kommentar</string>
+    <string name="cm_delete_comment">Radera kommentar</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d kommentar</item>
+        <item quantity="other">%d kommentarer</item>
+    </plurals>
+</resources>

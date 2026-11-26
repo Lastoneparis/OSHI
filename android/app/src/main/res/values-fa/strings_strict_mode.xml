@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">حالت امنیتی سخت‌گیرانه</string>
+    <string name="strict_status_on">روشن: بدون کپی، بدون ضبط صفحه، پنهان از برنامه‌های صفحه‌خوان</string>
+    <string name="strict_status_off">خاموش. وقتی ممکن است گوشی تحت نظر باشد، OSHI را قفل می‌کند</string>
+    <string name="strict_hero_on">حالت امنیتی سخت‌گیرانه روشن است</string>
+    <string name="strict_intro">برای وقتی که ممکن است گوشی تحت نظر باشد. با یک کلید، OSHI قفل می‌شود: هیچ چیز قابل کپی نیست، از صفحه نمی‌توان عکس یا فیلم گرفت و برنامه‌هایی که صفحه را می‌خوانند، از جمله عامل‌های هوش مصنوعی، چیزی نمی‌بینند.</string>
+    <string name="strict_section_switch">حالت</string>
+    <string name="strict_toggle_title">حالت امنیتی سخت‌گیرانه</string>
+    <string name="strict_toggle_on">روشن برای این دستگاه</string>
+    <string name="strict_toggle_off">خاموش</string>
+    <string name="strict_block_paste_title">جلوگیری از چسباندن هم</string>
+    <string name="strict_block_paste_subtitle">هیچ چیزی در OSHI چسبانده نمی‌شود</string>
+    <string name="strict_hide_presence_title">پنهان‌کردن تأیید خواندن و تایپ</string>
+    <string name="strict_hide_presence_subtitle">دیگران نمی‌بینند چه زمانی می‌خوانید یا تایپ می‌کنید</string>
+    <string name="strict_forced_subtitle">تنظیم‌شده توسط حالت امنیتی سخت‌گیرانه</string>
+    <string name="strict_blocked_toast">مسدود شده توسط حالت امنیتی سخت‌گیرانه</string>
+    <string name="strict_unlock_title">خاموش‌کردن حالت امنیتی سخت‌گیرانه</string>
+    <string name="strict_unlock_subtitle">هویت خود را تأیید کنید</string>
+    <string name="strict_threats_title">برنامه‌هایی که می‌توانند صفحه شما را بخوانند یا کنترل کنند</string>
+    <string name="strict_threats_none">هیچ موردی روی این گوشی پیدا نشد.</string>
+    <string name="strict_threat_a11y">سرویس دسترس‌پذیری که ابزار کمکی نیست</string>
+    <string name="strict_threat_remote">برنامه کنترل از راه دور یا هم‌رسانی صفحه</string>
+    <string name="strict_threats_open">بررسی</string>
+    <string name="strict_threats_explainer">OSHI نمی‌تواند برنامه دیگری را خاموش کند. اگر یکی از این موارد را نمی‌شناسید، آن را در تنظیمات Android › دسترس‌پذیری خاموش یا برنامه را حذف کنید.</string>
+    <string name="strict_banner_title">برنامه‌ها می‌توانند این صفحه را بخوانند یا کنترل کنند</string>
+    <string name="strict_banner_body">%1$s. حالت امنیتی سخت‌گیرانه تا جایی که Android اجازه دهد OSHI را از آن‌ها پنهان می‌کند.</string>
+    <string name="strict_banner_dismiss">بستن</string>
+    <string name="strict_does_title">کارهایی که انجام می‌دهد</string>
+    <string name="strict_does_copy">بدون کپی، برش، هدایت، اشتراک‌گذاری یا ذخیره پیام‌ها. متن قابل انتخاب نیست و هر چیزی که OSHI در کلیپ‌بورد گذاشته پاک می‌شود.</string>
+    <string name="strict_does_paste">وقتی «جلوگیری از چسباندن هم» روشن باشد، چسباندن در OSHI مسدود است، از جمله دستور چسباندن صفحه‌کلید.</string>
+    <string name="strict_does_screen">اسکرین‌شات، ضبط صفحه و هم‌رسانی صفحه تصویر سیاه نشان می‌دهند. پیش‌نمایش برنامه‌های اخیر پنهان است.</string>
+    <string name="strict_does_agents">برنامه‌هایی که صفحه را از طریق دسترس‌پذیری می‌خوانند، از جمله عامل‌های هوش مصنوعی، هیچ محتوایی از OSHI نمی‌بینند (Android 14 و بالاتر). ضربه‌هایی که تزریق کنند نادیده گرفته می‌شود.</string>
+    <string name="strict_does_overlays">وقتی برنامه دیگری روی OSHI نقاشی می‌کند، ضربه‌ها نادیده گرفته می‌شوند.</string>
+    <string name="strict_does_notifications">اعلان‌ها فقط می‌گویند «پیام جدید»: بدون نام، عکس یا متن.</string>
+    <string name="strict_does_lock">قفل برنامه هر بار که به OSHI برمی‌گردید (اگر گوشی‌تان قفل صفحه دارد).</string>
+    <string name="strict_does_keyboard">صفحه‌کلید ناشناس: از صفحه‌کلید خواسته می‌شود آنچه تایپ می‌کنید را یاد نگیرد.</string>
+    <string name="strict_does_network">بدون پیش‌نمایش پیوند و بدون جست‌وجوی GIPHY: هیچ چیزی از سایت‌های شخص ثالث دریافت نمی‌شود.</string>
+    <string name="strict_does_presence">تأیید خواندن و نشانگر تایپ خاموش است (اگر پنهان‌کردن را انتخاب کرده باشید).</string>
+    <string name="strict_does_relay">در صورت وجود، رله حریم خصوصی روشن می‌شود.</string>
+    <string name="strict_does_restore">با خاموش‌کردن این حالت، تنظیمات قبلی‌تان برمی‌گردد.</string>
+    <string name="strict_cannot_title">کارهایی که نمی‌تواند انجام دهد</string>
+    <string name="strict_cannot_malware">هیچ برنامه‌ای نمی‌تواند شما را کاملاً در برابر بدافزار یا گوشی نفوذشده (روت‌شده) محافظت کند.</string>
+    <string name="strict_cannot_keyboard">صفحه‌کلید شما همچنان آنچه را تایپ می‌کنید می‌بیند. پیشنهاد کلیپ‌بوردی که صفحه‌کلید برایتان تایپ می‌کند از تایپ عادی قابل تشخیص نیست.</string>
+    <string name="strict_cannot_readers">صفحه‌خوان‌ها برای افراد نابینا و کم‌بینا کار می‌کنند، اما سایر برنامه‌های دسترس‌پذیری تا وقتی این حالت روشن است نمی‌توانند OSHI را بخوانند.</string>
+    <string name="strict_cannot_old">در Android 13 و قدیمی‌تر، OSHI نمی‌تواند محتوای خود را از برنامه‌های دسترس‌پذیری پنهان کند. فقط می‌تواند درباره آن‌ها هشدار بدهد.</string>
+    <string name="strict_cannot_camera">کسی هنوز می‌تواند با دستگاه دیگری از صفحه عکس بگیرد.</string>
+    <string name="strict_cannot_recipient">فقط از همین گوشی محافظت می‌کند، نه گوشی کسانی که به آن‌ها پیام می‌دهید.</string>
+    <string name="strict_auto_lock_immediate">فوراً (حالت امنیتی سخت‌گیرانه)</string>
+</resources>

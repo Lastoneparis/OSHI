@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Chế độ bảo mật nghiêm ngặt</string>
+    <string name="strict_status_on">Bật: không sao chép, không chụp màn hình, ẩn khỏi ứng dụng đọc màn hình</string>
+    <string name="strict_status_off">Tắt. Khóa chặt OSHI khi điện thoại có thể bị theo dõi</string>
+    <string name="strict_hero_on">Chế độ bảo mật nghiêm ngặt đang bật</string>
+    <string name="strict_intro">Dành cho lúc điện thoại có thể bị theo dõi. Một công tắc khóa chặt OSHI: không gì có thể sao chép ra ngoài, màn hình không thể bị chụp, và các ứng dụng đọc màn hình, kể cả tác nhân AI, không thấy gì.</string>
+    <string name="strict_section_switch">Chế độ</string>
+    <string name="strict_toggle_title">Chế độ bảo mật nghiêm ngặt</string>
+    <string name="strict_toggle_on">Bật cho thiết bị này</string>
+    <string name="strict_toggle_off">Tắt</string>
+    <string name="strict_block_paste_title">Chặn cả dán</string>
+    <string name="strict_block_paste_subtitle">Cũng không thể dán gì vào OSHI</string>
+    <string name="strict_hide_presence_title">Ẩn xác nhận đã đọc và trạng thái đang nhập</string>
+    <string name="strict_hide_presence_subtitle">Người khác không thấy khi nào bạn đọc hoặc nhập</string>
+    <string name="strict_forced_subtitle">Do chế độ bảo mật nghiêm ngặt đặt</string>
+    <string name="strict_blocked_toast">Bị chế độ bảo mật nghiêm ngặt chặn</string>
+    <string name="strict_unlock_title">Tắt chế độ bảo mật nghiêm ngặt</string>
+    <string name="strict_unlock_subtitle">Xác nhận là bạn</string>
+    <string name="strict_threats_title">Ứng dụng có thể đọc hoặc điều khiển màn hình của bạn</string>
+    <string name="strict_threats_none">Không tìm thấy ứng dụng nào trên điện thoại này.</string>
+    <string name="strict_threat_a11y">Dịch vụ hỗ trợ tiếp cận không phải công cụ hỗ trợ</string>
+    <string name="strict_threat_remote">Ứng dụng điều khiển từ xa hoặc phản chiếu màn hình</string>
+    <string name="strict_threats_open">Xem lại</string>
+    <string name="strict_threats_explainer">OSHI không thể tắt ứng dụng khác. Nếu bạn không nhận ra ứng dụng nào trong số này, hãy tắt nó trong Cài đặt Android › Hỗ trợ tiếp cận, hoặc gỡ cài đặt.</string>
+    <string name="strict_banner_title">Ứng dụng có thể đọc hoặc điều khiển màn hình này</string>
+    <string name="strict_banner_body">%1$s. Chế độ bảo mật nghiêm ngặt ẩn OSHI khỏi chúng ở nơi Android cho phép.</string>
+    <string name="strict_banner_dismiss">Bỏ qua</string>
+    <string name="strict_does_title">Chức năng</string>
+    <string name="strict_does_copy">Không sao chép, cắt, chuyển tiếp, chia sẻ hay lưu tin nhắn. Không thể chọn văn bản, và mọi thứ OSHI đưa vào bộ nhớ tạm đều bị xóa.</string>
+    <string name="strict_does_paste">Việc dán vào OSHI bị chặn khi bật “Chặn cả dán”, kể cả lệnh dán của bàn phím.</string>
+    <string name="strict_does_screen">Ảnh chụp màn hình, quay màn hình và chia sẻ màn hình chỉ hiện màn hình đen. Bản xem trước trong ứng dụng gần đây bị ẩn.</string>
+    <string name="strict_does_agents">Ứng dụng đọc màn hình qua Hỗ trợ tiếp cận, kể cả tác nhân AI, không thấy nội dung OSHI (Android 14 trở lên). Các thao tác chạm chúng chèn vào bị bỏ qua.</string>
+    <string name="strict_does_overlays">Thao tác chạm bị bỏ qua khi ứng dụng khác vẽ đè lên OSHI.</string>
+    <string name="strict_does_notifications">Thông báo chỉ ghi “Tin nhắn mới”: không tên, không ảnh, không nội dung.</string>
+    <string name="strict_does_lock">Khóa ứng dụng mỗi khi bạn quay lại OSHI (khi điện thoại có khóa màn hình).</string>
+    <string name="strict_does_keyboard">Bàn phím ẩn danh: yêu cầu bàn phím không học những gì bạn gõ.</string>
+    <string name="strict_does_network">Không xem trước liên kết và không tìm kiếm GIPHY: không tải gì từ trang web của bên thứ ba.</string>
+    <string name="strict_does_presence">Tắt xác nhận đã đọc và trạng thái đang nhập (nếu bạn chọn ẩn chúng).</string>
+    <string name="strict_does_relay">Bật rơ-le quyền riêng tư khi có sẵn.</string>
+    <string name="strict_does_restore">Cài đặt trước đó của bạn được khôi phục khi tắt chế độ này.</string>
+    <string name="strict_cannot_title">Không thể làm gì</string>
+    <string name="strict_cannot_malware">Không ứng dụng nào bảo vệ bạn hoàn toàn khỏi phần mềm độc hại hoặc điện thoại đã bị xâm nhập (root).</string>
+    <string name="strict_cannot_keyboard">Bàn phím của bạn vẫn thấy những gì bạn gõ. Gợi ý từ bộ nhớ tạm mà nó gõ giúp bạn không thể phân biệt với việc gõ thật.</string>
+    <string name="strict_cannot_readers">Trình đọc màn hình cho người khiếm thị vẫn hoạt động, nhưng các ứng dụng hỗ trợ tiếp cận khác không thể đọc OSHI khi bật chế độ này.</string>
+    <string name="strict_cannot_old">Trên Android 13 trở xuống, OSHI không thể ẩn nội dung khỏi ứng dụng hỗ trợ tiếp cận. Nó chỉ có thể cảnh báo bạn về chúng.</string>
+    <string name="strict_cannot_camera">Ai đó vẫn có thể chụp ảnh màn hình bằng thiết bị khác.</string>
+    <string name="strict_cannot_recipient">Chỉ bảo vệ điện thoại này, không bảo vệ điện thoại của những người bạn nhắn tin.</string>
+    <string name="strict_auto_lock_immediate">Ngay lập tức (Chế độ bảo mật nghiêm ngặt)</string>
+</resources>

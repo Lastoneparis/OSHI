@@ -43,6 +43,10 @@ class OshiMailClient @Inject constructor(
         private const val BASE_URL = "https://oshi-messenger.com"
         private const val PREFS = "oshi_mail"
         private const val KEY_MAIL_PRIVATE = "mail_x25519_private"
+        // __MAIL_OFFLINE_KEEPS_MAILBOX_2026_11_25__ last account the server returned, tagged
+        // with the mail public key it belongs to (another identity never reads it).
+        private const val KEY_ACCOUNT_CACHE = "mail_account_cache_v1"
+        private const val KEY_ACCOUNT_CACHE_OWNER = "mail_account_cache_owner_v1"
         private val JSON = "application/json".toMediaType()
         private val OCTET = "application/octet-stream".toMediaType()
     }
@@ -51,6 +55,8 @@ class OshiMailClient @Inject constructor(
         Exception(message ?: code)
 
     private val http = OkHttpClient.Builder()
+        // __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ learn the offset; re-sign once on a clock 401/403.
+        .addInterceptor(com.oshi.messenger.network.auth.ServerClock.interceptor)
         .connectTimeout(20, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
         .writeTimeout(120, TimeUnit.SECONDS)
@@ -214,7 +220,39 @@ class OshiMailClient @Inject constructor(
         ),
     )
 
-    suspend fun account(): Account = parseAccount(callJson("GET", "/mail/v1/account"))
+    /**
+     * __MAIL_OFFLINE_KEEPS_MAILBOX_2026_11_25__ Every success is remembered (encrypted prefs,
+     * tagged with this identity's mail key) so a launch without network can still show the
+     * mailbox instead of the "choose your address" form. Only the server's explicit
+     * `no-mailbox` forgets it — a timeout says nothing about whether the mailbox exists.
+     */
+    suspend fun account(): Account {
+        val o = try {
+            callJson("GET", "/mail/v1/account")
+        } catch (e: MailException) {
+            if (e.code == "no-mailbox") forgetCachedAccount()
+            throw e
+        }
+        val account = parseAccount(o)
+        runCatching {
+            prefs.edit()
+                .putString(KEY_ACCOUNT_CACHE, o.toString())
+                .putString(KEY_ACCOUNT_CACHE_OWNER, mailPublicKeyHex())
+                .apply()
+        }
+        return account
+    }
+
+    /** The last account the server returned for THIS identity, or null. Never touches the network. */
+    fun cachedAccount(): Account? = runCatching {
+        val owner = prefs.getString(KEY_ACCOUNT_CACHE_OWNER, null) ?: return null
+        if (owner != mailPublicKeyHex()) return null
+        prefs.getString(KEY_ACCOUNT_CACHE, null)?.let { parseAccount(JSONObject(it)) }
+    }.getOrNull()
+
+    fun forgetCachedAccount() {
+        runCatching { prefs.edit().remove(KEY_ACCOUNT_CACHE).remove(KEY_ACCOUNT_CACHE_OWNER).apply() }
+    }
 
     // ---- inbox -------------------------------------------------------------------
 
@@ -306,6 +344,18 @@ class OshiMailClient @Inject constructor(
                 envelope = envelope,
             )
         }
+    }
+
+    /**
+     * __MAIL_UNREAD_REFRESH_2026_11_22__ Unread Inbox count from `GET /mail/v1/inbox/status`
+     * (counts from the server's index, no sealed blob). Null when that route is not
+     * deployed (404 `not-found`) so the caller can fall back to [inbox]; `no-mailbox`
+     * and every other failure throw [MailException] as usual.
+     */
+    suspend fun inboxStatusUnread(): Int? = try {
+        callJson("GET", "/mail/v1/inbox/status").getInt("inboxUnread")
+    } catch (e: MailException) {
+        if (e.status == 404 && e.code == "not-found") null else throw e
     }
 
     /** The full RFC822 message, decrypted on this device. */

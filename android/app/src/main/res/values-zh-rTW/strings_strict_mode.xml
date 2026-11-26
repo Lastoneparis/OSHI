@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">嚴格安全模式</string>
+    <string name="strict_status_on">已開啟:禁止複製、禁止擷取畫面、對讀螢幕的應用程式隱藏</string>
+    <string name="strict_status_off">已關閉。在手機可能被監視時,將 OSHI 全面鎖定</string>
+    <string name="strict_hero_on">嚴格安全模式已開啟</string>
+    <string name="strict_intro">適用於手機可能被監視的情況。一個開關即可鎖定 OSHI:任何內容都無法複製,畫面無法被擷取,讀取螢幕的應用程式(包括 AI 代理)什麼也看不到。</string>
+    <string name="strict_section_switch">模式</string>
+    <string name="strict_toggle_title">嚴格安全模式</string>
+    <string name="strict_toggle_on">在此裝置上開啟</string>
+    <string name="strict_toggle_off">關閉</string>
+    <string name="strict_block_paste_title">同時禁止貼上</string>
+    <string name="strict_block_paste_subtitle">也無法在 OSHI 中貼上任何內容</string>
+    <string name="strict_hide_presence_title">隱藏已讀回條和輸入狀態</string>
+    <string name="strict_hide_presence_subtitle">別人看不到你何時閱讀或輸入</string>
+    <string name="strict_forced_subtitle">由嚴格安全模式設定</string>
+    <string name="strict_blocked_toast">已被嚴格安全模式封鎖</string>
+    <string name="strict_unlock_title">關閉嚴格安全模式</string>
+    <string name="strict_unlock_subtitle">請確認是你本人</string>
+    <string name="strict_threats_title">可讀取或控制你螢幕的應用程式</string>
+    <string name="strict_threats_none">在這支手機上未發現。</string>
+    <string name="strict_threat_a11y">並非輔助工具的無障礙服務</string>
+    <string name="strict_threat_remote">遠端控制或螢幕鏡像應用程式</string>
+    <string name="strict_threats_open">查看</string>
+    <string name="strict_threats_explainer">OSHI 無法關閉其他應用程式。如果你不認識其中某個應用程式,請在 Android 設定 › 無障礙中將其關閉,或將其解除安裝。</string>
+    <string name="strict_banner_title">有應用程式可讀取或控制此畫面</string>
+    <string name="strict_banner_body">%1$s。嚴格安全模式會在 Android 允許的範圍內對它們隱藏 OSHI。</string>
+    <string name="strict_banner_dismiss">忽略</string>
+    <string name="strict_does_title">功能說明</string>
+    <string name="strict_does_copy">無法複製、剪下、轉寄、分享或儲存訊息。文字無法選取,OSHI 放入剪貼簿的內容會被清除。</string>
+    <string name="strict_does_paste">開啟「同時禁止貼上」後,將禁止在 OSHI 中貼上,包括鍵盤的貼上指令。</string>
+    <string name="strict_does_screen">螢幕截圖、螢幕錄影和螢幕分享只會顯示黑畫面。最近使用的應用程式預覽也會被隱藏。</string>
+    <string name="strict_does_agents">透過無障礙讀取螢幕的應用程式(包括 AI 代理)看不到 OSHI 的任何內容(Android 14 及更新版本)。它們注入的點按會被忽略。</string>
+    <string name="strict_does_overlays">當其他應用程式在 OSHI 上層繪製時,點按會被忽略。</string>
+    <string name="strict_does_notifications">通知只顯示「新訊息」:沒有姓名、大頭貼或內容。</string>
+    <string name="strict_does_lock">每次回到 OSHI 都會啟用應用程式鎖定(前提是手機設有螢幕鎖定)。</string>
+    <string name="strict_does_keyboard">無痕鍵盤:要求鍵盤不要學習你輸入的內容。</string>
+    <string name="strict_does_network">沒有連結預覽,也沒有 GIPHY 搜尋:不會從第三方網站擷取任何內容。</string>
+    <string name="strict_does_presence">已讀回條和輸入提示已關閉(如果你選擇隱藏)。</string>
+    <string name="strict_does_relay">有可用的隱私中繼時會自動開啟。</string>
+    <string name="strict_does_restore">關閉此模式後,你之前的設定會恢復。</string>
+    <string name="strict_cannot_title">無法做到的事</string>
+    <string name="strict_cannot_malware">沒有任何應用程式能完全保護你免受惡意軟體或已被入侵(已 root)的手機的威脅。</string>
+    <string name="strict_cannot_keyboard">鍵盤仍然能看到你輸入的內容。鍵盤替你輸入的剪貼簿建議,與手動輸入無法區分。</string>
+    <string name="strict_cannot_readers">供視障與低視能人士使用的讀屏器仍可正常運作,但模式開啟期間,其他無障礙應用程式無法讀取 OSHI。</string>
+    <string name="strict_cannot_old">在 Android 13 及更早版本上,OSHI 無法對無障礙應用程式隱藏內容,只能向你發出警告。</string>
+    <string name="strict_cannot_camera">別人仍可用另一台裝置拍攝螢幕。</string>
+    <string name="strict_cannot_recipient">它只保護這支手機,不保護與你通訊的對方的手機。</string>
+    <string name="strict_auto_lock_immediate">立即 (嚴格安全模式)</string>
+</resources>

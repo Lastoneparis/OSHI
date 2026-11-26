@@ -1727,9 +1727,11 @@ extension MessageManager {
             ? GroupWireV2.groupSentCopyPayload(groupId: UUID(uuidString: groupId) ?? UUID(), message: text,
                                                msgId: messageId, sentAt: at).map { (messageId, $0) }
             : nil
-        let (handled, _) = await router.sendGroupText(groupId: groupId, members: memberKeys, text,
+        let (handled, _, rateLimited) = await router.sendGroupText(groupId: groupId, members: memberKeys, text,
                                                       ts: Int64(at.timeIntervalSince1970 * 1000),
                                                       selfCopy: copy)
+        // __GROUP_FANOUT_2026_11_24__ members the relay rate-limited: never the legacy path.
+        GroupRateLimitLedger.shared.record(messageId: messageId, members: rateLimited)
         guard !handled.isEmpty else { return [] }
         guard push else { return Set(handled) }
 
@@ -1824,7 +1826,7 @@ extension MessageManager {
         let router = await MessageManager.v2Transport.router()
         await MessageManager.v2Transport.ensureRegistered()
 
-        let (handled, _) = await router.sendGroupFile(groupId: groupId,
+        let (handled, _, rateLimited) = await router.sendGroupFile(groupId: groupId,
                                                       members: memberKeys,
                                                       data: data,
                                                       filename: filename,
@@ -1833,6 +1835,7 @@ extension MessageManager {
                                                       groupMessageB64: groupMessageB64,
                                                       msgId: msgId,
                                                       videoNote: videoNote)
+        GroupRateLimitLedger.shared.record(messageId: msgId, members: rateLimited)   // __GROUP_FANOUT_2026_11_24__
         guard !handled.isEmpty else { return [] }
 
         for member in handled {

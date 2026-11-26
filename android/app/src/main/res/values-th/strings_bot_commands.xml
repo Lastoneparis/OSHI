@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">คำสั่ง</string>
+    <string name="bot_cmd_send_a11y">ส่ง %1$s</string>
+    <string name="bot_cmd_sheet_title">คำสั่งของบอต</string>
+    <string name="bot_cmd_tap_to_send">แตะคำสั่งเพื่อส่ง</string>
+    <string name="bot_cmd_empty_none_title">ยังไม่มีบอตที่นี่</string>
+    <string name="bot_cmd_empty_none_body">สร้างบอตแล้วเพิ่มเข้ากลุ่มนี้ คำสั่งของบอตจะแสดงที่นี่และเมื่อคุณพิมพ์ /</string>
+    <string name="bot_cmd_empty_bot">บอตนี้ยังไม่มีคำสั่ง</string>
+    <string name="bot_cmd_setup">ตั้งค่าคำสั่ง</string>
+    <string name="bot_cmd_section">คำสั่ง</string>
+    <string name="bot_cmd_section_hint">สมาชิกในกลุ่มของบอตจะเห็นคำสั่งเหล่านี้เมื่อพิมพ์ / หรือแตะ คำสั่ง</string>
+    <string name="bot_cmd_add">เพิ่ม</string>
+    <string name="bot_cmd_add_title">คำสั่งใหม่</string>
+    <string name="bot_cmd_edit_title">แก้ไขคำสั่ง</string>
+    <string name="bot_cmd_field_name">คำสั่ง</string>
+    <string name="bot_cmd_field_description">คำอธิบาย (แสดงในเมนู)</string>
+    <string name="bot_cmd_field_reply">คำตอบ</string>
+    <string name="bot_cmd_field_reply_hint">สิ่งที่บอตตอบ ใช้ {{input}}, {{bot_name}} และ {{date}} ได้</string>
+    <string name="bot_cmd_webhook_note">ส่งไปยัง webhook ของคุณซึ่งจะเป็นผู้ตอบ</string>
+    <string name="bot_cmd_empty_owner">ยังไม่มีคำสั่ง เพิ่มสักคำสั่ง เช่น /start หรือ /help เพื่อให้ทุกคนรู้ว่าบอตนี้ทำอะไรได้</string>
+    <string name="bot_cmd_err_empty">ใส่ชื่อคำสั่ง</string>
+    <string name="bot_cmd_err_invalid">ใช้ได้เฉพาะอักษรละตินตัวเล็ก ตัวเลข และ _</string>
+    <string name="bot_cmd_err_too_long">ไม่เกิน 32 อักขระ</string>
+    <string name="bot_cmd_err_duplicate">บอตนี้มีคำสั่งนี้อยู่แล้ว</string>
+    <string name="bot_cmd_err_too_many">บอตหนึ่งตัวมีคำสั่งได้ไม่เกิน 100 คำสั่ง</string>
+    <string name="bot_cmd_err_description">คำอธิบายยาวเกินไป (ไม่เกิน 256 อักขระ)</string>
+    <string name="bot_cmd_sync_local">บันทึกไว้ในโทรศัพท์เครื่องนี้ ซึ่งเป็นเครื่องที่รันบอต</string>
+    <string name="bot_cmd_sync_syncing">กำลังอัปเดตเซิร์ฟเวอร์…</string>
+    <string name="bot_cmd_sync_synced">อัปเดตเมนูบนเซิร์ฟเวอร์แล้ว</string>
+    <string name="bot_cmd_sync_failed">อัปเดตเซิร์ฟเวอร์ไม่ได้ คำสั่งของคุณบันทึกไว้ในโทรศัพท์เครื่องนี้แล้ว</string>
+    <string name="bot_profile_edit">แก้ไขโปรไฟล์</string>
+    <string name="bot_profile_name">ชื่อ</string>
+    <string name="bot_profile_description">คำอธิบาย</string>
+    <string name="bot_profile_avatar">อวาตาร์</string>
+    <string name="bot_profile_err_name_empty">ตั้งชื่อให้บอตของคุณ</string>
+    <string name="bot_profile_err_name_long">ชื่อยาวเกินไป (ไม่เกิน 64 อักขระ)</string>
+    <string name="bot_profile_err_desc_long">คำอธิบายยาวเกินไป (ไม่เกิน 512 อักขระ)</string>
+    <string name="bot_connect_title">วิธีเชื่อมต่อ</string>
+    <string name="bot_connect_local">บอตนี้ทำงานบนโทรศัพท์เครื่องนี้: เก็บ OSHI ไว้ในเครื่องและเปิดบอตไว้ เพิ่มบอตเข้ากลุ่ม แล้วสมาชิกจะใช้คำสั่งของบอตในกลุ่มนั้นได้</string>
+    <string name="bot_connect_webhook">แต่ละคำสั่งจะถูกส่งไปยัง URL ของ webhook ของคุณ และเซิร์ฟเวอร์ของคุณตอบกลับด้วย JSON {\"text\": \"…\"} เซิร์ฟเวอร์ของคุณยังใช้โทเค็นด้านล่างกับ API บอตของ OSHI ได้ด้วย</string>
+    <string name="bot_connect_token_warning">เก็บโทเค็นเป็นความลับ: ใครมีโทเค็นก็พูดในนามบอตของคุณได้</string>
+    <string name="bot_connect_groups">กลุ่ม: %1$s</string>
+    <string name="bot_connect_no_groups">ยังไม่อยู่ในกลุ่มใด จึงยังไม่มีใครใช้คำสั่งของบอตได้</string>
+</resources>

@@ -15,6 +15,82 @@ import java.io.File
 /** __ATTACH_PANEL_2027_2026_11_16__ the attachment panel's rules, off-device. */
 class AttachmentPanelLogicTest {
 
+    // ── Order of the "Recent" grid (__RECENT_PHOTOS_ORDER_2026_11_21__) ──────
+
+    private fun item(id: Long, addedSec: Long, takenMs: Long? = null) =
+        RecentMediaItem(id, "content://media/external/images/media/$id", false, "image/jpeg", 0, addedSec, takenMs)
+
+    @Test
+    fun `capture time wins, index time is the fallback in the same unit`() {
+        assertEquals(1_700_000_000_123L, AttachmentPanelLogic.sortTimeMs(1_700_000_000_123L, 5L))
+        // No capture time (a PNG, a download): date_added is SECONDS, the sort key ms.
+        assertEquals(1_800_000_000_000L, AttachmentPanelLogic.sortTimeMs(null, 1_800_000_000L))
+        // MediaStore writes 0, not NULL, for some files: 0 is "unknown", not 1970.
+        assertEquals(1_800_000_000_000L, AttachmentPanelLogic.sortTimeMs(0L, 1_800_000_000L))
+    }
+
+    @Test
+    fun `newest first, a month-old photo restored today does not jump ahead of this week`() {
+        val now = 1_800_000_000L // s
+        val day = 86_400L
+        // A whole library restored onto the phone today: date_added = today for all.
+        val restoredMonthOld = item(id = 900, addedSec = now, takenMs = (now - 30 * day) * 1000)
+        val takenYesterday = item(id = 100, addedSec = now - day, takenMs = (now - day) * 1000)
+        val screenshotNow = item(id = 901, addedSec = now + 60, takenMs = null)
+        val sorted = listOf(restoredMonthOld, takenYesterday, screenshotNow).sortedWith(AttachmentPanelLogic.newestFirst)
+        assertEquals(listOf(901L, 100L, 900L), sorted.map { it.id })
+    }
+
+    @Test
+    fun `ties are broken by the larger id, like the SQL clause`() {
+        val a = item(1, 10); val b = item(2, 10); val c = item(3, 10)
+        assertEquals(listOf(3L, 2L, 1L), listOf(a, c, b).sortedWith(AttachmentPanelLogic.newestFirst).map { it.id })
+    }
+
+    @Test
+    fun `the SQL order puts a direction on EVERY column`() {
+        // QUERY_ARG_SORT_COLUMNS [date_added, _id] + DESCENDING became
+        // "date_added, _id DESC" = oldest first. Each term must carry its own DESC.
+        val terms = AttachmentPanelLogic.SQL_SORT_ORDER.split(Regex(",(?![^(]*\\))")).map { it.trim() }
+        assertEquals(2, terms.size)
+        terms.forEach { assertTrue("no direction on '$it'", it.endsWith(" DESC")) }
+        assertTrue(terms[0].contains("datetaken") && terms[0].contains("date_added * 1000"))
+        assertEquals("_id DESC", terms[1])
+        AttachmentPanelLogic.SQL_SORT_ORDER_FALLBACK.split(",").map { it.trim() }
+            .forEach { assertTrue("no direction on '$it'", it.endsWith(" DESC")) }
+    }
+
+    @Test
+    fun `a fresh head adds new photos on top and keeps the scrolled pages`() {
+        val shown = (10L downTo 1L).map { item(it, addedSec = it * 100) } // 10 newest .. 1 oldest
+        val fresh = listOf(item(11, 1_100), item(10, 1_000), item(9, 900), item(8, 800)) // page of 4
+        val merged = AttachmentPanelLogic.mergeFreshHead(shown, fresh, pageSize = 4)
+        assertEquals((11L downTo 1L).toList(), merged.map { it.id })
+    }
+
+    @Test
+    fun `a photo deleted inside the fresh range disappears, older pages stay`() {
+        val shown = (10L downTo 1L).map { item(it, addedSec = it * 100) }
+        // 9 was deleted: the fresh first page of 4 now reaches down to 6.
+        val fresh = listOf(item(10, 1_000), item(8, 800), item(7, 700), item(6, 600))
+        val merged = AttachmentPanelLogic.mergeFreshHead(shown, fresh, pageSize = 4)
+        assertEquals(listOf(10L, 8L, 7L, 6L, 5L, 4L, 3L, 2L, 1L), merged.map { it.id })
+    }
+
+    @Test
+    fun `a short fresh head is the whole gallery`() {
+        val shown = listOf(item(3, 300), item(2, 200), item(1, 100))
+        val merged = AttachmentPanelLogic.mergeFreshHead(shown, listOf(item(4, 400), item(3, 300)), pageSize = 60)
+        assertEquals(listOf(4L, 3L), merged.map { it.id })
+    }
+
+    @Test
+    fun `an appended page never repeats a tile already shown`() {
+        val shown = listOf(item(5, 500), item(4, 400))
+        val merged = AttachmentPanelLogic.appendPage(shown, listOf(item(4, 400), item(3, 300), item(3, 300)))
+        assertEquals(listOf(5L, 4L, 3L), merged.map { it.id })
+    }
+
     // ── Permission states ──────────────────────────────────────────────
 
     @Test

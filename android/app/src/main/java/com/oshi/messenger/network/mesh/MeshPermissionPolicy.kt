@@ -118,6 +118,15 @@ object MeshPermissionPolicy {
         }
     }
 
+    /**
+     * __WIFI_AWARE_2026_11_25__ What Wi-Fi Aware needs: `NEARBY_WIFI_DEVICES` from
+     * Android 13, `ACCESS_FINE_LOCATION` below. Deliberately NOT a new [Lane]:
+     * both are already in the [Lane.NEARBY] set, so Wi-Fi Aware adds no prompt
+     * of its own (pinned by `WifiAwareArbiterTest`).
+     */
+    fun wifiAwarePermissions(sdkInt: Int): List<String> =
+        if (sdkInt >= SDK_TIRAMISU) listOf(NEARBY_WIFI_DEVICES) else listOf(ACCESS_FINE_LOCATION)
+
     /** Everything the mesh would ask for on [sdkInt], de-duplicated, in ask order. */
     fun allRequestable(sdkInt: Int): List<String> =
         Lane.entries.flatMap { permissionsFor(it, sdkInt) }

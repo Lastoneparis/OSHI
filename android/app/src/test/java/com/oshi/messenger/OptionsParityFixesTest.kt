@@ -6,7 +6,8 @@ import com.oshi.messenger.data.model.ReportReason
 import com.oshi.messenger.data.model.ReportSubject
 import com.oshi.messenger.data.model.ReportWireFormat
 import com.oshi.messenger.service.SyncCycleTally
-import com.oshi.messenger.ui.screens.OnboardingPage
+import com.oshi.messenger.ui.onboarding.OnboardingFlow
+import com.oshi.messenger.ui.onboarding.OnboardingPage
 import com.oshi.messenger.util.PrefsWipePolicy
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -233,38 +234,31 @@ class OptionsParityFixesTest {
     // ─────────────────────────────────────────────────────────────────────
 
     /**
-     * Android shipped three pages against iOS's eight
-     * (`OnboardingView.swift:60,180-200`), and the two SAFETY pages were among
-     * the missing five. Order matters: iOS shows Good Conduct then Disclaimer,
-     * both after the feature tour and before the terminal page.
-     *
-     * Asserted as a RELATIVE order rather than the whole list: the shell pass
-     * added `SEND_MESSAGE` and `CONNECTIVITY`, and a page inserted elsewhere in
-     * the flow must not fail the safety-page finding. The whole list is pinned
-     * by `ShellRound2FixesTest`.
+     * Android once shipped three pages against iOS's eight, and the two SAFETY
+     * disclosures (Good Conduct, Disclaimer) were among the missing ones. Since the
+     * 2027 redesign both live on ONE page, [OnboardingPage.RULES]: it must follow
+     * the slides, precede the terminal page, and be where Skip lands (a user can
+     * skip the tour, never the rules). Its content is pinned by `OnboardingRedesignTest`.
      */
     @Test
-    fun `onboarding ships the two safety pages in iOS order`() {
+    fun `onboarding ships the safety disclosures before the identity step`() {
         val order = OnboardingPage.ORDER
-        val features = order.indexOf(OnboardingPage.FEATURES)
-        val conduct = order.indexOf(OnboardingPage.GOOD_CONDUCT)
-        val disclaimer = order.indexOf(OnboardingPage.DISCLAIMER)
-        val identity = order.indexOf(OnboardingPage.IDENTITY)
-        assertTrue("Good Conduct missing", conduct >= 0)
-        assertTrue("Disclaimer missing", disclaimer >= 0)
-        assertTrue("Good Conduct must follow the feature tour", conduct > features)
-        assertTrue("Disclaimer must follow Good Conduct", disclaimer > conduct)
-        assertTrue("both must precede the terminal page", disclaimer < identity)
+        val rules = order.indexOf(OnboardingPage.RULES)
+        assertTrue("Rules page missing", rules >= 0)
+        assertTrue("Rules must follow every slide", order.filter { it.isSlide }.all { order.indexOf(it) < rules })
+        assertTrue("Rules must precede the terminal page", rules < order.indexOf(OnboardingPage.IDENTITY))
+        assertEquals("Skip must stop at the rules", OnboardingPage.RULES, OnboardingFlow.SKIP_TARGET)
     }
 
     /**
-     * The identity page must stay last: the primary button reads "Next" for
-     * every index below the last and "Create identity" only on it. A page
-     * appended after IDENTITY would strand the user on an unreachable action.
+     * The identity page must stay last: its primary button creates the identity.
+     * A page appended after IDENTITY would strand the user on an unreachable action.
      */
     @Test
     fun `the identity page is the terminal onboarding page`() {
         assertEquals(OnboardingPage.IDENTITY, OnboardingPage.ORDER.last())
+        assertEquals(OnboardingPage.IDENTITY, OnboardingFlow.steps(askNotifications = false).last())
+        assertNull(OnboardingFlow.next(OnboardingPage.IDENTITY, askNotifications = true))
     }
 
     // ─────────────────────────────────────────────────────────────────────

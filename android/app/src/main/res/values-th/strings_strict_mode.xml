@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">โหมดความปลอดภัยเข้มงวด</string>
+    <string name="strict_status_on">เปิด: ห้ามคัดลอก ห้ามจับภาพหน้าจอ ซ่อนจากแอปที่อ่านหน้าจอ</string>
+    <string name="strict_status_off">ปิด ล็อก OSHI ให้แน่นหนาเมื่อโทรศัพท์อาจถูกจับตามอง</string>
+    <string name="strict_hero_on">โหมดความปลอดภัยเข้มงวดเปิดอยู่</string>
+    <string name="strict_intro">สำหรับเวลาที่โทรศัพท์อาจถูกจับตามอง สวิตช์เดียวล็อก OSHI ให้แน่นหนา: คัดลอกอะไรออกไปไม่ได้ จับภาพหน้าจอไม่ได้ และแอปที่อ่านหน้าจอ รวมถึงเอเจนต์ AI จะมองไม่เห็นอะไรเลย</string>
+    <string name="strict_section_switch">โหมด</string>
+    <string name="strict_toggle_title">โหมดความปลอดภัยเข้มงวด</string>
+    <string name="strict_toggle_on">เปิดสำหรับอุปกรณ์นี้</string>
+    <string name="strict_toggle_off">ปิด</string>
+    <string name="strict_block_paste_title">บล็อกการวางด้วย</string>
+    <string name="strict_block_paste_subtitle">ไม่สามารถวางอะไรลงใน OSHI ได้เช่นกัน</string>
+    <string name="strict_hide_presence_title">ซ่อนการอ่านแล้วและการพิมพ์</string>
+    <string name="strict_hide_presence_subtitle">คนอื่นจะไม่เห็นว่าคุณอ่านหรือพิมพ์เมื่อไร</string>
+    <string name="strict_forced_subtitle">ตั้งค่าโดยโหมดความปลอดภัยเข้มงวด</string>
+    <string name="strict_blocked_toast">ถูกบล็อกโดยโหมดความปลอดภัยเข้มงวด</string>
+    <string name="strict_unlock_title">ปิดโหมดความปลอดภัยเข้มงวด</string>
+    <string name="strict_unlock_subtitle">ยืนยันว่าเป็นคุณ</string>
+    <string name="strict_threats_title">แอปที่อ่านหรือควบคุมหน้าจอของคุณได้</string>
+    <string name="strict_threats_none">ไม่พบในโทรศัพท์เครื่องนี้</string>
+    <string name="strict_threat_a11y">บริการการช่วยเหลือพิเศษที่ไม่ใช่เครื่องมือช่วยเหลือ</string>
+    <string name="strict_threat_remote">แอปควบคุมระยะไกลหรือมิเรอร์หน้าจอ</string>
+    <string name="strict_threats_open">ตรวจสอบ</string>
+    <string name="strict_threats_explainer">OSHI ปิดแอปอื่นให้ไม่ได้ หากคุณไม่รู้จักแอปใดในนี้ ให้ปิดใน การตั้งค่า Android › การช่วยเหลือพิเศษ หรือถอนการติดตั้ง</string>
+    <string name="strict_banner_title">แอปอ่านหรือควบคุมหน้าจอนี้ได้</string>
+    <string name="strict_banner_body">%1$s โหมดความปลอดภัยเข้มงวดซ่อน OSHI จากแอปเหล่านั้นเท่าที่ Android อนุญาต</string>
+    <string name="strict_banner_dismiss">ปิด</string>
+    <string name="strict_does_title">สิ่งที่ทำได้</string>
+    <string name="strict_does_copy">ห้ามคัดลอก ตัด ส่งต่อ แชร์ หรือบันทึกข้อความ เลือกข้อความไม่ได้ และทุกสิ่งที่ OSHI วางไว้ในคลิปบอร์ดจะถูกลบ</string>
+    <string name="strict_does_paste">การวางลงใน OSHI จะถูกบล็อกเมื่อเปิด “บล็อกการวางด้วย” รวมถึงคำสั่งวางของแป้นพิมพ์</string>
+    <string name="strict_does_screen">ภาพหน้าจอ การบันทึกหน้าจอ และการแชร์หน้าจอจะเป็นภาพดำ ตัวอย่างในรายการแอปล่าสุดถูกซ่อน</string>
+    <string name="strict_does_agents">แอปที่อ่านหน้าจอผ่านการช่วยเหลือพิเศษ รวมถึงเอเจนต์ AI จะไม่เห็นเนื้อหาของ OSHI (Android 14 ขึ้นไป) การแตะที่พวกมันแทรกเข้ามาจะถูกเพิกเฉย</string>
+    <string name="strict_does_overlays">การแตะจะถูกเพิกเฉยขณะที่แอปอื่นวาดทับ OSHI</string>
+    <string name="strict_does_notifications">การแจ้งเตือนจะแสดงเพียง “ข้อความใหม่”: ไม่มีชื่อ ไม่มีรูป ไม่มีข้อความ</string>
+    <string name="strict_does_lock">ล็อกแอปทุกครั้งที่คุณกลับมาที่ OSHI (เมื่อโทรศัพท์ของคุณมีการล็อกหน้าจอ)</string>
+    <string name="strict_does_keyboard">แป้นพิมพ์โหมดไม่ระบุตัวตน: ขอให้แป้นพิมพ์ไม่เรียนรู้สิ่งที่คุณพิมพ์</string>
+    <string name="strict_does_network">ไม่มีตัวอย่างลิงก์และไม่มีการค้นหา GIPHY: ไม่ดึงอะไรจากเว็บไซต์ของบุคคลที่สาม</string>
+    <string name="strict_does_presence">ปิดการอ่านแล้วและตัวบอกการพิมพ์ (หากคุณเลือกซ่อน)</string>
+    <string name="strict_does_relay">เปิดรีเลย์ความเป็นส่วนตัวเมื่อมีให้ใช้</string>
+    <string name="strict_does_restore">การตั้งค่าเดิมของคุณจะกลับมาเมื่อปิดโหมดนี้</string>
+    <string name="strict_cannot_title">สิ่งที่ทำไม่ได้</string>
+    <string name="strict_cannot_malware">ไม่มีแอปใดปกป้องคุณจากมัลแวร์หรือโทรศัพท์ที่ถูกเจาะ (รูท) ได้อย่างสมบูรณ์</string>
+    <string name="strict_cannot_keyboard">แป้นพิมพ์ของคุณยังเห็นสิ่งที่คุณพิมพ์ ข้อเสนอแนะจากคลิปบอร์ดที่แป้นพิมพ์พิมพ์ให้แยกไม่ออกจากการพิมพ์ปกติ</string>
+    <string name="strict_cannot_readers">โปรแกรมอ่านหน้าจอสำหรับผู้พิการทางสายตายังใช้งานได้ แต่แอปการช่วยเหลือพิเศษอื่นจะอ่าน OSHI ไม่ได้ขณะเปิดโหมดนี้</string>
+    <string name="strict_cannot_old">บน Android 13 และเก่ากว่า OSHI ซ่อนเนื้อหาจากแอปการช่วยเหลือพิเศษไม่ได้ ทำได้เพียงเตือนคุณเกี่ยวกับแอปเหล่านั้น</string>
+    <string name="strict_cannot_camera">ยังมีคนถ่ายรูปหน้าจอด้วยอุปกรณ์อื่นได้</string>
+    <string name="strict_cannot_recipient">ปกป้องเฉพาะโทรศัพท์เครื่องนี้ ไม่ใช่โทรศัพท์ของคนที่คุณส่งข้อความถึง</string>
+    <string name="strict_auto_lock_immediate">ทันที (โหมดความปลอดภัยเข้มงวด)</string>
+</resources>

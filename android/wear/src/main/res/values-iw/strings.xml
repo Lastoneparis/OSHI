@@ -48,4 +48,27 @@
     <string name="qr_no">לא</string>
     <string name="qr_busy">לא יכול/ה לדבר עכשיו</string>
     <string name="end_to_end">מוצפן מקצה לקצה על ידי הטלפון שלך</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">מוצמדת</string>
+    <string name="net_internet">אינטרנט</string>
+    <string name="net_nearby">%1$d בקרבת מקום</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">הטלפון לא מחובר · ההודעות ממתינות בטלפון</string>
+    <string name="net_offline_short">הטלפון לא מחובר</string>
+    <string name="voice_message">הודעה קולית</string>
+    <string name="voice_send">שליחת הודעה קולית</string>
+    <string name="voice_cancel">ביטול</string>
+    <string name="voice_permission">יש לאפשר גישה למיקרופון כדי להקליט הודעות קוליות. שום דבר לא נשמר בשעון.</string>
+    <string name="voice_mic_busy">המיקרופון תפוס. אפשר לנסות שוב.</string>
+    <string name="voice_too_short">קצר מדי. כדאי לדבר קצת יותר.</string>
+    <string name="voice_not_sent">לא נשלחה. יש להשאיר את הטלפון קרוב ולנסות שוב.</string>
+    <string name="send_emoji">שליחת אמוג׳י</string>
+    <string name="delivery_sending">בשליחה</string>
+    <string name="delivery_sent">נשלחה</string>
+    <string name="delivery_delivered">נמסרה</string>
+    <string name="delivery_read">נקראה</string>
+    <string name="delivery_failed">לא נמסרה</string>
+    <string name="complication_none">אין הודעות שלא נקראו</string>
+    <string name="tile_reply_to">תשובה ל%1$s</string>
+    <string name="tile_chat_unread">%1$s, לא נקראו: %2$d</string>
 </resources>

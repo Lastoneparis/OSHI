@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Avancerad chattsekretess</string>
+    <string name="adv_privacy_subtitle">Hindrar alla i den här chatten från att spara media, exportera chatten eller använda AI på meddelandena</string>
+    <string name="adv_privacy_learn_more">Läs mer</string>
+    <string name="adv_privacy_notice_on">%1$s aktiverade avancerad chattsekretess. Ingen kan spara media automatiskt, exportera chatten eller använda AI på meddelanden i den här chatten.</string>
+    <string name="adv_privacy_notice_off">%1$s inaktiverade avancerad chattsekretess. Spara media, exportera chatten och AI-funktioner är tillgängliga igen.</string>
+    <string name="adv_privacy_notice_on_you">Du aktiverade avancerad chattsekretess. Ingen kan spara media automatiskt, exportera chatten eller använda AI på meddelanden i den här chatten.</string>
+    <string name="adv_privacy_notice_off_you">Du inaktiverade avancerad chattsekretess. Spara media, exportera chatten och AI-funktioner är tillgängliga igen.</string>
+    <string name="adv_privacy_summary_on">Avancerad chattsekretess aktiverad</string>
+    <string name="adv_privacy_summary_off">Avancerad chattsekretess inaktiverad</string>
+    <string name="adv_privacy_sheet_intro">När någon aktiverar den gäller den för alla i den här chatten:</string>
+    <string name="adv_privacy_sheet_point_save">Media från den här chatten kan inte sparas i galleriet eller under Nedladdningar.</string>
+    <string name="adv_privacy_sheet_point_export">Den här chatten utesluts från chattexporter.</string>
+    <string name="adv_privacy_sheet_point_ai">OSHI:s AI på enheten kan inte läsa den här chatten: inga svarsförslag, ingen översättning, ingen kontext för skrivassistenten.</string>
+    <string name="adv_privacy_sheet_point_screen">Skärmbilder och skärminspelning av den här chatten är blockerade.</string>
+    <string name="adv_privacy_sheet_limits">Alla i chatten kan aktivera eller inaktivera den. Den kan inte hindra någon från att fotografera skärmen, och personer med en äldre version av OSHI påverkas inte.</string>
+    <string name="adv_privacy_blocked_toast">Avancerad chattsekretess är aktiverad i den här chatten</string>
+    <string name="adv_privacy_older_members">Medlemmar med en äldre version av OSHI som inte tillämpar den förrän de uppdaterar: %1$d</string>
+</resources>

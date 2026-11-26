@@ -22,7 +22,7 @@ Configuration = upstream defaults: float, `VAR_ARRAYS`, no custom modes, no DNN,
 runtime CPU detection). **Measured**: this build encodes bit-identically to upstream's own CMake
 build (speech + music, 24/28/32/40 kbit/s, complexity 5/8/10, FEC on/off). Compiles for
 arm64-ios, arm64-ios-simulator, arm64/x86_64-ios-macabi (Catalyst) and macOS.
-`opus_oshi/oshi_opus.h` is our six-function facade (Swift cannot call the variadic `opus_*_ctl`).
+`opus_oshi/oshi_opus.h` is our eight-function facade (decode_fec + an opt-in FEC encoder added by __CALL_FLUIDITY_2026_11_21__) (Swift cannot call the variadic `opus_*_ctl`).
 
 ## `concentus/` — Concentus 1.0.2 (pure Java port of libopus) — Android, Desktop (Windows / Linux / macOS JVM)
 

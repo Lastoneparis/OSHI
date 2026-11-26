@@ -4,10 +4,7 @@
     <string name="app_tagline">Secure Mesh Messenger</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">Welcome to OSHI</string>
-    <string name="onboarding_description">End-to-end encrypted messaging that works even without internet</string>
     <string name="onboarding_create_identity">Create Identity</string>
-    <string name="onboarding_restore_identity">Restore Identity</string>
 
     <!-- Messages -->
     <string name="messages_title">Messages</string>
@@ -93,6 +90,8 @@
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_oled_black">OLED black</string>
     <string name="settings_theme_oled_black_desc">Pure black backgrounds for OLED screens. Applies whenever the dark theme is on.</string>
+    <string name="appearance_glass_effect">Glass effect</string>
+    <string name="appearance_glass_effect_footer">Frosted, see-through bars, cards and menus. Works with Light, Dark and OLED black.</string>
     <string name="settings_backup">Backup Keys</string>
     <string name="settings_about">About</string>
     <string name="settings_version">Version %s</string>
@@ -462,22 +461,9 @@
     <string name="wallpaper_reset">Reset to Default</string>
 
     <!-- Onboarding - Additional -->
-    <string name="onboarding_subtitle">Secure, private messaging that works even without internet</string>
-    <string name="onboarding_key_features">Key Features</string>
-    <string name="onboarding_e2e_title">End-to-End Encryption</string>
-    <string name="onboarding_e2e_desc">All messages are encrypted. Only you and the recipient can read them.</string>
-    <string name="onboarding_mesh_title">Mesh Networking</string>
-    <string name="onboarding_mesh_desc">Send messages directly to nearby users, even without internet.</string>
-    <string name="onboarding_calls_title">Secure Calls</string>
-    <string name="onboarding_calls_desc">Voice and video calls with full encryption.</string>
-    <string name="onboarding_cross_platform_title">Cross-Platform</string>
-    <string name="onboarding_cross_platform_desc">Works with iOS and Android devices seamlessly.</string>
-    <string name="onboarding_create_your_identity">Create Your Identity</string>
-    <string name="onboarding_choose_display_name">Choose a display name for your contacts</string>
     <string name="onboarding_display_name">Display Name</string>
     <string name="onboarding_key_info">A unique encryption key pair will be generated for you. Make sure to backup your keys later.</string>
     <string name="onboarding_back">Back</string>
-    <string name="onboarding_next">Next</string>
     <string name="onboarding_creating">Creating…</string>
     <string name="onboarding_error_create">Failed to create identity: %s</string>
     <string name="onboarding_restore_from_backup">I have a backup — restore my identity</string>
@@ -652,6 +638,8 @@
     <string name="gif_picker_title">GIFs &amp; Stickers</string>
     <string name="gif_tab_gifs">GIFs</string>
     <string name="gif_tab_stickers">Stickers</string>
+    <string name="gif_tab_oshi" translatable="false">OSHI</string>
+    <string name="gif_oshi_hint">Animated OSHI stickers — pick one to send it</string>
     <string name="gif_category_all">All</string>
     <string name="gif_picker_search">Search</string>
     <string name="gif_picker_no_results">Nothing here</string>
@@ -960,8 +948,6 @@
     <string name="onboarding_rule_no_illegal">No illegal content</string>
 
     <!-- Onboarding Disclaimer -->
-    <string name="onboarding_disclaimer_title">Important Notice</string>
-    <string name="onboarding_disclaimer_subtitle">Please read before using OSHI</string>
     <string name="onboarding_disclaimer_audit_title">No Security Audit Yet</string>
     <string name="onboarding_disclaimer_audit_desc">This app has not undergone a professional security audit. While we use strong encryption, use at your own discretion.</string>
     <string name="onboarding_disclaimer_anonymous_title">Privacy-first</string>
@@ -2346,23 +2332,9 @@ Search, navigate, and explore without internet.</string>
          `ConnectivityPage` (OnboardingView.swift:481, :525). English copy taken
          verbatim from OSHI/en.lproj/Localizable.strings so the two platforms say
          the same thing; the other 33 locales still need these keys translated. -->
-    <string name="onboarding_message_title">Send Your First Message</string>
-    <string name="onboarding_message_description">Connect with someone by scanning their QR code or entering their public key.</string>
-    <string name="onboarding_method_qr_title">Method 1: Scan QR Code</string>
-    <string name="onboarding_method_paste_title">Method 2: Copy/Paste Public Key</string>
-    <string name="onboarding_reach_title">How your messages travel</string>
-    <string name="onboarding_reach_subtitle">OSHI works two ways — with or without the internet.</string>
-    <string name="onboarding_reach_online_title">Online</string>
-    <string name="onboarding_reach_online_body">With internet, reach anyone in the world instantly.</string>
-    <string name="onboarding_reach_offline_title">Offline (mesh)</string>
-    <string name="onboarding_reach_offline_body">No internet? Messages hop phone-to-phone through people nearby who have OSHI open.</string>
     <string name="onboarding_reach_range1_dist">~100 m</string>
-    <string name="onboarding_reach_range1_label">Phone to phone, directly</string>
     <string name="onboarding_reach_range2_dist">~500 m</string>
-    <string name="onboarding_reach_range2_label">Further, when others relay in between</string>
     <string name="onboarding_reach_range3_dist">~30 km</string>
-    <string name="onboarding_reach_range3_label">With a Meshtastic LoRa radio over Bluetooth</string>
-    <string name="onboarding_reach_tip">Offline needs other people nearby with OSHI open. The more people, the further your message travels.</string>
     <string name="onboarding_reach_disclaimer">Offline mesh is short range. Both phones need OSHI open to find each other, roughly 100 m apart in the open and much less through walls. It reaches further only when other people nearby also have OSHI open to pass the message along. If no one is in range, OSHI sends over the internet instead.</string>
 
     <!-- Settings entry point for the bubble accent / silhouette / bold-text picker,
@@ -2647,4 +2619,28 @@ Search, navigate, and explore without internet.</string>
     <string name="settings_animated_reactions">Animated OSHI reactions</string>
     <string name="settings_animated_reactions_desc">Off: standard emoji</string>
     <string name="reactions_new_hint">New: iPhones on an older version may show these as 👍</string>
+    <!-- __UPDATE_PROMPT_ANDROID_2026_11_21__ Play in-app update (FLEXIBLE): dialog + restart bar. -->
+    <string name="inapp_update_title">Update available</string>
+    <string name="inapp_update_body">A new version of OSHI is on Google Play. It downloads in the background, so you can keep using the app.</string>
+    <string name="inapp_update_now">Update</string>
+    <string name="inapp_update_later">Later</string>
+    <string name="inapp_update_ready">Update ready</string>
+    <string name="inapp_update_restart">Restart</string>
+    <!-- __CALL_WAKE_2026_11_22__ -->
+    <string name="call_state_calling">Calling…</string>
+    <string name="call_reach_unreachable">Not reachable right now</string>
+    <string name="call_readiness_title">Incoming calls may not ring</string>
+    <string name="call_readiness_notifications">Notifications for OSHI are off — tap to allow them</string>
+    <string name="call_readiness_channel">The “Incoming calls” notifications are off — tap to turn them on</string>
+    <string name="call_readiness_full_screen">Full-screen call alerts are not allowed — tap to allow them</string>
+    <string name="call_readiness_background">Android restricts OSHI in the background — tap and set battery to Unrestricted</string>
+    <string name="composer_format_bold">Bold</string>
+    <string name="composer_format_underline">Underline</string>
+    <!-- __GROUP_HEADER_ISLAND_2026_11_24__ floating group header -->
+    <string name="group_header_info_a11y">Group info, %1$s</string>
+    <string name="group_header_search_a11y">Search in conversation</string>
+    <plurals name="group_header_subscribers">
+        <item quantity="one">%1$d subscriber</item>
+        <item quantity="other">%1$d subscribers</item>
+    </plurals>
 </resources>

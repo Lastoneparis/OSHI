@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Szigorú biztonsági mód</string>
+    <string name="strict_status_on">Be: nincs másolás, nincs képernyőkép, rejtve a képernyőolvasó appok elől</string>
+    <string name="strict_status_off">Ki. Lezárja az OSHI-t, ha a telefont figyelhetik</string>
+    <string name="strict_hero_on">A szigorú biztonsági mód be van kapcsolva</string>
+    <string name="strict_intro">Arra az esetre, ha a telefont figyelhetik. Egyetlen kapcsolóval lezárja az OSHI-t: semmit sem lehet kimásolni, a képernyőt nem lehet rögzíteni, a képernyőt olvasó appok, köztük az MI-ügynökök, pedig semmit sem látnak.</string>
+    <string name="strict_section_switch">Mód</string>
+    <string name="strict_toggle_title">Szigorú biztonsági mód</string>
+    <string name="strict_toggle_on">Bekapcsolva ezen az eszközön</string>
+    <string name="strict_toggle_off">Ki</string>
+    <string name="strict_block_paste_title">A beillesztés tiltása is</string>
+    <string name="strict_block_paste_subtitle">Az OSHI-ba sem lehet semmit beilleszteni</string>
+    <string name="strict_hide_presence_title">Olvasási visszaigazolás és gépelés elrejtése</string>
+    <string name="strict_hide_presence_subtitle">Mások nem látják, mikor olvasol vagy írsz</string>
+    <string name="strict_forced_subtitle">A szigorú biztonsági mód állította be</string>
+    <string name="strict_blocked_toast">A szigorú biztonsági mód letiltotta</string>
+    <string name="strict_unlock_title">Szigorú biztonsági mód kikapcsolása</string>
+    <string name="strict_unlock_subtitle">Erősítsd meg, hogy te vagy az</string>
+    <string name="strict_threats_title">Appok, amelyek olvashatják vagy vezérelhetik a képernyőt</string>
+    <string name="strict_threats_none">Nem találtunk ilyet ezen a telefonon.</string>
+    <string name="strict_threat_a11y">Kisegítő szolgáltatás, amely nem segédeszköz</string>
+    <string name="strict_threat_remote">Távvezérlő vagy képernyőtükröző app</string>
+    <string name="strict_threats_open">Áttekintés</string>
+    <string name="strict_threats_explainer">Az OSHI nem tud kikapcsolni más appot. Ha valamelyiket nem ismered fel, kapcsold ki az Android Beállítások › Kisegítő lehetőségek menüjében, vagy töröld.</string>
+    <string name="strict_banner_title">Appok olvashatják vagy vezérelhetik ezt a képernyőt</string>
+    <string name="strict_banner_body">%1$s. A szigorú biztonsági mód elrejti előlük az OSHI-t, ahol az Android engedi.</string>
+    <string name="strict_banner_dismiss">Bezárás</string>
+    <string name="strict_does_title">Mit csinál</string>
+    <string name="strict_does_copy">Üzenetek nem másolhatók, vághatók ki, továbbíthatók, oszthatók meg vagy menthetők. A szöveg nem jelölhető ki, és minden, amit az OSHI a vágólapra tett, törlődik.</string>
+    <string name="strict_does_paste">A beillesztés az OSHI-ba tiltott, ha a „A beillesztés tiltása is” be van kapcsolva, a billentyűzet beillesztés parancsát is beleértve.</string>
+    <string name="strict_does_screen">A képernyőképek, a képernyőfelvétel és a képernyőmegosztás fekete képernyőt mutatnak. A legutóbbi appok előnézete rejtett.</string>
+    <string name="strict_does_agents">A képernyőt a kisegítő lehetőségeken át olvasó appok, köztük az MI-ügynökök, nem látják az OSHI tartalmát (Android 14 és újabb). Az általuk küldött koppintásokat figyelmen kívül hagyja.</string>
+    <string name="strict_does_overlays">A koppintásokat figyelmen kívül hagyja, amíg másik app rajzol az OSHI fölé.</string>
+    <string name="strict_does_notifications">Az értesítésekben csak az „Új üzenet” áll: nincs név, fotó vagy szöveg.</string>
+    <string name="strict_does_lock">Appzár minden alkalommal, amikor visszatérsz az OSHI-ba (ha a telefonon van képernyőzár).</string>
+    <string name="strict_does_keyboard">Inkognitó billentyűzet: a billentyűzetet megkéri, hogy ne tanulja meg, amit gépelsz.</string>
+    <string name="strict_does_network">Nincs linkelőnézet és nincs GIPHY-keresés: semmi sem töltődik le külső oldalakról.</string>
+    <string name="strict_does_presence">Az olvasási visszaigazolás és a gépelésjelzők ki vannak kapcsolva (ha az elrejtést választottad).</string>
+    <string name="strict_does_relay">Az adatvédelmi relé bekapcsol, ha elérhető.</string>
+    <string name="strict_does_restore">A korábbi beállításaid visszatérnek, ha kikapcsolod a módot.</string>
+    <string name="strict_cannot_title">Mit nem tud</string>
+    <string name="strict_cannot_malware">Egyetlen app sem védhet teljesen kártevőtől vagy feltört (rootolt) telefontól.</string>
+    <string name="strict_cannot_keyboard">A billentyűzeted továbbra is látja, mit írsz. A vágólapról általa beírt javaslat nem különböztethető meg a gépeléstől.</string>
+    <string name="strict_cannot_readers">A vak és gyengénlátó emberek képernyőolvasói tovább működnek, de más kisegítő appok nem olvashatják az OSHI-t, amíg a mód be van kapcsolva.</string>
+    <string name="strict_cannot_old">Android 13 és régebbi rendszeren az OSHI nem tudja elrejteni a tartalmát a kisegítő appok elől. Csak figyelmeztetni tud rájuk.</string>
+    <string name="strict_cannot_camera">A képernyőt valaki még mindig lefényképezheti másik eszközzel.</string>
+    <string name="strict_cannot_recipient">Csak ezt a telefont védi, a címzettekét nem.</string>
+    <string name="strict_auto_lock_immediate">Azonnal (Szigorú biztonsági mód)</string>
+</resources>

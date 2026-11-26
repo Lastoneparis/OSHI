@@ -63,9 +63,43 @@ class UDPRelayClient {
 
         /** Token refetches allowed per call for nack 01/04 (the endpoint is 30/min per identity). */
         private const val MAX_TOKEN_REFETCHES = 4
+
+        /**
+         * Parse a server → client frame `[type][senderKeyLen][senderKey][callIdLen][callId][payload]`.
+         * Null when truncated. The sender and callId are the ones the relay stamped: the
+         * relay only forwards between two registered holders of this call's token
+         * (__CALL_MEDIA_AUTH_2026_09_23__), so they are attested, not peer-claimed.
+         */
+        fun parseInbound(data: ByteArray): InboundFrame? {
+            if (data.size < 3) return null
+            var offset = 1
+            val senderKeyLen = data[offset].toInt() and 0xFF
+            offset += 1
+            if (offset + senderKeyLen > data.size) return null
+            val sender = String(data, offset, senderKeyLen, Charsets.UTF_8)
+            offset += senderKeyLen
+            if (offset >= data.size) return null
+            val callIdLen = data[offset].toInt() and 0xFF
+            offset += 1
+            if (offset + callIdLen > data.size) return null
+            val callId = String(data, offset, callIdLen, Charsets.UTF_8)
+            offset += callIdLen
+            val payload = if (offset < data.size) data.copyOfRange(offset, data.size) else ByteArray(0)
+            return InboundFrame(data[0], sender, callId, payload)
+        }
     }
 
-    @Volatile var onAudioPacket: ((ByteArray) -> Unit)? = null
+    /** Relay-stamped origin of an inbound frame. */
+    data class RelayOrigin(val sender: String, val callId: String)
+
+    class InboundFrame(val type: Byte, val sender: String, val callId: String, val payload: ByteArray)
+
+    /**
+     * Inbound audio-channel payload plus the relay-stamped [RelayOrigin] of its frame.
+     * __BARE_CALLEND_ATTESTED_2026_11_21__ the origin is what lets a legacy bare `0x04`
+     * hang-up be tied to THIS call and THIS peer (see [CallSignalGuards.mayEndFromBareMediaCallEnd]).
+     */
+    @Volatile var onAudioPacket: ((ByteArray, RelayOrigin) -> Unit)? = null
     @Volatile var onVideoPacket: ((ByteArray) -> Unit)? = null
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -104,6 +138,8 @@ class UDPRelayClient {
     @Volatile private var registered: Boolean = false
 
     val isRegistered: Boolean get() = registered
+    /** __EGRESS_STALL_2026_11_23__ The relay refused this call's token for good (see [onNack]). */
+    val isAuthRefused: Boolean get() = authGaveUp
     val lastServerReplyAtMs: Long get() = lastReplyAtMs.get()
 
     /**
@@ -341,32 +377,16 @@ class UDPRelayClient {
      */
     private fun handleInbound(data: ByteArray) {
         if (data.isEmpty()) return
-        val type = data[0]
         // Register ack: 2 bytes total, no further fields. Marks the session
         // as alive for the demote-on-stale logic in EnhancedCallManager.
-        if (type == TYPE_REGISTER && data.size == 2) {
+        if (data[0] == TYPE_REGISTER && data.size == 2) {
             if (RelayAuth.isAck(data)) registered = true
             return
         }
-        if (data.size < 3) return
-        var offset = 1
-        val senderKeyLen = data[offset].toInt() and 0xFF
-        offset += 1
-        if (offset + senderKeyLen > data.size) return
-        offset += senderKeyLen
-        if (offset >= data.size) return
-        val callIdLen = data[offset].toInt() and 0xFF
-        offset += 1
-        if (offset + callIdLen > data.size) return
-        offset += callIdLen
-        val payload = if (offset < data.size) {
-            data.copyOfRange(offset, data.size)
-        } else {
-            ByteArray(0)
-        }
-        when (type) {
-            TYPE_AUDIO -> onAudioPacket?.invoke(payload)
-            TYPE_VIDEO -> onVideoPacket?.invoke(payload)
+        val frame = parseInbound(data) ?: return
+        when (frame.type) {
+            TYPE_AUDIO -> onAudioPacket?.invoke(frame.payload, RelayOrigin(frame.sender, frame.callId))
+            TYPE_VIDEO -> onVideoPacket?.invoke(frame.payload)
             TYPE_PING -> { /* server liveness ping; recency already updated */ }
             else -> { /* unknown — drop */ }
         }

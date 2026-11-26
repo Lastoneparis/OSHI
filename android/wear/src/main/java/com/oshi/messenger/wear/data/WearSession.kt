@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.oshi.messenger.wear.DebugSources
 import com.oshi.wearbridge.WearConvKind
 import com.oshi.wearbridge.WearConversation
+import com.oshi.wearbridge.WearNet
+import com.oshi.wearbridge.WearProtocol
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,10 +37,32 @@ sealed interface SendState {
  */
 class WearSession(app: Application) : AndroidViewModel(app) {
 
-    private val source: WearSource = DebugSources.fake(app) ?: PhoneWearSource(app)
+    private val source: WearSource = testSource ?: DebugSources.fake(app) ?: PhoneWearSource(app)
+
+    companion object {
+        /** Screenshot / UI tests only: the source the next session uses. */
+        @androidx.annotation.VisibleForTesting
+        @Volatile var testSource: WearSource? = null
+    }
 
     private val _list = MutableStateFlow<Load<List<WearConversation>>>(Load.Loading)
     val list: StateFlow<Load<List<WearConversation>>> = _list.asStateFlow()
+
+    /** __WEAR_POLISH_2026_11_25__ What the phone can do (empty until the first list, or for an older phone). */
+    private val _caps = MutableStateFlow<Set<String>>(emptySet())
+    val caps: StateFlow<Set<String>> = _caps.asStateFlow()
+
+    /** How the phone is connected (internet / nearby mesh / LoRa); null when unknown. */
+    private val _net = MutableStateFlow<WearNet?>(null)
+    val net: StateFlow<WearNet?> = _net.asStateFlow()
+
+    /**
+     * Photo previews by message id, in memory only. A null value = asked and
+     * there is none (so it is not asked again). Dropped by [clear].
+     */
+    private val _thumbs = MutableStateFlow<Map<String, ByteArray?>>(emptyMap())
+    val thumbs: StateFlow<Map<String, ByteArray?>> = _thumbs.asStateFlow()
+    private val thumbsAsked = java.util.Collections.synchronizedSet(mutableSetOf<String>())
 
     private val _threads = MutableStateFlow<Map<String, Load<WearThread>>>(emptyMap())
     val threads: StateFlow<Map<String, Load<WearThread>>> = _threads.asStateFlow()
@@ -61,10 +85,50 @@ class WearSession(app: Application) : AndroidViewModel(app) {
     fun refreshList() {
         if (_list.value !is Load.Ready) _list.value = Load.Loading
         viewModelScope.launch {
-            _list.value = when (val r = source.conversations()) {
-                is Outcome.Ok -> Load.Ready(r.value)
+            _list.value = when (val r = source.inbox()) {
+                is Outcome.Ok -> {
+                    _caps.value = r.value.caps
+                    _net.value = r.value.net
+                    Load.Ready(r.value.conversations)
+                }
                 is Outcome.Fail -> Load.Failed(r.reason)
             }
+        }
+    }
+
+    fun can(cap: String): Boolean = cap in _caps.value
+
+    /**
+     * __WEAR_POLISH_2026_11_25__ The thread is on screen: mark it read on the
+     * phone, as opening it there would (only when the phone supports it, and
+     * only when there is something unread). The list badge drops at once.
+     */
+    fun markRead(kind: WearConvKind, id: String) {
+        if (!can(WearProtocol.CAP_READ)) return
+        val conv = conversation(kind, id) ?: return
+        if (conv.unread <= 0) return
+        _list.update { l ->
+            if (l is Load.Ready) Load.Ready(l.value.map { if (it.kind == kind && it.id == id) it.copy(unread = 0) else it }) else l
+        }
+        viewModelScope.launch { source.markRead(kind, id) }
+    }
+
+    /** Ask once for a photo preview; the bubble redraws when it lands. */
+    fun requestThumb(kind: WearConvKind, id: String, messageId: String) {
+        if (!can(WearProtocol.CAP_THUMB) || !thumbsAsked.add(messageId)) return
+        viewModelScope.launch {
+            val bytes = (source.thumbnail(kind, id, messageId) as? Outcome.Ok)?.value
+            _thumbs.update { it + (messageId to bytes) }
+        }
+    }
+
+    /** A voice note recorded on the watch: hand it to the phone, which sends it. */
+    fun sendVoice(kind: WearConvKind, id: String, audio: ByteArray, durationMs: Long) {
+        _send.value = SendState.Sending
+        viewModelScope.launch {
+            val r = source.sendVoice(kind, id, audio, durationMs)
+            _send.value = if (r is Outcome.Fail) SendState.Failed(r.reason) else SendState.Sent
+            if (r is Outcome.Ok) { refreshThread(kind, id); refreshList() }
         }
     }
 
@@ -108,6 +172,8 @@ class WearSession(app: Application) : AndroidViewModel(app) {
     fun clear() {
         _list.value = Load.Loading
         _threads.value = emptyMap()
+        _thumbs.value = emptyMap()
+        thumbsAsked.clear()
         _send.value = SendState.Idle
     }
 

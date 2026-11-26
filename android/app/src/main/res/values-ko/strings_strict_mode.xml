@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">엄격 보안 모드</string>
+    <string name="strict_status_on">켜짐: 복사 불가, 화면 캡처 불가, 화면을 읽는 앱에서 숨김</string>
+    <string name="strict_status_off">꺼짐. 휴대전화가 감시당할 수 있을 때 OSHI를 단단히 잠급니다</string>
+    <string name="strict_hero_on">엄격 보안 모드가 켜져 있습니다</string>
+    <string name="strict_intro">휴대전화가 감시당할 수 있을 때를 위한 모드입니다. 스위치 하나로 OSHI를 단단히 잠급니다. 아무것도 복사할 수 없고, 화면을 캡처할 수 없으며, AI 에이전트를 포함해 화면을 읽는 앱은 아무것도 볼 수 없습니다.</string>
+    <string name="strict_section_switch">모드</string>
+    <string name="strict_toggle_title">엄격 보안 모드</string>
+    <string name="strict_toggle_on">이 기기에서 켜짐</string>
+    <string name="strict_toggle_off">꺼짐</string>
+    <string name="strict_block_paste_title">붙여넣기도 차단</string>
+    <string name="strict_block_paste_subtitle">OSHI에도 아무것도 붙여넣을 수 없습니다</string>
+    <string name="strict_hide_presence_title">읽음 표시 및 입력 중 숨기기</string>
+    <string name="strict_hide_presence_subtitle">내가 읽거나 입력하는 시점을 다른 사람이 볼 수 없습니다</string>
+    <string name="strict_forced_subtitle">엄격 보안 모드에서 설정됨</string>
+    <string name="strict_blocked_toast">엄격 보안 모드로 차단됨</string>
+    <string name="strict_unlock_title">엄격 보안 모드 끄기</string>
+    <string name="strict_unlock_subtitle">본인인지 확인하세요</string>
+    <string name="strict_threats_title">화면을 읽거나 제어할 수 있는 앱</string>
+    <string name="strict_threats_none">이 휴대전화에서 발견되지 않았습니다.</string>
+    <string name="strict_threat_a11y">보조 도구가 아닌 접근성 서비스</string>
+    <string name="strict_threat_remote">원격 제어 또는 화면 미러링 앱</string>
+    <string name="strict_threats_open">검토</string>
+    <string name="strict_threats_explainer">OSHI는 다른 앱을 끌 수 없습니다. 모르는 앱이 있다면 Android 설정 › 접근성에서 끄거나 삭제하세요.</string>
+    <string name="strict_banner_title">앱이 이 화면을 읽거나 제어할 수 있습니다</string>
+    <string name="strict_banner_body">%1$s. 엄격 보안 모드는 Android가 허용하는 범위에서 OSHI를 해당 앱에서 숨깁니다.</string>
+    <string name="strict_banner_dismiss">닫기</string>
+    <string name="strict_does_title">제공 기능</string>
+    <string name="strict_does_copy">메시지를 복사, 잘라내기, 전달, 공유, 저장할 수 없습니다. 텍스트를 선택할 수 없고, OSHI가 클립보드에 넣은 내용은 삭제됩니다.</string>
+    <string name="strict_does_paste">“붙여넣기도 차단”이 켜져 있으면 키보드의 붙여넣기 명령을 포함해 OSHI로의 붙여넣기가 차단됩니다.</string>
+    <string name="strict_does_screen">스크린샷, 화면 녹화, 화면 공유에는 검은 화면이 나타납니다. 최근 앱 미리보기도 숨겨집니다.</string>
+    <string name="strict_does_agents">접근성을 통해 화면을 읽는 앱(AI 에이전트 포함)은 OSHI 콘텐츠를 볼 수 없습니다(Android 14 이상). 이들이 주입한 탭은 무시됩니다.</string>
+    <string name="strict_does_overlays">다른 앱이 OSHI 위에 그리는 동안에는 탭이 무시됩니다.</string>
+    <string name="strict_does_notifications">알림에는 “새 메시지”만 표시됩니다. 이름도, 사진도, 내용도 없습니다.</string>
+    <string name="strict_does_lock">OSHI로 돌아올 때마다 앱 잠금이 적용됩니다(휴대전화에 화면 잠금이 있는 경우).</string>
+    <string name="strict_does_keyboard">시크릿 키보드: 입력한 내용을 학습하지 않도록 키보드에 요청합니다.</string>
+    <string name="strict_does_network">링크 미리보기와 GIPHY 검색 없음: 외부 사이트에서 아무것도 가져오지 않습니다.</string>
+    <string name="strict_does_presence">읽음 표시와 입력 중 표시 꺼짐(숨기기를 선택한 경우).</string>
+    <string name="strict_does_relay">사용할 수 있으면 개인정보 보호 릴레이가 켜집니다.</string>
+    <string name="strict_does_restore">모드를 끄면 이전 설정이 복원됩니다.</string>
+    <string name="strict_cannot_title">할 수 없는 일</string>
+    <string name="strict_cannot_malware">어떤 앱도 악성코드나 침해된(루팅된) 휴대전화로부터 완전히 보호해 줄 수는 없습니다.</string>
+    <string name="strict_cannot_keyboard">키보드는 여전히 입력 내용을 봅니다. 키보드가 대신 입력해 주는 클립보드 제안은 직접 입력과 구분할 수 없습니다.</string>
+    <string name="strict_cannot_readers">시각 장애인과 저시력자를 위한 스크린 리더는 계속 작동하지만, 모드가 켜져 있는 동안 다른 접근성 앱은 OSHI를 읽을 수 없습니다.</string>
+    <string name="strict_cannot_old">Android 13 이하에서는 OSHI가 접근성 앱에서 콘텐츠를 숨길 수 없습니다. 경고만 할 수 있습니다.</string>
+    <string name="strict_cannot_camera">다른 기기로 화면을 촬영하는 것은 막을 수 없습니다.</string>
+    <string name="strict_cannot_recipient">이 휴대전화만 보호하며, 메시지를 주고받는 상대의 휴대전화는 보호하지 않습니다.</string>
+    <string name="strict_auto_lock_immediate">즉시 (엄격 보안 모드)</string>
+</resources>

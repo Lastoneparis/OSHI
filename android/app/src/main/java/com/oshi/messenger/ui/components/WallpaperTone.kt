@@ -176,7 +176,12 @@ fun WithChatScheme(dark: Boolean, content: @Composable () -> Unit) {
     if (isDarkScheme() == dark) {
         content()
     } else {
-        val scheme = oshiColorScheme(dark, com.oshi.messenger.ui.theme.LocalOledBlack.current)
+        val oled = com.oshi.messenger.ui.theme.LocalOledBlack.current
+        val glass = com.oshi.messenger.ui.theme.GlassDefaults.resolve(
+            com.oshi.messenger.ui.theme.LocalGlassPref.current,
+            com.oshi.messenger.ui.theme.GlassDefaults.styleFor(dark, oled),
+        )
+        val scheme = oshiColorScheme(dark, oled, glass)
         MaterialTheme(
             colorScheme = scheme,
             typography = MaterialTheme.typography,
@@ -212,7 +217,8 @@ fun WallpaperMiniChat(
             // will actually look like (iOS WallpaperMiniChat does).
             val received = SolidColor(Oshi.Bubble.received(dark, com.oshi.messenger.ui.theme.isOledScheme()))
             val onReceived = MaterialTheme.colorScheme.onSurface
-            val sent = LocalBubbleAppearance.current.accent.brush
+            val sentAccent = LocalBubbleAppearance.current.accent
+            val sent = sentAccent.surfaceBrush(dark)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -222,8 +228,9 @@ fun WallpaperMiniChat(
                 MiniBubble(outgoing = false, compact = compact, fill = received, ink = onReceived,
                     rim = Oshi.Bubble.rim(outgoing = false, darkTheme = dark),
                     modifier = Modifier.align(Alignment.Start))
-                MiniBubble(outgoing = true, compact = compact, fill = sent, ink = Color.White,
-                    rim = Oshi.Bubble.rim(outgoing = true, darkTheme = dark),
+                MiniBubble(outgoing = true, compact = compact, fill = sent, ink = sentAccent.ink(dark),
+                    rim = Oshi.Bubble.rimInk(true, dark, sentAccent.isTonal(dark))
+                        .copy(alpha = Oshi.Bubble.rimAlpha(true, dark, sentAccent.isTonal(dark))),
                     modifier = Modifier.align(Alignment.End))
             }
         }

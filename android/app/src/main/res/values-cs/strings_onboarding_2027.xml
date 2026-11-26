@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Přeskočit</string>
+    <string name="ob27_continue">Pokračovat</string>
+    <string name="ob27_page_of">Strana %1$d z %2$d</string>
+    <string name="ob27_private_title">Jen vy a oni</string>
+    <string name="ob27_private_body">Zprávy a hovory jsou ve vašem telefonu koncově šifrované. Nikdo mezi vámi je nepřečte — ani OSHI.</string>
+    <string name="ob27_offline_title">Funguje bez internetu</string>
+    <string name="ob27_offline_body">Nemáte síť? Zprávy přeskakují z telefonu na telefon přes lidi poblíž, kteří mají otevřené OSHI. Rádio LoRa je donese ještě dál.</string>
+    <string name="ob27_range_direct">přímo</string>
+    <string name="ob27_range_relayed">přes další</string>
+    <string name="ob27_range_lora">rádio LoRa</string>
+    <string name="ob27_anon_title">Bez telefonního čísla</string>
+    <string name="ob27_anon_body">Žádný účet, e-mail ani číslo k registraci. Vaše identita je klíč vytvořený v tomto telefonu.</string>
+    <string name="ob27_together_title">Přizvěte své blízké</string>
+    <string name="ob27_together_body">Pište si ve dvou nebo ve skupinách. Přidejte někoho naskenováním jeho QR kódu nebo zasláním pozvánky.</string>
+    <string name="ob27_rules_title">Než začnete</string>
+    <string name="ob27_rules_subtitle">Pár pravidel a co OSHI umí a co zatím ne.</string>
+    <string name="ob27_rules_do">Co dělat</string>
+    <string name="ob27_rules_dont">Nikdy</string>
+    <string name="ob27_good_to_know">Dobré vědět</string>
+    <string name="ob27_show_details">Zobrazit podrobnosti</string>
+    <string name="ob27_hide_details">Skrýt podrobnosti</string>
+    <string name="ob27_agree">Rozumím</string>
+    <string name="ob27_notif_title">Nezmeškejte zprávy</string>
+    <string name="ob27_notif_body">Povolte oznámení, abyste viděli nové zprávy a hovory. Kdykoli je můžete vypnout v Nastavení.</string>
+    <string name="ob27_notif_allow">Povolit oznámení</string>
+    <string name="ob27_not_now">Teď ne</string>
+    <string name="ob27_identity_title">Zvolte jméno</string>
+    <string name="ob27_identity_body">Uvidí ho vaše kontakty. Později ho můžete změnit.</string>
+    <string name="ob27_already">Už používáte OSHI?</string>
+</resources>

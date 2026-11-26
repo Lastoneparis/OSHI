@@ -1062,6 +1062,9 @@ struct ReactionOverlay: View {
     /// that is the only case where the answer exists: receipts are addressed
     /// to the sender, so this device knows nothing about anyone else's message.
     var onInfo: (() -> Void)? = nil
+    /// __CHANNEL_WEB_2026_11_26__ "Web link" of a channel post that is on the
+    /// public web (copy link / share / embed code). nil = not offered.
+    var onWebLink: (() -> Void)? = nil
     /// __GROUP_INFO_SETTINGS_2026_11_20__ nil = every reaction; empty = picker hidden.
     var reactionChoices: [ReactionEmoji]? = nil
 
@@ -1187,7 +1190,7 @@ struct ReactionOverlay: View {
         // this, a message whose only actions are those two would still open an
         // action bar, and the bar would be empty.
         let forwardOrCopy = !blockForwardAndCopy && (onForward != nil || onCopy != nil)
-        return forwardOrCopy || onReply != nil || onDelete != nil || onTranslate != nil || onReplyPrivate != nil || onPin != nil || onEdit != nil || onInfo != nil
+        return forwardOrCopy || onReply != nil || onDelete != nil || onTranslate != nil || onReplyPrivate != nil || onPin != nil || onEdit != nil || onInfo != nil || onWebLink != nil
     }
 
     // MARK: - Message Actions Bar
@@ -1291,6 +1294,19 @@ struct ReactionOverlay: View {
                     color: brandColor,
                     action: {
                         onTranslate()
+                        dismissOverlay()
+                    }
+                )
+            }
+
+            // __CHANNEL_WEB_2026_11_26__ Web link (copy / share / embed).
+            if let onWebLink = onWebLink {
+                MessageActionButton(
+                    icon: "globe",
+                    label: "cw_post_menu".localized,
+                    color: brandColor,
+                    action: {
+                        onWebLink()
                         dismissOverlay()
                     }
                 )

@@ -45,6 +45,13 @@ class MailViewModel @Inject constructor(
         val messages: List<OshiMailClient.Message> = emptyList(),
         val folder: String = "inbox",
         val error: String? = null,
+        /**
+         * __MAIL_OFFLINE_KEEPS_MAILBOX_2026_11_25__ The last account refresh could not reach
+         * the server (offline, timeout, 5xx). With no remembered mailbox the screen shows
+         * "can't reach mail" + Retry — never the address form, which is for a server-confirmed
+         * `no-mailbox` only.
+         */
+        val unreachable: Boolean = false,
     )
 
     private val _state = MutableStateFlow(UiState())
@@ -127,23 +134,22 @@ class MailViewModel @Inject constructor(
     val maxAttachmentBytes: Int get() = client.maxAttachmentTotalBytes
     val keyBasedLocalpart: String get() = client.keyBasedLocalpart()
 
-    init { refresh() }
+    init {
+        // A mailbox this identity already had is shown at once, network or not.
+        client.cachedAccount()?.let { cached ->
+            _state.value = _state.value.copy(loading = false, hasMailbox = true, account = cached)
+        }
+        refresh()
+    }
 
     fun refresh() {
         viewModelScope.launch {
             try {
                 val account = client.account()
-                _state.value = _state.value.copy(loading = false, hasMailbox = true, account = account, error = null)
+                _state.value = _state.value.copy(loading = false, hasMailbox = true, account = account, error = null, unreachable = false)
                 loadInbox()
-            } catch (e: OshiMailClient.MailException) {
-                _state.value = _state.value.copy(
-                    loading = false,
-                    // "no mailbox yet" is not an error; it is the signup state.
-                    hasMailbox = e.code != "no-mailbox",
-                    error = if (e.code == "no-mailbox") null else e.message,
-                )
             } catch (e: Exception) {
-                _state.value = _state.value.copy(loading = false, error = e.message)
+                _state.value = MailRefreshOutcome.afterFailure(_state.value, e)
             }
         }
     }
@@ -540,5 +546,29 @@ class MailViewModel @Inject constructor(
 
         private val IMAGE_EXTENSIONS = setOf("png", "jpg", "jpeg", "gif", "webp")
         private val TEXT_EXTENSIONS = setOf("txt", "md", "json", "csv", "log", "xml", "html")
+    }
+}
+
+/**
+ * __MAIL_OFFLINE_KEEPS_MAILBOX_2026_11_25__ What a failed account refresh does to the screen.
+ * Pure, so the three cases are unit-tested:
+ *  - server says `no-mailbox`  → address form (hasMailbox=false), no error;
+ *  - anything else, mailbox known (cached or loaded earlier) → keep showing it, with the error;
+ *  - anything else, nothing known → `unreachable` (retry screen), NOT the address form.
+ */
+internal object MailRefreshOutcome {
+    const val UNREACHABLE_MESSAGE = "Can't reach mail right now. Showing your mailbox as last loaded."
+    fun afterFailure(current: MailViewModel.UiState, e: Exception): MailViewModel.UiState {
+        val noMailbox = e is OshiMailClient.MailException && e.code == "no-mailbox"
+        return if (noMailbox) {
+            current.copy(loading = false, hasMailbox = false, account = null, error = null, unreachable = false)
+        } else {
+            current.copy(
+                loading = false,
+                hasMailbox = current.hasMailbox || current.account != null,
+                error = UNREACHABLE_MESSAGE,
+                unreachable = true,
+            )
+        }
     }
 }

@@ -152,7 +152,7 @@ class MediaCaptionAndMeshIdWireTest {
     @Test
     fun `a contact card or GIF on the legacy leg uses iOS's own wrapper`() {
         assertEquals("contact", MessageRepository.legacyWireMediaType(MediaType.CONTACT, false))
-        assertEquals("gif", MessageRepository.legacyWireMediaType(MediaType.IMAGE, true))
+        assertEquals("image", MessageRepository.legacyWireMediaType(MediaType.IMAGE, true))  // __GIF_COMPAT_IOS1043_2026_11_21__
         assertNull(MessageRepository.legacyWireMediaType(MediaType.IMAGE, false))
         assertNull(MessageRepository.legacyWireMediaType(MediaType.AUDIO, false))
         val env = JSONObject(

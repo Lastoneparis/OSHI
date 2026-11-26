@@ -9,6 +9,8 @@ import com.oshi.wearbridge.WearAvatar
 import com.oshi.wearbridge.WearConvKind
 import com.oshi.wearbridge.WearConversation
 import com.oshi.wearbridge.WearMessage
+import com.oshi.wearbridge.WearNet
+import com.oshi.wearbridge.WearVoiceFrame
 import com.oshi.wearbridge.WearOp
 import com.oshi.wearbridge.WearProtocol
 import com.oshi.wearbridge.WearRequest
@@ -16,6 +18,7 @@ import com.oshi.wearbridge.WearResponse
 import com.oshi.wearbridge.WearStatus
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -52,7 +55,26 @@ class WearBridgeHandlerTest {
         override suspend fun react(kind: WearConvKind, id: String, messageId: String, emoji: String): WearStatus {
             calls += "react:${kind.wire}:$id:$messageId:$emoji"; return WearStatus.OK
         }
+        override suspend fun markRead(kind: WearConvKind, id: String): WearStatus {
+            calls += "read:${kind.wire}:$id"; return WearStatus.OK
+        }
+        var thumb: ByteArray? = byteArrayOf(1, 2, 3)
+        override suspend fun thumbnail(kind: WearConvKind, id: String, messageId: String): ByteArray? {
+            calls += "thumb:${kind.wire}:$id:$messageId"; return thumb
+        }
+        override suspend fun sendVoice(kind: WearConvKind, id: String, audio: ByteArray, durationMs: Long): WearStatus {
+            calls += "voice:${kind.wire}:$id:${audio.size}:$durationMs"; return WearStatus.OK
+        }
+        override fun network() = WearNet(internet = false, meshPeers = 2, lora = true)
+        var strict = false
+        override fun strictGlance() = strict
     }
+
+    /** A minimal ISO-BMFF header: the `ftyp` box the voice path insists on. */
+    private val m4a = byteArrayOf(0, 0, 0, 24) + "ftypM4A ".toByteArray() + ByteArray(200)
+    private fun voiceFrame(dur: Long = 4_000, audio: ByteArray = m4a, cid: String = "k=") =
+        WearVoiceFrame.encode(WearRequest("rv", WearOp.VOICE, WearConvKind.DIRECT, cid, durationMs = dur), audio)
+    private fun handleVoice(b: FakeBackend, bytes: ByteArray) = runBlocking { WearBridgeHandler(b).handleVoice(bytes) }
 
     private fun handle(b: FakeBackend, r: WearRequest): WearResponse =
         runBlocking { WearBridgeHandler(b).handle(r.encode())!! }
@@ -117,6 +139,85 @@ class WearBridgeHandlerTest {
             ),
             b.calls,
         )
+    }
+
+    // ---- __WEAR_POLISH_2026_11_25__ read / preview / voice / caps ----------
+
+    @Test
+    fun `list advertises this phone's capabilities and network`() {
+        val l = handle(FakeBackend(), list)
+        assertEquals(WearProtocol.PHONE_CAPS, l.caps)
+        assertEquals(WearNet(internet = false, meshPeers = 2, lora = true), l.net)
+        assertEquals(false, l.strict)
+        assertEquals(true, handle(FakeBackend().apply { strict = true }, list).strict)
+    }
+
+    @Test
+    fun `read and thumbnail route to the backend`() {
+        val b = FakeBackend()
+        assertEquals(WearStatus.OK, handle(b, WearRequest("r", WearOp.READ, WearConvKind.GROUP, "g-1")).status)
+        val t = handle(b, WearRequest("r", WearOp.THUMB, WearConvKind.DIRECT, "k=", messageId = "m1"))
+        assertEquals(WearStatus.OK, t.status)
+        assertTrue(byteArrayOf(1, 2, 3).contentEquals(t.thumb))
+        b.thumb = null
+        assertEquals(WearStatus.NOT_FOUND, handle(b, WearRequest("r", WearOp.THUMB, WearConvKind.DIRECT, "k=", messageId = "m2")).status)
+        b.thumb = ByteArray(WearProtocol.MAX_THUMB_BYTES + 1)
+        assertEquals(WearStatus.NOT_FOUND, handle(b, WearRequest("r", WearOp.THUMB, WearConvKind.DIRECT, "k=", messageId = "m3")).status)
+        assertEquals(listOf("read:group:g-1", "thumb:dm:k=:m1", "thumb:dm:k=:m2", "thumb:dm:k=:m3"), b.calls)
+    }
+
+    @Test
+    fun `voice goes through the same gates in the same order`() {
+        assertEquals(WearStatus.DISABLED, handleVoice(FakeBackend(enabled = false), voiceFrame())!!.status)
+        assertEquals(WearStatus.LOCKED, handleVoice(FakeBackend(locked = true), voiceFrame())!!.status)
+        assertEquals(WearStatus.UNAVAILABLE, handleVoice(FakeBackend(ready = false), voiceFrame())!!.status)
+        val b = FakeBackend()
+        assertEquals(WearStatus.OK, handleVoice(b, voiceFrame())!!.status)
+        assertEquals(listOf("voice:dm:k=:${m4a.size}:4000"), b.calls)
+    }
+
+    @Test
+    fun `voice that is too long, not m4a or oversized is refused before the backend`() {
+        val b = FakeBackend()
+        assertEquals(WearStatus.INVALID, handleVoice(b, voiceFrame(dur = WearProtocol.MAX_VOICE_MS + 1))!!.status)
+        assertEquals(WearStatus.INVALID, handleVoice(b, voiceFrame(dur = 10))!!.status)
+        assertNull(handleVoice(b, voiceFrame(audio = "RIFF....WAVEfmt ".toByteArray() + ByteArray(100))))
+        assertNull(handleVoice(b, voiceFrame(audio = m4a + ByteArray(WearProtocol.MAX_VOICE_BYTES))))
+        assertNull(handleVoice(b, byteArrayOf(0, 0, 0)))
+        assertTrue(b.calls.isEmpty())
+    }
+
+    @Test
+    fun `a voice op sent as a plain message is invalid (it needs its audio)`() {
+        val b = FakeBackend()
+        assertEquals(WearStatus.INVALID, handle(b, WearRequest("r", WearOp.VOICE, WearConvKind.DIRECT, "k=", durationMs = 3_000)).status)
+        assertTrue(b.calls.isEmpty())
+    }
+
+    @Test
+    fun `voice caption keeps the phone's M SS shape both ways`() {
+        assertEquals("0:04", com.oshi.messenger.service.wear.WearVoiceDuration.caption(4_200))
+        assertEquals("1:00", com.oshi.messenger.service.wear.WearVoiceDuration.caption(60_000))
+        assertEquals(64, com.oshi.messenger.service.wear.WearVoiceDuration.fromCaption("[AUDIO] 1:04"))
+        assertEquals(0, com.oshi.messenger.service.wear.WearVoiceDuration.fromCaption("hello"))
+    }
+
+    @Test
+    fun `a watch voice note never goes to a radio-only thread (Meshtastic, LoRa channel, MeshCore)`() {
+        val r = com.oshi.messenger.service.wear.WearVoiceRoute
+        assertTrue(r.carriesAudio("MCowBQYDK2VuAyEAexampleOshiKey="))
+        assertFalse(r.carriesAudio("lora!a1b2c3d4"))
+        assertFalse(r.carriesAudio("lorachan!longfast"))
+        assertFalse(r.carriesAudio("meshcore!0123456789ab"))
+        assertFalse(r.carriesAudio("mcchan!public"))
+    }
+
+    @Test
+    fun `thumbnail size keeps the aspect and never upscales`() {
+        val t = com.oshi.messenger.service.wear.WearThumbnail
+        assertEquals(200 to 150, t.targetSize(4000, 3000, 200))
+        assertEquals(112 to 200, t.targetSize(2268, 4032, 200))
+        assertEquals(120 to 80, t.targetSize(120, 80, 200))
     }
 
     // ---- the lock rule ------------------------------------------------------

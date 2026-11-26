@@ -37,7 +37,9 @@ class BotManager @Inject constructor(
     private val database: AppDatabase,
     private val vpsClient: VPSClient,
     private val cryptoManager: CryptoManager,
-    private val groupManager: GroupManager
+    private val groupManager: GroupManager,
+    /** __BOTS_PHASE1_2026_11_24__ rights chosen at add time, sent with `register`. */
+    private val botGroupStore: BotGroupStore
 ) {
     companion object {
         private const val TAG = "BotManager"
@@ -198,6 +200,46 @@ class BotManager @Inject constructor(
             else -> condition.trim().toDoubleOrNull()?.takeIf { it > 0 }
                 ?.let { maxOf(it, 60.0).times(1000).toLong() }
         }
+            // =====================================================================
+        // __BOT_COMMANDS_2026_11_24__ A bot's command list, as its owner edits it.
+        //
+        // A command is a `command` trigger (condition "/name", reply in
+        // responseTemplate) — the runtime that answers it is unchanged. What a
+        // trigger never had is a DESCRIPTION for the `/` menu; it is kept beside
+        // Room (SharedPreferences, triggerId → text) because adding a column to an
+        // @Entity without a migration is how an app stops opening.
+        // =====================================================================
+
+        /** A webhook bot is the only kind registered on the server (see [needsServerRegistration]). */
+        @JvmStatic
+        fun isServerBot(bot: OSHIBot): Boolean = bot.type == "webhook"
+
+        /** The bot's `command` triggers as editor rows, in trigger order, valid names only. */
+        @JvmStatic
+        fun commandRows(triggers: List<BotTrigger>, descriptions: Map<String, String>): List<CommandRow> =
+            triggers.filter { it.type == "command" }.mapNotNull { t ->
+                val name = com.oshi.messenger.util.BotCommandSyntax.normalizeName(t.condition)
+                if (!com.oshi.messenger.util.BotCommandSyntax.isValidName(name)) null
+                else CommandRow(
+                    t.id,
+                    com.oshi.messenger.util.BotCommandSyntax.Spec(name, descriptions[t.id].orEmpty()),
+                    t.responseTemplate,
+                    t.isActive
+                )
+            }
+
+        @JvmStatic
+        fun encodeDescriptions(map: Map<String, String>): String =
+            JSONObject().apply { map.forEach { (k, v) -> if (v.isNotBlank()) put(k, v) } }.toString()
+
+        @JvmStatic
+        fun decodeDescriptions(raw: String?): Map<String, String> {
+            if (raw.isNullOrBlank()) return emptyMap()
+            return runCatching {
+                val o = JSONObject(raw)
+                o.keys().asSequence().associateWith { o.optString(it, "") }.filterValues { it.isNotBlank() }
+            }.getOrDefault(emptyMap())
+        }
     }
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -208,6 +250,85 @@ class BotManager @Inject constructor(
 
     // Public state
     val bots: Flow<List<OSHIBot>> = database.botDao().getAllBots()
+
+    /** __BOT_COMMANDS_2026_11_24__ triggerId → the command's menu description. */
+    private val commandPrefs by lazy {
+        context.getSharedPreferences("oshi_bot_command_meta", Context.MODE_PRIVATE)
+    }
+    private val _commandDescriptions = MutableStateFlow<Map<String, String>>(emptyMap())
+    val commandDescriptions: StateFlow<Map<String, String>> = _commandDescriptions.asStateFlow()
+    private var descriptionsLoaded = false
+
+    private fun ensureDescriptionsLoaded() {
+        if (descriptionsLoaded) return
+        synchronized(this) {
+            if (descriptionsLoaded) return
+            _commandDescriptions.value = runCatching { decodeDescriptions(commandPrefs.getString("descriptions", null)) }
+                .getOrDefault(emptyMap())
+            descriptionsLoaded = true
+        }
+    }
+
+    private fun writeDescriptions(map: Map<String, String>) {
+        _commandDescriptions.value = map
+        runCatching { commandPrefs.edit().putString("descriptions", encodeDescriptions(map)).apply() }
+    }
+
+    /** The owner's editor rows for [botId], live. */
+    fun commandRowsForBot(botId: String): Flow<List<CommandRow>> {
+        ensureDescriptionsLoaded()
+        return combine(database.botDao().getTriggersForBot(botId), _commandDescriptions) { triggers, desc ->
+            commandRows(triggers, desc)
+        }
+    }
+
+    /** One row of the owner's command editor. */
+    data class CommandRow(val triggerId: String, val spec: com.oshi.messenger.util.BotCommandSyntax.Spec, val reply: String, val isActive: Boolean)
+
+    sealed interface CommandSave {
+        data class Saved(val rows: List<CommandRow>) : CommandSave
+        data class Refused(val error: com.oshi.messenger.util.BotCommandSyntax.EditError) : CommandSave
+    }
+
+    /**
+     * Add ([triggerId] null) or edit a command. Validated with the server's own rule
+     * ([com.oshi.messenger.util.BotCommandSyntax.validate]) so a list saved here is never
+     * one `setMyCommands` would refuse.
+     */
+    suspend fun saveCommand(
+        botId: String,
+        triggerId: String?,
+        rawName: String,
+        description: String,
+        reply: String
+    ): CommandSave {
+        ensureDescriptionsLoaded()
+        val triggers = database.botDao().getTriggersForBotList(botId)
+        val rows = commandRows(triggers, _commandDescriptions.value)
+        val others = rows.filter { it.triggerId != triggerId }.map { it.spec.name }
+        com.oshi.messenger.util.BotCommandSyntax.validate(rawName, description, others)?.let {
+            return CommandSave.Refused(it)
+        }
+        val name = com.oshi.messenger.util.BotCommandSyntax.normalizeName(rawName)
+        val existing = triggers.firstOrNull { it.id == triggerId }
+        val trigger = existing?.copy(condition = "/$name", responseTemplate = reply.trim(), type = "command")
+            ?: BotTrigger(botId = botId, type = "command", condition = "/$name", responseTemplate = reply.trim())
+        database.botDao().insertTrigger(trigger)
+        val desc = description.trim()
+        writeDescriptions(
+            if (desc.isEmpty()) _commandDescriptions.value - trigger.id
+            else _commandDescriptions.value + (trigger.id to desc)
+        )
+        return CommandSave.Saved(commandRows(database.botDao().getTriggersForBotList(botId), _commandDescriptions.value))
+    }
+
+    /** Remove a command (its trigger and its description). Returns the remaining rows. */
+    suspend fun deleteCommand(botId: String, triggerId: String): List<CommandRow> {
+        ensureDescriptionsLoaded()
+        database.botDao().deleteTrigger(triggerId)
+        writeDescriptions(_commandDescriptions.value - triggerId)
+        return commandRows(database.botDao().getTriggersForBotList(botId), _commandDescriptions.value)
+    }
 
     init {
         // __BOT_IN_THE_PIPELINE_2026_11_09__ The group manager has had this hook
@@ -302,10 +423,26 @@ class BotManager @Inject constructor(
         return bot
     }
 
+    /**
+     * __BOTS_PHASE1_2026_11_24__ BotFather "Revoke token": the server issued [newToken]
+     * and the old one is dead; the local row follows. The public [botId] does NOT change
+     * (server S3) and can no longer be derived from the token, so it is pinned first.
+     */
+    suspend fun replaceToken(bot: OSHIBot, newToken: String, botId: String): OSHIBot {
+        botGroupStore.setOwnExtras(bot.id, botGroupStore.ownExtras(bot.id).copy(botId = botId))
+        val updated = bot.copy(token = newToken)
+        database.botDao().updateBot(updated)
+        return updated
+    }
+
+    /** The stable public id of one of my bots — see [BotGroupStore.botIdFor]. */
+    fun publicIdOf(bot: OSHIBot): String = botGroupStore.botIdFor(bot)
+
     suspend fun deleteBot(bot: OSHIBot) {
         scheduledJobs[bot.id]?.cancel()
         scheduledJobs.remove(bot.id)
         database.botDao().deleteBot(bot.id)
+        botGroupStore.forgetOwn(bot.id)
         // Revoke the server-side token. iOS `deleteBot` ends with
         // `unregisterBotFromServer(bot)` (BotManager.swift:179-186) for a reason:
         // the token is a bearer credential for the external Bot API, and deleting
@@ -453,7 +590,7 @@ class BotManager @Inject constructor(
      * group slash bar from `botsForGroup(group.id)` (GroupViews.swift:4797-4800).
      */
     fun slashCommandsForGroup(groupId: String): Flow<List<com.oshi.messenger.util.SlashCommandCatalog.Entry>> =
-        combine(bots, database.botDao().getAllTriggers()) { allBots, triggers ->
+        combine(bots, database.botDao().getAllTriggers(), _commandDescriptions.also { ensureDescriptionsLoaded() }) { allBots, triggers, descriptions ->
             val me = cryptoManager.getPublicKeyString()
             val here = allBots.filter { bot ->
                 bot.isEnabled && isOwnedBy(bot.ownerPublicKey, me) &&
@@ -467,7 +604,9 @@ class BotManager @Inject constructor(
                         description = bot.description,
                         commandConditions = triggers
                             .filter { it.botId == bot.id && it.isActive && it.type == "command" }
-                            .map { it.condition }
+                            .map { it.condition },
+                        commandDescriptions = commandRows(triggers.filter { it.botId == bot.id }, descriptions)
+                            .associate { it.spec.name to it.spec.description }
                     )
                 }
             )
@@ -773,7 +912,7 @@ class BotManager @Inject constructor(
      * group's roster — the user's contact graph — on the server, with no screen telling
      * them.
      */
-    fun needsServerRegistration(bot: OSHIBot): Boolean = bot.type == "webhook"
+    fun needsServerRegistration(bot: OSHIBot): Boolean = isServerBot(bot)
 
     suspend fun registerBotWithServer(bot: OSHIBot): Boolean {
         if (!needsServerRegistration(bot)) {
@@ -801,6 +940,10 @@ class BotManager @Inject constructor(
                     put("id", groupId)
                     put("name", group.name)
                     put("members", JSONArray(group.memberPublicKeys))
+                    // __BOTS_PHASE1_2026_11_24__ admin rights chosen when the bot was added
+                    // (additive: a server that does not know the field ignores it).
+                    put("permissions", botGroupStore.rights(groupId, botGroupStore.botIdFor(bot)).toJson())
+                    put("kind", if (group.groupType == com.oshi.messenger.data.model.GroupType.ADMIN_ONLY) "channel" else "group")
                 })
             }
 

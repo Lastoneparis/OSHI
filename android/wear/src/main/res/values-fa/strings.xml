@@ -48,4 +48,27 @@
     <string name="qr_no">نه</string>
     <string name="qr_busy">الان نمی‌توانم صحبت کنم</string>
     <string name="end_to_end">رمزگذاری سرتاسری توسط گوشی شما</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">سنجاق‌شده</string>
+    <string name="net_internet">اینترنت</string>
+    <string name="net_nearby">%1$d در نزدیکی</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">گوشی آفلاین است · پیام‌ها روی گوشی منتظرند</string>
+    <string name="net_offline_short">گوشی آفلاین</string>
+    <string name="voice_message">پیام صوتی</string>
+    <string name="voice_send">ارسال پیام صوتی</string>
+    <string name="voice_cancel">لغو</string>
+    <string name="voice_permission">برای ضبط پیام صوتی به میکروفون اجازه دهید. چیزی روی ساعت نگه داشته نمی‌شود.</string>
+    <string name="voice_mic_busy">میکروفون مشغول است. دوباره امتحان کنید.</string>
+    <string name="voice_too_short">خیلی کوتاه است. کمی بیشتر صحبت کنید.</string>
+    <string name="voice_not_sent">ارسال نشد. گوشی را نزدیک نگه دارید و دوباره امتحان کنید.</string>
+    <string name="send_emoji">ارسال ایموجی</string>
+    <string name="delivery_sending">در حال ارسال</string>
+    <string name="delivery_sent">ارسال شد</string>
+    <string name="delivery_delivered">تحویل شد</string>
+    <string name="delivery_read">خوانده شد</string>
+    <string name="delivery_failed">تحویل نشد</string>
+    <string name="complication_none">پیام خوانده‌نشده‌ای نیست</string>
+    <string name="tile_reply_to">پاسخ به %1$s</string>
+    <string name="tile_chat_unread">%1$s، خوانده‌نشده: %2$d</string>
 </resources>

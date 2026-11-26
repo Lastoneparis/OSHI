@@ -109,7 +109,7 @@ class PushNotificationManager: NSObject, ObservableObject {
         // __ONE_BANNER_PER_MESSAGE_2026_09_23__ No message text on the lock
         // screen, ever (no caller today; kept safe in case one appears).
         content.body = MessageBannerPolicy.showsMessageText()
-            ? OSHIControlPayload.previewText(for: message)
+            ? InlineMarkup.stripped(OSHIControlPayload.previewText(for: message))
             : NSLocalizedString(MessageBannerPolicy.genericBodyKey, comment: "")
         if content.body.isEmpty { content.body = NSLocalizedString(MessageBannerPolicy.genericBodyKey, comment: "") }
         content.sound = .default
@@ -197,7 +197,7 @@ class PushNotificationManager: NSObject, ObservableObject {
         // Same fix as the 1:1 path above — this is the GROUP banner, which is
         // where the reported reaction/call JSON surfaced most often.
         content.body = MessageBannerPolicy.showsMessageText()
-            ? OSHIControlPayload.previewText(for: message)
+            ? InlineMarkup.stripped(OSHIControlPayload.previewText(for: message))
             : NSLocalizedString(MessageBannerPolicy.genericBodyKey, comment: "")
         if content.body.isEmpty { content.body = NSLocalizedString(MessageBannerPolicy.genericBodyKey, comment: "") }
         content.sound = .default

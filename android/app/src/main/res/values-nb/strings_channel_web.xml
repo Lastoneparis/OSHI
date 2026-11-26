@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Offentlig nettvisning</string>
+    <string name="cw_toggle">Publiser innlegg på nettet</string>
+    <string name="cw_footer">Nye innlegg publiseres også som en offentlig nettside på oshi-messenger.com/c/%1$s. Alle kan lese dem, også søkemotorer og lenkeforhåndsvisninger. Ende-til-ende-kryptering gjelder ikke for nettkopien.</string>
+    <string name="cw_needs_link">Gi først denne kanalen en offentlig lenke: nettvisningen bruker navnet dens.</string>
+    <string name="cw_create_link">Opprett offentlig lenke</string>
+    <string name="cw_enable_title">Publisere innlegg på nettet?</string>
+    <string name="cw_enable_confirm">Innlegg i denne kanalen blir synlige for alle på nettet på oshi-messenger.com/c/%1$s. Bare nye innlegg. Lenkeforhåndsvisninger (WhatsApp, X, Telegram…) kan også lese dem, og ende-til-ende-kryptering gjelder ikke for nettkopien.</string>
+    <string name="cw_enable_action">Publiser</string>
+    <string name="cw_disable_title">Slå av nettvisningen?</string>
+    <string name="cw_disable_confirm">Alle innlegg og bilder publisert på oshi-messenger.com/c/%1$s fjernes fra nettet. Innleggene dine i appen forblir som de er.</string>
+    <string name="cw_disable_action">Slå av</string>
+    <string name="cw_indexing">Tillat søkemotorer</string>
+    <string name="cw_indexing_footer">Når dette er av, ber sidene søkemotorer om ikke å indeksere dem.</string>
+    <string name="cw_embed_code">Innebyggingskode</string>
+    <string name="cw_embed_title">Bygg inn dette innlegget</string>
+    <string name="cw_embed_hint">Lim inn denne koden på nettstedet ditt der innlegget skal vises.</string>
+    <string name="cw_embed_dark">Mørkt tema</string>
+    <string name="cw_copy_code">Kopier kode</string>
+    <string name="cw_code_copied">Koden er kopiert</string>
+    <string name="cw_not_on_web">Dette innlegget er ikke på nettet. Bare innlegg sendt etter at nettvisningen ble slått på, publiseres.</string>
+    <string name="cw_error">Kunne ikke endre nettvisningen. Sjekk tilkoblingen og prøv igjen.</string>
+</resources>

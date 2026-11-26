@@ -141,7 +141,10 @@ object AppModule {
         crossPlatformMesh: CrossPlatformMesh,
         // __GROUP_E2E_V2_2026_09_23__ every group byte goes out over v2 (docs/GROUP_E2E_V2_SPEC.md).
         // Lazy: the router must not be built before Hilt has the whole graph.
-        v2MessageRouter: dagger.Lazy<com.oshi.messenger.network.v2.V2MessageRouter>
+        v2MessageRouter: dagger.Lazy<com.oshi.messenger.network.v2.V2MessageRouter>,
+        // __INTEROP_2026_11_21__ the public-link registry (GROUP_INFO_SETTINGS_SPEC §4); it was
+        // never passed, so links never resolved and Public could never be set.
+        groupHandleClient: dagger.Lazy<com.oshi.messenger.network.v2.V2GroupHandleClient>
     ): GroupManager {
         // Named arguments throughout: this call was positional, so adding one
         // parameter in the middle silently bound `vpsClient` to the new slot and
@@ -153,7 +156,8 @@ object AppModule {
             doubleRatchet = doubleRatchet,
             vpsClient = vpsClient,
             crossPlatformMesh = crossPlatformMesh,
-            v2Router = v2MessageRouter
+            v2Router = v2MessageRouter,
+            handleClientLazy = groupHandleClient
         )
     }
 
@@ -320,6 +324,13 @@ object AppModule {
         return database.botDao()
     }
 
+    /** __BOTS_PHASE1_2026_11_24__ BotFather / "Add a bot" routes; tests use a fake. */
+    @Provides
+    @Singleton
+    fun provideBotDirectoryApi(
+        impl: com.oshi.messenger.network.bot.HttpBotDirectoryApi
+    ): com.oshi.messenger.network.bot.BotDirectoryApi = impl
+
     @Provides
     @Singleton
     fun provideGroupDao(database: AppDatabase): GroupDao {
@@ -390,9 +401,10 @@ object AppModule {
         database: AppDatabase,
         vpsClient: VPSClient,
         cryptoManager: CryptoManager,
-        groupManager: GroupManager
+        groupManager: GroupManager,
+        botGroupStore: com.oshi.messenger.service.BotGroupStore
     ): BotManager {
-        return BotManager(context, database, vpsClient, cryptoManager, groupManager)
+        return BotManager(context, database, vpsClient, cryptoManager, groupManager, botGroupStore)
     }
 
     // =========================================================================

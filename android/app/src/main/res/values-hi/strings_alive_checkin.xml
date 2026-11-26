@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">चेक-इन की पुष्टि हुई</string>
+    <string name="alive_a11y_neutral">कोई चेक-इन सेट नहीं</string>
+    <string name="alive_a11y_overdue">चेक-इन का समय निकल गया</string>
+    <string name="alive_action_im_alive">मैं ठीक हूँ</string>
+    <string name="alive_action_message_them">संदेश भेजें</string>
+    <string name="alive_bar_open_settings">चेक-इन सेटिंग्स</string>
+    <string name="alive_channel_description">आपके अपने चेक-इन के रिमाइंडर, और सूचनाएँ जब कोई जिस पर आप नज़र रखते हैं, अपने चेक-इन का जवाब नहीं देता।</string>
+    <string name="alive_channel_name">सुरक्षा चेक-इन</string>
+    <string name="alive_confirmed_toast">चेक-इन भेजा गया</string>
+    <string name="alive_duration_days_hours">%1$d दिन %2$d घं</string>
+    <string name="alive_duration_hours_minutes">%1$d घं %2$d मि</string>
+    <string name="alive_duration_minutes">%1$d मि</string>
+    <string name="alive_duration_now">एक मिनट से कम</string>
+    <string name="alive_interval_24h">हर 24 घंटे</string>
+    <string name="alive_interval_48h">हर 48 घंटे</string>
+    <string name="alive_interval_72h">हर 72 घंटे</string>
+    <string name="alive_interval_custom">कस्टम</string>
+    <string name="alive_interval_custom_hours">हर %1$d घंटे</string>
+    <string name="alive_interval_every">हर %1$s</string>
+    <string name="alive_lane_you">आप</string>
+    <string name="alive_note_delivery">रिमाइंडर और सूचनाएँ आपके नेटवर्क और नोटिफ़िकेशन अनुमति पर निर्भर करती हैं। छूटे हुए चेक-इन का मतलब बस इतना है कि कोई पुष्टि नहीं पहुँची।</string>
+    <string name="alive_note_no_location">कोई स्थान साझा नहीं किया जाता। चेक-इन में सिर्फ़ एक टाइमस्टैम्प होता है, और कुछ नहीं।</string>
+    <string name="alive_notification_mine_due_body">पुष्टि करें कि आप ठीक हैं ताकि %1$s इंतज़ार न करता रहे।</string>
+    <string name="alive_notification_mine_due_title">आपके चेक-इन का समय हो गया है</string>
+    <string name="alive_notification_overdue_body">उनका चेक-इन %1$s पहले होना था। इसका मतलब बस इतना है कि कोई पुष्टि नहीं पहुँची।</string>
+    <string name="alive_notification_overdue_title">%1$s का कोई चेक-इन नहीं</string>
+    <string name="alive_sheet_explainer">तय समय पर पुष्टि करें कि आप ठीक हैं। %1$s आपकी उलटी गिनती देखता है, और समय बिना जवाब के निकल जाने पर उसे बताया जाता है।</string>
+    <string name="alive_sheet_interval">कितनी बार</string>
+    <string name="alive_sheet_mine_switch">%1$s के साथ चेक-इन करें</string>
+    <string name="alive_sheet_stop">चेक-इन बंद करें</string>
+    <string name="alive_sheet_their_next">अगला अपेक्षित %1$s</string>
+    <string name="alive_sheet_their_none">%1$s ने यहाँ कोई चेक-इन सेट नहीं किया है।</string>
+    <string name="alive_sheet_their_section">%1$s का चेक-इन</string>
+    <string name="alive_state_confirmed_ago">%1$s पहले पुष्टि की</string>
+    <string name="alive_state_due_in">%1$s में देय</string>
+    <string name="alive_state_not_set">सेट नहीं</string>
+    <string name="alive_state_overdue_by">%1$s से कोई जवाब नहीं</string>
+    <string name="alive_summary_confirmed">जीवित होने की पुष्टि की</string>
+    <string name="alive_summary_started">सुरक्षा चेक-इन शुरू हुआ</string>
+    <string name="alive_summary_stopped">सुरक्षा चेक-इन बंद हुआ</string>
+    <string name="alive_title">सुरक्षा चेक-इन</string>
+    <string name="alive_unknown_peer">यह संपर्क</string>
+</resources>

@@ -11,6 +11,7 @@
 //
 
 import Foundation
+import os
 
 enum LaunchTimingLogger {
     /// Process-monotonic clock. First call to `mark` from any thread
@@ -57,8 +58,44 @@ enum LaunchTimingLogger {
             detail.isEmpty ? "" : "  | \(detail)"
         )
 
-        OshiLog.app.info("\(line)")
+        // Event names and timings only — no user content — so public: a
+        // device console / sysdiagnose shows the numbers instead of <private>.
+        OshiLog.app.infoPublic(line)
+        signposter.emitEvent("LaunchMark", "\(event, privacy: .public)")
         appendToTailFile(line)
+    }
+
+    // MARK: - Signposts (__LAUNCH_LAG_2026_11_22__)
+    //
+    // Points of Interest, so a plain Time Profiler / App Launch trace on a
+    // device shows the launch phases on the timeline with no extra setup:
+    //
+    //   xcrun xctrace record --device <udid> --template 'App Launch' \
+    //       --launch -- Moriceau-lab.Genesis
+    //
+    // Interval "Launch": `App.init` → the splash mascot has finished (the main
+    // UI is what is on screen). Events "LaunchMark": every `mark`.
+
+    static let signposter = OSSignposter(subsystem: "app.oshi", category: .pointsOfInterest)
+    nonisolated(unsafe) private static var launchState: OSSignpostIntervalState?
+
+    /// Call once, as early as possible (App.init).
+    static func beginLaunch() {
+        lock.lock(); defer { lock.unlock() }
+        guard launchState == nil else { return }
+        _ = startedAt  // pin the reference clock to process start
+        launchState = signposter.beginInterval("Launch")
+    }
+
+    /// The splash is gone: what the user sees is the app.
+    static func endLaunch() {
+        lock.lock()
+        let state = launchState
+        launchState = nil
+        lock.unlock()
+        guard let state else { return }
+        signposter.endInterval("Launch", state)
+        mark("Launch.splashEnded")
     }
 
     /// Wrap a synchronous block so its start/end (and duration) get logged.

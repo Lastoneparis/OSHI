@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Öffentliche Web-Vorschau</string>
+    <string name="cw_toggle">Beiträge im Web veröffentlichen</string>
+    <string name="cw_footer">Neue Beiträge werden zusätzlich als öffentliche Webseite unter oshi-messenger.com/c/%1$s veröffentlicht. Jeder kann sie lesen, auch Suchmaschinen und Link-Vorschauen. Die Ende-zu-Ende-Verschlüsselung gilt nicht für die Web-Kopie.</string>
+    <string name="cw_needs_link">Gib diesem Kanal zuerst einen öffentlichen Link: Die Web-Vorschau verwendet seinen Namen.</string>
+    <string name="cw_create_link">Öffentlichen Link erstellen</string>
+    <string name="cw_enable_title">Beiträge im Web veröffentlichen?</string>
+    <string name="cw_enable_confirm">Beiträge in diesem Kanal sind im Web für alle unter oshi-messenger.com/c/%1$s sichtbar. Nur neue Beiträge. Link-Vorschauen (WhatsApp, X, Telegram…) können sie ebenfalls lesen, und die Ende-zu-Ende-Verschlüsselung gilt nicht für die Web-Kopie.</string>
+    <string name="cw_enable_action">Veröffentlichen</string>
+    <string name="cw_disable_title">Web-Vorschau ausschalten?</string>
+    <string name="cw_disable_confirm">Alle unter oshi-messenger.com/c/%1$s veröffentlichten Beiträge und Bilder werden aus dem Web entfernt. Deine Beiträge in der App bleiben unverändert.</string>
+    <string name="cw_disable_action">Ausschalten</string>
+    <string name="cw_indexing">Suchmaschinen erlauben</string>
+    <string name="cw_indexing_footer">Wenn aus, bitten die Seiten Suchmaschinen, sie nicht aufzunehmen.</string>
+    <string name="cw_embed_code">Einbettungscode</string>
+    <string name="cw_embed_title">Diesen Beitrag einbetten</string>
+    <string name="cw_embed_hint">Füge diesen Code dort in deine Website ein, wo der Beitrag erscheinen soll.</string>
+    <string name="cw_embed_dark">Dunkles Design</string>
+    <string name="cw_copy_code">Code kopieren</string>
+    <string name="cw_code_copied">Code kopiert</string>
+    <string name="cw_not_on_web">Dieser Beitrag ist nicht im Web. Nur Beiträge, die nach dem Einschalten der Web-Vorschau gesendet wurden, werden veröffentlicht.</string>
+    <string name="cw_error">Die Web-Vorschau konnte nicht geändert werden. Prüfe deine Verbindung und versuche es erneut.</string>
+</resources>

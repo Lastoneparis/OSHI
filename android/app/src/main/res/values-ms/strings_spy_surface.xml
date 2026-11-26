@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">Apl yang boleh membaca OSHI</string>
+    <string name="spy_surface_dialog_body">Apl pada telefon ini boleh membaca apa yang ada pada skrin atau pemberitahuan anda, termasuk mesej anda selepas dinyahsulit oleh OSHI:\n\n%1$s\n\nJika anda tidak memasang atau membenarkan salah satunya sendiri, ia mungkin perisian pengintip. Matikan kebenarannya dalam Tetapan Android atau nyahpasangnya. OSHI tidak menyekat apa-apa.</string>
+    <string name="spy_surface_power_accessibility">skrin dan menaip (kebolehcapaian)</string>
+    <string name="spy_surface_power_notifications">pemberitahuan</string>
+    <string name="spy_surface_power_admin">pentadbir peranti</string>
+</resources>

@@ -748,10 +748,27 @@ class FCMService : FirebaseMessagingService() {
                     return
                 }
 
+                val intent = Intent(this, IncomingCallService::class.java).apply {
+                    action = IncomingCallService.ACTION_SHOW_INCOMING
+                    putExtra(IncomingCallService.EXTRA_CALLER_NAME, callerName)
+                    putExtra(IncomingCallService.EXTRA_CALLER_KEY, callerKey)
+                    putExtra(IncomingCallService.EXTRA_CALL_ID, callId)
+                    putExtra(IncomingCallService.EXTRA_IS_VIDEO, callType == "video")
+                }
+                val ctx = applicationContext
+                val startRinger: () -> Unit = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) ctx.startForegroundService(intent)
+                    else ctx.startService(intent)
+                }
+
                 // When app is in foreground, the in-app IncomingCallOverlay handles the UI.
                 // Starting IncomingCallService would post a duplicate heads-up + full-screen notif.
+                // __CALL_WAKE_2026_11_22__ ...but only once the OFFER arrives, and when that copy
+                // is lost nothing rang at all. Fetch it now; ring the system way if it still
+                // has not shown up 3 s later.
                 if (isAppForeground()) {
-                    Log.d(TAG, "📞 App in foreground — skipping heads-up notification (in-app overlay handles it)")
+                    Log.d(TAG, "📞 App in foreground — in-app overlay first, system ringer as a fallback")
+                    if (callId.isNotEmpty()) enhancedCallManager.onCallPushWhileForeground(callId, startRinger)
                     return
                 }
 
@@ -765,18 +782,9 @@ class FCMService : FirebaseMessagingService() {
                     return
                 }
 
-                val intent = Intent(this, IncomingCallService::class.java).apply {
-                    action = IncomingCallService.ACTION_SHOW_INCOMING
-                    putExtra(IncomingCallService.EXTRA_CALLER_NAME, callerName)
-                    putExtra(IncomingCallService.EXTRA_CALLER_KEY, callerKey)
-                    putExtra(IncomingCallService.EXTRA_CALL_ID, callId)
-                    putExtra(IncomingCallService.EXTRA_IS_VIDEO, callType == "video")
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent)
-                } else {
-                    startService(intent)
-                }
+                startRinger()
+                // __CALL_WAKE_2026_11_22__ the caller's screen can now say "Ringing…"
+                enhancedCallManager.reportRinging(callerKey, callId)
             }
 
             // High-priority FCM data-only wake for Android — task 1.2.9
@@ -911,6 +919,9 @@ class FCMService : FirebaseMessagingService() {
                 // Optimistic bump — the mailbox reconciles the exact number the next
                 // time MailViewModel loads the inbox.
                 MailUnread.increment()
+                // __MAIL_UNREAD_REFRESH_2026_11_22__ …and reconciled right away: the push may
+                // be the one survivor of several collapsed while the phone was offline.
+                com.oshi.messenger.mail.MailUnreadSync.instance?.onMailPush()
 
                 val mailMessageId = data["messageId"] ?: ""
                 // The server may send a sender / subject preview; fall back to a
@@ -1020,13 +1031,15 @@ class FCMService : FirebaseMessagingService() {
 
         // Message banners already carry name + generic body (see callers): the name is
         // what the owner wants shown, so hiding only applies to mail (subject = content).
-        val displayTitle = if (hideContent && !isMessageBanner) getString(R.string.app_name) else title
-        val displayBody = if (hideContent && !isMessageBanner) getString(R.string.notification_new_message) else body
+        // 🛡 __STRICT_MODE_2026_11_22__ strict: message banners lose the name too.
+        val strictAnonymous = isMessageBanner && MessageBanner.anonymous(this)
+        val displayTitle = if ((hideContent && !isMessageBanner) || strictAnonymous) getString(R.string.app_name) else title
+        val displayBody = if ((hideContent && !isMessageBanner) || strictAnonymous) getString(R.string.notification_new_message) else body
 
         // __NOTIFICATION_HAS_NO_FACE_2026_10_27__ A sync DAO read: this method is not a
         // coroutine, and it already does a runBlocking DataStore read just above. A key
         // spelled differently in the push than locally simply misses and shows no face.
-        val avatar = senderKeyExtra?.let { key ->
+        val avatar = if (strictAnonymous) null else senderKeyExtra?.let { key ->
             runCatching {
                 MessageBanner.avatar(database.contactDao().getContactByPublicKeySync(key)?.profilePicture)
             }.getOrNull()
@@ -1054,6 +1067,17 @@ class FCMService : FirebaseMessagingService() {
                     .setContentText(getString(R.string.notification_new_message))
                     .build()
             )
+
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Android's own on-device "smart reply"
+        // and contextual actions read the banner. Not for a protected conversation.
+        val advPrivacyOn = runCatching {
+            AdvancedChatPrivacyStore.attach(this)
+            (groupIdExtra?.let { AdvancedChatPrivacyStore.isOn(it) } ?: false) ||
+                (senderKeyExtra?.let { AdvancedChatPrivacyStore.isOn(it) } ?: false)
+        }.getOrDefault(false)
+        val systemRepliesAllowed = com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy
+            .systemGeneratedRepliesAllowed(advPrivacyOn)
+        if (!systemRepliesAllowed) notificationBuilder.setAllowSystemGeneratedContextualActions(false)
 
         // Quick reply and mark-as-read actions (inline reply from notification)
         val senderKey = extras["senderKey"] ?: extras["senderPublicKey"] ?: ""
@@ -1090,6 +1114,7 @@ class FCMService : FirebaseMessagingService() {
                 // the platform has no such gate). It does NOT hide the action — the reply
                 // box still appears, so nothing is lost for the person who can unlock.
                 .setAuthenticationRequired(true)
+                .setAllowGeneratedReplies(systemRepliesAllowed)
                 .build()
             notificationBuilder.addAction(replyAction)
 
@@ -1137,6 +1162,7 @@ class FCMService : FirebaseMessagingService() {
         val intent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             putExtra("incoming_call", true)
+                    com.oshi.messenger.service.IncomingCallLaunchToken.stamp(this)
             putExtra("caller_name", callerName)
             putExtra("is_video_call", isVideoCall)
             putExtra("call_id", callId)

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Publiczny podgląd w sieci</string>
+    <string name="cw_toggle">Publikuj posty w sieci</string>
+    <string name="cw_footer">Nowe posty są też publikowane jako publiczna strona internetowa pod adresem oshi-messenger.com/c/%1$s. Każdy może je przeczytać, także wyszukiwarki i podglądy linków. Szyfrowanie end-to-end nie obejmuje kopii w sieci.</string>
+    <string name="cw_needs_link">Najpierw nadaj temu kanałowi publiczny link: podgląd w sieci używa jego nazwy.</string>
+    <string name="cw_create_link">Utwórz publiczny link</string>
+    <string name="cw_enable_title">Publikować posty w sieci?</string>
+    <string name="cw_enable_confirm">Posty z tego kanału będą widoczne dla każdego w sieci pod adresem oshi-messenger.com/c/%1$s. Tylko nowe posty. Podglądy linków (WhatsApp, X, Telegram…) też mogą je odczytać, a szyfrowanie end-to-end nie obejmuje kopii w sieci.</string>
+    <string name="cw_enable_action">Publikuj</string>
+    <string name="cw_disable_title">Wyłączyć podgląd w sieci?</string>
+    <string name="cw_disable_confirm">Wszystkie posty i obrazy opublikowane pod adresem oshi-messenger.com/c/%1$s zostaną usunięte z sieci. Twoje posty w aplikacji pozostaną bez zmian.</string>
+    <string name="cw_disable_action">Wyłącz</string>
+    <string name="cw_indexing">Zezwól wyszukiwarkom</string>
+    <string name="cw_indexing_footer">Gdy wyłączone, strony proszą wyszukiwarki, by ich nie indeksowały.</string>
+    <string name="cw_embed_code">Kod do osadzenia</string>
+    <string name="cw_embed_title">Osadź ten post</string>
+    <string name="cw_embed_hint">Wklej ten kod na swojej stronie w miejscu, gdzie ma się pojawić post.</string>
+    <string name="cw_embed_dark">Ciemny motyw</string>
+    <string name="cw_copy_code">Kopiuj kod</string>
+    <string name="cw_code_copied">Skopiowano kod</string>
+    <string name="cw_not_on_web">Tego posta nie ma w sieci. Publikowane są tylko posty wysłane po włączeniu podglądu w sieci.</string>
+    <string name="cw_error">Nie udało się zmienić podglądu w sieci. Sprawdź połączenie i spróbuj ponownie.</string>
+</resources>

@@ -358,4 +358,46 @@ class LoRaIntegrationPolicyTest {
         val settled = outgoingRow(isDelivered = true, method = DeliveryMethod.LORA)
         assertNull(LoRaDeliveryLedger.afterMeshAck(settled))
     }
+
+    // ── __LORA_SEND_FAILED_VISIBLE_2026_11_23__ a LoRa "not delivered" verdict ──
+
+    @Test
+    fun `a LoRa failure fails a row the radio carried`() {
+        // What afterSendAttempt leaves after hand-off: delivered, via LoRa.
+        val handedOff = LoRaDeliveryLedger.afterSendAttempt(outgoingRow(), framesWritten = true)
+        assertTrue(LoRaDeliveryLedger.mayMarkNotDelivered(handedOff, confirmedElsewhere = false))
+    }
+
+    @Test
+    fun `a LoRa failure fails a row that never left`() {
+        assertTrue(LoRaDeliveryLedger.mayMarkNotDelivered(outgoingRow(), confirmedElsewhere = false))
+    }
+
+    @Test
+    fun `a LoRa failure never downgrades a row the relay or the mesh carried`() {
+        for (m in listOf(DeliveryMethod.VPS, DeliveryMethod.MESH, DeliveryMethod.IPFS)) {
+            assertFalse(m.name, LoRaDeliveryLedger.mayMarkNotDelivered(
+                outgoingRow(isDelivered = true, method = m), confirmedElsewhere = false))
+        }
+    }
+
+    @Test
+    fun `a LoRa failure never downgrades a confirmed, read or already failed row`() {
+        val lora = outgoingRow(isDelivered = true, method = DeliveryMethod.LORA)
+        assertFalse(LoRaDeliveryLedger.mayMarkNotDelivered(lora, confirmedElsewhere = true))
+        assertFalse(LoRaDeliveryLedger.mayMarkNotDelivered(lora.copy(isRead = true), confirmedElsewhere = false))
+        assertFalse(LoRaDeliveryLedger.mayMarkNotDelivered(outgoingRow(isFailed = true), confirmedElsewhere = false))
+        assertFalse(LoRaDeliveryLedger.mayMarkNotDelivered(null, confirmedElsewhere = false))
+        assertFalse(LoRaDeliveryLedger.mayMarkNotDelivered(lora.copy(isFromMe = false), confirmedElsewhere = false))
+    }
+
+    /** Failed by a timeout, then the radio's DELIVERED arrives late: the ack wins. */
+    @Test
+    fun `a late mesh ack upgrades a row a LoRa failure marked failed`() {
+        val failed = outgoingRow(isDelivered = false, isFailed = true, method = DeliveryMethod.LORA)
+        val promoted = LoRaDeliveryLedger.afterMeshAck(failed)
+        assertNotNull(promoted)
+        assertTrue(promoted!!.isDelivered)
+        assertFalse(promoted.isFailed)
+    }
 }

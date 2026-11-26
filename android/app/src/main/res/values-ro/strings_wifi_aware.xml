@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware (conexiune rapidă în apropiere)</string>
+    <string name="settings_wifi_aware_subtitle">Conexiune directă cu telefoanele OSHI din apropiere, fără router. Wi-Fi-ul tău rămâne conectat.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

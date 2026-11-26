@@ -140,6 +140,7 @@ fun SettingsScreen(
     // Appearance
     val theme by settingsViewModel.theme.collectAsState()
     val oledBlack by settingsViewModel.oledBlack.collectAsState()
+    val glassEffectPref by settingsViewModel.glassEffect.collectAsState()
     val fontSize by settingsViewModel.fontSize.collectAsState()
 
     // Export
@@ -150,6 +151,15 @@ fun SettingsScreen(
 
     // Privacy - Typing Indicators
     val typingIndicatorsEnabled by settingsViewModel.typingIndicators.collectAsState()
+
+    // 🛡 __STRICT_MODE_2026_11_22__ Strict security mode: its own screen, and the rows
+    // it holds are shown greyed "Set by strict security mode" while it is on.
+    val strictActive by settingsViewModel.strictModeActive.collectAsState()
+    val strictOptions by settingsViewModel.strictOptions.collectAsState()
+    var showStrictScreen by rememberSaveable { mutableStateOf(false) }
+    fun strictLocks(field: String) =
+        com.oshi.messenger.security.StrictModePolicy.isLocked(strictActive, field, strictOptions)
+    val strictForcedText = stringResource(R.string.strict_forced_subtitle)
 
     // Multi-device sync
     val syncEnabled by settingsViewModel.syncEnabled.collectAsState()
@@ -174,6 +184,9 @@ fun SettingsScreen(
     var showBubbleStylePicker by remember { mutableStateOf(false) }
     var showBubbleAppearanceSheet by remember { mutableStateOf(false) }
     var showWallpaperToneSheet by remember { mutableStateOf(false) }
+    var showGlobalWallpaperPicker by remember { mutableStateOf(false) }
+    // __PER_APP_LANGUAGE_2026_11_20__
+    var showLanguagePicker by remember { mutableStateOf(false) }
 
     // Map preference
     val mapOpenPreference by settingsViewModel.mapOpenPreference.collectAsState()
@@ -324,6 +337,11 @@ fun SettingsScreen(
     val accountIsTheEntry = openAccountOnStart && openCategory == SettingsCategory.ACCOUNT
     BackHandler(enabled = openCategory != null && !accountIsTheEntry) { openCategory = null }
 
+    if (showStrictScreen) {
+        StrictModeScreen(settingsViewModel = settingsViewModel, onBack = { showStrictScreen = false })
+        return
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -465,13 +483,22 @@ fun SettingsScreen(
             // =========================================================================
             if (openCategory == SettingsCategory.PRIVACY) item {
                 SettingsSection(title = stringResource(R.string.settings_security)) {
+                    // 🛡 __STRICT_MODE_2026_11_22__ first row of Privacy & Security.
+                    SettingsItem(
+                        icon = Icons.Default.Shield,
+                        iconTint = if (strictActive) OSHIGreen else OSHIPurple,
+                        title = stringResource(R.string.strict_title),
+                        subtitle = stringResource(if (strictActive) R.string.strict_status_on else R.string.strict_status_off),
+                        subtitleMaxLines = 2,
+                        onClick = { showStrictScreen = true }
+                    )
                     SettingsToggleItem(
                         icon = Icons.Default.Fingerprint,
                         iconTint = OSHIPurple,
                         title = stringResource(R.string.settings_biometric_lock),
-                        subtitle = if (biometricAvailable) stringResource(R.string.settings_biometric_subtitle) else stringResource(R.string.settings_biometric_unavailable),
+                        subtitle = if (strictActive && biometricEnabled) strictForcedText else if (biometricAvailable) stringResource(R.string.settings_biometric_subtitle) else stringResource(R.string.settings_biometric_unavailable),
                         checked = biometricEnabled,
-                        enabled = biometricAvailable,
+                        enabled = biometricAvailable && !(strictActive && biometricEnabled),
                         onCheckedChange = { settingsViewModel.setBiometricEnabled(it) }
                     )
                     // Auto-lock picker — only meaningful when biometric is enabled (iOS parity)
@@ -480,7 +507,9 @@ fun SettingsScreen(
                             icon = Icons.Default.Lock,
                             iconTint = OSHIPurple,
                             title = stringResource(R.string.settings_auto_lock),
-                            subtitle = autoLockLabel(autoLockTimeoutSeconds),
+                            // 🛡 __STRICT_MODE_2026_11_22__ strict locks on every return, whatever the timeout.
+                            subtitle = if (strictActive) stringResource(R.string.strict_auto_lock_immediate) else autoLockLabel(autoLockTimeoutSeconds),
+                            enabled = !strictActive,
                             onClick = { showAutoLockPicker = true }
                         )
                     }
@@ -488,8 +517,9 @@ fun SettingsScreen(
                         icon = Icons.Default.ScreenLockPortrait,
                         iconTint = OSHIGreen,
                         title = stringResource(R.string.screenshot_protection),
-                        subtitle = stringResource(R.string.settings_prevent_screenshots),
+                        subtitle = if (strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_SCREENSHOT)) strictForcedText else stringResource(R.string.settings_prevent_screenshots),
                         checked = screenshotProtection,
+                        enabled = !strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_SCREENSHOT),
                         onCheckedChange = { settingsViewModel.setScreenshotProtection(it) }
                     )
                     // (N6, Anatole 13/11) The three-taps-on-the-logo wipe is opt-in.
@@ -543,8 +573,9 @@ fun SettingsScreen(
                         icon = Icons.Default.DoneAll,
                         iconTint = Color(0xFF3B82F6),
                         title = stringResource(R.string.settings_read_receipts),
-                        subtitle = stringResource(R.string.settings_read_receipts_desc),
+                        subtitle = if (strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_READ_RECEIPTS)) strictForcedText else stringResource(R.string.settings_read_receipts_desc),
                         checked = readReceipts,
+                        enabled = !strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_READ_RECEIPTS),
                         onCheckedChange = { settingsViewModel.setReadReceipts(it) }
                     )
                     SettingsToggleItem(
@@ -559,8 +590,9 @@ fun SettingsScreen(
                         icon = Icons.Default.Keyboard,
                         iconTint = OSHIGreen,
                         title = stringResource(R.string.settings_typing_indicators),
-                        subtitle = stringResource(R.string.settings_typing_indicators_desc),
+                        subtitle = if (strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_TYPING)) strictForcedText else stringResource(R.string.settings_typing_indicators_desc),
                         checked = typingIndicatorsEnabled,
+                        enabled = !strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_TYPING),
                         onCheckedChange = { settingsViewModel.setTypingIndicators(it) }
                     )
                     // Off by default. The subtitle states the limit plainly:
@@ -569,8 +601,9 @@ fun SettingsScreen(
                         icon = Icons.Default.ContentCopy,
                         iconTint = OSHIPurple,
                         title = stringResource(R.string.settings_block_forward_copy),
-                        subtitle = stringResource(R.string.settings_block_forward_copy_desc),
+                        subtitle = if (strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_BLOCK_FORWARD_COPY)) strictForcedText else stringResource(R.string.settings_block_forward_copy_desc),
                         checked = blockForwardCopy,
+                        enabled = !strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_BLOCK_FORWARD_COPY),
                         onCheckedChange = { settingsViewModel.setBlockForwardCopy(it) }
                     )
                     // Oblivious HTTP (network/ohttp). Greyed out until a relay + pinned
@@ -585,7 +618,7 @@ fun SettingsScreen(
                             else R.string.settings_privacy_relay_not_set
                         ),
                         checked = privacyRelayEnabled && settingsViewModel.privacyRelayAvailable,
-                        enabled = settingsViewModel.privacyRelayAvailable,
+                        enabled = settingsViewModel.privacyRelayAvailable && !(strictActive && privacyRelayEnabled),
                         onCheckedChange = { settingsViewModel.setPrivacyRelayEnabled(it) }
                     )
                     // __OHTTP_RELAY_ADDRESS_2026_11_10__ where the relay is. Any OHTTP
@@ -673,8 +706,9 @@ fun SettingsScreen(
                         icon = Icons.Default.Keyboard,
                         iconTint = OSHIPurple,
                         title = stringResource(R.string.keyboard_incognito_title),
-                        subtitle = stringResource(R.string.keyboard_incognito_subtitle),
+                        subtitle = if (strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_INCOGNITO)) strictForcedText else stringResource(R.string.keyboard_incognito_subtitle),
                         checked = incognitoKeyboard,
+                        enabled = !strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_INCOGNITO),
                         onCheckedChange = { keyboardStore.setIncognito(it) }
                     )
                     val kb = currentKeyboard
@@ -773,8 +807,9 @@ fun SettingsScreen(
                                 icon = Icons.Default.Visibility,
                                 iconTint = OSHIGreen,
                                 title = stringResource(R.string.settings_message_preview),
-                                subtitle = stringResource(R.string.settings_message_preview_desc),
+                                subtitle = if (strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_NOTIFICATION_PREVIEW)) strictForcedText else stringResource(R.string.settings_message_preview_desc),
                                 checked = notificationPreview,
+                                enabled = !strictLocks(com.oshi.messenger.security.StrictModePolicy.FIELD_NOTIFICATION_PREVIEW),
                                 onCheckedChange = { settingsViewModel.setNotificationPreview(it) }
                             )
                         }
@@ -787,6 +822,7 @@ fun SettingsScreen(
             // =========================================================================
             if (openCategory == SettingsCategory.CALLS) item {
                 SettingsSection(title = stringResource(R.string.settings_calls)) {
+                    CallReadinessItem()  // __CALL_WAKE_2026_11_22__ only when calls may not ring
                     // Default Voice Effect
                     SettingsItem(
                         icon = Icons.Default.RecordVoiceOver,
@@ -932,6 +968,18 @@ fun SettingsScreen(
             // =========================================================================
             if (openCategory == SettingsCategory.APPEARANCE) item {
                 SettingsSection(title = stringResource(R.string.settings_appearance)) {
+                    // __PER_APP_LANGUAGE_2026_11_20__ App language, independent of the
+                    // phone's (Android 13+ also offers it in the system's app settings).
+                    SettingsItem(
+                        icon = Icons.Default.Language,
+                        iconTint = OSHIPurple,
+                        title = stringResource(R.string.settings_app_language),
+                        subtitle = com.oshi.messenger.ui.locale.AppLanguage.currentName(context)
+                            ?: stringResource(R.string.settings_app_language_system),
+                        onClick = { showLanguagePicker = true }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     ThemeSelector(
                         currentTheme = theme,
                         oledBlack = oledBlack,
@@ -952,6 +1000,20 @@ fun SettingsScreen(
                         // The "only when dark is on" half is the rule; do not ellipsize it.
                         subtitleMaxLines = 3,
                         onCheckedChange = { settingsViewModel.setOledBlack(it) }
+                    )
+
+                    // __GLASS_ALL_THEMES_2026_11_21__ « Effet verre » — the frosted
+                    // look in Light, Dark and Extra dark. Shows what is in force
+                    // now (the per-theme default until the user flips it).
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SettingsToggleItem(
+                        icon = Icons.Default.BlurOn,
+                        iconTint = OSHIPurple,
+                        title = stringResource(R.string.appearance_glass_effect),
+                        subtitle = stringResource(R.string.appearance_glass_effect_footer),
+                        checked = glassEffectPref ?: com.oshi.messenger.ui.theme.glassOn(),
+                        subtitleMaxLines = 3,
+                        onCheckedChange = { settingsViewModel.setGlassEffect(it) }
                     )
 
                     // __MERGED_CHATS_2026_11_18__ « Fusionner Messages et Groupes »:
@@ -1001,12 +1063,25 @@ fun SettingsScreen(
                         onClick = { showBubbleAppearanceSheet = true }
                     )
 
-                    // __WALLPAPER_TONE_2026_09_24__ Chat wallpaper tone (light /
-                    // dark / automatic), independent of the theme above.
+                    // __WALLPAPER_PERSIST_2026_11_21__ "Chat Wallpaper" opened the TONE
+                    // sheet only — light / dark / automatic — so the one row in
+                    // Settings named after wallpapers could not set one. It now
+                    // opens the picker on the app-wide default; the tone has its
+                    // own row below.
                     SettingsItem(
                         icon = Icons.Default.Wallpaper,
                         iconTint = OSHIPurple,
                         title = stringResource(R.string.wallpaper_chat_wallpaper),
+                        subtitle = stringResource(R.string.wallpaper_settings_desc),
+                        onClick = { showGlobalWallpaperPicker = true }
+                    )
+
+                    // __WALLPAPER_TONE_2026_09_24__ Chat wallpaper tone (light /
+                    // dark / automatic), independent of the theme above.
+                    SettingsItem(
+                        icon = Icons.Default.Contrast,
+                        iconTint = OSHIPurple,
+                        title = stringResource(R.string.wallpaper_tone_settings_title),
                         subtitle = stringResource(
                             when (WallpaperTonePrefs.defaultTone(LocalContext.current)) {
                                 WallpaperTone.AUTOMATIC -> R.string.wallpaper_tone_automatic
@@ -1278,6 +1353,26 @@ fun SettingsScreen(
                             mainViewModel.setMeshEnabled(it)
                         }
                     )
+                    // __WIFI_AWARE_2026_11_25__ Only on phones that have Wi-Fi Aware;
+                    // on by default, and greyed out while the mesh itself is off
+                    // (Aware never runs without the mesh).
+                    val awareSupported = remember { mainViewModel.isWifiAwareSupported }
+                    if (awareSupported) {
+                        var awareEnabled by remember { mutableStateOf(mainViewModel.isWifiAwareEnabled) }
+                        SettingsToggleItem(
+                            icon = Icons.Default.Wifi,
+                            iconTint = OSHIPurple,
+                            title = stringResource(R.string.settings_wifi_aware_title),
+                            subtitle = stringResource(R.string.settings_wifi_aware_subtitle),
+                            subtitleMaxLines = 2,
+                            checked = awareEnabled && meshEnabled,
+                            enabled = meshEnabled,
+                            onCheckedChange = {
+                                awareEnabled = it
+                                mainViewModel.setWifiAwareEnabled(it)
+                            }
+                        )
+                    }
                     // __BACKGROUND_PRESENCE_2026_11_10__ Off by default: Android shows
                     // a status-bar icon for as long as OSHI runs in the background.
                     // A phone without Google push keeps running regardless (it has
@@ -1420,6 +1515,28 @@ fun SettingsScreen(
 
     if (showWallpaperToneSheet) {
         ChatWallpaperToneSheet(onDismiss = { showWallpaperToneSheet = false })
+    }
+
+    if (showGlobalWallpaperPicker) {
+        // The singleton, not a new instance: the chats read its StateFlow.
+        val wallpaperManager = remember {
+            dagger.hilt.android.EntryPointAccessors.fromApplication(
+                context.applicationContext,
+                com.oshi.messenger.service.WallpaperManagerEntryPoint::class.java
+            ).wallpaperManager()
+        }
+        val globalWallpaper by wallpaperManager.globalWallpaper.collectAsState()
+        com.oshi.messenger.ui.components.WallpaperPickerSheet(
+            conversationId = "",
+            currentWallpaper = globalWallpaper,
+            onSelectWallpaper = { wallpaperManager.setGlobalWallpaper(it) },
+            onDismiss = { showGlobalWallpaperPicker = false },
+            globalMode = true,
+        )
+    }
+
+    if (showLanguagePicker) {
+        AppLanguagePickerDialog(onDismiss = { showLanguagePicker = false })
     }
 
     // Voice Effect Picker Dialog
@@ -2308,7 +2425,7 @@ private fun StatItem(
 // =============================================================================
 
 @Composable
-private fun ThemeSelector(
+internal fun ThemeSelector(
     currentTheme: String,
     oledBlack: Boolean = false,
     onThemeSelected: (String) -> Unit
@@ -2746,7 +2863,7 @@ private fun ReceiptLine(label: String, value: String) {
 }
 
 @Composable
-private fun SettingsSection(
+internal fun SettingsSection(
     title: String,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -2780,13 +2897,14 @@ private fun SettingsSection(
 // =============================================================================
 
 @Composable
-private fun SettingsItem(
+internal fun SettingsItem(
     icon: ImageVector,
     iconTint: Color,
     title: String,
     subtitle: String,
     isDestructive: Boolean = false,
     enabled: Boolean = true,
+    subtitleMaxLines: Int = 1,
     onClick: () -> Unit = {}
 ) {
     ListItem(
@@ -2821,7 +2939,7 @@ private fun SettingsItem(
             Text(
                 text = subtitle,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
+                maxLines = subtitleMaxLines,
                 overflow = TextOverflow.Ellipsis
             )
         },
@@ -2840,7 +2958,7 @@ private fun SettingsItem(
 }
 
 @Composable
-private fun SettingsToggleItem(
+internal fun SettingsToggleItem(
     icon: ImageVector,
     iconTint: Color,
     title: String,
@@ -3009,4 +3127,52 @@ private fun SettingsCategoryList(onOpen: (SettingsCategory) -> Unit) {
             }
         }
     }
+}
+
+/**
+ * __PER_APP_LANGUAGE_2026_11_20__ « Language »: System default + every shipped language,
+ * each written in its own name so a user stuck in a language they cannot read can still
+ * find theirs.
+ */
+@Composable
+internal fun AppLanguagePickerDialog(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val current = remember { com.oshi.messenger.ui.locale.AppLanguage.current(context) }
+    val options: List<Pair<String?, String>> =
+        listOf<Pair<String?, String>>(null to stringResource(R.string.settings_app_language_system)) +
+            com.oshi.messenger.ui.locale.AppLanguage.SUPPORTED
+    fun choose(tag: String?) {
+        onDismiss()
+        if (tag == current) return
+        var c: android.content.Context? = context
+        while (c is android.content.ContextWrapper && c !is android.app.Activity) c = c.baseContext
+        (c as? android.app.Activity)?.let { com.oshi.messenger.ui.locale.AppLanguage.set(it, tag) }
+    }
+    OshiAlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_app_language)) },
+        text = {
+            androidx.compose.foundation.lazy.LazyColumn(
+                modifier = Modifier.heightIn(max = 440.dp)
+            ) {
+                items(options.size) { i ->
+                    val (tag, label) = options[i]
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable(role = Role.RadioButton) { choose(tag) }
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = tag == current, onClick = { choose(tag) })
+                        Text(label, style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
+        }
+    )
 }

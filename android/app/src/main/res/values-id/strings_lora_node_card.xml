@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">Langsung</string>
+    <string name="lora_node_card_from_you">dari Anda</string>
+    <string name="lora_node_card_heard_day">terdengar %1$d hr lalu</string>
+    <string name="lora_node_card_heard_hour">terdengar %1$d j lalu</string>
+    <string name="lora_node_card_heard_min">terdengar %1$d mnt lalu</string>
+    <string name="lora_node_card_heard_now">baru saja terdengar</string>
+    <string name="lora_node_card_hops">%1$d lompatan</string>
+    <string name="lora_node_card_in_range">dalam jangkauan</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_never_heard">tak pernah terdengar</string>
+    <string name="lora_node_card_not_heard">belum terdengar</string>
+    <string name="lora_node_card_relayed">diteruskan</string>
+</resources>

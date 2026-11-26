@@ -631,7 +631,7 @@ class IdentityManager: ObservableObject {
     func signWebSocketMessage(type: String, payloadHash: String) -> (signature: String, timestamp: String, signingPublicKey: String)? {
         guard let signingKey = signingPrivateKey else { return nil }
 
-        let timestamp = String(Int(Date().timeIntervalSince1970 * 1000))
+        let timestamp = HTTPRequestSignature.currentTimestampMillis()  // __CALL_CLOCK_SKEW_2026_11_21__
         let message = "WS\n\(type)\n\(payloadHash)\n\(timestamp)"
 
         guard let messageData = message.data(using: .utf8) else { return nil }

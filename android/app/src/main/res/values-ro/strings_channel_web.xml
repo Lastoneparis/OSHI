@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Previzualizare web publică</string>
+    <string name="cw_toggle">Publică postările pe web</string>
+    <string name="cw_footer">Postările noi sunt publicate și ca pagină web publică la oshi-messenger.com/c/%1$s. Oricine le poate citi, inclusiv motoarele de căutare și previzualizările linkurilor. Criptarea end-to-end nu se aplică copiei web.</string>
+    <string name="cw_needs_link">Mai întâi dă acestui canal un link public: previzualizarea web folosește numele lui.</string>
+    <string name="cw_create_link">Creează link public</string>
+    <string name="cw_enable_title">Publici postările pe web?</string>
+    <string name="cw_enable_confirm">Postările din acest canal vor fi vizibile oricui pe web la oshi-messenger.com/c/%1$s. Doar postările noi. Previzualizările linkurilor (WhatsApp, X, Telegram…) le pot citi și ele, iar criptarea end-to-end nu se aplică copiei web.</string>
+    <string name="cw_enable_action">Publică</string>
+    <string name="cw_disable_title">Dezactivezi previzualizarea web?</string>
+    <string name="cw_disable_confirm">Toate postările și imaginile publicate la oshi-messenger.com/c/%1$s vor fi eliminate de pe web. Postările tale din aplicație rămân neschimbate.</string>
+    <string name="cw_disable_action">Dezactivează</string>
+    <string name="cw_indexing">Permite motoarele de căutare</string>
+    <string name="cw_indexing_footer">Când este dezactivat, paginile cer motoarelor de căutare să nu le indexeze.</string>
+    <string name="cw_embed_code">Cod de încorporare</string>
+    <string name="cw_embed_title">Încorporează această postare</string>
+    <string name="cw_embed_hint">Lipește acest cod în site-ul tău acolo unde trebuie să apară postarea.</string>
+    <string name="cw_embed_dark">Temă întunecată</string>
+    <string name="cw_copy_code">Copiază codul</string>
+    <string name="cw_code_copied">Cod copiat</string>
+    <string name="cw_not_on_web">Această postare nu este pe web. Sunt publicate doar postările trimise după activarea previzualizării web.</string>
+    <string name="cw_error">Previzualizarea web nu a putut fi modificată. Verifică conexiunea și încearcă din nou.</string>
+</resources>

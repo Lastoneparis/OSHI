@@ -640,10 +640,13 @@ class MessageGroupManager: ObservableObject {
         setupIncomingMessageListener()
         startPeriodicPublicGroupBroadcast()
         startPeriodicGroupSync()
+        startPendingDeliveryLoop()   // __GROUP_RESEND_2026_11_25__
         // __GROUP_INFO_SETTINGS_2026_11_20__ §4.3 failed DELETEs retried at launch;
         // §4.2 public handles re-PUT at most weekly so the 60-day sweeper keeps them.
         // Deferred: never on the launch path, and never in unit tests.
         if !Self.isRunningUnitTests, !ProcessInfo.processInfo.arguments.contains("-OSHIScreens") {
+            // __CHANNEL_WEB_2026_11_26__ resume the public-web outbox (durable across launches).
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6) { ChannelWebPublisher.shared.start() }
             DispatchQueue.main.asyncAfter(deadline: .now() + 20) { [weak self] in
                 GroupHandleRegistry.retryPendingUnregisters()
                 for g in self?.groups ?? [] { GroupHandleRegistry.refreshIfDue(g, me: self?.currentUserPublicKey) }
@@ -1801,6 +1804,82 @@ class MessageGroupManager: ObservableObject {
         return true
     }
 
+    // MARK: - A bot changing its own post (__BOTS_PHASE1_2026_11_24__)
+
+    /// Apply a bot's `editMessageText` / `editMessageReplyMarkup` /
+    /// `deleteMessage` / `pinChatMessage` to the post it made, in place. Ignored unless the stored
+    /// post is that bot's (`BotPostUpdate.isAuthor`) — a member cannot rewrite
+    /// a bot's post, and a bot cannot touch anyone else's. No 10-minute window:
+    /// a live vote count is edited for as long as the vote runs.
+    @MainActor
+    @discardableResult
+    func applyBotPostUpdate(_ update: BotPostUpdate) -> Bool {
+        let localId = BotPostUpdate.localId(forServerId: update.messageId)
+        guard var messages = groupMessages[update.groupId],
+              let index = messages.firstIndex(where: { $0.id == localId }) else {
+            OshiLog.messaging.info("🤖 bot post update for an unknown post — ignored")
+            return false
+        }
+        let original = messages[index]
+        let record = BotManager.shared.replyMarkup(forMessageId: localId.uuidString)
+        let author = BotPostAuthors.botId(for: localId) ?? record?.botId
+        guard BotPostUpdate.isAuthor(senderKey: original.senderPublicKey,
+                                     recordedBotId: author, update: update) else {
+            OshiLog.messaging.info("🤖 bot post update from another author — ignored")
+            return false
+        }
+        switch update.kind {
+        case .delete:
+            messages.remove(at: index)
+            BotManager.shared.removeReplyMarkup(forMessageId: localId.uuidString)
+            if let g = groups.firstIndex(where: { $0.id == update.groupId }), groups[g].pinnedMessageId == localId {
+                groups[g].pinnedMessageId = nil
+                groups[g].pinnedBy = nil
+                saveGroups()
+            }
+        case .pin, .unpin:
+            // Every member receives the action: applied locally, never re-broadcast.
+            guard let g = groups.firstIndex(where: { $0.id == update.groupId }) else { return false }
+            if update.kind == .pin {
+                groups[g].pinnedMessageId = localId
+                groups[g].pinnedBy = original.senderPublicKey
+            } else if groups[g].pinnedMessageId == localId {
+                groups[g].pinnedMessageId = nil
+                groups[g].pinnedBy = nil
+            }
+            saveGroups()
+        case .edit(let text, let keyboard):
+            if let text {
+                // Keep the "[Bot name] " prefix the bubble reads the name from.
+                var name = "Bot"
+                if let plain = original.plaintextContent, plain.hasPrefix("["), let end = plain.firstIndex(of: "]") {
+                    name = String(plain[plain.index(after: plain.startIndex)..<end])
+                }
+                messages[index].encryptedContent = Data(text.utf8)
+                messages[index].plaintextContent = "[\(name)] \(text)"
+                messages[index].editedAt = Date()
+            }
+            if let keyboard {
+                if let keyboard, !keyboard.isEmpty {
+                    BotManager.shared.storeReplyMarkup(
+                        BotReplyMarkupRecord(keyboard: keyboard,
+                                             sourceMessageId: record?.sourceMessageId ?? update.messageId,
+                                             groupId: update.groupId.uuidString,
+                                             botTokenPrefix: record?.botTokenPrefix,
+                                             botName: record?.botName,
+                                             botId: update.botId),
+                        forMessageId: localId.uuidString)
+                } else {
+                    BotManager.shared.removeReplyMarkup(forMessageId: localId.uuidString)
+                }
+            }
+        }
+        groupMessages[update.groupId] = messages
+        saveMessages()
+        objectWillChange.send()
+        return true
+    }
+
     // MARK: - Edit Group Message
 
     func editGroupMessage(groupId: UUID, messageId: UUID, newContent: String, senderPublicKey: String) {
@@ -1850,6 +1929,9 @@ class MessageGroupManager: ObservableObject {
         if let group = groups.first(where: { $0.id == groupId }), let me = currentUserPublicKey {
             Task { await broadcastGroupMessageViaRelay(systemMessage, to: group, senderKey: me) }
         }
+        // __CHANNEL_WEB_2026_11_26__ an edited web post is re-published (same n).
+        ChannelWebPublisher.shared.didEdit(groupId: groupId, messageId: messageId,
+                                           group: groups.first(where: { $0.id == groupId }))
         OshiLog.messaging.info("✏️ Broadcasted edit-for-everyone for message \(messageId)")
     }
 
@@ -2782,6 +2864,8 @@ class MessageGroupManager: ObservableObject {
     }
     
     func deleteGroup(_ groupId: UUID) {
+        pendingDeliveryStore.removeGroup(groupId.uuidString)   // __GROUP_RESEND_2026_11_25__
+        publishPendingDeliveries()
         groups.removeAll { $0.id == groupId }
         groupMessages.removeValue(forKey: groupId)
         GroupCommentStore.shared.forget(groupId)   // __GROUP_COMMENTS_2026_11_21__
@@ -2807,6 +2891,8 @@ class MessageGroupManager: ObservableObject {
     func deleteGroupMessageForEveryone(groupId: UUID, messageId: UUID, senderPublicKey: String) {
         // 1. Delete locally
         deleteGroupMessage(groupId: groupId, messageId: messageId)
+        // __CHANNEL_WEB_2026_11_26__ …and from the web, if it was published there.
+        ChannelWebPublisher.shared.didDelete(groupId: groupId, messageId: messageId)
 
         // 2. Create a system message carrying the deleted message ID
         let systemMessage = GroupMessage(
@@ -3097,6 +3183,13 @@ class MessageGroupManager: ObservableObject {
         )
 
         OshiLog.messaging.info("📤 Sent message to group (media: \(mediaType?.rawValue ?? "none"))")
+
+        // __CHANNEL_WEB_2026_11_26__ public web preview: queue the cleartext copy of a
+        // NEW channel post (no-op unless the preview is on and we are its admin). After
+        // the E2E send above, on its own durable queue — never in its way.
+        if let g = groups.first(where: { $0.id == groupId }) {
+            ChannelWebPublisher.shared.didSend(message, in: g, me: currentUserPublicKey)
+        }
         
         // 🔧 FIX (security R1): the mesh branch no longer carries group message
         // bodies. It used to JSON-encode `message` — whose `encryptedContent` is
@@ -3164,8 +3257,22 @@ class MessageGroupManager: ObservableObject {
     /// Re-broadcasting the SAME message id is idempotent on receivers (dedup by
     /// id). Reloads media from disk since mediaData isn't persisted on the struct.
     func retryGroupMessage(groupId: UUID, messageId: UUID) {
+        // __GROUP_RESEND_2026_11_25__ members already reached are not sent it again.
+        if pendingDeliveryStore.get(messageId.uuidString) != nil {
+            retryPendingDeliveryNow(messageId: messageId)
+            return
+        }
         guard let group = groups.first(where: { $0.id == groupId }),
-              var msg = groupMessages[groupId]?.first(where: { $0.id == messageId }) else { return }
+              let msg = resendableCopy(groupId: groupId, messageId: messageId) else { return }
+        updateGroupMessageStatus(groupId: groupId, messageId: messageId, to: .pending)
+        let retryMsg = msg
+        Task { await broadcastGroupMessageViaRelay(retryMsg, to: group, senderKey: retryMsg.senderPublicKey) }
+    }
+
+    /// The stored row, ready to go out again: media reloaded from disk, the inlined media JSON
+    /// rebuilt when the disk compaction trimmed it.
+    func resendableCopy(groupId: UUID, messageId: UUID) -> GroupMessage? {
+        guard var msg = groupMessages[groupId]?.first(where: { $0.id == messageId }) else { return nil }
         if let type = msg.mediaType, msg.mediaData == nil {
             msg.mediaData = loadGroupMediaAttachment(for: messageId.uuidString, type: type)
         }
@@ -3185,9 +3292,7 @@ class MessageGroupManager: ObservableObject {
                 msg.encryptedContent = jsonData
             }
         }
-        updateGroupMessageStatus(groupId: groupId, messageId: messageId, to: .pending)
-        let retryMsg = msg
-        Task { await broadcastGroupMessageViaRelay(retryMsg, to: group, senderKey: retryMsg.senderPublicKey) }
+        return msg
     }
 
     /// MIME for a group media attachment. Mirrors `MessageManager.v2Mime(for:)`,
@@ -3224,11 +3329,26 @@ class MessageGroupManager: ObservableObject {
     /// cleartext mesh relay of that envelope and its legacy push — is deleted. A member with no
     /// v2 bundle receives nothing and is listed in `v2UnreachableMembers` so the group screen
     /// can tell the user to have them update.
-    private func broadcastGroupMessageViaRelay(_ message: GroupMessage, to group: MessageGroup, senderKey: String) async {
+    /// __GROUP_RESEND_2026_11_25__ `onlyMembers`: an automatic / manual resend to the members a
+    /// pending-delivery entry still lists (nil = the first send, to everybody).
+    private func broadcastGroupMessageViaRelay(_ message: GroupMessage, to group: MessageGroup, senderKey: String,
+                                               onlyMembers: Set<String>? = nil) async {
         let me = MessageManager.canonicalIdentity(senderKey)
-        let members = group.members.filter { MessageManager.canonicalIdentity($0.publicKey) != me }
+        let wanted = onlyMembers.map { Set($0.map { MessageManager.canonicalIdentity($0) }) }
+        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ The switch goes only to members
+        // that read it: iOS 1.0.43 and every older build would print the raw
+        // sentinel as a message. They are simply not sent it (they could not have
+        // enforced it anyway); see `AdvancedChatPrivacyPolicy.peerReads`.
+        let isPrivacySwitch = message.mediaType == nil && AdvancedPrivacyChange.isPayload(
+            message.plaintextContent ?? String(data: message.encryptedContent, encoding: .utf8) ?? "")
+        let members = group.members.filter {
+            let k = MessageManager.canonicalIdentity($0.publicKey)
+            return k != me && (wanted?.contains(k) ?? true)
+                && (!isPrivacySwitch || AdvancedChatPrivacyPolicy.peerReadsNow($0.publicKey))
+        }
         guard !members.isEmpty else {
             // Solo group (or everyone left) — nothing to deliver, so it's "sent".
+            if onlyMembers != nil { pendingDeliveryStore.remove(message.id.uuidString); publishPendingDeliveries() }
             updateGroupMessageStatus(groupId: group.id, messageId: message.id, to: .sent)
             return
         }
@@ -3236,6 +3356,20 @@ class MessageGroupManager: ObservableObject {
         let recipientKeys = members.map { $0.publicKey }
         let kind = GroupWireV2.kind(of: message)
         var handled: Set<String> = []
+
+        // __GROUP_RESEND_2026_11_25__ a USER message that is a row of this thread is tracked until
+        // every recipient has it (typing, reactions, votes, system commands are not).
+        let msgKey = message.id.uuidString
+        let tracked = kind == .user && message.senderPublicKey != "SYSTEM"
+            && groupMessages[group.id]?.contains(where: { $0.id == message.id }) == true
+        if tracked {
+            if onlyMembers == nil {
+                pendingDeliveryStore.begin(msgId: msgKey, groupId: groupIdString, recipients: recipientKeys,
+                                           botAuthor: message.botAuthor)
+                publishPendingDeliveries()
+            }
+            groupSendsInFlight.insert(msgKey)
+        }
 
         // 📡 LOCAL MESH FIRST — a transport, not a consolation prize.
         //
@@ -3310,7 +3444,8 @@ class MessageGroupManager: ObservableObject {
                 senderKey: senderKey,
                 text: text,
                 messageId: message.id.uuidString,
-                push: kind == .user,
+                // __ADVANCED_CHAT_PRIVACY_2026_11_26__ the privacy switch never wakes anyone.
+                push: kind == .user && !isPrivacySwitch,
                 sentAt: message.timestamp,
                 selfCopy: kind == .user,
                 // __GROUP_COMMENTS_2026_11_21__ §2.12.3: a comment wakes only the
@@ -3322,14 +3457,17 @@ class MessageGroupManager: ObservableObject {
         // members not proven v2-group-capable (empty list when compat is off ⇒ no-op).
         // __LEAK_FIX_2026_09_25__ (audit B) not to a member v2 already reached whose build reads
         // v2 groups (advertises group v3): the legacy copy was a readable duplicate for it.
-        let legacyTargets = GroupLegacyCompat.stillNeedLegacy(GroupLegacyCompat.legacyTargets(recipientKeys),
-                                                              v2Reached: handled)
+        // __GROUP_FANOUT_2026_11_24__ a member the relay rate-limited is NOT a legacy target: the
+        // legacy envelope (groupId-derived key) is weaker, and a 429 says nothing about the member.
+        let legacyTargets = GroupLegacyCompat.withoutRateLimited(
+            GroupLegacyCompat.stillNeedLegacy(GroupLegacyCompat.legacyTargets(recipientKeys), v2Reached: handled),
+            rateLimited: GroupRateLimitLedger.shared.take(messageId: message.id.uuidString))
         var legacyReached: Set<String> = []
         if !legacyTargets.isEmpty {
             legacyReached = await legacyCompatSendGroupMessage(message, group: group, senderKey: senderKey,
                                                                allRecipients: recipientKeys,
                                                                legacyMembers: legacyTargets,
-                                                               wake: kind == .user && message.commentOn == nil)
+                                                               wake: kind == .user && message.commentOn == nil && !isPrivacySwitch)
             handled.formUnion(legacyReached)
         }
 
@@ -3343,6 +3481,18 @@ class MessageGroupManager: ObservableObject {
         if !missing.isEmpty {
             OshiLog.messaging.info("📡 [V2] group message: \(handled.count)/\(members.count) reached, \(listed.count) member(s) on a build without v2 (nothing sent to them)")
         }
+        if tracked {
+            // __GROUP_RESEND_2026_11_25__ reached members and members with no v2 bundle at all
+            // ("must update", §6) leave the list; the rest are retried 1, 5, 30 min, then 3-hourly.
+            groupSendsInFlight.remove(msgKey)
+            let left = pendingDeliveryStore.settle(msgId: msgKey, reached: Array(handled), noBundle: listed)
+            publishPendingDeliveries()
+            if let left {
+                OshiLog.messaging.info("↻ [V2] group message \(msgKey.prefix(8)): \(left.pending.count)/\(left.total) member(s) pending, next attempt in \(Int(left.nextAt.timeIntervalSinceNow)) s")
+            }
+        }
+        // A resend that reached nobody leaves the bubble as it was (the first send's status).
+        if onlyMembers != nil && handled.isEmpty { return }
         updateGroupMessageStatus(groupId: group.id, messageId: message.id,
                                  to: handled.isEmpty ? .failed : .sent)
     }
@@ -3675,7 +3825,7 @@ class MessageGroupManager: ObservableObject {
               let framed = GroupWireV2.syncRequest(requester: myKey) else { return }
         let peers = (MessageManager.shared?.conversations ?? [])
             .map(\.participantPublicKey)
-            .filter { !$0.isEmpty && $0 != "SYSTEM" && !$0.hasPrefix("bot:") && !$0.hasPrefix("lora!")
+            .filter { !$0.isEmpty && $0 != "SYSTEM" && !$0.hasPrefix("bot:") && !$0.hasPrefix("lora!") && !MeshCoreInterop.isInteropKey($0)
                       && MessageManager.canonicalIdentity($0) != MessageManager.canonicalIdentity(myKey) }
         let unique = Array(Set(peers))
         guard !unique.isEmpty else { return }
@@ -3825,7 +3975,20 @@ class MessageGroupManager: ObservableObject {
         // filter: a message carrying `commentOn` is decided by the comment rule
         // (accept → comment store, hold → orphan, drop), and only a message the
         // rule calls ordinary falls through to the post filter and the timeline.
-        if !isBot && !isSystem {
+        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ Any member may turn advanced chat
+        // privacy on or off (WhatsApp rule), so this is applied BEFORE the §2.4
+        // admins-only post filter and is exempt from it. The row is kept as the
+        // centred notice, already read: a settings change is not unread mail.
+        var isAdvancedPrivacyNotice = false
+        if !isBot && !isSystem, message.mediaType == nil {
+            let body = message.plaintextContent ?? String(data: message.encryptedContent, encoding: .utf8) ?? ""
+            if applyIncomingAdvancedPrivacy(body, from: message.senderPublicKey, groupId: message.groupId) {
+                isAdvancedPrivacyNotice = true
+                message.isRead = true
+                if message.plaintextContent == nil { message.plaintextContent = body }
+            }
+        }
+        if !isBot && !isSystem && !isAdvancedPrivacyNotice {
             let body = message.plaintextContent ?? (message.mediaType == nil ? String(data: message.encryptedContent, encoding: .utf8) : nil) ?? ""
             if !ReactionPayload.isReactionMessage(body) && !PollVotePayload.isVoteMessage(body) {
                 switch commentVerdict(message, sender: message.senderPublicKey, group: group) {
@@ -4155,6 +4318,8 @@ class MessageGroupManager: ObservableObject {
         // a blocked member's message is dropped before this point; the check stays as
         // a second guard.)
         if !message.isSystemMessage,
+           // __ADVANCED_CHAT_PRIVACY_2026_11_26__ a quiet notice never rings.
+           !OSHIControlPayload.isQuietNotice(message.plaintextContent ?? ""),
            let group = groups.first(where: { $0.id == message.groupId }),
            !group.isMuted,
            !BlockedContactsManager.shared.isGroupBlocked(group.id),
@@ -4876,6 +5041,14 @@ enum GroupLegacyCompat {
         return store.supportsGroupV3(member) || store.supportsGroupV3(MessageManager.canonicalIdentity(member))
     }
 
+    /// __GROUP_FANOUT_2026_11_24__ Pure: drop the members the v2 send left out only because the relay
+    /// rate-limited us. They read v2 groups; the message is simply not out to them yet.
+    static func withoutRateLimited(_ legacy: [String], rateLimited: Set<String>) -> [String] {
+        guard !rateLimited.isEmpty, !legacy.isEmpty else { return legacy }
+        let limited = Set(rateLimited.map { MessageManager.canonicalIdentity($0) })
+        return legacy.filter { !limited.contains(MessageManager.canonicalIdentity($0)) }
+    }
+
     /// Pure: which `candidates` still need a legacy copy once the v2 send reached `v2Reached`.
     static func stillNeedLegacy(_ candidates: [String], v2Reached: Set<String>,
                                 readsV2Groups: (String) -> Bool = GroupLegacyCompat.readsV2Groups) -> [String] {
@@ -5224,6 +5397,10 @@ extension MessageGroupManager {
         out.deliveryStatus = .sent
         if out.mediaType == nil, out.plaintextContent == nil {
             out.plaintextContent = String(data: out.encryptedContent, encoding: .utf8)
+        }
+        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ my own switch, flipped on my other device.
+        if out.mediaType == nil, let text = out.plaintextContent {
+            applyIncomingAdvancedPrivacy(text, from: me, groupId: m.groupId)
         }
         var list = groupMessages[m.groupId] ?? []
         list.append(out)
@@ -5669,5 +5846,120 @@ extension MessageGroupManager {
                                                       editedContent: t))
         Task { await broadcastGroupMessageViaRelay(cmd, to: group, senderKey: me) }
         return true
+    }
+}
+
+
+// MARK: - __GROUP_FANOUT_2026_11_24__
+
+/// messageId → members the v2 group send left out because the relay kept answering 429. Written by
+/// `v2TrySendGroup` / `v2TrySendGroupFile`, taken once by the legacy-compat step of the same message.
+nonisolated final class GroupRateLimitLedger: @unchecked Sendable {
+    static let shared = GroupRateLimitLedger()
+    private let lock = NSLock()
+    private var byMessage: [String: Set<String>] = [:]
+
+    func record(messageId: String, members: [String]) {
+        guard !members.isEmpty else { return }
+        lock.lock(); defer { lock.unlock() }
+        byMessage[messageId, default: []].formUnion(members)
+    }
+
+    func take(messageId: String) -> Set<String> {
+        lock.lock(); defer { lock.unlock() }
+        return byMessage.removeValue(forKey: messageId) ?? []
+    }
+}
+
+
+// MARK: - __GROUP_RESEND_2026_11_25__ automatic resend to the members a send missed
+
+extension MessageGroupManager {
+
+    static let sharedPendingDeliveryStore = GroupPendingDeliveryStore(fileURL: GroupPendingDeliveryStore.defaultURL)
+    /// A large group's first send can outlast the first retry slot: never run two at once.
+    private static var sendsInFlight: Set<String> = []
+    private static var resendPassRunning = false
+    private static var resendTimer: Timer?
+
+    var pendingDeliveryStore: GroupPendingDeliveryStore { Self.sharedPendingDeliveryStore }
+
+    var groupSendsInFlight: Set<String> {
+        get { Self.sendsInFlight }
+        set { Self.sendsInFlight = newValue }
+    }
+
+    func publishPendingDeliveries() {
+        GroupPendingDeliveryCenter.shared.publish(pendingDeliveryStore.all())
+    }
+
+    /// Every 30 s, and at once when the network comes back or the user taps "Retry now".
+    func startPendingDeliveryLoop() {
+        publishPendingDeliveries()
+        guard !Self.isRunningUnitTests, !ProcessInfo.processInfo.arguments.contains("-OSHIScreens") else { return }
+        NotificationCenter.default.addObserver(forName: .networkBecameReachable, object: nil, queue: .main) { [weak self] _ in
+            Task { @MainActor in
+                guard let self, !self.pendingDeliveryStore.all().isEmpty else { return }
+                self.pendingDeliveryStore.makeDue()
+                self.runDuePendingDeliveries()
+            }
+        }
+        // First pass after the transports came up on a cold start.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in self?.runDuePendingDeliveries() }
+        Self.resendTimer?.invalidate()
+        Self.resendTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.runDuePendingDeliveries() }
+        }
+    }
+
+    /// "Retry now" from the bubble's details.
+    func retryPendingDeliveryNow(messageId: UUID) {
+        pendingDeliveryStore.makeDue(msgId: messageId.uuidString)
+        publishPendingDeliveries()
+        runDuePendingDeliveries()
+    }
+
+    /// Resends every due entry to its pending members only, through the normal send path
+    /// (`broadcastGroupMessageViaRelay`: re-encrypted, re-signed, same message id — receivers
+    /// and the relay dedupe on it; a member the v2 path cannot reach gets exactly what the first
+    /// send would have given it, never a weaker copy because of the retry).
+    func runDuePendingDeliveries() {
+        guard !Self.resendPassRunning else { return }
+        let due = pendingDeliveryStore.due()
+        guard !due.isEmpty else { return }
+        Self.resendPassRunning = true
+        Task { @MainActor in
+            defer { Self.resendPassRunning = false; self.publishPendingDeliveries() }
+            for entry in due {
+                if self.groupSendsInFlight.contains(entry.msgId) { continue }
+                guard let gid = UUID(uuidString: entry.groupId),
+                      let group = self.groups.first(where: { $0.id == gid }),
+                      let mid = UUID(uuidString: entry.msgId) else {
+                    self.pendingDeliveryStore.remove(entry.msgId); continue
+                }
+                // Members who left are not owed the message.
+                self.pendingDeliveryStore.dropDeparted(groupId: entry.groupId,
+                                                      members: group.members.map { $0.publicKey })
+                guard let current = self.pendingDeliveryStore.get(entry.msgId) else {
+                    self.updateGroupMessageStatus(groupId: gid, messageId: mid, to: .sent)
+                    continue
+                }
+                guard let me = self.currentUserPublicKey, !me.isEmpty,
+                      let row = self.resendableCopy(groupId: gid, messageId: mid) else {
+                    self.pendingDeliveryStore.remove(entry.msgId); continue   // deleted row
+                }
+                let wire: GroupMessage
+                if row.senderPublicKey.hasPrefix("bot:"), let bot = current.botAuthor {
+                    wire = Self.botReplyWireMessage(row, ownerKey: me, botName: bot)
+                } else if MessageManager.canonicalIdentity(row.senderPublicKey) == MessageManager.canonicalIdentity(me) {
+                    wire = row
+                } else {
+                    self.pendingDeliveryStore.remove(entry.msgId); continue   // not ours to send
+                }
+                OshiLog.messaging.info("↻ group \(entry.groupId.prefix(8)) msg \(entry.msgId.prefix(8)): resend to \(current.pending.count)/\(current.total) (attempt \(current.attempts + 1))")
+                await self.broadcastGroupMessageViaRelay(wire, to: group, senderKey: me,
+                                                         onlyMembers: Set(current.pending))
+            }
+        }
     }
 }

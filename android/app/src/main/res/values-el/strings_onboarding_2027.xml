@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Παράλειψη</string>
+    <string name="ob27_continue">Συνέχεια</string>
+    <string name="ob27_page_of">Σελίδα %1$d από %2$d</string>
+    <string name="ob27_private_title">Μόνο εσείς και αυτοί</string>
+    <string name="ob27_private_body">Τα μηνύματα και οι κλήσεις κρυπτογραφούνται από άκρο σε άκρο στο τηλέφωνό σας. Κανείς ενδιάμεσα δεν μπορεί να τα διαβάσει — ούτε καν το OSHI.</string>
+    <string name="ob27_offline_title">Λειτουργεί χωρίς ίντερνετ</string>
+    <string name="ob27_offline_body">Δεν έχετε δίκτυο; Τα μηνύματα περνούν από τηλέφωνο σε τηλέφωνο μέσω ατόμων κοντά σας που έχουν ανοιχτό το OSHI. Ένας ασύρματος LoRa τα πηγαίνει ακόμα πιο μακριά.</string>
+    <string name="ob27_range_direct">απευθείας</string>
+    <string name="ob27_range_relayed">αναμετάδοση</string>
+    <string name="ob27_range_lora">ασύρματος LoRa</string>
+    <string name="ob27_anon_title">Χωρίς αριθμό τηλεφώνου</string>
+    <string name="ob27_anon_body">Χωρίς λογαριασμό, email ή αριθμό για εγγραφή. Η ταυτότητά σας είναι ένα κλειδί που δημιουργείται σε αυτό το τηλέφωνο.</string>
+    <string name="ob27_together_title">Φέρτε τους δικούς σας</string>
+    <string name="ob27_together_body">Συνομιλήστε ένας προς έναν ή σε ομάδες. Προσθέστε κάποιον σαρώνοντας τον κωδικό QR του ή στέλνοντάς του έναν σύνδεσμο πρόσκλησης.</string>
+    <string name="ob27_rules_title">Πριν ξεκινήσετε</string>
+    <string name="ob27_rules_subtitle">Μερικοί κανόνες, και τι μπορεί και τι δεν μπορεί ακόμα να κάνει το OSHI.</string>
+    <string name="ob27_rules_do">Κάντε αυτό</string>
+    <string name="ob27_rules_dont">Ποτέ</string>
+    <string name="ob27_good_to_know">Καλό να ξέρετε</string>
+    <string name="ob27_show_details">Εμφάνιση λεπτομερειών</string>
+    <string name="ob27_hide_details">Απόκρυψη λεπτομερειών</string>
+    <string name="ob27_agree">Κατάλαβα</string>
+    <string name="ob27_notif_title">Μη χάνετε μηνύματα</string>
+    <string name="ob27_notif_body">Επιτρέψτε τις ειδοποιήσεις για να βλέπετε νέα μηνύματα και κλήσεις. Μπορείτε να τις απενεργοποιήσετε οποιαδήποτε στιγμή στις Ρυθμίσεις.</string>
+    <string name="ob27_notif_allow">Επιτρέψτε ειδοποιήσεις</string>
+    <string name="ob27_not_now">Όχι τώρα</string>
+    <string name="ob27_identity_title">Επιλέξτε όνομα</string>
+    <string name="ob27_identity_body">Αυτό βλέπουν οι επαφές σας. Μπορείτε να το αλλάξετε αργότερα.</string>
+    <string name="ob27_already">Χρησιμοποιείτε ήδη το OSHI;</string>
+</resources>

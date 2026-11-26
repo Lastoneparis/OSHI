@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">सार्वजनिक वेब प्रीव्यू</string>
+    <string name="cw_toggle">पोस्ट वेब पर प्रकाशित करें</string>
+    <string name="cw_footer">नई पोस्ट oshi-messenger.com/c/%1$s पर एक सार्वजनिक वेब पेज के रूप में भी प्रकाशित होती हैं। सर्च इंजन और लिंक प्रीव्यू सहित कोई भी उन्हें पढ़ सकता है। एंड-टू-एंड एन्क्रिप्शन वेब कॉपी पर लागू नहीं होता।</string>
+    <string name="cw_needs_link">पहले इस चैनल को एक सार्वजनिक लिंक दें: वेब प्रीव्यू उसी का नाम इस्तेमाल करता है।</string>
+    <string name="cw_create_link">सार्वजनिक लिंक बनाएँ</string>
+    <string name="cw_enable_title">पोस्ट वेब पर प्रकाशित करें?</string>
+    <string name="cw_enable_confirm">इस चैनल की पोस्ट वेब पर oshi-messenger.com/c/%1$s पर सभी को दिखेंगी। सिर्फ़ नई पोस्ट। लिंक प्रीव्यू (WhatsApp, X, Telegram…) भी उन्हें पढ़ सकते हैं, और एंड-टू-एंड एन्क्रिप्शन वेब कॉपी पर लागू नहीं होता।</string>
+    <string name="cw_enable_action">प्रकाशित करें</string>
+    <string name="cw_disable_title">वेब प्रीव्यू बंद करें?</string>
+    <string name="cw_disable_confirm">oshi-messenger.com/c/%1$s पर प्रकाशित सभी पोस्ट और तस्वीरें वेब से हटा दी जाएँगी। ऐप में आपकी पोस्ट वैसी ही रहेंगी।</string>
+    <string name="cw_disable_action">बंद करें</string>
+    <string name="cw_indexing">सर्च इंजन को अनुमति दें</string>
+    <string name="cw_indexing_footer">बंद होने पर पेज सर्च इंजन से उन्हें इंडेक्स न करने को कहते हैं।</string>
+    <string name="cw_embed_code">एम्बेड कोड</string>
+    <string name="cw_embed_title">यह पोस्ट एम्बेड करें</string>
+    <string name="cw_embed_hint">यह कोड अपनी वेबसाइट में वहाँ पेस्ट करें जहाँ पोस्ट दिखनी चाहिए।</string>
+    <string name="cw_embed_dark">डार्क थीम</string>
+    <string name="cw_copy_code">कोड कॉपी करें</string>
+    <string name="cw_code_copied">कोड कॉपी हो गया</string>
+    <string name="cw_not_on_web">यह पोस्ट वेब पर नहीं है। सिर्फ़ वेब प्रीव्यू चालू होने के बाद भेजी गई पोस्ट ही प्रकाशित होती हैं।</string>
+    <string name="cw_error">वेब प्रीव्यू नहीं बदला जा सका। अपना कनेक्शन जाँचें और फिर से कोशिश करें।</string>
+</resources>

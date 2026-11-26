@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Check-in confirmado</string>
+    <string name="alive_a11y_neutral">Nenhum check-in configurado</string>
+    <string name="alive_a11y_overdue">Check-in atrasado</string>
+    <string name="alive_action_im_alive">Estou vivo</string>
+    <string name="alive_action_message_them">Mensagem</string>
+    <string name="alive_bar_open_settings">Configurações do check-in</string>
+    <string name="alive_channel_description">Lembretes dos seus próprios check-ins e avisos quando alguém que você acompanha não respondeu ao dele.</string>
+    <string name="alive_channel_name">Check-ins de segurança</string>
+    <string name="alive_confirmed_toast">Check-in enviado</string>
+    <string name="alive_duration_days_hours">%1$d d %2$d h</string>
+    <string name="alive_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="alive_duration_minutes">%1$d min</string>
+    <string name="alive_duration_now">menos de um minuto</string>
+    <string name="alive_interval_24h">A cada 24 horas</string>
+    <string name="alive_interval_48h">A cada 48 horas</string>
+    <string name="alive_interval_72h">A cada 72 horas</string>
+    <string name="alive_interval_custom">Personalizado</string>
+    <string name="alive_interval_custom_hours">A cada %1$d horas</string>
+    <string name="alive_interval_every">a cada %1$s</string>
+    <string name="alive_lane_you">Você</string>
+    <string name="alive_note_delivery">Lembretes e avisos dependem da sua rede e da permissão de notificações. Um check-in perdido significa apenas que nenhuma confirmação chegou.</string>
+    <string name="alive_note_no_location">Nenhuma localização é compartilhada. Um check-in leva apenas um horário e nada mais.</string>
+    <string name="alive_notification_mine_due_body">Confirme que você está vivo para que %1$s não fique esperando.</string>
+    <string name="alive_notification_mine_due_title">Hora do seu check-in</string>
+    <string name="alive_notification_overdue_body">O check-in era esperado há %1$s. Isso só significa que nenhuma confirmação chegou.</string>
+    <string name="alive_notification_overdue_title">Nenhum check-in de %1$s</string>
+    <string name="alive_sheet_explainer">Confirme que você está vivo em intervalos regulares. %1$s vê sua contagem regressiva e é avisado quando ela termina sem resposta.</string>
+    <string name="alive_sheet_interval">Com que frequência</string>
+    <string name="alive_sheet_mine_switch">Fazer check-in com %1$s</string>
+    <string name="alive_sheet_stop">Parar o check-in</string>
+    <string name="alive_sheet_their_next">Próximo esperado %1$s</string>
+    <string name="alive_sheet_their_none">%1$s não configurou um check-in aqui.</string>
+    <string name="alive_sheet_their_section">Check-in de %1$s</string>
+    <string name="alive_state_confirmed_ago">confirmado há %1$s</string>
+    <string name="alive_state_due_in">previsto em %1$s</string>
+    <string name="alive_state_not_set">não configurado</string>
+    <string name="alive_state_overdue_by">sem resposta há %1$s</string>
+    <string name="alive_summary_confirmed">Confirmou que está vivo</string>
+    <string name="alive_summary_started">Check-in de segurança iniciado</string>
+    <string name="alive_summary_stopped">Check-in de segurança encerrado</string>
+    <string name="alive_title">Check-in de segurança</string>
+    <string name="alive_unknown_peer">este contato</string>
+</resources>

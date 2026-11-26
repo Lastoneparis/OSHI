@@ -2,6 +2,7 @@ package com.oshi.messenger.service
 
 import com.oshi.messenger.ui.viewmodel.dataStore
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.withLock
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -18,6 +19,7 @@ import com.oshi.messenger.network.encryption.GroupEnvelopeV3
 import com.oshi.messenger.network.encryption.PeerCapabilities
 import com.oshi.messenger.network.mesh.CrossPlatformMesh
 import com.oshi.messenger.network.vps.VPSClient
+import com.oshi.messenger.network.v2.V2GroupHandleClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +61,13 @@ class GroupManager @Inject constructor(
     private val crossPlatformMesh: CrossPlatformMesh,
     // __GROUP_E2E_V2_2026_09_23__ the ONLY group transport (docs/GROUP_E2E_V2_SPEC.md §0).
     // Null only in JVM unit tests that construct the manager by hand.
-    private val v2Router: dagger.Lazy<com.oshi.messenger.network.v2.V2MessageRouter>? = null
+    private val v2Router: dagger.Lazy<com.oshi.messenger.network.v2.V2MessageRouter>? = null,
+    // __GROUP_SETTINGS_2026_11_20__ public link registry (GROUP_INFO_SETTINGS_SPEC §4).
+    // __INTEROP_2026_11_21__ NO default on purpose: it had `= null`, AppModule never passed it,
+    // and every production build resolved every public link to "This link no longer works"
+    // and could not make a group Public (found by the first Android↔Desktop run). A caller
+    // that wants no registry must now say `null` out loud.
+    private val handleClientLazy: dagger.Lazy<V2GroupHandleClient>?
 ) {
     /**
      * Where a group attachment's bytes go when the message list is persisted.
@@ -158,7 +166,9 @@ class GroupManager @Inject constructor(
             videoNote: Boolean = false,
             durationMs: Int? = null,
             /** __BOT_IN_THE_PIPELINE_2026_11_09__ name of the bot that wrote this, or null. */
-            botAuthor: String? = null
+            botAuthor: String? = null,
+            /** __GROUP_COMMENTS_2026_11_21__ spec §2.12.2 — the post this comments on, or null. */
+            commentOn: String? = null
         ): String = JSONObject().apply {
             put("id", id)
             put("groupId", wireGroupId)
@@ -178,6 +188,7 @@ class GroupManager @Inject constructor(
             com.oshi.messenger.service.media.VideoNote.putInto(this, videoNote && iosMediaType == "video", durationMs)
             // Optional, last, absent for a human message; iOS's Codable decoder ignores unknown keys.
             botAuthor?.takeIf { it.isNotBlank() }?.let { put(BOT_AUTHOR_FIELD, it) }
+            commentOn?.takeIf { it.isNotBlank() }?.let { put(GroupComments.FIELD, it) }
         }.toString()
 
         /**
@@ -334,7 +345,12 @@ class GroupManager @Inject constructor(
             // existing byte-for-byte expectation is unchanged.
             stateVersion: Int? = null,
             description: String? = null,
-            evictedMemberKeys: List<String>? = null
+            evictedMemberKeys: List<String>? = null,
+            // __GROUP_SETTINGS_2026_11_20__ GROUP_INFO_SETTINGS_SPEC §2.1 / §2.2: `settings`
+            // rides only when this device holds one; `description` is emitted even when empty
+            // once the group has had one (`""` = cleared; absent = keep).
+            settings: com.oshi.messenger.data.model.GroupSettings? = null,
+            emitEmptyDescription: Boolean = false
         ): String {
             val members = JSONArray()
             val joinedAtIso = iso8601(createdAtMs)
@@ -378,7 +394,8 @@ class GroupManager @Inject constructor(
                     pinnedBy?.takeIf { b -> b.isNotEmpty() }?.let { b -> put("pinnedBy", b) }
                 }
                 avatar?.takeIf { it.isNotEmpty() }?.let { put("avatar", it) }
-                description?.takeIf { it.isNotEmpty() }?.let { put("description", it) }
+                if (description != null && (description.isNotEmpty() || emitEmptyDescription)) put("description", description)
+                settings?.let { put("settings", it.toJson()) }
                 evictedMemberKeys?.takeIf { it.isNotEmpty() }?.let { put("evictedMemberKeys", JSONArray(it)) }
                 stateVersion?.let { put("stateVersion", it) }
             }.toString()
@@ -666,10 +683,15 @@ class GroupManager @Inject constructor(
         /** Tombstone one message. Returns null when the target id is absent. */
         fun applyDeletionToMessages(
             messages: List<GroupMessage>,
-            messageId: String
+            messageId: String,
+            /** Remote author of the delete; null for our own local delete. See [isAuthorOf]. */
+            actor: String? = null,
+            /** __GROUP_COMMENTS_2026_11_21__ §2.12.4 rule D: target is a comment AND actor is an admin. */
+            actorIsAdminOnComment: Boolean = false
         ): List<GroupMessage>? {
             val index = indexOfMessageId(messages, messageId)
             if (index < 0) return null
+            if (actor != null && !GroupComments.mayDelete(isAuthorOf(messages[index], actor), actorIsAdminOnComment, actorIsAdminOnComment)) return null
             // Already tombstoned AND already emptied ⇒ nothing to do. A delete now arrives
             // twice on a peer that understands both broadcast legs (the legacy
             // `📢GROUP_UPDATE📢` and the `.messageDeleted` system message), and without
@@ -682,6 +704,17 @@ class GroupManager @Inject constructor(
                 it[index] = it[index].copy(isDeleted = true, content = "")
             }
         }
+
+        /**
+         * 🔒 __GROUP_EDIT_DELETE_AUTHOR_2026_11_20__ A remote edit / delete-for-everyone
+         * applies only to a message the ACTOR wrote. Group message ids are visible to every
+         * member, so without this any member could rewrite another member's message (shown
+         * as "edited" under the victim's name) or retract it. The actor is the authenticated
+         * sender of the command; the target's author is what we stored at receipt.
+         */
+        fun isAuthorOf(target: GroupMessage, actor: String): Boolean =
+            GroupUpdateAuthorizer.canonicalIdentity(target.senderPublicKey) ==
+                GroupUpdateAuthorizer.canonicalIdentity(actor)
 
         /** Mark every id in [ids] read. Returns null when nothing changed. */
         fun applyReadReceiptToMessages(
@@ -865,11 +898,14 @@ class GroupManager @Inject constructor(
             messages: List<GroupMessage>,
             messageId: String,
             newContent: String,
-            editedAt: Long
+            editedAt: Long,
+            /** Remote author of the edit; null for our own local edit. See [isAuthorOf]. */
+            actor: String? = null
         ): List<GroupMessage>? {
             val index = indexOfMessageId(messages, messageId)
             if (index < 0) return null
             val target = messages[index]
+            if (actor != null && !isAuthorOf(target, actor)) return null
             // A tombstoned message cannot be resurrected by an edit — iOS removes the row
             // outright on delete-for-everyone, so an edit arriving after one has nothing
             // to land on there either.
@@ -1085,9 +1121,61 @@ class GroupManager @Inject constructor(
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    // __GROUP_RESEND_2026_11_25__ declared ABOVE init (InitOrderTest): init starts the loop.
+    private val pendingDelivery: GroupPendingDeliveryStore by lazy {
+        GroupPendingDeliveryStore(context.filesDir, canon = GroupUpdateAuthorizer::canonicalIdentity)
+    }
+
+    private val _pendingDeliveries = MutableStateFlow<Map<String, GroupPendingDeliveryStore.Entry>>(emptyMap())
+    /** msgId → members still owed that message. Absent = everybody got it (normal Sent). */
+    val pendingDeliveries: StateFlow<Map<String, GroupPendingDeliveryStore.Entry>> = _pendingDeliveries.asStateFlow()
+
+    private fun publishPendingDelivery() {
+        _pendingDeliveries.value = try { pendingDelivery.all() } catch (_: Throwable) { emptyMap() }
+    }
+
+    private val resendMutex = kotlinx.coroutines.sync.Mutex()
+    /** A large group's first send can outlast the first retry slot: never run two at once. */
+    private val sendsInFlight: MutableSet<String> = java.util.concurrent.ConcurrentHashMap.newKeySet()
+    private val resendKick = kotlinx.coroutines.channels.Channel<Unit>(kotlinx.coroutines.channels.Channel.CONFLATED)
+
+
     // State
     private val _groups = MutableStateFlow<List<Group>>(emptyList())
     val groups: StateFlow<List<Group>> = _groups.asStateFlow()
+
+    // __GROUP_SETTINGS_2026_11_20__ declared above `init` (InitOrderTest).
+    private val extrasLock = Any()
+    @Volatile private var extrasCache: MutableMap<String, JSONObject>? = null
+    /**
+     * __CHANNEL_WEB_2026_11_26__ Public channel web preview (PUBLIC_CHANNEL_WEB_SPEC.md §9).
+     * Set by `ChannelWebPublisher.start()`; every call is fire-and-forget (it only enqueues),
+     * so the E2E send never waits on, nor fails because of, the web copy.
+     */
+    interface ChannelWebHooks {
+        fun onOwnPost(groupId: String, message: GroupMessage)
+        fun onOwnPostEdited(groupId: String, messageId: String, newContent: String)
+        fun onPostDeletedForEveryone(groupId: String, messageId: String)
+    }
+    @Volatile var channelWebHooks: ChannelWebHooks? = null
+
+    private val _groupSettings = MutableStateFlow<Map<String, com.oshi.messenger.data.model.GroupSettings>>(emptyMap())
+    /** UPPER-case group id → settings. */
+    val groupSettings: StateFlow<Map<String, com.oshi.messenger.data.model.GroupSettings>> = _groupSettings.asStateFlow()
+    private val _autoTranslate = MutableStateFlow<Set<String>>(emptySet())
+    val autoTranslateGroups: StateFlow<Set<String>> = _autoTranslate.asStateFlow()
+    private val _adminLog = MutableStateFlow<Map<String, List<GroupAdminLog.Event>>>(emptyMap())
+    @Volatile private var adminLogLoaded = false
+    private val joinAccepts = java.util.concurrent.ConcurrentHashMap<String, MutableList<Long>>()
+
+    // __GROUP_COMMENTS_2026_11_21__ (spec §2.12) lower-case comment id → post id. A LOCAL
+    // index, persisted beside each row in the sealed MESSAGES document (`commentOn`), never a
+    // Room column (GroupMessage is an @Entity: a new column needs a migration).
+    private val _commentLinks = MutableStateFlow<Map<String, String>>(emptyMap())
+    val commentLinks: StateFlow<Map<String, String>> = _commentLinks.asStateFlow()
+    private val commentOrphans = GroupComments.OrphanBuffer()
+    private val commentReceiveRate = GroupComments.RateWindow()
+    private val commentSendRate = GroupComments.RateWindow()
 
     private val _groupMessages = MutableStateFlow<Map<String, List<GroupMessage>>>(emptyMap())
     val groupMessages: StateFlow<Map<String, List<GroupMessage>>> = _groupMessages.asStateFlow()
@@ -1434,8 +1522,14 @@ class GroupManager @Inject constructor(
         // sweep must never run against an empty in-memory map.
         startRoomMirror()
         purgeOrphanGroupMedia()
+        startPendingDeliveryLoop()   // __GROUP_RESEND_2026_11_25__
         setupCrossPlatformGroupDiscovery()
         setupPeerConnectSync()
+        // __GROUP_SETTINGS_2026_11_20__ keep public handles alive (60-day server expiry, spec §4.2).
+        if (handleClientLazy != null) scope.launch {
+            delay(30_000L)
+            runCatching { refreshPublicHandlesIfDue() }
+        }
     }
 
     /**
@@ -1893,7 +1987,9 @@ class GroupManager @Inject constructor(
             // which is the oscillation itself. iOS has shipped the field on the wire
             // since `__GROUP_EVICTION_TOMBSTONE_2026_09_10__` and unions it on receipt
             // (`GroupMessaging.swift:1097-1102`); Android encoded it nowhere.
-            evictedMemberKeys = group.evictedMemberKeys
+            evictedMemberKeys = group.evictedMemberKeys,
+            settings = settingsOf(group.id),
+            emitEmptyDescription = isDescriptionTouched(group.id)
         )
         return "$GROUP_UPDATE_PREFIX$json"
     }
@@ -2059,6 +2155,8 @@ class GroupManager @Inject constructor(
             updatedAt = System.currentTimeMillis()
         )
         _groups.value = currentGroups
+        // __GROUP_SETTINGS_2026_11_20__ recent events (spec §2.8)
+        recordAdminEvents(group.id, GroupAdminLog.diff(group, currentGroups[index], null, null, cryptoManager.getPublicKeyString(), System.currentTimeMillis()))
         saveGroups()
         updateGroupConversations()
 
@@ -2269,7 +2367,7 @@ class GroupManager @Inject constructor(
      *
      * @return true on success.
      */
-    fun joinGroupFromInvite(gid: String, inviterKey: String?, name: String?): Boolean {
+    fun joinGroupFromInvite(gid: String, inviterKey: String?, name: String?, inviteToken: String? = null): Boolean {
         val myPublicKey = cryptoManager.getPublicKeyString()
         if (myPublicKey.isEmpty()) {
             Log.e(TAG, "joinGroupFromInvite: no public key")
@@ -2323,6 +2421,7 @@ class GroupManager @Inject constructor(
         saveGroups()
         updateGroupConversations()
         postSystemMessage(gid, "You joined the group")
+        markJoined(gid)   // __GROUP_SETTINGS_2026_11_20__ welcome message on the definition (§2.5)
 
         // Send join notification + sync_request to the inviter
         scope.launch {
@@ -2336,6 +2435,8 @@ class GroupManager @Inject constructor(
                 put("type", "member_sync_request")
                 put("groupId", gid)
                 put("requesterPublicKey", myPublicKey)
+                // __GROUP_SETTINGS_2026_11_20__ reset-able invite link (spec §3.2); old builds ignore it
+                inviteToken?.let { put("inviteToken", it) }
             }
             val syncPayload = "$GROUP_UPDATE_PREFIX$syncReq"
 
@@ -2418,7 +2519,8 @@ class GroupManager @Inject constructor(
         // __MENTIONS_2026_09_23__ before the row is published, so the bubble draws them at once.
         recordMentions(
             message.id,
-            com.oshi.messenger.util.MentionWire.stillPresent(parsedReply?.content ?: content, mentions)
+            com.oshi.messenger.util.MentionWire.stillPresent(
+                com.oshi.messenger.util.MessageFormatting.strip(parsedReply?.content ?: content), mentions) // __TEXT_FORMATTING_2026_11_24__
                 .filter { m -> group.memberPublicKeys.any { sameMentionKey(it, m.publicKey) } }
         )
 
@@ -2426,6 +2528,8 @@ class GroupManager @Inject constructor(
         addMessageToGroup(groupId, message)
         updateGroupConversations()
         saveMessages()
+        // __CHANNEL_WEB_2026_11_26__ public web copy (enqueue only; decides eligibility itself).
+        channelWebHooks?.let { h -> runCatching { h.onOwnPost(group.id, message) } }
 
         // Send to all group members — with the reply envelope intact.
         val wireMessage = if (parsedReply != null) message.copy(content = content) else message
@@ -2514,6 +2618,67 @@ class GroupManager @Inject constructor(
                 Log.w(TAG, "📊 group ballot failed: ${e.message}")
             }
         }
+    }
+
+    /**
+     * 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Turn advanced chat privacy on or off for a
+     * group. Local state first, then an ordinary (stored) group message so the
+     * thread shows "You turned on …" and every member applies it through
+     * `handleIncomingGroupMessage`. Any member may do this, admins or not.
+     *
+     * Ungated by member version, like the poll and OFFLINE_ONLY: no capability
+     * proves a member reads this sentinel, so an iOS 1.0.43 member sees raw text.
+     */
+    fun setAdvancedChatPrivacy(groupId: String, on: Boolean) {
+        val group = _groups.value.find { it.id.equals(groupId, ignoreCase = true) } ?: return
+        AdvancedChatPrivacyStore.attach(context)
+        AdvancedChatPrivacyReaders.attach(context)
+        val change = com.oshi.messenger.data.model.AdvancedChatPrivacyChange.create(on)
+        AdvancedChatPrivacyStore.setLocal(change, group.id)
+        val message = GroupMessage(
+            id = UUID.randomUUID().toString(),
+            groupId = group.id,
+            senderPublicKey = cryptoManager.getPublicKeyString(),
+            senderName = "Me",
+            content = change.toMessageString(),
+            timestamp = System.currentTimeMillis(),
+            isFromMe = true,
+            isRead = true,
+        )
+        addMessageToGroup(group.id, message)
+        updateGroupConversations()
+        saveMessages()
+        // Fan-out to the members who read the sentinel ONLY (bundle bit 16, or they
+        // sent us one): the others would see raw JSON. Push is already off for it
+        // (`OSHIControlPayload.neverNotifies`), so nobody outside the set is woken.
+        val readers = advancedPrivacyReaders(group)
+        Log.d(TAG, "🛡 group ${group.id.take(8)} advanced privacy on=$on → ${readers.size} reader(s), " +
+            "${advancedPrivacyNonReaders(group).size} on an older version")
+        if (readers.isEmpty()) return
+        scope.launch {
+            try {
+                sendMessageToMembers(group, message, onlyMembers = readers.toSet())
+            } catch (e: Exception) {
+                Log.w(TAG, "🛡 advanced-privacy fan-out failed: ${e.message}")
+            }
+        }
+    }
+
+    /** Other human members whose build reads `🛡ADV_PRIVACY🛡`. */
+    private fun advancedPrivacyReaders(group: Group): List<String> =
+        com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.readers(groupRecipientKeys(group, null)) {
+            AdvancedChatPrivacyReaders.peerReadsNow(it)
+        }
+
+    /** Other human members who will not apply the switch until they update (group info footer). */
+    fun advancedPrivacyNonReaders(groupId: String): List<String> {
+        val group = _groups.value.find { it.id.equals(groupId, ignoreCase = true) } ?: return emptyList()
+        return advancedPrivacyNonReaders(group)
+    }
+
+    private fun advancedPrivacyNonReaders(group: Group): List<String> {
+        AdvancedChatPrivacyReaders.attach(context)
+        return groupRecipientKeys(group, null).filterNot { AdvancedChatPrivacyReaders.peerReadsNow(it) }
     }
 
     fun sendGroupTypingStatus(groupId: String, isTyping: Boolean) {
@@ -2675,9 +2840,56 @@ class GroupManager @Inject constructor(
                 return  // Never store as visible message
             }
 
+            // ── 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy ──────
+            //
+            // Any member may switch it (WhatsApp parity), so this sits ABOVE the
+            // channel-mode post filter: the state applies even in an admins-only
+            // group. The author is [senderPublicKey] (the key that opened the
+            // envelope). Stored as a READ row and never a banner; an unreadable
+            // payload (future `v`) is dropped so it can never print as JSON.
+            if (com.oshi.messenger.data.model.AdvancedChatPrivacyChange.isPayload(messageContent)) {
+                AdvancedChatPrivacyReaders.note(senderPublicKey)
+                val change = com.oshi.messenger.data.model.AdvancedChatPrivacyChange.fromMessageString(messageContent)
+                if (change == null) {
+                    Log.w(TAG, "🛡 unreadable advanced-privacy payload in ${groupId.take(8)} — dropped")
+                    return
+                }
+                val store = AdvancedChatPrivacyStore
+                store.attach(context)
+                val nowSeconds = System.currentTimeMillis() / 1000L
+                val applied = store.applyIncoming(change, groupId, nowSeconds)
+                Log.d(TAG, "🛡 group ${groupId.take(8)} advanced privacy on=${change.on} by ${senderPublicKey.take(8)} (applied=$applied)")
+                if (_groupMessages.value[groupId]?.any { it.id == messageId } == true) return
+                val atMillis = com.oshi.messenger.data.model.AdvancedChatPrivacyChange
+                    .clampedAt(change.atUnixSeconds, nowSeconds) * 1000L
+                addMessageToGroup(
+                    groupId,
+                    GroupMessage(
+                        id = messageId,
+                        groupId = groupId,
+                        senderPublicKey = senderPublicKey,
+                        senderName = senderName,
+                        content = messageContent,
+                        timestamp = minOf(atMillis, System.currentTimeMillis()).takeIf { it > 0 } ?: timestamp,
+                        isFromMe = false,
+                        isRead = true,
+                    )
+                )
+                updateGroupConversations()
+                saveMessages()
+                return
+            }
+
             // ── iOS Reaction message: "🔥REACTION🔥{JSON}" ──────────────────────
             if (messageContent.startsWith(REACTION_PREFIX)) {
                 val parsed = parseGroupReaction(messageContent, senderPublicKey)
+                // __GROUP_SETTINGS_2026_11_20__ reactions allowed (spec §2.3): an `add` the
+                // group does not allow is dropped; `remove` always passes.
+                if (parsed != null && !parsed.isRemoval &&
+                    settingsOf(groupId)?.isReactionAllowed(parsed.emoji) == false) {
+                    Log.d(TAG, "🚫 reaction '${parsed.emoji}' not allowed in ${groupId.take(8)} — dropped")
+                    return
+                }
                 if (parsed != null) {
                     applyReactionLocally(
                         groupId, parsed.messageId, parsed.senderPublicKey, parsed.emoji, parsed.isRemoval
@@ -2699,7 +2911,7 @@ class GroupManager @Inject constructor(
             // everything below assumes a body worth storing.
             parseGroupEditSystemMessage(json, timestamp)?.let { edit ->
                 val applied = applyMessageEditLocally(
-                    groupId, edit.editedMessageId, edit.newContent, edit.editedAt
+                    groupId, edit.editedMessageId, edit.newContent, edit.editedAt, actor = senderPublicKey
                 )
                 Log.d(
                     TAG,
@@ -2723,7 +2935,7 @@ class GroupManager @Inject constructor(
             // what the local delete already does, and it renders as the standard
             // "message deleted" placeholder rather than a hole in the thread.
             parseGroupDeleteSystemMessage(json)?.let { deletedMessageId ->
-                applyMessageDeletionLocally(groupId, deletedMessageId)
+                applyMessageDeletionLocally(groupId, deletedMessageId, actor = senderPublicKey)
                 Log.d(TAG, "🗑️ Applied remote delete-for-everyone to ${deletedMessageId.take(8)}")
                 return  // A command, never a visible bubble — iOS returns at :3289.
             }
@@ -2737,6 +2949,41 @@ class GroupManager @Inject constructor(
                 messageContent.startsWith("{\"type\":\"group_update")
             if (isSystemPayload) {
                 Log.d(TAG, "⏭️ Skipping system payload: ${messageContent.take(40)}")
+                return
+            }
+            // __GROUP_SETTINGS_2026_11_20__ channel mode (spec §2.4): content from a non-admin
+            // is dropped when only admins may post. Edits/deletes/reactions/ballots returned above.
+            // __GROUP_COMMENTS_2026_11_21__ spec §2.12.4: the one narrow exception — a comment
+            // under an admin's post, when the admins turned comments on.
+            var commentOfPost: String? = null
+            val commentOn = GroupComments.read(json)
+            if (commentOn != null) {
+                val senderRateKey = gk(groupId) + "|" + GroupUpdateAuthorizer.canonicalIdentity(senderPublicKey)
+                val (decision, parentMsg) = GroupComments.evaluate(
+                    json = json, body = messageContent, sender = senderPublicKey,
+                    settings = settingsOf(groupId),
+                    stored = _groupMessages.value[groupId] ?: emptyList(),
+                    isAdmin = { k -> isAdminOf(groupId, k) },
+                    isEvicted = { k -> isEvictedFrom(groupId, k) },
+                    isComment = ::isCommentId,
+                    recentFromSender = commentReceiveRate.count(senderRateKey, System.currentTimeMillis()),
+                )
+                when (decision.outcome) {
+                    GroupComments.Outcome.ACCEPT -> commentOfPost = parentMsg!!.id
+                    GroupComments.Outcome.HOLD -> {
+                        commentOrphans.hold(GroupComments.Orphan(groupId, commentOn, content, senderPublicKey, System.currentTimeMillis()))
+                        Log.d(TAG, "💬 comment ${messageId.take(8)} held: post ${commentOn.take(8)} not here yet")
+                        return
+                    }
+                    GroupComments.Outcome.DROP -> {
+                        Log.d(TAG, "🚫 comment ${messageId.take(8)} from ${senderPublicKey.take(8)} dropped: ${decision.reason}")
+                        return
+                    }
+                    GroupComments.Outcome.ORDINARY -> Unit
+                }
+            }
+            if (commentOfPost == null && !isAllowedToPost(groupId, senderPublicKey)) {
+                Log.d(TAG, "🚫 ${senderPublicKey.take(8)} may not post in ${groupId.take(8)} (admins only) — dropped")
                 return
             }
             // Protocol envelopes accidentally stored as content (must have ciphertext/encryptedContent
@@ -2842,7 +3089,7 @@ class GroupManager @Inject constructor(
                 val current = _groupMessages.value[groupId] ?: emptyList()
                 val target = liveLocationMergeTarget(current, senderPublicKey, finalContent)
                 if (target >= 0) {
-                    applyMessageEditLocally(groupId, current[target].id, finalContent, timestamp)
+                    applyMessageEditLocally(groupId, current[target].id, finalContent, timestamp, actor = senderPublicKey)
                     Log.d(TAG, "📍 Merged live-location update into ${current[target].id.take(8)}")
                     return
                 }
@@ -2875,7 +3122,7 @@ class GroupManager @Inject constructor(
             // __MENTIONS_2026_09_23__ keep only current members whose `@name` is visible in the text.
             val mentionGroup = _groups.value.find { it.id.equals(groupId, ignoreCase = true) }
             val admittedMentions = if (mentionGroup == null) emptyList() else com.oshi.messenger.util.MentionWire.admit(
-                body = messageContent,
+                body = com.oshi.messenger.util.MessageFormatting.strip(messageContent), // __TEXT_FORMATTING_2026_11_24__ `__@bob__`
                 mentions = com.oshi.messenger.util.MentionWire.parse(json.opt(com.oshi.messenger.util.MentionWire.FIELD)),
                 isMember = { k -> mentionGroup.memberPublicKeys.any { sameMentionKey(it, k) } },
                 sameKey = ::sameMentionKey
@@ -2896,9 +3143,11 @@ class GroupManager @Inject constructor(
                 groupId = groupId,
                 senderPublicKey = senderPublicKey,
                 senderName = senderName,
-                content = finalContent,
+                content = if (commentOfPost != null) GroupComments.clamp(finalContent) else finalContent,
                 timestamp = timestamp,
                 isFromMe = false,
+                // A comment never counts as unread in the group (§2.12.5).
+                isRead = commentOfPost != null,
                 mediaType = finalMediaType,
                 mediaData = finalMediaData,
                 mediaFileName = finalMediaFileName,
@@ -2912,9 +3161,21 @@ class GroupManager @Inject constructor(
                 isVideoNote = noteMerge.first && finalMediaType == MediaType.VIDEO
             )
 
+            if (commentOfPost != null) {
+                // Index first, so the timeline never draws it as a post for one frame.
+                recordCommentLink(message.id, commentOfPost)
+                commentReceiveRate.record(gk(groupId) + "|" + GroupUpdateAuthorizer.canonicalIdentity(senderPublicKey), System.currentTimeMillis())
+            }
             addMessageToGroup(groupId, message)
             updateGroupConversations()
             saveMessages()
+
+            if (commentOfPost != null) {
+                notifyCommentIfForMe(groupId, message, mentionsMe)
+                return
+            }
+            // A post that comments were waiting for (§2.12.4 orphans): run them again.
+            releaseCommentOrphans(groupId, messageId)
 
             // __GROUP_SELF_HEAL_2026_10_01__ We decrypted this message (its content key was
             // unwrapped over our 1:1 ratchet, which survives an app-data wipe) but we have no
@@ -3018,7 +3279,7 @@ class GroupManager @Inject constructor(
                 "read_receipt" -> handleReadReceipt(json)
                 "read_receipt_batch" -> handleReadReceiptBatch(json)
                 "reaction" -> handleReactionUpdate(json)
-                "message_deleted" -> handleMessageDeleted(json)
+                "message_deleted" -> handleMessageDeleted(json, senderPublicKey)
                 "admin_promoted" -> handleAdminPromoted(json, senderPublicKey)
                 "admin_demoted" -> handleAdminDemoted(json, senderPublicKey)
                 "sync_request" -> handleGroupSyncRequest(json, senderPublicKey)
@@ -3026,6 +3287,8 @@ class GroupManager @Inject constructor(
                 // unhandled, so the iPhone got silence. Mirror iOS's own handler (swift:941):
                 // auto-add the requester, then reply with the full group.
                 "member_sync_request" -> handleMemberSyncRequest(json, senderPublicKey)
+                // __GROUP_SETTINGS_2026_11_20__ public-link join (GROUP_INFO_SETTINGS_SPEC §3.1)
+                "join_request" -> handleJoinRequest(json, senderPublicKey)
                 "wallpaper_changed" -> handleWallpaperChanged(json, senderPublicKey)
                 "group_picture_changed" -> handleGroupPictureChanged(json, senderPublicKey)
                 "group_renamed" -> {
@@ -3093,14 +3356,32 @@ class GroupManager @Inject constructor(
             incomingEvictedKeys = groupJson.optJSONArray("evictedMemberKeys")?.let { arr ->
                 (0 until arr.length()).mapNotNull { i -> arr.optString(i, "").takeIf { k -> k.isNotEmpty() } }
             },
-            senderPublicKey = senderPublicKey
+            senderPublicKey = senderPublicKey,
+            // __GROUP_SETTINGS_2026_11_20__ the full definition's description was never applied
+            // here (only the Android-minimal `updated` kind did), so an iOS/Desktop description
+            // never reached Android. Absent = keep (spec §2.2).
+            incomingDescription = if (groupJson.has("description") && !groupJson.isNull("description"))
+                groupJson.optString("description") else null,
+            incomingSettings = com.oshi.messenger.data.model.GroupSettings.parseOrNull(groupJson.optJSONObject("settings"))
         )
         // Adopt the version only from an authenticated sender who is (now) a member: a
         // stranger must not be able to push our counter up and freeze the group.
         if (incomingVersion != null && senderPublicKey != null) {
             val g = _groups.value.find { it.id.equals(groupId, ignoreCase = true) }
             val senderCanon = GroupUpdateAuthorizer.canonicalIdentity(senderPublicKey)
-            if (g != null && g.memberPublicKeys.any { GroupUpdateAuthorizer.canonicalIdentity(it) == senderCanon }) {
+            if (g != null && g.memberPublicKeys.any { GroupUpdateAuthorizer.canonicalIdentity(it) == senderCanon } &&
+                // __GROUP_TYPE_TAKEOVER_2026_11_20__ and never a jump of more than 1024.
+                GroupUpdateAuthorizer.isPlausibleVersionStep(stateVersionOf(groupId), incomingVersion) &&
+                // __GROUP_TOMBSTONE_AUTHZ_2026_11_20__ and only from someone who may change the roster.
+                GroupUpdateAuthorizer.mayAdoptStateVersion(
+                    GroupUpdateAuthorizer.authorize(
+                        currentMemberKeys = g.memberPublicKeys,
+                        currentAdminKeys = g.adminPublicKeys,
+                        currentType = g.effectiveGroupType,
+                        sender = senderPublicKey
+                    )
+                )
+            ) {
                 adoptStateVersion(groupId, incomingVersion)
             }
         }
@@ -3159,7 +3440,13 @@ class GroupManager @Inject constructor(
             currentMemberKeys = currentGroups[index].memberPublicKeys,
             evictedMemberKeys = currentGroups[index].evictedMemberKeys,
             weMayAddMembers = me.isNotEmpty() && currentGroups[index].canAddMembers(me),
-        )
+        ).let { base ->
+            // __GROUP_SETTINGS_2026_11_20__ a reset invite link (spec §3.2/§3.3)
+            GroupUpdateAuthorizer.authorizeInviteToken(
+                base, settingsOf(currentGroups[index].id),
+                json.optString("inviteToken", "").ifEmpty { null }
+            )
+        }
         if (!decision.answer) {
             Log.w(TAG, "🛑 member_sync_request from ${senderPublicKey.take(8)} ignored (${decision.reason})")
             return
@@ -3428,7 +3715,50 @@ class GroupManager @Inject constructor(
         message: GroupMessage,
         ephemeral: Boolean = false,
         /** __BOT_IN_THE_PIPELINE_2026_11_09__ [BOT_AUTHOR_FIELD] value; null for a human message. */
-        botAuthor: String? = null
+        botAuthor: String? = null,
+        /** __GROUP_COMMENTS_2026_11_21__ post id for a comment (text only, §2.12.2). */
+        commentOn: String? = null,
+        /** Comment push rule (§2.12.3): wake only these members; null = the usual [ephemeral] rule. */
+        wakeOnly: Set<String>? = null,
+        /** __GROUP_RESEND_2026_11_25__ resend to these members only (a pending entry's list). */
+        onlyMembers: Set<String>? = null
+    ) {
+        val myPublicKey = cryptoManager.getPublicKeyString()
+        // __GROUP_RESEND_2026_11_25__ a message stored in the thread is tracked until every
+        // recipient got it (typing / ballot pings and reactions are not rows, not tracked).
+        val tracked = !ephemeral && isStoredGroupMessage(group.id, message.id)
+        val outcome = DeliveryOutcome()
+        if (tracked && onlyMembers == null) {
+            val stored = findStoredGroupMessage(group.id, message.id)
+            pendingDelivery.begin(
+                msgId = message.id, groupId = group.id,
+                recipients = groupRecipientKeys(group, null),
+                wireContent = message.content.takeIf { stored != null && it != stored.content },
+                botAuthor = botAuthor, commentOn = commentOn, wakeOnly = wakeOnly,
+            )
+            publishPendingDelivery()
+        }
+        if (tracked) sendsInFlight.add(message.id)
+        try {
+            sendMessageToMembersInner(group, message, ephemeral, botAuthor, commentOn, wakeOnly, onlyMembers, outcome)
+        } finally {
+            if (tracked) {
+                sendsInFlight.remove(message.id)
+                pendingDelivery.settle(message.id, outcome.reached, outcome.noBundle)
+                publishPendingDelivery()
+            }
+        }
+    }
+
+    private suspend fun sendMessageToMembersInner(
+        group: Group,
+        message: GroupMessage,
+        ephemeral: Boolean,
+        botAuthor: String?,
+        commentOn: String?,
+        wakeOnly: Set<String>?,
+        onlyMembers: Set<String>?,
+        outcome: DeliveryOutcome
     ) {
         val myPublicKey = cryptoManager.getPublicKeyString()
         val appleTimestamp = (message.timestamp / 1000.0) - 978307200.0
@@ -3494,7 +3824,7 @@ class GroupManager @Inject constructor(
                 appleTimestamp = appleTimestamp, encryptedContentBytes = ByteArray(0),
                 iosMediaTypeString = iosMediaTypeString, includeBodyCompat = false
             )
-            val handled = deliverGroupMedia(group, message, stripped, iosMediaTypeString)
+            val handled = deliverGroupMedia(group, message, stripped, iosMediaTypeString, onlyMembers, outcome)
             // __LEGACY_COMPAT_2026_09_23__ old builds read media only INLINE in the legacy envelope
             // (exactly what Android 1.6.25 sent). Transition window only.
             deliverLegacyGroupEnvelopeCompat(
@@ -3514,7 +3844,7 @@ class GroupManager @Inject constructor(
             message = message, wireGroupId = wireGroupId, senderPublicKey = myPublicKey,
             appleTimestamp = appleTimestamp, encryptedContentBytes = encryptedContentBytes,
             iosMediaTypeString = iosMediaTypeString, includeBodyCompat = true,
-            botAuthor = botAuthor
+            botAuthor = botAuthor, commentOn = commentOn
         )
         deliverGroupEnvelope(
             group = group,
@@ -3523,7 +3853,11 @@ class GroupManager @Inject constructor(
             appleTimestamp = appleTimestamp,
             iosMediaTypeString = iosMediaTypeString,
             hasMedia = message.mediaData != null || message.mediaType != null,
-            push = !silent
+            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ a settings notice wakes nobody.
+            push = !silent && wakeOnly == null && !OSHIControlPayload.neverNotifies(message.content),
+            wakeOnly = wakeOnly,
+            onlyMembers = onlyMembers,
+            outcome = outcome
         )
     }
 
@@ -3540,7 +3874,8 @@ class GroupManager @Inject constructor(
         encryptedContentBytes: ByteArray,
         iosMediaTypeString: String?,
         includeBodyCompat: Boolean,
-        botAuthor: String? = null
+        botAuthor: String? = null,
+        commentOn: String? = null
     ): String = wireGroupMessageJson(
         id = message.id,
         wireGroupId = wireGroupId,
@@ -3554,7 +3889,8 @@ class GroupManager @Inject constructor(
         mentionsRendered = com.oshi.messenger.util.MentionWire.render(mentionsFor(message.id)),
         videoNote = message.isVideoNote,
         durationMs = noteWireDuration(message),
-        botAuthor = botAuthor
+        botAuthor = botAuthor,
+        commentOn = commentOn
     )
 
     /** __VIDEO_NOTE_2026_09_24__ the wire duration of a note row, clamped; null otherwise. */
@@ -3718,10 +4054,13 @@ class GroupManager @Inject constructor(
         appleTimestamp: Double,
         iosMediaTypeString: String?,
         hasMedia: Boolean,
-        push: Boolean
+        push: Boolean,
+        /** __GROUP_COMMENTS_2026_11_21__ wake only these members (self copy kept); see [sendComment]. */
+        wakeOnly: Set<String>? = null,
+        onlyMembers: Set<String>? = null,
+        outcome: DeliveryOutcome? = null
     ) {
-        val myPublicKey = cryptoManager.getPublicKeyString()
-        val recipientKeys = group.memberPublicKeys.filter { it != myPublicKey && !it.startsWith("bot:") }
+        val recipientKeys = groupRecipientKeys(group, onlyMembers)
         if (recipientKeys.isEmpty()) return
 
         // 📡 LOCAL MESH FIRST — see __GROUP_MESH_IS_A_TRANSPORT_2026_10_16__ in
@@ -3749,6 +4088,7 @@ class GroupManager @Inject constructor(
         // member stayed branded "must update" indefinitely while all of them were
         // reading the messages fine.
         if (meshReached.isNotEmpty()) noteReachability(group.id, meshReached, emptySet())
+        outcome?.reached?.addAll(meshReached)
 
         val router = v2Router?.get()
         if (router == null) {
@@ -3762,7 +4102,7 @@ class GroupManager @Inject constructor(
         // __LEGACY_COMPAT_2026_09_23__ the legacy copy goes out even when the v2 send throws.
         var v2Handled: Set<String> = emptySet()
         try {
-            v2Handled = deliverGroupEnvelopeV2(router, group, messageId, groupMessageJson, appleTimestamp, recipientKeys, push)
+            v2Handled = deliverGroupEnvelopeV2(router, group, messageId, groupMessageJson, appleTimestamp, recipientKeys, push, wakeOnly, outcome)
         } finally {
             deliverLegacyGroupEnvelopeCompat(group, messageId, { groupMessageJson }, appleTimestamp,
                 iosMediaTypeString, hasMedia, push, v2Handled)
@@ -3777,7 +4117,9 @@ class GroupManager @Inject constructor(
         groupMessageJson: String,
         appleTimestamp: Double,
         recipientKeys: List<String>,
-        push: Boolean
+        push: Boolean,
+        wakeOnly: Set<String>? = null,
+        outcome: DeliveryOutcome? = null
     ): Set<String> {
         val plaintext = Base64.encodeToString(groupMessageJson.toByteArray(Charsets.UTF_8), Base64.NO_WRAP)
             .toByteArray(Charsets.UTF_8)
@@ -3789,15 +4131,22 @@ class GroupManager @Inject constructor(
                 plaintext = plaintext,
                 msgId = messageId,
                 originalTimestampMs = tsMs,
-                selfCopy = push
+                selfCopy = push || wakeOnly != null
             )
         } catch (e: Exception) {
             Log.e(TAG, "❌ v2 group send failed: ${e.message}")
             return emptySet()
         }
         noteReachability(group.id, result.handled, result.unreachable)
+        outcome?.reached?.addAll(result.handled); outcome?.noBundle?.addAll(result.unreachable)   // __GROUP_RESEND_2026_11_25__
+        if (result.rateLimited.isNotEmpty()) rateLimitedByMessage[messageId] = result.rateLimited   // __GROUP_FANOUT_2026_11_24__
         Log.d(TAG, "✅ Group message ${messageId.take(8)} → ${result.handled.size}/${recipientKeys.size} member(s) over v2")
         if (push && result.handled.isNotEmpty()) wakeMembers(result.handled, group.id, messageId)
+        if (!push && !wakeOnly.isNullOrEmpty()) {
+            val wanted = wakeOnly.map { GroupUpdateAuthorizer.canonicalIdentity(it) }.toSet()
+            val targets = result.handled.filter { GroupUpdateAuthorizer.canonicalIdentity(it) in wanted }.toSet()
+            if (targets.isNotEmpty()) wakeMembers(targets, group.id, messageId)
+        }
         return result.handled
     }
 
@@ -3810,6 +4159,93 @@ class GroupManager @Inject constructor(
      * generic one (no group name, no sender name, no content), and a member v2 already woke gets
      * neither a second push nor the queue's fallback push.
      */
+    /**
+     * __GROUP_FANOUT_2026_11_24__ messageId → members the v2 send left out because the relay kept
+     * answering 429 (see [com.oshi.messenger.network.v2.V2MessageRouter.GroupSendResult.rateLimited]).
+     * Written by the v2 half, consumed by [deliverLegacyGroupEnvelopeCompat] for the same message.
+     */
+    private val rateLimitedByMessage = java.util.concurrent.ConcurrentHashMap<String, Set<String>>()
+
+    // =========================================================================
+    // __GROUP_RESEND_2026_11_25__ automatic resend to the members a send missed
+    // =========================================================================
+
+    /** Who one fan-out reached (v2 or the local mesh) and who has no v2 bundle at all. */
+    internal class DeliveryOutcome {
+        val reached: MutableSet<String> = java.util.Collections.synchronizedSet(LinkedHashSet())
+        val noBundle: MutableSet<String> = java.util.Collections.synchronizedSet(LinkedHashSet())
+    }
+
+    private fun groupRecipientKeys(group: Group, onlyMembers: Set<String>?): List<String> {
+        val myPublicKey = cryptoManager.getPublicKeyString()
+        val all = group.memberPublicKeys.filter { it != myPublicKey && !it.startsWith("bot:") }
+        if (onlyMembers == null) return all
+        val wanted = onlyMembers.map { GroupUpdateAuthorizer.canonicalIdentity(it) }.toSet()
+        return all.filter { GroupUpdateAuthorizer.canonicalIdentity(it) in wanted }
+    }
+
+    private fun findStoredGroupMessage(groupId: String, msgId: String): GroupMessage? =
+        _groupMessages.value.entries.firstOrNull { it.key.equals(groupId, ignoreCase = true) }
+            ?.value?.firstOrNull { it.id == msgId }
+
+    private fun isStoredGroupMessage(groupId: String, msgId: String): Boolean =
+        findStoredGroupMessage(groupId, msgId) != null
+
+    /** "Retry now" from the bubble's details. */
+    fun retryPendingDelivery(msgId: String) {
+        pendingDelivery.makeDue(msgId)
+        publishPendingDelivery()
+        resendKick.trySend(Unit)
+    }
+
+    /**
+     * Runs for the life of the process: wakes every 30 s (and at once on "Retry now" or when a
+     * network comes back), resends every due entry to its pending members only.
+     */
+    private fun startPendingDeliveryLoop() {
+        publishPendingDelivery()
+        try {
+            val cm = context.getSystemService(android.net.ConnectivityManager::class.java)
+            cm?.registerDefaultNetworkCallback(object : android.net.ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: android.net.Network) {
+                    if (pendingDelivery.all().isEmpty()) return
+                    pendingDelivery.makeDue()
+                    resendKick.trySend(Unit)
+                }
+            })
+        } catch (e: Throwable) {
+            Log.w(TAG, "pending delivery: no network callback (${e.message}), timer only")
+        }
+        scope.launch {
+            delay(10_000L)   // let the transports come up after a cold start
+            while (isActive) {
+                try { runDuePendingDeliveries() } catch (e: Exception) { Log.w(TAG, "pending delivery pass failed: ${e.message}") }
+                withTimeoutOrNull(30_000L) { resendKick.receive() }
+            }
+        }
+    }
+
+    private suspend fun runDuePendingDeliveries() = resendMutex.withLock {
+        for (entry in pendingDelivery.due()) {
+            if (entry.msgId in sendsInFlight) continue
+            val group = _groups.value.find { it.id.equals(entry.groupId, ignoreCase = true) }
+            if (group == null) { pendingDelivery.remove(entry.msgId); continue }
+            // Members who left are not owed the message.
+            pendingDelivery.dropDeparted(group.id, group.memberPublicKeys)
+            val current = pendingDelivery.get(entry.msgId) ?: continue
+            val stored = findStoredGroupMessage(group.id, entry.msgId)
+            if (stored == null || stored.isDeleted) { pendingDelivery.remove(entry.msgId); continue }
+            val withMedia = if (stored.mediaType != null && stored.mediaData == null) {
+                loadMediaBytes(stored.id)?.let { stored.copy(mediaData = it) } ?: stored
+            } else stored
+            val wire = current.wireContent?.let { withMedia.copy(content = it) } ?: withMedia
+            Log.i(TAG, "↻ group ${group.id.take(8)} msg ${entry.msgId.take(8)}: resend to ${current.pending.size}/${current.total} (attempt ${current.attempts + 1})")
+            sendMessageToMembers(group, wire, botAuthor = current.botAuthor, commentOn = current.commentOn,
+                wakeOnly = current.wakeOnly, onlyMembers = current.pending)
+        }
+        publishPendingDelivery()
+    }
+
     private suspend fun deliverLegacyGroupEnvelopeCompat(
         group: Group,
         messageId: String,
@@ -3827,7 +4263,10 @@ class GroupManager @Inject constructor(
         // __LEAK_FIX_2026_09_25__ (audit B) a member v2 REACHED whose build reads v2 groups
         // (advertises group v3 ⇒ built after 2026-09-04) already has this message: no readable
         // duplicate for it. See GroupLegacyCompat.stillNeedLegacy.
-        val legacy = compat.stillNeedLegacy(compat.legacyRecipientsNow(recipientKeys), v2Handled, ::peerReadsGroupV3)
+        // __GROUP_FANOUT_2026_11_24__ never the legacy path because the relay said 429.
+        val legacy = compat.withoutRateLimited(
+            compat.stillNeedLegacy(compat.legacyRecipientsNow(recipientKeys), v2Handled, ::peerReadsGroupV3),
+            rateLimitedByMessage.remove(messageId).orEmpty())
         if (legacy.isEmpty()) return
         // __MEDIA_SEND_OOM_2026_11_11__ The inline copy of a large file may not fit in the
         // heap. The v2 blob send has already gone out; losing the old-build copy beats
@@ -4022,15 +4461,17 @@ class GroupManager @Inject constructor(
             PeerCapabilities.supportsGroupV3(context, GroupUpdateAuthorizer.canonicalIdentity(peer))
 
     /** Group MEDIA over the v2 blob store (spec §4). Over the cap ⇒ nobody, never inline. */
-    private suspend fun deliverGroupMedia(group: Group, message: GroupMessage, strippedGroupMessageJson: String, iosMediaType: String): Set<String> {
+    private suspend fun deliverGroupMedia(
+        group: Group, message: GroupMessage, strippedGroupMessageJson: String, iosMediaType: String,
+        onlyMembers: Set<String>? = null, outcome: DeliveryOutcome? = null
+    ): Set<String> {
         val router = v2Router?.get()
         val bytes = message.mediaData
         if (router == null || bytes == null) {
             Log.e(TAG, "👥 no v2 transport — group media NOT sent (no legacy fallback)")
             return emptySet()
         }
-        val myPublicKey = cryptoManager.getPublicKeyString()
-        val recipientKeys = group.memberPublicKeys.filter { it != myPublicKey && !it.startsWith("bot:") }
+        val recipientKeys = groupRecipientKeys(group, onlyMembers)
         if (recipientKeys.isEmpty()) return emptySet()
         val result = try {
             router.sendGroupFile(
@@ -4050,6 +4491,8 @@ class GroupManager @Inject constructor(
             return emptySet()
         }
         noteReachability(group.id, result.handled, result.unreachable)
+        outcome?.reached?.addAll(result.handled); outcome?.noBundle?.addAll(result.unreachable)   // __GROUP_RESEND_2026_11_25__
+        if (result.rateLimited.isNotEmpty()) rateLimitedByMessage[message.id] = result.rateLimited   // __GROUP_FANOUT_2026_11_24__
         Log.d(TAG, "✅ Group media ${message.id.take(8)} → ${result.handled.size}/${recipientKeys.size} member(s) over v2 blobs")
         if (result.handled.isNotEmpty()) wakeMembers(result.handled, group.id, message.id)
         return result.handled
@@ -4250,10 +4693,13 @@ class GroupManager @Inject constructor(
                 Log.w(TAG, "🛑 'created' ignored (${decision.reason}) for '${existing.name}'")
                 return
             }
-            val mergedMembers = if (decision.keepMembership) existing.memberPublicKeys else members
+            val mergedMembers = if (decision.keepMembership) existing.memberPublicKeys
+                else GroupUpdateAuthorizer.keepAdminsInRoster(decision, members, existing.memberPublicKeys, existing.adminPublicKeys)
             currentGroups[existingIndex] = existing.copy(
                 name = if (decision.keepName) existing.name else name,
-                description = description,
+                // __GROUP_TYPE_TAKEOVER_2026_11_20__ settings and type only from someone
+                // who may change them (a plain member of an admin-only group may not).
+                description = if (GroupUpdateAuthorizer.mayChangeGroupSettings(decision)) description else existing.description,
                 memberPublicKeys = mergedMembers,
                 adminPublicKeys = when {
                     // Roster taken but admin set protected → re-stamp from OUR copy, so a member
@@ -4263,10 +4709,12 @@ class GroupManager @Inject constructor(
                     decision.keepAdminSet -> existing.adminPublicKeys
                     else -> admins
                 },
-                isPublic = isPublic,
-                groupType = existing.groupType ?: resolvedType,
-                groupImage = groupImage ?: existing.groupImage,
-                encryptionKey = encryptionKey ?: existing.encryptionKey,
+                isPublic = if (GroupUpdateAuthorizer.mayChangeGroupSettings(decision)) isPublic else existing.isPublic,
+                groupType = existing.groupType
+                    ?: resolvedType.takeIf { GroupUpdateAuthorizer.mayChangeGroupType(decision) },
+                groupImage = (if (GroupUpdateAuthorizer.mayChangeGroupSettings(decision)) groupImage else null)
+                    ?: existing.groupImage,
+                encryptionKey = (if (!decision.keepMembership) encryptionKey else null) ?: existing.encryptionKey,
                 updatedAt = System.currentTimeMillis()
             )
             Log.d(TAG, "🔄 Updated existing group '${name}' (${groupId.take(8)}, ${decision.reason})")
@@ -4518,6 +4966,9 @@ class GroupManager @Inject constructor(
             Log.w(TAG, "🛑 'deleted' ignored — ${senderPublicKey?.take(8) ?: "unauthenticated"} is not an admin of '${group.name}'")
             return
         }
+        // __GROUP_SETTINGS_2026_11_20__ the definition with `settings.dissolved` already made the
+        // group read-only with a banner (spec §2.9); the user deletes the chat themselves.
+        if (settingsOf(group.id)?.dissolved == true) return
         currentGroups.removeAt(index)
         _groups.value = currentGroups
         saveGroups()
@@ -4635,7 +5086,10 @@ class GroupManager @Inject constructor(
 
     private fun updateGroupConversations() {
         val conversations = _groups.value.map { group ->
-            val messages = _groupMessages.value[group.id] ?: emptyList()
+            val links = _commentLinks.value
+            // __GROUP_COMMENTS_2026_11_21__ comments are not timeline rows (§2.12.4e).
+            val messages = (_groupMessages.value[group.id] ?: emptyList())
+                .let { l -> if (links.isEmpty()) l else l.filter { it.id.lowercase(Locale.US) !in links } }
             val lastMessage = messages.maxByOrNull { it.timestamp }
             val unreadCount = messages.count { !it.isRead && !it.isFromMe }
 
@@ -4767,7 +5221,11 @@ class GroupManager @Inject constructor(
          * everything applies EXCEPT the admin set. Defaulted so the existing `VPSClient`
          * call site keeps compiling and lands in the unauthenticated branch by construction.
          */
-        senderPublicKey: String? = null
+        senderPublicKey: String? = null,
+        /** `description` when the key travelled (null = absent = keep). */
+        incomingDescription: String? = null,
+        /** Parsed `settings` when the key travelled (null = absent = keep). */
+        incomingSettings: com.oshi.messenger.data.model.GroupSettings? = null
     ) {
         val currentGroups = _groups.value.toMutableList()
 
@@ -4865,13 +5323,28 @@ class GroupManager @Inject constructor(
                 // Carried in from birth: a group we are only now learning about may already
                 // have evictions behind it, and starting empty would let the evicted key
                 // back in on the very next `member_added`.
-                evictedMemberKeys = incomingEvictedKeys ?: emptyList()
+                evictedMemberKeys = incomingEvictedKeys ?: emptyList(),
+                description = incomingDescription?.let {
+                    com.oshi.messenger.data.model.GroupSettings.truncate(it, com.oshi.messenger.data.model.GroupSettings.MAX_DESCRIPTION)
+                } ?: ""
                 // encryptionKey intentionally null: key is always derived from groupId via deriveGroupKey()
             )
             currentGroups.add(newGroup)
             _groups.value = currentGroups
             saveGroups()
             updateGroupConversations()
+            // __GROUP_SETTINGS_2026_11_20__ a group we did not know = we just joined it. Settings
+            // are taken only from a sender the definition itself names as admin (there is no
+            // "our copy" yet), then the welcome message is shown once (spec §2.5).
+            run {
+                val senderCanon = senderPublicKey?.let { GroupUpdateAuthorizer.canonicalIdentity(it) }
+                val senderIsAdmin = senderCanon != null && (adminKeys.ifEmpty { listOfNotNull(adminPublicKey) })
+                    .any { GroupUpdateAuthorizer.canonicalIdentity(it) == senderCanon }
+                if (incomingDescription != null) markDescriptionTouched(groupId)
+                GroupSettingsMerge.merge(null, incomingSettings, senderIsAdmin)?.let { putSettings(groupId, it) }
+                markJoined(groupId)
+                maybeShowWelcome(groupId)
+            }
             Log.d(TAG, "📢 ✅ Created new group from iOS broadcast: '$name' (${groupId.take(8)}, isPublic=$isPublic, members=${newGroup.memberPublicKeys.size})")
             return
         }
@@ -4908,7 +5381,11 @@ class GroupManager @Inject constructor(
         val memberKeys = parseMemberKeys()
         val adminKeys = parseAdminKeys()
         if (!decision.keepMembership && memberKeys.isNotEmpty()) {
-            updated = updated.copy(memberPublicKeys = memberKeys)
+            updated = updated.copy(
+                memberPublicKeys = GroupUpdateAuthorizer.keepAdminsInRoster(
+                    decision, memberKeys, group.memberPublicKeys, group.adminPublicKeys
+                )
+            )
         }
         // __EVICTION_TOMBSTONE_WAS_DEVICE_LOCAL_2026_11_04__ UNION, never the incoming
         // value alone -- tombstones must not shrink (iOS `GroupMessaging.swift:1091-1109`).
@@ -4916,7 +5393,7 @@ class GroupManager @Inject constructor(
         // in a definition written before the eviction still lists them, and taking it whole
         // is how an evicted member reappeared on a device that had never evicted anyone.
         run {
-            val union = GroupUpdateAuthorizer.unionEvicted(updated.evictedMemberKeys, incomingEvictedKeys)
+            val union = GroupUpdateAuthorizer.mergeEvictedIfAuthorized(decision, updated.evictedMemberKeys, incomingEvictedKeys, group.adminPublicKeys)
             if (union.isNotEmpty()) {
                 val keptMembers = GroupUpdateAuthorizer.withoutEvicted(updated.memberPublicKeys, union)
                 if (keptMembers.size != updated.memberPublicKeys.size) {
@@ -4942,11 +5419,13 @@ class GroupManager @Inject constructor(
         } else if (adminKeys.isNotEmpty()) {
             updated = updated.copy(adminPublicKeys = adminKeys)
         }
-        if (groupImageBytes != null && groupImageBytes.isNotEmpty()) {
+        // __GROUP_TYPE_TAKEOVER_2026_11_20__ settings only from someone who may change them.
+        val maySettings = GroupUpdateAuthorizer.mayChangeGroupSettings(decision)
+        if (maySettings && groupImageBytes != null && groupImageBytes.isNotEmpty()) {
             updated = updated.copy(groupImage = groupImageBytes)
             Log.d(TAG, "📢 Group picture updated (${groupImageBytes.size} bytes)")
         }
-        if (groupWallpaperBytes != null && groupWallpaperBytes.isNotEmpty()) {
+        if (maySettings && groupWallpaperBytes != null && groupWallpaperBytes.isNotEmpty()) {
             updated = updated.copy(
                 groupWallpaperData = groupWallpaperBytes,
                 groupWallpaperUpdatedBy = groupWallpaperUpdatedBy ?: updated.groupWallpaperUpdatedBy,
@@ -4960,7 +5439,7 @@ class GroupManager @Inject constructor(
             !adminPublicKey.isNullOrEmpty() && !updated.adminPublicKeys.contains(adminPublicKey)) {
             updated = updated.copy(adminPublicKeys = updated.adminPublicKeys + adminPublicKey)
         }
-        if (groupType != null) {
+        if (groupType != null && GroupUpdateAuthorizer.mayChangeGroupType(decision)) {
             // 🔴 P1 fix: apply the FULL permission model, not just `isPublic`. Without
             // `groupType`, `effectiveGroupType` degrades an `admin_only` iOS group to
             // COLLABORATIVE and every Android member gains admin powers over it.
@@ -4971,7 +5450,7 @@ class GroupManager @Inject constructor(
             )
             Log.d(TAG, "📢 Group type applied: $groupType → $resolved")
         }
-        if (hasPinnedField && pinnedMessageId != updated.pinnedMessageId) {
+        if (maySettings && hasPinnedField && pinnedMessageId != updated.pinnedMessageId) {
             updated = updated.copy(
                 pinnedMessageId = pinnedMessageId,
                 // iOS attributes an incoming pin to `pinnedBy ?? adminPublicKey`
@@ -4982,16 +5461,518 @@ class GroupManager @Inject constructor(
             )
             Log.d(TAG, "📌 Pin synced: ${pinnedMessageId?.take(8) ?: "(cleared)"} by ${pinnedBy?.take(8) ?: "(admin)"}")
         }
-        if (hasAvatarField && avatar != updated.avatar) {
+        if (maySettings && hasAvatarField && avatar != updated.avatar) {
             updated = updated.copy(avatar = avatar)
             Log.d(TAG, "🎨 Group avatar synced: ${avatar ?: "(cleared)"}")
         }
+        // __GROUP_SETTINGS_2026_11_20__ description (shipped rename rule) and settings (admin only).
+        if (maySettings && incomingDescription != null) {
+            updated = updated.copy(description = com.oshi.messenger.data.model.GroupSettings.truncate(
+                incomingDescription, com.oshi.messenger.data.model.GroupSettings.MAX_DESCRIPTION))
+            markDescriptionTouched(group.id)
+        }
+        val settingsBefore = settingsOf(group.id)
+        val settingsAfter = GroupSettingsMerge.merge(
+            settingsBefore, incomingSettings, GroupUpdateAuthorizer.mayChangeGroupType(decision)
+        )
+        if (incomingSettings != null && !GroupUpdateAuthorizer.mayChangeGroupType(decision)) {
+            Log.w(TAG, "🛑 settings ignored (not an admin: ${decision.reason}) for '${group.name}'")
+        }
+        if (settingsAfter != settingsBefore) putSettings(group.id, settingsAfter)
+        // A stub from an invite link becomes the real group here (spec §2.5).
+        if (settingsAfter?.welcome?.isNotBlank() == true) maybeShowWelcome(group.id)
+        recordAdminEvents(group.id, GroupAdminLog.diff(
+            group, updated, settingsBefore, settingsAfter,
+            actor = senderPublicKey ?: "", at = System.currentTimeMillis()
+        ))
 
         // Always update timestamp to force StateFlow emission even if content is "same"
         currentGroups[index] = updated.copy(updatedAt = System.currentTimeMillis())
         _groups.value = currentGroups
         saveGroups()
         updateGroupConversations()
+    }
+
+
+    // =========================================================================
+    // GROUP SETTINGS  (docs/GROUP_INFO_SETTINGS_SPEC.md)  __GROUP_SETTINGS_2026_11_20__
+    // =========================================================================
+    //
+    // Side store, sealed like everything else in `GroupLocalStore`, keyed by UPPER-case
+    // group id. Not a Room column on purpose (see GroupSettings). Per group:
+    //   settings (wire object), descSet, autoTranslate, welcomeShown, joinedAt.
+
+    private fun gk(groupId: String) = groupId.uppercase(Locale.US)
+
+    private fun extras(): MutableMap<String, JSONObject> {
+        extrasCache?.let { return it }
+        synchronized(extrasLock) {
+            extrasCache?.let { return it }
+            val map = mutableMapOf<String, JSONObject>()
+            runCatching {
+                readDoc(GroupLocalStore.Doc.GROUP_EXTRAS)?.let { raw ->
+                    val o = JSONObject(raw)
+                    for (k in o.keys()) o.optJSONObject(k)?.let { map[k] = it }
+                }
+            }
+            extrasCache = map
+            _groupSettings.value = map.mapNotNull { (k, v) ->
+                com.oshi.messenger.data.model.GroupSettings.parseOrNull(v.optJSONObject("settings"))?.let { k to it }
+            }.toMap()
+            _autoTranslate.value = map.filterValues { it.optBoolean("autoTranslate") }.keys
+            return map
+        }
+    }
+
+    private fun editExtras(groupId: String, edit: (JSONObject) -> Unit) {
+        synchronized(extrasLock) {
+            val map = extras()
+            val o = map.getOrPut(gk(groupId)) { JSONObject() }
+            edit(o)
+            val snapshot = JSONObject().apply { map.forEach { (k, v) -> put(k, v) } }.toString()
+            persist(GroupLocalStore.Doc.GROUP_EXTRAS, snapshot)
+        }
+    }
+
+    fun settingsOf(groupId: String): com.oshi.messenger.data.model.GroupSettings? {
+        extras()
+        return _groupSettings.value[gk(groupId)]
+    }
+
+    private fun putSettings(groupId: String, settings: com.oshi.messenger.data.model.GroupSettings?) {
+        editExtras(groupId) { o -> if (settings == null) o.remove("settings") else o.put("settings", settings.toJson()) }
+        _groupSettings.value = _groupSettings.value.toMutableMap().apply {
+            if (settings == null) remove(gk(groupId)) else put(gk(groupId), settings)
+        }
+    }
+
+    private fun isDescriptionTouched(groupId: String): Boolean =
+        extras()[gk(groupId)]?.optBoolean("descSet") == true
+
+    private fun markDescriptionTouched(groupId: String) {
+        if (!isDescriptionTouched(groupId)) editExtras(groupId) { it.put("descSet", true) }
+    }
+
+    fun isAutoTranslate(groupId: String): Boolean { extras(); return gk(groupId) in _autoTranslate.value }
+
+    fun setAutoTranslate(groupId: String, on: Boolean) {
+        editExtras(groupId) { it.put("autoTranslate", on) }
+        _autoTranslate.value = if (on) _autoTranslate.value + gk(groupId) else _autoTranslate.value - gk(groupId)
+    }
+
+    private fun markJoined(groupId: String) = editExtras(groupId) { it.put("joinedAt", System.currentTimeMillis()) }
+
+    /** §2.5: once per group, only within a day of joining on this device. */
+    private fun maybeShowWelcome(groupId: String) {
+        val e = extras()[gk(groupId)] ?: return
+        if (e.optBoolean("welcomeShown")) return
+        val joinedAt = e.optLong("joinedAt", 0L)
+        if (joinedAt == 0L || System.currentTimeMillis() - joinedAt > 24 * 3600 * 1000L) return
+        val welcome = settingsOf(groupId)?.welcome?.takeIf { it.isNotBlank() } ?: return
+        editExtras(groupId) { it.put("welcomeShown", true) }
+        postSystemMessage(groupId, context.getString(com.oshi.messenger.R.string.gs_welcome_row, welcome))
+    }
+
+    // ---- comments (spec §2.12) ----------------------------------------------
+
+    fun isCommentId(messageId: String): Boolean = _commentLinks.value.containsKey(messageId.lowercase(Locale.US))
+
+    /** The post a stored comment belongs to, or null when [messageId] is not a comment. */
+    fun commentPostOf(messageId: String): String? = _commentLinks.value[messageId.lowercase(Locale.US)]
+
+    private fun recordCommentLink(commentId: String, postId: String) {
+        while (true) {
+            val cur = _commentLinks.value
+            if (_commentLinks.compareAndSet(cur, cur + (commentId.lowercase(Locale.US) to postId))) break
+        }
+    }
+
+    private fun isEvictedFrom(groupId: String, key: String): Boolean {
+        val g = _groups.value.find { it.id.equals(groupId, ignoreCase = true) } ?: return false
+        val c = GroupUpdateAuthorizer.canonicalIdentity(key)
+        return g.evictedMemberKeys.any { GroupUpdateAuthorizer.canonicalIdentity(it) == c }
+    }
+
+    private fun releaseCommentOrphans(groupId: String, postId: String) {
+        val held = commentOrphans.release(groupId, postId, System.currentTimeMillis())
+        if (held.isEmpty()) return
+        Log.d(TAG, "💬 replaying ${held.size} comment(s) that arrived before post ${postId.take(8)}")
+        for (o in held) handleIncomingGroupMessage(o.rawContent, o.sender)
+    }
+
+    /** §2.12.5: a comment rings only when it answers MY comment or mentions me. */
+    private fun notifyCommentIfForMe(groupId: String, comment: GroupMessage, mentionsMe: Boolean) {
+        val me = cryptoManager.getPublicKeyString()
+        val target = comment.replyToId?.let { rid ->
+            _groupMessages.value[groupId]?.let { l -> l.indexOfMessageId(rid).takeIf { it >= 0 }?.let { l[it] } }
+        }
+        val repliesToMine = target != null && isCommentId(target.id) &&
+            (target.isFromMe || GroupUpdateAuthorizer.canonicalIdentity(target.senderPublicKey) == GroupUpdateAuthorizer.canonicalIdentity(me))
+        if (!repliesToMine && !mentionsMe) return
+        val group = _groups.value.find { it.id.equals(groupId, ignoreCase = true) } ?: return
+        if (group.isMuted && !mentionsMe) return
+        if (com.oshi.messenger.data.repository.MessageRepository.isSenderBlockedCached(comment.senderPublicKey)) return
+        showGroupMessageNotification(
+            groupId, group.name, comment.senderName,
+            context.getString(R.string.cm_notif_reply, comment.senderName) + ": " + comment.content.take(120),
+            isMuted = false
+        )
+    }
+
+    enum class CommentSendResult { SENT, INACTIVE, NO_POST, TOO_FAST, EMPTY }
+
+    /**
+     * Send a comment under [postId] (§2.12.3). [replyTo] = the comment being answered, or null
+     * for a top-level comment. Text only.
+     */
+    fun sendComment(groupId: String, postId: String, text: String, replyTo: GroupMessage? = null): CommentSendResult {
+        val body = GroupComments.clamp(text.trim())
+        if (body.isEmpty()) return CommentSendResult.EMPTY
+        val group = _groups.value.find { it.id.equals(groupId, ignoreCase = true) } ?: return CommentSendResult.NO_POST
+        if (settingsOf(group.id)?.commentsActive != true) return CommentSendResult.INACTIVE
+        val stored = _groupMessages.value[group.id] ?: emptyList()
+        val post = stored.indexOfMessageId(postId).takeIf { it >= 0 }?.let { stored[it] }
+        if (post == null || post.isDeleted || isCommentId(post.id) || !isAdminOf(group.id, post.senderPublicKey)) {
+            return CommentSendResult.NO_POST
+        }
+        val quoted = replyTo?.takeIf { isCommentId(it.id) && commentPostOf(it.id).equals(post.id, ignoreCase = true) } ?: post
+        if (!commentSendRate.tryAcquire(gk(group.id), GroupComments.SEND_PER_MINUTE, System.currentTimeMillis())) {
+            return CommentSendResult.TOO_FAST
+        }
+        val me = cryptoManager.getPublicKeyString()
+        val envelope = buildReplyEnvelope(
+            content = body,
+            originalMessageId = canonicalGroupId(quoted.id),
+            originalSenderKey = quoted.senderPublicKey,
+            originalText = quoted.displayContent,
+            originalTimestampMs = quoted.timestamp,
+            originalMediaType = when (quoted.mediaType) {
+                MediaType.IMAGE -> "photo"; MediaType.VIDEO -> "video"; MediaType.AUDIO -> "audio"
+                MediaType.DOCUMENT -> "document"; MediaType.LOCATION -> "location"; else -> null
+            }
+        )
+        val message = GroupMessage(
+            id = UUID.randomUUID().toString(),
+            groupId = group.id,
+            senderPublicKey = me,
+            senderName = "Me",
+            content = body,
+            timestamp = System.currentTimeMillis(),
+            isFromMe = true,
+            isRead = true,
+            replyToId = quoted.id,
+        )
+        recordCommentLink(message.id, post.id)
+        addMessageToGroup(group.id, message)
+        updateGroupConversations()
+        saveMessages()
+        // Push: only the author of the comment we answer (never ourselves); top-level = nobody.
+        val wake = if (quoted !== post && !quoted.isFromMe &&
+            GroupUpdateAuthorizer.canonicalIdentity(quoted.senderPublicKey) != GroupUpdateAuthorizer.canonicalIdentity(me)
+        ) setOf(quoted.senderPublicKey) else emptySet()
+        scope.launch {
+            try {
+                sendMessageToMembers(group, message.copy(content = envelope),
+                    commentOn = canonicalGroupId(post.id), wakeOnly = wake)
+            } catch (e: Exception) {
+                Log.w(TAG, "💬 comment send failed: ${e.message}")
+            }
+        }
+        return CommentSendResult.SENT
+    }
+
+    fun isAdminOf(groupId: String, key: String?): Boolean {
+        if (key.isNullOrEmpty()) return false
+        val g = _groups.value.find { it.id.equals(groupId, ignoreCase = true) } ?: return false
+        val c = GroupUpdateAuthorizer.canonicalIdentity(key)
+        return g.adminPublicKeys.any { GroupUpdateAuthorizer.canonicalIdentity(it) == c } ||
+            (g.creatorPublicKey.isNotEmpty() && GroupUpdateAuthorizer.canonicalIdentity(g.creatorPublicKey) == c &&
+                g.adminPublicKeys.isEmpty())
+    }
+
+    /** §2.4 — bots are governed by their own admission, not by the post policy. */
+    fun isAllowedToPost(groupId: String, sender: String): Boolean {
+        if (sender.startsWith("bot:")) return true
+        val s = settingsOf(groupId) ?: return true
+        if (s.dissolved) return false
+        return s.mayPost(isAdminOf(groupId, sender))
+    }
+
+    // ---- admin log ----------------------------------------------------------
+
+    fun adminLogOf(groupId: String): List<GroupAdminLog.Event> {
+        loadAdminLog()
+        return GroupAdminLog.prune(_adminLog.value[gk(groupId)].orEmpty(), System.currentTimeMillis())
+    }
+
+    private fun loadAdminLog() {
+        if (adminLogLoaded) return
+        synchronized(extrasLock) {
+            if (adminLogLoaded) return
+            _adminLog.value = GroupAdminLog.decode(readDoc(GroupLocalStore.Doc.GROUP_ADMIN_LOG))
+            adminLogLoaded = true
+        }
+    }
+
+    private fun recordAdminEvents(groupId: String, events: List<GroupAdminLog.Event>) {
+        if (events.isEmpty()) return
+        loadAdminLog()
+        synchronized(extrasLock) {
+            val now = System.currentTimeMillis()
+            val all = _adminLog.value.toMutableMap()
+            all[gk(groupId)] = GroupAdminLog.append(all[gk(groupId)].orEmpty(), events, now)
+            // prune every group on write so a quiet group's old entries do not linger
+            for (k in all.keys.toList()) all[k] = GroupAdminLog.prune(all[k].orEmpty(), now)
+            _adminLog.value = all
+            persist(GroupLocalStore.Doc.GROUP_ADMIN_LOG, GroupAdminLog.encode(all))
+        }
+    }
+
+    // ---- local (admin) actions ---------------------------------------------
+
+    enum class SettingsResult { OK, NOT_ALLOWED, INVALID, TAKEN, NETWORK, UNKNOWN_GROUP }
+
+    private fun groupById(groupId: String): Group? = _groups.value.find { it.id.equals(groupId, ignoreCase = true) }
+
+    private fun replaceGroup(updated: Group) {
+        val list = _groups.value.toMutableList()
+        val i = list.indexOfFirst { it.id.equals(updated.id, ignoreCase = true) }
+        if (i < 0) return
+        list[i] = updated
+        _groups.value = list
+        saveGroups()
+        updateGroupConversations()
+    }
+
+    private fun me(): String = cryptoManager.getPublicKeyString()
+
+    /** Apply a settings change made on THIS device by an admin, log it, broadcast the definition. */
+    fun updateSettings(
+        groupId: String,
+        transform: (com.oshi.messenger.data.model.GroupSettings) -> com.oshi.messenger.data.model.GroupSettings,
+    ): SettingsResult {
+        val g = groupById(groupId) ?: return SettingsResult.UNKNOWN_GROUP
+        if (!isAdminOf(g.id, me())) return SettingsResult.NOT_ALLOWED
+        val before = settingsOf(g.id)
+        val after = transform(before ?: com.oshi.messenger.data.model.GroupSettings.DEFAULT).let {
+            // the one sticky field never goes back
+            if (before?.dissolved == true) it.copy(dissolved = true) else it
+        }.let {
+            // __CHANNEL_WEB_2026_11_26__ the web preview exists only for a public channel
+            // (spec §1); a group that stops being one drops the flag (the publisher purges).
+            if (it.webPreview && !it.webEligible) it.copy(webPreview = false, webIndexing = false) else it
+        }
+        if (after == before) return SettingsResult.OK
+        putSettings(g.id, after)
+        recordAdminEvents(g.id, GroupAdminLog.diff(g, g, before, after, me(), System.currentTimeMillis()))
+        val bumped = g.copy(updatedAt = System.currentTimeMillis())
+        replaceGroup(bumped)
+        scope.launch { runCatching { broadcastFullGroupUpdate(bumped) } }
+        return SettingsResult.OK
+    }
+
+    /** Description — shipped rename rule (spec §2.2). Empty clears and propagates as `""`. */
+    fun setDescription(groupId: String, text: String): SettingsResult {
+        val g = groupById(groupId) ?: return SettingsResult.UNKNOWN_GROUP
+        if (!g.canChangeName(me()) && !isAdminOf(g.id, me())) return SettingsResult.NOT_ALLOWED
+        val clean = com.oshi.messenger.data.model.GroupSettings.truncate(text.trim(), com.oshi.messenger.data.model.GroupSettings.MAX_DESCRIPTION)
+        if (clean == g.description) return SettingsResult.OK
+        markDescriptionTouched(g.id)
+        val updated = g.copy(description = clean, updatedAt = System.currentTimeMillis())
+        replaceGroup(updated)
+        recordAdminEvents(g.id, GroupAdminLog.diff(g, updated, null, null, me(), System.currentTimeMillis()))
+        scope.launch { runCatching { broadcastFullGroupUpdate(updated) } }
+        return SettingsResult.OK
+    }
+
+    /** Permission model (existing `type`), admin only — receive side already enforces it. */
+    fun setGroupType(groupId: String, type: GroupType): SettingsResult {
+        val g = groupById(groupId) ?: return SettingsResult.UNKNOWN_GROUP
+        if (!isAdminOf(g.id, me())) return SettingsResult.NOT_ALLOWED
+        if (g.effectiveGroupType == type) return SettingsResult.OK
+        val updated = g.copy(groupType = type, isPublic = type == GroupType.PUBLIC, updatedAt = System.currentTimeMillis())
+        replaceGroup(updated)
+        recordAdminEvents(g.id, GroupAdminLog.diff(g, updated, null, null, me(), System.currentTimeMillis()))
+        scope.launch { runCatching { broadcastFullGroupUpdate(updated) } }
+        return SettingsResult.OK
+    }
+
+    /** Admins first: creator, then the others (spec §4.3 `joinKeys` order). */
+    private fun adminsOrdered(g: Group): List<String> {
+        val admins = g.adminPublicKeys.ifEmpty { listOf(g.creatorPublicKey) }.filter { it.isNotEmpty() }
+        return (admins.filter { it == g.creatorPublicKey } + admins.filter { it != g.creatorPublicKey }).distinct()
+    }
+
+    /**
+     * Make the group Public under [rawHandle] (or Private when null). The server is asked
+     * FIRST; a handle it refused is never broadcast (spec §4.3).
+     */
+    suspend fun setVisibility(groupId: String, rawHandle: String?, showPreview: Boolean): SettingsResult {
+        val g = groupById(groupId) ?: return SettingsResult.UNKNOWN_GROUP
+        if (!isAdminOf(g.id, me())) return SettingsResult.NOT_ALLOWED
+        val current = settingsOf(g.id) ?: com.oshi.messenger.data.model.GroupSettings.DEFAULT
+        val client = handleClient ?: run {
+            Log.w(TAG, "🔗 setVisibility: no registry client")
+            return SettingsResult.NETWORK
+        }
+        Log.d(TAG, "🔗 setVisibility ${g.id.take(8)} handle=${rawHandle ?: "(private)"}")
+        if (rawHandle == null) {
+            current.handle?.let { old -> client.unregister(old) }
+            return updateSettings(g.id) { it.copy(visibility = com.oshi.messenger.data.model.GroupSettings.Visibility.PRIVATE, handle = null, showPreview = false) }
+        }
+        val handle = com.oshi.messenger.data.model.GroupSettings.normalizeHandle(rawHandle) ?: return SettingsResult.INVALID
+        val r = client.register(
+            handle = handle,
+            groupRef = com.oshi.messenger.data.model.GroupSettings.groupRef(g.id),
+            joinKeys = adminsOrdered(g).take(8),
+            controllers = adminsOrdered(g).take(16),
+            previewName = if (showPreview) g.name else null,
+            previewDescription = if (showPreview) g.description.ifBlank { null } else null,
+            previewMemberCount = if (showPreview) g.memberPublicKeys.size else null,
+        )
+        return when (r) {
+            V2GroupHandleClient.Result.OK -> {
+                editExtras(g.id) { it.put("handleRefreshedAt", System.currentTimeMillis()) }
+                updateSettings(g.id) {
+                    it.copy(visibility = com.oshi.messenger.data.model.GroupSettings.Visibility.PUBLIC, handle = handle, showPreview = showPreview)
+                }
+            }
+            V2GroupHandleClient.Result.TAKEN -> SettingsResult.TAKEN
+            V2GroupHandleClient.Result.INVALID -> SettingsResult.INVALID
+            V2GroupHandleClient.Result.NETWORK -> SettingsResult.NETWORK
+        }
+    }
+
+    /** Spec §3.2 — a fresh token; links without it stop working on new-build admins. */
+    fun resetInviteLink(groupId: String): SettingsResult =
+        updateSettings(groupId) { it.copy(inviteToken = com.oshi.messenger.data.model.GroupSettings.newInviteToken()) }
+
+    /** Private invite link (spec §3.2), `t` only once the link was reset. */
+    fun inviteLinkFor(groupId: String): String? {
+        val g = groupById(groupId) ?: return null
+        val base = android.net.Uri.Builder().scheme("https").authority("oshi-messenger.com").path("/group")
+            .appendQueryParameter("gid", g.id.uppercase(Locale.US))
+            .appendQueryParameter("name", g.name)
+            .appendQueryParameter("inviter", me())
+        settingsOf(g.id)?.inviteToken?.let { base.appendQueryParameter("t", it) }
+        return base.build().toString()
+    }
+
+    /** Spec §2.7 — lifts the tombstone on THIS device only (tombstones are a union). */
+    fun unbanMember(groupId: String, key: String): SettingsResult {
+        val g = groupById(groupId) ?: return SettingsResult.UNKNOWN_GROUP
+        if (!isAdminOf(g.id, me())) return SettingsResult.NOT_ALLOWED
+        val c = GroupUpdateAuthorizer.canonicalIdentity(key)
+        replaceGroup(g.copy(evictedMemberKeys = g.evictedMemberKeys.filter { GroupUpdateAuthorizer.canonicalIdentity(it) != c }))
+        return SettingsResult.OK
+    }
+
+    /** Spec §2.9 "Delete for everyone". */
+    suspend fun dissolveGroup(groupId: String): SettingsResult {
+        val g = groupById(groupId) ?: return SettingsResult.UNKNOWN_GROUP
+        if (!isAdminOf(g.id, me())) return SettingsResult.NOT_ALLOWED
+        val handle = settingsOf(g.id)?.handle
+        val r = updateSettings(g.id) { it.copy(dissolved = true) }
+        if (r != SettingsResult.OK) return r
+        val dissolved = groupById(g.id) ?: g
+        runCatching { broadcastFullGroupUpdate(dissolved) }
+        val companion = JSONObject().apply { put("type", "deleted"); put("groupId", g.id) }
+        runCatching { sendGroupUpdateRaw("$GROUP_UPDATE_PREFIX$companion", g.memberPublicKeys.filter { it != me() }) }
+        if (handle != null) handleClient?.unregister(handle)
+        deleteGroup(g.id)
+        return SettingsResult.OK
+    }
+
+    /**
+     * Joiner side of a public link (spec §3.1 step 4): one `join_request` to each admin the
+     * registry named. No stub group — the joiner does not know the group id.
+     */
+    suspend fun sendJoinRequest(handle: String, joinKeys: List<String>): Boolean {
+        val h = com.oshi.messenger.data.model.GroupSettings.normalizeHandle(handle) ?: return false
+        val mine = me()
+        if (mine.isEmpty()) return false
+        val body = JSONObject().apply {
+            put("type", "join_request"); put("handle", h); put("requesterPublicKey", mine)
+        }
+        val targets = joinKeys.filter { it.isNotBlank() && it != mine }.distinct().take(8)
+        if (targets.isEmpty()) return false
+        pendingPublicJoins[h] = System.currentTimeMillis()
+        return runCatching { sendGroupUpdateRaw("$GROUP_UPDATE_PREFIX$body", targets); true }.getOrDefault(false)
+    }
+    private val pendingPublicJoins = java.util.concurrent.ConcurrentHashMap<String, Long>()
+
+    /** Admin side of a public link (spec §3.3). */
+    private fun handleJoinRequest(json: JSONObject, senderPublicKey: String) {
+        val handle = com.oshi.messenger.data.model.GroupSettings.normalizeHandle(json.optString("handle", "")) ?: return
+        extras()
+        val gid = _groupSettings.value.entries.firstOrNull { it.value.isPublic && it.value.handle == handle }?.key
+        val g = gid?.let { groupById(it) }
+        val now = System.currentTimeMillis()
+        val recent = g?.let { joinAccepts[gk(it.id)]?.count { t -> now - t < 3600_000L } } ?: 0
+        val d = GroupUpdateAuthorizer.authorizeJoinRequest(
+            sender = senderPublicKey,
+            requesterFromBody = json.optString("requesterPublicKey", "").ifEmpty { null },
+            requestHandle = handle,
+            settings = g?.let { settingsOf(it.id) },
+            currentMemberKeys = g?.memberPublicKeys.orEmpty(),
+            evictedMemberKeys = g?.evictedMemberKeys.orEmpty(),
+            weAreAdmin = g != null && isAdminOf(g.id, me()),
+            recentAccepts = recent,
+        )
+        if (!d.accept || g == null) {
+            Log.w(TAG, "🛑 join_request for @$handle from ${senderPublicKey.take(8)} refused (${d.reason})")
+            return
+        }
+        if (d.alreadyMember) {
+            scope.launch { runCatching { broadcastFullGroupUpdate(g, bumpVersion = false, recipientsOverride = listOf(senderPublicKey)) } }
+            return
+        }
+        joinAccepts.getOrPut(gk(g.id)) { java.util.Collections.synchronizedList(mutableListOf()) }.apply {
+            add(now); removeAll { now - it >= 3600_000L }
+        }
+        val updated = g.copy(
+            memberPublicKeys = g.memberPublicKeys + senderPublicKey,
+            updatedAt = now
+        )
+        replaceGroup(updated)
+        recordAdminEvents(g.id, listOf(GroupAdminLog.Event(now, senderPublicKey, GroupAdminLog.JOINED_LINK, senderPublicKey)))
+        Log.d(TAG, "👥 @$handle: ${senderPublicKey.take(8)} joined '${g.name}' via the public link")
+        scope.launch { runCatching { broadcastFullGroupUpdate(updated) } }
+    }
+
+    /** Re-PUT the public handle at most weekly and whenever the admin set changed (spec §4.3). */
+    fun refreshPublicHandlesIfDue() {
+        val client = handleClient ?: return
+        extras()
+        for ((gid, s) in _groupSettings.value) {
+            val handle = s.handle ?: continue
+            if (!s.isPublic || s.dissolved) continue
+            val g = groupById(gid) ?: continue
+            if (!isAdminOf(g.id, me())) continue
+            val e = extras()[gk(gid)]
+            val adminsSig = adminsOrdered(g).joinToString(",")
+            val due = System.currentTimeMillis() - (e?.optLong("handleRefreshedAt") ?: 0L) > 7 * 24 * 3600_000L ||
+                e?.optString("handleAdmins") != adminsSig
+            if (!due) continue
+            scope.launch {
+                val r = client.register(handle, com.oshi.messenger.data.model.GroupSettings.groupRef(g.id),
+                    adminsOrdered(g).take(8), adminsOrdered(g).take(16),
+                    if (s.showPreview) g.name else null,
+                    if (s.showPreview) g.description.ifBlank { null } else null,
+                    if (s.showPreview) g.memberPublicKeys.size else null)
+                if (r == V2GroupHandleClient.Result.OK) editExtras(gid) {
+                    it.put("handleRefreshedAt", System.currentTimeMillis()); it.put("handleAdmins", adminsSig)
+                }
+            }
+        }
+    }
+
+    private val handleClient: V2GroupHandleClient? get() = handleClientLazy?.get()
+
+    /** Resolve a public link (joiner side). null = unknown handle; throws on network errors. */
+    suspend fun resolvePublicHandle(handle: String): V2GroupHandleClient.Resolved? {
+        val h = com.oshi.messenger.data.model.GroupSettings.normalizeHandle(handle) ?: return null
+        return handleClient?.resolve(h)
     }
 
     // =========================================================================
@@ -5154,6 +6135,7 @@ class GroupManager @Inject constructor(
         val offloaded = HashSet<String>()
         try {
             val allMessages = _groupMessages.value
+            val commentLinksSnapshot = _commentLinks.value
             val jsonObject = JSONObject()
             allMessages.forEach { (groupId, messages) ->
                 val messagesArray = JSONArray()
@@ -5201,6 +6183,8 @@ class GroupManager @Inject constructor(
                         msg.mediaDurationMs?.let { put("mediaDurationMs", it) }
                         if (msg.isVideoNote) put("isVideoNote", true)
                         msg.replyToId?.let { put("replyToId", it) }
+                        // __GROUP_COMMENTS_2026_11_21__ the comment → post link lives only here.
+                        commentLinksSnapshot[msg.id.lowercase(Locale.US)]?.let { put(GroupComments.FIELD, it) }
                         // ✏️ An edit lives ONLY here between launches — `content` keeps the
                         // original, exactly as iOS keeps `encryptedContent` untouched. Omit
                         // these and an edited bubble reverts to its original text on the
@@ -5264,6 +6248,7 @@ class GroupManager @Inject constructor(
             val messagesJson = readDoc(GroupLocalStore.Doc.MESSAGES) ?: return // __LEAK_FIX_2026_09_25__
             val jsonObject = JSONObject(messagesJson)
             val allMessages = mutableMapOf<String, List<GroupMessage>>()
+            val links = HashMap<String, String>()
             var skipped = 0
 
             jsonObject.keys().forEach { groupId ->
@@ -5334,10 +6319,12 @@ class GroupManager @Inject constructor(
                         continue
                     }
                     messages.add(message)
+                    GroupComments.read(msgJson)?.let { links[message.id.lowercase(Locale.US)] = it }
                 }
                 allMessages[groupId] = messages.sortedBy { it.timestamp }
             }
 
+            _commentLinks.value = links
             _groupMessages.value = allMessages
             if (skipped > 0) Log.w(TAG, "⚠️ Skipped $skipped unreadable group message(s); the rest were loaded")
         } catch (e: Exception) {
@@ -5377,10 +6364,18 @@ class GroupManager @Inject constructor(
         // __ONE_BANNER_PER_MESSAGE_2026_09_23__ Same id as the FCM banner for this group
         // (case-insensitive), and no second post if that banner went up moments ago.
         val bannerId = MessageBanner.groupNotificationId(groupId)
-        if (MessageBanner.shownRecently(context, bannerId)) {
+        // __PREVIEW_ONE_IN_TWO_2026_11_24__ see MessageBanner.localPostDecision: the FCM
+        // banner (generic) is updated quietly with the text instead of hiding it.
+        val post = MessageBanner.localPostDecision(
+            shownRecently = MessageBanner.shownRecently(context, bannerId),
+            carriesText = !MessageBanner.anonymous(context)
+                && MessageBanner.body(context, preview) != MessageBanner.genericBody(context)
+        )
+        if (post == MessageBanner.LocalPost.SKIP) {
             Log.d(TAG, "🔕 group banner for ${groupId.take(8)}… already up — not posting a second one")
             return
         }
+        val quiet = silent || post == MessageBanner.LocalPost.UPDATE_QUIETLY
         try {
             val intent = Intent(context, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -5393,15 +6388,25 @@ class GroupManager @Inject constructor(
             val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val notification = NotificationCompat.Builder(context, FCMService.CHANNEL_MESSAGES)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(groupName)
+                // 🛡 __STRICT_MODE_2026_11_22__ strict: no group name, no sender alias.
+                .setContentTitle(if (MessageBanner.anonymous(context)) MessageBanner.anonymousTitle(context) else groupName)
                 // Sender alias + generic body; the text only with previews explicitly ON.
-                .setContentText(context.getString(R.string.notification_group_body, senderName,
-                    MessageBanner.body(context, preview)))
+                .setContentText(
+                    if (MessageBanner.anonymous(context)) MessageBanner.genericBody(context)
+                    else context.getString(R.string.notification_group_body, senderName, MessageBanner.body(context, preview))
+                )
                 .setAutoCancel(true)
-                .setSound(if (silent) null else soundUri)
-                .setSilent(silent)
+                .setSound(if (quiet) null else soundUri)
+                .setSilent(quiet)
+                .setOnlyAlertOnce(post == MessageBanner.LocalPost.UPDATE_QUIETLY)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ no system "smart" actions on a protected chat's banner.
+                .setAllowSystemGeneratedContextualActions(
+                    com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.systemGeneratedRepliesAllowed(
+                        com.oshi.messenger.service.AdvancedChatPrivacyStore.isOn(groupId)
+                    )
+                )
                 // __BOT_E2E_2026_09_23__ Lock screen: generic public version, as FCMService.
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setPublicVersion(
@@ -5723,6 +6728,7 @@ class GroupManager @Inject constructor(
 
         // Mark as deleted locally
         applyMessageDeletionLocally(groupId, messageId)
+        channelWebHooks?.let { h -> runCatching { h.onPostDeletedForEveryone(group.id, messageId) } } // __CHANNEL_WEB_2026_11_26__
 
         scope.launch {
             try {
@@ -5772,11 +6778,11 @@ class GroupManager @Inject constructor(
         }
     }
 
-    private fun handleMessageDeleted(json: JSONObject) {
+    private fun handleMessageDeleted(json: JSONObject, senderPublicKey: String) {
         val groupId = json.getString("groupId")
         val messageId = json.getString("messageId")
 
-        applyMessageDeletionLocally(groupId, messageId)
+        applyMessageDeletionLocally(groupId, messageId, actor = senderPublicKey)
         Log.d(TAG, "Message $messageId deleted in group $groupId")
     }
 
@@ -5818,6 +6824,7 @@ class GroupManager @Inject constructor(
         }
 
         if (!applyMessageEditLocally(groupId, messageId, newContent, now)) return false
+        channelWebHooks?.let { h -> runCatching { h.onOwnPostEdited(group.id, messageId, newContent) } } // __CHANNEL_WEB_2026_11_26__
 
         // ONE id for the envelope and for the system message it carries — iOS's delivery
         // receipt keys on `payload.id` while its dedupe keys on the GroupMessage's `id`,
@@ -5913,12 +6920,13 @@ class GroupManager @Inject constructor(
         rawGroupId: String,
         messageId: String,
         newContent: String,
-        editedAt: Long
+        editedAt: Long,
+        actor: String? = null
     ): Boolean {
         val groupId = localGroupKey(rawGroupId)
         val currentMessages = _groupMessages.value.toMutableMap()
         val groupMsgs = currentMessages[groupId] ?: return false
-        val updated = applyEditToMessages(groupMsgs, messageId, newContent, editedAt) ?: return false
+        val updated = applyEditToMessages(groupMsgs, messageId, newContent, editedAt, actor) ?: return false
         currentMessages[groupId] = updated
         _groupMessages.value = currentMessages
         saveMessages()
@@ -5926,12 +6934,53 @@ class GroupManager @Inject constructor(
         return true
     }
 
-    private fun applyMessageDeletionLocally(rawGroupId: String, messageId: String) {
+    /**
+     * __BOTS_PHASE1_2026_11_24__ A bot acted on its own post (edit / delete / pin /
+     * unpin, server S5). See [BotPostUpdate] for the authorship rule. Local only: every
+     * member receives the same action from the server, so nothing is re-broadcast.
+     */
+    fun applyBotPostUpdate(update: BotPostUpdate): Boolean {
+        val groupId = localGroupKey(update.groupId)
+        val currentMessages = _groupMessages.value.toMutableMap()
+        val groupMsgs = currentMessages[groupId] ?: return false
+        when (update.action) {
+            BotPostUpdate.Action.EDIT, BotPostUpdate.Action.DELETE -> {
+                val updated = BotPostUpdate.applyTo(groupMsgs, update) ?: return false
+                currentMessages[groupId] = updated
+                _groupMessages.value = currentMessages
+                saveMessages()
+                updateGroupConversations()
+                return true
+            }
+            BotPostUpdate.Action.PIN, BotPostUpdate.Action.UNPIN -> {
+                val target = BotPostUpdate.target(groupMsgs, update) ?: return false
+                val groups = _groups.value.toMutableList()
+                val index = groups.indexOfFirst { it.id.equals(groupId, ignoreCase = true) }
+                if (index < 0) return false
+                val g = groups[index]
+                groups[index] = if (update.action == BotPostUpdate.Action.PIN) {
+                    g.copy(pinnedMessageId = target.id, pinnedBy = target.senderPublicKey, updatedAt = System.currentTimeMillis())
+                } else {
+                    if (!g.pinnedMessageId.equals(target.id, ignoreCase = true)) return false
+                    g.copy(pinnedMessageId = null, updatedAt = System.currentTimeMillis())
+                }
+                _groups.value = groups
+                saveGroups()
+                return true
+            }
+        }
+    }
+
+    /** __BOTS_PHASE1_2026_11_24__ S7 client obligation: bot items only for groups I am in. */
+    fun isInGroup(groupId: String): Boolean = _groups.value.any { it.id.equals(groupId.trim(), ignoreCase = true) }
+
+    private fun applyMessageDeletionLocally(rawGroupId: String, messageId: String, actor: String? = null) {
         val groupId = localGroupKey(rawGroupId)
         val currentMessages = _groupMessages.value.toMutableMap()
         val groupMsgs = currentMessages[groupId] ?: return
         // Case-insensitive match: an iOS delete-for-everyone targets the UPPERCASE uuidString.
-        val updated = applyDeletionToMessages(groupMsgs, messageId)
+        val adminOnComment = actor != null && isCommentId(messageId) && isAdminOf(groupId, actor)
+        val updated = applyDeletionToMessages(groupMsgs, messageId, actor, adminOnComment)
         if (updated != null) {
             currentMessages[groupId] = updated
             _groupMessages.value = currentMessages
@@ -5980,6 +7029,8 @@ class GroupManager @Inject constructor(
             updatedAt = System.currentTimeMillis()
         )
         _groups.value = currentGroups
+        // __GROUP_SETTINGS_2026_11_20__ recent events (spec §2.8)
+        recordAdminEvents(group.id, GroupAdminLog.diff(group, currentGroups[index], null, null, cryptoManager.getPublicKeyString(), System.currentTimeMillis()))
         saveGroups()
         updateGroupConversations()
 
@@ -6041,6 +7092,8 @@ class GroupManager @Inject constructor(
             updatedAt = System.currentTimeMillis()
         )
         _groups.value = currentGroups
+        // __GROUP_SETTINGS_2026_11_20__ recent events (spec §2.8)
+        recordAdminEvents(group.id, GroupAdminLog.diff(group, currentGroups[index], null, null, cryptoManager.getPublicKeyString(), System.currentTimeMillis()))
         saveGroups()
         updateGroupConversations()
 

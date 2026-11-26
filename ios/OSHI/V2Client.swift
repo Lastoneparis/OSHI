@@ -196,6 +196,37 @@ public nonisolated final class V2Client: @unchecked Sendable {
         return ((resp as? HTTPURLResponse)?.statusCode ?? -1, data)
     }
 
+    /// __CHANNEL_WEB_2026_11_26__ Public channel web preview
+    /// (ServerVPS/v2/PUBLIC_CHANNEL_WEB_SPEC.md). `path` is built and validated by the
+    /// caller (`ChannelWeb.path…`: handle `[a-z0-9_]`, postId `[A-Za-z0-9._:-]`, so no
+    /// percent-encoding is ever needed); `query` is appended unsigned. Writes and the
+    /// admin GET are signed with `x-oshi-user` (re-signed with a fresh timestamp on
+    /// every call — the server refuses replays); the public reads are NOT signed, for
+    /// the same reason as the group-handle lookup. Returns the status instead of
+    /// throwing on non-2xx: the spec's 4xx codes are answers the caller acts on.
+    public func channelWebRequest(method: String, path: String, query: String? = nil, body: Data?,
+                                  contentType: String?, signed: Bool,
+                                  timeout: TimeInterval? = nil) async throws -> (Int, Data) {
+        let full = query.map { "\(path)?\($0)" } ?? path
+        var req: URLRequest
+        if signed {
+            req = try makeRequest(method: method, path: full, body: body, contentType: contentType,
+                                  withUserHeader: true)
+        } else {
+            guard let url = URL(string: full, relativeTo: config.baseURL)?.absoluteURL else {
+                throw V2.ClientError.invalidURL(full)
+            }
+            req = URLRequest(url: url)
+            req.httpMethod = method
+            req.cachePolicy = .reloadIgnoringLocalCacheData
+            if let body { req.httpBody = body }
+            if let contentType { req.setValue(contentType, forHTTPHeaderField: "Content-Type") }
+        }
+        req.timeoutInterval = timeout ?? 20
+        let (data, resp) = try await V2Transport.data(for: req, session: session)
+        return ((resp as? HTTPURLResponse)?.statusCode ?? -1, data)
+    }
+
     /// How many one-time pre-keys remain for `userKey` (for refill decisions).
     public func prekeyCount(userKey: String) async throws -> Int {
         let req = try makeRequest(method: "GET",
@@ -243,6 +274,7 @@ public nonisolated final class V2Client: @unchecked Sendable {
     /// pubkey); it defaults to that identity.
     public func reserve(ownerKey: String? = nil,
                         recipientKey: String,
+                        recipientKeys: [String]? = nil,
                         totalSize: Int,
                         chunkCount: Int) async throws -> V2.ReserveResult {
         guard totalSize > 0 else { throw V2.ClientError.invalidArgument("totalSize must be > 0") }
@@ -252,16 +284,8 @@ public nonisolated final class V2Client: @unchecked Sendable {
         guard chunkCount >= 1 else { throw V2.ClientError.invalidArgument("chunkCount must be >= 1") }
         let owner = try (ownerKey ?? requireIdentity())
 
-        struct Body: Encodable {
-            let ownerKey: String
-            let recipientKey: String
-            let totalSize: Int
-            let chunkCount: Int
-        }
-        let body = try encoder.encode(Body(ownerKey: owner,
-                                           recipientKey: recipientKey,
-                                           totalSize: totalSize,
-                                           chunkCount: chunkCount))
+        let body = try Self.reserveBody(encoder: encoder, ownerKey: owner, recipientKey: recipientKey,
+                                        recipientKeys: recipientKeys, totalSize: totalSize, chunkCount: chunkCount)
         // 🔧 RESILIENCE FIX: retried like the chunk PUTs are. A single transient 5xx
         // here aborted the whole V2 send and dropped the message into the legacy
         // ~13 MB Pinata chain. Rebuilding the request inside the closure also
@@ -273,6 +297,82 @@ public nonisolated final class V2Client: @unchecked Sendable {
                                            contentType: "application/json")
             return try await self.sendDecoding(req)
         }
+    }
+
+    /// The `POST /v2/blobs` body. `recipientKeys` is written only when non-nil
+    /// (__GROUP_BLOB_2026_11_25__), so a 1:1 reservation sends exactly the body it always did.
+    static func reserveBody(encoder: JSONEncoder, ownerKey: String, recipientKey: String,
+                            recipientKeys: [String]?, totalSize: Int, chunkCount: Int) throws -> Data {
+        struct Body: Encodable {
+            let ownerKey: String
+            let recipientKey: String
+            let recipientKeys: [String]?
+            let totalSize: Int
+            let chunkCount: Int
+            private enum CodingKeys: String, CodingKey { case ownerKey, recipientKey, recipientKeys, totalSize, chunkCount }
+            func encode(to encoder: Encoder) throws {
+                var c = encoder.container(keyedBy: CodingKeys.self)
+                try c.encode(ownerKey, forKey: .ownerKey)
+                try c.encode(recipientKey, forKey: .recipientKey)
+                try c.encodeIfPresent(recipientKeys, forKey: .recipientKeys)
+                try c.encode(totalSize, forKey: .totalSize)
+                try c.encode(chunkCount, forKey: .chunkCount)
+            }
+        }
+        return try encoder.encode(Body(ownerKey: ownerKey, recipientKey: recipientKey, recipientKeys: recipientKeys,
+                                       totalSize: totalSize, chunkCount: chunkCount))
+    }
+
+    /// __GROUP_BLOB_2026_11_25__ Upload ONE blob for a whole group message.
+    ///
+    /// Reserves with `recipientKey = recipientKeys[0]` AND the full `recipientKeys` list. A server
+    /// running ServerPatches/group_blob_2026_11_25 stores the list and echoes `recipients: N`:
+    /// every listed member may read the blob (`shared == true`). An older server ignores the list
+    /// and lets only `recipientKey` read it: the result is `shared == false` and the caller
+    /// uploads one blob per remaining member (the old path). Same resumable contract as
+    /// `uploadBlob`: `resumeBlobId` tops up whatever `/status` still reports missing, `onReserved`
+    /// fires the instant a reservation lands (before the first chunk) so a killed app resumes.
+    /// `chunk(n)` hands out the already-sealed ciphertext of chunk n (memory or disk).
+    public func uploadGroupBlob(recipientKeys: [String],
+                                chunkCount: Int,
+                                totalSize: Int,
+                                chunk: @escaping @Sendable (Int) throws -> Data,
+                                useBackground: Bool = true,
+                                resumeBlobId: String? = nil,
+                                resumeShared: Bool = false,
+                                onReserved: (@Sendable (String, Bool) -> Void)? = nil) async throws -> (blobId: String, shared: Bool) {
+        guard let first = recipientKeys.first else { throw V2.ClientError.invalidArgument("no recipients") }
+        guard chunkCount >= 1 else { throw V2.ClientError.invalidArgument("no chunks to upload") }
+        guard totalSize <= V2.maxBlobBytes else {
+            throw V2.ClientError.blobTooLarge(size: totalSize, max: V2.maxBlobBytes)
+        }
+        let put: @Sendable (String, Int) async throws -> Void = { [self] blobId, n in
+            try await self.uploadChunk(blobId: blobId, index: n, data: try chunk(n), useBackground: useBackground)
+        }
+        if let resumed = try await resumeReservation(resumeBlobId, expectedChunkCount: chunkCount) {
+            if !resumed.committed {
+                try await withBoundedParallelism(over: Self.chunksToUpload(missing: resumed.missing, chunkCount: chunkCount)) { n in
+                    try await put(resumed.blobId, n)
+                }
+                try await commit(blobId: resumed.blobId)
+            }
+            return (resumed.blobId, resumeShared)
+        }
+        let reservation = try await reserve(recipientKey: first,
+                                            recipientKeys: recipientKeys.count > 1 ? recipientKeys : nil,
+                                            totalSize: totalSize,
+                                            chunkCount: chunkCount)
+        let shared = recipientKeys.count == 1 || V2GroupBlobPlan.isShared(reservation)
+        onReserved?(reservation.blobId, shared)
+        try await withBoundedParallelism(over: Self.chunksToUpload(missing: reservation.missing, chunkCount: chunkCount)) { n in
+            try await put(reservation.blobId, n)
+        }
+        let status = try await blobStatus(blobId: reservation.blobId)
+        try await withBoundedParallelism(over: Self.chunksToUpload(missing: status.missing, chunkCount: chunkCount)) { n in
+            try await put(reservation.blobId, n)
+        }
+        try await commit(blobId: reservation.blobId)
+        return (reservation.blobId, shared)
     }
 
     /// Upload one chunk. Idempotent + retried on transient failures: the server
@@ -749,6 +849,11 @@ public nonisolated final class V2Client: @unchecked Sendable {
             var files: [URL] = []
             for n in 0..<chunkCount {
                 try Task.checkCancellation()
+                // __GROUP_BLOB_2026_11_25__ a chunk staged by an earlier attempt (any path) is
+                // kept: this loop used to fetch every chunk again on each attempt.
+                if let staged = V2BackgroundBlobDownloader.stagedChunk(blobId: blobId, index: n) {
+                    files.append(staged); continue
+                }
                 let bytes = try await downloadChunk(blobId: blobId, index: n)
                 let target = directory.appendingPathComponent("cover-\(n).part")
                 try bytes.write(to: target, options: .atomic)
@@ -772,8 +877,10 @@ public nonisolated final class V2Client: @unchecked Sendable {
             var staged = [URL?](repeating: nil, count: chunkCount)
             let stagedLock = NSLock()
             try await withBoundedParallelism(over: Array(0..<chunkCount)) { [self] n in
-                let target = directory.appendingPathComponent("ohttp-\(n).part")
-                if !FileManager.default.fileExists(atPath: target.path) {
+                var target = directory.appendingPathComponent("ohttp-\(n).part")
+                if let prior = V2BackgroundBlobDownloader.stagedChunk(blobId: blobId, index: n) {
+                    target = prior   // __GROUP_BLOB_2026_11_25__ staged by any earlier path
+                } else {
                     let bytes = try await withV2Retry(label: "ohttpDownloadChunk[\(n)]") {
                         try await downloadChunk(blobId: blobId, index: n)
                     }
@@ -817,6 +924,12 @@ public nonisolated final class V2Client: @unchecked Sendable {
         let lock = NSLock()
         try await withBoundedParallelism(over: Array(0..<chunkCount)) { [self] n in
             let url: URL
+            if let prior = V2BackgroundBlobDownloader.stagedChunk(blobId: blobId, index: n) {
+                // __GROUP_BLOB_2026_11_25__ also a chunk an earlier attempt read in ranged parts
+                // or through the relay path, not only `<n>.part`.
+                lock.lock(); out[n] = prior; lock.unlock()
+                return
+            }
             do {
                 url = try await withV2Retry(label: "bgDownloadChunk[\(n)]") {
                     try await V2BackgroundBlobDownloader.shared.downloadChunk(
@@ -868,7 +981,11 @@ public nonisolated final class V2Client: @unchecked Sendable {
         } catch {
             // __OHTTP_MEDIA_2026_11_10__ chunks staged by the relay path are reused on
             // the next attempt; a set that failed to open must not be reused forever.
-            for u in chunkURLs where u.lastPathComponent.hasPrefix("ohttp-") { try? FileManager.default.removeItem(at: u) }
+            // __GROUP_BLOB_2026_11_25__ the same for EVERY staged chunk: `<n>.part` from the
+            // background path is reused too, so one bad chunk on disk made every later attempt
+            // fail the same way (the pending-blob replay retries forever). Integrity = the
+            // per-chunk AES-GCM tag; a set that does not open is fetched again.
+            for u in chunkURLs { try? FileManager.default.removeItem(at: u) }
             throw error
         }
         // Reassembly succeeded — the staged .part chunks are no longer needed.
@@ -908,13 +1025,20 @@ public nonisolated final class V2Client: @unchecked Sendable {
         }
         struct Body: Encodable { let envelopes: [V2.Envelope] }
         let body = try encoder.encode(Body(envelopes: envelopes))
-        let req = try makeRequest(method: "POST",
-                                  path: "/v2/messages",
-                                  body: body,
-                                  contentType: "application/json")
+        // __GROUP_FANOUT_2026_11_24__ a 429 waits Retry-After (V2RateLimitBackoff); the request is
+        // re-signed on every attempt (fresh timestamp), the relay dedups an accepted batch.
+        let (data, http) = try await V2RateLimitBackoff.retrying({ () async throws -> (Data, HTTPURLResponse) in
+            let req = try self.makeRequest(method: "POST", path: "/v2/messages", body: body, contentType: "application/json")
+            let (data, response) = try await V2Transport.data(for: req, session: self.session)
+            guard let http = response as? HTTPURLResponse else { throw V2.ClientError.notHTTPResponse }
+            return (data, http)
+        }, status: { $0.1.statusCode }, retryAfter: { $0.1.value(forHTTPHeaderField: "Retry-After") })
+        guard (200...299).contains(http.statusCode) else {
+            throw V2.ClientError.http(status: http.statusCode, reason: reasonString(from: data))
+        }
         struct Resp: Decodable { let accepted: [String] }
-        let resp: Resp = try await sendDecoding(req)
-        return resp.accepted
+        do { return try decoder.decode(Resp.self, from: data).accepted }
+        catch { throw V2.ClientError.decoding(underlying: error) }
     }
 
     /// __PULL_BUDGET_2026_11_19__ `GET /v2/messages/<key>[?after=N][&budget=B]`. On a network
@@ -1089,9 +1213,13 @@ public nonisolated final class V2Client: @unchecked Sendable {
         }
         struct Body: Encodable { let envelopes: [V2.Envelope] }
         let body = try encoder.encode(Body(envelopes: envelopes))
-        let req = try makeRequest(method: "POST", path: "/v2/messages", body: body, contentType: "application/json")
-        let (data, response) = try await V2Transport.data(for: req, session: session)
-        guard let http = response as? HTTPURLResponse else { throw V2.ClientError.notHTTPResponse }
+        // __GROUP_FANOUT_2026_11_24__ this request was never retried: one 429 failed the whole group.
+        let (data, http) = try await V2RateLimitBackoff.retrying({ () async throws -> (Data, HTTPURLResponse) in
+            let req = try self.makeRequest(method: "POST", path: "/v2/messages", body: body, contentType: "application/json")
+            let (data, response) = try await V2Transport.data(for: req, session: self.session)
+            guard let http = response as? HTTPURLResponse else { throw V2.ClientError.notHTTPResponse }
+            return (data, http)
+        }, status: { $0.1.statusCode }, retryAfter: { $0.1.value(forHTTPHeaderField: "Retry-After") })
         if (200...299).contains(http.statusCode) {
             struct Resp: Decodable { let accepted: [String] }
             do { return try decoder.decode(Resp.self, from: data).accepted }
@@ -1162,6 +1290,18 @@ public nonisolated final class V2Client: @unchecked Sendable {
         return request
     }
 
+    /// Lower-case hex SHA-256 of the raw body bytes (empty body → `e3b0c442…b855`).
+    nonisolated static func bodySHA256Hex(_ body: Data) -> String {
+        SHA256.hash(data: body).map { String(format: "%02x", $0) }.joined()
+    }
+
+    /// The canonical string every v2 signature covers (oshi_auth.js):
+    /// `METHOD\nPATH\nhex(sha256(body))\nTIMESTAMP`, no trailing newline. `path`
+    /// excludes the query. Pinned by the PUBLIC_CHANNEL_WEB_SPEC §10 vectors.
+    nonisolated static func canonicalRequestString(method: String, path: String, body: Data, timestamp: String) -> String {
+        "\(method)\n\(path)\n\(bodySHA256Hex(body))\n\(timestamp)"
+    }
+
     /// Attach the three `x-oshi-*` signature headers. Canonical message is
     /// `METHOD\nPATH\nSHA256(bodyToHash)\nTIMESTAMP`, exactly as oshi_auth.js
     /// and `VoIPPushManager.signRequest` compute it. PATH is the percent-encoded
@@ -1170,9 +1310,10 @@ public nonisolated final class V2Client: @unchecked Sendable {
         guard let url = request.url, let method = request.httpMethod else { return }
         let path = URLComponents(url: url, resolvingAgainstBaseURL: false)?.percentEncodedPath
             ?? url.path
-        let timestamp = String(Int(Date().timeIntervalSince1970 * 1000))
-        let bodyHash = SHA256.hash(data: bodyToHash).map { String(format: "%02x", $0) }.joined()
-        let message = "\(method)\n\(path)\n\(bodyHash)\n\(timestamp)"
+        // __CALL_CLOCK_SKEW_2026_11_21__ server time when this device is ≥ 5 s off.
+        let timestamp = String(ServerClock.signingNowMs())
+        let bodyHash = Self.bodySHA256Hex(bodyToHash)
+        let message = Self.canonicalRequestString(method: method, path: path, body: bodyToHash, timestamp: timestamp)
         do {
             let (signature, pubKey) = try crypto.signCanonical(Data(message.utf8))
             request.setValue(signature, forHTTPHeaderField: "x-oshi-signature")
@@ -1488,6 +1629,25 @@ nonisolated final class V2BackgroundBlobDownloader: NSObject, URLSessionDownload
         stageDir(blobId: blobId).appendingPathComponent("\(index).part")
     }
 
+    /// __GROUP_BLOB_2026_11_25__ Every name a chunk can be staged under, by the path that fetched
+    /// it: background (`<n>.part`), ranged fallback, relay (OHTTP / blocked host), cover.
+    static func stagedChunkNames(index: Int) -> [String] {
+        ["\(index).part", "ranged-\(index).part", "ohttp-\(index).part", "cover-\(index).part"]
+    }
+
+    /// A non-empty chunk already on disk from an earlier attempt (possibly before an app kill),
+    /// or nil. Staged chunks live under Application Support until the file opens.
+    static func stagedChunk(blobId: String, index: Int) -> URL? {
+        let dir = stageDir(blobId: blobId)
+        for name in stagedChunkNames(index: index) {
+            let u = dir.appendingPathComponent(name)
+            if let size = (try? FileManager.default.attributesOfItem(atPath: u.path))?[.size] as? Int, size > 0 {
+                return u
+            }
+        }
+        return nil
+    }
+
     /// Download one chunk to its staged file. If the file already exists (a prior
     /// run got this far), returns immediately — this is the resume.
     func downloadChunk(request: URLRequest, blobId: String, index: Int) async throws -> URL {
@@ -1741,5 +1901,90 @@ nonisolated final class OshiSPKIPinningDelegate: NSObject, URLSessionTaskDelegat
         }
         _ = keyBytes
         return nil
+    }
+}
+
+
+// MARK: - __GROUP_FANOUT_2026_11_24__ waiting out a relay 429
+
+/// The relay charges one token per member envelope to a per-sender bucket (60 tokens, 10/s on the
+/// relay of 2026-11-24). Reproduced on a local copy of production: a group batch of more than 60
+/// members got 429 on every attempt, and `sendBatch`/`sendDeviceBatch` did not even retry, so the
+/// whole group message failed. Now a 429 waits what the relay says (`Retry-After`, seconds, sent
+/// from ServerPatches/group_fanout_2026_11_24 on) or backs off 1, 2, 4… s without it; each wait is
+/// capped at `maxSingleWait` and all of them at `maxTotalWait`. Other statuses are returned as is.
+/// Same rule as Android `RateLimitBackoff` and desktop `RateLimitBackoff`.
+nonisolated enum V2RateLimitBackoff {
+    static let maxSingleWait: TimeInterval = 30
+    static let maxTotalWait: TimeInterval = 120
+
+    /// `Retry-After` in delta-seconds; an HTTP-date or garbage ⇒ nil (use the backoff).
+    static func retryAfterSeconds(_ header: String?) -> TimeInterval? {
+        guard let h = header?.trimmingCharacters(in: .whitespaces), let n = Int(h), n >= 0 else { return nil }
+        return TimeInterval(n)
+    }
+
+    /// Delay before the next attempt after a 429, or nil to stop.
+    static func nextDelay(retryAfter: String?, rateLimitedSoFar: Int, waitedSoFar: TimeInterval) -> TimeInterval? {
+        let backoff = TimeInterval(1 << min(rateLimitedSoFar, 5))
+        let d = min(max(retryAfterSeconds(retryAfter) ?? backoff, 1), maxSingleWait)
+        return waitedSoFar + d > maxTotalWait ? nil : d
+    }
+
+    /// Runs `call` again after each 429 until it is something else or the budget is spent.
+    static func retrying<A>(_ call: () async throws -> A,
+                            status: (A) -> Int,
+                            retryAfter: (A) -> String?,
+                            sleep: (TimeInterval) async -> Void = { try? await Task.sleep(nanoseconds: UInt64($0 * 1_000_000_000)) }) async throws -> A {
+        var limited = 0
+        var waited: TimeInterval = 0
+        while true {
+            let a = try await call()
+            guard status(a) == 429,
+                  let d = nextDelay(retryAfter: retryAfter(a), rateLimitedSoFar: limited, waitedSoFar: waited) else { return a }
+            limited += 1
+            waited += d
+            await sleep(d)
+        }
+    }
+
+    /// The relay refused the send for rate reasons even after the wait budget.
+    static func isRateLimited(_ error: Error) -> Bool {
+        if case .http(let status, _)? = error as? V2.ClientError { return status == 429 }
+        return false
+    }
+}
+
+
+// MARK: - __GROUP_BLOB_2026_11_25__ one blob per group message
+
+/// Pure decisions of the group upload, unit-tested.
+nonisolated enum V2GroupBlobPlan {
+    /// Server cap on one reservation's list (`OSHI_BLOB_MAX_RECIPIENTS`).
+    static let maxRecipients = 5000
+
+    /// The server stored the list iff it echoed `recipients`. Without the echo it is an older
+    /// server and only `recipientKey` (the first listed member) may read the blob.
+    static func isShared(_ r: V2.ReserveResult) -> Bool { (r.recipients ?? 0) > 0 }
+
+    /// Who a group blob lets read, given the list it was reserved with and the server's answer.
+    static func covered(listed: [String], shared: Bool) -> [String] {
+        guard let first = listed.first else { return [] }
+        return shared ? listed : [first]
+    }
+
+    /// Who the shared reservation lists: the reachable members first, then the members whose
+    /// reachability is unknown this attempt; never a member with no v2 bundle.
+    static func readers(reachable: [String], recipients: [String], noBundle: Set<String>) -> [String] {
+        let r = Set(reachable)
+        return reachable + recipients.filter { !r.contains($0) && !noBundle.contains($0) }
+    }
+
+    /// Members who still need a blob of their own (old-server fallback, or a member that joined
+    /// the reachable set after the shared blob was reserved).
+    static func needOwnBlob(reachable: [String], covered: [String],
+                            canon: (String) -> String = { $0 }) -> [String] {
+        let c = Set(covered.map(canon))
+        return reachable.filter { !c.contains(canon($0)) }
     }
 }

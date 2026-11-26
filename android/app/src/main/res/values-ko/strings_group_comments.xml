@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">댓글</string>
+    <string name="gs_comments_footer">멤버는 각 게시물에 댓글을 달 수 있습니다. 게시는 관리자만 가능합니다.</string>
+    <string name="cm_leave_comment">댓글 달기</string>
+    <string name="cm_thread_title">댓글</string>
+    <string name="cm_empty">아직 댓글이 없습니다.</string>
+    <string name="cm_composer_hint">댓글…</string>
+    <string name="cm_replying_to">%1$s님에게 답장</string>
+    <string name="cm_disabled">댓글이 꺼져 있습니다.</string>
+    <string name="cm_post_unavailable">이 게시물은 더 이상 볼 수 없습니다.</string>
+    <string name="cm_too_fast">댓글을 너무 빨리 달고 있습니다. 잠시 기다려 주세요.</string>
+    <string name="cm_notif_reply">%1$s님이 내 댓글에 답장했습니다</string>
+    <string name="cm_delete_comment">댓글 삭제</string>
+    <plurals name="cm_comments_count">
+        <item quantity="other">댓글 %d개</item>
+    </plurals>
+</resources>

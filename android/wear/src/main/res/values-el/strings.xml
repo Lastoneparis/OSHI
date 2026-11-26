@@ -48,4 +48,27 @@
     <string name="qr_no">Όχι</string>
     <string name="qr_busy">Δεν μπορώ να μιλήσω</string>
     <string name="end_to_end">Κρυπτογράφηση από άκρο σε άκρο από το τηλέφωνό σας</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Καρφιτσωμένη</string>
+    <string name="net_internet">Διαδίκτυο</string>
+    <string name="net_nearby">%1$d κοντά</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Τηλέφωνο εκτός σύνδεσης · τα μηνύματα περιμένουν στο τηλέφωνο</string>
+    <string name="net_offline_short">Τηλέφωνο εκτός σύνδεσης</string>
+    <string name="voice_message">Φωνητικό μήνυμα</string>
+    <string name="voice_send">Αποστολή φωνητικού</string>
+    <string name="voice_cancel">Ακύρωση</string>
+    <string name="voice_permission">Επιτρέψτε το μικρόφωνο για εγγραφή φωνητικών μηνυμάτων. Τίποτα δεν αποθηκεύεται στο ρολόι.</string>
+    <string name="voice_mic_busy">Το μικρόφωνο είναι απασχολημένο. Δοκιμάστε ξανά.</string>
+    <string name="voice_too_short">Πολύ σύντομο. Μιλήστε λίγο περισσότερο.</string>
+    <string name="voice_not_sent">Δεν εστάλη. Κρατήστε το τηλέφωνο κοντά και δοκιμάστε ξανά.</string>
+    <string name="send_emoji">Αποστολή emoji</string>
+    <string name="delivery_sending">Αποστολή</string>
+    <string name="delivery_sent">Εστάλη</string>
+    <string name="delivery_delivered">Παραδόθηκε</string>
+    <string name="delivery_read">Διαβάστηκε</string>
+    <string name="delivery_failed">Δεν παραδόθηκε</string>
+    <string name="complication_none">Κανένα μη αναγνωσμένο</string>
+    <string name="tile_reply_to">Απάντηση σε %1$s</string>
+    <string name="tile_chat_unread">%1$s, μη αναγνωσμένα: %2$d</string>
 </resources>

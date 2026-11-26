@@ -66,6 +66,9 @@ class ControlPayloadCatalogTest {
         // __OFFLINE_ONLY_CONVERSATION_2026_10_23__ Swift:111. RENDERED: a change
         // to how a conversation is routed is something a reader should SEE.
         "🔒OFFLINE_ONLY🔒" to Kind.RENDERED,           // 🔒OFFLINE_ONLY🔒
+        // __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy. Catalog key carries
+        // U+FE0F so its derived bare twin matches the wire spelling `🛡ADV_PRIVACY🛡`.
+        "\uD83D\uDEE1\uFE0FADV_PRIVACY\uD83D\uDEE1\uFE0F" to Kind.RENDERED,
         "MEDIA|||" to Kind.RENDERED,
 
         "💬REPLY💬" to Kind.ENVELOPE,                  // 💬REPLY💬

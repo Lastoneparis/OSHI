@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware（快速近距離連線）</string>
+    <string name="settings_wifi_aware_subtitle">無需路由器即可直接連線附近的 OSHI 手機。您的 Wi-Fi 保持連線。</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

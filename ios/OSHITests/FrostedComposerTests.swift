@@ -37,19 +37,25 @@ final class FrostedComposerTests: XCTestCase {
     }
 
     /// And the other half: the field keeps an OPAQUE ground of its own.
+    /// __COMPOSER_PILL_2026_11_23__ that ground now belongs to the Google-style
+    /// pill the field sits in (`ComposerPill`, SharedUIComponents.swift), and
+    /// the field itself is bare inside it.
     func testTheTextFieldItselfStaysOpaque() throws {
         let src = try chatView()
+        let here = URL(fileURLWithPath: #filePath)
+        let root = here.deletingLastPathComponent().deletingLastPathComponent()
+        let shared = try String(contentsOf: root.appendingPathComponent("OSHI/SharedUIComponents.swift"), encoding: .utf8)
         XCTAssertTrue(
-            src.contains("private var inputBackground: Color"),
-            "inputBackground is gone; the field may have lost its opaque ground"
+            src.contains("ComposerPill(focused: isComposerFocused"),
+            "the 1:1 field is no longer inside the composer pill; it may have lost its opaque ground"
         )
         XCTAssertTrue(
-            src.contains("colorScheme == .dark ? Color(.systemGray6) : Color(.systemGray5)"),
-            "the field's ground is no longer a solid colour — typing would happen over the wallpaper"
+            shared.contains("colorScheme == .dark ? Color(.systemGray6) : Color(.systemGray5)"),
+            "the pill's ground is no longer a solid colour — typing would happen over the wallpaper"
         )
         XCTAssertTrue(
-            src.contains(".background(inputBackground)"),
-            "the field no longer paints its own ground"
+            shared.contains(".background(ComposerPillFill().clipShape(shape))"),
+            "the pill no longer paints its own ground"
         )
     }
 }

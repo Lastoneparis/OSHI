@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · ei OSHIn päästä päähän -salausta</string>
+    <string name="meshcore_error_not_connected">MeshCore-radiota ei ole yhdistetty</string>
+    <string name="meshcore_channels_title">MeshCore-kanavat</string>
+    <string name="meshcore_channel_public">Julkinen · kuka tahansa nimen tietävä voi lukea</string>
+    <string name="meshcore_channel_private">Yksityinen · salainen avain</string>
+    <string name="meshcore_join_hashtag">Liity hashtag-kanavalle</string>
+    <string name="meshcore_join_private">Liity yksityiselle kanavalle</string>
+    <string name="meshcore_contacts_title">MeshCore-yhteystiedot</string>
+    <string name="meshcore_refresh_contacts">Päivitä yhteystiedot</string>
+    <string name="meshcore_join_refused">Radio hylkäsi tämän kanavan.</string>
+    <string name="meshcore_join_no_slot">Tällä radiolla ei ole vapaata kanavapaikkaa.</string>
+    <string name="meshcore_join_bad_name">Anna kelvollinen kanavan nimi (enintään 31 tavua, ei välilyöntejä hashtag-kanavassa).</string>
+    <string name="meshcore_join_bad_secret">Salaisuuden on oltava 16 tavua: 32 heksamerkkiä tai base64.</string>
+    <string name="meshcore_hashtag_hint">Avain johdetaan nimestä: kuka tahansa nimen tietävä voi lukea kanavaa.</string>
+    <string name="meshcore_private_hint">Anna kanavan nimi ja jäsenten jakama salaisuus.</string>
+    <string name="meshcore_channel_name">Kanavan nimi</string>
+    <string name="meshcore_channel_secret">Salaisuus (heksa tai base64)</string>
+    <string name="meshcore_join">Liity</string>
+    <string name="meshcore_note_dm">MeshCore salaa viestit radioiden välillä, OSHI ei päästä päähän.</string>
+    <string name="meshcore_note_public">Julkinen kanava: kuka tahansa sen nimen tunteva voi lukea sitä.</string>
+    <string name="meshcore_note_private">Yksityinen kanava: kuka tahansa sen salaisuuden tietävä voi lukea sitä.</string>
+    <string name="meshcore_radio_offline">MeshCore-radiota ei ole yhdistetty. Viestit odottavat täällä toimittamattomina.</string>
+    <string name="meshcore_connect">Yhdistä</string>
+    <string name="meshcore_parts">%1$d viestiä</string>
+    <string name="meshcore_sending">Odottaa radiota</string>
+    <string name="meshcore_failed_dm">Ei vastausta heidän radioltaan (kantaman ulkopuolella?). Yritä uudelleen napauttamalla.</string>
+    <string name="meshcore_error_pairing">Pariliitos epäonnistui. Tarkista PIN-koodi ja yritä uudelleen. Jos radio on nollattu, poista se ensin Androidin Bluetooth-asetuksista.</string>
+    <string name="meshcore_error_no_answer">Radio ei vastannut. Tarkista, että siinä on MeshCore companion -laiteohjelmisto Bluetoothille.</string>
+    <string name="meshcore_state_reconnecting">Yhteys katkesi. Yhdistetään uudelleen, kun radio on taas kantamalla…</string>
+    <string name="meshcore_state_pin">Kirjoita radion PIN-koodi Androidin ikkunaan</string>
+    <string name="meshcore_state_reading">Luetaan yhteystietoja ja kanavia…</string>
+    <string name="meshcore_state_connecting">Yhdistetään…</string>
+    <string name="meshcore_seen_as">Yhdistetty · MeshCore-käyttäjät näkevät sinut nimellä %1$s</string>
+    <string name="meshcore_connected">Yhdistetty</string>
+    <string name="meshcore_footer_users">Keskustele MeshCore-käyttäjien kanssa (yksityisviestit ja kanavat) ja välitä OSHI-viestejä MeshCore-toistimien kautta. Vaatii MeshCore companion -laiteohjelmiston Bluetoothille. OSHI lisää yhden kanavan, #oshi-bridge, vapaaseen paikkaan eikä koskaan muuta muita kanaviasi.</string>
+    <string name="meshcore_scan_below">MeshCore-radiot näkyvät alempana kohdassa Lähellä olevat radiot, merkittynä MeshCore.</string>
+    <string name="meshcore_contacts_footer">Napauta henkilöä kirjoittaaksesi hänelle. MeshCore salaa viestit, OSHI ei päästä päähän.</string>
+    <string name="meshcore_no_contacts">Ketään ei ole vielä kuultu. MeshCore-käyttäjät näkyvät täällä, kun heidän radionsa ilmoittaa itsestään. Ilmoita omasi, jotta he löytävät sinut.</string>
+    <string name="meshcore_heard">Kuultu %1$s</string>
+    <string name="meshcore_announce">Ilmoita minut</string>
+    <string name="meshcore_announce_done">Ilmoitettu. Kantamalla olevat MeshCore-käyttäjät voivat nyt lisätä sinut ja kirjoittaa sinulle.</string>
+    <string name="meshcore_announce_failed">Radio ei voinut lähettää ilmoitusta.</string>
+    <string name="meshcore_channels_footer">Avaa kanava napauttamalla. Julkisia ja aihetunnistekanavia voi lukea kuka tahansa niiden nimen tunteva.</string>
+    <string name="meshcore_pin_title">Muodosta pariliitos: %1$s</string>
+    <string name="meshcore_pin_body">Android kysyy nyt radion PIN-koodia. Jos radiossa on näyttö, PIN-koodi näkyy siinä.</string>
+    <string name="meshcore_pin_default">Ei näyttöä? PIN-koodi on 123456, ellei sitä ole vaihdettu MeshCore-sovelluksessa.</string>
+    <string name="meshcore_pin_continue">Jatka</string>
+    <string name="meshcore_no_free_channel_chat">Kaikki 8 kanavapaikkaa ovat käytössä. Voit silti keskustella MeshCore-käyttäjien kanssa; vapauta paikka MeshCore-sovelluksessa, jotta OSHI-viestit voivat käyttää kanavaa #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">MeshCore-käyttäjä</string>
+    <string name="meshcore_too_long">Liian pitkä: enintään %1$d viestiä</string>
+</resources>

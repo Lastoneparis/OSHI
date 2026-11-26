@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">Bezpośrednio</string>
+    <string name="lora_node_card_from_you">od Ciebie</string>
+    <string name="lora_node_card_heard_day">słyszany %1$d d temu</string>
+    <string name="lora_node_card_heard_hour">słyszany %1$d godz. temu</string>
+    <string name="lora_node_card_heard_min">słyszany %1$d min temu</string>
+    <string name="lora_node_card_heard_now">słyszany przed chwilą</string>
+    <string name="lora_node_card_hops">%1$d przeskoków</string>
+    <string name="lora_node_card_in_range">w zasięgu</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_never_heard">nigdy nie słyszany</string>
+    <string name="lora_node_card_not_heard">jeszcze nie słyszany</string>
+    <string name="lora_node_card_relayed">przekazany</string>
+</resources>

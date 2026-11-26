@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">Skickat till %1$d av %2$d</string>
+    <string name="group_sent_partial_body">Ännu inte levererat till %1$d medlem(mar). OSHI försöker automatiskt igen i 7 dagar.</string>
+    <string name="group_sent_partial_gave_up">Fortfarande inte levererat till %1$d medlem(mar) efter 7 dagar.</string>
+    <string name="group_retry_now">Försök igen nu</string>
+</resources>

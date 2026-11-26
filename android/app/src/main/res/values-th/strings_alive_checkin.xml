@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">ยืนยันการเช็กอินแล้ว</string>
+    <string name="alive_a11y_neutral">ยังไม่ได้ตั้งค่าการเช็กอิน</string>
+    <string name="alive_a11y_overdue">เลยกำหนดเช็กอินแล้ว</string>
+    <string name="alive_action_im_alive">ฉันยังปลอดภัย</string>
+    <string name="alive_action_message_them">ส่งข้อความ</string>
+    <string name="alive_bar_open_settings">การตั้งค่าเช็กอิน</string>
+    <string name="alive_channel_description">การแจ้งเตือนสำหรับการเช็กอินของคุณเอง และการแจ้งเมื่อคนที่คุณติดตามไม่ได้ตอบการเช็กอินของเขา</string>
+    <string name="alive_channel_name">เช็กอินความปลอดภัย</string>
+    <string name="alive_confirmed_toast">ส่งการเช็กอินแล้ว</string>
+    <string name="alive_duration_days_hours">%1$d วัน %2$d ชม.</string>
+    <string name="alive_duration_hours_minutes">%1$d ชม. %2$d นาที</string>
+    <string name="alive_duration_minutes">%1$d นาที</string>
+    <string name="alive_duration_now">ไม่ถึงหนึ่งนาที</string>
+    <string name="alive_interval_24h">ทุก 24 ชั่วโมง</string>
+    <string name="alive_interval_48h">ทุก 48 ชั่วโมง</string>
+    <string name="alive_interval_72h">ทุก 72 ชั่วโมง</string>
+    <string name="alive_interval_custom">กำหนดเอง</string>
+    <string name="alive_interval_custom_hours">ทุก %1$d ชั่วโมง</string>
+    <string name="alive_interval_every">ทุก %1$s</string>
+    <string name="alive_lane_you">คุณ</string>
+    <string name="alive_note_delivery">การแจ้งเตือนขึ้นอยู่กับเครือข่ายของคุณและสิทธิ์การแจ้งเตือน การพลาดเช็กอินหมายความเพียงว่าไม่มีการยืนยันมาถึง ไม่มีอะไรมากกว่านั้น</string>
+    <string name="alive_note_no_location">ไม่มีการแชร์ตำแหน่ง การเช็กอินมีเพียงเวลาประทับหนึ่งค่าเท่านั้น</string>
+    <string name="alive_notification_mine_due_body">ยืนยันว่าคุณยังปลอดภัย เพื่อไม่ให้ %1$s ต้องรอ</string>
+    <string name="alive_notification_mine_due_title">ถึงเวลาเช็กอินของคุณแล้ว</string>
+    <string name="alive_notification_overdue_body">การเช็กอินของเขาเลยกำหนดมา %1$s แล้ว ซึ่งหมายความเพียงว่ายังไม่มีการยืนยันมาถึง</string>
+    <string name="alive_notification_overdue_title">ไม่มีการเช็กอินจาก %1$s</string>
+    <string name="alive_sheet_explainer">ยืนยันว่าคุณยังปลอดภัยตามกำหนดเวลา %1$s จะเห็นการนับถอยหลังของคุณ และจะได้รับแจ้งเมื่อเลยเวลาโดยไม่มีคำตอบ</string>
+    <string name="alive_sheet_interval">ความถี่</string>
+    <string name="alive_sheet_mine_switch">เช็กอินกับ %1$s</string>
+    <string name="alive_sheet_stop">หยุดเช็กอิน</string>
+    <string name="alive_sheet_their_next">ครั้งถัดไปที่คาดไว้ %1$s</string>
+    <string name="alive_sheet_their_none">%1$s ยังไม่ได้ตั้งค่าการเช็กอินที่นี่</string>
+    <string name="alive_sheet_their_section">การเช็กอินของ %1$s</string>
+    <string name="alive_state_confirmed_ago">ยืนยันเมื่อ %1$s ที่แล้ว</string>
+    <string name="alive_state_due_in">ครบกำหนดในอีก %1$s</string>
+    <string name="alive_state_not_set">ยังไม่ได้ตั้งค่า</string>
+    <string name="alive_state_overdue_by">ไม่มีการตอบกลับมา %1$s</string>
+    <string name="alive_summary_confirmed">ยืนยันว่ายังมีชีวิตอยู่</string>
+    <string name="alive_summary_started">เริ่มการยืนยันความปลอดภัยแล้ว</string>
+    <string name="alive_summary_stopped">หยุดการยืนยันความปลอดภัยแล้ว</string>
+    <string name="alive_title">เช็กอินความปลอดภัย</string>
+    <string name="alive_unknown_peer">ผู้ติดต่อนี้</string>
+</resources>

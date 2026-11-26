@@ -247,6 +247,24 @@ class GroupDeleteForEveryoneTest {
         assertEquals("keep", after[0].content)
     }
 
+    // __GROUP_EDIT_DELETE_AUTHOR_2026_11_20__
+    @Test
+    fun `a member cannot delete or edit someone else's message`() {
+        val target = androidId()
+        val rows = listOf(msg(target, sender = myKey, content = "mine"))
+        assertNull(GroupManager.applyDeletionToMessages(rows, target, actor = peerKey))
+        assertNull(GroupManager.applyEditToMessages(rows, target, "forged", 1L, actor = peerKey))
+    }
+
+    @Test
+    fun `the author may delete and edit their own message`() {
+        val target = androidId()
+        val rows = listOf(msg(target, sender = peerKey, content = "theirs"))
+        assertNotNull(GroupManager.applyEditToMessages(rows, target, "fixed", 1L, actor = peerKey))
+        val after = GroupManager.applyDeletionToMessages(rows, target, actor = peerKey)
+        assertTrue(after!![0].isDeleted)
+    }
+
     /**
      * An iPhone targets `messageId.uuidString`, which is UPPERCASE, while Android mints
      * lowercase ids. Matching case-sensitively would drop every inbound iOS delete.

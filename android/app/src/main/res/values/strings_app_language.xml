@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __PER_APP_LANGUAGE_2026_11_20__ In-app language picker (Settings › Appearance). The
+     language names themselves are autonyms in AppLanguage.kt, never translated. -->
+<resources>
+    <string name="settings_app_language">Language</string>
+    <string name="settings_app_language_system">System default</string>
+</resources>

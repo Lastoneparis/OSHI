@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">فرمان‌ها</string>
+    <string name="bot_cmd_send_a11y">ارسال %1$s</string>
+    <string name="bot_cmd_sheet_title">فرمان‌های بات</string>
+    <string name="bot_cmd_tap_to_send">برای ارسال، روی یک فرمان بزنید.</string>
+    <string name="bot_cmd_empty_none_title">هنوز اینجا باتی نیست</string>
+    <string name="bot_cmd_empty_none_body">یک بات بسازید و آن را به این گروه اضافه کنید. فرمان‌هایش اینجا و هنگام تایپ / نمایش داده می‌شوند.</string>
+    <string name="bot_cmd_empty_bot">این بات هنوز فرمانی ندارد.</string>
+    <string name="bot_cmd_setup">تنظیم فرمان‌ها</string>
+    <string name="bot_cmd_section">فرمان‌ها</string>
+    <string name="bot_cmd_section_hint">اعضای گروه‌های بات این‌ها را با تایپ / یا زدن «فرمان‌ها» می‌بینند.</string>
+    <string name="bot_cmd_add">افزودن</string>
+    <string name="bot_cmd_add_title">فرمان جدید</string>
+    <string name="bot_cmd_edit_title">ویرایش فرمان</string>
+    <string name="bot_cmd_field_name">فرمان</string>
+    <string name="bot_cmd_field_description">توضیح (در منو نمایش داده می‌شود)</string>
+    <string name="bot_cmd_field_reply">پاسخ</string>
+    <string name="bot_cmd_field_reply_hint">آنچه بات پاسخ می‌دهد. می‌توانید از {{input}}، {{bot_name}} و {{date}} استفاده کنید.</string>
+    <string name="bot_cmd_webhook_note">به وب‌هوک شما فرستاده می‌شود که پاسخ می‌دهد.</string>
+    <string name="bot_cmd_empty_owner">هنوز فرمانی نیست. یکی مثل /start یا /help اضافه کنید تا همه بدانند این بات چه کار می‌کند.</string>
+    <string name="bot_cmd_err_empty">نام فرمان را وارد کنید.</string>
+    <string name="bot_cmd_err_invalid">فقط حروف کوچک لاتین، رقم و _.</string>
+    <string name="bot_cmd_err_too_long">حداکثر ۳۲ نویسه.</string>
+    <string name="bot_cmd_err_duplicate">این بات از قبل این فرمان را دارد.</string>
+    <string name="bot_cmd_err_too_many">هر بات حداکثر ۱۰۰ فرمان می‌تواند داشته باشد.</string>
+    <string name="bot_cmd_err_description">توضیح خیلی طولانی است (حداکثر ۲۵۶ نویسه).</string>
+    <string name="bot_cmd_sync_local">روی همین گوشی که بات را اجرا می‌کند ذخیره شد.</string>
+    <string name="bot_cmd_sync_syncing">در حال به‌روزرسانی سرور…</string>
+    <string name="bot_cmd_sync_synced">منو روی سرور به‌روز شد.</string>
+    <string name="bot_cmd_sync_failed">به‌روزرسانی سرور ممکن نشد. فرمان‌های شما روی این گوشی ذخیره شده‌اند.</string>
+    <string name="bot_profile_edit">ویرایش نمایه</string>
+    <string name="bot_profile_name">نام</string>
+    <string name="bot_profile_description">توضیح</string>
+    <string name="bot_profile_avatar">آواتار</string>
+    <string name="bot_profile_err_name_empty">برای باتتان نامی بگذارید.</string>
+    <string name="bot_profile_err_name_long">نام خیلی طولانی است (حداکثر ۶۴ نویسه).</string>
+    <string name="bot_profile_err_desc_long">توضیح خیلی طولانی است (حداکثر ۵۱۲ نویسه).</string>
+    <string name="bot_connect_title">نحوهٔ اتصال</string>
+    <string name="bot_connect_local">این بات روی همین گوشی اجرا می‌شود: OSHI را نصب‌شده و بات را روشن نگه دارید. آن را به یک گروه اضافه کنید تا اعضا بتوانند از فرمان‌هایش استفاده کنند.</string>
+    <string name="bot_connect_webhook">هر فرمان به نشانی وب‌هوک شما فرستاده می‌شود و سرور شما با JSON ‏{\"text\": \"…\"} پاسخ می‌دهد. سرور شما می‌تواند از توکن زیر با API بات OSHI هم استفاده کند.</string>
+    <string name="bot_connect_token_warning">توکن را محرمانه نگه دارید: هر کس آن را داشته باشد می‌تواند به نام بات شما حرف بزند.</string>
+    <string name="bot_connect_groups">گروه‌ها: %1$s</string>
+    <string name="bot_connect_no_groups">هنوز در هیچ گروهی نیست، پس کسی نمی‌تواند از فرمان‌هایش استفاده کند.</string>
+</resources>

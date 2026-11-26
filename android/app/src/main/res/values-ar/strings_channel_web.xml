@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">معاينة ويب عامة</string>
+    <string name="cw_toggle">نشر المنشورات على الويب</string>
+    <string name="cw_footer">تُنشر المنشورات الجديدة أيضًا كصفحة ويب عامة على oshi-messenger.com/c/%1$s. يمكن لأي شخص قراءتها، بما في ذلك محركات البحث ومعاينات الروابط. لا ينطبق التشفير التام بين الطرفين على نسخة الويب.</string>
+    <string name="cw_needs_link">امنح هذه القناة رابطًا عامًا أولًا: تستخدم معاينة الويب اسمها.</string>
+    <string name="cw_create_link">إنشاء رابط عام</string>
+    <string name="cw_enable_title">نشر المنشورات على الويب؟</string>
+    <string name="cw_enable_confirm">ستكون منشورات هذه القناة مرئية لأي شخص على الويب على oshi-messenger.com/c/%1$s. المنشورات الجديدة فقط. يمكن لمعاينات الروابط (WhatsApp وX وTelegram…) قراءتها أيضًا، ولا ينطبق التشفير التام بين الطرفين على نسخة الويب.</string>
+    <string name="cw_enable_action">نشر</string>
+    <string name="cw_disable_title">إيقاف معاينة الويب؟</string>
+    <string name="cw_disable_confirm">ستُزال كل المنشورات والصور المنشورة على oshi-messenger.com/c/%1$s من الويب. تبقى منشوراتك في التطبيق كما هي.</string>
+    <string name="cw_disable_action">إيقاف</string>
+    <string name="cw_indexing">السماح لمحركات البحث</string>
+    <string name="cw_indexing_footer">عند الإيقاف، تطلب الصفحات من محركات البحث عدم فهرستها.</string>
+    <string name="cw_embed_code">رمز التضمين</string>
+    <string name="cw_embed_title">تضمين هذا المنشور</string>
+    <string name="cw_embed_hint">الصق هذا الرمز في موقعك حيث يجب أن يظهر المنشور.</string>
+    <string name="cw_embed_dark">المظهر الداكن</string>
+    <string name="cw_copy_code">نسخ الرمز</string>
+    <string name="cw_code_copied">تم نسخ الرمز</string>
+    <string name="cw_not_on_web">هذا المنشور ليس على الويب. تُنشر فقط المنشورات المرسلة بعد تفعيل معاينة الويب.</string>
+    <string name="cw_error">تعذّر تغيير معاينة الويب. تحقّق من اتصالك وحاول مرة أخرى.</string>
+</resources>

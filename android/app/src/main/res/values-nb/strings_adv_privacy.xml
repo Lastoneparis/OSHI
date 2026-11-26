@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Avansert chatpersonvern</string>
+    <string name="adv_privacy_subtitle">Hindrer alle i denne chatten i å lagre medier, eksportere chatten eller bruke KI på meldingene</string>
+    <string name="adv_privacy_learn_more">Finn ut mer</string>
+    <string name="adv_privacy_notice_on">%1$s slo på avansert chatpersonvern. Ingen kan lagre medier automatisk, eksportere chatten eller bruke KI på meldinger i denne chatten.</string>
+    <string name="adv_privacy_notice_off">%1$s slo av avansert chatpersonvern. Lagring av medier, eksport av chatten og KI-funksjoner er tilgjengelige igjen.</string>
+    <string name="adv_privacy_notice_on_you">Du slo på avansert chatpersonvern. Ingen kan lagre medier automatisk, eksportere chatten eller bruke KI på meldinger i denne chatten.</string>
+    <string name="adv_privacy_notice_off_you">Du slo av avansert chatpersonvern. Lagring av medier, eksport av chatten og KI-funksjoner er tilgjengelige igjen.</string>
+    <string name="adv_privacy_summary_on">Avansert chatpersonvern slått på</string>
+    <string name="adv_privacy_summary_off">Avansert chatpersonvern slått av</string>
+    <string name="adv_privacy_sheet_intro">Når noen slår det på, gjelder det for alle i denne chatten:</string>
+    <string name="adv_privacy_sheet_point_save">Medier fra denne chatten kan ikke lagres i galleriet eller under Nedlastinger.</string>
+    <string name="adv_privacy_sheet_point_export">Denne chatten utelates fra chateksporter.</string>
+    <string name="adv_privacy_sheet_point_ai">OSHIs KI på enheten kan ikke lese denne chatten: ingen svarforslag, ingen oversettelse, ingen kontekst for skriveassistenten.</string>
+    <string name="adv_privacy_sheet_point_screen">Skjermbilder og skjermopptak av denne chatten er blokkert.</string>
+    <string name="adv_privacy_sheet_limits">Alle i chatten kan slå det på eller av. Det kan ikke hindre noen i å fotografere skjermen, og personer med en eldre versjon av OSHI påvirkes ikke.</string>
+    <string name="adv_privacy_blocked_toast">Avansert chatpersonvern er på i denne chatten</string>
+    <string name="adv_privacy_older_members">Medlemmer med en eldre versjon av OSHI som ikke tar det i bruk før de oppdaterer: %1$d</string>
+</resources>

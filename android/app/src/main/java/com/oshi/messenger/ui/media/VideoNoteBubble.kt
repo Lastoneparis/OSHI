@@ -306,7 +306,7 @@ fun VideoNoteBubble(
                 .fillMaxSize()
                 .clip(CircleShape)
                 // __OLED_GLASS_2026_11_16__ OLED black: a neutral glass disc, not indigo.
-                .background(if (com.oshi.messenger.ui.theme.glassOn()) com.oshi.messenger.ui.theme.OledGlass.BubbleFill else Color(0xFF1B1530)),
+                .background(if (com.oshi.messenger.ui.theme.oledGlassOn()) com.oshi.messenger.ui.theme.OledGlass.BubbleFill else Color(0xFF1B1530)),
             contentAlignment = Alignment.Center
         ) {
             thumbnail?.let {

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Opdrachten</string>
+    <string name="bot_cmd_send_a11y">%1$s versturen</string>
+    <string name="bot_cmd_sheet_title">Botopdrachten</string>
+    <string name="bot_cmd_tap_to_send">Tik op een opdracht om die te versturen.</string>
+    <string name="bot_cmd_empty_none_title">Nog geen bots hier</string>
+    <string name="bot_cmd_empty_none_body">Maak een bot en voeg hem toe aan deze groep. Zijn opdrachten verschijnen dan hier en als je / typt.</string>
+    <string name="bot_cmd_empty_bot">Deze bot heeft nog geen opdrachten.</string>
+    <string name="bot_cmd_setup">Opdrachten instellen</string>
+    <string name="bot_cmd_section">Opdrachten</string>
+    <string name="bot_cmd_section_hint">Leden van de groepen van de bot zien deze als ze / typen of op Opdrachten tikken.</string>
+    <string name="bot_cmd_add">Toevoegen</string>
+    <string name="bot_cmd_add_title">Nieuwe opdracht</string>
+    <string name="bot_cmd_edit_title">Opdracht bewerken</string>
+    <string name="bot_cmd_field_name">Opdracht</string>
+    <string name="bot_cmd_field_description">Beschrijving (in het menu)</string>
+    <string name="bot_cmd_field_reply">Antwoord</string>
+    <string name="bot_cmd_field_reply_hint">Wat de bot antwoordt. Je kunt {{input}}, {{bot_name}} en {{date}} gebruiken.</string>
+    <string name="bot_cmd_webhook_note">Naar je webhook gestuurd, die antwoordt.</string>
+    <string name="bot_cmd_empty_owner">Nog geen opdrachten. Voeg er een toe, zoals /start of /help, zodat iedereen weet wat deze bot doet.</string>
+    <string name="bot_cmd_err_empty">Voer een opdrachtnaam in.</string>
+    <string name="bot_cmd_err_invalid">Alleen kleine letters, cijfers en _.</string>
+    <string name="bot_cmd_err_too_long">Maximaal 32 tekens.</string>
+    <string name="bot_cmd_err_duplicate">Deze bot heeft deze opdracht al.</string>
+    <string name="bot_cmd_err_too_many">Een bot kan maximaal 100 opdrachten hebben.</string>
+    <string name="bot_cmd_err_description">Beschrijving te lang (maximaal 256 tekens).</string>
+    <string name="bot_cmd_sync_local">Opgeslagen op deze telefoon, die de bot draait.</string>
+    <string name="bot_cmd_sync_syncing">Server bijwerken…</string>
+    <string name="bot_cmd_sync_synced">Menu bijgewerkt op de server.</string>
+    <string name="bot_cmd_sync_failed">Kon de server niet bijwerken. Je opdrachten zijn op deze telefoon opgeslagen.</string>
+    <string name="bot_profile_edit">Profiel bewerken</string>
+    <string name="bot_profile_name">Naam</string>
+    <string name="bot_profile_description">Beschrijving</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Geef je bot een naam.</string>
+    <string name="bot_profile_err_name_long">Naam te lang (maximaal 64 tekens).</string>
+    <string name="bot_profile_err_desc_long">Beschrijving te lang (maximaal 512 tekens).</string>
+    <string name="bot_connect_title">Hoe hij verbonden is</string>
+    <string name="bot_connect_local">Deze bot draait op deze telefoon: houd OSHI geïnstalleerd en de bot ingeschakeld. Voeg hem toe aan een groep en de leden kunnen er zijn opdrachten gebruiken.</string>
+    <string name="bot_connect_webhook">Elke opdracht gaat naar je webhook-URL en je server antwoordt met JSON {\"text\": \"…\"}. Je server kan het token hieronder ook gebruiken met de OSHI-bot-API.</string>
+    <string name="bot_connect_token_warning">Houd het token geheim: wie het heeft, kan spreken als jouw bot.</string>
+    <string name="bot_connect_groups">Groepen: %1$s</string>
+    <string name="bot_connect_no_groups">Nog in geen enkele groep: niemand kan zijn opdrachten gebruiken.</string>
+</resources>

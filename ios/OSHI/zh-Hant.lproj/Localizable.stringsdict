@@ -16,5 +16,33 @@
 			<string>%d 則留言</string>
 		</dict>
 	</dict>
+	<key>group_header_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@members@</string>
+		<key>members</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 位成員</string>
+		</dict>
+	</dict>
+	<key>group_header_subscribers</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@subscribers@</string>
+		<key>subscribers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 位訂閱者</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

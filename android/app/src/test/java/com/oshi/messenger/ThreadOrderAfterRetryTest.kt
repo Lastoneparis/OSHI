@@ -42,6 +42,8 @@ class ThreadOrderAfterRetryTest {
         assertTrue("V2 inbound rows carry the envelope date", inbound.contains("timestamp = normalizeTimestamp(tsMs)"))
         // The parked-message retry hands the router the row's own date.
         assertTrue(repo.contains("v2MessageRouter.sendText(recipientPublicKey, v2Bytes, messageId, originalTimestampMs = message.timestamp)"))
-        assertTrue("a resend keeps its date", repo.contains("timestamp = resendOf?.timestamp ?: System.currentTimeMillis()"))
+        assertTrue("a resend keeps its date", repo.contains("timestamp = timestampOverride ?: resendOf?.timestamp ?: System.currentTimeMillis()"))
+        // __LONG_TEXT_SPLIT_2026_11_23__ split parts are dated from the resend's date, 1 ms apart.
+        assertTrue(repo.contains("val baseTimestamp = resendOf?.timestamp ?: System.currentTimeMillis()"))
     }
 }

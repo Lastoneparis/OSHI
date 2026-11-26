@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Parancsok</string>
+    <string name="bot_cmd_send_a11y">%1$s küldése</string>
+    <string name="bot_cmd_sheet_title">A bot parancsai</string>
+    <string name="bot_cmd_tap_to_send">Koppints egy parancsra az elküldéséhez.</string>
+    <string name="bot_cmd_empty_none_title">Itt még nincs bot</string>
+    <string name="bot_cmd_empty_none_body">Hozz létre egy botot, és add hozzá ehhez a csoporthoz. A parancsai itt jelennek meg, és amikor beírod: /.</string>
+    <string name="bot_cmd_empty_bot">Ennek a botnak még nincsenek parancsai.</string>
+    <string name="bot_cmd_setup">Parancsok beállítása</string>
+    <string name="bot_cmd_section">Parancsok</string>
+    <string name="bot_cmd_section_hint">A bot csoportjainak tagjai akkor látják ezeket, ha beírják a / jelet vagy a Parancsok gombra koppintanak.</string>
+    <string name="bot_cmd_add">Hozzáadás</string>
+    <string name="bot_cmd_add_title">Új parancs</string>
+    <string name="bot_cmd_edit_title">Parancs szerkesztése</string>
+    <string name="bot_cmd_field_name">Parancs</string>
+    <string name="bot_cmd_field_description">Leírás (a menüben látszik)</string>
+    <string name="bot_cmd_field_reply">Válasz</string>
+    <string name="bot_cmd_field_reply_hint">Amit a bot válaszol. Használhatod: {{input}}, {{bot_name}} és {{date}}.</string>
+    <string name="bot_cmd_webhook_note">A webhookodra megy, az válaszol.</string>
+    <string name="bot_cmd_empty_owner">Még nincsenek parancsok. Adj hozzá egyet, például /start vagy /help, hogy mindenki tudja, mit tud ez a bot.</string>
+    <string name="bot_cmd_err_empty">Add meg a parancs nevét.</string>
+    <string name="bot_cmd_err_invalid">Csak kisbetűk, számjegyek és _.</string>
+    <string name="bot_cmd_err_too_long">Legfeljebb 32 karakter.</string>
+    <string name="bot_cmd_err_duplicate">Ennek a botnak már van ilyen parancsa.</string>
+    <string name="bot_cmd_err_too_many">Egy botnak legfeljebb 100 parancsa lehet.</string>
+    <string name="bot_cmd_err_description">Túl hosszú leírás (legfeljebb 256 karakter).</string>
+    <string name="bot_cmd_sync_local">Mentve ezen a telefonon, amely a botot futtatja.</string>
+    <string name="bot_cmd_sync_syncing">A szerver frissítése…</string>
+    <string name="bot_cmd_sync_synced">A menü frissült a szerveren.</string>
+    <string name="bot_cmd_sync_failed">Nem sikerült frissíteni a szervert. A parancsaid ezen a telefonon vannak mentve.</string>
+    <string name="bot_profile_edit">Profil szerkesztése</string>
+    <string name="bot_profile_name">Név</string>
+    <string name="bot_profile_description">Leírás</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Adj nevet a botodnak.</string>
+    <string name="bot_profile_err_name_long">Túl hosszú név (legfeljebb 64 karakter).</string>
+    <string name="bot_profile_err_desc_long">Túl hosszú leírás (legfeljebb 512 karakter).</string>
+    <string name="bot_connect_title">Így kapcsolódik</string>
+    <string name="bot_connect_local">Ez a bot ezen a telefonon fut: tartsd telepítve az OSHI-t és bekapcsolva a botot. Add hozzá egy csoporthoz, és a tagjai ott használhatják a parancsait.</string>
+    <string name="bot_connect_webhook">Minden parancs a webhookod URL-jére megy, a szervered pedig JSON-ban válaszol: {\"text\": \"…\"}. A szervered az alábbi tokent is használhatja az OSHI bot API-val.</string>
+    <string name="bot_connect_token_warning">Tartsd titokban a tokent: aki ismeri, a botod nevében beszélhet.</string>
+    <string name="bot_connect_groups">Csoportok: %1$s</string>
+    <string name="bot_connect_no_groups">Még egyetlen csoportban sincs, így senki sem használhatja a parancsait.</string>
+</resources>

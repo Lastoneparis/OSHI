@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Privadesa avançada del xat</string>
+    <string name="adv_privacy_subtitle">Impedeix que tothom en aquest xat desi fitxers multimèdia, exporti el xat o faci servir IA amb els missatges</string>
+    <string name="adv_privacy_learn_more">Més informació</string>
+    <string name="adv_privacy_notice_on">%1$s ha activat la privadesa avançada del xat. Ningú no pot desar fitxers automàticament, exportar el xat ni fer servir IA amb els missatges d\'aquest xat.</string>
+    <string name="adv_privacy_notice_off">%1$s ha desactivat la privadesa avançada del xat. Desar fitxers, exportar el xat i les funcions d\'IA tornen a estar disponibles.</string>
+    <string name="adv_privacy_notice_on_you">Has activat la privadesa avançada del xat. Ningú no pot desar fitxers automàticament, exportar el xat ni fer servir IA amb els missatges d\'aquest xat.</string>
+    <string name="adv_privacy_notice_off_you">Has desactivat la privadesa avançada del xat. Desar fitxers, exportar el xat i les funcions d\'IA tornen a estar disponibles.</string>
+    <string name="adv_privacy_summary_on">Privadesa avançada del xat activada</string>
+    <string name="adv_privacy_summary_off">Privadesa avançada del xat desactivada</string>
+    <string name="adv_privacy_sheet_intro">Quan algú l\'activa, s\'aplica a tothom en aquest xat:</string>
+    <string name="adv_privacy_sheet_point_save">Els fitxers multimèdia d\'aquest xat no es poden desar a la galeria ni a Baixades.</string>
+    <string name="adv_privacy_sheet_point_export">Aquest xat queda fora de les exportacions de xats.</string>
+    <string name="adv_privacy_sheet_point_ai">La IA al dispositiu d\'OSHI no pot llegir aquest xat: sense respostes suggerides, sense traducció, sense context per a l\'assistent d\'escriptura.</string>
+    <string name="adv_privacy_sheet_point_screen">Les captures i gravacions de pantalla d\'aquest xat estan bloquejades.</string>
+    <string name="adv_privacy_sheet_limits">Qualsevol persona del xat la pot activar o desactivar. No impedeix que algú fotografiï la pantalla, i no afecta qui fa servir una versió antiga d\'OSHI.</string>
+    <string name="adv_privacy_blocked_toast">La privadesa avançada està activada en aquest xat</string>
+    <string name="adv_privacy_older_members">Membres amb una versió antiga d\'OSHI que no l\'aplicaran fins que actualitzin: %1$d</string>
+</resources>

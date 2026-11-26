@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">Odesláno %1$d z %2$d</string>
+    <string name="group_sent_partial_body">Zatím nedoručeno %1$d členům. OSHI to bude automaticky zkoušet 7 dní.</string>
+    <string name="group_sent_partial_gave_up">Ani po 7 dnech nedoručeno %1$d členům.</string>
+    <string name="group_retry_now">Zkusit znovu</string>
+</resources>

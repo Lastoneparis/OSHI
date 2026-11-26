@@ -170,7 +170,15 @@ object Oshi {
          * dark. Still opaque; the edge comes from [rim] + elevation.
          */
         val receivedLight = Color(0xFFFFFFFF)
-        val receivedDark = Color(0xFF1E1B2E)
+
+        /**
+         * __BUBBLE_MEDIA_2026_11_21__ (BUBBLE_MEDIA_SPEC §2) Dark received surface is
+         * now a NEUTRAL elevated grey, #22252B, one step above the neutral dark
+         * ground ([Chat.groundDarkTop]). The indigo #1E1B2E sat on an indigo ground
+         * and, next to the purple outgoing bubble, made the whole thread one hue.
+         * White body text 15.4:1, [Chat.metaInk] 6.6:1, every group name ≥ 5.2:1.
+         */
+        val receivedDark = Color(0xFF22252B)
 
         /**
          * __OLED_BLACK_2026_11_16__ Incoming bubble in OLED black: a neutral
@@ -187,6 +195,35 @@ object Oshi {
             darkTheme -> receivedDark
             else -> receivedLight
         }
+
+        /**
+         * __BUBBLE_MEDIA_2026_11_21__ (BUBBLE_MEDIA_SPEC §2) The DEFAULT (OSHI accent)
+         * outgoing bubble is now tonal, not a saturated fill:
+         *
+         *  * LIGHT — a pale OSHI lavender ramp #EFE8FF → #E6DCFF under near-black ink
+         *    [onOutgoingLight]. White on #7B3AF5 read fine for one line and was heavy
+         *    for a paragraph; this is the Telegram/iMessage-light pattern with the
+         *    brand hue kept. Ink 13.4:1, meta 5.4:1, link (brand) 5.9:1.
+         *  * DARK — a deep OSHI purple ramp #5B47B3 → #4A3B8F under white: 7.0:1 at
+         *    the light stop. Less neon than #7B3AF5 on a near-black ground.
+         *
+         * OLED black uses the dark ramp too (black is the GROUND there, never a bubble).
+         * The other five accents stay saturated with white ink (BubbleAccentContrastTest).
+         */
+        val outgoingLightStart = Color(0xFFEFE8FF)
+        val outgoingLightEnd = Color(0xFFE6DCFF)
+        val outgoingDarkStart = Color(0xFF5B47B3)
+        val outgoingDarkEnd = Color(0xFF4A3B8F)
+        val onOutgoingLight = Color(0xFF1B1530)
+        val onOutgoingDark = Color.White
+
+        /** Timestamp / edited / tick ink INSIDE the tonal outgoing bubble. */
+        fun metaOnOutgoing(darkTheme: Boolean): Color =
+            if (darkTheme) Color(0xFFE6E0FA) else Color(0xFF5C5570)
+
+        /** Media-only bubbles: time + ticks on a translucent dark pill over the picture. */
+        val mediaPillFill = Color(0x8C000000)
+        val mediaPillInk = Color.White
 
         /**
          * A hairline rim around a bubble. THIS IS A READABILITY FIX, not
@@ -212,11 +249,12 @@ object Oshi {
          * string), and those carry their own, much higher, alphas — a marking
          * drawn at the rim's 0.10 would not be visible at all.
          */
-        fun rimInk(outgoing: Boolean, darkTheme: Boolean): Color =
-            if (outgoing || darkTheme) Color.White else Color(0xFF2A1F4D)
+        fun rimInk(outgoing: Boolean, darkTheme: Boolean, tonal: Boolean = false): Color =
+            if (darkTheme || (outgoing && !tonal)) Color.White else Color(0xFF2A1F4D)
 
         /** iOS `BubbleStyleManager.rim` — white bubble on a pale ground wants a firmer violet-grey hairline. */
-        fun rimAlpha(outgoing: Boolean, darkTheme: Boolean): Float = when {
+        fun rimAlpha(outgoing: Boolean, darkTheme: Boolean, tonal: Boolean = false): Float = when {
+            outgoing && tonal && !darkTheme -> 0.12f
             outgoing -> 0.14f
             darkTheme -> 0.08f
             else -> 0.12f
@@ -231,11 +269,16 @@ object Oshi {
         val rimWidth: Dp = 0.5.dp
 
         /**
-         * __CHAT_POLISH_2026_09_24__ How wide a message bubble may get: 70 % of
-         * the screen, capped at 420 — the same rule as iOS
-         * `BubbleStyleManager.maxBubbleWidth` (was a flat 300 dp here, 55 % there).
+         * __CHAT_POLISH_2026_09_24__ How wide a message bubble may get.
+         * __BUBBLE_MEDIA_2026_11_21__ 75 % of the chat, capped at 420 (was 70 %; the
+         * group thread used its own 82 %) — one rule for 1:1 and groups.
          */
-        fun maxWidth(screenWidthDp: Int): Dp = (screenWidthDp * 0.70f).coerceAtMost(420f).dp
+        fun maxWidth(screenWidthDp: Int): Dp =
+            com.oshi.messenger.ui.media.MediaBubbleSizing.maxBubbleWidth(screenWidthDp.toFloat(), channel = false).dp
+
+        /** __BUBBLE_MEDIA_2026_11_21__ a channel post is a card: 90 % of the chat, cap 560. */
+        fun maxWidth(screenWidthDp: Int, channel: Boolean): Dp =
+            com.oshi.messenger.ui.media.MediaBubbleSizing.maxBubbleWidth(screenWidthDp.toFloat(), channel).dp
     }
 
     /**
@@ -246,10 +289,14 @@ object Oshi {
      * ground in `ChatPaletteContrastTest`.
      */
     object Chat {
-        val groundLightTop = Color(0xFFFBFAFF)
-        val groundLightBottom = Color(0xFFF1EEFB)
-        val groundDarkTop = Color(0xFF120E24)
-        val groundDarkBottom = Color(0xFF07060D)
+        // __BUBBLE_MEDIA_2026_11_21__ (BUBBLE_MEDIA_SPEC §2) Light: a touch more lavender
+        // so the WHITE incoming bubble separates from the ground (was #FBFAFF, 1.03:1
+        // against white). Dark: neutral #17181C → #0F1115 (was indigo #120E24 → #07060D);
+        // the brand stays in the glow and the outgoing bubble, not in every surface.
+        val groundLightTop = Color(0xFFF7F5FC)
+        val groundLightBottom = Color(0xFFEEEAF7)
+        val groundDarkTop = Color(0xFF17181C)
+        val groundDarkBottom = Color(0xFF0F1115)
         fun brandGlow(dark: Boolean): Float = if (dark) 0.24f else 0.06f
         fun accentGlow(dark: Boolean): Float = if (dark) 0.10f else 0.04f
 

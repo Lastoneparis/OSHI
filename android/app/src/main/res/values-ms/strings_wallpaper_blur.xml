@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">Lalai untuk semua sembang. Setiap sembang masih boleh ada kertas dindingnya sendiri.</string>
+    <string name="wallpaper_tone_settings_title">Ton kertas dinding</string>
+    <string name="wallpaper_personal_note">Hanya anda yang melihat kertas dinding ini, pada peranti ini.</string>
+</resources>

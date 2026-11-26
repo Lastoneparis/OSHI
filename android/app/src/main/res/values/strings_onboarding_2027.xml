@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  __ONBOARDING_2027__ First-launch onboarding (slides, house rules, notification ask,
+  identity). Kept short on purpose: one idea per slide, one line of "why" per ask.
+
+  Honesty rules for this file (and every translation of it):
+  - OSHI has NO Tor. Never mention Tor or onion routing.
+  - No "first", "only", "most secure" or other superlatives.
+  - Offline reach is short (about 100 m phone to phone); say "nearby".
+-->
+<resources>
+    <string name="ob27_skip">Skip</string>
+    <string name="ob27_continue">Continue</string>
+    <!-- TalkBack: position in the slide pager, e.g. "Page 2 of 5" -->
+    <string name="ob27_page_of">Page %1$d of %2$d</string>
+
+    <string name="ob27_private_title">Only you and them</string>
+    <string name="ob27_private_body">Messages and calls are end-to-end encrypted on your phone. Nobody in between can read them — not even OSHI.</string>
+
+    <string name="ob27_offline_title">Works without internet</string>
+    <string name="ob27_offline_body">No network? Messages hop phone to phone through people nearby who have OSHI open. A LoRa radio takes them further.</string>
+    <!-- Short labels under the three distances (~100 m / ~500 m / ~30 km) -->
+    <string name="ob27_range_direct">direct</string>
+    <string name="ob27_range_relayed">relayed</string>
+    <string name="ob27_range_lora">LoRa radio</string>
+
+    <string name="ob27_anon_title">No phone number needed</string>
+    <string name="ob27_anon_body">No account, no email, no number to sign up with. Your identity is a key created on this phone.</string>
+
+    <string name="ob27_together_title">Bring your people</string>
+    <string name="ob27_together_body">Chat one to one or in groups. Add someone by scanning their QR code or sending them an invite link.</string>
+
+    <string name="ob27_rules_title">Before you start</string>
+    <string name="ob27_rules_subtitle">A few house rules, and what OSHI can and can’t do yet.</string>
+    <string name="ob27_rules_do">Please do</string>
+    <string name="ob27_rules_dont">Never</string>
+    <string name="ob27_good_to_know">Good to know</string>
+    <string name="ob27_show_details">Show details</string>
+    <string name="ob27_hide_details">Hide details</string>
+    <string name="ob27_agree">I understand</string>
+
+    <string name="ob27_notif_title">Know when someone writes</string>
+    <string name="ob27_notif_body">Allow notifications to see new messages and calls. You can turn them off any time in Settings.</string>
+    <string name="ob27_notif_allow">Allow notifications</string>
+    <string name="ob27_not_now">Not now</string>
+
+    <string name="ob27_identity_title">Pick a name</string>
+    <string name="ob27_identity_body">It’s what your contacts see. You can change it later.</string>
+    <string name="ob27_already">Already use OSHI?</string>
+</resources>

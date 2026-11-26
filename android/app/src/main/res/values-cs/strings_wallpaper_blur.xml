@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">Výchozí pozadí pro všechny chaty. Každý chat může mít i vlastní.</string>
+    <string name="wallpaper_tone_settings_title">Tón pozadí</string>
+    <string name="wallpaper_personal_note">Toto pozadí vidíte jen vy, na tomto zařízení.</string>
+</resources>

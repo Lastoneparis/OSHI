@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Julkinen verkkoesikatselu</string>
+    <string name="cw_toggle">Julkaise julkaisut verkossa</string>
+    <string name="cw_footer">Uudet julkaisut julkaistaan myös julkisena verkkosivuna osoitteessa oshi-messenger.com/c/%1$s. Kuka tahansa voi lukea ne, myös hakukoneet ja linkkien esikatselut. Päästä päähän -salaus ei koske verkkokopiota.</string>
+    <string name="cw_needs_link">Anna kanavalle ensin julkinen linkki: verkkoesikatselu käyttää sen nimeä.</string>
+    <string name="cw_create_link">Luo julkinen linkki</string>
+    <string name="cw_enable_title">Julkaistaanko julkaisut verkossa?</string>
+    <string name="cw_enable_confirm">Tämän kanavan julkaisut näkyvät kaikille verkossa osoitteessa oshi-messenger.com/c/%1$s. Vain uudet julkaisut. Linkkien esikatselut (WhatsApp, X, Telegram…) voivat myös lukea ne, eikä päästä päähän -salaus koske verkkokopiota.</string>
+    <string name="cw_enable_action">Julkaise</string>
+    <string name="cw_disable_title">Poistetaanko verkkoesikatselu käytöstä?</string>
+    <string name="cw_disable_confirm">Kaikki osoitteessa oshi-messenger.com/c/%1$s julkaistut julkaisut ja kuvat poistetaan verkosta. Julkaisusi sovelluksessa pysyvät ennallaan.</string>
+    <string name="cw_disable_action">Poista käytöstä</string>
+    <string name="cw_indexing">Salli hakukoneet</string>
+    <string name="cw_indexing_footer">Kun tämä on pois päältä, sivut pyytävät hakukoneita olemaan indeksoimatta niitä.</string>
+    <string name="cw_embed_code">Upotuskoodi</string>
+    <string name="cw_embed_title">Upota tämä julkaisu</string>
+    <string name="cw_embed_hint">Liitä tämä koodi verkkosivustollesi kohtaan, jossa julkaisun pitää näkyä.</string>
+    <string name="cw_embed_dark">Tumma teema</string>
+    <string name="cw_copy_code">Kopioi koodi</string>
+    <string name="cw_code_copied">Koodi kopioitu</string>
+    <string name="cw_not_on_web">Tämä julkaisu ei ole verkossa. Vain verkkoesikatselun käyttöönoton jälkeen lähetetyt julkaisut julkaistaan.</string>
+    <string name="cw_error">Verkkoesikatselua ei voitu muuttaa. Tarkista yhteys ja yritä uudelleen.</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Príkazy</string>
+    <string name="bot_cmd_send_a11y">Odoslať %1$s</string>
+    <string name="bot_cmd_sheet_title">Príkazy bota</string>
+    <string name="bot_cmd_tap_to_send">Ťuknutím na príkaz ho odošlete.</string>
+    <string name="bot_cmd_empty_none_title">Zatiaľ tu nie sú žiadni boti</string>
+    <string name="bot_cmd_empty_none_body">Vytvorte bota a pridajte ho do tejto skupiny. Jeho príkazy sa zobrazia tu a po napísaní /.</string>
+    <string name="bot_cmd_empty_bot">Tento bot zatiaľ nemá žiadne príkazy.</string>
+    <string name="bot_cmd_setup">Nastaviť príkazy</string>
+    <string name="bot_cmd_section">Príkazy</string>
+    <string name="bot_cmd_section_hint">Členovia skupín bota ich uvidia po napísaní / alebo ťuknutí na Príkazy.</string>
+    <string name="bot_cmd_add">Pridať</string>
+    <string name="bot_cmd_add_title">Nový príkaz</string>
+    <string name="bot_cmd_edit_title">Upraviť príkaz</string>
+    <string name="bot_cmd_field_name">Príkaz</string>
+    <string name="bot_cmd_field_description">Popis (zobrazí sa v ponuke)</string>
+    <string name="bot_cmd_field_reply">Odpoveď</string>
+    <string name="bot_cmd_field_reply_hint">Čo bot odpovie. Môžete použiť {{input}}, {{bot_name}} a {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Odosiela sa na váš webhook, ktorý odpovie.</string>
+    <string name="bot_cmd_empty_owner">Zatiaľ žiadne príkazy. Pridajte napríklad /start alebo /help, nech všetci vedia, čo tento bot vie.</string>
+    <string name="bot_cmd_err_empty">Zadajte názov príkazu.</string>
+    <string name="bot_cmd_err_invalid">Iba malé písmená, číslice a _.</string>
+    <string name="bot_cmd_err_too_long">Najviac 32 znakov.</string>
+    <string name="bot_cmd_err_duplicate">Tento bot už tento príkaz má.</string>
+    <string name="bot_cmd_err_too_many">Bot môže mať najviac 100 príkazov.</string>
+    <string name="bot_cmd_err_description">Popis je príliš dlhý (najviac 256 znakov).</string>
+    <string name="bot_cmd_sync_local">Uložené v tomto telefóne, na ktorom bot beží.</string>
+    <string name="bot_cmd_sync_syncing">Aktualizuje sa server…</string>
+    <string name="bot_cmd_sync_synced">Ponuka na serveri aktualizovaná.</string>
+    <string name="bot_cmd_sync_failed">Server sa nepodarilo aktualizovať. Vaše príkazy sú uložené v tomto telefóne.</string>
+    <string name="bot_profile_edit">Upraviť profil</string>
+    <string name="bot_profile_name">Meno</string>
+    <string name="bot_profile_description">Popis</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Pomenujte svojho bota.</string>
+    <string name="bot_profile_err_name_long">Meno je príliš dlhé (najviac 64 znakov).</string>
+    <string name="bot_profile_err_desc_long">Popis je príliš dlhý (najviac 512 znakov).</string>
+    <string name="bot_connect_title">Ako je pripojený</string>
+    <string name="bot_connect_local">Tento bot beží v tomto telefóne: nechajte OSHI nainštalované a bota zapnutého. Pridajte ho do skupiny a jej členovia tam budú môcť používať jeho príkazy.</string>
+    <string name="bot_connect_webhook">Každý príkaz sa odošle na URL vášho webhooku a váš server odpovie vo formáte JSON {\"text\": \"…\"}. Váš server môže tiež použiť token nižšie s API botov OSHI.</string>
+    <string name="bot_connect_token_warning">Token držte v tajnosti: kto ho má, môže hovoriť za vášho bota.</string>
+    <string name="bot_connect_groups">Skupiny: %1$s</string>
+    <string name="bot_connect_no_groups">Zatiaľ nie je v žiadnej skupine, takže jeho príkazy nikto nemôže používať.</string>
+</resources>

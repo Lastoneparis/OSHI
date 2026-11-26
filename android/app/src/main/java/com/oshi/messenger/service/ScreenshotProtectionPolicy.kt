@@ -119,4 +119,12 @@ object ScreenshotProtectionPolicy {
 
     /** Intent extra a DEBUG build reads to allow screen capture for this process. */
     const val DEBUG_ALLOW_CAPTURE_EXTRA = "com.oshi.messenger.debug.ALLOW_SCREEN_CAPTURE"
+
+    /**
+     * __ANTI_STALKERWARE_2026_11_20__ `View.accessibilityDataSensitive` for the window
+     * roots: YES (= 1, hidden from non-`isAccessibilityTool` services) while protection is
+     * on, AUTO (= 0) otherwise. Spelled as literals so this stays pure on the JVM; they are
+     * `View.ACCESSIBILITY_DATA_SENSITIVE_YES` / `_AUTO` (API 34).
+     */
+    fun accessibilityDataSensitive(protectionOn: Boolean): Int = if (protectionOn) 1 else 0
 }

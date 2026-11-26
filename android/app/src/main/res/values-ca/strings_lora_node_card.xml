@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">Directe</string>
+    <string name="lora_node_card_from_you">de tu</string>
+    <string name="lora_node_card_heard_day">sentit fa %1$d d</string>
+    <string name="lora_node_card_heard_hour">sentit fa %1$d h</string>
+    <string name="lora_node_card_heard_min">sentit fa %1$d min</string>
+    <string name="lora_node_card_heard_now">sentit ara mateix</string>
+    <string name="lora_node_card_hops">%1$d salts</string>
+    <string name="lora_node_card_in_range">a l\'abast</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_never_heard">mai sentit</string>
+    <string name="lora_node_card_not_heard">encara no sentit</string>
+    <string name="lora_node_card_relayed">retransmès</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Previsualització web pública</string>
+    <string name="cw_toggle">Publica les publicacions al web</string>
+    <string name="cw_footer">Les publicacions noves també es publiquen com a pàgina web pública a oshi-messenger.com/c/%1$s. Tothom les pot llegir, inclosos els cercadors i les previsualitzacions d\'enllaços. El xifratge d\'extrem a extrem no s\'aplica a la còpia web.</string>
+    <string name="cw_needs_link">Primer dona un enllaç públic a aquest canal: la previsualització web en fa servir l\'identificador.</string>
+    <string name="cw_create_link">Crea un enllaç públic</string>
+    <string name="cw_enable_title">Vols publicar les publicacions al web?</string>
+    <string name="cw_enable_confirm">Les publicacions d\'aquest canal seran visibles per a tothom al web a oshi-messenger.com/c/%1$s. Només les publicacions noves. Les previsualitzacions d\'enllaços (WhatsApp, X, Telegram…) també les poden llegir, i el xifratge d\'extrem a extrem no s\'aplica a la còpia web.</string>
+    <string name="cw_enable_action">Publica</string>
+    <string name="cw_disable_title">Vols desactivar la previsualització web?</string>
+    <string name="cw_disable_confirm">Totes les publicacions i imatges publicades a oshi-messenger.com/c/%1$s s\'eliminaran del web. Les teves publicacions a l\'app no canvien.</string>
+    <string name="cw_disable_action">Desactiva</string>
+    <string name="cw_indexing">Permet els cercadors</string>
+    <string name="cw_indexing_footer">Si està desactivat, les pàgines demanen als cercadors que no les indexin.</string>
+    <string name="cw_embed_code">Codi per inserir</string>
+    <string name="cw_embed_title">Insereix aquesta publicació</string>
+    <string name="cw_embed_hint">Enganxa aquest codi al teu lloc web on ha d\'aparèixer la publicació.</string>
+    <string name="cw_embed_dark">Tema fosc</string>
+    <string name="cw_copy_code">Copia el codi</string>
+    <string name="cw_code_copied">Codi copiat</string>
+    <string name="cw_not_on_web">Aquesta publicació no és al web. Només es publiquen les enviades després d\'activar la previsualització web.</string>
+    <string name="cw_error">No s\'ha pogut canviar la previsualització web. Comprova la connexió i torna-ho a provar.</string>
+</resources>

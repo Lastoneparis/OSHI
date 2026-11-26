@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Lewati</string>
+    <string name="ob27_continue">Lanjutkan</string>
+    <string name="ob27_page_of">Halaman %1$d dari %2$d</string>
+    <string name="ob27_private_title">Hanya Anda dan mereka</string>
+    <string name="ob27_private_body">Pesan dan panggilan dienkripsi end-to-end di ponsel Anda. Tak ada pihak di tengah yang bisa membacanya — OSHI pun tidak.</string>
+    <string name="ob27_offline_title">Bisa tanpa internet</string>
+    <string name="ob27_offline_body">Tidak ada jaringan? Pesan berpindah dari ponsel ke ponsel melalui orang-orang di sekitar yang sedang membuka OSHI. Radio LoRa membawanya lebih jauh.</string>
+    <string name="ob27_range_direct">langsung</string>
+    <string name="ob27_range_relayed">diteruskan</string>
+    <string name="ob27_range_lora">radio LoRa</string>
+    <string name="ob27_anon_title">Tanpa nomor telepon</string>
+    <string name="ob27_anon_body">Tanpa akun, tanpa email, tanpa nomor untuk mendaftar. Identitas Anda adalah kunci yang dibuat di ponsel ini.</string>
+    <string name="ob27_together_title">Ajak orang terdekat</string>
+    <string name="ob27_together_body">Chat berdua atau dalam grup. Tambahkan seseorang dengan memindai kode QR-nya atau mengirim tautan undangan.</string>
+    <string name="ob27_rules_title">Sebelum mulai</string>
+    <string name="ob27_rules_subtitle">Beberapa aturan dasar, serta apa yang sudah dan belum bisa dilakukan OSHI.</string>
+    <string name="ob27_rules_do">Lakukan</string>
+    <string name="ob27_rules_dont">Jangan pernah</string>
+    <string name="ob27_good_to_know">Perlu diketahui</string>
+    <string name="ob27_show_details">Tampilkan detail</string>
+    <string name="ob27_hide_details">Sembunyikan detail</string>
+    <string name="ob27_agree">Saya mengerti</string>
+    <string name="ob27_notif_title">Jangan lewatkan pesan</string>
+    <string name="ob27_notif_body">Izinkan notifikasi untuk melihat pesan dan panggilan baru. Anda bisa mematikannya kapan saja di Setelan.</string>
+    <string name="ob27_notif_allow">Izinkan notifikasi</string>
+    <string name="ob27_not_now">Nanti saja</string>
+    <string name="ob27_identity_title">Pilih nama</string>
+    <string name="ob27_identity_body">Nama ini yang dilihat kontak Anda. Anda bisa mengubahnya nanti.</string>
+    <string name="ob27_already">Sudah pakai OSHI?</string>
+</resources>

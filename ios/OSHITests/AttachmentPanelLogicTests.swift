@@ -6,6 +6,24 @@ import Photos
 /// the same way Android pins `AttachmentPanelLogic.kt`.
 final class AttachmentPanelLogicTests: XCTestCase {
 
+    // MARK: Order of the recent grid (__RECENT_PHOTOS_ORDER_2026_11_21__)
+
+    /// Android shipped the grid OLDEST first (user report 21/11: "the recent tab
+    /// shows photos from a month ago"). The iOS fetch must stay newest-first, on
+    /// the capture date, over the whole library.
+    @MainActor
+    func testRecentFetchIsNewestCaptureDateFirstOverTheWholeLibrary() {
+        let o = RecentMediaStore.recentFetchOptions()
+        XCTAssertEqual(o.sortDescriptors?.count, 1)
+        XCTAssertEqual(o.sortDescriptors?.first?.key, "creationDate")
+        XCTAssertEqual(o.sortDescriptors?.first?.ascending, false)
+        XCTAssertEqual(o.fetchLimit, 0, "a limit would cut the library before the window pages it")
+        XCTAssertFalse(o.includeHiddenAssets)
+        let p = o.predicate?.predicateFormat ?? ""
+        XCTAssertTrue(p.contains("mediaType == \(PHAssetMediaType.image.rawValue)"), p)
+        XCTAssertTrue(p.contains("mediaType == \(PHAssetMediaType.video.rawValue)"), p)
+    }
+
     // MARK: Selection & numbering
 
     func testToggleAddsInOrderAndNumbersFromOne() {

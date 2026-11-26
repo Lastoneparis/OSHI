@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Privacidade avançada da conversa</string>
+    <string name="adv_privacy_subtitle">Impede que todos nesta conversa salvem mídia, exportem a conversa ou usem IA nas mensagens</string>
+    <string name="adv_privacy_learn_more">Saiba mais</string>
+    <string name="adv_privacy_notice_on">%1$s ativou a privacidade avançada da conversa. Ninguém pode salvar mídia automaticamente, exportar a conversa ou usar IA nas mensagens desta conversa.</string>
+    <string name="adv_privacy_notice_off">%1$s desativou a privacidade avançada da conversa. Salvar mídia, exportar a conversa e os recursos de IA estão disponíveis novamente.</string>
+    <string name="adv_privacy_notice_on_you">Você ativou a privacidade avançada da conversa. Ninguém pode salvar mídia automaticamente, exportar a conversa ou usar IA nas mensagens desta conversa.</string>
+    <string name="adv_privacy_notice_off_you">Você desativou a privacidade avançada da conversa. Salvar mídia, exportar a conversa e os recursos de IA estão disponíveis novamente.</string>
+    <string name="adv_privacy_summary_on">Privacidade avançada da conversa ativada</string>
+    <string name="adv_privacy_summary_off">Privacidade avançada da conversa desativada</string>
+    <string name="adv_privacy_sheet_intro">Quando alguém a ativa, ela vale para todos nesta conversa:</string>
+    <string name="adv_privacy_sheet_point_save">A mídia desta conversa não pode ser salva na galeria nem em Downloads.</string>
+    <string name="adv_privacy_sheet_point_export">Esta conversa fica fora das exportações de conversas.</string>
+    <string name="adv_privacy_sheet_point_ai">A IA no dispositivo do OSHI não pode ler esta conversa: sem respostas sugeridas, sem tradução, sem contexto para o assistente de escrita.</string>
+    <string name="adv_privacy_sheet_point_screen">Capturas e gravações de tela desta conversa estão bloqueadas.</string>
+    <string name="adv_privacy_sheet_limits">Qualquer pessoa na conversa pode ativar ou desativar. Ela não impede que alguém fotografe a tela, e quem usa uma versão antiga do OSHI não é afetado.</string>
+    <string name="adv_privacy_blocked_toast">A privacidade avançada está ativada nesta conversa</string>
+    <string name="adv_privacy_older_members">Membros com uma versão antiga do OSHI que só vão aplicá-la depois de atualizar: %1$d</string>
+</resources>

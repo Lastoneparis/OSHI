@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · 非 OSHI 端到端加密</string>
+    <string name="meshcore_error_not_connected">未连接 MeshCore 电台</string>
+    <string name="meshcore_channels_title">MeshCore 频道</string>
+    <string name="meshcore_channel_public">公开 · 知道名称的人都能读取</string>
+    <string name="meshcore_channel_private">私密 · 密钥</string>
+    <string name="meshcore_join_hashtag">加入话题标签频道</string>
+    <string name="meshcore_join_private">加入私密频道</string>
+    <string name="meshcore_contacts_title">MeshCore 联系人</string>
+    <string name="meshcore_refresh_contacts">刷新联系人</string>
+    <string name="meshcore_join_refused">电台拒绝了此频道。</string>
+    <string name="meshcore_join_no_slot">此电台没有空闲的频道位置。</string>
+    <string name="meshcore_join_bad_name">请输入有效的频道名称（最多 31 字节，话题标签频道不能有空格）。</string>
+    <string name="meshcore_join_bad_secret">密钥必须为 16 字节：32 个十六进制字符或 base64。</string>
+    <string name="meshcore_hashtag_hint">密钥由名称派生：任何知道名称的人都能读取该频道。</string>
+    <string name="meshcore_private_hint">请输入频道名称以及成员共享的密钥。</string>
+    <string name="meshcore_channel_name">频道名称</string>
+    <string name="meshcore_channel_secret">密钥（hex 或 base64）</string>
+    <string name="meshcore_join">加入</string>
+    <string name="meshcore_note_dm">由 MeshCore 在电台之间加密，不是 OSHI 的端到端加密。</string>
+    <string name="meshcore_note_public">公开频道：任何知道其名称的人都能读取。</string>
+    <string name="meshcore_note_private">私密频道：任何拥有其密钥的人都能读取。</string>
+    <string name="meshcore_radio_offline">MeshCore 电台未连接。消息会以未送达状态在此等待。</string>
+    <string name="meshcore_connect">连接</string>
+    <string name="meshcore_parts">%1$d 条消息</string>
+    <string name="meshcore_sending">正在等待电台</string>
+    <string name="meshcore_failed_dm">对方电台没有回应（超出范围？）。点按重试。</string>
+    <string name="meshcore_error_pairing">配对失败。请检查 PIN 后重试。如果电台已重置，请先在 Android 蓝牙设置中将其移除。</string>
+    <string name="meshcore_error_no_answer">电台没有回应。请确认它运行的是蓝牙版 MeshCore companion 固件。</string>
+    <string name="meshcore_state_reconnecting">连接已断开。电台回到范围内后将重新连接…</string>
+    <string name="meshcore_state_pin">请在 Android 提示中输入电台的 PIN</string>
+    <string name="meshcore_state_reading">正在读取联系人和频道…</string>
+    <string name="meshcore_state_connecting">正在连接…</string>
+    <string name="meshcore_seen_as">已连接 · MeshCore 用户看到的你是 %1$s</string>
+    <string name="meshcore_connected">已连接</string>
+    <string name="meshcore_footer_users">与 MeshCore 用户聊天（私信和频道），并通过 MeshCore 中继器传送 OSHI 消息。需要蓝牙版 MeshCore companion 固件。OSHI 只会在空闲位置添加一个频道 #oshi-bridge，绝不会更改你的其他频道。</string>
+    <string name="meshcore_scan_below">MeshCore 电台会显示在下方“附近的电台”中，并标有 MeshCore。</string>
+    <string name="meshcore_contacts_footer">点按某人即可给对方写消息。消息由 MeshCore 加密，不是 OSHI 的端到端加密。</string>
+    <string name="meshcore_no_contacts">还没有收到任何人。MeshCore 用户的电台广播自身后会出现在这里。广播你的电台，让他们找到你。</string>
+    <string name="meshcore_heard">收到于 %1$s</string>
+    <string name="meshcore_announce">广播我</string>
+    <string name="meshcore_announce_done">已广播。范围内的 MeshCore 用户现在可以添加你并给你发消息。</string>
+    <string name="meshcore_announce_failed">电台无法发送广播。</string>
+    <string name="meshcore_channels_footer">点按频道即可打开。公开频道和话题标签频道任何知道名称的人都能读取。</string>
+    <string name="meshcore_pin_title">与 %1$s 配对</string>
+    <string name="meshcore_pin_body">Android 现在会要求输入电台的 PIN。如果电台有屏幕，PIN 会显示在屏幕上。</string>
+    <string name="meshcore_pin_default">没有屏幕？PIN 是 123456，除非已在 MeshCore 应用中更改。</string>
+    <string name="meshcore_pin_continue">继续</string>
+    <string name="meshcore_no_free_channel_chat">8 个频道位置都已占用。你仍然可以与 MeshCore 用户聊天；请在 MeshCore 应用中腾出一个位置，以便 OSHI 消息使用 #oshi-bridge。</string>
+    <string name="meshcore_contact_kind">MeshCore 用户</string>
+    <string name="meshcore_too_long">太长：最多 %1$d 条消息</string>
+</resources>

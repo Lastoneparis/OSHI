@@ -29,22 +29,43 @@ class WallpaperManager @Inject constructor(
     private val _globalWallpaper = MutableStateFlow<ChatWallpaper>(loadGlobalWallpaper())
     val globalWallpaper: StateFlow<ChatWallpaper> = _globalWallpaper.asStateFlow()
 
-    // Cache for per-conversation wallpapers
-    private val conversationWallpapers = mutableMapOf<String, ChatWallpaper>()
+    // __WALLPAPER_PERSIST_2026_11_21__ Per-conversation wallpapers, PERSISTED.
+    //
+    // Until now the wallpaper a user picked for one chat lived only in
+    // `MessageRepository._wallpapers`, an in-memory map nothing ever wrote to
+    // disk: it survived until the process died, and the next launch showed the
+    // app-wide default again. From the user's side, "wallpapers per chat don't
+    // exist on Android" — they did, for a few minutes. The methods below were
+    // the intended store (iOS `ChatWallpaperManager`), with no caller.
+    //
+    // Keys are a hash of the conversation id, never the id itself: these prefs
+    // are not encrypted, and a list of contact public keys / group ids in plain
+    // text would be a contact list on disk.
+    private val conversationWallpapers = mutableMapOf<String, ChatWallpaper?>()
+
+    /** Bumped on every per-conversation change, so UI reading [storedWallpaper] can re-read. */
+    private val _revision = MutableStateFlow(0)
+    val revision: StateFlow<Int> = _revision.asStateFlow()
 
     /**
      * Get wallpaper for a specific conversation
      * Falls back to global if not set
      */
-    fun getWallpaper(conversationId: String): ChatWallpaper {
-        // Check cache first
-        conversationWallpapers[conversationId]?.let { return it }
+    fun getWallpaper(conversationId: String): ChatWallpaper =
+        storedWallpaper(conversationId) ?: _globalWallpaper.value
 
-        // Load from prefs
-        val wallpaper = loadWallpaper("conv_$conversationId") ?: _globalWallpaper.value
+    /** The wallpaper chosen for [conversationId] itself, or null when it follows the default. */
+    @Synchronized
+    fun storedWallpaper(conversationId: String): ChatWallpaper? {
+        if (conversationId.isEmpty()) return null
+        if (conversationWallpapers.containsKey(conversationId)) return conversationWallpapers[conversationId]
+        val wallpaper = loadWallpaper(convKey(conversationId))
         conversationWallpapers[conversationId] = wallpaper
         return wallpaper
     }
+
+    /** True once the user has chosen an app-wide default (Settings, or "apply to all chats"). */
+    fun hasChosenGlobal(): Boolean = prefs.contains("global_type")
 
     /**
      * Optional callback invoked whenever a wallpaper changes. The MessageRepository
@@ -56,17 +77,31 @@ class WallpaperManager @Inject constructor(
      * Set wallpaper for a specific conversation
      */
     fun setWallpaper(conversationId: String, wallpaper: ChatWallpaper) {
-        conversationWallpapers[conversationId] = wallpaper
-        saveWallpaper("conv_$conversationId", wallpaper)
+        persistConversationWallpaper(conversationId, wallpaper)
         onWallpaperChanged?.invoke(conversationId, wallpaper)
+    }
+
+    /**
+     * Store [wallpaper] for [conversationId] without telling linked web sessions
+     * — for the 1:1 path, whose sync already went through the repository.
+     */
+    fun persistConversationWallpaper(conversationId: String, wallpaper: ChatWallpaper) {
+        if (conversationId.isEmpty()) return
+        synchronized(this) {
+            conversationWallpapers[conversationId] = wallpaper
+            removeKeys(convKey(conversationId))
+            saveWallpaper(convKey(conversationId), wallpaper)
+        }
+        _revision.value++
     }
 
     /**
      * Set global wallpaper (default for all conversations)
      */
     fun setGlobalWallpaper(wallpaper: ChatWallpaper) {
-        _globalWallpaper.value = wallpaper
+        removeKeys("global")
         saveWallpaper("global", wallpaper)
+        _globalWallpaper.value = wallpaper
         onWallpaperChanged?.invoke(null, wallpaper)
     }
 
@@ -74,24 +109,34 @@ class WallpaperManager @Inject constructor(
      * Reset conversation to use global wallpaper
      */
     fun resetToGlobal(conversationId: String) {
-        conversationWallpapers.remove(conversationId)
-        // 🧹 REMOVE WHAT saveWallpaper ACTUALLY WROTE.
-        //
-        // This used to remove `conv_<id>` — a key nothing ever writes. saveWallpaper
-        // stores a FAMILY of suffixed keys (`conv_<id>_type`, `_color`, `_image`, …),
-        // so the reset cleared the in-memory map and left every stored value on disk:
-        // the override came straight back on the next launch.
-        //
-        // Unreachable today (no caller), which is exactly why it was never noticed —
-        // and why it is worth fixing before the first "reset to default" button
-        // reaches it.
-        val key = "conv_$conversationId"
+        synchronized(this) {
+            conversationWallpapers[conversationId] = null
+            removeKeys(convKey(conversationId))
+        }
+        _revision.value++
+    }
+
+    /** Forget every per-conversation wallpaper ("use this in every chat"). */
+    fun clearAllConversationWallpapers() {
+        synchronized(this) {
+            conversationWallpapers.clear()
+            val editor = prefs.edit()
+            prefs.all.keys.filter { it.startsWith(CONV_PREFIX) }.forEach { editor.remove(it) }
+            editor.apply()
+        }
+        _revision.value++
+    }
+
+    /** saveWallpaper writes a FAMILY of suffixed keys; a type change must not leave the old ones. */
+    private fun removeKeys(key: String) {
         prefs.edit().apply {
-            listOf("type", "style", "color", "bgcolor", "gradient", "emoji", "image")
+            listOf("type", "style", "color", "color1", "color2", "gradient_name", "bgcolor", "emoji", "image")
                 .forEach { remove("${key}_$it") }
-            remove(key)   // harmless, and covers any legacy unsuffixed value
+            remove(key)
         }.apply()
     }
+
+    private fun convKey(conversationId: String): String = CONV_PREFIX + hashId(conversationId)
 
     // =========================================================================
     // PERSISTENCE
@@ -179,6 +224,14 @@ class WallpaperManager @Inject constructor(
     }
 
     companion object {
+        private const val CONV_PREFIX = "convh_"
+
+        /** First 128 bits of SHA-256, hex: a stable, non-reversible key for a conversation id. */
+        internal fun hashId(id: String): String {
+            val d = java.security.MessageDigest.getInstance("SHA-256").digest(id.toByteArray(Charsets.UTF_8))
+            return d.take(16).joinToString("") { "%02x".format(it) }
+        }
+
         val FALLBACK_GLOBAL: ChatWallpaper =
             ChatWallpaper.OshiDynamic(com.oshi.messenger.ui.components.OshiDynamicStyle.DEFAULT.ordinal)
     }
@@ -217,4 +270,16 @@ class WallpaperManager @Inject constructor(
     fun getEmojiPresets(): List<String> = listOf(
         "💬", "❤️", "🌸", "✨", "🌊", "🎵"
     )
+}
+
+/**
+ * __WALLPAPER_PERSIST_2026_11_21__ For composables outside a Hilt ViewModel
+ * (Settings) that must reach THE [WallpaperManager] singleton: a second
+ * instance would have its own `globalWallpaper` flow and the open chats would
+ * not see the change.
+ */
+@dagger.hilt.EntryPoint
+@dagger.hilt.InstallIn(dagger.hilt.components.SingletonComponent::class)
+interface WallpaperManagerEntryPoint {
+    fun wallpaperManager(): WallpaperManager
 }

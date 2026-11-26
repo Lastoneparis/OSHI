@@ -2,6 +2,7 @@ package com.oshi.messenger.ui.components
 
 import com.oshi.messenger.ui.theme.glassHairline
 import com.oshi.messenger.ui.theme.GlassTier
+import com.oshi.messenger.ui.theme.glassOpaque
 import com.oshi.messenger.ui.theme.glassOn
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,7 +62,7 @@ fun AIQuickBar(
             label = { Text(stringResource(R.string.ai_quickbar_correct), fontSize = 12.sp) },
             shape = RoundedCornerShape(16.dp),
             // __OLED_GLASS_2026_11_16__ OLED black: glass chips.
-            colors = if (glass) SuggestionChipDefaults.suggestionChipColors(containerColor = GlassTier.Chip.opaque)
+            colors = if (glass) SuggestionChipDefaults.suggestionChipColors(containerColor = glassOpaque(GlassTier.Chip))
                 else SuggestionChipDefaults.suggestionChipColors(),
             border = if (glass) null else SuggestionChipDefaults.suggestionChipBorder(),
             modifier = if (glass) Modifier.glassHairline(RoundedCornerShape(16.dp), highlight = false, visibleHeight = 32.dp) else Modifier
@@ -73,7 +74,7 @@ fun AIQuickBar(
             label = { Text(stringResource(R.string.ai_quickbar_improve), fontSize = 12.sp) },
             shape = RoundedCornerShape(16.dp),
             // __OLED_GLASS_2026_11_16__ OLED black: glass chips.
-            colors = if (glass) SuggestionChipDefaults.suggestionChipColors(containerColor = GlassTier.Chip.opaque)
+            colors = if (glass) SuggestionChipDefaults.suggestionChipColors(containerColor = glassOpaque(GlassTier.Chip))
                 else SuggestionChipDefaults.suggestionChipColors(),
             border = if (glass) null else SuggestionChipDefaults.suggestionChipBorder(),
             modifier = if (glass) Modifier.glassHairline(RoundedCornerShape(16.dp), highlight = false, visibleHeight = 32.dp) else Modifier
@@ -85,7 +86,7 @@ fun AIQuickBar(
             label = { Text("...", fontSize = 12.sp) },
             shape = RoundedCornerShape(16.dp),
             // __OLED_GLASS_2026_11_16__ OLED black: glass chips.
-            colors = if (glass) SuggestionChipDefaults.suggestionChipColors(containerColor = GlassTier.Chip.opaque)
+            colors = if (glass) SuggestionChipDefaults.suggestionChipColors(containerColor = glassOpaque(GlassTier.Chip))
                 else SuggestionChipDefaults.suggestionChipColors(),
             border = if (glass) null else SuggestionChipDefaults.suggestionChipBorder(),
             modifier = if (glass) Modifier.glassHairline(RoundedCornerShape(16.dp), highlight = false, visibleHeight = 32.dp) else Modifier

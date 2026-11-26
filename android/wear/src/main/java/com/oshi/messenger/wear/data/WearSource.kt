@@ -3,6 +3,7 @@ package com.oshi.messenger.wear.data
 import com.oshi.wearbridge.WearConvKind
 import com.oshi.wearbridge.WearConversation
 import com.oshi.wearbridge.WearMessage
+import com.oshi.wearbridge.WearNet
 import com.oshi.wearbridge.WearStatus
 
 /** Why the watch has nothing to show; each maps to one screen of copy. */
@@ -31,14 +32,39 @@ sealed interface Outcome<out T> {
 data class WearThread(val title: String, val messages: List<WearMessage>)
 
 /**
+ * __WEAR_POLISH_2026_11_25__ One LIST answer: the conversations plus what the
+ * phone can do ([caps], empty for a phone older than 1.7.4) and how it is
+ * connected ([net], null when unknown).
+ */
+data class WearInbox(
+    val conversations: List<WearConversation>,
+    val caps: Set<String> = emptySet(),
+    val net: WearNet? = null,
+    /** Phone in strict mode: tile / complication show counts, no names. */
+    val strict: Boolean = false,
+) {
+    fun can(cap: String) = cap in caps
+}
+
+/**
  * Where the watch gets its conversations. The real one ([PhoneWearSource])
  * asks the phone; a debug build can swap in sample data (src/debug).
  * Implementations keep NOTHING on disk.
  */
 interface WearSource {
-    suspend fun conversations(): Outcome<List<WearConversation>>
+    suspend fun inbox(): Outcome<WearInbox>
+    suspend fun conversations(): Outcome<List<WearConversation>> = when (val r = inbox()) {
+        is Outcome.Ok -> Outcome.Ok(r.value.conversations)
+        is Outcome.Fail -> r
+    }
     suspend fun thread(kind: WearConvKind, id: String): Outcome<WearThread>
     suspend fun send(kind: WearConvKind, id: String, text: String): Outcome<Unit>
     suspend fun react(kind: WearConvKind, id: String, messageId: String, emoji: String): Outcome<Unit>
+    /** Only when the phone advertised [com.oshi.wearbridge.WearProtocol.CAP_READ]. */
+    suspend fun markRead(kind: WearConvKind, id: String): Outcome<Unit>
+    /** A small JPEG of one photo, memory only ([com.oshi.wearbridge.WearProtocol.CAP_THUMB]). */
+    suspend fun thumbnail(kind: WearConvKind, id: String, messageId: String): Outcome<ByteArray>
+    /** An m4a recorded here, sent by the phone ([com.oshi.wearbridge.WearProtocol.CAP_VOICE]). */
+    suspend fun sendVoice(kind: WearConvKind, id: String, audio: ByteArray, durationMs: Long): Outcome<Unit>
     fun close() {}
 }

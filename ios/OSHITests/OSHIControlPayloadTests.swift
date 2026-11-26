@@ -472,10 +472,15 @@ final class OSHIControlPayloadTests: XCTestCase {
         // `requestMemberSync` passe par l'état de groupe v2 (`v2SendGroupState`), dont le
         // réveil est demandé en SILENCE par le paramètre. On garde les deux maillons.
         let src = try projectSource("OSHI/GroupMessaging.swift")
-        guard let fn = src.range(of: "func requestMemberSync(groupId: UUID)") else {
+        // Ancre sans la parenthèse fermante: 73970dc9 (20/11) a ajouté
+        // `inviteToken: String? = nil` à la signature, et l'ancre exacte
+        // `(groupId: UUID)` a cessé de trouver la fonction toujours présente.
+        guard let fn = src.range(of: "func requestMemberSync(groupId: UUID") else {
             return XCTFail("requestMemberSync a disparu — cette règle ne surveille plus rien")
         }
-        let body = String(src[fn.lowerBound..<(src.index(fn.lowerBound, offsetBy: 1200, limitedBy: src.endIndex) ?? src.endIndex)])
+        // Le corps entier (jusqu'à l'accolade fermante de la fonction), pas une fenêtre fixe.
+        let end = src.range(of: "\n    }\n", range: fn.upperBound..<src.endIndex)?.upperBound ?? src.endIndex
+        let body = String(src[fn.lowerBound..<end])
         XCTAssertTrue(body.contains("v2SendGroupState("),
                       "la sync de membres ne passe plus par l'état de groupe v2")
         XCTAssertFalse(body.contains("wake: false"),

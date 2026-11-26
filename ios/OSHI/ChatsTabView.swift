@@ -212,9 +212,12 @@ struct ChatsTabView: View {
         // Populate the unread-mail count at app open so the Email badge (and the mail
         // slice of the app icon badge, via refreshInbox → messages.didSet) is correct
         // before the user ever taps the Email segment. Quietly no-ops without a mailbox.
+        // __MAIL_UNREAD_REFRESH_2026_11_22__ This used to be the ONLY mail fetch outside
+        // MailView: once per process, never retried (offline at launch ⇒ 0 for good), never
+        // repeated on foreground / network return / mail push. MailUnreadRefresher owns
+        // that now; start() is idempotent (the app root usually got there first).
         .task {
-            mail.configure(identity: identityManager)
-            _ = try? await mail.refreshInbox()
+            MailUnreadRefresher.shared.start(identity: identityManager)
         }
     }
 

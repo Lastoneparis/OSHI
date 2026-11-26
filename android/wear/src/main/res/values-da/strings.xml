@@ -48,4 +48,27 @@
     <string name="qr_no">Nej</string>
     <string name="qr_busy">Kan ikke tale nu</string>
     <string name="end_to_end">End-to-end-krypteret af din telefon</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Fastgjort</string>
+    <string name="net_internet">Internet</string>
+    <string name="net_nearby">%1$d i nærheden</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Telefon offline · beskederne venter på din telefon</string>
+    <string name="net_offline_short">Telefon offline</string>
+    <string name="voice_message">Talebesked</string>
+    <string name="voice_send">Send talebesked</string>
+    <string name="voice_cancel">Annuller</string>
+    <string name="voice_permission">Giv adgang til mikrofonen for at optage talebeskeder. Intet gemmes på uret.</string>
+    <string name="voice_mic_busy">Mikrofonen er optaget. Prøv igen.</string>
+    <string name="voice_too_short">For kort. Tal lidt længere.</string>
+    <string name="voice_not_sent">Ikke sendt. Hold telefonen tæt på, og prøv igen.</string>
+    <string name="send_emoji">Send en emoji</string>
+    <string name="delivery_sending">Sender</string>
+    <string name="delivery_sent">Sendt</string>
+    <string name="delivery_delivered">Leveret</string>
+    <string name="delivery_read">Læst</string>
+    <string name="delivery_failed">Ikke leveret</string>
+    <string name="complication_none">Ingen ulæste beskeder</string>
+    <string name="tile_reply_to">Svar %1$s</string>
+    <string name="tile_chat_unread">%1$s, %2$d ulæste</string>
 </resources>

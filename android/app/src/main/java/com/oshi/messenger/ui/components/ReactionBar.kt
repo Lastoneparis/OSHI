@@ -3,6 +3,7 @@ package com.oshi.messenger.ui.components
 import com.oshi.messenger.ui.theme.glassGlow
 import com.oshi.messenger.ui.theme.glassHairline
 import com.oshi.messenger.ui.theme.GlassTier
+import com.oshi.messenger.ui.theme.glassOpaque
 import com.oshi.messenger.ui.theme.glassFill
 import com.oshi.messenger.ui.theme.glassOn
 import androidx.compose.foundation.BorderStroke
@@ -92,10 +93,16 @@ fun ReactionPicker(
     currentReaction: String?,
     onPick: (String) -> Unit,
     modifier: Modifier = Modifier,
+    /**
+     * __INTEROP_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.3 "the picker shows only allowed
+     * emoji": non-null ⇒ exactly these (no "+"), empty ⇒ no picker at all. Null = the full set.
+     */
+    restrictTo: List<String>? = null,
 ) {
-    var showAll by remember { mutableStateOf(false) }
+    if (restrictTo != null && restrictTo.isEmpty()) return
+    var showAll by remember { mutableStateOf(restrictTo != null) }
     val glass = glassOn()
-    val offered = if (showAll) OshiReaction.PICKER_ALL else OshiReaction.QUICK_ROW
+    val offered = restrictTo ?: if (showAll) OshiReaction.PICKER_ALL else OshiReaction.QUICK_ROW
     FlowRow(
         modifier = modifier
             .fillMaxWidth()
@@ -230,7 +237,7 @@ fun ReactionChip(
         val glass = glassOn()
         Surface(
             color = if (isMine) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-            else if (glass) GlassTier.Chip.opaque
+            else if (glass) glassOpaque(GlassTier.Chip)
             else MaterialTheme.colorScheme.surfaceVariant,
             shape = RoundedCornerShape(50),
             border = if (isMine) BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)) else null,

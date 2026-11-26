@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  __WIFI_AWARE_2026_11_25__ OSHI.entitlements + Wi-Fi Aware. NOT used by any
+  build until the owner switches to it (current builds keep OSHI.entitlements,
+  so a provisioning profile without Wi-Fi Aware keeps signing as today).
+
+  To ship Wi-Fi Aware (iOS only; Mac Catalyst keeps OSHI-macOS.entitlements):
+   1. developer.apple.com > Certificates, IDs & Profiles > Identifiers >
+      Moriceau-lab.Genesis > Capabilities: tick "Wi-Fi Aware", Save.
+      (If it is not listed for the account, it must be requested from Apple
+      first.) Then regenerate / re-download the iOS App Store and development
+      profiles (Xcode automatic signing does this on the next build).
+   2. OSHI target > Build Settings:
+        CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]       = OSHI/OSHI-WiFiAware.entitlements
+        CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*] = OSHI/OSHI-WiFiAware.entitlements
+        OSHI_WIFI_AWARE (user-defined)               = YES
+      OSHI_WIFI_AWARE reaches the app as Info.plist OSHIWiFiAwareEnabled; when
+      it is absent the code stays dormant even if this file is used.
+  Keep this file in sync with OSHI.entitlements (same keys + the one below).
+-->
+<plist version="1.0">
+<dict>
+    <key>com.apple.external-accessory.wireless-configuration</key>
+    <true/>
+    <key>keychain-access-groups</key>
+    <array>
+        <!-- ⚠️ ORDER IS LOAD-BEARING. The FIRST entry is the default access group
+             for every keychain write that does not name one. The app's own group
+             stays first so adding this entitlement changes nothing for the ~30
+             existing call sites; only KeychainHelper.sharedKeys move, and only
+             through migrateSharedItems(), which copies and never deletes. -->
+        <string>$(AppIdentifierPrefix)Moriceau-lab.Genesis</string>
+        <string>$(AppIdentifierPrefix)Moriceau-lab.Genesis.shared</string>
+    </array>
+    <key>com.apple.security.application-groups</key>
+    <array>
+        <string>group.Moriceau-lab.Genesis</string>
+    </array>
+    <key>aps-environment</key>
+    <string>production</string>
+    <key>com.apple.developer.associated-domains</key>
+    <array>
+        <string>applinks:oshi-messenger.com</string>
+        <string>applinks:oshi-messenger.org</string>
+    </array>
+    <key>com.apple.developer.wifi-aware</key>
+    <array>
+        <string>Publish</string>
+        <string>Subscribe</string>
+    </array>
+</dict>
+</plist>

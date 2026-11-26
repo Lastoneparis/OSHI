@@ -4,10 +4,7 @@
     <string name="app_tagline">セキュアメッシュメッセンジャー</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">OSHIへようこそ</string>
-    <string name="onboarding_description">インターネットなしでも動作するエンドツーエンド暗号化メッセージ</string>
     <string name="onboarding_create_identity">IDを作成</string>
-    <string name="onboarding_restore_identity">IDを復元</string>
 
     <!-- Messages -->
     <string name="messages_title">メッセージ</string>
@@ -61,6 +58,8 @@
     <string name="settings_theme_dark">ダーク</string>
     <string name="settings_theme_oled_black">OLEDブラック</string>
     <string name="settings_theme_oled_black_desc">OLED画面向けの完全な黒背景。ダークテーマが有効なときに適用されます。</string>
+    <string name="appearance_glass_effect">ガラス効果</string>
+    <string name="appearance_glass_effect_footer">すりガラスのように透けるバー、カード、メニュー。ライト、ダーク、OLEDブラックで使えます。</string>
     <string name="settings_backup">キーのバックアップ</string>
     <string name="settings_about">アプリについて</string>
     <string name="settings_version">バージョン %s</string>
@@ -385,22 +384,9 @@
     <string name="video_switch_to_voice">音声に切替</string>
 
     <!-- Onboarding - Additional -->
-    <string name="onboarding_subtitle">インターネットなしでも使える安全なプライベートメッセージング</string>
-    <string name="onboarding_key_features">主な機能</string>
-    <string name="onboarding_e2e_title">エンドツーエンド暗号化</string>
-    <string name="onboarding_e2e_desc">すべてのメッセージは暗号化されます。あなたと受信者だけが読むことができます。</string>
-    <string name="onboarding_mesh_title">メッシュネットワーク</string>
-    <string name="onboarding_mesh_desc">インターネットなしでも、近くのユーザーに直接メッセージを送信できます。</string>
-    <string name="onboarding_calls_title">安全な通話</string>
-    <string name="onboarding_calls_desc">完全な暗号化による音声・ビデオ通話。</string>
-    <string name="onboarding_cross_platform_title">クロスプラットフォーム</string>
-    <string name="onboarding_cross_platform_desc">iOSとAndroidデバイスでシームレスに動作します。</string>
-    <string name="onboarding_create_your_identity">IDを作成する</string>
-    <string name="onboarding_choose_display_name">連絡先に表示する名前を選択してください</string>
     <string name="onboarding_display_name">表示名</string>
     <string name="onboarding_key_info">あなた専用の暗号化キーペアが生成されます。後でキーのバックアップを忘れずに行ってください。</string>
     <string name="onboarding_back">戻る</string>
-    <string name="onboarding_next">次へ</string>
     <string name="onboarding_creating">作成中…</string>
     <string name="onboarding_error_create">IDの作成に失敗しました：%s</string>
 
@@ -820,8 +806,6 @@
     <string name="faq_q6_answer">新しいメッセージに移動して、連絡先のQRコードをスキャン、自分のQRコードを共有、または相手の公開鍵を貼り付けてください。</string>
 
     <!-- Onboarding Disclaimer -->
-    <string name="onboarding_disclaimer_title">重要な注意事項</string>
-    <string name="onboarding_disclaimer_subtitle">OSHIを使用する前にお読みください</string>
     <string name="onboarding_disclaimer_audit_title">セキュリティ監査未実施</string>
     <string name="onboarding_disclaimer_audit_desc">このアプリはまだ専門的なセキュリティ監査を受けていません。強力な暗号化を使用していますが、ご自身の判断でご利用ください。</string>
     <string name="onboarding_disclaimer_anonymous_title">プライバシー第一</string>
@@ -2147,24 +2131,10 @@
     <string name="new_message_sent">メッセージ送信済み！</string>
     <string name="onboarding_conduct_subtitle">OSHIは信頼と尊重の上に構築されています。これらのガイドラインに従ってください:</string>
     <string name="onboarding_conduct_title">コミュニティガイドライン</string>
-    <string name="onboarding_message_description">QRコードをスキャンするか公開鍵を入力して誰かと接続しましょう。</string>
-    <string name="onboarding_message_title">最初のメッセージを送信</string>
-    <string name="onboarding_method_paste_title">方法2: 公開鍵をコピー/ペースト</string>
-    <string name="onboarding_method_qr_title">方法1: QRコードをスキャン</string>
     <string name="onboarding_reach_disclaimer">オフラインメッシュの通信距離は短いです。互いを見つけるには両方の端末でOSHIを開いておく必要があり、見通しの良い場所で約100 m、壁越しではさらに短くなります。それより遠くへ届くのは、近くにいる他の人もOSHIを開いてメッセージを中継してくれる場合だけです。範囲内に誰もいない場合、OSHIは代わりにインターネット経由で送信します。</string>
-    <string name="onboarding_reach_offline_body">インターネットがなくても、近くでOSHIを開いている人を経由して端末から端末へメッセージが伝わります。</string>
-    <string name="onboarding_reach_offline_title">オフライン（メッシュ）</string>
-    <string name="onboarding_reach_online_body">インターネットがあれば、世界中の誰にでもすぐ届きます。</string>
-    <string name="onboarding_reach_online_title">オンライン</string>
     <string name="onboarding_reach_range1_dist">~100 m</string>
-    <string name="onboarding_reach_range1_label">端末どうしで直接</string>
     <string name="onboarding_reach_range2_dist">~500 m</string>
-    <string name="onboarding_reach_range2_label">間にいる人が中継すると、さらに遠くへ</string>
     <string name="onboarding_reach_range3_dist">~30 km</string>
-    <string name="onboarding_reach_range3_label">Bluetooth接続のMeshtastic LoRa無線機で</string>
-    <string name="onboarding_reach_subtitle">OSHIはインターネットの有無どちらでも使えます。</string>
-    <string name="onboarding_reach_tip">オフラインは近くでOSHIを開いている人が必要です。人が多いほど、メッセージは遠くまで届きます。</string>
-    <string name="onboarding_reach_title">メッセージが届くしくみ</string>
     <string name="onboarding_rule_backup">鍵を安全にバックアップする</string>
     <string name="onboarding_rule_no_abuse">ハラスメントや虐待をしない</string>
     <string name="onboarding_rule_no_illegal">違法なコンテンツを送らない</string>
@@ -2579,6 +2549,7 @@
     <string name="gif_picker_title">GIFとステッカー</string>
     <string name="gif_tab_gifs">GIF</string>
     <string name="gif_tab_stickers">ステッカー</string>
+    <string name="gif_oshi_hint">OSHIのアニメーションステッカー — 選ぶと送信されます</string>
     <string name="linked_device_alert_body">いま、OSHIアカウントにデバイスが1台リンクされました。心当たりがない場合は「リンク済みデバイス」を開いて、すぐに削除してください。</string>
     <string name="linked_device_alert_body_plural">いま、OSHIアカウントにデバイスが%1$d台リンクされました。心当たりがない場合は「リンク済みデバイス」を開いて、すぐに削除してください。</string>
     <string name="linked_device_alert_title">アカウントに新しいデバイスがリンクされました</string>
@@ -2787,4 +2758,63 @@
     <string name="settings_animated_reactions">OSHI アニメリアクション</string>
     <string name="settings_animated_reactions_desc">オフ: 標準の絵文字</string>
     <string name="reactions_new_hint">新機能：古いバージョンの iPhone では 👍 と表示される場合があります</string>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="accessibility_updates">アップデートとメンテナンス</string>
+    <string name="ai_download_failed_network">ダウンロードに失敗しました。接続を確認して「再試行」をタップしてください。</string>
+    <string name="ai_download_failed_server">ダウンロードサーバーが応答しませんでした。「再試行」をタップするか、しばらくしてからお試しください。</string>
+    <string name="chat_welcome_creator_notice">OSHI が書いたメッセージで、作成者の Hugo に届きます。返信は Hugo が読んでいます。</string>
+    <string name="conversation_pin">上部に固定</string>
+    <string name="conversation_unpin">ピン解除</string>
+    <string name="group_block_member">このメンバーをブロック</string>
+    <string name="group_member_blocked">ブロックしました。このグループでの相手のメッセージは今後届きません。</string>
+    <string name="group_member_unblocked">ブロックを解除しました。</string>
+    <string name="group_report_member">このメンバーを報告</string>
+    <string name="group_unblock_member">このメンバーのブロックを解除</string>
+    <string name="groups_show_fewer_members">表示を減らす</string>
+    <string name="lora_error_channel_unknown">このチャンネルは接続中の無線機にありません。名前の変更、移動、削除の可能性があります。送信されていません。</string>
+    <string name="lora_node_message">このノードにメッセージ</string>
+    <string name="map_pois_hide">スポットを隠す</string>
+    <string name="map_pois_show">スポットを表示</string>
+    <string name="map_regions_insufficient_space">このデバイスの空き容量が足りないため、この地域をインストールできません。</string>
+    <string name="markup_done">完了</string>
+    <string name="markup_draw">描画</string>
+    <string name="markup_undo">元に戻す</string>
+    <string name="mesh_blocked_bluetooth">Bluetoothがオフです</string>
+    <string name="mesh_blocked_permission">付近のデバイスの権限がオフです</string>
+    <string name="mesh_blocked_wifi">Wi‑Fi がオフです</string>
+    <string name="new_message_fab">新規</string>
+    <string name="peers_connect_already">%1$s はすでに接続されています</string>
+    <string name="peers_connect_dialing">%1$s に接続中…</string>
+    <string name="peers_connect_searching">%1$s のアドレスがまだありません。再検索中…</string>
+    <string name="report_member_already_filed">このメンバーはすでに報告済みです。</string>
+    <string name="report_member_dialog_title">このメンバーを報告</string>
+    <string name="updates_available">新しいバージョンの OSHI があります。</string>
+    <string name="updates_checking">新しいバージョンを確認中…</string>
+    <string name="updates_current_version">OSHI %1$s を使用中です</string>
+    <string name="updates_news_action">リリースノートを読む</string>
+    <string name="updates_news_body">新機能、修正、メンテナンスのお知らせはリリースごとに公開されます。</string>
+    <string name="updates_title">アップデートとメンテナンス</string>
+    <string name="updates_up_to_date">把握している最新バージョンを使用中です。</string>
+    <string name="inapp_update_title">アップデートがあります</string>
+    <string name="inapp_update_body">OSHI の新しいバージョンが Google Play で公開されました。ダウンロードはバックグラウンドで行われるため、そのままアプリを使えます。</string>
+    <string name="inapp_update_now">アップデート</string>
+    <string name="inapp_update_later">後で</string>
+    <string name="inapp_update_ready">アップデートの準備ができました</string>
+    <string name="inapp_update_restart">再起動</string>
+    <!-- __CALL_WAKE_2026_11_22__ -->
+    <string name="call_state_calling">発信中…</string>
+    <string name="call_reach_unreachable">現在つながりません</string>
+    <string name="call_readiness_title">着信が鳴らない可能性があります</string>
+    <string name="call_readiness_notifications">OSHI の通知がオフです — タップして許可</string>
+    <string name="call_readiness_channel">「着信」通知がオフです — タップしてオン</string>
+    <string name="call_readiness_full_screen">全画面の着信表示が許可されていません — タップして許可</string>
+    <string name="call_readiness_background">Android が OSHI のバックグラウンド動作を制限しています — タップしてバッテリーを「制限なし」に</string>
+    <string name="composer_format_bold">太字</string>
+    <string name="composer_format_underline">下線</string>
+    <!-- __GROUP_HEADER_ISLAND_2026_11_24__ floating group header -->
+    <string name="group_header_info_a11y">グループ情報、%1$s</string>
+    <string name="group_header_search_a11y">会話内を検索</string>
+    <plurals name="group_header_subscribers">
+        <item quantity="other">登録者 %1$d 人</item>
+    </plurals>
 </resources>

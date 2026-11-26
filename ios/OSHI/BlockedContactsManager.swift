@@ -71,7 +71,14 @@ enum BlockReason: String, Codable, CaseIterable {
 class BlockedContactsManager: ObservableObject {
     static let shared = BlockedContactsManager()
     
-    @Published private(set) var blockedContacts: [BlockedContact] = []
+    @Published private(set) var blockedContacts: [BlockedContact] = [] {
+        didSet { blockedKeySet = Set(blockedContacts.map { normalizeKey($0.publicKey) }) }
+    }
+    /// __LAUNCH_LAG_2026_11_22__ The blocked keys, folded once. `isBlocked` is
+    /// called once per MESSAGE by `MessageManager.updateConversations`, which
+    /// runs on the main thread at launch and on every list refresh; folding
+    /// every blocked key on every call made that messages × blocked string work.
+    private var blockedKeySet: Set<String> = []
     @Published private(set) var blockedGroups: [BlockedGroup] = []
     
     private let contactsStorageKey = "blockedContacts"
@@ -141,8 +148,7 @@ class BlockedContactsManager: ObservableObject {
     /// base64 vs base64url and `=` padding skew don't accidentally let a
     /// blocked or stale identity ring through.
     func isBlocked(_ publicKey: String) -> Bool {
-        let target = normalizeKey(publicKey)
-        return blockedContacts.contains { normalizeKey($0.publicKey) == target }
+        blockedKeySet.contains(normalizeKey(publicKey))
     }
     
     /// Block a contact

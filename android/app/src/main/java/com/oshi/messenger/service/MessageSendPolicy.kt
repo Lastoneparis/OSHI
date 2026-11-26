@@ -169,10 +169,9 @@ object MessageSendPolicy {
      * marker missing from a hand-written copy is a control message that gets
      * refused or chopped.
      *
-     * Reply and forward wrappers are envelopes around prose; iOS splits INSIDE
-     * them. Android does not split (see the class note on [Outcome]), so they
-     * are treated as prose for the purposes of the budget check — a 4 KB reply
-     * is still a 4 KB message on the wire.
+     * Reply and forward wrappers are envelopes around prose, so they count as
+     * prose: [MessageTextSplitter] splits INSIDE them (quote on the first part,
+     * attribution on every part), as iOS does.
      */
     fun isUserProse(content: String): Boolean {
         if (content.isEmpty()) return false
@@ -191,22 +190,22 @@ object MessageSendPolicy {
         WITHIN_BUDGET,
 
         /**
-         * Over the budget for the transports that are reachable. The caller MUST
-         * tell the user: iOS returns `.tooLong` from `sendMessage`
-         * (`MessageManager.swift:4866-4870`) and the composer puts the text back
-         * in the box.
+         * Over the budget for the transports that are reachable, as ONE message.
          *
-         * Android REFUSES where iOS SPLITS (`MessageTextSplitter.splitForSend`).
-         * Splitting one composed message into N rows changes what
-         * `sendTextMessage` returns and what every one of its ~8 callers stores,
-         * so it is deliberately left out of this change; the refusal is the half
-         * that stops a long message being encrypted and chunked only to die at
-         * chunk 13.
+         * __LONG_TEXT_SPLIT_2026_11_23__ No longer a refusal by itself:
+         * `MessageRepository.sendTextMessage` asks [MessageTextSplitter.splitForSend],
+         * which splits such a text into parts that fit, as iOS does, and refuses
+         * (`MessageTooLongException`) only a Cashu token, an envelope it cannot
+         * parse, or more than [MessageTextSplitter.MAX_PARTS] parts. This answer
+         * remains the plain "does it fit as one message" test.
          */
         TOO_LONG,
     }
 
     /**
+     * Does [content] fit its route as ONE message? The send path splits what does
+     * not, through [MessageTextSplitter] (see [Outcome.TOO_LONG]).
+     *
      * The gate that runs BEFORE the message row is inserted and before the
      * ratchet is touched. iOS decides the same thing first, at
      * `MessageManager.swift:4861-4871`, and deliberately before charging the
@@ -465,11 +464,14 @@ object LoRaDeliveryLedger {
      * make impossible: it turns a message that may never leave the device into a
      * ✓ on screen.
      */
-    fun afterSendAttempt(row: Message, framesWritten: Boolean): Message? {
+    fun afterSendAttempt(row: Message, framesWritten: Boolean, acknowledgeable: Boolean = true): Message? {
         if (!framesWritten) return null
+        // __MESHCORE_INTEROP_2026_11_25__ A hand-off nobody will acknowledge (a MeshCore "#oshi-bridge"
+        // broadcast, LoRaRadios.handOffCountsAsDelivered) is SENT: it went out over LoRa, and only the
+        // peer's own delivery receipt may say it arrived.
         return row.copy(
             deliveryMethod = DeliveryMethod.LORA,
-            isDelivered = true,
+            isDelivered = acknowledgeable,
             isFailed = false,
         )
     }
@@ -484,6 +486,26 @@ object LoRaDeliveryLedger {
      * for a message's LAST chunk — Meshtastic never acks a broadcast, so a
      * missing ack is not evidence of anything and never marks a row failed here.
      */
+    /**
+     * __LORA_SEND_FAILED_VISIBLE_2026_11_23__ May a LoRa "not delivered" verdict (OMP FAILED/REJECTED, a
+     * stock routing failure, the OMP send timeout, or a held message the radio can never carry) mark
+     * this row failed?
+     *
+     * Only while nothing better is known about it:
+     *  - not yet handed to any transport (`!isDelivered`), or handed to the RADIO last
+     *    (`deliveryMethod == LORA`; [afterSendAttempt] stamps `isDelivered` on hand-off, so that flag
+     *    alone cannot tell a LoRa send from a relay one). A row the relay or the mesh carried keeps its
+     *    status whatever the radio says;
+     *  - not read, not confirmed by a delivery receipt or a mesh ack ([confirmedElsewhere]);
+     *  - not already failed.
+     *
+     * A late mesh confirmation still upgrades a row failed here: [afterMeshAck] leaves FAILED.
+     */
+    fun mayMarkNotDelivered(row: Message?, confirmedElsewhere: Boolean): Boolean {
+        if (row == null || !row.isFromMe || row.isRead || row.isFailed || confirmedElsewhere) return false
+        return !row.isDelivered || row.deliveryMethod == DeliveryMethod.LORA
+    }
+
     fun afterMeshAck(row: Message): Message? {
         if (row.isDelivered && !row.isFailed && row.deliveryMethod == DeliveryMethod.LORA) {
             return null

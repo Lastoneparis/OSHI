@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware (liaison rapide de proximité)</string>
+    <string name="settings_wifi_aware_subtitle">Liaison directe avec les téléphones OSHI à proximité, sans routeur. Votre Wi-Fi reste connecté.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

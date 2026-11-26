@@ -16,8 +16,43 @@ import javax.inject.Inject
 class BotPortalViewModel @Inject constructor(
     private val botManager: BotManager,
     private val cryptoManager: CryptoManager,
-    private val groupManager: GroupManager
+    private val groupManager: GroupManager,
+    // __BOT_COMMANDS_2026_11_24__ pushes a server bot's command list (setMyCommands).
+    private val botPlatformClient: com.oshi.messenger.network.bot.BotPlatformClient,
+    // __BOTS_PHASE1_2026_11_24__ name / description / avatar reach the public profile too.
+    private val botDirectoryApi: com.oshi.messenger.network.bot.BotDirectoryApi
 ) : ViewModel() {
+
+    companion object {
+        const val MAX_NAME = 64
+        const val MAX_DESCRIPTION = 512
+
+        /** Why the profile editor must refuse, or null. Pure, unit-tested. */
+        @JvmStatic
+        fun validateProfile(name: String, description: String): ProfileError? = when {
+            name.isBlank() -> ProfileError.NAME_EMPTY
+            name.trim().length > MAX_NAME -> ProfileError.NAME_TOO_LONG
+            description.trim().length > MAX_DESCRIPTION -> ProfileError.DESCRIPTION_TOO_LONG
+            else -> null
+        }
+
+        /**
+         * Where a bot's command list lives. A LOCAL bot answers on this phone, so its list
+         * is complete the moment it is saved; a webhook bot is registered on the server and
+         * its list must also reach `setMyCommands` (see [BotManager.needsServerRegistration]).
+         */
+        @JvmStatic
+        fun syncsCommandsToServer(bot: OSHIBot): Boolean = BotManager.isServerBot(bot)
+
+        /** The avatars the profile editor offers. The bot model stores ONE emoji. */
+        val AVATAR_CHOICES = listOf(
+            "🤖", "👋", "❓", "⏰", "🛡️", "🔗", "🔊", "📣", "🧠", "📚", "🌦️", "🎲",
+            "🎵", "🛒", "📅", "✅", "💡", "🔔", "🧭", "🗳️", "🐱", "🦊", "🌱", "🚀",
+        )
+    }
+
+    enum class CommandSync { LOCAL, SYNCING, SYNCED, FAILED }
+    enum class ProfileError { NAME_EMPTY, NAME_TOO_LONG, DESCRIPTION_TOO_LONG }
 
     enum class PortalTab { CHANNELS, BOTS, APPS }
 
@@ -55,7 +90,12 @@ class BotPortalViewModel @Inject constructor(
         val isEditing: Boolean = false,
         val showDeleteConfirm: Boolean = false,
         val testMessage: String = "",
-        val isSending: Boolean = false
+        val isSending: Boolean = false,
+        /** __BOT_COMMANDS_2026_11_24__ the `/` menu as the owner configured it. */
+        val commands: List<BotManager.CommandRow> = emptyList(),
+        val commandSync: CommandSync = CommandSync.LOCAL,
+        /** Names of the groups the bot is in (empty = in none: its commands reach nobody yet). */
+        val groupNames: List<String> = emptyList()
     )
 
     private val _portalState = MutableStateFlow(PortalUiState())
@@ -241,7 +281,16 @@ class BotPortalViewModel @Inject constructor(
         viewModelScope.launch {
             val bot = botManager.bots.first().find { it.id == botId }
             if (bot != null) {
-                _botDetailState.value = BotDetailState(bot = bot)
+                val ids = bot.assignedGroups.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+                val names = groupManager.groups.value
+                    .filter { g -> ids.any { it.equals(g.id, ignoreCase = true) } }
+                    .map { it.name }
+                _botDetailState.value = BotDetailState(bot = bot, groupNames = names)
+                launch {
+                    botManager.commandRowsForBot(botId).collect { rows ->
+                        _botDetailState.value = _botDetailState.value.copy(commands = rows)
+                    }
+                }
                 botManager.getTriggersForBot(botId).collect { triggers ->
                     _botDetailState.value = _botDetailState.value.copy(triggers = triggers)
                 }
@@ -318,5 +367,77 @@ class BotPortalViewModel @Inject constructor(
                 _botDetailState.value = _botDetailState.value.copy(isSending = false)
             }
         }
+    }
+
+    // =========================================================================
+    // __BOT_COMMANDS_2026_11_24__ PROFILE + COMMANDS (owner configuration)
+    // =========================================================================
+
+    /** Save name / description / avatar. Returns the refusal, or null when saved. */
+    fun updateBotProfile(name: String, description: String, emoji: String): ProfileError? {
+        validateProfile(name, description)?.let { return it }
+        val bot = _botDetailState.value.bot ?: return null
+        val updated = bot.copy(
+            name = name.trim(),
+            description = description.trim(),
+            avatarEmoji = emoji.ifBlank { bot.avatarEmoji }
+        )
+        _botDetailState.value = _botDetailState.value.copy(bot = updated)
+        viewModelScope.launch {
+            botManager.updateBot(updated)
+            if (BotManager.isServerBot(updated)) runCatching {
+                botDirectoryApi.setMyProfile(updated.token, com.oshi.messenger.network.bot.BotProfileUpdate(
+                    name = updated.name, description = updated.description, avatarEmoji = updated.avatarEmoji))
+            }
+        }
+        return null
+    }
+
+    /**
+     * Add ([triggerId] null) or edit one command; [onResult] gets the refusal or null.
+     * A webhook bot's whole list is then pushed to the server.
+     */
+    fun saveCommand(
+        triggerId: String?,
+        name: String,
+        description: String,
+        reply: String,
+        onResult: (com.oshi.messenger.util.BotCommandSyntax.EditError?) -> Unit
+    ) {
+        val bot = _botDetailState.value.bot ?: return
+        viewModelScope.launch {
+            when (val r = botManager.saveCommand(bot.id, triggerId, name, description, reply)) {
+                is BotManager.CommandSave.Refused -> onResult(r.error)
+                is BotManager.CommandSave.Saved -> {
+                    onResult(null)
+                    pushCommands(bot, r.rows)
+                }
+            }
+        }
+    }
+
+    fun deleteCommand(triggerId: String) {
+        val bot = _botDetailState.value.bot ?: return
+        viewModelScope.launch {
+            pushCommands(bot, botManager.deleteCommand(bot.id, triggerId))
+        }
+    }
+
+    /** Retry the server push after a failure. */
+    fun retryCommandSync() {
+        val bot = _botDetailState.value.bot ?: return
+        viewModelScope.launch { pushCommands(bot, _botDetailState.value.commands) }
+    }
+
+    private suspend fun pushCommands(bot: OSHIBot, rows: List<BotManager.CommandRow>) {
+        if (!syncsCommandsToServer(bot)) {
+            _botDetailState.value = _botDetailState.value.copy(commandSync = CommandSync.LOCAL)
+            return
+        }
+        _botDetailState.value = _botDetailState.value.copy(commandSync = CommandSync.SYNCING)
+        val ok = botPlatformClient.setMyCommands(bot.token, rows.filter { it.isActive }.map { it.spec })
+        _botDetailState.value = _botDetailState.value.copy(
+            commandSync = if (ok) CommandSync.SYNCED else CommandSync.FAILED
+        )
     }
 }

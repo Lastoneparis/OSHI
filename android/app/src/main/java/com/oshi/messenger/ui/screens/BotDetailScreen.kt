@@ -37,6 +37,10 @@ fun BotDetailScreen(
 ) {
     val detailState by viewModel.botDetailState.collectAsState()
     var showDeleteDialog by remember { mutableStateOf(false) }
+    // __BOT_COMMANDS_2026_11_24__ owner configuration: profile + command list.
+    var showProfileDialog by remember { mutableStateOf(false) }
+    var editingCommand by remember { mutableStateOf<com.oshi.messenger.service.BotManager.CommandRow?>(null) }
+    var addingCommand by remember { mutableStateOf(false) }
 
     LaunchedEffect(botId) {
         viewModel.loadBotDetail(botId)
@@ -77,6 +81,26 @@ fun BotDetailScreen(
             return@Scaffold
         }
 
+        val isWebhook = bot.type == "webhook"
+        if (showProfileDialog) {
+            BotProfileDialog(
+                name = bot.name,
+                description = bot.description,
+                emoji = bot.avatarEmoji,
+                onSave = { n, d, e -> viewModel.updateBotProfile(n, d, e) },
+                onDismiss = { showProfileDialog = false }
+            )
+        }
+        if (addingCommand || editingCommand != null) {
+            val initial = editingCommand
+            BotCommandEditDialog(
+                initial = initial,
+                isWebhook = isWebhook,
+                onSave = { n, d, r, done -> viewModel.saveCommand(initial?.triggerId, n, d, r, done) },
+                onDismiss = { addingCommand = false; editingCommand = null }
+            )
+        }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -113,6 +137,14 @@ fun BotDetailScreen(
                                 "@${bot.username}",
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
+                            if (bot.description.isNotBlank()) {
+                                Text(
+                                    bot.description,
+                                    fontSize = 13.sp,
+                                    maxLines = 3,
+                                    modifier = Modifier.padding(top = 2.dp)
+                                )
+                            }
                             Spacer(modifier = Modifier.height(4.dp))
                             val botType = try {
                                 BotType.valueOf(bot.type.uppercase())
@@ -134,9 +166,32 @@ fun BotDetailScreen(
                                 )
                             }
                         }
+                        IconButton(onClick = { showProfileDialog = true }) {
+                            Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.bot_profile_edit),
+                                tint = MaterialTheme.colorScheme.primary)
+                        }
                     }
                 }
             }
+
+            // __BOTS_PHASE1_2026_11_24__ public profile: @username, about, public, link + QR, token.
+            item { com.oshi.messenger.ui.bots.BotPublicProfileCard(localBotId = bot.id, onTokenChanged = { viewModel.loadBotDetail(botId) }) }
+
+            // __BOT_COMMANDS_2026_11_24__ The `/` menu, as the owner configures it.
+            item {
+                BotCommandsSection(
+                    rows = detailState.commands,
+                    sync = detailState.commandSync,
+                    isWebhook = isWebhook,
+                    onAdd = { addingCommand = true },
+                    onEdit = { editingCommand = it },
+                    onDelete = { viewModel.deleteCommand(it.triggerId) },
+                    onRetry = { viewModel.retryCommandSync() }
+                )
+            }
+
+            // Where it runs and who hears it.
+            item { BotConnectCard(isWebhook = isWebhook, groupNames = detailState.groupNames) }
 
             // Stats
             item {
@@ -245,8 +300,9 @@ fun BotDetailScreen(
                 }
             }
 
-            // Triggers section header
-            item {
+            // Triggers other than commands (commands have their own editor above).
+            val otherTriggers = detailState.triggers.filter { it.type != "command" }
+            if (otherTriggers.isNotEmpty()) item {
                 Text(
                     stringResource(R.string.bot_detail_triggers),
                     fontWeight = FontWeight.SemiBold,
@@ -255,7 +311,7 @@ fun BotDetailScreen(
             }
 
             // Trigger items
-            items(detailState.triggers) { trigger ->
+            items(otherTriggers) { trigger ->
                 OshiCard(shape = RoundedCornerShape(12.dp)) {
                     Row(
                         modifier = Modifier.padding(12.dp),

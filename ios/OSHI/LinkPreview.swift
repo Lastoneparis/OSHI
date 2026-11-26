@@ -179,6 +179,15 @@ class LinkPreviewFetcher: ObservableObject {
     func fetchPreview(for urlString: String, allowNetwork: Bool = false) {
         OshiLog.messaging.info("🔍 LinkPreview: Starting fetch")
 
+        // __STRICT_SECURITY_MODE_2026_11_22__ no preview at all — not even from
+        // the cache — while strict mode is on.
+        guard StrictSecurityMode.allowsLinkPreviews else {
+            previewData = nil
+            previewImage = nil
+            isLoading = false
+            return
+        }
+
         guard let url = URL(string: urlString) else {
             OshiLog.messaging.info("❌ LinkPreview: Invalid URL - cannot create URL object")
             return
@@ -594,29 +603,12 @@ struct LinkPreviewView: View {
 // MARK: - Link Detection Extension
 
 extension String {
+    /// __GROUP_OPEN_HITCH_2026_11_22__ Same answer as before, now pre-checked,
+    /// cached per text and served by a reused detector — see LinkDetection.
+    /// It used to allocate a fresh `NSDataDetector` for every bubble's
+    /// `onAppear` on the main thread (~27 ms of a group open on device).
     func detectFirstURL() -> String? {
-        let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-        let matches = detector?.matches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count))
-        
-        if let match = matches?.first,
-           let range = Range(match.range, in: self) {
-            let urlString = String(self[range])
-            
-            // Handle different URL formats
-            if urlString.lowercased().hasPrefix("http://") || urlString.lowercased().hasPrefix("https://") {
-                return urlString
-            } else if urlString.lowercased().hasPrefix("www.") {
-                // Add https:// prefix for www. URLs
-                return "https://\(urlString)"
-            } else if !urlString.contains("://") {
-                // Add https:// for URLs without protocol
-                return "https://\(urlString)"
-            }
-            
-            return urlString
-        }
-        
-        return nil
+        LinkDetection.firstURL(in: self)
     }
 }
 

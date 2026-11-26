@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Bỏ qua</string>
+    <string name="ob27_continue">Tiếp tục</string>
+    <string name="ob27_page_of">Trang %1$d/%2$d</string>
+    <string name="ob27_private_title">Chỉ bạn và họ</string>
+    <string name="ob27_private_body">Tin nhắn và cuộc gọi được mã hóa đầu cuối ngay trên điện thoại của bạn. Không ai ở giữa có thể đọc được — kể cả OSHI.</string>
+    <string name="ob27_offline_title">Dùng được không cần mạng</string>
+    <string name="ob27_offline_body">Không có mạng? Tin nhắn được chuyền từ điện thoại này sang điện thoại khác qua những người ở gần đang mở OSHI. Radio LoRa đưa chúng đi xa hơn nữa.</string>
+    <string name="ob27_range_direct">trực tiếp</string>
+    <string name="ob27_range_relayed">chuyển tiếp</string>
+    <string name="ob27_range_lora">radio LoRa</string>
+    <string name="ob27_anon_title">Không cần số điện thoại</string>
+    <string name="ob27_anon_body">Không tài khoản, không email, không số điện thoại để đăng ký. Danh tính của bạn là một khóa được tạo trên điện thoại này.</string>
+    <string name="ob27_together_title">Rủ mọi người cùng dùng</string>
+    <string name="ob27_together_body">Trò chuyện riêng hoặc theo nhóm. Thêm ai đó bằng cách quét mã QR của họ hoặc gửi liên kết mời.</string>
+    <string name="ob27_rules_title">Trước khi bắt đầu</string>
+    <string name="ob27_rules_subtitle">Vài quy tắc chung, cùng những gì OSHI đã làm được và chưa làm được.</string>
+    <string name="ob27_rules_do">Nên làm</string>
+    <string name="ob27_rules_dont">Không bao giờ</string>
+    <string name="ob27_good_to_know">Cần biết</string>
+    <string name="ob27_show_details">Hiện chi tiết</string>
+    <string name="ob27_hide_details">Ẩn chi tiết</string>
+    <string name="ob27_agree">Tôi đã hiểu</string>
+    <string name="ob27_notif_title">Không bỏ lỡ tin nhắn</string>
+    <string name="ob27_notif_body">Cho phép thông báo để thấy tin nhắn và cuộc gọi mới. Bạn có thể tắt bất cứ lúc nào trong Cài đặt.</string>
+    <string name="ob27_notif_allow">Cho phép thông báo</string>
+    <string name="ob27_not_now">Để sau</string>
+    <string name="ob27_identity_title">Chọn một cái tên</string>
+    <string name="ob27_identity_body">Đây là tên mà danh bạ của bạn sẽ thấy. Bạn có thể đổi sau.</string>
+    <string name="ob27_already">Bạn đã dùng OSHI?</string>
+</resources>

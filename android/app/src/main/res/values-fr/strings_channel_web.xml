@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Aperçu web public</string>
+    <string name="cw_toggle">Publier les posts sur le web</string>
+    <string name="cw_footer">Les nouveaux posts sont aussi publiés sur une page web publique à oshi-messenger.com/c/%1$s. Tout le monde peut les lire, y compris les moteurs de recherche et les aperçus de liens. Le chiffrement de bout en bout ne s\'applique pas à la copie web.</string>
+    <string name="cw_needs_link">Donnez d\'abord un lien public à ce canal : l\'aperçu web utilise son identifiant.</string>
+    <string name="cw_create_link">Créer un lien public</string>
+    <string name="cw_enable_title">Publier les posts sur le web ?</string>
+    <string name="cw_enable_confirm">Les posts de ce canal seront visibles par tous sur le web à oshi-messenger.com/c/%1$s. Nouveaux posts uniquement. Les aperçus de liens (WhatsApp, X, Telegram…) peuvent aussi les lire, et le chiffrement de bout en bout ne s\'applique pas à la copie web.</string>
+    <string name="cw_enable_action">Publier</string>
+    <string name="cw_disable_title">Désactiver l\'aperçu web ?</string>
+    <string name="cw_disable_confirm">Tous les posts et images publiés à oshi-messenger.com/c/%1$s seront retirés du web. Vos posts dans l\'app restent inchangés.</string>
+    <string name="cw_disable_action">Désactiver</string>
+    <string name="cw_indexing">Autoriser les moteurs de recherche</string>
+    <string name="cw_indexing_footer">Désactivé, les pages demandent aux moteurs de recherche de ne pas les référencer.</string>
+    <string name="cw_embed_code">Code d\'intégration</string>
+    <string name="cw_embed_title">Intégrer ce post</string>
+    <string name="cw_embed_hint">Collez ce code dans votre site à l\'endroit où le post doit apparaître.</string>
+    <string name="cw_embed_dark">Thème sombre</string>
+    <string name="cw_copy_code">Copier le code</string>
+    <string name="cw_code_copied">Code copié</string>
+    <string name="cw_not_on_web">Ce post n\'est pas sur le web. Seuls les posts envoyés après l\'activation de l\'aperçu web sont publiés.</string>
+    <string name="cw_error">Impossible de modifier l\'aperçu web. Vérifiez votre connexion et réessayez.</string>
+</resources>

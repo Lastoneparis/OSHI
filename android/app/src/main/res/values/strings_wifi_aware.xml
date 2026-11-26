@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    __WIFI_AWARE_2026_11_25__ Wi-Fi Aware (NAN) lane, GitHub Lastoneparis/OSHI#4.
+    "Wi-Fi Aware" is the Wi-Fi Alliance name of the technology and is kept as is
+    in every language (it is also what Android calls it in system settings).
+    The subtitle promises only what the code guarantees: no router, and the
+    user's Wi-Fi connection is never touched (WifiAwareArbiter).
+-->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware (fast nearby link)</string>
+    <string name="settings_wifi_aware_subtitle">Direct link to nearby OSHI phones, no router needed. Your Wi-Fi stays connected.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

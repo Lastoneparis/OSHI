@@ -26,5 +26,53 @@
 			<string>%d تعليق</string>
 		</dict>
 	</dict>
+	<key>group_header_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@members@</string>
+		<key>members</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>%d عضو</string>
+			<key>one</key>
+			<string>%d عضو</string>
+			<key>two</key>
+			<string>%d عضوان</string>
+			<key>few</key>
+			<string>%d أعضاء</string>
+			<key>many</key>
+			<string>%d عضوًا</string>
+			<key>other</key>
+			<string>%d عضو</string>
+		</dict>
+	</dict>
+	<key>group_header_subscribers</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@subscribers@</string>
+		<key>subscribers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>%d مشترك</string>
+			<key>one</key>
+			<string>%d مشترك</string>
+			<key>two</key>
+			<string>%d مشتركان</string>
+			<key>few</key>
+			<string>%d مشتركين</string>
+			<key>many</key>
+			<string>%d مشتركًا</string>
+			<key>other</key>
+			<string>%d مشترك</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

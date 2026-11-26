@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">Fondo predeterminado para todos los chats. Cada chat puede tener el suyo.</string>
+    <string name="wallpaper_tone_settings_title">Tono del fondo</string>
+    <string name="wallpaper_personal_note">Solo tú ves este fondo, en este dispositivo.</string>
+</resources>

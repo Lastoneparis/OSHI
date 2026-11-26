@@ -813,7 +813,8 @@ class NotificationManager: ObservableObject {
         if OSHIControlPayload.isSilent(text) {
             return NSLocalizedString("notification.message.body.generic", comment: "You have a new message")
         }
-        return OSHIControlPayload.previewText(for: text)
+        // __TEXT_FORMATTING_2026_11_24__ a banner cannot style a run: no markers.
+        return InlineMarkup.stripped(OSHIControlPayload.previewText(for: text))
     }
     
     // Helper struct for location notification parsing
@@ -984,6 +985,9 @@ class NotificationManager: ObservableObject {
         if let name = MessageManager.lookupContactDisplayName(address) {
             return name
         }
+        // __MESHCORE_INTEROP_2026_11_25__ A MeshCore person or channel, or a LoRa room: its name, never the id.
+        if let name = MeshCoreInterop.threadTitle(forKey: address) { return name }
+        if LoRaChannelThread.isChannelKey(address) { return LoRaChannelThread.displayName(address) }
         // Show first 6 and last 4 characters
         if address.count > 10 {
             return "\(address.prefix(6))...\(address.suffix(4))"
@@ -1265,6 +1269,11 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
             || title.lowercased().contains("call")
             || body.lowercased().contains("incoming call")
         let callInProgress = VoIPPushManager.shared.hasActiveCallUUID
+        // __MAIL_UNREAD_REFRESH_2026_11_22__ New mail announced while open: fetch it so the
+        // Email badge moves with the banner instead of waiting for the Email screen.
+        if notificationType == "mail" {
+            NotificationCenter.default.post(name: .oshiMailPushReceived, object: nil)
+        }
         if looksLikeCall || callInProgress {
             OshiLog.ui.info("📞 Suppressing call notification banner — using full-screen overlay instead")
             completionHandler([])  // No banner, no sound (ringtone plays from call UI)
@@ -1369,6 +1378,7 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         // in case the server contract is later widened. If no id is present we still
         // land the tap on the Inbox rather than the app home.
         if notificationType == "mail" {
+            NotificationCenter.default.post(name: .oshiMailPushReceived, object: nil)  // __MAIL_UNREAD_REFRESH_2026_11_22__
             let mailId = messageId ?? (userInfo["mailId"] as? String)
             OshiLog.ui.info("📧 Mail notification tapped — mailId: \(mailId?.prefix(8) ?? "nil")")
             PendingNotificationDeepLink.shared.set(.mail(messageId: mailId))

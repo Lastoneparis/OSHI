@@ -16,5 +16,33 @@
 			<string>%d件のコメント</string>
 		</dict>
 	</dict>
+	<key>group_header_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@members@</string>
+		<key>members</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 人のメンバー</string>
+		</dict>
+	</dict>
+	<key>group_header_subscribers</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@subscribers@</string>
+		<key>subscribers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>登録者 %d 人</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

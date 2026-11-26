@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Komen</string>
+    <string name="gs_comments_footer">Ahli boleh mengulas di bawah setiap siaran. Hanya admin yang menyiarkan.</string>
+    <string name="cm_leave_comment">Tinggalkan komen</string>
+    <string name="cm_thread_title">Komen</string>
+    <string name="cm_empty">Belum ada komen.</string>
+    <string name="cm_composer_hint">Komen…</string>
+    <string name="cm_replying_to">Membalas %1$s</string>
+    <string name="cm_disabled">Komen dimatikan.</string>
+    <string name="cm_post_unavailable">Siaran ini tidak lagi tersedia.</string>
+    <string name="cm_too_fast">Anda mengulas terlalu pantas. Tunggu sebentar.</string>
+    <string name="cm_notif_reply">%1$s membalas komen anda</string>
+    <string name="cm_delete_comment">Padam komen</string>
+    <plurals name="cm_comments_count">
+        <item quantity="other">%d komen</item>
+    </plurals>
+</resources>

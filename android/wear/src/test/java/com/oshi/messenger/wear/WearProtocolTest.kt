@@ -10,6 +10,9 @@ import com.oshi.wearbridge.WearProtocol
 import com.oshi.wearbridge.WearRequest
 import com.oshi.wearbridge.WearResponse
 import com.oshi.wearbridge.WearStatus
+import com.oshi.wearbridge.WearDelivery
+import com.oshi.wearbridge.WearNet
+import com.oshi.wearbridge.WearVoiceFrame
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -116,5 +119,110 @@ class WearProtocolTest {
         val clipped = WearResponse.decode(WearResponse("r", WearStatus.OK, listOf(emoji)).encode())!!.conversations[0].name
         assertFalse("split a surrogate pair", Character.isHighSurrogate(clipped[clipped.length - 2]))
         assertTrue(clipped.endsWith("…"))
+    }
+
+    // ---- __WEAR_POLISH_2026_11_25__ -------------------------------------
+
+    @Test
+    fun `new request shapes round trip and are checked`() {
+        val read = WearRequest("r5", WearOp.READ, WearConvKind.DIRECT, "k=")
+        val thumb = WearRequest("r6", WearOp.THUMB, WearConvKind.GROUP, "g-1", messageId = "m-9")
+        val voice = WearRequest("r7", WearOp.VOICE, WearConvKind.DIRECT, "k=", durationMs = 4_200)
+        for (r in listOf(read, thumb, voice)) {
+            assertEquals(r, WearRequest.decode(r.encode()))
+            assertTrue("$r", r.isWellFormed())
+        }
+        assertFalse(read.copy(cid = null).isWellFormed())
+        assertFalse(thumb.copy(messageId = null).isWellFormed())
+        assertFalse(thumb.copy(messageId = "x".repeat(129)).isWellFormed())
+        assertFalse(voice.copy(durationMs = WearProtocol.MAX_VOICE_MS + 1).isWellFormed())
+        assertFalse(voice.copy(durationMs = WearProtocol.MIN_VOICE_MS - 1).isWellFormed())
+    }
+
+    @Test
+    fun `list answer carries caps, network, strict and pins`() {
+        val resp = WearResponse(
+            "rid", WearStatus.OK,
+            conversations = listOf(WearConversation(WearConvKind.DIRECT, "k", "Léa", "hi", 1, 1, "k", pinned = true)),
+            caps = WearProtocol.PHONE_CAPS,
+            net = WearNet(internet = false, meshPeers = 3, lora = true),
+            strict = true,
+        )
+        val back = WearResponse.decode(resp.encode())!!
+        assertEquals(resp, back)
+        assertTrue(back.conversations.single().pinned)
+        assertFalse(back.net!!.isOffline)
+        assertTrue(WearNet(internet = false).isOffline)
+    }
+
+    @Test
+    fun `a 1_7_3 phone answer (no caps, no net) reads as nothing new supported`() {
+        // Exactly what the 1.7.3 phone sends: none of the new keys.
+        val old = """{"v":1,"rid":"a","status":"ok","convs":[{"kind":"dm","cid":"k","name":"Léa","preview":"hi","unread":1,"ts":1,"akey":"k"}],
+            "msgs":[{"mid":"m","mine":true,"text":"yo","ts":2}]}""".toByteArray()
+        val r = WearResponse.decode(old)!!
+        assertTrue(r.caps.isEmpty())
+        assertNull(r.net)
+        assertFalse(r.strict)
+        assertFalse(r.conversations.single().pinned)
+        val m = r.messages.single()
+        assertNull(m.delivery)
+        assertFalse(m.hasThumb)
+        assertEquals(0, m.durationSec)
+    }
+
+    @Test
+    fun `message delivery, preview and duration round trip`() {
+        val msgs = listOf(
+            WearMessage("a", true, text = "x", timestamp = 1, delivery = WearDelivery.READ),
+            WearMessage("b", false, text = "", media = WearMedia.PHOTO, timestamp = 2, hasThumb = true),
+            WearMessage("c", false, text = "", media = WearMedia.VOICE, timestamp = 3, durationSec = 14),
+            WearMessage("d", true, text = "y", timestamp = 4, delivery = WearDelivery.FAILED),
+        )
+        assertEquals(msgs, WearResponse.decode(WearResponse("r", WearStatus.OK, messages = msgs).encode())!!.messages)
+        // Unknown future delivery value: no tick rather than a crash.
+        val future = """{"v":1,"rid":"a","status":"ok","msgs":[{"mid":"m","mine":true,"text":"yo","ts":2,"st":"teleported"}]}"""
+        assertNull(WearResponse.decode(future.toByteArray())!!.messages.single().delivery)
+    }
+
+    @Test
+    fun `a thumbnail round trips and an oversized one is dropped`() {
+        val jpeg = ByteArray(1_000) { (it * 7).toByte() }
+        val back = WearResponse.decode(WearResponse("r", WearStatus.OK, thumb = jpeg).encode())!!
+        assertTrue(jpeg.contentEquals(back.thumb))
+        val huge = WearResponse("r", WearStatus.OK, thumb = ByteArray(WearProtocol.MAX_THUMB_BYTES + 1)).encode()
+        assertNull(WearResponse.decode(huge)!!.thumb)
+        assertTrue(huge.size <= WearProtocol.MAX_PAYLOAD_BYTES)
+    }
+
+    @Test
+    fun `voice frame round trips and refuses what it must`() {
+        val m4a = byteArrayOf(0, 0, 0, 24) + "ftypM4A ".toByteArray() + ByteArray(5_000) { it.toByte() }
+        val req = WearRequest("v", WearOp.VOICE, WearConvKind.GROUP, "g", durationMs = 3_000)
+        val (h, a) = WearVoiceFrame.decode(WearVoiceFrame.encode(req, m4a))!!
+        assertEquals(req, h)
+        assertTrue(m4a.contentEquals(a))
+        // Not an MP4 container.
+        assertNull(WearVoiceFrame.decode(WearVoiceFrame.encode(req, ByteArray(500))))
+        // Over the cap: refused while reading, before it is all in memory.
+        assertNull(WearVoiceFrame.decode(WearVoiceFrame.encode(req, m4a + ByteArray(WearProtocol.MAX_VOICE_BYTES))))
+        // A header that is not a VOICE request.
+        assertNull(WearVoiceFrame.decode(WearVoiceFrame.encode(WearRequest("x", WearOp.LIST), m4a)))
+        // Truncated / absurd header lengths.
+        assertNull(WearVoiceFrame.decode(byteArrayOf(0, 0)))
+        assertNull(WearVoiceFrame.decode(byteArrayOf(0x7f, 0, 0, 0) + m4a))
+    }
+
+    @Test
+    fun `tile picks who to show and whom Reply answers`() {
+        fun c(id: String, unread: Int, ts: Long, canReply: Boolean = true) =
+            WearConversation(WearConvKind.DIRECT, id, id, "", unread, ts, id, canReply = canReply)
+        val convs = listOf(c("a", 0, 9), c("b", 2, 8), c("sys", 5, 7, canReply = false), c("d", 0, 6))
+        assertEquals("b", com.oshi.messenger.wear.tile.TileLayout.replyTarget(convs)!!.id)
+        assertEquals("a", com.oshi.messenger.wear.tile.TileLayout.replyTarget(listOf(c("a", 0, 9)))!!.id)
+        assertNull(com.oshi.messenger.wear.tile.TileLayout.replyTarget(listOf(c("sys", 1, 1, canReply = false))))
+        // Unread first, then recent; 2 on a small round screen, 3 on a large one.
+        assertEquals(listOf("b", "sys"), com.oshi.messenger.wear.tile.TileLayout.avatars(convs, 192).map { it.id })
+        assertEquals(listOf("b", "sys", "a"), com.oshi.messenger.wear.tile.TileLayout.avatars(convs, 227).map { it.id })
     }
 }

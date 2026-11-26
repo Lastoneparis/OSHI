@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Ohita</string>
+    <string name="ob27_continue">Jatka</string>
+    <string name="ob27_page_of">Sivu %1$d / %2$d</string>
+    <string name="ob27_private_title">Vain te kaksi</string>
+    <string name="ob27_private_body">Viestit ja puhelut salataan päästä päähän puhelimessasi. Kukaan välissä ei voi lukea niitä – ei edes OSHI.</string>
+    <string name="ob27_offline_title">Toimii ilman nettiä</string>
+    <string name="ob27_offline_body">Ei verkkoa? Viestit hyppivät puhelimesta toiseen lähellä olevien ihmisten kautta, joilla on OSHI auki. LoRa-radio vie ne vielä pidemmälle.</string>
+    <string name="ob27_range_direct">suoraan</string>
+    <string name="ob27_range_relayed">välitettynä</string>
+    <string name="ob27_range_lora">LoRa-radio</string>
+    <string name="ob27_anon_title">Ei puhelinnumeroa</string>
+    <string name="ob27_anon_body">Ei tiliä, ei sähköpostia, ei numeroa rekisteröitymiseen. Identiteettisi on avain, joka luodaan tällä puhelimella.</string>
+    <string name="ob27_together_title">Kutsu omasi mukaan</string>
+    <string name="ob27_together_body">Keskustele kahden kesken tai ryhmissä. Lisää joku skannaamalla hänen QR-koodinsa tai lähettämällä kutsulinkki.</string>
+    <string name="ob27_rules_title">Ennen kuin aloitat</string>
+    <string name="ob27_rules_subtitle">Muutama talon sääntö ja mitä OSHI osaa ja mitä ei vielä.</string>
+    <string name="ob27_rules_do">Tee näin</string>
+    <string name="ob27_rules_dont">Älä koskaan</string>
+    <string name="ob27_good_to_know">Hyvä tietää</string>
+    <string name="ob27_show_details">Näytä tiedot</string>
+    <string name="ob27_hide_details">Piilota tiedot</string>
+    <string name="ob27_agree">Ymmärrän</string>
+    <string name="ob27_notif_title">Älä missaa viestejä</string>
+    <string name="ob27_notif_body">Salli ilmoitukset, niin näet uudet viestit ja puhelut. Voit poistaa ne käytöstä milloin tahansa asetuksista.</string>
+    <string name="ob27_notif_allow">Salli ilmoitukset</string>
+    <string name="ob27_not_now">Ei nyt</string>
+    <string name="ob27_identity_title">Valitse nimi</string>
+    <string name="ob27_identity_body">Yhteystietosi näkevät sen. Voit vaihtaa sen myöhemmin.</string>
+    <string name="ob27_already">Käytätkö jo OSHIa?</string>
+</resources>

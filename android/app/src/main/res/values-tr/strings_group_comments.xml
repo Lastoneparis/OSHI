@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Yorumlar</string>
+    <string name="gs_comments_footer">Üyeler her gönderinin altına yorum yapabilir. Yalnızca yöneticiler paylaşır.</string>
+    <string name="cm_leave_comment">Yorum yap</string>
+    <string name="cm_thread_title">Yorumlar</string>
+    <string name="cm_empty">Henüz yorum yok.</string>
+    <string name="cm_composer_hint">Yorum…</string>
+    <string name="cm_replying_to">%1$s adlı kişiye yanıt</string>
+    <string name="cm_disabled">Yorumlar kapalı.</string>
+    <string name="cm_post_unavailable">Bu gönderi artık mevcut değil.</string>
+    <string name="cm_too_fast">Çok hızlı yorum yapıyorsunuz. Biraz bekleyin.</string>
+    <string name="cm_notif_reply">%1$s yorumunuza yanıt verdi</string>
+    <string name="cm_delete_comment">Yorumu sil</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d yorum</item>
+        <item quantity="other">%d yorum</item>
+    </plurals>
+</resources>

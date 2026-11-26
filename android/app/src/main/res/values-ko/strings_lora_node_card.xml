@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">직접</string>
+    <string name="lora_node_card_from_you">내 위치에서</string>
+    <string name="lora_node_card_heard_day">%1$d일 전 수신</string>
+    <string name="lora_node_card_heard_hour">%1$d시간 전 수신</string>
+    <string name="lora_node_card_heard_min">%1$d분 전 수신</string>
+    <string name="lora_node_card_heard_now">방금 수신</string>
+    <string name="lora_node_card_hops">%1$d홉</string>
+    <string name="lora_node_card_in_range">범위 내</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_never_heard">수신 기록 없음</string>
+    <string name="lora_node_card_not_heard">아직 수신 안 됨</string>
+    <string name="lora_node_card_relayed">중계됨</string>
+</resources>

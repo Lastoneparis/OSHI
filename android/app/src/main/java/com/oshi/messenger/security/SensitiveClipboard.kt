@@ -86,6 +86,40 @@ object SensitiveClipboard {
         schedule(CLEAR_AFTER_MS)
     }
 
+    /**
+     * 🛡 __STRICT_MODE_2026_11_22__ Decrypted MESSAGE text (a message, a translation,
+     * a revealed hidden message): refused while strict security mode is on. Returns
+     * whether the copy happened, so the caller only says "Copied" when it did.
+     */
+    fun copyMessageText(context: Context, text: String): Boolean {
+        if (!StrictModeGate.copyAllowed) return false
+        copy(context, text)
+        return true
+    }
+
+    /**
+     * 🛡 __STRICT_MODE_2026_11_22__ Turning strict mode on removes, right away, any
+     * clip OSHI put on the clipboard that is still there (decided from the clip
+     * description, as [attemptClear]; never by reading someone else's clip). Called
+     * from the foreground, so the description is readable.
+     */
+    fun clearOursNow(context: Context) {
+        val app = context.applicationContext
+        appContext = app
+        val p = load(app) ?: return
+        val cm = app.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager ?: return
+        val desc = try { cm.primaryClipDescription } catch (_: Exception) { null }
+        val ours = desc != null && descriptionMatches(
+            p,
+            currentTimestamp = desc.timestamp,
+            currentLabel = desc.label?.toString(),
+            currentSensitive = try { desc.extras?.getBoolean(EXTRA_IS_SENSITIVE, false) == true } catch (_: Exception) { false },
+        )
+        if (ours) clear(cm)
+        handler.removeCallbacks(clearRunnable)
+        setPending(app, null)
+    }
+
     /** Retry point for a clear that came due while OSHI could not read the clipboard, or before a process death. */
     fun onAppFocused(context: Context) {
         val app = context.applicationContext

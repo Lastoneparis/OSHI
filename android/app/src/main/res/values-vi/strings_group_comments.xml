@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Bình luận</string>
+    <string name="gs_comments_footer">Thành viên có thể bình luận dưới mỗi bài đăng. Chỉ quản trị viên được đăng bài.</string>
+    <string name="cm_leave_comment">Viết bình luận</string>
+    <string name="cm_thread_title">Bình luận</string>
+    <string name="cm_empty">Chưa có bình luận nào.</string>
+    <string name="cm_composer_hint">Bình luận…</string>
+    <string name="cm_replying_to">Trả lời %1$s</string>
+    <string name="cm_disabled">Bình luận đã bị tắt.</string>
+    <string name="cm_post_unavailable">Bài đăng này không còn nữa.</string>
+    <string name="cm_too_fast">Bạn bình luận quá nhanh. Hãy chờ một chút.</string>
+    <string name="cm_notif_reply">%1$s đã trả lời bình luận của bạn</string>
+    <string name="cm_delete_comment">Xóa bình luận</string>
+    <plurals name="cm_comments_count">
+        <item quantity="other">%d bình luận</item>
+    </plurals>
+</resources>

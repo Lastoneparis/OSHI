@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · không được OSHI mã hóa đầu cuối</string>
+    <string name="meshcore_error_not_connected">Chưa kết nối radio MeshCore</string>
+    <string name="meshcore_channels_title">Kênh MeshCore</string>
+    <string name="meshcore_channel_public">Công khai · ai biết tên đều đọc được</string>
+    <string name="meshcore_channel_private">Riêng tư · khóa bí mật</string>
+    <string name="meshcore_join_hashtag">Tham gia kênh hashtag</string>
+    <string name="meshcore_join_private">Tham gia kênh riêng tư</string>
+    <string name="meshcore_contacts_title">Liên hệ MeshCore</string>
+    <string name="meshcore_refresh_contacts">Làm mới liên hệ</string>
+    <string name="meshcore_join_refused">Radio đã từ chối kênh này.</string>
+    <string name="meshcore_join_no_slot">Radio này không còn vị trí kênh trống.</string>
+    <string name="meshcore_join_bad_name">Nhập tên kênh hợp lệ (tối đa 31 byte, không có khoảng trắng với kênh hashtag).</string>
+    <string name="meshcore_join_bad_secret">Khóa bí mật phải dài 16 byte: 32 ký tự hex hoặc base64.</string>
+    <string name="meshcore_hashtag_hint">Khóa được tạo từ tên: ai biết tên đều có thể đọc kênh.</string>
+    <string name="meshcore_private_hint">Nhập tên kênh và khóa bí mật mà các thành viên chia sẻ.</string>
+    <string name="meshcore_channel_name">Tên kênh</string>
+    <string name="meshcore_channel_secret">Khóa bí mật (hex hoặc base64)</string>
+    <string name="meshcore_join">Tham gia</string>
+    <string name="meshcore_note_dm">Được MeshCore mã hóa giữa các bộ đàm, không phải mã hóa đầu cuối của OSHI.</string>
+    <string name="meshcore_note_public">Kênh công khai: ai biết tên kênh đều đọc được.</string>
+    <string name="meshcore_note_private">Kênh riêng tư: ai có khóa bí mật đều đọc được.</string>
+    <string name="meshcore_radio_offline">Chưa kết nối bộ đàm MeshCore. Tin nhắn chờ ở đây với trạng thái chưa gửi được.</string>
+    <string name="meshcore_connect">Kết nối</string>
+    <string name="meshcore_parts">%1$d tin nhắn</string>
+    <string name="meshcore_sending">Đang chờ bộ đàm</string>
+    <string name="meshcore_failed_dm">Bộ đàm của họ không phản hồi (ngoài vùng phủ sóng?). Nhấn để thử lại.</string>
+    <string name="meshcore_error_pairing">Ghép nối thất bại. Kiểm tra mã PIN rồi thử lại. Nếu bộ đàm đã được đặt lại, hãy xóa nó trong cài đặt Bluetooth của Android trước.</string>
+    <string name="meshcore_error_no_answer">Bộ đàm không phản hồi. Hãy kiểm tra bộ đàm đang chạy firmware MeshCore companion cho Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Mất kết nối. Sẽ kết nối lại khi bộ đàm trở lại vùng phủ sóng…</string>
+    <string name="meshcore_state_pin">Nhập mã PIN của bộ đàm trong hộp thoại Android</string>
+    <string name="meshcore_state_reading">Đang đọc danh bạ và kênh…</string>
+    <string name="meshcore_state_connecting">Đang kết nối…</string>
+    <string name="meshcore_seen_as">Đã kết nối · người dùng MeshCore thấy bạn là %1$s</string>
+    <string name="meshcore_connected">Đã kết nối</string>
+    <string name="meshcore_footer_users">Trò chuyện với người dùng MeshCore (tin nhắn trực tiếp và kênh) và chuyển tin nhắn OSHI qua các trạm lặp MeshCore. Cần firmware MeshCore companion cho Bluetooth. OSHI thêm một kênh, #oshi-bridge, vào một ô trống và không bao giờ thay đổi các kênh khác của bạn.</string>
+    <string name="meshcore_scan_below">Bộ đàm MeshCore hiện ở bên dưới trong Bộ đàm ở gần, có nhãn MeshCore.</string>
+    <string name="meshcore_contacts_footer">Nhấn vào một người để nhắn tin. Tin nhắn được MeshCore mã hóa, không phải mã hóa đầu cuối của OSHI.</string>
+    <string name="meshcore_no_contacts">Chưa nghe thấy ai. Người dùng MeshCore xuất hiện ở đây khi bộ đàm của họ tự thông báo. Hãy thông báo bộ đàm của bạn để họ tìm thấy bạn.</string>
+    <string name="meshcore_heard">Nghe thấy %1$s</string>
+    <string name="meshcore_announce">Thông báo tôi</string>
+    <string name="meshcore_announce_done">Đã thông báo. Người dùng MeshCore trong vùng giờ có thể thêm và nhắn tin cho bạn.</string>
+    <string name="meshcore_announce_failed">Bộ đàm không gửi được thông báo.</string>
+    <string name="meshcore_channels_footer">Nhấn vào một kênh để mở. Kênh công khai và kênh hashtag ai biết tên đều đọc được.</string>
+    <string name="meshcore_pin_title">Ghép nối với %1$s</string>
+    <string name="meshcore_pin_body">Android sẽ hỏi mã PIN của bộ đàm. Nếu bộ đàm có màn hình, mã PIN hiển thị trên đó.</string>
+    <string name="meshcore_pin_default">Không có màn hình? Mã PIN là 123456, trừ khi đã được đổi trong ứng dụng MeshCore.</string>
+    <string name="meshcore_pin_continue">Tiếp tục</string>
+    <string name="meshcore_no_free_channel_chat">Cả 8 ô kênh đều đã dùng. Bạn vẫn có thể trò chuyện với người dùng MeshCore; hãy giải phóng một ô trong ứng dụng MeshCore để tin nhắn OSHI dùng được #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">Người dùng MeshCore</string>
+    <string name="meshcore_too_long">Quá dài: tối đa %1$d tin nhắn</string>
+</resources>

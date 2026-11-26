@@ -116,27 +116,48 @@ class V2MessagesClient @Inject constructor(
         // each attempt. The relay deduplicates an accepted send whose reply was lost.
         val bodyBytes = env.toJson().toString().toByteArray(Charsets.UTF_8)
         val path = "/v2/messages"
-        for (attempt in 0..2) {
-            try {
-                val headers = signer.sign("POST", path, bodyBytes)
-                val req = Request.Builder()
-                    .url("${BuildConfig.VPS_URL}$path")
-                    .post(bodyBytes.toRequestBody("application/json; charset=utf-8".toMediaType()))
-                    .apply { headers.forEach { (k, v) -> header(k, v) } }
-                    .build()
-                client.newCall(req).execute().use { resp ->
-                    if (resp.code in 200..299) {
-                        val accepted = JSONObject(resp.body?.string().orEmpty()).optJSONArray("accepted") ?: JSONArray()
-                        return@withContext (0 until accepted.length()).map { accepted.getString(it) }
-                    }
-                    if (resp.code != 429 && resp.code !in 500..599) return@withContext emptyList()
-                }
-            } catch (e: CancellationException) { throw e }
-            catch (e: Exception) { Log.w("V2MessagesClient", "send attempt failed: ${e.message}") }
-            if (attempt < 2) delay(1000L shl attempt)
-        }
-        emptyList()
+        // __GROUP_FANOUT_2026_11_24__ a 429 waits Retry-After (RateLimitBackoff); 5xx/network as before.
+        data class Try(val code: Int, val body: String?, val retryAfter: String?)
+        val last = RateLimitBackoff.retrying(
+            call = {
+                try {
+                    val headers = signer.sign("POST", path, bodyBytes)
+                    val req = Request.Builder()
+                        .url("${BuildConfig.VPS_URL}$path")
+                        .post(bodyBytes.toRequestBody("application/json; charset=utf-8".toMediaType()))
+                        .apply { headers.forEach { (k, v) -> header(k, v) } }
+                        .build()
+                    client.newCall(req).execute().use { resp -> Try(resp.code, resp.body?.string(), resp.header("Retry-After")) }
+                } catch (e: CancellationException) { throw e }
+                catch (e: Exception) { Log.w("V2MessagesClient", "send attempt failed: ${e.message}"); Try(-1, null, null) }
+            },
+            status = { it.code },
+            retryAfter = { it.retryAfter },
+        )
+        lastSendRateLimited = last.code == 429
+        if (last.code !in 200..299) return@withContext emptyList()
+        val accepted = runCatching { JSONObject(last.body.orEmpty()).optJSONArray("accepted") }.getOrNull() ?: JSONArray()
+        (0 until accepted.length()).map { accepted.getString(it) }
     }
+
+    /**
+     * __GROUP_FANOUT_2026_11_24__ The last [send] ended on a 429 after the whole wait budget.
+     * Read right after [send] under the router's outbound lock (sends are serialized there).
+     */
+    @Volatile var lastSendRateLimited: Boolean = false
+        private set
+
+    /**
+     * __PULL_BUDGET_2026_11_19__ On a network that already showed a stalled cover exchange
+     * (CoverConnectionPolicy window: Russia-TSPU-style freeze after ~16 KB per connection),
+     * ask the relay for a page that fits the 4 KiB cover bucket (~5.5 KB on the wire). A page
+     * of several messages lands in the 16 KiB bucket (~22 KB) and is withheld forever by such
+     * a network. Relays without the feature ignore the parameter.
+     */
+    // Also without cover: the blocked-host relay fallback (RelayFallback) opens the same
+    // window on a capped network, and its OHTTP replies need the same small pages.
+    private fun pullBudgetQuery(): String =
+        if (CoverConnectionPolicy.freshConnections()) "&budget=${CoverConnectionPolicy.SMALL_PULL_BUDGET}" else ""
 
     /** Pull messages after `afterSeq` for our own userKey. Non-destructive. */
     suspend fun pull(myUserKey: String, afterSeq: Long): V2Pull? = withContext(Dispatchers.IO) {
@@ -144,7 +165,7 @@ class V2MessagesClient @Inject constructor(
             val path = "/v2/messages/${signer.encodeIdentity(myUserKey)}"  // query excluded from signature
             val headers = signer.sign("GET", path, ByteArray(0))
             val req = Request.Builder()
-                .url("${BuildConfig.VPS_URL}$path?after=$afterSeq")
+                .url("${BuildConfig.VPS_URL}$path?after=$afterSeq" + pullBudgetQuery())
                 .get()
                 .apply { headers.forEach { (k, v) -> header(k, v) } }
                 .build()

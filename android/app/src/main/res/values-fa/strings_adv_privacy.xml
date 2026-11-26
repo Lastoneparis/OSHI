@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">حریم خصوصی پیشرفته گفتگو</string>
+    <string name="adv_privacy_subtitle">مانع می‌شود هر کسی در این گفتگو رسانه ذخیره کند، گفتگو را صادر کند یا از هوش مصنوعی روی پیام‌ها استفاده کند</string>
+    <string name="adv_privacy_learn_more">بیشتر بدانید</string>
+    <string name="adv_privacy_notice_on">%1$s حریم خصوصی پیشرفته گفتگو را روشن کرد. هیچ‌کس نمی‌تواند رسانه را خودکار ذخیره کند، گفتگو را صادر کند یا از هوش مصنوعی روی پیام‌های این گفتگو استفاده کند.</string>
+    <string name="adv_privacy_notice_off">%1$s حریم خصوصی پیشرفته گفتگو را خاموش کرد. ذخیره رسانه، صدور گفتگو و قابلیت‌های هوش مصنوعی دوباره در دسترس هستند.</string>
+    <string name="adv_privacy_notice_on_you">شما حریم خصوصی پیشرفته گفتگو را روشن کردید. هیچ‌کس نمی‌تواند رسانه را خودکار ذخیره کند، گفتگو را صادر کند یا از هوش مصنوعی روی پیام‌های این گفتگو استفاده کند.</string>
+    <string name="adv_privacy_notice_off_you">شما حریم خصوصی پیشرفته گفتگو را خاموش کردید. ذخیره رسانه، صدور گفتگو و قابلیت‌های هوش مصنوعی دوباره در دسترس هستند.</string>
+    <string name="adv_privacy_summary_on">حریم خصوصی پیشرفته گفتگو روشن شد</string>
+    <string name="adv_privacy_summary_off">حریم خصوصی پیشرفته گفتگو خاموش شد</string>
+    <string name="adv_privacy_sheet_intro">وقتی کسی آن را روشن کند، برای همه در این گفتگو اعمال می‌شود:</string>
+    <string name="adv_privacy_sheet_point_save">رسانه‌های این گفتگو را نمی‌توان در گالری یا پوشه دانلودها ذخیره کرد.</string>
+    <string name="adv_privacy_sheet_point_export">این گفتگو از خروجی‌های گفتگو کنار گذاشته می‌شود.</string>
+    <string name="adv_privacy_sheet_point_ai">هوش مصنوعی روی دستگاه OSHI نمی‌تواند این گفتگو را بخواند: بدون پاسخ پیشنهادی، بدون ترجمه، بدون زمینه برای دستیار نوشتن.</string>
+    <string name="adv_privacy_sheet_point_screen">اسکرین‌شات و ضبط صفحه در این گفتگو مسدود است.</string>
+    <string name="adv_privacy_sheet_limits">هر کسی در گفتگو می‌تواند آن را روشن یا خاموش کند. مانع عکس گرفتن از صفحه نمی‌شود و روی کسانی که نسخه قدیمی‌تر OSHI را دارند اثری ندارد.</string>
+    <string name="adv_privacy_blocked_toast">حریم خصوصی پیشرفته در این گفتگو روشن است</string>
+    <string name="adv_privacy_older_members">اعضایی با نسخه قدیمی‌تر OSHI که تا به‌روزرسانی آن را اعمال نمی‌کنند: %1$d</string>
+</resources>

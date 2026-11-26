@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Turvallisuusilmoitus vahvistettu</string>
+    <string name="alive_a11y_neutral">Turvallisuusilmoitusta ei ole määritetty</string>
+    <string name="alive_a11y_overdue">Turvallisuusilmoitus myöhässä</string>
+    <string name="alive_action_im_alive">Olen elossa</string>
+    <string name="alive_action_message_them">Viesti</string>
+    <string name="alive_bar_open_settings">Ilmoituksen asetukset</string>
+    <string name="alive_channel_description">Muistutukset omista turvallisuusilmoituksistasi ja ilmoitukset, kun seuraamasi henkilö ei ole vastannut omaansa.</string>
+    <string name="alive_channel_name">Turvallisuusilmoitukset</string>
+    <string name="alive_confirmed_toast">Ilmoitus lähetetty</string>
+    <string name="alive_duration_days_hours">%1$d pv %2$d h</string>
+    <string name="alive_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="alive_duration_minutes">%1$d min</string>
+    <string name="alive_duration_now">alle minuutti</string>
+    <string name="alive_interval_24h">24 tunnin välein</string>
+    <string name="alive_interval_48h">48 tunnin välein</string>
+    <string name="alive_interval_72h">72 tunnin välein</string>
+    <string name="alive_interval_custom">Mukautettu</string>
+    <string name="alive_interval_custom_hours">%1$d tunnin välein</string>
+    <string name="alive_interval_every">%1$s välein</string>
+    <string name="alive_lane_you">Sinä</string>
+    <string name="alive_note_delivery">Muistutukset ja ilmoitukset riippuvat verkostasi ja ilmoituslupasta. Väliin jäänyt ilmoitus tarkoittaa vain, ettei vahvistusta tullut, ei mitään muuta.</string>
+    <string name="alive_note_no_location">Sijaintia ei jaeta. Ilmoitus sisältää yhden aikaleiman eikä mitään muuta.</string>
+    <string name="alive_notification_mine_due_body">Vahvista olevasi elossa, jottei %1$s jää odottamaan.</string>
+    <string name="alive_notification_mine_due_title">Turvallisuusilmoituksesi on erääntynyt</string>
+    <string name="alive_notification_overdue_body">Ilmoitus erääntyi %1$s sitten. Tämä tarkoittaa vain, ettei vahvistusta ole tullut.</string>
+    <string name="alive_notification_overdue_title">Ei ilmoitusta henkilöltä %1$s</string>
+    <string name="alive_sheet_explainer">Vahvista aikataulun mukaan, että olet elossa. %1$s näkee lähtölaskentasi ja saa tiedon, jos se umpeutuu ilman vastausta.</string>
+    <string name="alive_sheet_interval">Kuinka usein</string>
+    <string name="alive_sheet_mine_switch">Ilmoita itsestäsi henkilölle %1$s</string>
+    <string name="alive_sheet_stop">Lopeta ilmoitukset</string>
+    <string name="alive_sheet_their_next">Seuraava odotetaan %1$s</string>
+    <string name="alive_sheet_their_none">%1$s ei ole ottanut turvallisuusilmoitusta käyttöön täällä.</string>
+    <string name="alive_sheet_their_section">Turvallisuusilmoitus: %1$s</string>
+    <string name="alive_state_confirmed_ago">vahvisti %1$s sitten</string>
+    <string name="alive_state_due_in">erääntyy %1$s kuluttua</string>
+    <string name="alive_state_not_set">ei käytössä</string>
+    <string name="alive_state_overdue_by">ei vastausta %1$s</string>
+    <string name="alive_summary_confirmed">Vahvisti olevansa elossa</string>
+    <string name="alive_summary_started">Turvallisuusilmoitus aloitettu</string>
+    <string name="alive_summary_stopped">Turvallisuusilmoitus lopetettu</string>
+    <string name="alive_title">Turvallisuusilmoitus</string>
+    <string name="alive_unknown_peer">tämä kontakti</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">תגובות</string>
+    <string name="gs_comments_footer">חברים יכולים להגיב מתחת לכל פוסט. רק מנהלים מפרסמים.</string>
+    <string name="cm_leave_comment">הוספת תגובה</string>
+    <string name="cm_thread_title">תגובות</string>
+    <string name="cm_empty">אין עדיין תגובות.</string>
+    <string name="cm_composer_hint">תגובה…</string>
+    <string name="cm_replying_to">תשובה ל־%1$s</string>
+    <string name="cm_disabled">התגובות כבויות.</string>
+    <string name="cm_post_unavailable">הפוסט הזה כבר לא זמין.</string>
+    <string name="cm_too_fast">את/ה מגיב/ה מהר מדי. המתן/י רגע.</string>
+    <string name="cm_notif_reply">%1$s השיב/ה לתגובה שלך</string>
+    <string name="cm_delete_comment">מחיקת תגובה</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">תגובה אחת</item>
+        <item quantity="two">%d תגובות</item>
+        <item quantity="other">%d תגובות</item>
+    </plurals>
+</resources>

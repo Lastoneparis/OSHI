@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Comments</string>
+    <string name="gs_comments_footer">Members can comment under each post. Posts stay admin-only.</string>
+    <string name="cm_leave_comment">Leave a comment</string>
+    <string name="cm_thread_title">Comments</string>
+    <string name="cm_empty">No comments yet.</string>
+    <string name="cm_composer_hint">Comment…</string>
+    <string name="cm_replying_to">Replying to %1$s</string>
+    <string name="cm_disabled">Comments are turned off.</string>
+    <string name="cm_post_unavailable">This post is no longer available.</string>
+    <string name="cm_too_fast">You are commenting too fast. Wait a moment.</string>
+    <string name="cm_notif_reply">%1$s replied to your comment</string>
+    <string name="cm_delete_comment">Delete comment</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
+</resources>

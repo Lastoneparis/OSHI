@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">모든 채팅의 기본 배경화면입니다. 채팅마다 따로 설정할 수도 있습니다.</string>
+    <string name="wallpaper_tone_settings_title">배경화면 톤</string>
+    <string name="wallpaper_personal_note">이 배경화면은 이 기기에서 나에게만 보입니다.</string>
+</resources>

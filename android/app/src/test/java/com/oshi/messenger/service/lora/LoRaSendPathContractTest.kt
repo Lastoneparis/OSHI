@@ -87,6 +87,8 @@ class LoRaSendPathContractTest {
     @Test
     fun `send gate passes the remembered oshi firmware to the budget`() {
         assertTrue(repo.contains("MeshtasticManager.lastKnownOshiFirmware(context)"))
-        assertTrue(repo.contains("MessageSendPolicy.check(content, loRaBudget, oshiFirmware)"))
+        // __LONG_TEXT_SPLIT_2026_11_23__ the budget now feeds the splitter instead of a refusal.
+        assertTrue(repo.contains("val limit = MessageSendPolicy.maxUTF8Bytes(loRaBudget, oshiFirmware)"))
+        assertTrue(repo.contains("MessageTextSplitter.splitForSend(content, limit)"))
     }
 }

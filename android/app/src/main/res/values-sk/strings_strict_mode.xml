@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Prísny režim zabezpečenia</string>
+    <string name="strict_status_on">Zapnuté: bez kopírovania, bez snímok obrazovky, skryté pred aplikáciami čítajúcimi obrazovku</string>
+    <string name="strict_status_off">Vypnuté. Zabezpečí OSHI, keď môže byť telefón sledovaný</string>
+    <string name="strict_hero_on">Prísny režim zabezpečenia je zapnutý</string>
+    <string name="strict_intro">Pre prípad, že môže byť telefón sledovaný. Jedným prepínačom OSHI uzamknete: nič sa nedá skopírovať, obrazovku nemožno zachytiť a aplikácie čítajúce obrazovku, vrátane AI agentov, nič nevidia.</string>
+    <string name="strict_section_switch">Režim</string>
+    <string name="strict_toggle_title">Prísny režim zabezpečenia</string>
+    <string name="strict_toggle_on">Zapnuté na tomto zariadení</string>
+    <string name="strict_toggle_off">Vypnuté</string>
+    <string name="strict_block_paste_title">Blokovať aj vkladanie</string>
+    <string name="strict_block_paste_subtitle">Do OSHI sa tiež nedá nič vložiť</string>
+    <string name="strict_hide_presence_title">Skryť potvrdenia o prečítaní a písanie</string>
+    <string name="strict_hide_presence_subtitle">Ostatní nevidia, kedy čítate alebo píšete</string>
+    <string name="strict_forced_subtitle">Nastavené prísnym režimom zabezpečenia</string>
+    <string name="strict_blocked_toast">Zablokované prísnym režimom zabezpečenia</string>
+    <string name="strict_unlock_title">Vypnúť prísny režim zabezpečenia</string>
+    <string name="strict_unlock_subtitle">Potvrďte, že ste to vy</string>
+    <string name="strict_threats_title">Aplikácie, ktoré môžu čítať alebo ovládať obrazovku</string>
+    <string name="strict_threats_none">V tomto telefóne sa nič nenašlo.</string>
+    <string name="strict_threat_a11y">Služba dostupnosti, ktorá nie je pomôckou</string>
+    <string name="strict_threat_remote">Aplikácia na vzdialené ovládanie alebo zrkadlenie obrazovky</string>
+    <string name="strict_threats_open">Skontrolovať</string>
+    <string name="strict_threats_explainer">OSHI nemôže vypnúť inú aplikáciu. Ak niektorú nepoznáte, vypnite ju v nastaveniach Androidu (Nastavenia › Dostupnosť) alebo ju odinštalujte.</string>
+    <string name="strict_banner_title">Aplikácie môžu čítať alebo ovládať túto obrazovku</string>
+    <string name="strict_banner_body">%1$s. Prísny režim zabezpečenia pred nimi OSHI skrýva, kde to Android umožňuje.</string>
+    <string name="strict_banner_dismiss">Zavrieť</string>
+    <string name="strict_does_title">Čo robí</string>
+    <string name="strict_does_copy">Žiadne kopírovanie, vystrihovanie, preposielanie, zdieľanie ani ukladanie správ. Text sa nedá vybrať a všetko, čo OSHI vložil do schránky, sa vymaže.</string>
+    <string name="strict_does_paste">Vkladanie do OSHI je blokované, keď je zapnuté „Blokovať aj vkladanie“, vrátane príkazu na vloženie z klávesnice.</string>
+    <string name="strict_does_screen">Snímky obrazovky, nahrávanie a zdieľanie obrazovky ukážu čiernu obrazovku. Náhľad v nedávnych aplikáciách je skrytý.</string>
+    <string name="strict_does_agents">Aplikácie čítajúce obrazovku cez dostupnosť, vrátane AI agentov, nevidia obsah OSHI (Android 14 a novší). Klepnutia, ktoré vkladajú, sa ignorujú.</string>
+    <string name="strict_does_overlays">Klepnutia sa ignorujú, keď iná aplikácia kreslí cez OSHI.</string>
+    <string name="strict_does_notifications">Oznámenia hovoria len „Nová správa“: bez mena, fotky a textu.</string>
+    <string name="strict_does_lock">Zámok aplikácie pri každom návrate do OSHI (ak má telefón zámku obrazovky).</string>
+    <string name="strict_does_keyboard">Anonymná klávesnica: klávesnica je požiadaná, aby sa neučila z toho, čo píšete.</string>
+    <string name="strict_does_network">Žiadne náhľady odkazov a žiadne hľadanie GIPHY: nič sa nesťahuje z cudzích webov.</string>
+    <string name="strict_does_presence">Potvrdenia o prečítaní a indikátory písania vypnuté (ak ste zvolili ich skrytie).</string>
+    <string name="strict_does_relay">Súkromné relé zapnuté, ak je k dispozícii.</string>
+    <string name="strict_does_restore">Predchádzajúce nastavenia sa vrátia, keď režim vypnete.</string>
+    <string name="strict_cannot_title">Čo nedokáže</string>
+    <string name="strict_cannot_malware">Žiadna aplikácia vás plne nechráni pred malvérom ani pred napadnutým (rootnutým) telefónom.</string>
+    <string name="strict_cannot_keyboard">Vaša klávesnica stále vidí, čo píšete. Návrh zo schránky, ktorý za vás napíše, sa nedá odlíšiť od písania.</string>
+    <string name="strict_cannot_readers">Čítačky obrazovky pre nevidiacich a slabozrakých fungujú ďalej, ale iné aplikácie dostupnosti nemôžu OSHI čítať, kým je režim zapnutý.</string>
+    <string name="strict_cannot_old">V Androide 13 a staršom nemôže OSHI skryť obsah pred aplikáciami dostupnosti. Môže ich len nahlásiť.</string>
+    <string name="strict_cannot_camera">Obrazovku môže niekto stále odfotiť iným zariadením.</string>
+    <string name="strict_cannot_recipient">Chráni iba tento telefón, nie telefóny ľudí, ktorým píšete.</string>
+    <string name="strict_auto_lock_immediate">Okamžite (Prísny režim zabezpečenia)</string>
+</resources>

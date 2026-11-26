@@ -48,4 +48,27 @@
     <string name="qr_no">Nem</string>
     <string name="qr_busy">Most nem tudok beszélni</string>
     <string name="end_to_end">Végponttól végpontig titkosítja a telefonod</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Kitűzve</string>
+    <string name="net_internet">Internet</string>
+    <string name="net_nearby">%1$d a közelben</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">A telefon offline · az üzenetek a telefonodon várnak</string>
+    <string name="net_offline_short">Telefon offline</string>
+    <string name="voice_message">Hangüzenet</string>
+    <string name="voice_send">Hangüzenet küldése</string>
+    <string name="voice_cancel">Mégse</string>
+    <string name="voice_permission">Engedélyezd a mikrofont a hangüzenetek felvételéhez. Az órán semmi sem marad.</string>
+    <string name="voice_mic_busy">A mikrofon foglalt. Próbáld újra.</string>
+    <string name="voice_too_short">Túl rövid. Beszélj egy kicsit tovább.</string>
+    <string name="voice_not_sent">Nincs elküldve. Tartsd a közelben a telefont, és próbáld újra.</string>
+    <string name="send_emoji">Emoji küldése</string>
+    <string name="delivery_sending">Küldés</string>
+    <string name="delivery_sent">Elküldve</string>
+    <string name="delivery_delivered">Kézbesítve</string>
+    <string name="delivery_read">Olvasva</string>
+    <string name="delivery_failed">Nincs kézbesítve</string>
+    <string name="complication_none">Nincs olvasatlan üzenet</string>
+    <string name="tile_reply_to">Válasz neki: %1$s</string>
+    <string name="tile_chat_unread">%1$s, %2$d olvasatlan</string>
 </resources>

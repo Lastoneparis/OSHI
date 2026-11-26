@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Pokročilé súkromie chatu</string>
+    <string name="adv_privacy_subtitle">Zabráni všetkým v tomto chate ukladať médiá, exportovať chat alebo používať AI na jeho správy</string>
+    <string name="adv_privacy_learn_more">Ďalšie informácie</string>
+    <string name="adv_privacy_notice_on">%1$s zapol/zapla pokročilé súkromie chatu. Nikto nemôže automaticky ukladať médiá, exportovať chat ani používať AI na správy v tomto chate.</string>
+    <string name="adv_privacy_notice_off">%1$s vypol/vypla pokročilé súkromie chatu. Ukladanie médií, export chatu a funkcie AI sú opäť k dispozícii.</string>
+    <string name="adv_privacy_notice_on_you">Zapli ste pokročilé súkromie chatu. Nikto nemôže automaticky ukladať médiá, exportovať chat ani používať AI na správy v tomto chate.</string>
+    <string name="adv_privacy_notice_off_you">Vypli ste pokročilé súkromie chatu. Ukladanie médií, export chatu a funkcie AI sú opäť k dispozícii.</string>
+    <string name="adv_privacy_summary_on">Pokročilé súkromie chatu zapnuté</string>
+    <string name="adv_privacy_summary_off">Pokročilé súkromie chatu vypnuté</string>
+    <string name="adv_privacy_sheet_intro">Keď ho ktokoľvek zapne, platí pre všetkých v tomto chate:</string>
+    <string name="adv_privacy_sheet_point_save">Médiá z tohto chatu nemožno uložiť do galérie ani do Stiahnutých súborov.</string>
+    <string name="adv_privacy_sheet_point_export">Tento chat sa nezahŕňa do exportov chatov.</string>
+    <string name="adv_privacy_sheet_point_ai">AI v zariadení OSHI nemôže tento chat čítať: žiadne navrhované odpovede, žiadny preklad, žiadny kontext pre asistenta písania.</string>
+    <string name="adv_privacy_sheet_point_screen">Snímky obrazovky a nahrávanie obrazovky tohto chatu sú blokované.</string>
+    <string name="adv_privacy_sheet_limits">Ktokoľvek v chate ho môže zapnúť alebo vypnúť. Nezabráni nikomu odfotiť obrazovku a netýka sa ľudí so staršou verziou OSHI.</string>
+    <string name="adv_privacy_blocked_toast">V tomto chate je zapnuté pokročilé súkromie</string>
+    <string name="adv_privacy_older_members">Členovia so staršou verziou OSHI, ktorí ho uplatnia až po aktualizácii: %1$d</string>
+</resources>

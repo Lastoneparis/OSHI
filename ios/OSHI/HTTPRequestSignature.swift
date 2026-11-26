@@ -72,8 +72,12 @@ enum HTTPRequestSignature {
     ///
     /// Seconds here would be inside the server's 30s window for the first 30 seconds of
     /// 1970 and rejected forever after, so the unit is load-bearing.
+    ///
+    /// __CALL_CLOCK_SKEW_2026_11_21__ Server time when this device's clock is ≥ 5 s off
+    /// the server's (``ServerClock``), the local clock otherwise — a healthy clock signs
+    /// exactly as before; a wrong one stops being refused as `timestamp-expired`.
     static func currentTimestampMillis() -> String {
-        String(Int(Date().timeIntervalSince1970 * 1000))
+        String(ServerClock.signingNowMs())
     }
 }
 

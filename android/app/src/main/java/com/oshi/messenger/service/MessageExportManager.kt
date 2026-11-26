@@ -138,6 +138,14 @@ class MessageExportManager @Inject constructor(
             return AndroidExportV2.media(type, fileName, bytes, null)
         }
 
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ A conversation with advanced chat privacy
+        // on is left out of the export entirely — both its messages and its row.
+        AdvancedChatPrivacyStore.attach(context)
+        var privacySkipped = 0
+        fun exportable(conversationId: String?): Boolean =
+            conversationId == null || com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy
+                .exportAllowed(AdvancedChatPrivacyStore.isOn(conversationId))
+
         // 1:1 — every non-deleted row, whichever side it is keyed on.
         val keys = (messageDao.distinctSenderKeys() + messageDao.distinctRecipientKeys()).toSet()
         val seen = HashSet<String>()
@@ -145,6 +153,8 @@ class MessageExportManager @Inject constructor(
         for (k in keys) {
             for (m in messageDao.getMessagesForContact(k).first()) {
                 if (!seen.add(m.id) || AndroidExportV2.isControl(m.content)) continue
+                // Checked BEFORE the media is loaded, so a skipped chat spends no budget.
+                if (!exportable(if (m.isFromMe) m.recipientPublicKey else m.senderPublicKey)) { privacySkipped++; continue }
                 val media = mediaFor(m.id, m.mediaData, m.mediaType, m.isViewOnce, null, directStore)
                 val (conv, msg) = AndroidExportV2.direct(m, media)
                 if (conv.peerPublicKey == selfKey) continue
@@ -157,6 +167,7 @@ class MessageExportManager @Inject constructor(
 
         // Groups.
         for (g in groupDao.getAllGroups().first()) {
+            if (!exportable(g.id)) { privacySkipped++; continue }
             for (m in groupDao.getGroupMessages(g.id).first()) {
                 if (m.isDeleted || !seen.add(m.id)) continue
                 val media = mediaFor(m.id, m.mediaData, m.mediaType, false, m.mediaFileName, groupStore)
@@ -192,7 +203,7 @@ class MessageExportManager @Inject constructor(
         val file = File(dir, "OSHI_Messages_$stamp.${MessageExportCrypto.FILE_EXTENSION}")
         file.writeBytes(sealed)
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-        Log.d(TAG, "Exported $count messages (${sealed.size} B, media skipped: $mediaSkipped)")
+        Log.d(TAG, "Exported $count messages (${sealed.size} B, media skipped: $mediaSkipped, privacy-protected skipped: $privacySkipped)")
         ExportOutcome(uri, file, count, mediaSkipped)
     }
 

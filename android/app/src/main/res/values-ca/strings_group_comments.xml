@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Comentaris</string>
+    <string name="gs_comments_footer">Els membres poden comentar cada publicació. Només publiquen els admins.</string>
+    <string name="cm_leave_comment">Deixa un comentari</string>
+    <string name="cm_thread_title">Comentaris</string>
+    <string name="cm_empty">Encara no hi ha comentaris.</string>
+    <string name="cm_composer_hint">Comenta…</string>
+    <string name="cm_replying_to">Responent a %1$s</string>
+    <string name="cm_disabled">Els comentaris estan desactivats.</string>
+    <string name="cm_post_unavailable">Aquesta publicació ja no està disponible.</string>
+    <string name="cm_too_fast">Comentes massa de pressa. Espera un moment.</string>
+    <string name="cm_notif_reply">%1$s ha respost al teu comentari</string>
+    <string name="cm_delete_comment">Elimina el comentari</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d comentari</item>
+        <item quantity="many">%d comentaris</item>
+        <item quantity="other">%d comentaris</item>
+    </plurals>
+</resources>

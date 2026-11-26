@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Omet</string>
+    <string name="ob27_continue">Continua</string>
+    <string name="ob27_page_of">Pàgina %1$d de %2$d</string>
+    <string name="ob27_private_title">Només tu i ells</string>
+    <string name="ob27_private_body">Els missatges i les trucades es xifren d’extrem a extrem al teu telèfon. Ningú pel mig no els pot llegir, ni tan sols OSHI.</string>
+    <string name="ob27_offline_title">Funciona sense internet</string>
+    <string name="ob27_offline_body">Sense xarxa? Els missatges salten de telèfon en telèfon a través de persones properes que tenen OSHI obert. Una ràdio LoRa els porta més lluny.</string>
+    <string name="ob27_range_direct">directe</string>
+    <string name="ob27_range_relayed">retransmès</string>
+    <string name="ob27_range_lora">ràdio LoRa</string>
+    <string name="ob27_anon_title">Sense número de telèfon</string>
+    <string name="ob27_anon_body">Sense compte, sense correu, sense número per registrar-te. La teva identitat és una clau creada en aquest telèfon.</string>
+    <string name="ob27_together_title">Porta la teva gent</string>
+    <string name="ob27_together_body">Xateja d’un a un o en grups. Afegeix algú escanejant el seu codi QR o enviant-li un enllaç d’invitació.</string>
+    <string name="ob27_rules_title">Abans de començar</string>
+    <string name="ob27_rules_subtitle">Unes quantes normes de la casa, i què pot fer OSHI i què encara no.</string>
+    <string name="ob27_rules_do">Què fer</string>
+    <string name="ob27_rules_dont">Mai</string>
+    <string name="ob27_good_to_know">Convé saber</string>
+    <string name="ob27_show_details">Mostra els detalls</string>
+    <string name="ob27_hide_details">Amaga els detalls</string>
+    <string name="ob27_agree">Ho entenc</string>
+    <string name="ob27_notif_title">No et perdis cap missatge</string>
+    <string name="ob27_notif_body">Permet les notificacions per veure missatges i trucades nous. Les pots desactivar quan vulguis a Configuració.</string>
+    <string name="ob27_notif_allow">Permet les notificacions</string>
+    <string name="ob27_not_now">Ara no</string>
+    <string name="ob27_identity_title">Tria un nom</string>
+    <string name="ob27_identity_body">És el que veuran els teus contactes. El pots canviar més tard.</string>
+    <string name="ob27_already">Ja fas servir OSHI?</string>
+</resources>

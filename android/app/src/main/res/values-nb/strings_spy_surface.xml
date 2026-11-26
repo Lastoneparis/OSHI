@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">Apper som kan lese OSHI</string>
+    <string name="spy_surface_dialog_body">Disse appene på telefonen kan lese det som vises på skjermen eller i varslene, også meldingene dine etter at OSHI har dekryptert dem:\n\n%1$s\n\nHvis du ikke selv har installert eller tillatt en av dem, kan det være spionprogramvare. Slå av tillatelsen i Android-innstillinger, eller avinstaller appen. OSHI har ikke blokkert noe.</string>
+    <string name="spy_surface_power_accessibility">skjerm og skriving (tilgjengelighet)</string>
+    <string name="spy_surface_power_notifications">varsler</string>
+    <string name="spy_surface_power_admin">enhetsadministrator</string>
+</resources>

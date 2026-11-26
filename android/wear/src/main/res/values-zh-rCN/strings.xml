@@ -48,4 +48,27 @@
     <string name="qr_no">否</string>
     <string name="qr_busy">现在不方便说话</string>
     <string name="end_to_end">由你的手机进行端到端加密</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">已置顶</string>
+    <string name="net_internet">互联网</string>
+    <string name="net_nearby">附近 %1$d</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">手机离线 · 消息在手机上等待</string>
+    <string name="net_offline_short">手机离线</string>
+    <string name="voice_message">语音消息</string>
+    <string name="voice_send">发送语音消息</string>
+    <string name="voice_cancel">取消</string>
+    <string name="voice_permission">允许使用麦克风以录制语音消息。手表上不保留任何内容。</string>
+    <string name="voice_mic_busy">麦克风正被占用，请重试。</string>
+    <string name="voice_too_short">太短了，请多说一会儿。</string>
+    <string name="voice_not_sent">未发送。请将手机放在附近后重试。</string>
+    <string name="send_emoji">发送表情</string>
+    <string name="delivery_sending">发送中</string>
+    <string name="delivery_sent">已发送</string>
+    <string name="delivery_delivered">已送达</string>
+    <string name="delivery_read">已读</string>
+    <string name="delivery_failed">未送达</string>
+    <string name="complication_none">没有未读消息</string>
+    <string name="tile_reply_to">回复 %1$s</string>
+    <string name="tile_chat_unread">%1$s，%2$d 条未读</string>
 </resources>

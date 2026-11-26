@@ -204,6 +204,19 @@ class OledGlassTest {
     }
 
     @Test
+    fun `glass boot mirror keeps never-touched apart from on and off`() {
+        val p = FakePrefs()
+        assertNull(ThemeBoot.readGlass(p))
+        assertFalse(ThemeBoot.writeGlass(p, null))
+        assertTrue(ThemeBoot.writeGlass(p, false))
+        assertEquals(false, ThemeBoot.readGlass(p))
+        assertFalse(ThemeBoot.writeGlass(p, false))
+        assertTrue(ThemeBoot.writeGlass(p, true))
+        assertEquals(true, ThemeBoot.readGlass(p))
+        assertEquals(2, p.commits)
+    }
+
+    @Test
     fun `splash themes are black where they must be and only there`() {
         val res = resDir()
         val night = File(res, "values-night-v31/themes.xml").readText()

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">厳格セキュリティモード</string>
+    <string name="strict_status_on">オン:コピー不可、画面キャプチャ不可、画面読み上げアプリから非表示</string>
+    <string name="strict_status_off">オフ。端末が監視されているおそれがあるときにOSHIを固く守ります</string>
+    <string name="strict_hero_on">厳格セキュリティモードはオンです</string>
+    <string name="strict_intro">端末が監視されているかもしれないときのために。スイッチ1つでOSHIを固く守ります。何もコピーできず、画面はキャプチャできず、AIエージェントを含む画面を読み取るアプリには何も見えません。</string>
+    <string name="strict_section_switch">モード</string>
+    <string name="strict_toggle_title">厳格セキュリティモード</string>
+    <string name="strict_toggle_on">この端末でオン</string>
+    <string name="strict_toggle_off">オフ</string>
+    <string name="strict_block_paste_title">貼り付けもブロック</string>
+    <string name="strict_block_paste_subtitle">OSHIには何も貼り付けられません</string>
+    <string name="strict_hide_presence_title">既読と入力中を非表示</string>
+    <string name="strict_hide_presence_subtitle">読んだ時や入力中であることが相手に見えません</string>
+    <string name="strict_forced_subtitle">厳格セキュリティモードにより設定済み</string>
+    <string name="strict_blocked_toast">厳格セキュリティモードによりブロックされました</string>
+    <string name="strict_unlock_title">厳格セキュリティモードをオフにする</string>
+    <string name="strict_unlock_subtitle">ご本人であることを確認してください</string>
+    <string name="strict_threats_title">画面を読み取ったり操作したりできるアプリ</string>
+    <string name="strict_threats_none">この端末では見つかりませんでした。</string>
+    <string name="strict_threat_a11y">支援ツールではないユーザー補助サービス</string>
+    <string name="strict_threat_remote">リモート操作または画面ミラーリングアプリ</string>
+    <string name="strict_threats_open">確認する</string>
+    <string name="strict_threats_explainer">OSHIから他のアプリをオフにすることはできません。見覚えのないものがあれば、Androidの設定 › ユーザー補助でオフにするか、アンインストールしてください。</string>
+    <string name="strict_banner_title">アプリがこの画面を読み取ったり操作したりできます</string>
+    <string name="strict_banner_body">%1$s。厳格セキュリティモードは、Androidが許す範囲でOSHIをそれらのアプリから隠します。</string>
+    <string name="strict_banner_dismiss">閉じる</string>
+    <string name="strict_does_title">できること</string>
+    <string name="strict_does_copy">メッセージのコピー、切り取り、転送、共有、保存はできません。テキストは選択できず、OSHIがクリップボードに置いたものは消去されます。</string>
+    <string name="strict_does_paste">「貼り付けもブロック」がオンの間は、キーボードの貼り付けコマンドを含め、OSHIへの貼り付けがブロックされます。</string>
+    <string name="strict_does_screen">スクリーンショット、画面録画、画面共有は黒い画面になります。最近使ったアプリのプレビューも非表示です。</string>
+    <string name="strict_does_agents">ユーザー補助を通じて画面を読み取るアプリ(AIエージェントを含む)には、OSHIの内容が見えません(Android 14以降)。それらが送り込むタップは無視されます。</string>
+    <string name="strict_does_overlays">他のアプリがOSHIの上に描画している間は、タップが無視されます。</string>
+    <string name="strict_does_notifications">通知は「新着メッセージ」とだけ表示されます。名前も写真も本文も表示されません。</string>
+    <string name="strict_does_lock">OSHIに戻るたびにアプリロックがかかります(端末に画面ロックがある場合)。</string>
+    <string name="strict_does_keyboard">シークレットキーボード:入力内容を学習しないようキーボードに求めます。</string>
+    <string name="strict_does_network">リンクプレビューもGIPHY検索もなし:外部サイトからは何も取得しません。</string>
+    <string name="strict_does_presence">既読表示と入力中表示はオフ(非表示を選んだ場合)。</string>
+    <string name="strict_does_relay">利用可能な場合はプライバシーリレーがオンになります。</string>
+    <string name="strict_does_restore">モードをオフにすると、以前の設定に戻ります。</string>
+    <string name="strict_cannot_title">できないこと</string>
+    <string name="strict_cannot_malware">マルウェアや、侵害された(root化された)端末から完全に守れるアプリはありません。</string>
+    <string name="strict_cannot_keyboard">キーボードには入力内容が見えています。キーボードが代わりに入力するクリップボードの候補は、通常の入力と区別できません。</string>
+    <string name="strict_cannot_readers">視覚障がいのある方向けのスクリーンリーダーは引き続き動作しますが、モードがオンの間、他のユーザー補助アプリはOSHIを読み取れません。</string>
+    <string name="strict_cannot_old">Android 13以前では、OSHIは内容をユーザー補助アプリから隠せません。警告するだけです。</string>
+    <string name="strict_cannot_camera">別の機器で画面を撮影されることは防げません。</string>
+    <string name="strict_cannot_recipient">守るのはこの端末だけで、やり取りする相手の端末は守れません。</string>
+    <string name="strict_auto_lock_immediate">すぐに (厳格セキュリティモード)</string>
+</resources>

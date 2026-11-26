@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">略過</string>
+    <string name="ob27_continue">繼續</string>
+    <string name="ob27_page_of">第 %1$d 頁，共 %2$d 頁</string>
+    <string name="ob27_private_title">只有你和對方</string>
+    <string name="ob27_private_body">訊息和通話在你的手機上進行端對端加密。中間任何人都無法讀取，連 OSHI 也不行。</string>
+    <string name="ob27_offline_title">沒有網路也能用</string>
+    <string name="ob27_offline_body">沒有網路？訊息會透過附近開著 OSHI 的人，在手機之間接力傳遞。LoRa 無線電還能傳得更遠。</string>
+    <string name="ob27_range_direct">直連</string>
+    <string name="ob27_range_relayed">中繼</string>
+    <string name="ob27_range_lora">LoRa 無線電</string>
+    <string name="ob27_anon_title">不需要手機號碼</string>
+    <string name="ob27_anon_body">不需帳號、電子郵件或手機號碼註冊。你的身分是在這支手機上產生的金鑰。</string>
+    <string name="ob27_together_title">邀請你的朋友</string>
+    <string name="ob27_together_body">一對一或群組聊天。掃描對方的 QR 碼或傳送邀請連結即可新增。</string>
+    <string name="ob27_rules_title">開始之前</string>
+    <string name="ob27_rules_subtitle">幾條基本規則，以及 OSHI 目前能做和還不能做的事。</string>
+    <string name="ob27_rules_do">請這樣做</string>
+    <string name="ob27_rules_dont">切勿</string>
+    <string name="ob27_good_to_know">須知</string>
+    <string name="ob27_show_details">顯示詳細資料</string>
+    <string name="ob27_hide_details">隱藏詳細資料</string>
+    <string name="ob27_agree">我了解</string>
+    <string name="ob27_notif_title">不錯過任何訊息</string>
+    <string name="ob27_notif_body">允許通知，就能看到新訊息和來電。你隨時可以在設定中關閉。</string>
+    <string name="ob27_notif_allow">允許通知</string>
+    <string name="ob27_not_now">暫時不要</string>
+    <string name="ob27_identity_title">選擇名稱</string>
+    <string name="ob27_identity_body">這是聯絡人看到的名稱。之後可以更改。</string>
+    <string name="ob27_already">已經在用 OSHI？</string>
+</resources>

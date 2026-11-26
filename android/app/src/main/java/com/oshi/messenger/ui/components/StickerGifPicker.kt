@@ -61,7 +61,8 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.oshi.messenger.R
 import com.oshi.messenger.data.model.Mascot
-import com.oshi.messenger.data.model.OshiMascot
+import com.oshi.messenger.data.model.OshiStickerPack
+import com.oshi.messenger.data.model.StickerPickerTab
 import com.oshi.messenger.network.giphy.GiphyClient
 import com.oshi.messenger.network.giphy.GiphyItem
 import com.oshi.messenger.network.giphy.GiphyKind
@@ -78,7 +79,10 @@ import kotlinx.coroutines.withContext
 /**
  * __LOCAL_GIF_LIBRARY_2026_09_13__ Port Android de `OSHI/StickerGifPicker.swift`.
  *
- * DEUX ONGLETS SEULEMENT — GIFs et Autocollants. Il n'y a PAS d'onglet « GIPHY »:
+ * __OSHI_MASCOT_STICKERS_2026_11_21__ TROIS onglets: OSHI (les 20 autocollants
+ * mascotte, ouvert par défaut, voir [OshiStickerPack]), GIFs et Autocollants.
+ *
+ * Toujours PAS d'onglet « GIPHY »:
  * les résultats de GIPHY arrivent DANS ces deux catégories, à la suite du paquet
  * local. Pour la personne qui l'utilise il n'y a qu'une bibliothèque; d'où vient
  * chaque vignette est un détail d'implémentation, pas une décision à lui confier.
@@ -136,7 +140,11 @@ fun StickerGifPicker(
     val library = remember { LocalGifLibrary.get(context) }
     val scope = rememberCoroutineScope()
 
-    var kind by remember { mutableStateOf(LocalPackKind.GIF) }
+    // __OSHI_MASCOT_STICKERS_2026_11_21__ Three tabs, OSHI first: the picker opens on the
+    // 20 mascot stickers (bundled, offline, no GIPHY call spent on opening).
+    var tab by remember { mutableStateOf(OshiStickerPack.DEFAULT_TAB) }
+    val kind = if (tab == StickerPickerTab.STICKERS) LocalPackKind.STICKER else LocalPackKind.GIF
+    val reduceMotion = remember { isSystemReduceMotion(context) }
     var category by remember { mutableStateOf<String?>(null) }
     var query by remember { mutableStateOf("") }
     var isSending by remember { mutableStateOf(false) }
@@ -149,15 +157,20 @@ fun StickerGifPicker(
      * occuperait le haut le temps d'un aller-retour — précisément le saut que les
      * cases sont là pour supprimer.
      */
-    var giphyLoading by remember(kind, query) { mutableStateOf(GiphyClient.isConfigured) }
+    var giphyLoading by remember(tab, query) {
+        mutableStateOf(GiphyClient.isConfigured && OshiStickerPack.usesGiphy(tab))
+    }
 
     val categories = remember(kind) { library.categories(kind) }
-    // The O-bubble section: shown with no category or with "OSHI", filtered by
-    // the search (name, label, emoji: "love", "❤️", "oshi").
-    val mascotResults = remember(category, query) {
-        if (category == null || category == "OSHI") OshiMascot.search(query) else emptyList()
+    // The OSHI tab: the mascots, filtered by the search (name, label, emoji: "love",
+    // "❤️", "oshi"). The GIFs and Stickers tabs no longer repeat them.
+    val isOshiTab = tab == StickerPickerTab.OSHI
+    val mascotResults = remember(tab, query) {
+        if (tab == StickerPickerTab.OSHI) OshiStickerPack.stickers(query) else emptyList()
     }
-    val localResults = remember(kind, category, query) { library.search(query, kind, category) }
+    val localResults = remember(tab, category, query) {
+        if (tab == StickerPickerTab.OSHI) emptyList() else library.search(query, kind, category)
+    }
     val featuredResults = remember(localResults) {
         // Dans l'ordre des préfixes (phrases OSHI, puis GIPHY, puis émojis).
         FEATURED_PREFIXES.flatMap { prefix -> localResults.filter { it.id.startsWith(prefix) } }
@@ -174,15 +187,15 @@ fun StickerGifPicker(
      * le paquet local », donc on n'y mêle pas de résultats distants: sinon la
      * catégorie sélectionnée mentirait sur ce qui est affiché.
      */
-    val showsGiphy = category == null
+    val showsGiphy = category == null && OshiStickerPack.usesGiphy(tab)
 
     /**
      * Page suivante à demander. Changer d'onglet ou de recherche REMET à zéro:
      * sans ça la page 2 d'une recherche viendrait se coller aux résultats d'une
      * autre.
      */
-    var giphyPage by remember(kind, query) { mutableStateOf(0) }
-    var giphyExhausted by remember(kind, query) { mutableStateOf(false) }
+    var giphyPage by remember(tab, query) { mutableStateOf(0) }
+    var giphyExhausted by remember(tab, query) { mutableStateOf(false) }
 
     /**
      * Numéro d'ordre des chargements. Une page lancée dans la portée du sélecteur
@@ -204,9 +217,9 @@ fun StickerGifPicker(
      * page suivante, qui vient d'un défilement.
      */
     suspend fun loadGiphyPage(page: Int) {
-        if (!GiphyClient.isConfigured) return
+        if (!GiphyClient.isConfigured || !OshiStickerPack.usesGiphy(tab)) return
         val giphyKind = if (kind == LocalPackKind.STICKER) GiphyKind.STICKER else GiphyKind.GIF
-        val forKind = kind
+        val forTab = tab
         val forQuery = query
         val generation = giphyGeneration.incrementAndGet()
         giphyLoading = true
@@ -230,7 +243,7 @@ fun StickerGifPicker(
             // toujours). En échange elle n'est pas annulée quand l'onglet ou la
             // recherche change, donc on vérifie ici que la réponse concerne encore
             // ce qui est à l'écran.
-            if (forKind != kind || forQuery != query) return
+            if (forTab != tab || forQuery != query) return
 
             // Une page vide veut dire qu'il n'y a plus rien: on arrête de demander,
             // sinon chaque défilement en bas de grille dépenserait un appel pour
@@ -254,7 +267,7 @@ fun StickerGifPicker(
 
     /** Demande la page suivante, une seule à la fois. */
     fun requestNextGiphyPage() {
-        if (giphyLoading || giphyExhausted || !GiphyClient.isConfigured) return
+        if (giphyLoading || giphyExhausted || !GiphyClient.isConfigured || !OshiStickerPack.usesGiphy(tab)) return
         val page = giphyPage
         giphyLoading = true // pris SYNCHRONE: deux cellules peuvent apparaître ensemble
         scope.launch { loadGiphyPage(page) }
@@ -263,7 +276,7 @@ fun StickerGifPicker(
     // Première page. `LaunchedEffect` est aussi ce qui ANNULE la requête en vol
     // quand l'onglet ou la recherche change — même contrat que le
     // `searchTask?.cancel()` d'iOS.
-    LaunchedEffect(kind, query) {
+    LaunchedEffect(tab, query) {
         giphyItems = emptyList()
         loadGiphyPage(0)
     }
@@ -306,24 +319,28 @@ fun StickerGifPicker(
                     }
                 }
 
-                // Deux onglets, et deux seulement.
-                TabRow(selectedTabIndex = if (kind == LocalPackKind.GIF) 0 else 1) {
-                    LocalPackKind.values().forEach { k ->
+                // OSHI, GIFs, Stickers — in [OshiStickerPack.TABS] order.
+                TabRow(selectedTabIndex = OshiStickerPack.TABS.indexOf(tab)) {
+                    OshiStickerPack.TABS.forEach { t ->
                         Tab(
-                            selected = kind == k,
+                            selected = tab == t,
                             onClick = {
-                                if (kind == k) return@Tab
-                                kind = k
+                                if (tab == t) return@Tab
+                                tab = t
                                 // Une catégorie de GIFs n'existe pas forcément côté
                                 // autocollants: la garder en changeant d'onglet
                                 // donnerait une grille vide.
                                 category = null
                             },
+                            modifier = Modifier.testTag("gif-tab-${t.name.lowercase()}"),
                             text = {
                                 Text(
                                     stringResource(
-                                        if (k == LocalPackKind.GIF) R.string.gif_tab_gifs
-                                        else R.string.gif_tab_stickers
+                                        when (t) {
+                                            StickerPickerTab.OSHI -> R.string.gif_tab_oshi
+                                            StickerPickerTab.GIFS -> R.string.gif_tab_gifs
+                                            StickerPickerTab.STICKERS -> R.string.gif_tab_stickers
+                                        }
                                     )
                                 )
                             },
@@ -352,7 +369,7 @@ fun StickerGifPicker(
                 // Puces de catégorie. TOUTES celles du manifeste sont proposées:
                 // une vignette qu'aucune puce n'atteint est introuvable dans une
                 // grille de 2700 éléments.
-                LazyRow(
+                if (!isOshiTab) LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -388,40 +405,30 @@ fun StickerGifPicker(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    // __O_BUBBLE_MASCOT_2026_11_16__ The O-bubble mascot leads
-                    // the picker in both tabs: 20 GIFs bundled in the app
-                    // (assets/OshiMascot/gif), so the section works offline and
-                    // over the mesh like every other bundled GIF. What is sent
-                    // is the GIF file through the ordinary GIF path — never the
-                    // WebP: iOS (1.0.43 included) animates a picture only when
-                    // its bytes start with GIF87a/GIF89a
-                    // (MediaManager.isGIFData), and every client already shows
-                    // GIFs.
-                    if (mascotResults.isNotEmpty()) {
+                    // __OSHI_MASCOT_STICKERS_2026_11_21__ The OSHI tab: the 20 mascot
+                    // GIFs bundled in the app (assets/OshiMascot/gif), so it works
+                    // offline and over the mesh. What is sent is the GIF file through
+                    // the ordinary GIF path — never the WebP: every client shows a GIF
+                    // (iOS 1.0.43 as a still of its first frame, which is why the GIFs
+                    // start on the expressive pose), see [OshiStickerPack].
+                    if (isOshiTab && mascotResults.isNotEmpty()) {
                         item(span = { GridItemSpan(maxLineSpan) }, key = "mascot-header") {
                             Text(
-                                text = "OSHI",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
+                                text = stringResource(R.string.gif_oshi_hint),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(top = 2.dp).testTag(TAG_MASCOT_SECTION),
                             )
                         }
                         items(mascotResults, key = { "m:${it.name}" }) { mascot ->
-                            MascotGifCell(mascot) {
+                            MascotGifCell(mascot, reduceMotion) {
                                 send {
-                                    val bytes = withContext(Dispatchers.IO) {
-                                        runCatching {
-                                            context.assets.open(mascot.gifAsset).use { it.readBytes() }
-                                        }.getOrNull()
-                                    }
-                                    bytes?.let { it to mascot.gifFileName }
+                                    withContext(Dispatchers.IO) {
+                                        OshiStickerPack.sticker(mascot) { path ->
+                                            context.assets.open(path).use { it.readBytes() }
+                                        }
+                                    }?.let { it.bytes to it.fileName }
                                 }
-                            }
-                        }
-                        if (featuredResults.isNotEmpty() || otherLocalResults.isNotEmpty() || showsGiphy) {
-                            item(span = { GridItemSpan(maxLineSpan) }, key = "mascot-divider") {
-                                Box(Modifier.fillMaxWidth().padding(vertical = 2.dp))
                             }
                         }
                     }
@@ -487,7 +494,7 @@ fun StickerGifPicker(
                         }
                     }
 
-                    if (localResults.isEmpty() && mascotResults.isEmpty() && giphyItems.isEmpty() && !giphyLoading) {
+                    if (localResults.isEmpty() && mascotResults.isEmpty() && (isOshiTab || giphyItems.isEmpty()) && !giphyLoading) {
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             Text(
                                 text = stringResource(R.string.gif_picker_no_results),
@@ -599,12 +606,13 @@ private fun RemoteGifCell(item: GiphyItem, onClick: () -> Unit) {
 }
 
 /**
- * One O-bubble mascot GIF. Shows the GIF that will be SENT (240 px, 1-bit alpha
+ * One O-bubble mascot sticker. Shows the GIF that will be SENT (240 px, 1-bit alpha
  * with a dark outline), animated while visible; the cell recycles its drawable
- * on scroll like [LocalGifCell].
+ * on scroll like [LocalGifCell]. Under the system's "Remove animations"
+ * ([reduceMotion]) it draws the still frame instead.
  */
 @Composable
-private fun MascotGifCell(mascot: Mascot, onClick: () -> Unit) {
+private fun MascotGifCell(mascot: Mascot, reduceMotion: Boolean, onClick: () -> Unit) {
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -616,7 +624,7 @@ private fun MascotGifCell(mascot: Mascot, onClick: () -> Unit) {
     ) {
         AsyncImage(
             model = ImageRequest.Builder(context)
-                .data("file:///android_asset/${mascot.gifAsset}")
+                .data("file:///android_asset/${OshiStickerPack.previewAsset(mascot, reduceMotion)}")
                 .crossfade(false)
                 .build(),
             imageLoader = BubbleMedia.imageLoader(context),

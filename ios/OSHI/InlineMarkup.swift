@@ -29,6 +29,8 @@ enum InlineMarkup {
 
     enum Kind {
         case bold, italic, strikethrough, code
+        /// `__text__` only (cross-platform, see `MessageFormatting`).
+        case underline
     }
 
     /// A styled run, expressed in UTF-16 offsets into the RETURNED plain text so
@@ -55,6 +57,13 @@ enum InlineMarkup {
     }
 
     /// - Returns: the text with markers removed, and the runs to style.
+    ///
+    /// __TEXT_FORMATTING_2026_11_24__ Two passes. First the cross-platform
+    /// `**bold**` / `__underline__` (`MessageFormatting`, same rules and golden
+    /// vectors as Android); then the iOS single markers below, on what is left.
+    /// The first pass's ranges are shifted by the markers the second removes, so
+    /// every span ends up in the coordinates of the RETURNED text. Markers
+    /// inside a URL or an `@[…]` token are never formatting, in either pass.
     static func parse(_ input: String) -> (String, [Span]) {
         // Cheap bail-out: the overwhelming majority of messages contain no
         // marker at all, and this runs on every one of them.
@@ -62,15 +71,48 @@ enum InlineMarkup {
             return (input, [])
         }
 
+        let doubled = MessageFormatting.parse(input)
+        let (out, singleSpans, removed) = parseSingle(doubled.text)
+
+        // Shift a first-pass offset past the single markers removed before it.
+        func shift(_ offset: Int) -> Int {
+            var lo = 0, hi = removed.count
+            while lo < hi {   // count of removed positions < offset
+                let mid = (lo + hi) / 2
+                if removed[mid] < offset { lo = mid + 1 } else { hi = mid }
+            }
+            return offset - lo
+        }
+        func mapped(_ r: NSRange, _ kind: Kind) -> Span {
+            let s = shift(r.location), e = shift(r.location + r.length)
+            return Span(kind: kind, location: s, length: e - s)
+        }
+        var spans = doubled.bold.map { mapped($0, .bold) }
+        spans += doubled.underline.map { mapped($0, .underline) }
+        spans += singleSpans
+        return (out, spans)
+    }
+
+    /// The original single-marker pass. Also returns the UTF-16 offsets (in
+    /// `input`) of every marker it removed, ascending.
+    private static func parseSingle(_ input: String) -> (String, [Span], [Int]) {
+        guard input.contains(where: { c in markers.contains(where: { $0.0 == c }) }) else {
+            return (input, [], [])
+        }
+        let protected = MessageFormatting.protectedMask(Array(input.utf16))
+
         var out = ""
         var spans: [Span] = []
+        var removed: [Int] = []
         var i = input.startIndex
+        var offset = 0   // UTF-16 offset of `i` in `input`
 
         while i < input.endIndex {
             let c = input[i]
 
-            guard let kind = markers.first(where: { $0.0 == c })?.1 else {
+            guard let kind = markers.first(where: { $0.0 == c })?.1, !protected[offset] else {
                 out.append(c)
+                offset += c.utf16.count
                 i = input.index(after: i)
                 continue
             }
@@ -79,23 +121,28 @@ enum InlineMarkup {
             let before = out.last
             guard isBoundary(before) else {
                 out.append(c)
+                offset += 1
                 i = input.index(after: i)
                 continue
             }
 
             // Find a closing marker on the SAME line with content in between.
             var j = input.index(after: i)
+            var jOffset = offset + 1
             var closing: String.Index?
+            var closingOffset = 0
             while j < input.endIndex {
                 let d = input[j]
                 if d.isNewline { break }
                 if d == c {
                     let after = input.index(after: j) < input.endIndex ? input[input.index(after: j)] : nil
-                    if j > input.index(after: i), isBoundary(after) {
+                    if j > input.index(after: i), isBoundary(after), !protected[jOffset] {
                         closing = j
+                        closingOffset = jOffset
                     }
                     break
                 }
+                jOffset += d.utf16.count
                 j = input.index(after: j)
             }
 
@@ -103,6 +150,7 @@ enum InlineMarkup {
                 // No valid partner — emit the marker as the literal character it
                 // is. This is the case that protects `2 * 3 * 4` and a lone `_`.
                 out.append(c)
+                offset += 1
                 i = input.index(after: i)
                 continue
             }
@@ -119,6 +167,7 @@ enum InlineMarkup {
             guard let first = inner.first, let last = inner.last,
                   !first.isWhitespace, !last.isWhitespace else {
                 out.append(c)
+                offset += 1
                 i = input.index(after: i)
                 continue
             }
@@ -126,10 +175,13 @@ enum InlineMarkup {
             let location = out.utf16.count
             out += inner
             spans.append(Span(kind: kind, location: location, length: inner.utf16.count))
+            removed.append(offset)
+            removed.append(closingOffset)
+            offset = closingOffset + 1
             i = input.index(after: close)
         }
 
-        return (out, spans)
+        return (out, spans, removed)
     }
 
     /// The message as it will be SEEN, with the markers gone and nothing styled.

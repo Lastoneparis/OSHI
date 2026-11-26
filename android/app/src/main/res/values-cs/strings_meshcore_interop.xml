@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · bez koncového šifrování OSHI</string>
+    <string name="meshcore_error_not_connected">Žádné rádio MeshCore není připojeno</string>
+    <string name="meshcore_channels_title">Kanály MeshCore</string>
+    <string name="meshcore_channel_public">Veřejný · čitelný pro každého, kdo zná název</string>
+    <string name="meshcore_channel_private">Soukromý · tajný klíč</string>
+    <string name="meshcore_join_hashtag">Připojit se ke kanálu hashtag</string>
+    <string name="meshcore_join_private">Připojit se k soukromému kanálu</string>
+    <string name="meshcore_contacts_title">Kontakty MeshCore</string>
+    <string name="meshcore_refresh_contacts">Obnovit kontakty</string>
+    <string name="meshcore_join_refused">Rádio tento kanál odmítlo.</string>
+    <string name="meshcore_join_no_slot">Na tomto rádiu není volná pozice pro kanál.</string>
+    <string name="meshcore_join_bad_name">Zadejte platný název kanálu (max. 31 bajtů, bez mezer u kanálu hashtag).</string>
+    <string name="meshcore_join_bad_secret">Tajemství musí mít 16 bajtů: 32 hexadecimálních znaků nebo base64.</string>
+    <string name="meshcore_hashtag_hint">Klíč je odvozen z názvu: kdokoli, kdo název zná, může kanál číst.</string>
+    <string name="meshcore_private_hint">Zadejte název kanálu a tajemství sdílené jeho členy.</string>
+    <string name="meshcore_channel_name">Název kanálu</string>
+    <string name="meshcore_channel_secret">Tajemství (hex nebo base64)</string>
+    <string name="meshcore_join">Připojit</string>
+    <string name="meshcore_note_dm">Šifrováno MeshCore mezi vysílačkami, ne end-to-end pomocí OSHI.</string>
+    <string name="meshcore_note_public">Veřejný kanál: může ho číst každý, kdo zná jeho název.</string>
+    <string name="meshcore_note_private">Soukromý kanál: může ho číst každý, kdo má jeho tajný klíč.</string>
+    <string name="meshcore_radio_offline">Vysílačka MeshCore není připojena. Zprávy tu čekají jako nedoručené.</string>
+    <string name="meshcore_connect">Připojit</string>
+    <string name="meshcore_parts">Zpráv: %1$d</string>
+    <string name="meshcore_sending">Čeká na vysílačku</string>
+    <string name="meshcore_failed_dm">Žádná odpověď z jejich vysílačky (mimo dosah?). Klepnutím to zkuste znovu.</string>
+    <string name="meshcore_error_pairing">Párování selhalo. Zkontrolujte PIN a zkuste to znovu. Pokud byla vysílačka resetována, nejprve ji odeberte v nastavení Bluetooth v Androidu.</string>
+    <string name="meshcore_error_no_answer">Vysílačka neodpověděla. Zkontrolujte, že používá firmware MeshCore companion pro Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Spojení ztraceno. Znovu se připojí, až bude vysílačka v dosahu…</string>
+    <string name="meshcore_state_pin">Zadejte PIN vysílačky do dialogu Androidu</string>
+    <string name="meshcore_state_reading">Načítání kontaktů a kanálů…</string>
+    <string name="meshcore_state_connecting">Připojování…</string>
+    <string name="meshcore_seen_as">Připojeno · uživatelé MeshCore vás vidí jako %1$s</string>
+    <string name="meshcore_connected">Připojeno</string>
+    <string name="meshcore_footer_users">Pište si s uživateli MeshCore (přímé zprávy a kanály) a posílejte zprávy OSHI přes opakovače MeshCore. Vyžaduje firmware MeshCore companion pro Bluetooth. OSHI přidá jeden kanál, #oshi-bridge, do volného slotu a nikdy nemění vaše ostatní kanály.</string>
+    <string name="meshcore_scan_below">Vysílačky MeshCore se zobrazí níže v části Vysílačky v okolí, označené MeshCore.</string>
+    <string name="meshcore_contacts_footer">Klepnutím na osobu jí napíšete. Zprávy šifruje MeshCore, ne OSHI end-to-end.</string>
+    <string name="meshcore_no_contacts">Zatím nikdo nezachycen. Uživatelé MeshCore se tu objeví, když se jejich vysílačka ohlásí. Ohlaste tu svou, aby vás našli.</string>
+    <string name="meshcore_heard">Zachyceno %1$s</string>
+    <string name="meshcore_announce">Ohlásit mě</string>
+    <string name="meshcore_announce_done">Ohlášeno. Uživatelé MeshCore v dosahu si vás teď mohou přidat a napsat vám.</string>
+    <string name="meshcore_announce_failed">Vysílačka nemohla ohlášení odeslat.</string>
+    <string name="meshcore_channels_footer">Klepnutím kanál otevřete. Veřejné a hashtagové kanály může číst každý, kdo zná jejich název.</string>
+    <string name="meshcore_pin_title">Spárovat s %1$s</string>
+    <string name="meshcore_pin_body">Android si teď vyžádá PIN vysílačky. Pokud má vysílačka displej, PIN je zobrazen na něm.</string>
+    <string name="meshcore_pin_default">Bez displeje? PIN je 123456, pokud nebyl změněn v aplikaci MeshCore.</string>
+    <string name="meshcore_pin_continue">Pokračovat</string>
+    <string name="meshcore_no_free_channel_chat">Všech 8 slotů pro kanály je obsazeno. S uživateli MeshCore si můžete psát dál; uvolněte slot v aplikaci MeshCore, aby zprávy OSHI mohly používat #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">Uživatel MeshCore</string>
+    <string name="meshcore_too_long">Příliš dlouhé: max. %1$d zpráv</string>
+</resources>

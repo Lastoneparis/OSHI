@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">Trực tiếp</string>
+    <string name="lora_node_card_from_you">từ bạn</string>
+    <string name="lora_node_card_heard_day">nghe %1$d ngày trước</string>
+    <string name="lora_node_card_heard_hour">nghe %1$d giờ trước</string>
+    <string name="lora_node_card_heard_min">nghe %1$d phút trước</string>
+    <string name="lora_node_card_heard_now">vừa nghe</string>
+    <string name="lora_node_card_hops">%1$d bước</string>
+    <string name="lora_node_card_in_range">trong tầm</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_never_heard">chưa từng nghe</string>
+    <string name="lora_node_card_not_heard">chưa nghe thấy</string>
+    <string name="lora_node_card_relayed">chuyển tiếp</string>
+</resources>

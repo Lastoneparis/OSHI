@@ -22,5 +22,45 @@
 			<string>%d תגובות</string>
 		</dict>
 	</dict>
+	<key>group_header_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@members@</string>
+		<key>members</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d חבר</string>
+			<key>two</key>
+			<string>%d חברים</string>
+			<key>many</key>
+			<string>%d חברים</string>
+			<key>other</key>
+			<string>%d חברים</string>
+		</dict>
+	</dict>
+	<key>group_header_subscribers</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@subscribers@</string>
+		<key>subscribers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d מנוי</string>
+			<key>two</key>
+			<string>%d מנויים</string>
+			<key>many</key>
+			<string>%d מנויים</string>
+			<key>other</key>
+			<string>%d מנויים</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

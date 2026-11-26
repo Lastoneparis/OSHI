@@ -575,7 +575,8 @@ struct ModernGroupRowView: View {
             ?? String(data: last.encryptedContent, encoding: .utf8)
             ?? ""
         guard !raw.isEmpty else { return nil }
-        let summary = OSHIControlPayload.previewText(for: raw)
+        // __TEXT_FORMATTING_2026_11_24__ a row cannot style a run: no markers.
+        let summary = InlineMarkup.stripped(OSHIControlPayload.previewText(for: raw))
         return summary.isEmpty ? nil : summary
     }
 
@@ -981,6 +982,10 @@ struct GroupInfoSheet: View {
                     // 🔇 Mute / Unmute Notifications
                     notificationToggleSection
                     
+                    // __BOTS_PHASE1_2026_11_24__ the bots of this group / channel,
+                    // and "Add a bot" for its admins.
+                    GroupBotsCard(groupId: groupId, isAdmin: isAdmin)
+
                     // Quick Actions for members with permissions (admin for adminOnly, anyone for collaborative/public)
                     if permGroup.canChangeGroupPicture {
                         adminActionsSection
@@ -2393,7 +2398,7 @@ struct ContactPickerForGroup: View {
                         // __SHARED_NICKNAME_2026_09_22__ alias local > pseudo partage.
                         let alias = SharedNickname.resolve(
                             alias: contactAliases[pk],
-                            nickname: SharedNickname.nickname(for: pk, in: SharedNickname.decode(sharedNicknamesData)))
+                            nickname: SharedNickname.table(sharedNicknamesData).nickname(for: pk))
 
                         Button {
                             if isSelected {
@@ -2453,11 +2458,16 @@ struct ContactPickerForGroup: View {
 struct IdentifiableImageData: Identifiable {
     let id = UUID()
     let data: Data
+    /// 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ nil = sender unknown (treated as others').
+    var isMine: Bool? = nil
 }
 
 // MARK: - Group Chat View
 
 struct GroupChatView: View {
+    /// __GROUP_RESEND_2026_11_25__ own messages some members have not received yet.
+    @ObservedObject private var pendingDeliveries = GroupPendingDeliveryCenter.shared
+    @State private var partialDeliveryShown: GroupPendingDeliveryStore.Entry?
     let group: MessageGroup
     // __FOLDABLE_LAYOUT_2026_11_16__ see AdaptiveThreadLayout.swift / ChatView.
     @State private var groupColumnWidth: CGFloat = 0
@@ -2504,6 +2514,11 @@ struct GroupChatView: View {
     @ObservedObject private var botManager = BotManager.shared
 
     @State private var messageText = ""
+    /// __BOT_COMMANDS_2026_11_24__ Row of the `/` menu highlighted by the
+    /// hardware keyboard (↑/↓); `nil` until an arrow is pressed.
+    @State private var slashHighlight: Int?
+    /// The bot whose command editor is open from the `/` menu ("Add commands").
+    @State private var slashEditorBot: OSHIBot?
     /// __CASHU_2026_10_25__ A token held for one confirmation before it reaches
     /// the whole group.
     @State private var cashuAboutToGoPublic: String?
@@ -2705,6 +2720,8 @@ struct GroupChatView: View {
     @State private var actionMessage: GroupMessage? = nil
     @State private var actionFrame: CGRect = .zero
     @State private var showMessageActions = false
+    /// __CHANNEL_WEB_2026_11_26__ the post whose web link sheet is open.
+    @State private var webLinkMessage: GroupMessage?
     @State private var showGroupForwardPicker = false
     // Parity with the 1:1 long-press menu (delete / edit / translate). These
     // actions existed only on `GroupMessageBubble`, which is instantiated
@@ -2719,6 +2736,9 @@ struct GroupChatView: View {
     @State private var groupTranslatedText = ""
     @State private var showGroupTranslationResult = false
     @ObservedObject private var nlpManager = NLPManager.shared
+    /// 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ observed: any member can flip it.
+    @ObservedObject private var advancedPrivacyStore = AdvancedChatPrivacyStore.shared
+    private var isAdvancedPrivacyOn: Bool { advancedPrivacyStore.isOn(group.id.uuidString) }
     @Environment(\.dismiss) private var dismiss
 
     // ✅ FIX: Force LazyVStack re-render when messages change
@@ -2734,6 +2754,9 @@ struct GroupChatView: View {
 
     // ✅ AI: Conversation context for AI — last 5 human-readable group messages (filtered)
     private var conversationContextForAI: String? {
+        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ nothing from a protected group
+        // reaches smart replies, the AI shortcuts or the scheduled-message writer.
+        guard AdvancedChatPrivacyPolicy.allowsAI(protected: isAdvancedPrivacyOn) else { return nil }
         let messages = groupManager.groupMessages[group.id] ?? []
         let readable = messages.filter { msg in
             // Skip system messages
@@ -2741,7 +2764,9 @@ struct GroupChatView: View {
             // Get text content
             let text = msg.plaintextContent ?? groupManager.decryptMessage(msg)
             guard let t = text, !t.isEmpty else { return false }
-            return true
+            // Control payloads (receipts, polls, the privacy switch…) are not
+            // conversation; the 1:1 context already dropped them.
+            return !OSHIControlPayload.isControl(t)
         }
         let recent = readable.suffix(5)
         guard !recent.isEmpty else { return nil }
@@ -2878,6 +2903,18 @@ struct GroupChatView: View {
 
         if isSystem {
             systemBubble(for: message)
+        } else if OSHIControlPayload.isQuietNotice(rawPlain) {
+            // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ centred notice, never a bubble.
+            if let change = AdvancedPrivacyChange.fromMessageString(rawPlain) {
+                AdvancedPrivacyNoticeRow(
+                    change: change,
+                    actorName: isMine ? nil
+                        : (liveGroup.members.first(where: { $0.publicKey == message.senderPublicKey })?.alias
+                           ?? String(message.senderPublicKey.prefix(10))),
+                    timestamp: message.timestamp)
+            } else {
+                EmptyView()
+            }
         } else if rawPlain.hasPrefix("📍LOCATION📍") {
             // Location message — show map card
             groupLocationBubble(rawText: rawPlain, message: message, isMine: isMine)
@@ -3099,6 +3136,7 @@ struct GroupChatView: View {
                         if isBot {
                             Image(systemName: "cpu").font(.caption2).foregroundColor(.blue)
                             Text(botName(from: message)).font(.caption2).fontWeight(.medium).foregroundColor(.blue)
+                            BotBadge()
                         } else {
                             // __TELEGRAM_WIDE_BUBBLES_2026_09_15__ Telegram tints
                             // the sender name in the group accent and gives it a
@@ -3113,6 +3151,7 @@ struct GroupChatView: View {
                         Text("message.edited".localized).font(.caption2).italic().foregroundColor(.secondary)
                     }
                     Text(chatFormatTimestamp(message.timestamp)).font(.caption2).foregroundColor(.secondary)
+                    partialDeliveryBadge(message, ink: .secondary)   // __GROUP_RESEND_2026_11_25__
                 }
                 // __BOT_INLINE_KEYBOARD_2026_09_16__ Under the bubble, above the
                 // reactions — where Telegram puts it, and the only place where a
@@ -3516,6 +3555,7 @@ struct GroupChatView: View {
                 if isBot {
                     Image(systemName: "cpu").font(.caption2).foregroundColor(.blue)
                     Text(botName(from: message)).font(.caption2).fontWeight(.medium).foregroundColor(.blue)
+                    BotBadge()
                 } else {
                     Text(chatFormatAddress(message.senderPublicKey)).font(.caption2).foregroundColor(.secondary)
                 }
@@ -3606,13 +3646,15 @@ struct GroupChatView: View {
                 } else if message.mediaType == .photo, let data = mediaData {
                     // ✅ FIX #2: Lazy decode — UIImage(data:) is no longer called inside body.
                     LazyGroupPhotoView(id: message.id.uuidString, data: data, maxDimension: 800) {
-                        fullScreenImageItem = IdentifiableImageData(data: data)
+                        fullScreenImageItem = IdentifiableImageData(data: data, isMine: isMine)
                     }
                     .cornerRadius(15)
                 } else if message.mediaType == .document {
                     // Document card with file info and tap-to-share
                     Button {
-                        if let data = mediaData {
+                        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ others' files stay in OSHI.
+                        if AdvancedChatPrivacyPolicy.allowsSavingMedia(protected: isAdvancedPrivacyOn, isFromMe: isMine),
+                           let data = mediaData {
                             let fileName = message.mediaFileName ?? "document"
                             // __PLAINTEXT_LEFTOVERS_2026_09_24__ dossier de partage, protégé.
                             documentShareURL = try? MediaPlaintextTemp.writeForShare(data, fileName: fileName)
@@ -3793,7 +3835,7 @@ struct GroupChatView: View {
                         HStack(spacing: 4) {
                             if isBot {
                                 Image(systemName: "cpu").font(.caption2).foregroundColor(.blue)
-                                Text(botName(from: message)).font(.caption.weight(.semibold)).foregroundColor(.blue)
+                                Text(botName(from: message)).font(.caption.weight(.semibold)).foregroundColor(.blue); BotBadge()
                             } else {
                                 Text(senderDisplayName(message.senderPublicKey))
                                     .font(.caption.weight(.semibold))
@@ -3810,19 +3852,21 @@ struct GroupChatView: View {
                         Self.mediaLoadingPlaceholder(side)
                     } else if message.mediaType == .photo, let data = mediaData {
                         LazyGroupPhotoView(id: message.id.uuidString, data: data, maxDimension: 1200, size: layout.size) {
-                            fullScreenImageItem = IdentifiableImageData(data: data)
+                            fullScreenImageItem = IdentifiableImageData(data: data, isMine: isMine)
                         }
                         .overlay(alignment: .bottomTrailing) {
-                            if !hasCaption { MediaTimePill(time: time, status: status) }
+                            if !hasCaption { mediaTimePill(message, time: time, status: status) }
                         }
                     } else if message.mediaType == .video, let data = mediaData {
                         LazyGroupVideoThumbnailView(id: message.id.uuidString, data: data, fileName: message.mediaFileName, width: layout.size.width)
                             .overlay(alignment: .bottomTrailing) {
-                                if !hasCaption { MediaTimePill(time: time, status: status) }
+                                if !hasCaption { mediaTimePill(message, time: time, status: status) }
                             }
                     } else if message.mediaType == .document {
                         Button {
-                            if let data = mediaData {
+                            // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ others' files stay in OSHI.
+                            if AdvancedChatPrivacyPolicy.allowsSavingMedia(protected: isAdvancedPrivacyOn, isFromMe: isMine),
+                               let data = mediaData {
                                 let fileName = message.mediaFileName ?? "document"
                                 // __PLAINTEXT_LEFTOVERS_2026_09_24__ dossier de partage, protégé.
                                 documentShareURL = try? MediaPlaintextTemp.writeForShare(data, fileName: fileName)
@@ -3882,7 +3926,7 @@ struct GroupChatView: View {
                         HStack(spacing: 4) {
                             Spacer(minLength: 0)
                             Text(time).font(.caption2).foregroundColor(secondaryInk)
-                            if let status { groupTick(status, ink: secondaryInk) }
+                            groupStatus(message, status, ink: secondaryInk)
                         }
                         .padding(.horizontal, 12)
                         .padding(.top, 2)
@@ -3934,6 +3978,56 @@ struct GroupChatView: View {
         }
     }
 
+    /// __GROUP_RESEND_2026_11_25__ An own message some members have not received yet: a clock
+    /// and "delivered/total" where the tick goes (never the Sent tick while members are pending).
+    /// Tap → who is missing + "Retry now". Nothing at all once everybody has it.
+    @ViewBuilder
+    private func partialDeliveryBadge(_ message: GroupMessage, ink: Color) -> some View {
+        if isFromCurrentUser(message), let e = pendingDeliveries.entry(for: message.id) {
+            Button { partialDeliveryShown = e } label: {
+                HStack(spacing: 2) {
+                    Image(systemName: e.gaveUp ? "exclamationmark.circle" : "clock").font(.scaled(9))
+                    Text(GroupPartialDelivery.compact(e)).font(.caption2).monospacedDigit()
+                }
+                .foregroundColor(e.gaveUp ? .red : ink)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(GroupPartialDelivery.title(e))
+        }
+    }
+
+    /// The tick, or the partial-delivery badge while members are pending.
+    @ViewBuilder
+    private func groupStatus(_ message: GroupMessage, _ status: DeliveryStatus?, ink: Color) -> some View {
+        if isFromCurrentUser(message), pendingDeliveries.entry(for: message.id) != nil {
+            partialDeliveryBadge(message, ink: ink)
+        } else if let status { groupTick(status, ink: ink) }
+    }
+
+    /// The time pill over a photo/video; the partial-delivery badge replaces its tick.
+    @ViewBuilder
+    private func mediaTimePill(_ message: GroupMessage, time: String, status: DeliveryStatus?) -> some View {
+        if isFromCurrentUser(message), pendingDeliveries.entry(for: message.id) != nil {
+            HStack(spacing: 3) {
+                Text(time).font(.caption2.weight(.medium)).monospacedDigit().foregroundColor(.white)
+                partialDeliveryBadge(message, ink: .white)
+            }
+            .padding(.horizontal, 7)
+            .padding(.vertical, 3)
+            .background(Capsule().fill(Color.black.opacity(MediaTimePill.backdropOpacity)))
+            .padding(6)
+        } else {
+            MediaTimePill(time: time, status: status)
+        }
+    }
+
+    /// The details behind the badge: how many got it, who has not, and "Retry now".
+    private var partialDeliveryAlertMessage: String {
+        guard let e = partialDeliveryShown else { return "" }
+        let names = (pendingDeliveries.entries[e.msgId] ?? e).pending.map { senderDisplayName($0) }
+        return GroupPartialDelivery.body(e) + "\n\n" + "group.receipts.pending".localized + ":\n" + names.joined(separator: "\n")
+    }
+
     /// Audio playback bubble with play/pause, waveform, and speaker/earpiece routing
     private func audioPlaybackBubble(message: GroupMessage, isMine: Bool) -> some View {
         let isBot = message.senderPublicKey.hasPrefix("bot:")
@@ -3946,6 +4040,7 @@ struct GroupChatView: View {
                         if isBot {
                             Image(systemName: "cpu").font(.caption2).foregroundColor(.blue)
                             Text(botName(from: message)).font(.caption2).fontWeight(.medium).foregroundColor(.blue)
+                            BotBadge()
                         } else {
                             Text(senderDisplayName(message.senderPublicKey)).font(.caption2)
                                 .foregroundColor(AvatarIdentity.nameColor(for: message.senderPublicKey))
@@ -3953,6 +4048,7 @@ struct GroupChatView: View {
                         Text("\u{2022}").font(.caption2).foregroundColor(.secondary)
                     }
                     Text(chatFormatTimestamp(message.timestamp)).font(.caption2).foregroundColor(.secondary)
+                    partialDeliveryBadge(message, ink: .secondary)   // __GROUP_RESEND_2026_11_25__
                 }
                 MessageReactionsView(messageId: message.id.uuidString, isFromCurrentUser: isMine)
             }
@@ -4193,55 +4289,21 @@ struct GroupChatView: View {
     // MARK: - Group Toolbar Content (extracted for type-checker)
     @ToolbarContentBuilder
     private var groupToolbarContent: some ToolbarContent {
+        // __GROUP_HEADER_ISLAND_2026_11_24__ (system back) (search)  ( name / count )  (avatar).
+        // See GroupChatHeader.swift. The ⋯ menu's items live in the group info sheet
+        // and behind a long-press on the avatar.
         ToolbarItem(placement: .principal) {
-            Button { showGroupInfo = true } label: {
-                HStack(spacing: 8) {
-                    // 🔴 PERF: this was `UIImage(data: pictureData)` inline. The
-                    // group chat's toolbar is re-evaluated on every
-                    // `MessageGroupManager` publish — every arriving message,
-                    // every typing tick, every receipt — so the title bar was
-                    // re-inflating a up-to-500 KB JPEG on the main thread each
-                    // time, while the user watched new messages appear. That is
-                    // the complaint, almost literally. See `GroupPictureCache`.
-                    if let image = GroupPictureCache.image(for: liveGroup.id,
-                                                           data: liveGroup.groupPictureData) {
-                        Image(uiImage: image).resizable().aspectRatio(contentMode: .fill)
-                            .frame(width: 32, height: 32).clipShape(Circle())
-                    } else if let avatar = liveGroup.avatar, !avatar.isEmpty {
-                        // __AVATAR_SAME_COLOUR_EVERYWHERE_2026_11_09__ same
-                        // tint as `ModernGroupRowView` (the group's own
-                        // `AvatarIdentity` gradient at 0.2), not the brand colour.
-                        Text(avatar).font(.scaled(18)).frame(width: 32, height: 32)
-                            .background(Circle().fill(LinearGradient(
-                                colors: AvatarIdentity.gradient(for: liveGroup.id.uuidString).map { $0.opacity(0.2) },
-                                startPoint: .topLeading, endPoint: .bottomTrailing)))
-                    } else {
-                        // __ONE_AVATAR_NOT_THREE_2026_11_07__ keyed on the GROUP
-                        // id, so the room keeps the colour the group list gives
-                        // it. Was a flat brand circle, which made every group
-                        // header look like every other group header.
-                        DefaultAvatar(key: liveGroup.id.uuidString, name: liveGroup.name,
-                                      size: 32, initialCount: 1)
-                    }
-                    VStack(alignment: .leading, spacing: 1) {
-                        HStack(spacing: 4) {
-                            Text(liveGroup.name).font(.headline).foregroundColor(.primary)
-                            if groupManager.isGroupMuted(group.id) {
-                                Image(systemName: "bell.slash.fill").font(.caption2).foregroundColor(.secondary)
-                            }
-                        }
-                        // Prefer the live typing summary when someone is typing; otherwise show the member count.
-                        let typingLine = typingManager.typingSummary(forGroup: group.id.uuidString, excludingPublicKey: identityManager.publicKey)
-                        if !typingLine.isEmpty {
-                            Text(typingLine).font(.caption2).foregroundColor(groupBrandColor)
-                        } else {
-                            Text(String(format: "%d " + "groups.members".localized, liveGroup.members.count))
-                                .font(.caption2).foregroundColor(.secondary)
-                        }
-                    }
-                }
-            }
-            .buttonStyle(.plain)
+            // Prefer the live typing summary when someone is typing; otherwise the count.
+            let typingLine = typingManager.typingSummary(forGroup: group.id.uuidString, excludingPublicKey: identityManager.publicKey)
+            GroupHeaderIsland(
+                name: liveGroup.name,
+                subtitle: typingLine.isEmpty
+                    ? GroupHeaderText.count(liveGroup.members.count, channel: liveGroup.type == .adminOnly)
+                    : typingLine,
+                subtitleIsActivity: !typingLine.isEmpty,
+                muted: groupManager.isGroupMuted(group.id),
+                activityColor: groupBrandColor,
+                onTap: { showGroupInfo = true })
         }
         ToolbarItem(placement: .navigationBarLeading) {
             Button {
@@ -4249,46 +4311,87 @@ struct GroupChatView: View {
             } label: {
                 Image(systemName: showSearch ? "xmark" : "magnifyingglass")
             }
+            .accessibilityLabel(GroupHeaderText.searchLabel)
+            .accessibilityIdentifier("group_header_search")
         }
         ToolbarItem(placement: .navigationBarTrailing) {
-            HStack(spacing: 8) {
-                // 🧹 UX (2026-07-13): removed the Map + AI shortcuts from the group
-                // chat toolbar for a minimalist header — they belong to the main tab
-                // bar, not inside a conversation. Search stays (leading) and every
-                // group function stays in the ⋯ menu below.
-            Menu {
-                Button { showGroupInfo = true } label: { Label("menu_group_info".localized, systemImage: "info.circle") }
-                if canAddMembers {
-                    Button { showAddMember = true } label: { Label("menu_add_member".localized, systemImage: "person.badge.plus") }
-                }
-                if permGroup.canChangeWallpaper {
-                    Button { showWallpaperPicker = true } label: { Label("wallpaper.title".localized, systemImage: "photo.artframe") }
-                }
-                Button { groupManager.toggleMuteGroup(group.id) } label: {
-                    if groupManager.isGroupMuted(group.id) {
-                        Label("group.unmute".localized, systemImage: "bell.fill")
-                    } else {
-                        Label("group.mute".localized, systemImage: "bell.slash.fill")
-                    }
-                }
-                Divider()
-                // 🚩 Report (App Store guideline 1.2) — always available, even
-                // for an already-blocked group.
-                Button { showingReportSheet = true } label: { Label("group.report_group".localized, systemImage: "flag.fill") }
-                if isGroupBlocked {
-                    Button { showingUnblockAlert = true } label: { Label("group.unblock".localized, systemImage: "hand.raised.slash") }
-                } else {
-                    Button { showingBlockSheet = true } label: { Label("group.block".localized, systemImage: "hand.raised.fill") }
-                }
-                Divider()
-                Button(role: .destructive) { showLeaveGroupAlert = true } label: {
-                    Label(isAdmin ? "button_delete_group".localized : "button_leave_group".localized,
-                          systemImage: isAdmin ? "trash" : "rectangle.portrait.and.arrow.right")
-                }
-            } label: {
-                Image(systemName: "ellipsis.circle")
+            // __MENU_SCROLL_RESET_2026_11_21__ The long-press menu is the same value-typed
+            // `GroupOverflowMenu.sections` the ⋯ button used, rebuilt only when they change.
+            let menu = GroupOverflowMenu(
+                state: GroupOverflowMenu.MenuState(
+                    canAddMembers: canAddMembers,
+                    muted: groupManager.isGroupMuted(group.id),
+                    blocked: isGroupBlocked,
+                    admin: isAdmin,
+                    advancedPrivacy: isAdvancedPrivacyOn),
+                actions: groupOverflowActions)
+            GroupHeaderAvatarButton(
+                name: liveGroup.name,
+                sections: menu.sections,
+                onTap: { showGroupInfo = true },
+                onSelect: menu.select) {
+                groupHeaderAvatar
             }
-            } // HStack
+        }
+    }
+
+    /// What the old ⋯ menu did, shared by the avatar's long-press menu.
+    private var groupOverflowActions: GroupOverflowMenu.Actions {
+        GroupOverflowMenu.Actions(
+            openInfo: { showGroupInfo = true },
+            addMember: { showAddMember = true },
+            openWallpaper: { showWallpaperPicker = true },
+            toggleMute: { groupManager.toggleMuteGroup(group.id) },
+            toggleAdvancedPrivacy: {
+                groupManager.setAdvancedChatPrivacy(!isAdvancedPrivacyOn, groupId: group.id,
+                                                    senderPublicKey: identityManager.publicKey)
+            },
+            report: { showingReportSheet = true },
+            unblock: { showingUnblockAlert = true },
+            block: { showingBlockSheet = true },
+            leave: { showLeaveGroupAlert = true })
+    }
+
+    /// The same actions for the info sheet: it is closed first, and what it opens
+    /// is presented once it has gone (two sheets cannot be up at once).
+    private var groupInfoChatActions: GroupInfoChatActions {
+        let after: (@escaping () -> Void) -> () -> Void = { open in
+            {
+                showGroupInfo = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) { open() }
+            }
+        }
+        let a = groupOverflowActions
+        return GroupInfoChatActions(
+            canAddMembers: canAddMembers,
+            blocked: isGroupBlocked,
+            addMember: after(a.addMember),
+            openWallpaper: after(a.openWallpaper),
+            toggleMute: a.toggleMute,
+            report: after(a.report),
+            block: after(a.block),
+            unblock: after(a.unblock))
+    }
+
+    /// The group's picture, emoji or initial — the header's right-hand button.
+    @ViewBuilder
+    private var groupHeaderAvatar: some View {
+        // 🔴 PERF: never `UIImage(data:)` here — the toolbar is re-evaluated on
+        // every typing tick and message. See `GroupPictureCache`.
+        if let image = GroupPictureCache.image(for: liveGroup.id,
+                                               data: liveGroup.groupPictureData) {
+            Image(uiImage: image).resizable().aspectRatio(contentMode: .fill)
+        } else if let avatar = liveGroup.avatar, !avatar.isEmpty {
+            // __AVATAR_SAME_COLOUR_EVERYWHERE_2026_11_09__ the group's own gradient at 0.2.
+            Text(avatar).font(.scaled(20))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Circle().fill(LinearGradient(
+                    colors: AvatarIdentity.gradient(for: liveGroup.id.uuidString).map { $0.opacity(0.2) },
+                    startPoint: .topLeading, endPoint: .bottomTrailing)))
+        } else {
+            // __ONE_AVATAR_NOT_THREE_2026_11_07__ keyed on the GROUP id.
+            DefaultAvatar(key: liveGroup.id.uuidString, name: liveGroup.name,
+                          size: 38, initialCount: 1)
         }
     }
 
@@ -4333,9 +4436,11 @@ struct GroupChatView: View {
             // messages render, the user saw a fully black screen ("all
             // black, scroll up to see messages"). A neutral grey under the
             // wallpaper ensures the chat never looks like a frozen view.
-            Color(.systemGray6).ignoresSafeArea()
-            // Wallpaper background
-            ChatWallpaperView(wallpaper: wallpaperManager.getWallpaper(for: group.id.uuidString))
+            //
+            // __CHAT_CHROME_BLUR_2026_11_21__ That grey and the wallpaper moved
+            // to `mainContentBody`'s background: drawn here they stopped at the
+            // composer and at the banners, so the backdrop never reached the
+            // bottom of the screen in a group.
 
             ScrollViewReader { proxy in
                 ScrollView {
@@ -4455,11 +4560,15 @@ struct GroupChatView: View {
                                         showMessageActions = true
                                     },
                                     onDoubleTap: { reactToGroupMessage(message, emoji: .oshiSmile) },
-                                    onReact: { reactToGroupMessage(message, emoji: $0) }
+                                    onReact: { reactToGroupMessage(message, emoji: $0) },
+                                    onWebLink: webLinkAction(for: message)
                                 ))
                             // __GROUP_INFO_SETTINGS_2026_11_20__ §2.10 auto-translate (local pref).
                             if !message.isSystemMessage, message.mediaType == nil,
                                !isFromCurrentUser(message),
+                               // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ auto-translate runs the
+                               // on-device model over every message: off in a protected group.
+                               AdvancedChatPrivacyPolicy.allowsAI(protected: isAdvancedPrivacyOn),
                                GroupLocalFlags.shared.autoTranslate(message.groupId),
                                let t = resolveText(for: message), !t.isEmpty,
                                !t.hasPrefix("📍"), !t.hasPrefix("📅") {
@@ -5058,10 +5167,19 @@ struct GroupChatView: View {
             // __SLASH_MENU_2026_08_26__ Le menu `/`, comme sur Telegram.
             // Pose juste au-dessus du champ, comme `SmartRepliesView`, et jamais
             // construit vide: `matches` rend `[]` quand il n'y a rien a montrer.
-            if !slashCommandSuggestions.isEmpty && !isGroupBlocked {
-                SlashCommandBar(commands: slashCommandSuggestions, tint: groupBrandColor) { cmd in
-                    messageText = SlashCommands.completion(for: cmd)
-                }
+            // __BOT_COMMANDS_2026_11_24__ per-command descriptions, keyboard
+            // highlight, tap = send for a bot command, and a friendly line
+            // instead of nothing in a chat that has bots.
+            if let menu = slashMenu, !isGroupBlocked {
+                SlashCommandBar(commands: menu.commands,
+                                tint: groupBrandColor,
+                                highlightedIndex: slashHighlight,
+                                hint: menu.hint,
+                                onAddCommands: { botID in
+                                    slashEditorBot = BotManager.shared.bots.first { $0.id == botID }
+                                },
+                                onInsert: { insertSlashCommand($0) },
+                                onPick: { pickSlashCommand($0) })
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
@@ -5077,115 +5195,219 @@ struct GroupChatView: View {
                 .padding(.horizontal).padding(.bottom, 8)
             }
         }
+        // __OLED_GLASS_2026_11_16__ crystal-glass bar under OLED black.
+        // __CHAT_CHROME_BLUR_2026_11_21__ frosted, not opaque (was
+        // `systemBackground` with the glass option off): the full-screen
+        // wallpaper runs under the whole input area, as in a 1:1 thread whose
+        // composer has been `.ultraThinMaterial` since 07/11.
+        .oledGlassBar(fallback: .ultraThinMaterial)
     }
 
-    /// Les commandes proposees pour le texte courant. Vide = pas de barre.
-    ///
-    /// Recalcule a chaque frappe parce que `messageText` est un `@State`: c'est
-    /// exactement la reactivite qu'on veut, et la fonction est du texte pur.
-    private var slashCommandSuggestions: [SlashCommand] {
-        SlashCommands.matches(for: messageText,
-                              bots: BotManager.shared.botsForGroup(group.id))
+    /// __BOT_COMMANDS_2026_11_24__ The bots that serve this group.
+    private var groupBots: [OSHIBot] { BotManager.shared.botsForGroup(group.id) }
+
+    /// __BOTS_PHASE1_2026_11_24__ Commands of the group's REMOTE bots that were
+    /// not created on this device (GroupBotDirectory, `/api/bot/commands`).
+    private var remoteSlashCommands: [SlashCommand] {
+        GroupBotDirectory.shared.slashCommands(in: group.id, owned: BotManager.shared.bots)
+    }
+
+    /// In a channel only admins type; members use the buttons (contract §ADD 2).
+    private var canTypeCommands: Bool {
+        group.groupType != .adminOnly || groupManager.isCurrentUserAdmin(of: group.id)
+    }
+
+    /// What the `/` bar shows (nil = no bar). See `SlashMenuContent.make`.
+    private var slashMenu: SlashMenuContent? {
+        guard canTypeCommands else { return nil }
+        return SlashMenuContent.make(for: messageText, bots: groupBots, extra: remoteSlashCommands)
+    }
+
+    /// Tap (or Return): a bot command goes out at once, like Telegram; a
+    /// built-in that needs an argument (`/pay`) fills the composer instead.
+    private func pickSlashCommand(_ cmd: SlashCommand) {
+        slashHighlight = nil
+        if cmd.sendsOnPick {
+            messageText = cmd.command
+            sendMessage()
+        } else {
+            messageText = SlashCommands.completion(for: cmd)
+            groupComposerFocused = true
+        }
+    }
+
+    /// The arrow on a row (or Tab): `/name ` in the composer, to add arguments.
+    private func insertSlashCommand(_ cmd: SlashCommand) {
+        slashHighlight = nil
+        messageText = SlashCommands.completion(for: cmd)
+        groupComposerFocused = true
+    }
+
+    private enum SlashKey { case up, down, pick, insert, close }
+
+    /// Hardware keyboard in the `/` menu. `.ignored` whenever the menu is
+    /// closed, so ↑/↓/Return/Tab keep their usual meaning in the field.
+    private func handleSlashKey(_ key: SlashKey) -> KeyPress.Result {
+        guard let menu = slashMenu, !menu.commands.isEmpty, !isGroupBlocked else { return .ignored }
+        let count = menu.commands.count
+        switch key {
+        case .up: slashHighlight = SlashMenuNavigation.move(slashHighlight, by: -1, count: count)
+        case .down: slashHighlight = SlashMenuNavigation.move(slashHighlight, by: 1, count: count)
+        case .pick:
+            guard let i = SlashMenuNavigation.target(slashHighlight, count: count) else { return .ignored }
+            pickSlashCommand(menu.commands[i])
+        case .insert:
+            guard let i = SlashMenuNavigation.target(slashHighlight, count: count) else { return .ignored }
+            insertSlashCommand(menu.commands[i])
+        case .close:
+            // __BOTS_PHASE1_2026_11_24__ Esc closes the menu (contract §4.4).
+            slashHighlight = nil
+            messageText = ""
+        }
+        return .handled
+    }
+
+    /// The `/` button shows in a chat with bots while the field is empty or
+    /// already holds a command being chosen.
+    private var showsSlashMenuButton: Bool {
+        (!groupBots.isEmpty || !remoteSlashCommands.isEmpty) && canTypeCommands && !isGroupBlocked
+            && (messageText.isEmpty || slashMenu != nil)
+    }
+
+    private func toggleSlashMenu() {
+        slashHighlight = nil
+        if slashMenu != nil { messageText = "" } else { messageText = "/" }
+        groupComposerFocused = true
     }
 
     // MARK: - Group Input Row (further extracted)
     private var groupInputRow: some View {
-        HStack(spacing: 12) {
-            // __ATTACH_PANEL_2027_2026_11_17__ "+" opens the attachment panel
-            // shared with 1:1 (recent photos, multi-select + caption, and every
-            // option the menu listed: Gallery, Camera, File, GIFs & Stickers,
-            // Location, Contact, Poll, Check-In, Video note, Cashu, Thinking of
-            // You, Schedule a Call).
-            Button { showAttachPanel = true } label: {
-                Image(systemName: "plus.circle.fill").font(.title2).foregroundColor(isGroupBlocked ? .gray : groupBrandColor)
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
-            }
-            .frame(width: 36, height: 44).disabled(isRecordingAudio || isGroupBlocked)
-            .accessibilityLabel(Text("attach.button".localized))
-            .accessibilityIdentifier("composer.attach")
+        HStack(alignment: .bottom, spacing: 8) {
+            // __COMPOSER_PILL_2026_11_23__ Google-app style (user request 23/11,
+            // Android 99c1844d): "+", the field, AI and the capture shortcuts share
+            // ONE pill; the shortcuts still fold away while there is text.
+            ComposerPill(focused: groupComposerFocused, tint: groupBrandColor) {
+                // __ATTACH_PANEL_2027_2026_11_17__ "+" opens the attachment panel
+                // shared with 1:1 (recent photos, multi-select + caption, and every
+                // option the menu listed: Gallery, Camera, File, GIFs & Stickers,
+                // Location, Contact, Poll, Check-In, Video note, Cashu, Thinking of
+                // You, Schedule a Call).
+                Button { showAttachPanel = true } label: {
+                    Image(systemName: "plus").font(.scaled(22, weight: .medium)).foregroundColor(isGroupBlocked ? .gray : groupBrandColor)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .frame(width: 40, height: 44).disabled(isRecordingAudio || isGroupBlocked)
+                .accessibilityLabel(Text("attach.button".localized))
+                .accessibilityIdentifier("composer.attach")
 
-            // __VIDEO_NOTE_2026_09_24__ Camera + round-video buttons fold away while
-            // there is text, and the field takes their width (same rule as 1:1,
-            // `ComposerChrome`).
-            if groupShowsCaptureButtons {
-                Button { showGroupCamera = true } label: {
-                    Image(systemName: "camera.fill").font(.title3).foregroundColor(isGroupBlocked ? .gray : groupBrandColor)
-                        .frame(width: 36, height: 44).contentShape(Rectangle())
+                if showsSlashMenuButton {
+                    SlashMenuButton(isOpen: slashMenu != nil, tint: groupBrandColor) { toggleSlashMenu() }
+                        .disabled(isRecordingAudio)
+                        .transition(.opacity)
                 }
-                .accessibilityLabel(Text("camera_permission".localized))
-                .disabled(isRecordingAudio || isGroupBlocked)
-                .transition(groupCaptureTransition)
 
-                Button {
-                    var t = Transaction()
-                    t.disablesAnimations = true
-                    withTransaction(t) { showGroupVideoNote = true }
-                } label: {
-                    Image(systemName: "video.circle.fill").font(.scaled(24))
-                        .foregroundColor(isGroupBlocked || !groupVideoNoteAvailable ? .gray : groupBrandColor)
-                        .frame(width: 36, height: 44).contentShape(Rectangle())
-                }
-                .accessibilityLabel(Text("videonote.button".localized))
-                .help(groupVideoNoteAvailable ? "videonote.button".localized : "videonote.no_camera".localized)
-                .disabled(isRecordingAudio || isGroupBlocked || !groupVideoNoteAvailable)
-                .transition(groupCaptureTransition)
-            }
-
-            TextField("placeholder_message".localized, text: $messageText, axis: .vertical)
-                .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
-                .textFieldStyle(.plain)
-                .padding(.horizontal, groupShowsCaptureButtons ? 10 : 14)
-                .padding(.vertical, 10)
-                .background(Color(.systemGray6)).cornerRadius(20)
-                .oledGlassEdge(RoundedRectangle(cornerRadius: 20, style: .continuous))  // __OLED_GLASS_2026_11_16__
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .stroke(LinearGradient(colors: [groupBrandColor.opacity(0.75), Theme.brandSecondary.opacity(0.75)],
-                                               startPoint: .leading, endPoint: .trailing),
-                                lineWidth: 1.25)
-                        .opacity(groupShowsCaptureButtons ? 0 : 1)
-                )
-                .lineLimit(ComposerChrome.lineLimit(expanded: !groupShowsCaptureButtons))
-                .frame(minHeight: 44)
-                .layoutPriority(1)
-                .disabled(isRecordingAudio || isGroupBlocked)
-                .accessibilityIdentifier("group.composer")
-                // __FOLDABLE_LAYOUT_2026_11_16__ keyboard state for the hand-off.
-                .focused($groupComposerFocused)
-                .onChange(of: groupComposerFocused) { _, focused in
-                    ThreadHandoff.shared.setComposerFocused(handoffKey, focused)
-                }
-                .onReceive(NotificationCenter.default.publisher(for: ThreadHandoff.restoreComposerFocus)) { note in
-                    guard ThreadHandoff.isComposerFocusRequest(note, key: handoffKey, token: handoffToken) else { return }
-                    groupComposerFocused = true
-                }
-                .onChange(of: messageText) { _, newValue in
-                    ThreadHandoff.shared.setText(handoffKey, newValue)
-                    // Announce typing/stopped to the group through the shared manager (debounced internally).
-                    let displayName = UserDefaults.standard.string(forKey: "userName") ?? ""
-                    if newValue.isEmpty {
-                        TypingIndicatorManager.shared.userStoppedTyping(in: group.id.uuidString, senderName: displayName)
-                    } else {
-                        TypingIndicatorManager.shared.userStartedTyping(in: group.id.uuidString, senderName: displayName)
+                TextField("placeholder_message".localized, text: $messageText, axis: .vertical)
+                    .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
+                    .textFieldStyle(.plain)
+                    // __COMPOSER_PILL_2026_11_23__ bare field: the pill carries fill,
+                    // outline (brand while focused) and the glass edge.
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 10)
+                    .lineLimit(ComposerChrome.lineLimit(expanded: !groupShowsCaptureButtons))
+                    .frame(minHeight: 44)
+                    .layoutPriority(1)
+                    .disabled(isRecordingAudio || isGroupBlocked)
+                    .accessibilityIdentifier("group.composer")
+                    // __FOLDABLE_LAYOUT_2026_11_16__ keyboard state for the hand-off.
+                    .focused($groupComposerFocused)
+                    .onChange(of: groupComposerFocused) { _, focused in
+                        ThreadHandoff.shared.setComposerFocused(handoffKey, focused)
                     }
+                    .onReceive(NotificationCenter.default.publisher(for: ThreadHandoff.restoreComposerFocus)) { note in
+                        guard ThreadHandoff.isComposerFocusRequest(note, key: handoffKey, token: handoffToken) else { return }
+                        groupComposerFocused = true
+                    }
+                    // __BOT_COMMANDS_2026_11_24__ ↑/↓/Return/Tab in the `/` menu
+                    // (iPad and Mac hardware keyboards). Shift-Return still
+                    // breaks the line.
+                    .onKeyPress(.upArrow) { handleSlashKey(.up) }
+                    .onKeyPress(.downArrow) { handleSlashKey(.down) }
+                    .onKeyPress(.tab) { handleSlashKey(.insert) }
+                    .onKeyPress(.escape) { handleSlashKey(.close) }
+                    .onKeyPress(keys: [.return]) { press in
+                        press.modifiers.contains(.shift) ? .ignored : handleSlashKey(.pick)
+                    }
+                    .onChange(of: messageText) { _, newValue in
+                        if slashHighlight != nil { slashHighlight = nil }
+                        ThreadHandoff.shared.setText(handoffKey, newValue)
+                        // Announce typing/stopped to the group through the shared manager (debounced internally).
+                        let displayName = UserDefaults.standard.string(forKey: "userName") ?? ""
+                        if newValue.isEmpty {
+                            TypingIndicatorManager.shared.userStoppedTyping(in: group.id.uuidString, senderName: displayName)
+                        } else {
+                            TypingIndicatorManager.shared.userStartedTyping(in: group.id.uuidString, senderName: displayName)
+                        }
+                    }
+
+                // __TEXT_FORMATTING_2026_11_24__ Bold / Underline, while writing.
+                if groupComposerFocused && !isGroupBlocked {
+                    ComposerFormatMenu(text: $messageText, tint: groupBrandColor) {
+                        groupComposerFocused = true
+                    }
+                    .disabled(isRecordingAudio)
+                    .transition(.opacity)
                 }
 
-            Button { showAIShortcuts = true } label: {
-                Image(systemName: "sparkles").font(.scaled(18))
-                    .foregroundColor(isGroupBlocked ? .gray : groupBrandColor).frame(width: 32, height: 32)
-            }
-            .disabled(isRecordingAudio || isGroupBlocked)
+                // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ not offered in a protected group.
+                if AdvancedChatPrivacyPolicy.allowsAI(protected: isAdvancedPrivacyOn) {
+                Button { showAIShortcuts = true } label: {
+                    Image(systemName: "sparkles").font(.scaled(18))
+                        .foregroundColor(isGroupBlocked ? .gray : groupBrandColor).frame(width: 36, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .disabled(isRecordingAudio || isGroupBlocked)
+                }
 
+                // __VIDEO_NOTE_2026_09_24__ Camera + round-video buttons fold away while
+                // there is text, and the field takes their width (same rule as 1:1,
+                // `ComposerChrome`).
+                if groupShowsCaptureButtons {
+                    Button { showGroupCamera = true } label: {
+                        Image(systemName: "camera.fill").font(.title3).foregroundColor(isGroupBlocked ? .gray : groupBrandColor)
+                            .frame(width: 36, height: 44).contentShape(Rectangle())
+                    }
+                    .accessibilityLabel(Text("camera_permission".localized))
+                    .disabled(isRecordingAudio || isGroupBlocked)
+                    .transition(groupCaptureTransition)
+
+                    Button {
+                        var t = Transaction()
+                        t.disablesAnimations = true
+                        withTransaction(t) { showGroupVideoNote = true }
+                    } label: {
+                        Image(systemName: "video.circle.fill").font(.scaled(24))
+                            .foregroundColor(isGroupBlocked || !groupVideoNoteAvailable ? .gray : groupBrandColor)
+                            .frame(width: 36, height: 44).contentShape(Rectangle())
+                    }
+                    .accessibilityLabel(Text("videonote.button".localized))
+                    .help(groupVideoNoteAvailable ? "videonote.button".localized : "videonote.no_camera".localized)
+                    .disabled(isRecordingAudio || isGroupBlocked || !groupVideoNoteAvailable)
+                    .transition(groupCaptureTransition)
+                }
+
+            }
+            .layoutPriority(1)
+
+            // __COMPOSER_PILL_2026_11_23__ mic / send: a separate circle of the
+            // pill's height beside it.
             if !messageText.isEmpty || !selectedMedia.isEmpty {
                 Button { sendMessage() } label: {
-                    ZStack {
-                        Circle().fill(isGroupBlocked ? Color.gray : groupBrandColor).frame(width: 44, height: 44)
-                            .oledFocusGlow(groupBrandColor)  // __OLED_GLASS_2026_11_16__
-                        Image(systemName: "arrow.up").font(.scaled(20, weight: .bold)).foregroundColor(.white)
-                    }
+                    ComposerRoundButtonFace(systemImage: "arrow.up", primary: true,
+                                            tint: groupBrandColor, enabled: !isGroupBlocked)
                 }
-                .frame(width: 44, height: 44).disabled(isGroupBlocked)
+                .buttonStyle(PressScaleButtonStyle())
+                .disabled(isGroupBlocked)
                 .accessibilityLabel(Text("general.send".localized))
                 .accessibilityIdentifier("group.send")
             } else {
@@ -5193,8 +5415,9 @@ struct GroupChatView: View {
             }
         }
         .padding()
-        // __OLED_GLASS_2026_11_16__ crystal-glass bar under OLED black.
-        .oledGlassBar(fallback: Color(.systemBackground))
+        // __CHAT_CHROME_BLUR_2026_11_21__ the bar's surface moved up to
+        // `groupInputBar`, so it also covers the quick replies, the reply
+        // preview and the `/` bar above this row.
         .animation(composerReduceMotion ? .easeInOut(duration: 0.18) : .spring(response: 0.36, dampingFraction: 0.78),
                    value: groupShowsCaptureButtons)
         .attachmentPanel(isPresented: $showAttachPanel,
@@ -5520,6 +5743,20 @@ struct GroupChatView: View {
                 }
             }
         }
+        // __CHAT_CHROME_BLUR_2026_11_21__ « les fonds d'écran sur les groupes
+        // comme sur les conversations privées … pour avoir le fond sur tout
+        // l'écran ». The wallpaper is the ground of the WHOLE screen, edge to
+        // edge — under the frosted header, the banners and the frosted composer
+        // — exactly as in a 1:1 thread. It keeps the thread's tone.
+        .background {
+            ZStack {
+                Color(.systemGray6)
+                ChatWallpaperView(wallpaper: wallpaperManager.getWallpaper(for: group.id.uuidString))
+            }
+            .environment(\.colorScheme, threadScheme)
+            .ignoresSafeArea()
+        }
+        .chatTopBarBackdrop()
         .navigationTitle(liveGroup.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { groupToolbarContent }
@@ -5617,12 +5854,26 @@ struct GroupChatView: View {
                         showGroupEditSheet = true
                     }
                 } : nil,
+                onWebLink: deferredWebLinkAction(for: m),
                 reactionChoices: groupReactionChoices
             )
             // THE fix: without this the cover is opaque and the overlay's own
             // scrim has nothing to sit on.
             .background(ClearBackgroundView())
         }
+    }
+
+    /// __CHANNEL_WEB_2026_11_26__ nil unless this is a channel post on the public web.
+    private func webLinkAction(for m: GroupMessage) -> (() -> Void)? {
+        guard ChannelWebShare.isEligible(m, in: liveGroup) else { return nil }
+        return { webLinkMessage = m }
+    }
+
+    /// Same, from the long-press overlay: deferred until the cover has dismissed
+    /// (a second presentation requested earlier is swallowed).
+    private func deferredWebLinkAction(for m: GroupMessage) -> (() -> Void)? {
+        guard let open = webLinkAction(for: m) else { return nil }
+        return { DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { open() } }
     }
 
     /// Toggle locally so the tap is immediate, then broadcast the add/remove so
@@ -5685,6 +5936,19 @@ struct GroupChatView: View {
         // Message actions for the LIVE bubble path. Presented here rather than
         // per-bubble: a fullScreenCover on every row is one presentation context
         // per message, which SwiftUI charges for whether or not it is shown.
+        .alert(partialDeliveryShown.map { GroupPartialDelivery.title($0) } ?? "",
+               isPresented: Binding(get: { partialDeliveryShown != nil },
+                                    set: { if !$0 { partialDeliveryShown = nil } })) {
+            Button("group.retry_now".localized) {
+                if let e = partialDeliveryShown, let id = UUID(uuidString: e.msgId) {
+                    groupManager.retryPendingDeliveryNow(messageId: id)
+                }
+                partialDeliveryShown = nil
+            }
+            Button("peers_done".localized, role: .cancel) { partialDeliveryShown = nil }
+        } message: {
+            Text(partialDeliveryAlertMessage)
+        }
         .fullScreenCover(isPresented: $showMessageActions) {
             groupMessageActionsOverlay
         }
@@ -5751,14 +6015,22 @@ struct GroupChatView: View {
             }
         }
         .sheet(isPresented: $showWallpaperPicker) {
-            WallpaperPickerView(conversationId: group.id.uuidString)
+            // Without the group permission: this device only (see GroupOverflowMenu).
+            WallpaperPickerView(conversationId: group.id.uuidString,
+                                broadcast: permGroup.canChangeWallpaper)
         }
         .sheet(isPresented: $showDatePicker) {
             DatePickerSheet(selectedDate: $selectedDate, messages: loadedMessages,
                             onSelectMessage: { messageId in scrollToMessageId = messageId })
         }
         .sheet(isPresented: $showDateSearch) { groupDateSearchSheet }
-        .sheet(isPresented: $showGroupInfo) { GroupInfoView(groupId: group.id) }
+        .sheet(isPresented: $showGroupInfo) { GroupInfoView(groupId: group.id, chatActions: groupInfoChatActions) }
+        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ see ChatView: media viewers,
+        // notice rows and the capture shield read this.
+        .advancedChatPrivacy(isOn: isAdvancedPrivacyOn, toggle: {
+            groupManager.setAdvancedChatPrivacy(!isAdvancedPrivacyOn, groupId: group.id,
+                                                senderPublicKey: identityManager.publicKey)
+        })
         .sheet(isPresented: $showAddMember) { AddMemberView(group: group) }
         .sheet(isPresented: $showMediaPicker) {
             // __ATTACH_PANEL_2027_2026_11_17__ "All photos" / "Choose from
@@ -5790,6 +6062,10 @@ struct GroupChatView: View {
     // MARK: - Sheets Group B (extracted for type-checker)
     private var contentWithSheetsB: some View {
         contentWithSheetsA
+        .sheet(item: $webLinkMessage) { m in
+            ChannelWebPostSheet(message: m, handle: liveGroup.settings?.handle ?? "",
+                                isAdmin: GroupSettingsPolicy.isAdmin(identityManager.publicKey, in: liveGroup))
+        }
         .sheet(isPresented: $showContactPicker) {
             ContactSelectorView { publicKey, alias in
                 sendGroupContactCard(publicKey: publicKey, alias: alias)
@@ -5840,7 +6116,10 @@ struct GroupChatView: View {
                 originalSize: nil,
                 compressionRatio: nil,
                 isCompressed: false
-            ))
+            ), isFromCurrentUser: imageItem.isMine)
+            // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ this cover sits outside the
+            // `.advancedChatPrivacy` modifier, so the switch is handed in here.
+            .environment(\.advancedChatPrivacy, AdvancedChatPrivacyContext(isOn: isAdvancedPrivacyOn))
         }
         .sheet(isPresented: $showLocationPicker) {
             LocationShareSheet(onShareLocation: { sendLocationMessage($0) },
@@ -5892,6 +6171,9 @@ struct GroupChatView: View {
     // MARK: - Sheets Group C (extracted for type-checker)
     private var contentWithSheetsC: some View {
         contentWithSheetsB
+        .sheet(item: $slashEditorBot) { bot in
+            BotCommandsEditorSheet(bot: bot)
+        }
         .sheet(isPresented: $showAIShortcuts) {
             AIShortcutsView(messageText: $messageText, isPresented: $showAIShortcuts, replyingToMessage: conversationContextForAI)
                 .presentationDetents([.medium, .large])
@@ -6019,6 +6301,8 @@ struct GroupChatView: View {
         // __FOLDABLE_LAYOUT_2026_11_16__ Bubble caps follow THIS view's width.
         .providesChatColumnWidth($groupColumnWidth)
         .onAppear {
+            // __BOTS_PHASE1_2026_11_24__ the remote bots' command lists, for the `/` menu.
+            Task { await GroupBotDirectory.shared.refreshCommands(in: group.id) }
             isViewVisible = true
             attachGroupHandoffIfNeeded()
             #if DEBUG
@@ -6169,6 +6453,8 @@ struct GroupChatView: View {
             // Skip system/protocol content (call summaries, receipts…) so raw
             // localization keys like "call.no.answer" never reach the LLM prompt.
             if newCount > oldCount,
+               // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ no model run on a protected group.
+               AdvancedChatPrivacyPolicy.allowsAI(protected: isAdvancedPrivacyOn),
                let lastMsg = loadedMessages.last,
                lastMsg.senderPublicKey != identityManager.publicKey,
                lastMsg.systemMessageType == nil,
@@ -6628,7 +6914,12 @@ struct GroupChatView: View {
         // bot still deserves an answer, and the answer is "there is no bot here".
         // The app ships a `/help` TEMPLATE, so the command looks like something
         // the app should handle; nothing said otherwise until now.
-        if BotManager.shared.shouldShowNoBotHint(for: sentText, groupId: group.id) {
+        // __BOTS_PHASE1_2026_11_24__ A typed `/cmd` also reaches the group's
+        // REMOTE bots (`kind:"command"`, first line only — never the thread).
+        let dispatched = GroupBotDirectory.shared.dispatchIfCommand(sentText, groupId: group.id,
+                                                                    owned: BotManager.shared.bots)
+        if dispatched.isEmpty, GroupBotDirectory.shared.bots(in: group.id).isEmpty,
+           BotManager.shared.shouldShowNoBotHint(for: sentText, groupId: group.id) {
             BotManager.shared.markNoBotHintShown(groupId: group.id)
             withAnimation(.easeInOut(duration: 0.25)) { showNoBotHint = true }
         }
@@ -6740,11 +7031,17 @@ struct GroupChatView: View {
     
     // ✅ Audio recording button - Fixed for iPad compatibility
     private var audioRecordButton: some View {
-        Image(systemName: "mic.fill")
-            .font(.title3)
-            .foregroundColor(groupBrandColor)
-            .frame(width: 44, height: 44)
+        // __COMPOSER_PILL_2026_11_23__ the Google bar's voice button: a quiet
+        // tonal circle beside the pill; red with a stop glyph while recording.
+        ComposerRoundButtonFace(systemImage: isRecordingAudio ? "stop.fill" : "mic.fill",
+                                primary: false,
+                                recording: isRecordingAudio,
+                                tint: groupBrandColor,
+                                enabled: !isGroupBlocked)
             .contentShape(Circle())
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(isRecordingAudio ? "audio.recording".localized : "audio.hold_to_record".localized))
+            .accessibilityAddTraits(.isButton)
             .allowsHitTesting(true)  // ✅ Explicitly enable hit testing for iPad
             .onTapGesture {
                 if !isRecordingAudio {
@@ -7735,6 +8032,7 @@ struct GroupMessageBubble: View {
                                 .font(.caption2)
                                 .fontWeight(.medium)
                                 .foregroundColor(.blue)
+                            BotBadge()
                         } else {
                             Text(formatAddress(message.senderPublicKey))
                                 .font(.caption2)
@@ -8797,6 +9095,8 @@ struct AddMemberView: View {
 
 struct GroupInfoView: View {
     let groupId: UUID
+    /// __GROUP_HEADER_ISLAND_2026_11_24__ the old ⋯ menu's actions, when opened from the chat.
+    var chatActions: GroupInfoChatActions? = nil
     @Environment(\.dismiss) var dismiss
     @Environment(\.presentationMode) var presentationMode  // For proper navigation pop
     @EnvironmentObject var groupManager: MessageGroupManager
@@ -8995,6 +9295,12 @@ struct GroupInfoView: View {
                         Spacer()
                     }
                     .listRowBackground(Color.clear)
+                }
+
+                // __GROUP_HEADER_ISLAND_2026_11_24__ what the chat's ⋯ menu held.
+                if let chatActions {
+                    GroupInfoChatActionsSection(actions: chatActions,
+                                                muted: groupManager.isGroupMuted(groupId))
                 }
 
                 // __GROUP_INFO_SETTINGS_2026_11_20__ GROUP_INFO_SETTINGS_SPEC §5 items 2–9.
@@ -10385,11 +10691,15 @@ struct GroupInlineLinkBubble: View {
                     lineWidth: 0.5))
         // __OLED_GLASS_2026_11_16__ received bubble = dark glass edge (no blur).
         .modifier(OLEDGlassIncomingEdge(isMine: isMine, radius: 18))
-        .onAppear {
-            if detectedURL == nil, let url = text.detectFirstURL() {
-                detectedURL = url
-                fetcher.fetchPreview(for: url, allowNetwork: isMine) // __LEAK_FIX_2026_09_25__
-            }
+        // __GROUP_OPEN_HITCH_2026_11_22__ `.task`, not `.onAppear`: the
+        // first-link scan runs off the main thread (LinkDetection) instead of
+        // inside the open's first layout, once per bubble.
+        .task(id: text) {
+            guard detectedURL == nil,
+                  let url = await LinkDetection.firstURLAsync(in: text),
+                  detectedURL == nil else { return }
+            detectedURL = url
+            fetcher.fetchPreview(for: url, allowNetwork: isMine) // __LEAK_FIX_2026_09_25__
         }
     }
 
@@ -10413,6 +10723,8 @@ struct GroupMessageActions: ViewModifier {
     var onDoubleTap: () -> Void = {}
     /// __REACTION_MAC_MENU_2026_11_15__ Mac right-click → "React" submenu.
     var onReact: ((ReactionEmoji) -> Void)? = nil
+    /// __CHANNEL_WEB_2026_11_26__ Mac right-click → "Web link…" (channel posts on the web).
+    var onWebLink: (() -> Void)? = nil
 
     @State private var frame: CGRect = .zero
 
@@ -10442,6 +10754,9 @@ struct GroupMessageActions: ViewModifier {
             .contextMenu {
                 if let onReact {
                     ReactionContextMenu(onReact: onReact)
+                }
+                if let onWebLink {
+                    Button { onWebLink() } label: { Label("cw_post_menu".localized, systemImage: "globe") }
                 }
             }
             #endif
@@ -10559,5 +10874,93 @@ enum GroupGifSend {
         let name = attachment.fileName.isEmpty ? "gif_\(Int(Date().timeIntervalSince1970)).gif" : attachment.fileName
         let fileName = name.lowercased().hasSuffix(".gif") ? name : name + ".gif"
         return (attachment.data, .photo, fileName)
+    }
+}
+
+
+// MARK: - Group "…" menu  __MENU_SCROLL_RESET_2026_11_21__
+//
+// See `ChatOverflowMenu` (ChatView.swift): a SwiftUI menu refreshed while open
+// is replaced by UIKit and loses its scroll position. Compared by value, and
+// the UIMenu is owned by `StableMenuButton`.
+struct GroupOverflowMenu: View, Equatable {
+    struct MenuState: Equatable {
+        var canAddMembers: Bool
+        var muted: Bool
+        var blocked: Bool
+        var admin: Bool
+        /// 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__
+        var advancedPrivacy: Bool = false
+    }
+
+    struct Actions {
+        var openInfo: () -> Void
+        var addMember: () -> Void
+        var openWallpaper: () -> Void
+        var toggleMute: () -> Void
+        var toggleAdvancedPrivacy: () -> Void = {}
+        var report: () -> Void
+        var unblock: () -> Void
+        var block: () -> Void
+        var leave: () -> Void
+    }
+
+    let state: MenuState
+    let actions: Actions
+
+    static func == (lhs: GroupOverflowMenu, rhs: GroupOverflowMenu) -> Bool {
+        lhs.state == rhs.state
+    }
+
+    var sections: [[OverflowMenuItem]] {
+        var first: [OverflowMenuItem] = [.init(id: "info", title: "menu_group_info".localized, symbol: "info.circle")]
+        if state.canAddMembers {
+            first.append(.init(id: "add", title: "menu_add_member".localized, symbol: "person.badge.plus"))
+        }
+        // __WALLPAPER_FOR_EVERY_MEMBER_2026_11_21__ Always offered. Without the
+        // group permission (admin-only group, channel) the choice is kept on
+        // this device only instead of being sent to the members — it used to be
+        // hidden outright, so a channel reader could not choose a backdrop.
+        first.append(.init(id: "wallpaper", title: "wallpaper.title".localized, symbol: "photo.artframe"))
+        first.append(state.muted
+            ? .init(id: "mute", title: "group.unmute".localized, symbol: "bell.fill")
+            : .init(id: "mute", title: "group.mute".localized, symbol: "bell.slash.fill"))
+        return [
+            first,
+            // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ any member may flip it.
+            [AdvancedChatPrivacyMenu.item(isOn: state.advancedPrivacy)],
+            // 🚩 Report (App Store guideline 1.2) — always available, even for an
+            // already-blocked group.
+            [.init(id: "report", title: "group.report_group".localized, symbol: "flag.fill"),
+             state.blocked
+                ? .init(id: "unblock", title: "group.unblock".localized, symbol: "hand.raised.slash")
+                : .init(id: "block", title: "group.block".localized, symbol: "hand.raised.fill")],
+            [.init(id: "leave",
+                   title: state.admin ? "button_delete_group".localized : "button_leave_group".localized,
+                   symbol: state.admin ? "trash" : "rectangle.portrait.and.arrow.right",
+                   destructive: true)],
+        ]
+    }
+
+    /// __GROUP_HEADER_ISLAND_2026_11_24__ also run by the header avatar's long-press menu.
+    func select(_ id: String) { perform(id) }
+
+    private func perform(_ id: String) {
+        switch id {
+        case "info": actions.openInfo()
+        case "add": actions.addMember()
+        case "wallpaper": actions.openWallpaper()
+        case "mute": actions.toggleMute()
+        case AdvancedChatPrivacyMenu.itemId: actions.toggleAdvancedPrivacy()
+        case "report": actions.report()
+        case "unblock": actions.unblock()
+        case "block": actions.block()
+        case "leave": actions.leave()
+        default: break
+        }
+    }
+
+    var body: some View {
+        StableMenuButton(sections: sections, identifier: "group_overflow_menu", onSelect: perform)
     }
 }

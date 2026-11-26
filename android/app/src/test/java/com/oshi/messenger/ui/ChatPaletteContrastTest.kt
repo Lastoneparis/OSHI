@@ -108,7 +108,8 @@ class ChatPaletteContrastTest {
     @Test
     fun `tokens are the same hex values as iOS ChatPalette`() {
         assertEquals(Color(0xFFFFFFFF), Oshi.Bubble.receivedLight)
-        assertEquals(Color(0xFF1E1B2E), Oshi.Bubble.receivedDark)
+        // __BUBBLE_MEDIA_2026_11_21__ BUBBLE_MEDIA_SPEC §2: neutral elevated grey (was indigo #1E1B2E).
+        assertEquals(Color(0xFF22252B), Oshi.Bubble.receivedDark)
         assertEquals(Color(0xFF7B3AF5), BubbleAccent.OSHI.stopStart)
         assertEquals(Color(0xFF5616EC), BubbleAccent.OSHI.stopEnd)
         assertEquals(18f, BubbleStyle.Modern.radius.value)

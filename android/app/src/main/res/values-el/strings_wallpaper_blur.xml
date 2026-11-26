@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">Προεπιλεγμένη ταπετσαρία για όλες τις συνομιλίες. Κάθε συνομιλία μπορεί να έχει τη δική της.</string>
+    <string name="wallpaper_tone_settings_title">Τόνος ταπετσαρίας</string>
+    <string name="wallpaper_personal_note">Μόνο εσύ βλέπεις αυτή την ταπετσαρία, σε αυτή τη συσκευή.</string>
+</resources>

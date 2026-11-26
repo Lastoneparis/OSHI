@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">छोड़ें</string>
+    <string name="ob27_continue">जारी रखें</string>
+    <string name="ob27_page_of">पेज %2$d में से %1$d</string>
+    <string name="ob27_private_title">सिर्फ़ आप और वे</string>
+    <string name="ob27_private_body">मैसेज और कॉल आपके फ़ोन पर एंड-टू-एंड एन्क्रिप्टेड होते हैं। बीच में कोई भी इन्हें नहीं पढ़ सकता — OSHI भी नहीं।</string>
+    <string name="ob27_offline_title">इंटरनेट के बिना भी चलता है</string>
+    <string name="ob27_offline_body">नेटवर्क नहीं है? मैसेज आस-पास के उन लोगों के ज़रिए फ़ोन से फ़ोन तक पहुँचते हैं जिनके फ़ोन में OSHI खुला है। LoRa रेडियो इन्हें और दूर ले जाता है।</string>
+    <string name="ob27_range_direct">सीधे</string>
+    <string name="ob27_range_relayed">रिले से</string>
+    <string name="ob27_range_lora">LoRa रेडियो</string>
+    <string name="ob27_anon_title">फ़ोन नंबर की ज़रूरत नहीं</string>
+    <string name="ob27_anon_body">न अकाउंट, न ईमेल, न साइन अप के लिए नंबर। आपकी पहचान इसी फ़ोन पर बनी एक कुंजी है।</string>
+    <string name="ob27_together_title">अपने लोगों को जोड़ें</string>
+    <string name="ob27_together_body">किसी एक से या ग्रुप में चैट करें। किसी का QR कोड स्कैन करके या उन्हें इनवाइट लिंक भेजकर जोड़ें।</string>
+    <string name="ob27_rules_title">शुरू करने से पहले</string>
+    <string name="ob27_rules_subtitle">कुछ ज़रूरी नियम, और OSHI क्या कर सकता है और क्या अभी नहीं।</string>
+    <string name="ob27_rules_do">ये करें</string>
+    <string name="ob27_rules_dont">कभी नहीं</string>
+    <string name="ob27_good_to_know">जानने लायक</string>
+    <string name="ob27_show_details">विवरण दिखाएँ</string>
+    <string name="ob27_hide_details">विवरण छिपाएँ</string>
+    <string name="ob27_agree">समझ आ गया</string>
+    <string name="ob27_notif_title">कोई मैसेज न चूकें</string>
+    <string name="ob27_notif_body">नए मैसेज और कॉल देखने के लिए सूचनाएँ चालू करें। आप इन्हें कभी भी सेटिंग्स में बंद कर सकते हैं।</string>
+    <string name="ob27_notif_allow">सूचनाएँ चालू करें</string>
+    <string name="ob27_not_now">अभी नहीं</string>
+    <string name="ob27_identity_title">एक नाम चुनें</string>
+    <string name="ob27_identity_body">आपके संपर्क यही नाम देखेंगे। आप इसे बाद में बदल सकते हैं।</string>
+    <string name="ob27_already">पहले से OSHI इस्तेमाल करते हैं?</string>
+</resources>

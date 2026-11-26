@@ -246,8 +246,9 @@ fun RevealResultDialog(outcome: PhotoDisguise.Outcome?, checking: Boolean, onOpe
                         }
                         Row {
                             if (r.payload.text.isNotEmpty()) TextButton(onClick = {
-                                (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-                                    .setPrimaryClip(ClipData.newPlainText("", r.payload.text))
+                                // __ANTI_STALKERWARE_2026_11_20__ a revealed hidden message is
+                                // decrypted plaintext: sensitive clip, auto-cleared after 60 s.
+                                com.oshi.messenger.security.SensitiveClipboard.copyMessageText(context, r.payload.text)
                             }) { Text(stringResource(R.string.reveal_copy)) }
                             r.payload.file?.let { f ->
                                 TextButton(onClick = {

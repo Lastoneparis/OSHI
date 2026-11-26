@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Mode de seguretat estricta</string>
+    <string name="strict_status_on">Activat: sense copiar, sense captures de pantalla, amagat a les apps lectores de pantalla</string>
+    <string name="strict_status_off">Desactivat. Blinda OSHI quan et poden vigilar el telèfon</string>
+    <string name="strict_hero_on">El mode de seguretat estricta està activat</string>
+    <string name="strict_intro">Per quan poden vigilar un telèfon. Un sol interruptor blinda OSHI: no es pot copiar res, la pantalla no es pot capturar i les apps que llegeixen la pantalla, inclosos els agents d\'IA, no hi veuen res.</string>
+    <string name="strict_section_switch">Mode</string>
+    <string name="strict_toggle_title">Mode de seguretat estricta</string>
+    <string name="strict_toggle_on">Activat en aquest dispositiu</string>
+    <string name="strict_toggle_off">Desactivat</string>
+    <string name="strict_block_paste_title">Bloqueja també enganxar</string>
+    <string name="strict_block_paste_subtitle">Tampoc no es pot enganxar res a OSHI</string>
+    <string name="strict_hide_presence_title">Amaga les confirmacions de lectura i l\'escriptura</string>
+    <string name="strict_hide_presence_subtitle">Els altres no veuen quan llegeixes o escrius</string>
+    <string name="strict_forced_subtitle">Definit pel mode de seguretat estricta</string>
+    <string name="strict_blocked_toast">Bloquejat pel mode de seguretat estricta</string>
+    <string name="strict_unlock_title">Desactiva el mode de seguretat estricta</string>
+    <string name="strict_unlock_subtitle">Confirma que ets tu</string>
+    <string name="strict_threats_title">Apps que poden llegir o controlar la pantalla</string>
+    <string name="strict_threats_none">No se n\'ha trobat cap en aquest telèfon.</string>
+    <string name="strict_threat_a11y">Servei d\'accessibilitat que no és una eina d\'assistència</string>
+    <string name="strict_threat_remote">App de control remot o de duplicació de pantalla</string>
+    <string name="strict_threats_open">Revisa</string>
+    <string name="strict_threats_explainer">OSHI no pot desactivar una altra app. Si no en reconeixes alguna, desactiva-la a Configuració d\'Android › Accessibilitat o desinstal·la-la.</string>
+    <string name="strict_banner_title">Hi ha apps que poden llegir o controlar aquesta pantalla</string>
+    <string name="strict_banner_body">%1$s. El mode de seguretat estricta hi amaga OSHI allà on Android ho permet.</string>
+    <string name="strict_banner_dismiss">Descarta</string>
+    <string name="strict_does_title">Què fa</string>
+    <string name="strict_does_copy">No es pot copiar, retallar, reenviar, compartir ni desar missatges. El text no es pot seleccionar i s\'esborra tot el que OSHI hagi posat al porta-retalls.</string>
+    <string name="strict_does_paste">Enganxar a OSHI queda bloquejat quan “Bloqueja també enganxar” està activat, incloent-hi l\'ordre d\'enganxar del teclat.</string>
+    <string name="strict_does_screen">Les captures, la gravació i la compartició de pantalla mostren una pantalla negra. La vista prèvia d\'apps recents queda amagada.</string>
+    <string name="strict_does_agents">Les apps que llegeixen la pantalla mitjançant Accessibilitat, inclosos els agents d\'IA, no veuen cap contingut d\'OSHI (Android 14 i posteriors). Els tocs que injectin s\'ignoren.</string>
+    <string name="strict_does_overlays">Els tocs s\'ignoren mentre una altra app es dibuixa per sobre d\'OSHI.</string>
+    <string name="strict_does_notifications">Les notificacions només diuen “Missatge nou”: sense nom, sense foto, sense text.</string>
+    <string name="strict_does_lock">Bloqueig de l\'app cada cop que tornes a OSHI (si el telèfon té bloqueig de pantalla).</string>
+    <string name="strict_does_keyboard">Teclat d\'incògnit: se li demana al teclat que no aprengui el que escrius.</string>
+    <string name="strict_does_network">Sense previsualització d\'enllaços ni cerca de GIPHY: no es descarrega res de llocs de tercers.</string>
+    <string name="strict_does_presence">Confirmacions de lectura i indicadors d\'escriptura desactivats (si has triat amagar-los).</string>
+    <string name="strict_does_relay">Relé de privacitat activat quan n\'hi ha un de disponible.</string>
+    <string name="strict_does_restore">La configuració anterior torna quan desactives el mode.</string>
+    <string name="strict_cannot_title">Què no pot fer</string>
+    <string name="strict_cannot_malware">Cap app no et pot protegir del tot del programari maliciós ni d\'un telèfon compromès (amb root).</string>
+    <string name="strict_cannot_keyboard">El teclat continua veient el que escrius. Un suggeriment del porta-retalls que escrigui per tu no es distingeix d\'escriure.</string>
+    <string name="strict_cannot_readers">Els lectors de pantalla per a persones cegues o amb baixa visió continuen funcionant, però altres apps d\'accessibilitat no poden llegir OSHI mentre el mode estigui activat.</string>
+    <string name="strict_cannot_old">A Android 13 i anteriors, OSHI no pot amagar el seu contingut a les apps d\'accessibilitat. Només te\'n pot avisar.</string>
+    <string name="strict_cannot_camera">Algú encara pot fotografiar la pantalla amb un altre dispositiu.</string>
+    <string name="strict_cannot_recipient">Protegeix només aquest telèfon, no els de les persones a qui escrius.</string>
+    <string name="strict_auto_lock_immediate">Immediatament (Mode de seguretat estricta)</string>
+</resources>

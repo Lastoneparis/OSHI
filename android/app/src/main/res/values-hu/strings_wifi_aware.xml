@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware (gyors közeli kapcsolat)</string>
+    <string name="settings_wifi_aware_subtitle">Közvetlen kapcsolat a közeli OSHI-telefonokkal, router nélkül. A Wi-Fi-kapcsolatod megmarad.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

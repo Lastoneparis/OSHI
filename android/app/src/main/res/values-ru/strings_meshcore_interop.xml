@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · без сквозного шифрования OSHI</string>
+    <string name="meshcore_error_not_connected">Радио MeshCore не подключено</string>
+    <string name="meshcore_channels_title">Каналы MeshCore</string>
+    <string name="meshcore_channel_public">Публичный · доступен всем, кто знает название</string>
+    <string name="meshcore_channel_private">Приватный · секретный ключ</string>
+    <string name="meshcore_join_hashtag">Войти в хештег-канал</string>
+    <string name="meshcore_join_private">Войти в приватный канал</string>
+    <string name="meshcore_contacts_title">Контакты MeshCore</string>
+    <string name="meshcore_refresh_contacts">Обновить контакты</string>
+    <string name="meshcore_join_refused">Радио отклонило этот канал.</string>
+    <string name="meshcore_join_no_slot">На этом радио нет свободного слота для канала.</string>
+    <string name="meshcore_join_bad_name">Введите корректное название канала (не более 31 байта, без пробелов для хештег-канала).</string>
+    <string name="meshcore_join_bad_secret">Секрет должен быть 16 байт: 32 шестнадцатеричных символа или base64.</string>
+    <string name="meshcore_hashtag_hint">Ключ выводится из названия: любой, кто знает название, может читать канал.</string>
+    <string name="meshcore_private_hint">Введите название канала и секрет, общий для его участников.</string>
+    <string name="meshcore_channel_name">Название канала</string>
+    <string name="meshcore_channel_secret">Секрет (hex или base64)</string>
+    <string name="meshcore_join">Войти</string>
+    <string name="meshcore_note_dm">Шифруется MeshCore между радиостанциями, а не сквозным шифрованием OSHI.</string>
+    <string name="meshcore_note_public">Публичный канал: его может читать любой, кто знает название.</string>
+    <string name="meshcore_note_private">Приватный канал: его может читать любой, у кого есть его секрет.</string>
+    <string name="meshcore_radio_offline">Радиостанция MeshCore не подключена. Сообщения ждут здесь как недоставленные.</string>
+    <string name="meshcore_connect">Подключить</string>
+    <string name="meshcore_parts">Сообщений: %1$d</string>
+    <string name="meshcore_sending">Ожидание радиостанции</string>
+    <string name="meshcore_failed_dm">Нет ответа от их радиостанции (вне зоны?). Нажмите, чтобы повторить.</string>
+    <string name="meshcore_error_pairing">Не удалось создать пару. Проверьте PIN-код и повторите попытку. Если радиостанцию сбросили, сначала удалите её в настройках Bluetooth Android.</string>
+    <string name="meshcore_error_no_answer">Радиостанция не ответила. Убедитесь, что на ней прошивка MeshCore companion для Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Связь потеряна. Переподключение, когда радиостанция вернётся в зону…</string>
+    <string name="meshcore_state_pin">Введите PIN-код радиостанции в окне Android</string>
+    <string name="meshcore_state_reading">Чтение контактов и каналов…</string>
+    <string name="meshcore_state_connecting">Подключение…</string>
+    <string name="meshcore_seen_as">Подключено · пользователи MeshCore видят вас как %1$s</string>
+    <string name="meshcore_connected">Подключено</string>
+    <string name="meshcore_footer_users">Общайтесь с пользователями MeshCore (личные сообщения и каналы) и передавайте сообщения OSHI через ретрансляторы MeshCore. Нужна прошивка MeshCore companion для Bluetooth. OSHI добавляет один канал, #oshi-bridge, в свободный слот и никогда не меняет другие ваши каналы.</string>
+    <string name="meshcore_scan_below">Радиостанции MeshCore появляются ниже в разделе «Радиостанции рядом» с меткой MeshCore.</string>
+    <string name="meshcore_contacts_footer">Нажмите на человека, чтобы написать ему. Сообщения шифрует MeshCore, а не сквозное шифрование OSHI.</string>
+    <string name="meshcore_no_contacts">Пока никого не слышно. Пользователи MeshCore появляются здесь, когда их радиостанция объявляет о себе. Объявите свою, чтобы вас нашли.</string>
+    <string name="meshcore_heard">Слышно %1$s</string>
+    <string name="meshcore_announce">Объявить меня</string>
+    <string name="meshcore_announce_done">Объявлено. Пользователи MeshCore в зоне теперь могут добавить вас и написать вам.</string>
+    <string name="meshcore_announce_failed">Радиостанции не удалось отправить объявление.</string>
+    <string name="meshcore_channels_footer">Нажмите на канал, чтобы открыть его. Публичные и хештег-каналы может читать любой, кто знает их название.</string>
+    <string name="meshcore_pin_title">Создать пару с %1$s</string>
+    <string name="meshcore_pin_body">Сейчас Android запросит PIN-код радиостанции. Если у неё есть экран, PIN-код показан на нём.</string>
+    <string name="meshcore_pin_default">Нет экрана? PIN-код 123456, если его не меняли в приложении MeshCore.</string>
+    <string name="meshcore_pin_continue">Продолжить</string>
+    <string name="meshcore_no_free_channel_chat">Все 8 слотов каналов заняты. Вы всё равно можете общаться с пользователями MeshCore; освободите слот в приложении MeshCore, чтобы сообщения OSHI могли использовать #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">Пользователь MeshCore</string>
+    <string name="meshcore_too_long">Слишком длинно: максимум %1$d сообщений</string>
+</resources>

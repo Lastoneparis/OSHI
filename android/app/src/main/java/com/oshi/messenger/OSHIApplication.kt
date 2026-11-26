@@ -28,6 +28,10 @@ class OSHIApplication : Application() {
 
     /** __DEVSYNC_DIRECT_2026_09_22__ Direct own-device sync (flag-gated, foreground only). */
     @Inject lateinit var devSyncManager: com.oshi.messenger.devsync.DevSyncManager
+    // __MAIL_UNREAD_REFRESH_2026_11_22__ unread-mail badge kept true outside the Mail screen.
+    @Inject lateinit var mailUnreadSync: com.oshi.messenger.mail.MailUnreadSync
+    // __CHANNEL_WEB_2026_11_26__ public channel web preview outbox (drained in the background).
+    @Inject lateinit var channelWebPublisher: dagger.Lazy<com.oshi.messenger.service.channelweb.ChannelWebPublisher>
 
     /**
      * The app's ONE location source, injected so the LoRa position beacon can borrow it.
@@ -39,9 +43,18 @@ class OSHIApplication : Application() {
      */
     @Inject lateinit var locationSharingManager: com.oshi.messenger.network.location.LocationSharingManager
 
+    /**
+     * __PER_APP_LANGUAGE_2026_11_20__ Android 8–12: notifications and services resolve
+     * strings through the application context, so it carries the in-app language too.
+     */
+    override fun attachBaseContext(base: android.content.Context) {
+        super.attachBaseContext(com.oshi.messenger.ui.locale.AppLanguage.wrap(base))
+    }
+
     override fun onCreate() {
         super.onCreate()
         instance = this
+        com.oshi.messenger.ui.locale.AppLanguage.migrateToFramework(this)
 
         // __RATCHET_IS_SHARED_SOURCE_2026_10_28__ The ratchet logs through a seam now, so
         // that `DoubleRatchet.kt` imports no `android.*` and the desktop client can compile
@@ -72,6 +85,13 @@ class OSHIApplication : Application() {
         // low-priority thread and never blocks startup.
         com.oshi.messenger.data.local.atrest.AtRestKey.install(this)
         com.oshi.messenger.data.local.atrest.AtRestMigration.start(this)
+
+        // __CHANNEL_WEB_2026_11_26__ after the first frame (it pulls in GroupManager, which the
+        // UI builds anyway); `start` itself only launches a background coroutine.
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            runCatching { channelWebPublisher.get().start() }
+                .onFailure { Log.w(TAG, "channel web start failed: ${it.message}") }
+        }, 2_000L)
 
         // __CALL_LOG_AT_REST_2026_09_23__ Sealed call diagnostics (OSHILOG1, same as iOS).
         // Rotation is a rename; the key and every write live on the logger's own thread.
@@ -119,6 +139,13 @@ class OSHIApplication : Application() {
         runCatching {
             com.oshi.messenger.service.LastReactionStore.attach(this)
         }.onFailure { Log.w(TAG, "last-reaction store attach failed: ${it.message}") }
+
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Loaded before any banner can be built:
+        // the banner builders ask it whether system smart actions are allowed.
+        runCatching {
+            com.oshi.messenger.service.AdvancedChatPrivacyStore.attach(this)
+            com.oshi.messenger.service.AdvancedChatPrivacyReaders.attach(this)
+        }.onFailure { Log.w(TAG, "advanced-privacy store attach failed: ${it.message}") }
 
         // 💓 __ALIVE_CHECK_IN_2026_11_04__ The liveness check-ins, for the same
         // reason as the line above — the conversation list draws their dots and
@@ -219,6 +246,9 @@ class OSHIApplication : Application() {
         OshiConnectionService.registerPhoneAccount(this)
 
         registerCallLifecycleObserver()
+        // __MAIL_UNREAD_REFRESH_2026_11_22__ network-available + launch checks of the mailbox.
+        runCatching { mailUnreadSync.install(this) }
+            .onFailure { Log.w(TAG, "mailUnreadSync.install failed: ${it.message}") }
 
         // __DEVSYNC_DIRECT_2026_09_22__ Registers its own process-lifecycle observer; every heavy
         // dependency is lazy, so this constructs nothing else on the main thread.
@@ -262,6 +292,10 @@ class OSHIApplication : Application() {
                         .onFailure { Log.w(TAG, "AppPollState.onForeground failed: ${it.message}") }
                     runCatching { enhancedCallManager.onAppForegrounded() }
                         .onFailure { Log.w(TAG, "onAppForegrounded failed: ${it.message}") }
+                    // __MAIL_UNREAD_REFRESH_2026_11_22__ ask the mailbox on every foreground
+                    // and every minute while open, not only when the Mail screen loads.
+                    runCatching { mailUnreadSync.onForeground() }
+                        .onFailure { Log.w(TAG, "mailUnreadSync.onForeground failed: ${it.message}") }
                 }
 
                 override fun onStop(owner: LifecycleOwner) {
@@ -275,6 +309,7 @@ class OSHIApplication : Application() {
                         .onFailure { Log.w(TAG, "BackgroundPresence.onBackground failed: ${it.message}") }
                     runCatching { enhancedCallManager.onAppBackgrounded() }
                         .onFailure { Log.w(TAG, "onAppBackgrounded failed: ${it.message}") }
+                    runCatching { mailUnreadSync.onBackground() }
                 }
             })
             Log.d(TAG, "📱 Process lifecycle observer registered for call camera pause/resume")

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Kommentarer</string>
+    <string name="gs_comments_footer">Medlemmer kan kommentere under hvert innlegg. Bare administratorer kan poste.</string>
+    <string name="cm_leave_comment">Skriv en kommentar</string>
+    <string name="cm_thread_title">Kommentarer</string>
+    <string name="cm_empty">Ingen kommentarer ennå.</string>
+    <string name="cm_composer_hint">Kommentar…</string>
+    <string name="cm_replying_to">Svarer %1$s</string>
+    <string name="cm_disabled">Kommentarer er slått av.</string>
+    <string name="cm_post_unavailable">Dette innlegget er ikke lenger tilgjengelig.</string>
+    <string name="cm_too_fast">Du kommenterer for raskt. Vent litt.</string>
+    <string name="cm_notif_reply">%1$s svarte på kommentaren din</string>
+    <string name="cm_delete_comment">Slett kommentar</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d kommentar</item>
+        <item quantity="other">%d kommentarer</item>
+    </plurals>
+</resources>

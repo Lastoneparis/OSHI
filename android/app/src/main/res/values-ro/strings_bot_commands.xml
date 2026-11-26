@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Comenzi</string>
+    <string name="bot_cmd_send_a11y">Trimite %1$s</string>
+    <string name="bot_cmd_sheet_title">Comenzile botului</string>
+    <string name="bot_cmd_tap_to_send">Atinge o comandă ca s-o trimiți.</string>
+    <string name="bot_cmd_empty_none_title">Încă niciun bot aici</string>
+    <string name="bot_cmd_empty_none_body">Creează un bot și adaugă-l în acest grup. Comenzile lui vor apărea aici și când tastezi /.</string>
+    <string name="bot_cmd_empty_bot">Acest bot nu are încă nicio comandă.</string>
+    <string name="bot_cmd_setup">Configurează comenzile</string>
+    <string name="bot_cmd_section">Comenzi</string>
+    <string name="bot_cmd_section_hint">Membrii grupurilor botului le văd când tastează / sau ating Comenzi.</string>
+    <string name="bot_cmd_add">Adaugă</string>
+    <string name="bot_cmd_add_title">Comandă nouă</string>
+    <string name="bot_cmd_edit_title">Editează comanda</string>
+    <string name="bot_cmd_field_name">Comandă</string>
+    <string name="bot_cmd_field_description">Descriere (afișată în meniu)</string>
+    <string name="bot_cmd_field_reply">Răspuns</string>
+    <string name="bot_cmd_field_reply_hint">Ce răspunde botul. Poți folosi {{input}}, {{bot_name}} și {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Trimisă la webhookul tău, care răspunde.</string>
+    <string name="bot_cmd_empty_owner">Încă nicio comandă. Adaugă una, de exemplu /start sau /help, ca toată lumea să știe ce face acest bot.</string>
+    <string name="bot_cmd_err_empty">Introdu un nume de comandă.</string>
+    <string name="bot_cmd_err_invalid">Doar litere mici, cifre și _.</string>
+    <string name="bot_cmd_err_too_long">Cel mult 32 de caractere.</string>
+    <string name="bot_cmd_err_duplicate">Acest bot are deja această comandă.</string>
+    <string name="bot_cmd_err_too_many">Un bot poate avea cel mult 100 de comenzi.</string>
+    <string name="bot_cmd_err_description">Descriere prea lungă (cel mult 256 de caractere).</string>
+    <string name="bot_cmd_sync_local">Salvat pe acest telefon, care rulează botul.</string>
+    <string name="bot_cmd_sync_syncing">Se actualizează serverul…</string>
+    <string name="bot_cmd_sync_synced">Meniu actualizat pe server.</string>
+    <string name="bot_cmd_sync_failed">Serverul nu a putut fi actualizat. Comenzile tale sunt salvate pe acest telefon.</string>
+    <string name="bot_profile_edit">Editează profilul</string>
+    <string name="bot_profile_name">Nume</string>
+    <string name="bot_profile_description">Descriere</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Dă-i un nume botului tău.</string>
+    <string name="bot_profile_err_name_long">Nume prea lung (cel mult 64 de caractere).</string>
+    <string name="bot_profile_err_desc_long">Descriere prea lungă (cel mult 512 caractere).</string>
+    <string name="bot_connect_title">Cum se conectează</string>
+    <string name="bot_connect_local">Acest bot rulează pe acest telefon: păstrează OSHI instalat și botul activat. Adaugă-l într-un grup și membrii îi vor putea folosi comenzile acolo.</string>
+    <string name="bot_connect_webhook">Fiecare comandă e trimisă la URL-ul webhookului tău, iar serverul tău răspunde cu JSON {\"text\": \"…\"}. Serverul tău poate folosi și tokenul de mai jos cu API-ul de boți OSHI.</string>
+    <string name="bot_connect_token_warning">Păstrează tokenul secret: oricine îl are poate vorbi în numele botului tău.</string>
+    <string name="bot_connect_groups">Grupuri: %1$s</string>
+    <string name="bot_connect_no_groups">Încă nu e în niciun grup, deci nimeni nu-i poate folosi comenzile.</string>
+</resources>

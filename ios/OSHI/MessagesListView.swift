@@ -100,15 +100,21 @@ struct MessagesListView: View {
         // invocation; combined with file-backed logging that's 20k log
         // writes/sec post-call, which froze the app for ~10s.
         guard !contactAliasesData.isEmpty else { return [:] }
-        return (try? JSONDecoder().decode([String: String].self, from: contactAliasesData)) ?? [:]
+        return ContactAliasesMemo.map(contactAliasesData)
     }
 
     /// __SHARED_NICKNAME_2026_09_22__ Nom affiche: alias local > pseudo partage
     /// par le contact > nil (la ligne retombe alors sur l'adresse courte).
+    ///
+    /// __LAUNCH_LAG_2026_11_22__ Called once per conversation ROW on every body
+    /// pass. It used to JSON-decode both tables and scan the whole nickname map
+    /// per row — measured as ~2 s of main thread in the first 8 s of a cold
+    /// launch on the owner's iPhone 17 Pro Max. Both tables are now memoised on
+    /// their bytes and the nickname lookup is a single hash hit.
     private func displayName(for publicKey: String) -> String? {
         SharedNickname.resolve(
             alias: contactAliases[publicKey],
-            nickname: SharedNickname.nickname(for: publicKey, in: SharedNickname.decode(sharedNicknamesData))
+            nickname: SharedNickname.table(sharedNicknamesData).nickname(for: publicKey)
         )
     }
 
@@ -1017,41 +1023,54 @@ struct MessagesListView: View {
         }
     }
 
+    /// __LAUNCH_LAG_2026_11_22__ The row menu's labels, looked up once per list
+    /// pass instead of six `.localized` bundle lookups per ROW per pass (the
+    /// menu content is built with the row, not when it opens).
+    struct RowMenuLabels {
+        let pin = "message.pin".localized
+        let unpin = "message.unpin".localized
+        let mute = "chat.mute".localized
+        let unmute = "chat.unmute".localized
+        let contact = "conversation.open_contact".localized
+        let qr = "a11y.contact_qr".localized
+    }
+
     @ViewBuilder
-    private func conversationContextMenu(for conversation: Conversation) -> some View {
+    private func conversationContextMenu(for conversation: Conversation, labels: RowMenuLabels) -> some View {
         let key = conversation.participantPublicKey
         let pinned = conversationPrefs.isPinned(key)
         let muted = conversationPrefs.isMuted(key)
         Button {
             conversationPrefs.togglePinned(key)
         } label: {
-            Label(pinned ? "message.unpin".localized : "message.pin".localized,
+            Label(pinned ? labels.unpin : labels.pin,
                   systemImage: pinned ? "pin.slash" : "pin")
         }
         Button {
             conversationPrefs.toggleMuted(key)
         } label: {
-            Label(muted ? "chat.unmute".localized : "chat.mute".localized,
+            Label(muted ? labels.unmute : labels.mute,
                   systemImage: muted ? "bell" : "bell.slash")
         }
-        if !LoRaChannelThread.isChannelKey(key) {
+        if !LoRaChannelThread.isChannelKey(key) && !MeshCoreInterop.isContactKey(key) {
             Button {
                 profileConversation = conversation
             } label: {
-                Label("conversation.open_contact".localized, systemImage: "person.crop.circle")
+                Label(labels.contact, systemImage: "person.crop.circle")
             }
         }
         Button {
             selectedConversation = conversation
             showAddressSheet = true
         } label: {
-            Label("a11y.contact_qr".localized, systemImage: "qrcode")
+            Label(labels.qr, systemImage: "qrcode")
         }
     }
 
     /// A person on the other end: not a LoRa channel, not the legacy welcome id.
     static func isCallable(_ key: String) -> Bool {
-        !LoRaChannelThread.isChannelKey(key) && key != WelcomeMessageManager.legacySystemSenderKey
+        !LoRaChannelThread.isChannelKey(key) && !MeshCoreInterop.isContactKey(key)
+            && key != WelcomeMessageManager.legacySystemSenderKey
     }
 
     /// The chat's own rule (`ChatView.startHeaderCall`): a contact we blocked,
@@ -1076,7 +1095,8 @@ struct MessagesListView: View {
     // MARK: - Conversations List
     
     private var conversationsList: some View {
-        List {
+        let menuLabels = RowMenuLabels()
+        return List {
             ForEach(Array(filteredConversations.enumerated()), id: \.element.id) { index, conversation in
                 SwiftUI.Group {
                     if splitActive {
@@ -1148,7 +1168,7 @@ struct MessagesListView: View {
                         selectedConversation = conversation
                         showAddressSheet = true
                     } label: {
-                        Label("a11y.contact_qr".localized, systemImage: "qrcode")
+                        Label(menuLabels.qr, systemImage: "qrcode")
                     }
                     .tint(oshiBrandColor)
                 }
@@ -1156,7 +1176,7 @@ struct MessagesListView: View {
                     // __ANATOLE_1311_IOS__ (N8) Pin, mute and the contact card
                     // from a long press on the row — the native iOS form of
                     // the bottom sheet Android opens for the same gesture.
-                    conversationContextMenu(for: conversation)
+                    conversationContextMenu(for: conversation, labels: menuLabels)
                 }
             }
             .onDelete(perform: deleteConversations)
@@ -1275,7 +1295,7 @@ struct MessageSearchResultRow: View {
     let searchText: String
     
     private var displayName: String {
-        alias ?? formatAddress(result.conversation.participantAddress)
+        alias ?? MeshCoreInterop.threadTitle(forKey: result.conversation.participantPublicKey) ?? formatAddress(result.conversation.participantAddress)
     }
     
     var body: some View {
@@ -1436,7 +1456,7 @@ struct ConversationRow: View {
     // bouton QR, seul endroit de cette rangée qui distinguait clair et sombre.
 
     private var displayName: String {
-        alias ?? formatAddress(conversation.participantAddress)
+        alias ?? MeshCoreInterop.threadTitle(forKey: conversation.participantPublicKey) ?? formatAddress(conversation.participantAddress)
     }
 
     // Modern gradient colors based on public key hash - includes brand color.
@@ -1805,7 +1825,8 @@ struct ConversationRow: View {
                 // The named branches above are kept, not replaced: they produce
                 // richer text (a live-location countdown, a check-in title) than
                 // the catalog's generic summary.
-                previewText = OSHIControlPayload.previewText(for: preview)
+                // __TEXT_FORMATTING_2026_11_24__ a row cannot style a run: no markers.
+                previewText = InlineMarkup.stripped(OSHIControlPayload.previewText(for: preview))
             }
             previewMessageId = message.id
             isDecrypting = false
@@ -1899,7 +1920,7 @@ struct ContactAddressSheet: View {
     @State private var showFullPhoto = false
 
     private var displayName: String {
-        alias ?? formatAddress(conversation.participantAddress)
+        alias ?? MeshCoreInterop.threadTitle(forKey: conversation.participantPublicKey) ?? formatAddress(conversation.participantAddress)
     }
 
     // Get contact's profile photo (same as conversation view)

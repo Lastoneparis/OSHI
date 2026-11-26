@@ -55,6 +55,12 @@ class GroupLocalStore(
         LEFT_IDS("left_group_ids.sealed", "groups/left_group_ids"),
         DEVSYNC_LEFT("devsync_left_groups.sealed", "groups/devsync_left_groups"),
         MENTIONS("group_mentions.sealed", "groups/group_mentions"),
+        /** __GROUP_SETTINGS_2026_11_20__ settings + per-device group prefs (GROUP_INFO_SETTINGS_SPEC). */
+        GROUP_EXTRAS("group_extras.sealed", "groups/group_extras"),
+        /** Recent events, 48 h (GROUP_INFO_SETTINGS_SPEC §2.8). */
+        GROUP_ADMIN_LOG("group_admin_log.sealed", "groups/group_admin_log"),
+        /** __CHANNEL_WEB_2026_11_26__ web-preview outbox + postId→n map (PUBLIC_CHANNEL_WEB_SPEC §9). */
+        CHANNEL_WEB("channel_web.sealed", "groups/channel_web"),
     }
 
     init { dir.mkdirs() }
@@ -119,6 +125,13 @@ class GroupLocalStore(
             Doc.LEFT_IDS -> SealedStringStore.prefsLegacy(app, LEGACY_PREFS, LEGACY_KEY_LEFT)
             Doc.MENTIONS -> SealedStringStore.prefsLegacy(app, LEGACY_PREFS_MENTIONS, LEGACY_KEY_MENTIONS)
             Doc.DEVSYNC_LEFT -> wholePrefsLegacy(app, LEGACY_PREFS_DEVSYNC_LEFT)
+            // Born sealed: no plaintext predecessor to migrate.
+            Doc.GROUP_EXTRAS, Doc.GROUP_ADMIN_LOG, Doc.CHANNEL_WEB -> NO_LEGACY
+        }
+
+        private val NO_LEGACY = object : SealedStringStore.Legacy {
+            override fun read(): String? = null
+            override fun clear(): Boolean = true
         }
 
         /**

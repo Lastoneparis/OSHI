@@ -158,8 +158,9 @@ private fun redeemInWallet(context: android.content.Context, token: CashuTokens.
 
 /** The token on the clipboard, so it can be pasted into any wallet by hand. */
 private fun copyToken(context: android.content.Context, token: CashuTokens.Token) {
-    val clipboard = context.getSystemService(android.content.ClipboardManager::class.java)
-    clipboard?.setPrimaryClip(android.content.ClipData.newPlainText("cashu", token.raw))
+    // __ANTI_STALKERWARE_2026_11_20__ a Cashu token is a bearer secret (whoever reads it
+    // can redeem the money): sensitive clip, hidden preview, auto-cleared after 60 s.
+    com.oshi.messenger.security.SensitiveClipboard.copy(context, token.raw)
     Toast.makeText(context, R.string.cashu_copied, Toast.LENGTH_SHORT).show()
 }
 

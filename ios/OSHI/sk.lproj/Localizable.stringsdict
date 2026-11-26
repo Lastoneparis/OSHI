@@ -22,5 +22,45 @@
 			<string>%d komentárov</string>
 		</dict>
 	</dict>
+	<key>group_header_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@members@</string>
+		<key>members</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d člen</string>
+			<key>few</key>
+			<string>%d členovia</string>
+			<key>many</key>
+			<string>%d člena</string>
+			<key>other</key>
+			<string>%d členov</string>
+		</dict>
+	</dict>
+	<key>group_header_subscribers</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@subscribers@</string>
+		<key>subscribers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d odberateľ</string>
+			<key>few</key>
+			<string>%d odberatelia</string>
+			<key>many</key>
+			<string>%d odberateľa</string>
+			<key>other</key>
+			<string>%d odberateľov</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Lệnh</string>
+    <string name="bot_cmd_send_a11y">Gửi %1$s</string>
+    <string name="bot_cmd_sheet_title">Lệnh của bot</string>
+    <string name="bot_cmd_tap_to_send">Chạm vào một lệnh để gửi.</string>
+    <string name="bot_cmd_empty_none_title">Chưa có bot nào ở đây</string>
+    <string name="bot_cmd_empty_none_body">Tạo một bot và thêm vào nhóm này. Các lệnh của bot sẽ hiện ở đây và khi bạn gõ /.</string>
+    <string name="bot_cmd_empty_bot">Bot này chưa có lệnh nào.</string>
+    <string name="bot_cmd_setup">Thiết lập lệnh</string>
+    <string name="bot_cmd_section">Lệnh</string>
+    <string name="bot_cmd_section_hint">Thành viên trong các nhóm của bot thấy các lệnh này khi gõ / hoặc chạm vào Lệnh.</string>
+    <string name="bot_cmd_add">Thêm</string>
+    <string name="bot_cmd_add_title">Lệnh mới</string>
+    <string name="bot_cmd_edit_title">Sửa lệnh</string>
+    <string name="bot_cmd_field_name">Lệnh</string>
+    <string name="bot_cmd_field_description">Mô tả (hiện trong menu)</string>
+    <string name="bot_cmd_field_reply">Câu trả lời</string>
+    <string name="bot_cmd_field_reply_hint">Bot sẽ trả lời gì. Bạn có thể dùng {{input}}, {{bot_name}} và {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Được gửi đến webhook của bạn, nơi sẽ trả lời.</string>
+    <string name="bot_cmd_empty_owner">Chưa có lệnh nào. Hãy thêm một lệnh như /start hoặc /help để mọi người biết bot này làm được gì.</string>
+    <string name="bot_cmd_err_empty">Nhập tên lệnh.</string>
+    <string name="bot_cmd_err_invalid">Chỉ dùng chữ thường, chữ số và _.</string>
+    <string name="bot_cmd_err_too_long">Tối đa 32 ký tự.</string>
+    <string name="bot_cmd_err_duplicate">Bot này đã có lệnh này.</string>
+    <string name="bot_cmd_err_too_many">Một bot có thể có tối đa 100 lệnh.</string>
+    <string name="bot_cmd_err_description">Mô tả quá dài (tối đa 256 ký tự).</string>
+    <string name="bot_cmd_sync_local">Đã lưu trên điện thoại này, nơi chạy bot.</string>
+    <string name="bot_cmd_sync_syncing">Đang cập nhật máy chủ…</string>
+    <string name="bot_cmd_sync_synced">Đã cập nhật menu trên máy chủ.</string>
+    <string name="bot_cmd_sync_failed">Không thể cập nhật máy chủ. Các lệnh của bạn đã được lưu trên điện thoại này.</string>
+    <string name="bot_profile_edit">Sửa hồ sơ</string>
+    <string name="bot_profile_name">Tên</string>
+    <string name="bot_profile_description">Mô tả</string>
+    <string name="bot_profile_avatar">Ảnh đại diện</string>
+    <string name="bot_profile_err_name_empty">Đặt tên cho bot của bạn.</string>
+    <string name="bot_profile_err_name_long">Tên quá dài (tối đa 64 ký tự).</string>
+    <string name="bot_profile_err_desc_long">Mô tả quá dài (tối đa 512 ký tự).</string>
+    <string name="bot_connect_title">Cách kết nối</string>
+    <string name="bot_connect_local">Bot này chạy trên điện thoại này: hãy giữ OSHI được cài đặt và bật bot. Thêm bot vào một nhóm để các thành viên dùng được lệnh của nó ở đó.</string>
+    <string name="bot_connect_webhook">Mỗi lệnh được gửi đến URL webhook của bạn và máy chủ của bạn trả lời bằng JSON {\"text\": \"…\"}. Máy chủ của bạn cũng có thể dùng mã thông báo bên dưới với API bot của OSHI.</string>
+    <string name="bot_connect_token_warning">Hãy giữ bí mật mã thông báo: ai có nó đều có thể nói thay bot của bạn.</string>
+    <string name="bot_connect_groups">Nhóm: %1$s</string>
+    <string name="bot_connect_no_groups">Chưa ở trong nhóm nào nên chưa ai dùng được lệnh của bot.</string>
+</resources>

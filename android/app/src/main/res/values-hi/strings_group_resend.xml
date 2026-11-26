@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">%2$d में से %1$d को भेजा गया</string>
+    <string name="group_sent_partial_body">%1$d सदस्य(यों) तक अभी नहीं पहुँचा। OSHI 7 दिनों तक अपने आप फिर से कोशिश करता है।</string>
+    <string name="group_sent_partial_gave_up">7 दिनों के बाद भी %1$d सदस्य(यों) तक नहीं पहुँचा।</string>
+    <string name="group_retry_now">अभी फिर कोशिश करें</string>
+</resources>

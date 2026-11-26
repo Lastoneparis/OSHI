@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Komutlar</string>
+    <string name="bot_cmd_send_a11y">%1$s gönder</string>
+    <string name="bot_cmd_sheet_title">Bot komutları</string>
+    <string name="bot_cmd_tap_to_send">Göndermek için bir komuta dokunun.</string>
+    <string name="bot_cmd_empty_none_title">Burada henüz bot yok</string>
+    <string name="bot_cmd_empty_none_body">Bir bot oluşturup bu gruba ekleyin. Komutları burada ve / yazdığınızda görünür.</string>
+    <string name="bot_cmd_empty_bot">Bu botun henüz komutu yok.</string>
+    <string name="bot_cmd_setup">Komutları ayarla</string>
+    <string name="bot_cmd_section">Komutlar</string>
+    <string name="bot_cmd_section_hint">Botun gruplarındaki kişiler bunları / yazınca veya Komutlar\'a dokununca görür.</string>
+    <string name="bot_cmd_add">Ekle</string>
+    <string name="bot_cmd_add_title">Yeni komut</string>
+    <string name="bot_cmd_edit_title">Komutu düzenle</string>
+    <string name="bot_cmd_field_name">Komut</string>
+    <string name="bot_cmd_field_description">Açıklama (menüde görünür)</string>
+    <string name="bot_cmd_field_reply">Yanıt</string>
+    <string name="bot_cmd_field_reply_hint">Botun vereceği yanıt. {{input}}, {{bot_name}} ve {{date}} kullanabilirsiniz.</string>
+    <string name="bot_cmd_webhook_note">Yanıt veren webhook\'unuza gönderilir.</string>
+    <string name="bot_cmd_empty_owner">Henüz komut yok. Herkes bu botun ne yaptığını bilsin diye /start veya /help gibi bir komut ekleyin.</string>
+    <string name="bot_cmd_err_empty">Bir komut adı girin.</string>
+    <string name="bot_cmd_err_invalid">Yalnızca küçük harf, rakam ve _.</string>
+    <string name="bot_cmd_err_too_long">En fazla 32 karakter.</string>
+    <string name="bot_cmd_err_duplicate">Bu botta bu komut zaten var.</string>
+    <string name="bot_cmd_err_too_many">Bir botun en fazla 100 komutu olabilir.</string>
+    <string name="bot_cmd_err_description">Açıklama çok uzun (en fazla 256 karakter).</string>
+    <string name="bot_cmd_sync_local">Botu çalıştıran bu telefona kaydedildi.</string>
+    <string name="bot_cmd_sync_syncing">Sunucu güncelleniyor…</string>
+    <string name="bot_cmd_sync_synced">Menü sunucuda güncellendi.</string>
+    <string name="bot_cmd_sync_failed">Sunucu güncellenemedi. Komutlarınız bu telefona kaydedildi.</string>
+    <string name="bot_profile_edit">Profili düzenle</string>
+    <string name="bot_profile_name">Ad</string>
+    <string name="bot_profile_description">Açıklama</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Botunuza bir ad verin.</string>
+    <string name="bot_profile_err_name_long">Ad çok uzun (en fazla 64 karakter).</string>
+    <string name="bot_profile_err_desc_long">Açıklama çok uzun (en fazla 512 karakter).</string>
+    <string name="bot_connect_title">Nasıl bağlanır</string>
+    <string name="bot_connect_local">Bu bot bu telefonda çalışır: OSHI\'yi yüklü ve botu açık tutun. Bir gruba ekleyin; üyeler komutlarını orada kullanabilir.</string>
+    <string name="bot_connect_webhook">Her komut webhook URL\'nize gönderilir ve sunucunuz JSON {\"text\": \"…\"} ile yanıt verir. Sunucunuz aşağıdaki belirteci OSHI bot API\'siyle de kullanabilir.</string>
+    <string name="bot_connect_token_warning">Belirteci gizli tutun: ona sahip olan herkes botunuz adına konuşabilir.</string>
+    <string name="bot_connect_groups">Gruplar: %1$s</string>
+    <string name="bot_connect_no_groups">Henüz hiçbir grupta değil, bu yüzden kimse komutlarını kullanamaz.</string>
+</resources>

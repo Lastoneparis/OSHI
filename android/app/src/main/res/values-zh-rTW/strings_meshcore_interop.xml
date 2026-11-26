@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · 非 OSHI 端對端加密</string>
+    <string name="meshcore_error_not_connected">未連接 MeshCore 無線電</string>
+    <string name="meshcore_channels_title">MeshCore 頻道</string>
+    <string name="meshcore_channel_public">公開 · 知道名稱的人都能讀取</string>
+    <string name="meshcore_channel_private">私人 · 密鑰</string>
+    <string name="meshcore_join_hashtag">加入主題標籤頻道</string>
+    <string name="meshcore_join_private">加入私人頻道</string>
+    <string name="meshcore_contacts_title">MeshCore 聯絡人</string>
+    <string name="meshcore_refresh_contacts">重新整理聯絡人</string>
+    <string name="meshcore_join_refused">無線電拒絕了此頻道。</string>
+    <string name="meshcore_join_no_slot">此無線電沒有空的頻道位置。</string>
+    <string name="meshcore_join_bad_name">請輸入有效的頻道名稱（最多 31 位元組，主題標籤頻道不可有空格）。</string>
+    <string name="meshcore_join_bad_secret">密鑰必須為 16 位元組：32 個十六進位字元或 base64。</string>
+    <string name="meshcore_hashtag_hint">密鑰由名稱衍生：任何知道名稱的人都能讀取該頻道。</string>
+    <string name="meshcore_private_hint">請輸入頻道名稱以及成員共用的密鑰。</string>
+    <string name="meshcore_channel_name">頻道名稱</string>
+    <string name="meshcore_channel_secret">密鑰（hex 或 base64）</string>
+    <string name="meshcore_join">加入</string>
+    <string name="meshcore_note_dm">由 MeshCore 在無線電之間加密，不是 OSHI 的端對端加密。</string>
+    <string name="meshcore_note_public">公開頻道：任何知道名稱的人都能讀取。</string>
+    <string name="meshcore_note_private">私人頻道：任何擁有其密鑰的人都能讀取。</string>
+    <string name="meshcore_radio_offline">MeshCore 無線電未連線。訊息會以未送達狀態在此等待。</string>
+    <string name="meshcore_connect">連線</string>
+    <string name="meshcore_parts">%1$d 則訊息</string>
+    <string name="meshcore_sending">正在等待無線電</string>
+    <string name="meshcore_failed_dm">對方的無線電沒有回應（超出範圍？）。輕觸以重試。</string>
+    <string name="meshcore_error_pairing">配對失敗。請檢查 PIN 後重試。若無線電已重設，請先在 Android 藍牙設定中將其移除。</string>
+    <string name="meshcore_error_no_answer">無線電沒有回應。請確認它執行的是藍牙版 MeshCore companion 韌體。</string>
+    <string name="meshcore_state_reconnecting">連線中斷。無線電回到範圍內後將重新連線…</string>
+    <string name="meshcore_state_pin">請在 Android 提示中輸入無線電的 PIN</string>
+    <string name="meshcore_state_reading">正在讀取聯絡人和頻道…</string>
+    <string name="meshcore_state_connecting">正在連線…</string>
+    <string name="meshcore_seen_as">已連線 · MeshCore 使用者看到的你是 %1$s</string>
+    <string name="meshcore_connected">已連線</string>
+    <string name="meshcore_footer_users">與 MeshCore 使用者聊天（私訊和頻道），並透過 MeshCore 中繼器傳送 OSHI 訊息。需要藍牙版 MeshCore companion 韌體。OSHI 只會在空位新增一個頻道 #oshi-bridge，絕不會變更你的其他頻道。</string>
+    <string name="meshcore_scan_below">MeshCore 無線電會顯示在下方「附近的無線電」中，並標示 MeshCore。</string>
+    <string name="meshcore_contacts_footer">輕觸某人即可寫訊息給對方。訊息由 MeshCore 加密，不是 OSHI 的端對端加密。</string>
+    <string name="meshcore_no_contacts">尚未收到任何人。MeshCore 使用者的無線電廣播自身後會出現在這裡。廣播你的無線電，讓他們找到你。</string>
+    <string name="meshcore_heard">收到於 %1$s</string>
+    <string name="meshcore_announce">廣播我</string>
+    <string name="meshcore_announce_done">已廣播。範圍內的 MeshCore 使用者現在可以新增你並傳訊息給你。</string>
+    <string name="meshcore_announce_failed">無線電無法傳送廣播。</string>
+    <string name="meshcore_channels_footer">輕觸頻道即可開啟。公開頻道和主題標籤頻道任何知道名稱的人都能讀取。</string>
+    <string name="meshcore_pin_title">與 %1$s 配對</string>
+    <string name="meshcore_pin_body">Android 現在會要求輸入無線電的 PIN。如果無線電有螢幕，PIN 會顯示在螢幕上。</string>
+    <string name="meshcore_pin_default">沒有螢幕？PIN 是 123456，除非已在 MeshCore App 中變更。</string>
+    <string name="meshcore_pin_continue">繼續</string>
+    <string name="meshcore_no_free_channel_chat">8 個頻道位置都已占用。你仍可與 MeshCore 使用者聊天；請在 MeshCore App 中空出一個位置，讓 OSHI 訊息使用 #oshi-bridge。</string>
+    <string name="meshcore_contact_kind">MeshCore 使用者</string>
+    <string name="meshcore_too_long">太長：最多 %1$d 則訊息</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">已確認平安</string>
+    <string name="alive_a11y_neutral">未設定安全確認</string>
+    <string name="alive_a11y_overdue">安全確認已逾時</string>
+    <string name="alive_action_im_alive">我平安</string>
+    <string name="alive_action_message_them">傳訊息</string>
+    <string name="alive_bar_open_settings">安全確認設定</string>
+    <string name="alive_channel_description">提醒你按時報平安，並在你關注的人未按時報平安時通知你。</string>
+    <string name="alive_channel_name">安全確認</string>
+    <string name="alive_confirmed_toast">已報平安</string>
+    <string name="alive_duration_days_hours">%1$d天%2$d小時</string>
+    <string name="alive_duration_hours_minutes">%1$d小時%2$d分</string>
+    <string name="alive_duration_minutes">%1$d分鐘</string>
+    <string name="alive_duration_now">不到 1 分鐘</string>
+    <string name="alive_interval_24h">每 24 小時</string>
+    <string name="alive_interval_48h">每 48 小時</string>
+    <string name="alive_interval_72h">每 72 小時</string>
+    <string name="alive_interval_custom">自訂</string>
+    <string name="alive_interval_custom_hours">每 %1$d 小時</string>
+    <string name="alive_interval_every">每 %1$s</string>
+    <string name="alive_lane_you">你</string>
+    <string name="alive_note_delivery">提醒與通知取決於你的網路和通知權限。錯過一次安全確認只代表沒有收到確認，沒有其他意思。</string>
+    <string name="alive_note_no_location">不會分享位置。每次安全確認只包含一個時間戳記，別無其他。</string>
+    <string name="alive_notification_mine_due_body">請確認你平安，別讓 %1$s 一直等待。</string>
+    <string name="alive_notification_mine_due_title">該報平安了</string>
+    <string name="alive_notification_overdue_body">對方的安全確認已逾時 %1$s。這只代表尚未收到確認。</string>
+    <string name="alive_notification_overdue_title">%1$s 未報平安</string>
+    <string name="alive_sheet_explainer">依設定的週期確認你平安。%1$s 能看到你的倒數計時，逾時未回應時會收到通知。</string>
+    <string name="alive_sheet_interval">頻率</string>
+    <string name="alive_sheet_mine_switch">向 %1$s 報平安</string>
+    <string name="alive_sheet_stop">停止報平安</string>
+    <string name="alive_sheet_their_next">下次預計：%1$s</string>
+    <string name="alive_sheet_their_none">%1$s 尚未在此設定安全確認。</string>
+    <string name="alive_sheet_their_section">%1$s 的安全確認</string>
+    <string name="alive_state_confirmed_ago">%1$s前已確認</string>
+    <string name="alive_state_due_in">%1$s後到期</string>
+    <string name="alive_state_not_set">未設定</string>
+    <string name="alive_state_overdue_by">已 %1$s 無回應</string>
+    <string name="alive_summary_confirmed">已確認平安</string>
+    <string name="alive_summary_started">已開始安全確認</string>
+    <string name="alive_summary_stopped">已停止安全確認</string>
+    <string name="alive_title">安全確認</string>
+    <string name="alive_unknown_peer">此聯絡人</string>
+</resources>

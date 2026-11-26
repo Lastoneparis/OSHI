@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Gelişmiş sohbet gizliliği</string>
+    <string name="adv_privacy_subtitle">Bu sohbetteki herkesin medya kaydetmesini, sohbeti dışa aktarmasını veya mesajlarda yapay zekâ kullanmasını engeller</string>
+    <string name="adv_privacy_learn_more">Daha fazla bilgi</string>
+    <string name="adv_privacy_notice_on">%1$s gelişmiş sohbet gizliliğini açtı. Kimse medyayı otomatik kaydedemez, sohbeti dışa aktaramaz veya bu sohbetteki mesajlarda yapay zekâ kullanamaz.</string>
+    <string name="adv_privacy_notice_off">%1$s gelişmiş sohbet gizliliğini kapattı. Medya kaydetme, sohbeti dışa aktarma ve yapay zekâ özellikleri yeniden kullanılabilir.</string>
+    <string name="adv_privacy_notice_on_you">Gelişmiş sohbet gizliliğini açtınız. Kimse medyayı otomatik kaydedemez, sohbeti dışa aktaramaz veya bu sohbetteki mesajlarda yapay zekâ kullanamaz.</string>
+    <string name="adv_privacy_notice_off_you">Gelişmiş sohbet gizliliğini kapattınız. Medya kaydetme, sohbeti dışa aktarma ve yapay zekâ özellikleri yeniden kullanılabilir.</string>
+    <string name="adv_privacy_summary_on">Gelişmiş sohbet gizliliği açıldı</string>
+    <string name="adv_privacy_summary_off">Gelişmiş sohbet gizliliği kapatıldı</string>
+    <string name="adv_privacy_sheet_intro">Biri açtığında bu sohbetteki herkes için geçerli olur:</string>
+    <string name="adv_privacy_sheet_point_save">Bu sohbetteki medya galeriye veya İndirilenler\'e kaydedilemez.</string>
+    <string name="adv_privacy_sheet_point_export">Bu sohbet, sohbet dışa aktarımlarına dahil edilmez.</string>
+    <string name="adv_privacy_sheet_point_ai">OSHI\'nin cihaz üzerindeki yapay zekâsı bu sohbeti okuyamaz: önerilen yanıt, çeviri ve yazma asistanı için bağlam yok.</string>
+    <string name="adv_privacy_sheet_point_screen">Bu sohbetin ekran görüntüleri ve ekran kaydı engellenir.</string>
+    <string name="adv_privacy_sheet_limits">Sohbetteki herkes açıp kapatabilir. Birinin ekranının fotoğrafını çekmesini engelleyemez ve OSHI\'nin eski bir sürümünü kullananları etkilemez.</string>
+    <string name="adv_privacy_blocked_toast">Bu sohbette gelişmiş gizlilik açık</string>
+    <string name="adv_privacy_older_members">OSHI\'nin eski bir sürümünü kullanan ve güncelleyene kadar uygulamayacak üyeler: %1$d</string>
+</resources>

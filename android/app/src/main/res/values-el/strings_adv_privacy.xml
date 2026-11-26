@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Προηγμένο απόρρητο συνομιλίας</string>
+    <string name="adv_privacy_subtitle">Εμποδίζει όλους σε αυτή τη συνομιλία να αποθηκεύουν πολυμέσα, να εξάγουν τη συνομιλία ή να χρησιμοποιούν AI στα μηνύματά της</string>
+    <string name="adv_privacy_learn_more">Μάθετε περισσότερα</string>
+    <string name="adv_privacy_notice_on">Ο/Η %1$s ενεργοποίησε το προηγμένο απόρρητο συνομιλίας. Κανείς δεν μπορεί να αποθηκεύει αυτόματα πολυμέσα, να εξάγει τη συνομιλία ή να χρησιμοποιεί AI στα μηνύματα αυτής της συνομιλίας.</string>
+    <string name="adv_privacy_notice_off">Ο/Η %1$s απενεργοποίησε το προηγμένο απόρρητο συνομιλίας. Η αποθήκευση πολυμέσων, η εξαγωγή της συνομιλίας και οι λειτουργίες AI είναι ξανά διαθέσιμες.</string>
+    <string name="adv_privacy_notice_on_you">Ενεργοποιήσατε το προηγμένο απόρρητο συνομιλίας. Κανείς δεν μπορεί να αποθηκεύει αυτόματα πολυμέσα, να εξάγει τη συνομιλία ή να χρησιμοποιεί AI στα μηνύματα αυτής της συνομιλίας.</string>
+    <string name="adv_privacy_notice_off_you">Απενεργοποιήσατε το προηγμένο απόρρητο συνομιλίας. Η αποθήκευση πολυμέσων, η εξαγωγή της συνομιλίας και οι λειτουργίες AI είναι ξανά διαθέσιμες.</string>
+    <string name="adv_privacy_summary_on">Το προηγμένο απόρρητο συνομιλίας ενεργοποιήθηκε</string>
+    <string name="adv_privacy_summary_off">Το προηγμένο απόρρητο συνομιλίας απενεργοποιήθηκε</string>
+    <string name="adv_privacy_sheet_intro">Όταν κάποιος το ενεργοποιεί, ισχύει για όλους σε αυτή τη συνομιλία:</string>
+    <string name="adv_privacy_sheet_point_save">Τα πολυμέσα αυτής της συνομιλίας δεν μπορούν να αποθηκευτούν στη συλλογή ή στις Λήψεις.</string>
+    <string name="adv_privacy_sheet_point_export">Αυτή η συνομιλία εξαιρείται από τις εξαγωγές συνομιλιών.</string>
+    <string name="adv_privacy_sheet_point_ai">Το AI του OSHI στη συσκευή δεν μπορεί να διαβάσει αυτή τη συνομιλία: χωρίς προτεινόμενες απαντήσεις, χωρίς μετάφραση, χωρίς πλαίσιο για τον βοηθό γραφής.</string>
+    <string name="adv_privacy_sheet_point_screen">Τα στιγμιότυπα και η εγγραφή οθόνης αυτής της συνομιλίας είναι αποκλεισμένα.</string>
+    <string name="adv_privacy_sheet_limits">Οποιοσδήποτε στη συνομιλία μπορεί να το ενεργοποιήσει ή να το απενεργοποιήσει. Δεν εμποδίζει κάποιον να φωτογραφίσει την οθόνη του, και δεν επηρεάζει όσους χρησιμοποιούν παλαιότερη έκδοση του OSHI.</string>
+    <string name="adv_privacy_blocked_toast">Το προηγμένο απόρρητο είναι ενεργό σε αυτή τη συνομιλία</string>
+    <string name="adv_privacy_older_members">Μέλη με παλαιότερη έκδοση του OSHI που δεν θα το εφαρμόσουν μέχρι να ενημερώσουν: %1$d</string>
+</resources>

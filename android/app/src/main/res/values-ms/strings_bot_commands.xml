@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Arahan</string>
+    <string name="bot_cmd_send_a11y">Hantar %1$s</string>
+    <string name="bot_cmd_sheet_title">Arahan bot</string>
+    <string name="bot_cmd_tap_to_send">Ketik arahan untuk menghantarnya.</string>
+    <string name="bot_cmd_empty_none_title">Belum ada bot di sini</string>
+    <string name="bot_cmd_empty_none_body">Cipta bot dan tambahkan ke kumpulan ini. Arahannya akan muncul di sini dan apabila anda menaip /.</string>
+    <string name="bot_cmd_empty_bot">Bot ini belum ada arahan.</string>
+    <string name="bot_cmd_setup">Sediakan arahan</string>
+    <string name="bot_cmd_section">Arahan</string>
+    <string name="bot_cmd_section_hint">Ahli kumpulan bot melihat ini apabila menaip / atau mengetik Arahan.</string>
+    <string name="bot_cmd_add">Tambah</string>
+    <string name="bot_cmd_add_title">Arahan baharu</string>
+    <string name="bot_cmd_edit_title">Edit arahan</string>
+    <string name="bot_cmd_field_name">Arahan</string>
+    <string name="bot_cmd_field_description">Penerangan (dipaparkan dalam menu)</string>
+    <string name="bot_cmd_field_reply">Balasan</string>
+    <string name="bot_cmd_field_reply_hint">Jawapan bot. Anda boleh guna {{input}}, {{bot_name}} dan {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Dihantar ke webhook anda, yang menjawab.</string>
+    <string name="bot_cmd_empty_owner">Belum ada arahan. Tambah satu, seperti /start atau /help, supaya semua orang tahu apa yang bot ini boleh buat.</string>
+    <string name="bot_cmd_err_empty">Masukkan nama arahan.</string>
+    <string name="bot_cmd_err_invalid">Huruf kecil, digit dan _ sahaja.</string>
+    <string name="bot_cmd_err_too_long">Maksimum 32 aksara.</string>
+    <string name="bot_cmd_err_duplicate">Bot ini sudah ada arahan ini.</string>
+    <string name="bot_cmd_err_too_many">Bot boleh ada maksimum 100 arahan.</string>
+    <string name="bot_cmd_err_description">Penerangan terlalu panjang (maksimum 256 aksara).</string>
+    <string name="bot_cmd_sync_local">Disimpan pada telefon ini, yang menjalankan bot.</string>
+    <string name="bot_cmd_sync_syncing">Mengemas kini pelayan…</string>
+    <string name="bot_cmd_sync_synced">Menu dikemas kini pada pelayan.</string>
+    <string name="bot_cmd_sync_failed">Tidak dapat mengemas kini pelayan. Arahan anda disimpan pada telefon ini.</string>
+    <string name="bot_profile_edit">Edit profil</string>
+    <string name="bot_profile_name">Nama</string>
+    <string name="bot_profile_description">Penerangan</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Beri nama kepada bot anda.</string>
+    <string name="bot_profile_err_name_long">Nama terlalu panjang (maksimum 64 aksara).</string>
+    <string name="bot_profile_err_desc_long">Penerangan terlalu panjang (maksimum 512 aksara).</string>
+    <string name="bot_connect_title">Cara ia bersambung</string>
+    <string name="bot_connect_local">Bot ini berjalan pada telefon ini: biarkan OSHI dipasang dan bot dihidupkan. Tambahkannya ke kumpulan dan ahli boleh menggunakan arahannya di sana.</string>
+    <string name="bot_connect_webhook">Setiap arahan dihantar ke URL webhook anda dan pelayan anda membalas dengan JSON {\"text\": \"…\"}. Pelayan anda juga boleh menggunakan token di bawah dengan API bot OSHI.</string>
+    <string name="bot_connect_token_warning">Rahsiakan token: sesiapa yang memilikinya boleh bercakap sebagai bot anda.</string>
+    <string name="bot_connect_groups">Kumpulan: %1$s</string>
+    <string name="bot_connect_no_groups">Belum berada dalam mana-mana kumpulan, jadi tiada siapa boleh menggunakan arahannya.</string>
+</resources>

@@ -102,12 +102,23 @@ final class RecentMediaStore: NSObject, ObservableObject {
         observing = true
     }
 
-    private func reload() {
+    /// __RECENT_PHOTOS_ORDER_2026_11_21__ The recent grid's fetch: photos and
+    /// videos, NEWEST capture date first, the whole library (no `fetchLimit` —
+    /// the window is paged from the sorted result). Android shipped this grid
+    /// oldest-first (a sort direction that only reached the last column, user
+    /// report 21/11); this is pinned by `AttachmentPanelLogicTests` so the iOS
+    /// twin cannot drift the same way. An asset with no `creationDate` sorts
+    /// last (PhotoKit orders nil below every date).
+    static func recentFetchOptions() -> PHFetchOptions {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         options.predicate = NSPredicate(format: "mediaType == %d OR mediaType == %d",
                                         PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
-        let result = PHAsset.fetchAssets(with: options)
+        return options
+    }
+
+    private func reload() {
+        let result = PHAsset.fetchAssets(with: Self.recentFetchOptions())
         fetch = result
         total = result.count
         materialise(min(result.count, max(assets.count, AttachmentPanelLogic.pageSize)))

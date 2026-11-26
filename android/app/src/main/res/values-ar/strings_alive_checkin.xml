@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">تم تأكيد التحقق</string>
+    <string name="alive_a11y_neutral">لم يُضبط أي تحقق</string>
+    <string name="alive_a11y_overdue">تأخّر التحقق</string>
+    <string name="alive_action_im_alive">أنا على قيد الحياة</string>
+    <string name="alive_action_message_them">مراسلة</string>
+    <string name="alive_bar_open_settings">إعدادات التحقق</string>
+    <string name="alive_channel_description">تذكيرات بتأكيداتك، وتنبيهات عندما لا يردّ شخص تتابعه على تأكيده.</string>
+    <string name="alive_channel_name">التحقق من السلامة</string>
+    <string name="alive_confirmed_toast">تم إرسال التأكيد</string>
+    <string name="alive_duration_days_hours">%1$d ي %2$d س</string>
+    <string name="alive_duration_hours_minutes">%1$d س %2$d د</string>
+    <string name="alive_duration_minutes">%1$d د</string>
+    <string name="alive_duration_now">أقل من دقيقة</string>
+    <string name="alive_interval_24h">كل 24 ساعة</string>
+    <string name="alive_interval_48h">كل 48 ساعة</string>
+    <string name="alive_interval_72h">كل 72 ساعة</string>
+    <string name="alive_interval_custom">مخصص</string>
+    <string name="alive_interval_custom_hours">كل %1$d ساعة</string>
+    <string name="alive_interval_every">كل %1$s</string>
+    <string name="alive_lane_you">أنت</string>
+    <string name="alive_note_delivery">تعتمد التذكيرات والتنبيهات على شبكتك وعلى إذن الإشعارات. فوات موعد التأكيد يعني فقط أنه لم يصل أي تأكيد، لا أكثر.</string>
+    <string name="alive_note_no_location">لا تتم مشاركة أي موقع. يحمل التأكيد طابعًا زمنيًا واحدًا فقط ولا شيء غيره.</string>
+    <string name="alive_notification_mine_due_body">أكّد أنك على قيد الحياة كي لا يبقى %1$s في الانتظار.</string>
+    <string name="alive_notification_mine_due_title">حان موعد تأكيدك</string>
+    <string name="alive_notification_overdue_body">كان موعد تأكيده قبل %1$s. هذا يعني فقط أنه لم يصل أي تأكيد.</string>
+    <string name="alive_notification_overdue_title">لا تأكيد من %1$s</string>
+    <string name="alive_sheet_explainer">أكّد أنك على قيد الحياة وفق جدول. يرى %1$s العدّ التنازلي، ويُبلَّغ إذا انقضى دون رد.</string>
+    <string name="alive_sheet_interval">كم مرة</string>
+    <string name="alive_sheet_mine_switch">التحقق مع %1$s</string>
+    <string name="alive_sheet_stop">إيقاف التحقق</string>
+    <string name="alive_sheet_their_next">التالي متوقع %1$s</string>
+    <string name="alive_sheet_their_none">لم يضبط %1$s تحققًا هنا.</string>
+    <string name="alive_sheet_their_section">تحقق %1$s</string>
+    <string name="alive_state_confirmed_ago">أكّد قبل %1$s</string>
+    <string name="alive_state_due_in">مستحق خلال %1$s</string>
+    <string name="alive_state_not_set">غير مضبوط</string>
+    <string name="alive_state_overdue_by">لا رد منذ %1$s</string>
+    <string name="alive_summary_confirmed">أكّد أنه على قيد الحياة</string>
+    <string name="alive_summary_started">بدأ التحقق من السلامة</string>
+    <string name="alive_summary_stopped">توقف التحقق من السلامة</string>
+    <string name="alive_title">التحقق من السلامة</string>
+    <string name="alive_unknown_peer">جهة الاتصال هذه</string>
+</resources>

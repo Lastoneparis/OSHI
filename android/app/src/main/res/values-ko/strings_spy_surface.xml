@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">OSHI를 읽을 수 있는 앱</string>
+    <string name="spy_surface_dialog_body">이 휴대전화의 다음 앱은 화면이나 알림에 표시되는 내용을 읽을 수 있으며, OSHI가 복호화한 메시지도 포함됩니다:\n\n%1$s\n\n직접 설치하거나 허용하지 않은 앱이 있다면 스파이웨어일 수 있습니다. Android 설정에서 권한을 끄거나 앱을 제거하세요. OSHI는 아무것도 차단하지 않았습니다.</string>
+    <string name="spy_surface_power_accessibility">화면 및 입력(접근성)</string>
+    <string name="spy_surface_power_notifications">알림</string>
+    <string name="spy_surface_power_admin">기기 관리자</string>
+</resources>

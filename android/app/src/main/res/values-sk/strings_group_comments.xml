@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Komentáre</string>
+    <string name="gs_comments_footer">Členovia môžu komentovať každý príspevok. Publikujú len správcovia.</string>
+    <string name="cm_leave_comment">Napísať komentár</string>
+    <string name="cm_thread_title">Komentáre</string>
+    <string name="cm_empty">Zatiaľ žiadne komentáre.</string>
+    <string name="cm_composer_hint">Komentár…</string>
+    <string name="cm_replying_to">Odpoveď pre %1$s</string>
+    <string name="cm_disabled">Komentáre sú vypnuté.</string>
+    <string name="cm_post_unavailable">Tento príspevok už nie je dostupný.</string>
+    <string name="cm_too_fast">Komentujete príliš rýchlo. Chvíľu počkajte.</string>
+    <string name="cm_notif_reply">%1$s odpovedal(a) na váš komentár</string>
+    <string name="cm_delete_comment">Odstrániť komentár</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d komentár</item>
+        <item quantity="few">%d komentáre</item>
+        <item quantity="many">%d komentára</item>
+        <item quantity="other">%d komentárov</item>
+    </plurals>
+</resources>

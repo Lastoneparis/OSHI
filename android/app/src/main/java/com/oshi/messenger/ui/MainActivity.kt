@@ -252,6 +252,32 @@ sealed class OshiDeepLink {
     object GroupInvite : OshiDeepLink()
 
     /**
+     * __GROUP_SETTINGS_2026_11_20__ Public group link (GROUP_INFO_SETTINGS_SPEC §3.1):
+     * `https://oshi-messenger.{com,org}/g/<handle>`, `oshi://g/<handle>`,
+     * `oshi://group/join?h=<handle>`. [handle] is already validated and lower-cased.
+     */
+    data class PublicGroup(val handle: String) : OshiDeepLink()
+
+    /**
+     * __CHANNEL_WEB_2026_11_26__ Public channel post (PUBLIC_CHANNEL_WEB_SPEC §9.8):
+     * `https://oshi-messenger.{com,org}/c/<handle>[/<n>]`, `oshi://channel?h=<handle>[&n=<n>]`
+     * (the web page's "Open in OSHI"), `oshi://c/<handle>[/<n>]`. Opens the channel when we are
+     * a member (scrolling to post [n] when it can be found), else the public-link join flow.
+     */
+    data class PublicChannel(val handle: String, val n: Int?) : OshiDeepLink()
+
+    /** A web-only URL under a route we claim (`/c/<handle>/media/<id>`): hand it to a browser. */
+    data class OpenInBrowser(val url: String) : OshiDeepLink()
+
+    /**
+     * __BOTS_PHASE1_2026_11_24__ `https://oshi-messenger.com/bot/<username>` or
+     * `oshi://bot/<username>`: opens the bot's profile sheet (Add to group / channel).
+     * [username] is lower-cased but NOT validated: an invalid one is answered by the
+     * sheet with "This bot doesn't exist or isn't public".
+     */
+    data class OpenBot(val username: String) : OshiDeepLink()
+
+    /**
      * `oshi://share` — on iOS this pokes the app to drain the Share Extension's
      * App Group hand-off. Android has a real `ACTION_SEND` intent filter instead,
      * so there is nothing to drain; recognised and ignored.
@@ -320,7 +346,46 @@ object DeepLinkParser {
                 if (key.isNullOrBlank()) OshiDeepLink.Unhandled(route)
                 else OshiDeepLink.OpenChat(key)
             }
-            "group" -> OshiDeepLink.GroupInvite
+            "group" -> {
+                // `oshi://group/join?h=<handle>` is the public-link form the /g/ web page opens.
+                val h = firstQueryValue(query, "h")
+                if (h != null) com.oshi.messenger.data.model.GroupSettings.normalizeHandle(h)
+                    ?.let { OshiDeepLink.PublicGroup(it) } ?: OshiDeepLink.Unhandled(route)
+                else OshiDeepLink.GroupInvite
+            }
+            "bot" -> {
+                // https: /bot/<username> — custom scheme: oshi://bot/<username>
+                val segs = path.split('/').filter { it.isNotEmpty() }
+                val raw = (if (scheme == "oshi") segs.firstOrNull() else segs.getOrNull(1))
+                    ?.let { percentDecode(it) }?.let { com.oshi.messenger.util.BotUsername.normalize(it) }
+                if (raw.isNullOrEmpty() || raw.length > 64) OshiDeepLink.Unhandled(route) else OshiDeepLink.OpenBot(raw)
+            }
+            // __CHANNEL_WEB_2026_11_26__
+            "channel" -> {
+                val h = com.oshi.messenger.service.channelweb.ChannelWebLinks.parseHandle(firstQueryValue(query, "h"))
+                if (h == null) OshiDeepLink.Unhandled(route)
+                else OshiDeepLink.PublicChannel(h, com.oshi.messenger.service.channelweb.ChannelWebLinks.parseN(firstQueryValue(query, "n")))
+            }
+            "c" -> {
+                val segs = path.split('/').filter { it.isNotEmpty() }.let { if (scheme == "oshi") it else it.drop(1) }
+                val h = com.oshi.messenger.service.channelweb.ChannelWebLinks.parseHandle(segs.getOrNull(0))
+                when {
+                    h == null -> OshiDeepLink.Unhandled(route)
+                    segs.size == 1 -> OshiDeepLink.PublicChannel(h, null)
+                    segs.size == 2 -> com.oshi.messenger.service.channelweb.ChannelWebLinks.parseN(segs[1])
+                        ?.let { OshiDeepLink.PublicChannel(h, it) }
+                        ?: if (scheme == "https") OshiDeepLink.OpenInBrowser(raw) else OshiDeepLink.Unhandled(route)
+                    // /c/<handle>/media/<id> and anything deeper is a web resource, not a post.
+                    else -> if (scheme == "https") OshiDeepLink.OpenInBrowser(raw) else OshiDeepLink.Unhandled(route)
+                }
+            }
+            "g" -> {
+                // https: /g/<handle>  — custom scheme: oshi://g/<handle> (route = host, handle = path)
+                val segs = path.split('/').filter { it.isNotEmpty() }
+                val raw = if (scheme == "oshi") segs.firstOrNull() else segs.getOrNull(1)
+                com.oshi.messenger.data.model.GroupSettings.normalizeHandle(raw)
+                    ?.let { OshiDeepLink.PublicGroup(it) } ?: OshiDeepLink.Unhandled(route)
+            }
             else -> OshiDeepLink.Unhandled(route)
         }
     }
@@ -369,6 +434,9 @@ object DeepLinkParser {
 class MainActivity : FragmentActivity() {
 
     @Inject lateinit var screenshotProtection: ScreenshotProtectionManager
+
+    /** __CHANNEL_WEB_2026_11_26__ finds the local channel a `/c/<handle>` link points at. */
+    @Inject lateinit var groupManagerLazy: dagger.Lazy<com.oshi.messenger.service.GroupManager>
 
     /** True when the current route is a video call screen */
     var isOnVideoCall = false
@@ -427,7 +495,13 @@ class MainActivity : FragmentActivity() {
     /** STEGO-v1: a single shared image, checked for a hidden message for us before the share picker. */
     internal var pendingStegoCheck by androidx.compose.runtime.mutableStateOf<android.net.Uri?>(null)
 
-    data class GroupInviteData(val gid: String, val name: String?, val inviter: String?)
+    data class GroupInviteData(val gid: String, val name: String?, val inviter: String?, val token: String? = null)
+
+    /** __GROUP_SETTINGS_2026_11_20__ pending public link handle (confirmation dialog). */
+    var pendingPublicGroup by androidx.compose.runtime.mutableStateOf<String?>(null)
+
+    /** __BOTS_PHASE1_2026_11_24__ pending bot link (profile sheet). */
+    var pendingBotUsername by androidx.compose.runtime.mutableStateOf<String?>(null)
 
     /**
      * Content handed to OSHI by another app through the system share sheet.
@@ -539,6 +613,21 @@ class MainActivity : FragmentActivity() {
                 pendingNavRoute = "chat/${encodeKeyForNav(link.publicKey)}"
             }
             is OshiDeepLink.GroupInvite -> handleGroupInviteUri(uri)
+            is OshiDeepLink.PublicGroup -> {
+                Log.d("MainActivity", "👥 Public group link @${link.handle}")
+                pendingPublicGroup = link.handle
+            }
+            is OshiDeepLink.PublicChannel -> openPublicChannel(link.handle, link.n)
+            is OshiDeepLink.OpenInBrowser -> runCatching {
+                startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(link.url)).apply {
+                    selector = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                })
+            }.onFailure { Log.w("MainActivity", "no browser for ${link.url}: ${it.message}") }
+            is OshiDeepLink.OpenBot -> {
+                Log.d("MainActivity", "🤖 Bot link @${link.username}")
+                pendingBotUsername = link.username
+            }
             is OshiDeepLink.Share ->
                 Log.d("MainActivity", "Deep link: share route — Android uses ACTION_SEND, ignoring")
             is OshiDeepLink.Unhandled ->
@@ -546,6 +635,21 @@ class MainActivity : FragmentActivity() {
             is OshiDeepLink.NotOurs ->
                 Log.d("MainActivity", "Not an OSHI link: $uri")
         }
+    }
+
+    /**
+     * __CHANNEL_WEB_2026_11_26__ A member opens the channel (and lands on post [n] when it can be
+     * matched); anyone else gets the existing `/g/<handle>` confirm-and-join dialog.
+     */
+    private fun openPublicChannel(handle: String, n: Int?) {
+        val gm = runCatching { groupManagerLazy.get() }.getOrNull()
+        val gid = gm?.groupSettings?.value?.entries
+            ?.firstOrNull { it.value.isPublic && it.value.handle == handle && !it.value.dissolved }?.key
+            ?.let { key -> gm.groups.value.firstOrNull { it.id.equals(key, ignoreCase = true) }?.id }
+        Log.d("MainActivity", "🌐 Channel link @$handle n=$n member=${gid != null}")
+        if (gid == null) { pendingPublicGroup = handle; return }
+        if (n != null) com.oshi.messenger.service.channelweb.ChannelWebDeepLinks.put(gid, n)
+        pendingNavRoute = "groupChat/$gid"
     }
 
     private fun handleGroupInviteUri(uri: android.net.Uri) {
@@ -575,7 +679,9 @@ class MainActivity : FragmentActivity() {
             return
         }
 
-        pendingGroupInvite = GroupInviteData(gid = gid!!, name = name, inviter = inviter)
+        pendingGroupInvite = GroupInviteData(gid = gid!!, name = name, inviter = inviter,
+            // __GROUP_SETTINGS_2026_11_20__ reset-able invite link (spec §3.2)
+            token = uri.getQueryParameter("t")?.takeIf { Regex("^[A-Za-z0-9_-]{16,64}$").matches(it) })
         Log.d("MainActivity", "👥 Pending group invite: gid=$gid name=$name inviter=${inviter?.take(12)}")
     }
 
@@ -589,11 +695,28 @@ class MainActivity : FragmentActivity() {
      */
     private fun handleShareIntent(intent: Intent) {
         @Suppress("DEPRECATION")
-        val streams: List<android.net.Uri> = when (intent.action) {
+        val rawStreams: List<android.net.Uri> = when (intent.action) {
             Intent.ACTION_SEND_MULTIPLE ->
                 intent.getParcelableArrayListExtra<android.net.Uri>(Intent.EXTRA_STREAM) ?: emptyList()
             else ->
                 listOfNotNull(intent.getParcelableExtra<android.net.Uri>(Intent.EXTRA_STREAM))
+        }
+        // __SHARE_TARGET_OWN_FILES_2026_11_20__ Never read OSHI's own sandbox or
+        // FileProvider on behalf of the sending app (see SharedStreamGuard).
+        val ownAuthorities = listOf("$packageName.fileprovider")
+        val privateRoots = buildList {
+            add(java.io.File(applicationInfo.dataDir))
+            add(filesDir); add(cacheDir)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                runCatching { add(java.io.File(createDeviceProtectedStorageContext().dataDir.path)) }
+            }
+            getExternalFilesDir(null)?.let { add(it) }
+            externalCacheDir?.let { add(it) }
+        }
+        val streams = rawStreams.filter { uri ->
+            com.oshi.messenger.util.SharedStreamGuard.isAllowed(
+                uri.scheme, uri.authority, uri.path, ownAuthorities, privateRoots
+            ).also { ok -> if (!ok) Log.w("MainActivity", "Refused inbound share stream pointing into OSHI") }
         }
         // EXTRA_TEXT arrives as a String from most apps and as a CharSequence
         // (styled text) from a few — read both or Chrome's "share link" is lost.
@@ -656,7 +779,10 @@ class MainActivity : FragmentActivity() {
      * the rest of its life.
      */
     private fun applyLockScreenVisibility(intent: Intent?) {
-        val forIncomingCall = intent?.getBooleanExtra("incoming_call", false) == true
+        // __LOCKSCREEN_INTENT_SPOOF_2026_11_20__ the boolean alone is forgeable by any
+        // app; only a launch stamped by this process counts (IncomingCallLaunchToken).
+        val forIncomingCall = intent?.getBooleanExtra("incoming_call", false) == true &&
+            com.oshi.messenger.service.IncomingCallLaunchToken.isGenuine(intent)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(forIncomingCall)
             setTurnScreenOn(forIncomingCall)
@@ -740,6 +866,13 @@ class MainActivity : FragmentActivity() {
         com.oshi.messenger.update.ForcedUpdateManager.onFlowResult(result.resultCode)
     }
 
+    /** __UPDATE_PROMPT_ANDROID_2026_11_21__ Play's FLEXIBLE consent sheet. Same registration rule. */
+    private val flexibleUpdateLauncher = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        com.oshi.messenger.update.FlexibleUpdateManager.onFlowResult(this, result.resultCode)
+    }
+
     /**
      * Refresh the server floors, then let [ForcedUpdateManager] decide.
      *
@@ -761,6 +894,10 @@ class MainActivity : FragmentActivity() {
                     this@MainActivity,
                     immediateUpdateLauncher
                 )
+                // __UPDATE_PROMPT_ANDROID_2026_11_21__ The non-forced offer. After the
+                // refresh for the same reason as the forced check: it must know
+                // whether the forced wall applies, to stay out of its way.
+                com.oshi.messenger.update.FlexibleUpdateManager.check(this@MainActivity)
             }.onFailure {
                 Log.d("MainActivity", "forced-update check skipped: ${it.javaClass.simpleName}")
             }
@@ -832,6 +969,7 @@ class MainActivity : FragmentActivity() {
     /** The mirror's appearance, read once in onCreate (see ThemeBoot.kt). */
     private var bootTheme: String? = null
     private var bootOled: Boolean = false
+    private var bootGlass: Boolean? = null
 
     private fun holdSystemSplashUntilComposeDraws() {
         val content = findViewById<android.view.View>(android.R.id.content)
@@ -870,6 +1008,11 @@ class MainActivity : FragmentActivity() {
         findViewById<android.view.View>(android.R.id.content)?.invalidate()
     }
 
+    /** __PER_APP_LANGUAGE_2026_11_20__ Android 8–12: apply the in-app language choice. */
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(com.oshi.messenger.ui.locale.AppLanguage.wrap(newBase))
+    }
+
     // `consumeWindowInsets` (the app-wide double-inset fix on the NavHost) is
     // still ExperimentalLayoutApi in the Compose BOM this module pins.
     @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
@@ -883,6 +1026,7 @@ class MainActivity : FragmentActivity() {
         // has not answered yet. See ThemeBoot.kt.
         bootTheme = com.oshi.messenger.ui.theme.ThemeBoot.readTheme(this)
         bootOled = com.oshi.messenger.ui.theme.ThemeBoot.readOled(this)
+        bootGlass = com.oshi.messenger.ui.theme.ThemeBoot.readGlass(this)
         com.oshi.messenger.ui.theme.ThemeBoot.apply(this, bootTheme, bootOled)
         val splashGroundBlack = com.oshi.messenger.ui.theme.ThemeBoot.splashGroundIsBlack(
             android.os.Build.VERSION.SDK_INT,
@@ -910,8 +1054,12 @@ class MainActivity : FragmentActivity() {
         // call may appear over the lock screen.
         applyLockScreenVisibility(intent)
 
-        // Request only notification permission at startup (all others are lazy)
-        requestNotificationPermission()
+        // __ONBOARDING_2027__ The notification permission is no longer asked
+        // here, in onCreate: on a fresh install that threw the system dialog
+        // over the launch screen before the user had seen a word of OSHI. It is
+        // asked once the app knows who is launching (see the LaunchedEffect on
+        // `isLoading` in setContent): an onboarded user is asked at startup as
+        // before; a new user is asked inside onboarding, with a line of why.
 
         // __FORCED_UPDATE_ANDROID_2026_10_13__ Ask the server whether this build
         // is below the blocking floor, and hand the answer to Play.
@@ -940,7 +1088,24 @@ class MainActivity : FragmentActivity() {
         // the user explicitly turned it off; a DEBUG build may opt out via
         // ScreenshotProtectionPolicy.DEBUG_ALLOW_CAPTURE_EXTRA (ignored in release).
         screenshotProtection.applyDebugCaptureOverride(intent)
+        // 🛡 __STRICT_MODE_2026_11_22__ load the mode BEFORE the first window flags are
+        // set (StrictModeGate feeds ScreenshotProtectionManager.effectiveEnabled).
+        val strictStore = com.oshi.messenger.security.StrictModeStore.get(this)
         screenshotProtection.registerActivity(this)
+        lifecycleScope.launch {
+            strictStore.active.collect { on ->
+                com.oshi.messenger.security.StrictWindowGuards.apply(this@MainActivity, on)
+                screenshotProtection.reapplyAll()
+            }
+        }
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ a conversation with advanced chat privacy
+        // on screen forces FLAG_SECURE even if the user turned screenshot protection
+        // off; leaving it restores whatever the setting says.
+        lifecycleScope.launch {
+            com.oshi.messenger.service.AdvancedChatPrivacyStore.onScreen.collect {
+                screenshotProtection.reapplyAll()
+            }
+        }
 
         // (N10, Anatole 13/11) Opening the app no longer clears every message
         // notification. A banner goes when IT is tapped (`setAutoCancel(true)` on
@@ -991,7 +1156,17 @@ class MainActivity : FragmentActivity() {
             // of the app (one hook instead of ~100 fields): asks the keyboard not to
             // learn what is typed before OSHI encrypts it. See IncognitoTextInput.kt.
             com.oshi.messenger.ui.keyboard.IncognitoKeyboardScope {
-            OSHITheme(darkTheme = resolvedDark, oledBlack = oledBlackPref) {
+            // __GLASS_ALL_THEMES_2026_11_21__ « Effet verre » (null = per-theme
+            // default) and the system's high-contrast request.
+            val liveGlass by settingsVm.glassEffect.collectAsState()
+            val glassPref = if (appearanceLoaded) liveGlass else bootGlass
+            val highContrast = com.oshi.messenger.ui.theme.GlassAccessibility.rememberHighContrast()
+            OSHITheme(
+                darkTheme = resolvedDark,
+                oledBlack = oledBlackPref,
+                glass = glassPref,
+                reduceTransparency = highContrast,
+            ) {
                 val baseDensity = androidx.compose.ui.platform.LocalDensity.current
                 val scaledDensity = androidx.compose.ui.unit.Density(
                     density = baseDensity.density,
@@ -1020,6 +1195,16 @@ class MainActivity : FragmentActivity() {
                     // only (no key wiped, nothing blocked). Root-hosted for the same
                     // reason as CallRatingHost: its own dialog window.
                     com.oshi.messenger.security.DeviceIntegrityHost()
+
+                    // 🕵️ __ANTI_STALKERWARE_2026_11_20__ "These apps can read your screen
+                    // or your notifications" — once per distinct set, informs only.
+                    // __ONBOARDING_2027__ not over onboarding: before an identity exists
+                    // there is nothing for such an app to read, and a security alarm is
+                    // the wrong first screen. It shows once the identity exists.
+                    val spyVm: MainViewModel = hiltViewModel()
+                    val spyOnboarded by spyVm.isOnboarded.collectAsState()
+                    val spyLoading by spyVm.isLoading.collectAsState()
+                    if (spyOnboarded && !spyLoading) com.oshi.messenger.security.SpySurfaceHost()
 
                     // ── Cold-launch hand-over (see holdSystemSplashUntilComposeDraws) ──
                     // Runs on the FIRST composition, before any branch below, so the
@@ -1062,6 +1247,16 @@ class MainActivity : FragmentActivity() {
                     val unreadCount by viewModel.totalUnreadCount.collectAsState()
                     val callState by viewModel.incomingCallState.collectAsState()
                     val incomingCall by viewModel.incomingCall.collectAsState()
+
+                    // __ONBOARDING_2027__ Startup notification ask, only for a user who
+                    // was ALREADY onboarded when this launch finished loading. Keyed on
+                    // isLoading alone, so finishing onboarding in this session (which
+                    // has its own in-context step) does not trigger a second ask.
+                    LaunchedEffect(isLoading) {
+                        if (StartupNotificationAsk.shouldAsk(isLoading = isLoading, onboardedAtLoad = viewModel.isOnboarded.value)) {
+                            requestNotificationPermission()
+                        }
+                    }
 
                     // Show the branded launch screen while DataStore loads AND for at
                     // least LAUNCH_MIN_VISIBLE_MS, so it is genuinely seen rather
@@ -1170,11 +1365,31 @@ class MainActivity : FragmentActivity() {
                         GroupInviteJoinDialog(
                             invite = invite,
                             onJoin = {
-                                viewModel.joinGroupFromInvite(invite.gid, invite.inviter, invite.name)
+                                viewModel.joinGroupFromInvite(invite.gid, invite.inviter, invite.name, invite.token)
                                 pendingGroupInvite = null
                                 navController.navigate("groupChat/${invite.gid}") { launchSingleTop = true }
                             },
                             onDismiss = { pendingGroupInvite = null }
+                        )
+                    }
+                    // __GROUP_SETTINGS_2026_11_20__ public group link: resolve, CONFIRM, then
+                    // send `join_request` (GROUP_INFO_SETTINGS_SPEC §3.1). Nothing is sent before Join.
+                    // __BOTS_PHASE1_2026_11_24__ a bot link opens the bot's profile sheet.
+                    val botUsername = pendingBotUsername
+                    if (botUsername != null && isOnboarded && !isLoading) {
+                        com.oshi.messenger.ui.bots.BotProfileSheetHost(
+                            username = botUsername,
+                            onDismiss = { pendingBotUsername = null },
+                            onOpenChat = { gid -> navController.navigate("groupChat/$gid") { launchSingleTop = true } },
+                        )
+                    }
+                    val publicHandle = pendingPublicGroup
+                    if (publicHandle != null && isOnboarded && !isLoading) {
+                        com.oshi.messenger.ui.screens.PublicGroupJoinDialog(
+                            handle = publicHandle,
+                            resolve = { viewModel.resolvePublicGroup(it) },
+                            onJoin = { resolved -> viewModel.requestPublicGroupJoin(resolved) },
+                            onDismiss = { pendingPublicGroup = null }
                         )
                     }
                     // 🆕 Add-contact prompt (from …/add?key=… deep link).
@@ -1325,6 +1540,28 @@ class MainActivity : FragmentActivity() {
                     val windowSize = rememberWindowSize()
                     val showRail = isOnboarded && showBottomBar && windowSize.useNavigationRail
                     val showBottomBarNow = isOnboarded && showBottomBar && !windowSize.useNavigationRail
+
+                    // __UPDATE_PROMPT_ANDROID_2026_11_21__ "Update available" (Play
+                    // FLEXIBLE flow) and, once downloaded, "Update ready · Restart".
+                    // Never during onboarding, a call or the lock cover.
+                    com.oshi.messenger.ui.components.UpdatePromptHost(
+                        onboarded = isOnboarded,
+                        inCall = callState == CallState.RINGING || callState == CallState.CONNECTING ||
+                            callState == CallState.IN_CALL ||
+                            currentRoute?.startsWith("call/") == true ||
+                            currentRoute?.startsWith("incomingCall/") == true,
+                        locked = autoLockTriggered.value,
+                        restartBarHere = isOnboarded && showBottomBar,
+                        // Tab bar (80 dp) + the conversation list's "New" FAB
+                        // (56 dp + margins), which a bar at 92 dp covered on screen.
+                        bottomInset = if (showBottomBarNow) 156.dp else 76.dp,
+                        onUpdate = {
+                            com.oshi.messenger.update.FlexibleUpdateManager.startFlexible(
+                                this@MainActivity,
+                                flexibleUpdateLauncher
+                            )
+                        },
+                    )
                     val onTabSelected: (String) -> Unit = { route ->
                         navController.selectTab(route)
                     }
@@ -1588,8 +1825,14 @@ class MainActivity : FragmentActivity() {
                             }
 
                             // Tab 5: Portal (Bots, Channels, Apps) — matches iOS PortalView
-                            composable("botPortal") {
+                            composable(
+                                route = "botPortal?createLocal={createLocal}",
+                                arguments = listOf(
+                                    navArgument("createLocal") { type = NavType.StringType; defaultValue = "false" }
+                                )
+                            ) { portalEntry ->
                                 BotPortalScreen(
+                                    openLocalWizard = portalEntry.arguments?.getString("createLocal") == "true",
                                     onNavigateToBotDetail = { botId -> navController.navigate("botDetail/$botId") },
                                     onNavigateToGroupChat = { groupId -> navController.navigate("groupChat/$groupId") },
                                     onNavigateToCreateChannel = { navController.navigate("groups") },
@@ -1597,7 +1840,19 @@ class MainActivity : FragmentActivity() {
                                     onNavigateToChat = { publicKey ->
                                         navController.navigate("chat/${encodeKeyForNav(publicKey)}")
                                     },
-                                    onBack = { navController.popBackStack() }
+                                    onBack = { navController.popBackStack() },
+                                    onCreateBot = { navController.navigate("botFather") }
+                                )
+                            }
+
+                            // __BOTS_PHASE1_2026_11_24__ BotFather: create a bot, step by step.
+                            composable("botFather") {
+                                com.oshi.messenger.ui.bots.BotFatherScreen(
+                                    onClose = { navController.popBackStack() },
+                                    onFinished = { id ->
+                                        navController.popBackStack()
+                                        if (id != null) navController.navigate("botDetail/$id")
+                                    }
                                 )
                             }
 
@@ -1793,6 +2048,9 @@ class MainActivity : FragmentActivity() {
                                 LoRaSettingsScreen(
                                     onBack = { navController.popBackStack() },
                                     onOpenNodeSetup = { navController.navigate("loraNodeSetup") },
+                                    // __MESHCORE_INTEROP_2026_11_25__ a MeshCore contact or channel tapped in settings
+                                    // opens its thread (it used to only say "added to your chats").
+                                    onOpenChat = { key -> navController.navigate("chat/${encodeKeyForNav(key)}") { launchSingleTop = true } },
                                     deviceLocation = here?.let { it.latitude to it.longitude }
                                 )
                             }
@@ -1871,6 +2129,8 @@ class MainActivity : FragmentActivity() {
                                 val publicKey = decodeKeyFromNav(backStackEntry.arguments?.getString("publicKey") ?: "")
                                 ChatScreen(
                                     publicKey = publicKey,
+                                    // __CHAT_BACKDROP_BLUR_2026_11_21__ wallpaper behind the clock.
+                                    statusBarUnderlap = hostPadding.calculateTopPadding(),
                                     onBack = { navController.popBackStack() },
                                     onCallClick = { isVideo ->
                                         navController.navigate("call/${encodeKeyForNav(publicKey)}/$isVideo")
@@ -1909,7 +2169,9 @@ class MainActivity : FragmentActivity() {
                                         navController.navigate(
                                             "safetyNumber/${encodeKeyForNav(theirPublicKey)}"
                                         ) { launchSingleTop = true }
-                                    }
+                                    },
+                                    // __MESHCORE_INTEROP_2026_11_25__ "radio not connected · Connect".
+                                    onOpenRadioSettings = { navController.navigate("loraSettings") { launchSingleTop = true } },
                                 )
                             }
 
@@ -2098,13 +2360,18 @@ class MainActivity : FragmentActivity() {
                                 val groupId = backStackEntry.arguments?.getString("groupId") ?: ""
                                 GroupChatScreen(
                                     groupId = groupId,
+                                    statusBarUnderlap = hostPadding.calculateTopPadding(),
                                     onBack = { navController.popBackStack() },
                                     onGroupInfo = { /* Show group info */ },
                                     onNavigateToChat = { publicKey ->
                                         navController.navigate("chat/${encodeKeyForNav(publicKey)}")
                                     },
                                     onNavigateToMap = { navController.navigate("map") },
-                                    onNavigateToAIChat = { navController.navigate("aiChat") }
+                                    onNavigateToAIChat = { navController.navigate("aiChat") },
+                                    onOpenBot = { botId -> navController.navigate("botDetail/$botId") },
+                                    onCreateBot = { choice ->
+                                        navController.navigate(com.oshi.messenger.ui.bots.BotCreateEntry.route(choice))
+                                    }
                                 )
                             }
 
@@ -2291,6 +2558,19 @@ class MainActivity : FragmentActivity() {
         }
     }
 
+    /**
+     * 🛡 __STRICT_MODE_2026_11_22__ Strict mode swallows touches an AccessibilityService
+     * injected (dispatchGesture) while a service that is not a declared assistive tool
+     * is enabled — an "AI agent" driving the screen by coordinates. Real tools pass.
+     */
+    override fun dispatchTouchEvent(ev: android.view.MotionEvent): Boolean {
+        if (com.oshi.messenger.security.StrictWindowGuards.shouldDrop(ev)) {
+            Log.w("MainActivity", "Strict mode: dropped an accessibility-injected touch")
+            return true
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     override fun onPause() {
         super.onPause()
         // Show OSHI logo cover in task switcher (recents) — matches iOS behavior
@@ -2305,6 +2585,9 @@ class MainActivity : FragmentActivity() {
         com.oshi.messenger.util.AppReviewManager.setCurrentActivity(this)
         // Remove the cover when app returns to foreground
         com.oshi.messenger.service.PrivacyCoverManager.hideCover(this)
+        // 🛡 __STRICT_MODE_2026_11_22__ enabling an accessibility service means leaving
+        // OSHI for system Settings, so a refresh on every resume is enough.
+        com.oshi.messenger.security.StrictModeThreats.refreshNonToolFlag(this)
         // Auto-lock check: if app was backgrounded longer than configured timeout, require biometric
         checkAutoLockOnForeground()
         // __FORCED_UPDATE_ANDROID_2026_10_13__ Google requires the host app to
@@ -2327,6 +2610,22 @@ class MainActivity : FragmentActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) com.oshi.messenger.security.SensitiveClipboard.onAppFocused(this)
+    }
+
+    // __RECENTS_LIVE_TILE_COVER_2026_11_20__ Opening the task switcher straight from
+    // OSHI (swipe up / Overview) does NOT pause the activity on Pixel launchers: the
+    // card is the app's LIVE surface ("live tile") and only top-resumed is lost.
+    // onPause never ran, so the OSHI cover was never drawn and the card showed the
+    // real conversation list (measured on an Android 16 emulator, 20/11). Cover on
+    // losing top-resumed; uncover when it comes back. Compose dialogs stay in this
+    // activity and do not trigger it.
+    override fun onTopResumedActivityChanged(isTopResumedActivity: Boolean) {
+        super.onTopResumedActivityChanged(isTopResumedActivity)
+        if (isTopResumedActivity) {
+            com.oshi.messenger.service.PrivacyCoverManager.hideCover(this)
+        } else {
+            com.oshi.messenger.service.PrivacyCoverManager.showCover(this)
+        }
     }
 
     override fun onStop() {
@@ -2363,7 +2662,11 @@ class MainActivity : FragmentActivity() {
             val prefs = this@MainActivity.dataStore.data.first()
             val biometricEnabled = prefs[com.oshi.messenger.ui.viewmodel.SettingsViewModel.KEY_BIOMETRIC_ENABLED] ?: false
             val timeoutSec = prefs[com.oshi.messenger.ui.viewmodel.SettingsViewModel.KEY_AUTO_LOCK_TIMEOUT_SECONDS] ?: 0
-            val shouldLock = biometricEnabled && timeoutSec > 0 && elapsedMs >= timeoutSec * 1000L
+            // 🛡 __STRICT_MODE_2026_11_22__ strict mode: lock on EVERY return.
+            val shouldLock = com.oshi.messenger.security.StrictModePolicy.shouldAutoLock(
+                biometricEnabled, timeoutSec, elapsedMs,
+                strict = com.oshi.messenger.security.StrictModeGate.active,
+            )
             if (shouldLock) {
                 setAutoLockOverlay(true)
                 promptBiometricUnlock()
@@ -3133,7 +3436,7 @@ fun OSHIBottomNavigation(
     val navGlass = com.oshi.messenger.ui.theme.glassOn()
     NavigationBar(
         modifier = if (navGlass) Modifier.glassEdge(top = true) else Modifier,
-        containerColor = if (navGlass) com.oshi.messenger.ui.theme.GlassTier.Bar.opaque else MaterialTheme.colorScheme.surface,
+        containerColor = if (navGlass) com.oshi.messenger.ui.theme.glassOpaque(com.oshi.messenger.ui.theme.GlassTier.Bar) else MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface,
         // (N10) 0, not 8. `Surface` tints its container when — and only when —
         // the colour it is given IS `colorScheme.surface`
@@ -3430,9 +3733,19 @@ fun MeshPermissionGate(
         val needed = MeshPermissionRequests.missingForBleLanes(context)
         if (needed.isEmpty()) {
             permissionsHandled = true
+            // __WIFI_AWARE_2026_11_25__ Bluetooth already granted ⇒ the "Nearby
+            // devices" group is held and NEARBY_WIFI_DEVICES is granted without a
+            // dialog. Once ever.
+            val silent = MeshPermissionRequests.silentWifiAwareAsk(context)
+            if (silent.isNotEmpty()) {
+                MeshPermissionRequests.recordAsked(context, silent)
+                permissionLauncher.launch(silent.toTypedArray())
+            }
         } else {
-            MeshPermissionRequests.recordAsked(context, needed)
-            permissionLauncher.launch(needed.toTypedArray())
+            // __WIFI_AWARE_2026_11_25__ Rides in the same "Nearby devices" dialog.
+            val ask = needed + MeshPermissionRequests.wifiAwareRideAlong(context)
+            MeshPermissionRequests.recordAsked(context, ask)
+            permissionLauncher.launch(ask.distinct().toTypedArray())
         }
     }
 

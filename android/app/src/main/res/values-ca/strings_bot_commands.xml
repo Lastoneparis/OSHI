@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Ordres</string>
+    <string name="bot_cmd_send_a11y">Envia %1$s</string>
+    <string name="bot_cmd_sheet_title">Ordres del bot</string>
+    <string name="bot_cmd_tap_to_send">Toca una ordre per enviar-la.</string>
+    <string name="bot_cmd_empty_none_title">Encara no hi ha bots aquí</string>
+    <string name="bot_cmd_empty_none_body">Crea un bot i afegeix-lo a aquest grup. Les seves ordres apareixeran aquí i quan escriguis /.</string>
+    <string name="bot_cmd_empty_bot">Aquest bot encara no té ordres.</string>
+    <string name="bot_cmd_setup">Configura les ordres</string>
+    <string name="bot_cmd_section">Ordres</string>
+    <string name="bot_cmd_section_hint">Els membres dels grups del bot les veuen quan escriuen / o toquen Ordres.</string>
+    <string name="bot_cmd_add">Afegeix</string>
+    <string name="bot_cmd_add_title">Ordre nova</string>
+    <string name="bot_cmd_edit_title">Edita l’ordre</string>
+    <string name="bot_cmd_field_name">Ordre</string>
+    <string name="bot_cmd_field_description">Descripció (es mostra al menú)</string>
+    <string name="bot_cmd_field_reply">Resposta</string>
+    <string name="bot_cmd_field_reply_hint">El que respon el bot. Pots fer servir {{input}}, {{bot_name}} i {{date}}.</string>
+    <string name="bot_cmd_webhook_note">S’envia al teu webhook, que respon.</string>
+    <string name="bot_cmd_empty_owner">Encara no hi ha ordres. Afegeix-ne una, com ara /start o /help, perquè tothom sàpiga què fa aquest bot.</string>
+    <string name="bot_cmd_err_empty">Escriu un nom d’ordre.</string>
+    <string name="bot_cmd_err_invalid">Només minúscules, xifres i _.</string>
+    <string name="bot_cmd_err_too_long">Com a màxim 32 caràcters.</string>
+    <string name="bot_cmd_err_duplicate">Aquest bot ja té aquesta ordre.</string>
+    <string name="bot_cmd_err_too_many">Un bot pot tenir com a màxim 100 ordres.</string>
+    <string name="bot_cmd_err_description">Descripció massa llarga (com a màxim 256 caràcters).</string>
+    <string name="bot_cmd_sync_local">Desat en aquest telèfon, que fa funcionar el bot.</string>
+    <string name="bot_cmd_sync_syncing">S’està actualitzant el servidor…</string>
+    <string name="bot_cmd_sync_synced">Menú actualitzat al servidor.</string>
+    <string name="bot_cmd_sync_failed">No s’ha pogut actualitzar el servidor. Les teves ordres estan desades en aquest telèfon.</string>
+    <string name="bot_profile_edit">Edita el perfil</string>
+    <string name="bot_profile_name">Nom</string>
+    <string name="bot_profile_description">Descripció</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Posa un nom al teu bot.</string>
+    <string name="bot_profile_err_name_long">Nom massa llarg (com a màxim 64 caràcters).</string>
+    <string name="bot_profile_err_desc_long">Descripció massa llarga (com a màxim 512 caràcters).</string>
+    <string name="bot_connect_title">Com es connecta</string>
+    <string name="bot_connect_local">Aquest bot funciona en aquest telèfon: mantén OSHI instal·lat i el bot activat. Afegeix-lo a un grup i els membres hi podran fer servir les seves ordres.</string>
+    <string name="bot_connect_webhook">Cada ordre s’envia a l’URL del teu webhook i el teu servidor respon amb JSON {\"text\": \"…\"}. El teu servidor també pot fer servir el testimoni de sota amb l’API de bots d’OSHI.</string>
+    <string name="bot_connect_token_warning">Mantén el testimoni en secret: qui el tingui pot parlar com el teu bot.</string>
+    <string name="bot_connect_groups">Grups: %1$s</string>
+    <string name="bot_connect_no_groups">Encara no és a cap grup: ningú pot fer servir les seves ordres.</string>
+</resources>

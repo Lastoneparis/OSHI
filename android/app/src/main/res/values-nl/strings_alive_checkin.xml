@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Check-in bevestigd</string>
+    <string name="alive_a11y_neutral">Geen check-in ingesteld</string>
+    <string name="alive_a11y_overdue">Check-in te laat</string>
+    <string name="alive_action_im_alive">Ik leef</string>
+    <string name="alive_action_message_them">Bericht</string>
+    <string name="alive_bar_open_settings">Check-in-instellingen</string>
+    <string name="alive_channel_description">Herinneringen voor je eigen check-ins, en meldingen als iemand die je volgt niet op de zijne heeft gereageerd.</string>
+    <string name="alive_channel_name">Veiligheidscheck-ins</string>
+    <string name="alive_confirmed_toast">Check-in verstuurd</string>
+    <string name="alive_duration_days_hours">%1$d d %2$d u</string>
+    <string name="alive_duration_hours_minutes">%1$d u %2$d min</string>
+    <string name="alive_duration_minutes">%1$d min</string>
+    <string name="alive_duration_now">minder dan een minuut</string>
+    <string name="alive_interval_24h">Elke 24 uur</string>
+    <string name="alive_interval_48h">Elke 48 uur</string>
+    <string name="alive_interval_72h">Elke 72 uur</string>
+    <string name="alive_interval_custom">Aangepast</string>
+    <string name="alive_interval_custom_hours">Elke %1$d uur</string>
+    <string name="alive_interval_every">elke %1$s</string>
+    <string name="alive_lane_you">Jij</string>
+    <string name="alive_note_delivery">Herinneringen en meldingen hangen af van je netwerk en van de meldingstoestemming. Een gemiste check-in betekent alleen dat er geen bevestiging is aangekomen, meer niet.</string>
+    <string name="alive_note_no_location">Er wordt geen locatie gedeeld. Een check-in bevat één tijdstempel en verder niets.</string>
+    <string name="alive_notification_mine_due_body">Bevestig dat je leeft, zodat %1$s niet blijft wachten.</string>
+    <string name="alive_notification_mine_due_title">Tijd voor je check-in</string>
+    <string name="alive_notification_overdue_body">Hun check-in was %1$s geleden verwacht. Dit betekent alleen dat er geen bevestiging is aangekomen.</string>
+    <string name="alive_notification_overdue_title">Geen check-in van %1$s</string>
+    <string name="alive_sheet_explainer">Bevestig volgens een schema dat je leeft. %1$s ziet je aftelling en krijgt een melding als die verloopt zonder antwoord.</string>
+    <string name="alive_sheet_interval">Hoe vaak</string>
+    <string name="alive_sheet_mine_switch">Check-in bij %1$s</string>
+    <string name="alive_sheet_stop">Stoppen met check-ins</string>
+    <string name="alive_sheet_their_next">Volgende verwacht %1$s</string>
+    <string name="alive_sheet_their_none">%1$s heeft hier geen check-in ingesteld.</string>
+    <string name="alive_sheet_their_section">Check-in van %1$s</string>
+    <string name="alive_state_confirmed_ago">%1$s geleden bevestigd</string>
+    <string name="alive_state_due_in">verwacht over %1$s</string>
+    <string name="alive_state_not_set">niet ingesteld</string>
+    <string name="alive_state_overdue_by">al %1$s geen reactie</string>
+    <string name="alive_summary_confirmed">Bevestigd in leven</string>
+    <string name="alive_summary_started">Veiligheidscheck gestart</string>
+    <string name="alive_summary_stopped">Veiligheidscheck gestopt</string>
+    <string name="alive_title">Veiligheidscheck-in</string>
+    <string name="alive_unknown_peer">dit contact</string>
+</resources>

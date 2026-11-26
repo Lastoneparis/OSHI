@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">بررسی تأیید شد</string>
+    <string name="alive_a11y_neutral">هیچ بررسی‌ای تنظیم نشده</string>
+    <string name="alive_a11y_overdue">بررسی عقب افتاده</string>
+    <string name="alive_action_im_alive">زنده‌ام</string>
+    <string name="alive_action_message_them">پیام</string>
+    <string name="alive_bar_open_settings">تنظیمات بررسی</string>
+    <string name="alive_channel_description">یادآوری برای بررسی‌های خودتان، و اعلان وقتی کسی که دنبال می‌کنید به بررسی خودش پاسخ نداده است.</string>
+    <string name="alive_channel_name">بررسی‌های ایمنی</string>
+    <string name="alive_confirmed_toast">تأیید ارسال شد</string>
+    <string name="alive_duration_days_hours">%1$d روز %2$d ساعت</string>
+    <string name="alive_duration_hours_minutes">%1$d ساعت %2$d دقیقه</string>
+    <string name="alive_duration_minutes">%1$d دقیقه</string>
+    <string name="alive_duration_now">کمتر از یک دقیقه</string>
+    <string name="alive_interval_24h">هر ۲۴ ساعت</string>
+    <string name="alive_interval_48h">هر ۴۸ ساعت</string>
+    <string name="alive_interval_72h">هر ۷۲ ساعت</string>
+    <string name="alive_interval_custom">سفارشی</string>
+    <string name="alive_interval_custom_hours">هر %1$d ساعت</string>
+    <string name="alive_interval_every">هر %1$s</string>
+    <string name="alive_lane_you">شما</string>
+    <string name="alive_note_delivery">یادآوری‌ها و اعلان‌ها به شبکه و مجوز اعلان شما بستگی دارند. بررسیِ ازدست‌رفته فقط یعنی تأییدی نرسیده است، نه بیشتر.</string>
+    <string name="alive_note_no_location">هیچ موقعیتی به اشتراک گذاشته نمی‌شود. هر بررسی فقط یک مُهر زمانی دارد و بس.</string>
+    <string name="alive_notification_mine_due_body">تأیید کنید که زنده‌اید تا %1$s منتظر نماند.</string>
+    <string name="alive_notification_mine_due_title">زمان بررسی شما رسیده است</string>
+    <string name="alive_notification_overdue_body">بررسی او %1$s پیش موعدش بود. این فقط یعنی تأییدی نرسیده است.</string>
+    <string name="alive_notification_overdue_title">تأییدی از %1$s نرسیده</string>
+    <string name="alive_sheet_explainer">طبق برنامه تأیید کنید که زنده‌اید. %1$s شمارش معکوس شما را می‌بیند و اگر بدون پاسخ بگذرد باخبر می‌شود.</string>
+    <string name="alive_sheet_interval">هر چند وقت</string>
+    <string name="alive_sheet_mine_switch">بررسی با %1$s</string>
+    <string name="alive_sheet_stop">توقف بررسی</string>
+    <string name="alive_sheet_their_next">بعدی مورد انتظار: %1$s</string>
+    <string name="alive_sheet_their_none">%1$s اینجا بررسی‌ای تنظیم نکرده است.</string>
+    <string name="alive_sheet_their_section">بررسی %1$s</string>
+    <string name="alive_state_confirmed_ago">%1$s پیش تأیید شد</string>
+    <string name="alive_state_due_in">موعد تا %1$s دیگر</string>
+    <string name="alive_state_not_set">تنظیم نشده</string>
+    <string name="alive_state_overdue_by">%1$s است که پاسخی نیامده</string>
+    <string name="alive_summary_confirmed">تأیید کرد که زنده است</string>
+    <string name="alive_summary_started">بررسی ایمنی آغاز شد</string>
+    <string name="alive_summary_stopped">بررسی ایمنی متوقف شد</string>
+    <string name="alive_title">بررسی ایمنی</string>
+    <string name="alive_unknown_peer">این مخاطب</string>
+</resources>

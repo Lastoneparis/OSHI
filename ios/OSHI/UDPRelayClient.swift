@@ -187,40 +187,100 @@ final class UDPRelayClient {
             self.tokenWaitDeadline = Date().addingTimeInterval(Self.tokenWaitGrace)
 
             guard let nwPort = NWEndpoint.Port(rawValue: port) else { return }
-            let endpoint = NWEndpoint.hostPort(
+            self.endpoint = NWEndpoint.hostPort(
                 host: NWEndpoint.Host(host),
                 port: nwPort
             )
-            let conn = NWConnection(to: endpoint, using: .udp)
-            self.connection = conn
-            conn.stateUpdateHandler = { [weak self] state in
-                guard let self = self else { return }
-                self.queue.async {
-                    switch state {
-                    case .ready:
-                        self.startReceiveLoop(on: conn)
-                        self.sendRegisterLocked()
-                        self.startHeartbeatLocked()
-                        // No token yet: the first register was held back for the
-                        // fetch. Retry once the grace window closes rather than
-                        // waiting a full 10 s heartbeat (legacy register if the
-                        // fetch failed — `dual` still accepts it).
-                        let wait = max(0, self.tokenWaitDeadline.timeIntervalSinceNow) + 0.05
-                        self.queue.asyncAfter(deadline: .now() + wait) { [weak self] in
-                            guard let self = self, self.connection === conn, !self._isRegistered else { return }
-                            self.sendRegisterLocked()
-                        }
-                    case .failed(let err):
-                        OshiLog.mesh.info("📡 UDPRelay: NWConnection failed: \(err)")
-                    case .cancelled:
-                        break
-                    default: break
-                    }
-                }
-            }
-            conn.start(queue: self.queue)
+            self.openConnectionLocked()
         }
     }
+
+    /// __CALL_FLUIDITY_2026_11_21__ Where `start` pointed the socket, for `reconnect`.
+    private var endpoint: NWEndpoint?
+    private var lastNudgeAt: Date = .distantPast
+    private var reconnectPending = false
+    /// Sockets opened this call after the first (diagnostic).
+    private var reconnects = 0
+
+    private func openConnectionLocked() {
+        guard let endpoint = endpoint else { return }
+        let conn = NWConnection(to: endpoint, using: .udp)
+        self.connection = conn
+        conn.stateUpdateHandler = { [weak self] state in
+            guard let self = self else { return }
+            self.queue.async {
+                guard self.connection === conn else { return }   // a socket we already replaced
+                switch state {
+                case .ready:
+                    self.startReceiveLoop(on: conn)
+                    self.sendRegisterLocked()
+                    self.startHeartbeatLocked()
+                    // No token yet: the first register was held back for the
+                    // fetch. Retry once the grace window closes rather than
+                    // waiting a full 10 s heartbeat (legacy register if the
+                    // fetch failed — `dual` still accepts it).
+                    let wait = max(0, self.tokenWaitDeadline.timeIntervalSinceNow) + 0.05
+                    self.queue.asyncAfter(deadline: .now() + wait) { [weak self] in
+                        guard let self = self, self.connection === conn, !self._isRegistered else { return }
+                        self.sendRegisterLocked()
+                    }
+                case .failed(let err):
+                    OshiLog.mesh.info("📡 UDPRelay: NWConnection failed: \(err)")
+                    // __CALL_FLUIDITY_2026_11_21__ a failed socket stays failed: open a new one.
+                    self.scheduleReconnectLocked(reason: "failed", after: 1.0)
+                case .cancelled:
+                    break
+                default: break
+                }
+            }
+        }
+        conn.start(queue: self.queue)
+    }
+
+    /// __CALL_FLUIDITY_2026_11_21__ (gap 7) Open a NEW socket to the relay and register from
+    /// it at once. Call after a network change: a UDP NWConnection stays bound to the path it
+    /// was opened on, so after Wi-Fi → cellular the old one kept writing into the dead
+    /// interface and the server only learnt our new address at the next 10 s heartbeat — if
+    /// that heartbeat could leave at all. The token, its counter and the registered state are
+    /// kept (the counter only moves forward); the register goes out as soon as the new socket
+    /// is ready.
+    func reconnect(reason: String) {
+        queue.async { [weak self] in self?.reconnectLocked(reason: reason) }
+    }
+
+    private func reconnectLocked(reason: String) {
+        guard started, !udpAuthGaveUp, endpoint != nil else { return }
+        reconnectPending = false
+        reconnects += 1
+        OshiLog.mesh.info("📡 UDPRelay: new socket (\(reason)), #\(self.reconnects)")
+        heartbeatTimer?.cancel(); heartbeatTimer = nil
+        let old = connection
+        openConnectionLocked()
+        old?.cancel()
+    }
+
+    private func scheduleReconnectLocked(reason: String, after: TimeInterval) {
+        guard started, !reconnectPending else { return }
+        reconnectPending = true
+        queue.asyncAfter(deadline: .now() + after) { [weak self] in
+            guard let self = self, self.reconnectPending else { return }
+            self.reconnectLocked(reason: reason)
+        }
+    }
+
+    /// __CALL_FLUIDITY_2026_11_21__ (gap 8) Re-register now instead of at the next 10 s
+    /// heartbeat (at most once a second): the relay stopped carrying media, and if the NAT
+    /// mapping or our address changed the server learns the new one from this datagram.
+    func nudge() {
+        queue.async { [weak self] in
+            guard let self = self, self.started, self.connection != nil else { return }
+            let now = Date()
+            guard now.timeIntervalSince(self.lastNudgeAt) >= Self.minNudgeInterval else { return }
+            self.lastNudgeAt = now
+            self.sendRegisterLocked()
+        }
+    }
+    static let minNudgeInterval: TimeInterval = 1.0
 
     /// Stop heartbeat, close the socket, clear state. Safe to call multiple times.
     func stop() {
@@ -230,6 +290,9 @@ final class UDPRelayClient {
             self.heartbeatTimer = nil
             self.connection?.cancel()
             self.connection = nil
+            self.endpoint = nil
+            self.reconnectPending = false
+            self.reconnects = 0
             self.started = false
             self._isRegistered = false
             self._lastServerReplyAt = nil

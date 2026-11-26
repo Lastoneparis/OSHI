@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Εντολές</string>
+    <string name="bot_cmd_send_a11y">Αποστολή %1$s</string>
+    <string name="bot_cmd_sheet_title">Εντολές του bot</string>
+    <string name="bot_cmd_tap_to_send">Πατήστε μια εντολή για να την στείλετε.</string>
+    <string name="bot_cmd_empty_none_title">Δεν υπάρχουν ακόμη bots εδώ</string>
+    <string name="bot_cmd_empty_none_body">Δημιουργήστε ένα bot και προσθέστε το σε αυτή την ομάδα. Οι εντολές του θα εμφανίζονται εδώ και όταν πληκτρολογείτε /.</string>
+    <string name="bot_cmd_empty_bot">Αυτό το bot δεν έχει ακόμη εντολές.</string>
+    <string name="bot_cmd_setup">Ρύθμιση εντολών</string>
+    <string name="bot_cmd_section">Εντολές</string>
+    <string name="bot_cmd_section_hint">Τα μέλη των ομάδων του bot τις βλέπουν όταν πληκτρολογούν / ή πατούν Εντολές.</string>
+    <string name="bot_cmd_add">Προσθήκη</string>
+    <string name="bot_cmd_add_title">Νέα εντολή</string>
+    <string name="bot_cmd_edit_title">Επεξεργασία εντολής</string>
+    <string name="bot_cmd_field_name">Εντολή</string>
+    <string name="bot_cmd_field_description">Περιγραφή (εμφανίζεται στο μενού)</string>
+    <string name="bot_cmd_field_reply">Απάντηση</string>
+    <string name="bot_cmd_field_reply_hint">Τι απαντά το bot. Μπορείτε να χρησιμοποιήσετε {{input}}, {{bot_name}} και {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Στέλνεται στο webhook σας, που απαντά.</string>
+    <string name="bot_cmd_empty_owner">Δεν υπάρχουν ακόμη εντολές. Προσθέστε μία, όπως /start ή /help, ώστε όλοι να ξέρουν τι κάνει αυτό το bot.</string>
+    <string name="bot_cmd_err_empty">Εισαγάγετε όνομα εντολής.</string>
+    <string name="bot_cmd_err_invalid">Μόνο πεζά λατινικά, ψηφία και _.</string>
+    <string name="bot_cmd_err_too_long">Έως 32 χαρακτήρες.</string>
+    <string name="bot_cmd_err_duplicate">Αυτό το bot έχει ήδη αυτή την εντολή.</string>
+    <string name="bot_cmd_err_too_many">Ένα bot μπορεί να έχει έως 100 εντολές.</string>
+    <string name="bot_cmd_err_description">Πολύ μεγάλη περιγραφή (έως 256 χαρακτήρες).</string>
+    <string name="bot_cmd_sync_local">Αποθηκεύτηκε σε αυτό το τηλέφωνο, που εκτελεί το bot.</string>
+    <string name="bot_cmd_sync_syncing">Ενημέρωση διακομιστή…</string>
+    <string name="bot_cmd_sync_synced">Το μενού ενημερώθηκε στον διακομιστή.</string>
+    <string name="bot_cmd_sync_failed">Δεν ήταν δυνατή η ενημέρωση του διακομιστή. Οι εντολές σας είναι αποθηκευμένες σε αυτό το τηλέφωνο.</string>
+    <string name="bot_profile_edit">Επεξεργασία προφίλ</string>
+    <string name="bot_profile_name">Όνομα</string>
+    <string name="bot_profile_description">Περιγραφή</string>
+    <string name="bot_profile_avatar">Άβαταρ</string>
+    <string name="bot_profile_err_name_empty">Δώστε ένα όνομα στο bot σας.</string>
+    <string name="bot_profile_err_name_long">Πολύ μεγάλο όνομα (έως 64 χαρακτήρες).</string>
+    <string name="bot_profile_err_desc_long">Πολύ μεγάλη περιγραφή (έως 512 χαρακτήρες).</string>
+    <string name="bot_connect_title">Πώς συνδέεται</string>
+    <string name="bot_connect_local">Αυτό το bot τρέχει σε αυτό το τηλέφωνο: κρατήστε το OSHI εγκατεστημένο και το bot ενεργό. Προσθέστε το σε μια ομάδα και τα μέλη της θα μπορούν να χρησιμοποιούν τις εντολές του εκεί.</string>
+    <string name="bot_connect_webhook">Κάθε εντολή στέλνεται στο URL του webhook σας και ο διακομιστής σας απαντά με JSON {\"text\": \"…\"}. Ο διακομιστής σας μπορεί επίσης να χρησιμοποιήσει το παρακάτω διακριτικό με το API bot του OSHI.</string>
+    <string name="bot_connect_token_warning">Κρατήστε το διακριτικό μυστικό: όποιος το έχει μπορεί να μιλά ως το bot σας.</string>
+    <string name="bot_connect_groups">Ομάδες: %1$s</string>
+    <string name="bot_connect_no_groups">Δεν ανήκει ακόμη σε καμία ομάδα, οπότε κανείς δεν μπορεί να χρησιμοποιήσει τις εντολές του.</string>
+</resources>

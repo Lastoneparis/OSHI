@@ -23,6 +23,10 @@ import java.util.Base64
  */
 fun OkHttpClient.Builder.noSilentReplay(): OkHttpClient.Builder =
     followRedirects(false).followSslRedirects(false).retryOnConnectionFailure(false)
+        // __COVER_DNS_FALLBACK_2026_11_19__ every signed /v2 client (and the OHTTP relay
+        // call, which goes through the same client) resolves through CoverDns: the system
+        // resolver first, DoH only when it fails or answers with a non-routable address.
+        .dns(CoverDns.DEFAULT)
 
 /** No retry or direct-transport fallback here: failed cover transport stays failed. */
 class CoverInterceptor(private val mode: () -> String?) : Interceptor {
@@ -66,7 +70,18 @@ class CoverInterceptor(private val mode: () -> String?) : Interceptor {
             val budgetMs = coverTimeoutMs(carrier.body.size)
             val timed = chain.withReadTimeout(maxOf(chain.readTimeoutMillis(), budgetMs), java.util.concurrent.TimeUnit.MILLISECONDS)
                 .withWriteTimeout(maxOf(chain.writeTimeoutMillis(), budgetMs), java.util.concurrent.TimeUnit.MILLISECONDS)
-            timed.proceed(outer).use { response ->
+            // __COVER_SHORT_CONNECTIONS_2026_11_19__ see CoverConnectionPolicy.
+            val fresh = CoverConnectionPolicy.freshConnections()
+            val response = try {
+                if (fresh) {
+                    CoverConnectionPolicy.freshClient.newBuilder()
+                        .connectTimeout(chain.connectTimeoutMillis().toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
+                        .readTimeout(maxOf(chain.readTimeoutMillis(), budgetMs).toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
+                        .writeTimeout(maxOf(chain.writeTimeoutMillis(), budgetMs).toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
+                        .build().newCall(outer).execute()
+                } else timed.proceed(outer)
+            } catch (e: IOException) { CoverConnectionPolicy.onFailure(e); throw e }
+            response.use { response ->
                 if (!response.isSuccessful) throw IOException("Obfuscated transport HTTP ${response.code}")
                 val source = response.body ?: throw IOException("Missing cover response")
                 // __COVER_MIDDLEBOX_2026_11_18__ The relay never compresses a cover reply
@@ -79,8 +94,10 @@ class CoverInterceptor(private val mode: () -> String?) : Interceptor {
                 // trusted either way — the closed JSON schema in CoverCodec.decode is
                 // the check — so a relabelled reply is read as JSON.
                 val gzipped = response.header("Content-Encoding").orEmpty().trim().equals("gzip", ignoreCase = true)
-                val bytes = (if (gzipped) java.util.zip.GZIPInputStream(source.byteStream()) else source.byteStream())
-                    .use { it.readBytesBounded(CoverCodec.MAX * 4) }
+                val bytes = try {
+                    (if (gzipped) java.util.zip.GZIPInputStream(source.byteStream()) else source.byteStream())
+                        .use { it.readBytesBounded(CoverCodec.MAX * 4) }
+                } catch (e: IOException) { CoverConnectionPolicy.onFailure(e); throw e }
                 val decoded = CoverCodec.decode(bytes, "application/json")
                 val status = decoded.getInt("status")
                 require(status in 200..599)
@@ -91,6 +108,8 @@ class CoverInterceptor(private val mode: () -> String?) : Interceptor {
                     .removeHeader("Content-Length").removeHeader("Content-Encoding").header("Content-Type", mime)
                     .body(payload.toResponseBody(mime.toMediaType()))
                 innerHeaders.optString("retry-after").takeIf { it.isNotEmpty() }?.let { result.header("Retry-After", it) }
+                // __BLOB_RANGE_2026_11_19__ a ranged chunk read (206) is only usable with its range.
+                innerHeaders.optString("content-range").takeIf { it.isNotEmpty() }?.let { result.header("Content-Range", it) }
                 return result.build()
             }
         } catch (e: IOException) { throw e }

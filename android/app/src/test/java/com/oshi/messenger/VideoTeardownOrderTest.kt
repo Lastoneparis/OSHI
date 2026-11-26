@@ -147,12 +147,15 @@ class VideoTeardownOrderTest {
 
     @Test
     fun `0x04 ends the call on the media plane and on the signal plane`() {
-        // Media plane: iOS's VPS-WebSocket dual-path delivery lands in handleAudioData.
+        // Media plane: the legacy bare 0x04 (Android's own endCall "Path 1") still ends
+        // the call, but only once the per-call UDP relay attests it is this call's peer
+        // for this callId (__BARE_CALLEND_ATTESTED_2026_11_21__). iOS never puts 0x04 on
+        // the media path: its WebSocket callEnd is a sealed `call_signal`, which is the
+        // signal plane asserted below, and its media-path hang-up is the sealed 0x0D.
         assertTrue(
-            "handleAudioData must still act on packetType 0x04 — it is the only teardown " +
-                "trigger iOS ever sends (OSHI/VoiceCallManager.swift:8109)",
+            "handleAudioData must still act on an attested packetType 0x04",
             Regex(
-                """packetType == 0x04\.toByte\(\)[\s\S]{0,400}?handleCallEnded\(\)"""
+                """packetType == 0x04\.toByte\(\)[\s\S]{0,1500}?CallSignalGuards\.mayEndFromBareMediaCallEnd[\s\S]{0,1500}?handleCallEnded\(\)"""
             ).containsMatchIn(managerSource)
         )
         // Signal plane: resolveSignalType reads the type off byte 0 of the plaintext.

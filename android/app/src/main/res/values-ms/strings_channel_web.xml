@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Pratonton web awam</string>
+    <string name="cw_toggle">Terbitkan siaran di web</string>
+    <string name="cw_footer">Siaran baharu juga diterbitkan sebagai halaman web awam di oshi-messenger.com/c/%1$s. Sesiapa sahaja boleh membacanya, termasuk enjin carian dan pratonton pautan. Penyulitan hujung ke hujung tidak terpakai pada salinan web.</string>
+    <string name="cw_needs_link">Beri saluran ini pautan awam dahulu: pratonton web menggunakan namanya.</string>
+    <string name="cw_create_link">Cipta pautan awam</string>
+    <string name="cw_enable_title">Terbitkan siaran di web?</string>
+    <string name="cw_enable_confirm">Siaran dalam saluran ini akan kelihatan kepada sesiapa sahaja di web di oshi-messenger.com/c/%1$s. Siaran baharu sahaja. Pratonton pautan (WhatsApp, X, Telegram…) juga boleh membacanya, dan penyulitan hujung ke hujung tidak terpakai pada salinan web.</string>
+    <string name="cw_enable_action">Terbitkan</string>
+    <string name="cw_disable_title">Matikan pratonton web?</string>
+    <string name="cw_disable_confirm">Semua siaran dan imej yang diterbitkan di oshi-messenger.com/c/%1$s akan dialih keluar daripada web. Siaran anda dalam apl kekal seperti sedia ada.</string>
+    <string name="cw_disable_action">Matikan</string>
+    <string name="cw_indexing">Benarkan enjin carian</string>
+    <string name="cw_indexing_footer">Apabila dimatikan, halaman meminta enjin carian supaya tidak mengindeksnya.</string>
+    <string name="cw_embed_code">Kod benam</string>
+    <string name="cw_embed_title">Benamkan siaran ini</string>
+    <string name="cw_embed_hint">Tampal kod ini dalam laman web anda di tempat siaran patut dipaparkan.</string>
+    <string name="cw_embed_dark">Tema gelap</string>
+    <string name="cw_copy_code">Salin kod</string>
+    <string name="cw_code_copied">Kod disalin</string>
+    <string name="cw_not_on_web">Siaran ini tiada di web. Hanya siaran yang dihantar selepas pratonton web dihidupkan diterbitkan.</string>
+    <string name="cw_error">Tidak dapat menukar pratonton web. Semak sambungan anda dan cuba lagi.</string>
+</resources>

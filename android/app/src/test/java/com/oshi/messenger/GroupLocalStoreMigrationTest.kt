@@ -64,6 +64,12 @@ class GroupLocalStoreMigrationTest {
         mapOf("AAAA-LEFT" to JSONObject().put("leftAt", 1L).put("name", "Old group").put("key", groupKeyB64).toString())
     )
     private val mentionsJson = """{"M1":[{"k":"memberKeyBBBB","n":"Bob"}]}"""
+    // __GROUP_SETTINGS_2026_11_20__ the two new docs are born sealed, but the store must still
+    // seal whatever value it is handed for them.
+    private val extrasJson = """{"G1":{"settings":{"welcome":"Secret plans"}}}"""
+    private val adminLogJson = """{"G1":[{"at":1,"actor":"memberKeyBBBB","kind":"renamed"}]}"""
+    // __CHANNEL_WEB_2026_11_26__ born sealed too.
+    private val channelWebJson = """{"v":1,"jobs":[{"t":"Secret plans"}],"posts":{}}"""
 
     private fun legacies() = mapOf(
         Doc.GROUPS to FakeLegacy(groupsJson),
@@ -71,6 +77,9 @@ class GroupLocalStoreMigrationTest {
         Doc.LEFT_IDS to FakeLegacy(leftJson),
         Doc.DEVSYNC_LEFT to FakeLegacy(devsyncJson),
         Doc.MENTIONS to FakeLegacy(mentionsJson),
+        Doc.GROUP_EXTRAS to FakeLegacy(extrasJson),
+        Doc.GROUP_ADMIN_LOG to FakeLegacy(adminLogJson),
+        Doc.CHANNEL_WEB to FakeLegacy(channelWebJson),
     )
 
     private fun expected(doc: Doc) = when (doc) {
@@ -79,6 +88,9 @@ class GroupLocalStoreMigrationTest {
         Doc.LEFT_IDS -> leftJson
         Doc.DEVSYNC_LEFT -> devsyncJson
         Doc.MENTIONS -> mentionsJson
+        Doc.GROUP_EXTRAS -> extrasJson
+        Doc.GROUP_ADMIN_LOG -> adminLogJson
+        Doc.CHANNEL_WEB -> channelWebJson
     }
 
     @Before fun setUp() { dir = Files.createTempDirectory("grpstore").toFile() }

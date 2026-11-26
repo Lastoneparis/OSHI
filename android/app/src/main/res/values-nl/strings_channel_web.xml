@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Openbare webweergave</string>
+    <string name="cw_toggle">Berichten op het web publiceren</string>
+    <string name="cw_footer">Nieuwe berichten worden ook gepubliceerd als openbare webpagina op oshi-messenger.com/c/%1$s. Iedereen kan ze lezen, ook zoekmachines en linkvoorbeelden. End-to-end-versleuteling geldt niet voor de webkopie.</string>
+    <string name="cw_needs_link">Geef dit kanaal eerst een openbare link: de webweergave gebruikt de naam ervan.</string>
+    <string name="cw_create_link">Openbare link maken</string>
+    <string name="cw_enable_title">Berichten op het web publiceren?</string>
+    <string name="cw_enable_confirm">Berichten in dit kanaal zijn voor iedereen zichtbaar op het web via oshi-messenger.com/c/%1$s. Alleen nieuwe berichten. Linkvoorbeelden (WhatsApp, X, Telegram…) kunnen ze ook lezen, en end-to-end-versleuteling geldt niet voor de webkopie.</string>
+    <string name="cw_enable_action">Publiceren</string>
+    <string name="cw_disable_title">Webweergave uitschakelen?</string>
+    <string name="cw_disable_confirm">Alle berichten en afbeeldingen die op oshi-messenger.com/c/%1$s zijn gepubliceerd, worden van het web verwijderd. Je berichten in de app blijven zoals ze zijn.</string>
+    <string name="cw_disable_action">Uitschakelen</string>
+    <string name="cw_indexing">Zoekmachines toestaan</string>
+    <string name="cw_indexing_footer">Als dit uit staat, vragen de pagina\'s zoekmachines om ze niet op te nemen.</string>
+    <string name="cw_embed_code">Insluitcode</string>
+    <string name="cw_embed_title">Dit bericht insluiten</string>
+    <string name="cw_embed_hint">Plak deze code in je website op de plek waar het bericht moet verschijnen.</string>
+    <string name="cw_embed_dark">Donker thema</string>
+    <string name="cw_copy_code">Code kopiëren</string>
+    <string name="cw_code_copied">Code gekopieerd</string>
+    <string name="cw_not_on_web">Dit bericht staat niet op het web. Alleen berichten die na het inschakelen van de webweergave zijn verstuurd, worden gepubliceerd.</string>
+    <string name="cw_error">Kan de webweergave niet wijzigen. Controleer je verbinding en probeer het opnieuw.</string>
+</resources>

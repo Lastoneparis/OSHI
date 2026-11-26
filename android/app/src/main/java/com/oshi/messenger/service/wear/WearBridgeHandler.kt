@@ -3,11 +3,13 @@ package com.oshi.messenger.service.wear
 import com.oshi.wearbridge.WearConvKind
 import com.oshi.wearbridge.WearConversation
 import com.oshi.wearbridge.WearMessage
+import com.oshi.wearbridge.WearNet
 import com.oshi.wearbridge.WearOp
 import com.oshi.wearbridge.WearProtocol
 import com.oshi.wearbridge.WearRequest
 import com.oshi.wearbridge.WearResponse
 import com.oshi.wearbridge.WearStatus
+import com.oshi.wearbridge.WearVoiceFrame
 
 /**
  * __WEAR_BRIDGE_2026_11_17__ What the phone needs to answer a watch. The real
@@ -35,6 +37,26 @@ interface WearBridgeBackend {
     /** Toggle [emoji] on [messageId] through the existing reaction path. */
     suspend fun react(kind: WearConvKind, id: String, messageId: String, emoji: String): WearStatus
 
+    // ---- __WEAR_POLISH_2026_11_25__ ---------------------------------------
+
+    /** The person opened the thread on the watch: same as opening it on the phone. */
+    suspend fun markRead(kind: WearConvKind, id: String): WearStatus
+
+    /**
+     * A small JPEG of one PHOTO message of this conversation, or null when
+     * there is none to give (not a photo, view-once, missing, undecodable).
+     */
+    suspend fun thumbnail(kind: WearConvKind, id: String, messageId: String): ByteArray?
+
+    /** Send [audio] (m4a, already checked) as a voice message through the existing path. */
+    suspend fun sendVoice(kind: WearConvKind, id: String, audio: ByteArray, durationMs: Long): WearStatus
+
+    /** How the phone is connected right now (counts only). */
+    fun network(): WearNet?
+
+    /** Strict security mode: glanceable surfaces on the watch drop names. */
+    fun strictGlance(): Boolean = false
+
     data class Thread(val title: String, val canReply: Boolean, val messages: List<WearMessage>)
 }
 
@@ -53,6 +75,25 @@ class WearBridgeHandler(private val backend: WearBridgeBackend) {
 
     suspend fun handle(bytes: ByteArray?): WearResponse? {
         val req = WearRequest.decode(bytes) ?: return null
+        // A VOICE request only ever arrives as a channel frame with its audio; as a plain
+        // message it passes the same gates (off is still DISABLED first) and is then INVALID.
+        return answer(req, audio = null)
+    }
+
+    /**
+     * __WEAR_POLISH_2026_11_25__ A voice message frame from the voice channel.
+     * Undecodable, oversized or not-m4a → no answer (as for undecodable
+     * bytes); otherwise the same gates, in the same order, as [handle].
+     */
+    suspend fun handleVoice(frame: Pair<WearRequest, ByteArray>?): WearResponse? {
+        val (req, audio) = frame ?: return null
+        if (req.op != WearOp.VOICE) return null
+        return answer(req, audio)
+    }
+
+    suspend fun handleVoice(bytes: ByteArray): WearResponse? = handleVoice(WearVoiceFrame.decode(bytes))
+
+    private suspend fun answer(req: WearRequest, audio: ByteArray?): WearResponse {
         if (!backend.isEnabled()) return WearResponse.status(req.rid, WearStatus.DISABLED)
         if (!req.isWellFormed()) return WearResponse.status(req.rid, WearStatus.INVALID)
         if (backend.isLocked()) return WearResponse.status(req.rid, WearStatus.LOCKED)
@@ -62,7 +103,12 @@ class WearBridgeHandler(private val backend: WearBridgeBackend) {
                 WearOp.LIST -> {
                     val limit = req.limit.takeIf { it > 0 }?.coerceAtMost(WearProtocol.MAX_CONVERSATIONS)
                         ?: WearProtocol.MAX_CONVERSATIONS
-                    WearResponse(req.rid, WearStatus.OK, conversations = backend.conversations(limit))
+                    WearResponse(
+                        req.rid, WearStatus.OK, conversations = backend.conversations(limit),
+                        caps = WearProtocol.PHONE_CAPS,
+                        net = runCatching { backend.network() }.getOrNull(),
+                        strict = runCatching { backend.strictGlance() }.getOrDefault(true),
+                    )
                 }
                 WearOp.THREAD -> {
                     val limit = req.limit.takeIf { it > 0 }?.coerceAtMost(WearProtocol.MAX_THREAD_MESSAGES)
@@ -75,6 +121,17 @@ class WearBridgeHandler(private val backend: WearBridgeBackend) {
                 WearOp.REACT -> WearResponse.status(
                     req.rid, backend.react(req.kind!!, req.cid!!, req.messageId!!, req.emoji!!)
                 )
+                WearOp.READ -> WearResponse.status(req.rid, backend.markRead(req.kind!!, req.cid!!))
+                WearOp.THUMB -> {
+                    val jpeg = backend.thumbnail(req.kind!!, req.cid!!, req.messageId!!)
+                        ?.takeIf { it.isNotEmpty() && it.size <= WearProtocol.MAX_THUMB_BYTES }
+                        ?: return WearResponse.status(req.rid, WearStatus.NOT_FOUND)
+                    WearResponse(req.rid, WearStatus.OK, thumb = jpeg)
+                }
+                WearOp.VOICE -> {
+                    val bytes = audio ?: return WearResponse.status(req.rid, WearStatus.INVALID)
+                    WearResponse.status(req.rid, backend.sendVoice(req.kind!!, req.cid!!, bytes, req.durationMs))
+                }
             }
         } catch (e: Exception) {
             WearResponse.status(req.rid, WearStatus.ERROR)

@@ -25,6 +25,12 @@ void oshi_opus_enc_destroy(void *enc);
 int32_t oshi_opus_encode(void *enc, const int16_t *pcm, int32_t frame_samples,
                          uint8_t *out, int32_t max_bytes);
 
+/** __CALL_FLUIDITY_2026_11_21__ Same encoder with Opus in-band FEC (LBRR) on and this
+ *  packet-loss hint (percent, 1..100). OPT-IN: the call path keeps oshi_opus_enc_create
+ *  (FEC off) so the default wire bytes are unchanged; any decoder plays such a stream
+ *  normally and ignores the FEC unless asked for it. NULL on failure. */
+void *oshi_opus_enc_create_fec(int32_t bitrate, int32_t complexity, int32_t loss_pct);
+
 /** 48 kHz mono decoder. NULL on failure. */
 void *oshi_opus_dec_create(void);
 void oshi_opus_dec_destroy(void *dec);
@@ -32,6 +38,13 @@ void oshi_opus_dec_destroy(void *dec);
  *  `max_samples` (pass 960). Returns samples written, < 0 on error. */
 int32_t oshi_opus_decode(void *dec, const uint8_t *data, int32_t len,
                          int16_t *pcm, int32_t max_samples);
+
+/** __CALL_FLUIDITY_2026_11_21__ Conceal the frame BEFORE `data` (decode_fec = 1): libopus
+ *  rebuilds it from the in-band FEC that `data` carries, or runs its own PLC when there is
+ *  none — never worse than plain PLC. Writes `frame_samples` (960). The decoder state then
+ *  expects `data` itself next. Returns samples written, < 0 on error. */
+int32_t oshi_opus_decode_fec(void *dec, const uint8_t *data, int32_t len,
+                             int16_t *pcm, int32_t frame_samples);
 
 #ifdef __cplusplus
 }

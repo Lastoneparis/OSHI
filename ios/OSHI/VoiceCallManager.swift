@@ -2086,7 +2086,7 @@ enum CallPacketType: UInt8 {
 
     // ──────────────────────────────────────────────────────────────
     // P2P Internet Call stack — Phase 2 (reserved, not wired up yet).
-    // See OSHI-P2P-PLAN.md §2.
+    // See /Users/HUGOMORICEAU/Documents/Genesis/OSHI-P2P-PLAN.md §2.
     // ──────────────────────────────────────────────────────────────
     case iceCandidateExchange = 0x30   // 🌐 Phase 2 — exchange host/srflx/relay candidates via VPS signal
     case hdrHolePunchPing     = 0x31   // 🌐 Phase 2 — UDP hole-punch keepalive ping
@@ -2271,6 +2271,11 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
     /// haut-parleur (__VOICE_METER_2026_09_22__).
     @Published var remoteAudioLevel: Float = 0
     @Published var isOutgoingCall = false
+    /// __CALL_WAKE_2026_11_22__ caller side: did the callee's phone get the call
+    /// (`GET /call-reach`)? nil = unknown / server without the route.
+    @Published var calleeReach: CallReach? = nil
+    var outgoingRingingSince: Date? = nil
+    private var reportedRingingCallIds: [String] = []
     @Published var incomingCall: IncomingCall?
     @Published var connectionType: ConnectionType = .none
     @Published var isCallKitHandlingIncoming: Bool = false  // 🔧 FIX: Track when CallKit is showing incoming call UI
@@ -2378,6 +2383,9 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
     /// normale dure moins d'une seconde, et la branche de scrutation de secours
     /// la plus lente plafonne vers 6 s.
     private let acceptFlagStaleAfter: TimeInterval = 12
+    /// __ANSWER_WITHOUT_KEY_2026_11_21__ How long an answer given before the offer's
+    /// session key arrived is held for it before the call is ended as a network error.
+    private let answerWithoutKeyWaitSeconds: TimeInterval = 10
 
     // 🔧 FIX: Track whether call was answered via CallKit (background) vs in-app overlay
     // When answered via CallKit, we must NOT dismiss CallKit - it manages the audio session
@@ -2511,6 +2519,9 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
 
     // 🔧 FIX: Track if auto-accept is scheduled (prevents manual + auto double-accept)
     private var autoAcceptScheduled = false
+    /// __AUTO_ACCEPT_AUTHENTICATED_2026_11_21__ media frames refused as an implicit accept
+    /// (did not decrypt under the session key) — log throttle only.
+    private var diagUnauthRingingMedia: UInt64 = 0
 
     // Track processed call signal IDs to prevent duplicate processing
     private var processedCallSignalIDs = Set<String>()
@@ -3001,6 +3012,79 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         CallPushSigner.sign(&request)
     }
 
+    // MARK: - __CALL_WAKE_2026_11_22__ ringing report (callee) / reach poll (caller)
+
+    /// Callee: tell the call server this phone rings for `callId`. Recorded for the
+    /// caller's `GET /call-reach`, never forwarded (an old client would read an unknown
+    /// sealed signal as an offer). Once per call, fire-and-forget.
+    func reportRingingToCaller(callerKey: String?, callId: String?) {
+        guard let callerKey, !callerKey.isEmpty, let callId, !callId.isEmpty,
+              let me = getIdentityManager()?.publicKey, !me.isEmpty else { return }
+        let key = callId.lowercased()
+        guard !reportedRingingCallIds.contains(key) else { return }
+        reportedRingingCallIds.append(key)
+        if reportedRingingCallIds.count > 16 { reportedRingingCallIds.removeFirst(reportedRingingCallIds.count - 16) }
+        guard let url = URL(string: "\(vpsBaseURL)/signal") else { return }
+        let payload: [String: Any] = [
+            "recipient": base64urlEncode(callerKey),
+            "sender": base64urlEncode(me),
+            "signal": CallReachWire.ringingPlaceholder,
+            "callId": callId,
+            "type": CallReachWire.ringingType,
+        ]
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: payload)
+        request.timeoutInterval = 8
+        signRequest(&request)
+        Task.detached {
+            let sentAt = Date()
+            if let result = try? await URLSession.shared.data(for: request) {
+                ServerClock.observe(response: result.1, sentAt: sentAt)
+            }
+        }
+    }
+
+    /// Caller: every 2 s while the outgoing call rings, ask the server whether the
+    /// callee's phone has it (ringing / delivered / pushed / unreachable).
+    func startCalleeReachPoll() {
+        calleeReach = nil
+        outgoingRingingSince = Date()
+        guard isOutgoingCall, let callId = currentCallId, !callId.isEmpty,
+              let me = getIdentityManager()?.publicKey, !me.isEmpty else { return }
+        let base = vpsBaseURL
+        let meUrl = base64urlEncode(me)
+        Task { [weak self] in
+            for _ in 0..<23 {
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                guard let self else { return }
+                let still = await MainActor.run { self.callState == .ringing && self.currentCallId == callId }
+                guard still else { return }
+                var comps = URLComponents(string: "\(base)/call-reach/\(callId)")
+                comps?.queryItems = [URLQueryItem(name: "me", value: meUrl)]
+                guard let url = comps?.url else { return }
+                var request = URLRequest(url: url)
+                request.httpMethod = "GET"
+                request.timeoutInterval = 5
+                self.signRequest(&request)
+                let sentAt = Date()
+                guard let result = try? await URLSession.shared.data(for: request),
+                      let http = result.1 as? HTTPURLResponse else { continue }
+                ServerClock.observe(response: result.1, sentAt: sentAt)
+                guard http.statusCode == 200,
+                      let obj = try? JSONSerialization.jsonObject(with: result.0) as? [String: Any],
+                      let reach = CallReach(server: obj["state"] as? String) else { continue }
+                // the label re-renders on publish only: hold "unreachable" back until the 6 s grace is over
+                if reach == .unreachable, let t0 = await MainActor.run(body: { self.outgoingRingingSince }),
+                   Date().timeIntervalSince(t0) < 6 { continue }
+                await MainActor.run {
+                    if self.currentCallId == callId { self.calleeReach = CallReach.merge(self.calleeReach, reach) }
+                }
+            }
+        }
+    }
+
     /// Add signature fields to a WebSocket JSON message (mutates the dictionary)
     private func signWebSocketMessage(_ message: inout [String: Any], type: String) {
         guard let identityManager = getIdentityManager() else { return }
@@ -3486,6 +3570,16 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
     private var opusTxEncoder: OpusCallEncoder?
     private var opusRxDecoder: OpusCallDecoder?
     private var opusRxLastKey: UInt64?
+    /// __CALL_FLUIDITY_2026_11_21__ The 0x19 receive path: frames filed ENCODED by codec seq in
+    /// an `AdaptiveJitterBuffer`, decoded at playout (Opus FEC/PLC), handed to the player by a
+    /// clock — see OpusPlayoutClock.swift. Same logic as desktop/Android. Kill switch (back to
+    /// decode-on-arrival + AdvancedJitterBuffer): `defaults write … oshi.call.legacyOpusPlayout -bool YES`.
+    private let opusPlayout = OpusPlayoutClock()
+    private var opusClockPlayoutEnabled: Bool {
+        !UserDefaults.standard.bool(forKey: "oshi.call.legacyOpusPlayout")
+    }
+    /// 0x19 payloads that did not parse (gap 10: they used to vanish without a trace).
+    private var opusRxRejected: UInt64 = 0
     // Lazily-allocated encoder/decoder for the current call (when useOshiCodec == true).
     private var oshiEncoder: OshiCodec?
     private var oshiDecoder: OshiCodec?
@@ -3594,7 +3688,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
     // When state is .connected or .relay, audio/video are routed through the
     // UDP transport (see sendAudioPacket / sendVideoPacketInternal). VPS/mesh
     // remain as fallback when P2P is failed/stale or forceRelay is on.
-    // See OSHI-P2P-PLAN.md
+    // See /Users/HUGOMORICEAU/Documents/Genesis/OSHI-P2P-PLAN.md
     // ──────────────────────────────────────────────────────────────────────
     private var p2p: P2PTransport?
     /// UInt64 call_id derived from currentCallId (SHA-256 → first 8 bytes BE).
@@ -4443,6 +4537,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         isCurrentCallVideo = isVideoCall
         currentCallStartTime = Date()
         currentCallId = callId
+        reportRingingToCaller(callerKey: callerPublicKey, callId: callId)  // __CALL_WAKE_2026_11_22__
 
         // ⏱️ Callee-side ring watchdog: guarantees the ring NEVER outlives ~55s
         // even if every caller-cancel / callEnd path is missed. CallKit times the
@@ -4645,6 +4740,11 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                             }
                         }
 
+                        // __CALL_FLUIDITY_2026_11_21__ (gap 7) the :8089 socket is bound to the
+                        // old interface: open a new one and register from it now, instead of
+                        // writing into a dead path until the 10 s heartbeat.
+                        self.udpRelay?.reconnect(reason: "interface \(previousInterface)->\(currentInterface)")
+
                         // Phase 2: if P2P transport is up, restart ICE so we
                         // re-gather srflx on the new interface and re-punch.
                         // New local candidates will be re-shipped to the peer
@@ -4670,6 +4770,8 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                         fileLog.log("Network restored during call — reconnecting transport")
                         if self.lockedConnectionType != .meshDirect {
                             self.connectWebSocket()
+                            // __CALL_FLUIDITY_2026_11_21__ (gap 7) same for the :8089 socket.
+                            self.udpRelay?.reconnect(reason: "network restored")
                             // __ICE_RESTART_ON_RESTORE_2026_08_13__ Also re-punch P2P.
                             // p2p.restart() used to run ONLY in the interface-change
                             // branch above, but a tunnel / lift / underground stretch
@@ -5359,7 +5461,9 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         signRequest(&request)
         
         do {
+            let pollSentAt = Date()
             let (data, response) = try await URLSession.shared.data(for: request)
+            ServerClock.observe(response: response, sentAt: pollSentAt)  // __CALL_CLOCK_SKEW_2026_11_21__
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 OshiLog.call.info("   ❌ Invalid HTTP response")
@@ -5525,7 +5629,8 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         await MainActor.run {
             // Use the proper handler that routes all signal types correctly
             // (callRequest, callAccept, callDecline, callEnd)
-            handleReceivedCallSignal(from: sender, peerName: senderName, encryptedData: data)
+            handleReceivedCallSignal(from: sender, peerName: senderName, encryptedData: data,
+                                     envelopeCallId: receivedCallId, relayStampMs: Self.envelopeStampMs(signal["timestamp"]))
         }
     }
     
@@ -5695,7 +5800,9 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         
         // Use the unified handler that properly routes all signal types
         // (callRequest, callAccept, callDecline, callEnd)
-        handleReceivedCallSignal(from: senderPublicKey, peerName: senderName, encryptedData: encryptedData)
+        handleReceivedCallSignal(from: senderPublicKey, peerName: senderName, encryptedData: encryptedData,
+                                 envelopeCallId: userInfo["callId"] as? String,
+                                 relayStampMs: Self.envelopeStampMs(userInfo["serverTimestamp"]))
     }
     
     @objc private func handleCallSignalNotification(_ notification: Notification) {
@@ -6355,6 +6462,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         
         await MainActor.run {
             self.callState = .ringing
+            self.startCalleeReachPoll()  // __CALL_WAKE_2026_11_22__
 
             // 🔔 __CONNECTING_FIRST_2026_06_21__ Show "Connecting…" (the connecting pulse, started
             // at the dial — __OSHI_CALL_SOUNDS_2026_09_28__) for the
@@ -6574,7 +6682,8 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
     
     // MARK: - Handle Incoming Call
     
-    func handleIncomingCall(from peerPublicKey: String, peerName: String, encryptedData: Data, viaTor: Bool = true, viaRelay: Bool = false) {
+    func handleIncomingCall(from peerPublicKey: String, peerName: String, encryptedData: Data, viaTor: Bool = true, viaRelay: Bool = false,
+                            relayStampMs: Int64? = nil) {
         OshiLog.call.info("📞 VoiceCall: handleIncomingCall called")
         OshiLog.call.info("   Current state: \(callState)")
         OshiLog.call.info("   Encrypted data size: \(encryptedData.count) bytes")
@@ -6987,7 +7096,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                     return
                 } else if packetType == .callEnd {
                     // 🔧 FIX: Validate timestamp to reject stale callEnd signals
-                    guard validateAndExtractPayload(from: decryptedData, packetType: .callEnd) != nil else {
+                    guard validateAndExtractPayload(from: decryptedData, packetType: .callEnd, relayStampMs: relayStampMs) != nil else {
                         OshiLog.call.info("⚠️ VoiceCall: Ignoring stale/invalid callEnd signal in handleIncomingCall")
                         return
                     }
@@ -7038,7 +7147,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
 
             if decryptedData.count >= 45 {
                 // New format with timestamp - validate and extract
-                guard let payload = validateAndExtractPayload(from: decryptedData, packetType: packetType) else {
+                guard let payload = validateAndExtractPayload(from: decryptedData, packetType: packetType, relayStampMs: relayStampMs) else {
                     OshiLog.call.info("⚠️ VoiceCall: Ignoring stale/invalid call request")
                     return
                 }
@@ -7184,6 +7293,10 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                 // push, keep it rather than randomizing away a possible match.)
                 currentCallId = UUID().uuidString
                 OshiLog.call.info("📞 VoiceCall: No callId in payload, generated new: \(currentCallId ?? "none")")
+            }
+            // __CALL_WAKE_2026_11_22__ the caller's screen can say "Ringing…" now
+            if !isOutgoingCall, let cid = extractedCallId, !cid.isEmpty {
+                reportRingingToCaller(callerKey: peerPublicKey, callId: cid)
             }
 
             // P2P pre-warm / reconcile: start STUN gathering + candidate exchange
@@ -7363,6 +7476,14 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                             return
                         }
                         
+                        // __ACCEPT_FLAG_STRANDED_2026_08_25__ the SAME stranding as the
+                        // retry branch above, on the common path: `isAcceptingCall` was
+                        // raised 0.6 s ago to fence off a concurrent accept, and
+                        // `acceptCall` opens with `guard !isAcceptingCall` — so the held
+                        // CallKit answer was refused ("une acceptation est déjà en
+                        // cours") every time the key WAS ready. Release it just before
+                        // handing over; `acceptCall` raises and clears it itself.
+                        self.isAcceptingCall = false
                         Task {
                             do {
                                 try await self.acceptCall()
@@ -7395,7 +7516,11 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
     
     /// Handle all types of received call signals (from IPFS or mesh)
     /// This routes callRequest, callAccept, callDecline, callEnd properly
-    func handleReceivedCallSignal(from peerPublicKey: String, peerName: String, encryptedData: Data, viaTor: Bool = true, viaRelay: Bool = false) {
+    /// - `envelopeCallId` / `relayStampMs`: the callId and the call server's `Date.now()`
+    ///   from the relay envelope (HTTP poll, WebSocket, VoIP-push poll). `nil` for mesh /
+    ///   IPFS / legacy paths, which carry neither.
+    func handleReceivedCallSignal(from peerPublicKey: String, peerName: String, encryptedData: Data, viaTor: Bool = true, viaRelay: Bool = false,
+                                  envelopeCallId: String? = nil, relayStampMs: Int64? = nil) {
         OshiLog.call.info("📞 VoiceCall: ============================================")
         OshiLog.call.info("📞 VoiceCall: Received call signal from \(peerName)")
         OshiLog.call.info("   My state: \(callState)")
@@ -7453,7 +7578,28 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
             }
             
             OshiLog.call.info("📞 VoiceCall: Decrypted signal type: \(packetType)")
-            
+
+            // __CROSS_CALL_GUARD_2026_11_21__ accept / decline / end name their call only
+            // in the relay envelope. One for another callId must not touch this call —
+            // on EVERY relay path (the WebSocket had no check at all; the HTTP poll
+            // compared ids for terminal type strings only, never for an accept).
+            if CallSignalGuards.isForeignCallSignal(packetType, signalCallId: envelopeCallId, activeCallId: currentCallId) {
+                let line = "🛡️ DIAG_FOREIGN_CALL_SIGNAL | dropped \(packetType) for callId \(envelopeCallId?.prefix(8) ?? "?") — active \(currentCallId?.prefix(8) ?? "?") (state=\(callState))"
+                OshiLog.call.info("\(line)"); fileLog.log(line)
+                return
+            }
+            // Mesh / legacy paths carry no callId. A DECLINE made before the current call
+            // started (by more than the clock tolerance) cannot be about it — the
+            // ab49980b shape (decline of the cancelled call landing on the redial).
+            if packetType == .callDecline, CallSignalGuards.normalizeCallId(envelopeCallId).isEmpty,
+               let stamp = Self.peekPacketStampMs(decryptedData),
+               CallSignalGuards.predatesCurrentCall(packetStampMs: stamp, callStart: currentCallStartTime,
+                                                    effectiveOffsetMs: ServerClock.currentEffectiveOffsetMs) {
+                let line = "🛡️ DIAG_FOREIGN_CALL_SIGNAL | dropped mesh callDecline older than the current call (state=\(callState))"
+                OshiLog.call.info("\(line)"); fileLog.log(line)
+                return
+            }
+
             switch packetType {
             case .callRequest, .videoCallRequest:
                 OshiLog.call.info("   📞 Got callRequest (video: \(packetType == .videoCallRequest))")
@@ -7496,7 +7642,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                 else if weAreActiveCaller && (callState == .connecting || callState == .ringing) {
                     OshiLog.call.info("   ⚡ Glare detected — peer calling us too (different callId); routing to tie-break")
                     fileLog.log("⚡ GLARE: inbound callRequest with different callId while outgoing (state=\(callState) from=\(peerPublicKey.prefix(12)))")
-                    handleIncomingCall(from: peerPublicKey, peerName: peerName, encryptedData: encryptedData, viaTor: viaTor, viaRelay: viaRelay)
+                    handleIncomingCall(from: peerPublicKey, peerName: peerName, encryptedData: encryptedData, viaTor: viaTor, viaRelay: viaRelay, relayStampMs: relayStampMs)
                 }
                 else if weAreActiveCaller {
                     // outgoing & already .inCall & a foreign callId — ignore, don't disrupt.
@@ -7508,7 +7654,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                 // but handleIncomingCall is the ONLY place that installs the session key.
                 // Without the session key, no audio/video can be encrypted/decrypted.
                 else if callState == .idle || callState == .ringing || (callState == .inCall && sessionKey == nil) {
-                    handleIncomingCall(from: peerPublicKey, peerName: peerName, encryptedData: encryptedData, viaTor: viaTor, viaRelay: viaRelay)
+                    handleIncomingCall(from: peerPublicKey, peerName: peerName, encryptedData: encryptedData, viaTor: viaTor, viaRelay: viaRelay, relayStampMs: relayStampMs)
                 } else {
                     OshiLog.call.info("   ⚠️ Ignoring callRequest - state: \(callState), sessionKey: \(sessionKey != nil)")
                     fileLog.log("⚠️ SIGNAL IGNORED: callRequest state=\(callState) sessionKey=\(sessionKey != nil)")
@@ -7550,7 +7696,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                 OshiLog.call.info("   currentCallStartTime: \(String(describing: currentCallStartTime))")
                 fileLog.log("📩 SIGNAL: callEnd received - state: \(callState), connTime: \(callConnectedTime?.description ?? "nil")")
                 
-                guard let payload = validateAndExtractPayload(from: decryptedData, packetType: .callEnd) else {
+                guard let payload = validateAndExtractPayload(from: decryptedData, packetType: .callEnd, relayStampMs: relayStampMs) else {
                     OshiLog.call.info("⚠️ VoiceCall: Ignoring stale/invalid callEnd signal")
                     return
                 }
@@ -7834,6 +7980,39 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                 }
             }
             isAcceptingCall = true  // Restore flag
+        }
+
+        // __ANSWER_WITHOUT_KEY_2026_11_21__ "Answered, no media" (f822b7c4, 702bcadb).
+        // This used to carry on regardless: send the accept (it is sealed with the
+        // identity ECDH key, so the CALLER happily connects), go `.inCall` — with no
+        // session key, so not one media frame either way can be encrypted or decrypted.
+        // And once `.inCall`, a late copy of the offer from the same peer is dropped as
+        // "already in call with this peer", so nothing ever installs the key: a connected,
+        // silent call until someone hangs up. The offer goes missing exactly when it was
+        // refused as stale / future-dated (a wrong clock on either phone — see
+        // ServerClock) or drained by an earlier poll that failed to open it.
+        // Now: no key ⇒ no accept. The user's answer is HELD (pendingCallKitAccept — the
+        // polled / WebSocket offer completes it the moment it lands) and given up after
+        // a bounded wait with an honest network error instead of a fake connection.
+        if !CallSignalGuards.mayCompleteAccept(hasSessionKey: sessionKey != nil) {
+            let heldCallId = currentCallId
+            let line = "❌ DIAG_ACCEPT_NO_KEY | callId=\(heldCallId?.prefix(8) ?? "nil") | no accept sent, answer held \(Int(answerWithoutKeyWaitSeconds))s for the offer | clockOffsetMs=\(ServerClock.rawOffsetMs)"
+            OshiLog.call.info("\(line)"); fileLog.log(line)
+            pendingCallKitAccept = true
+            pendingCallKitAcceptCallerKey = incoming.peerPublicKey
+            Task { [weak self] in await self?.checkForIncomingCallSignals() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + answerWithoutKeyWaitSeconds) { [weak self] in
+                guard let self,
+                      self.callState == .ringing,
+                      self.sessionKey == nil,
+                      self.currentCallId == heldCallId else { return }
+                self.pendingCallKitAccept = false
+                self.pendingCallKitAcceptCallerKey = nil
+                let gaveUp = "❌ DIAG_ACCEPT_NO_KEY | callId=\(heldCallId?.prefix(8) ?? "nil") | offer never arrived — ending instead of connecting a call nobody can hear"
+                OshiLog.call.info("\(gaveUp)"); fileLog.log(gaveUp)
+                self.endCall(reason: .networkError)
+            }
+            return
         }
 
         // Call v2 — allocate codec lazily now that negotiation is locked in (callee side).
@@ -9210,6 +9389,8 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         opusTxEncoder = nil
         wbTxState = WbAdpcm.EncoderState()
         wbTxResampler.reset()
+        opusPlayout.reset()   // __CALL_FLUIDITY_2026_11_21__ stops the clock, forgets the stream
+        opusRxRejected = 0
         wbRxLock.lock()
         opusRxDecoder = nil
         opusRxLastKey = nil
@@ -9224,6 +9405,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         txPrimarySelectedAt = .distantPast
         txBlackoutCursor = 0
         txBlackoutRotatedAt = .distantPast
+        udpStallSince = nil
         lastTxPacketBytes = 0
         lastOversizeWarnAt = .distantPast
         // Same for the video carrier plan + counters (DIAG_PATH vTx*).
@@ -11391,6 +11573,18 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         return relayUsable ? .udpRelay : .ws
     }
 
+    /// __CALL_FLUIDITY_2026_11_21__ The relay carried media, then nothing for this long
+    /// (desktop `CallMediaLeg.UDP_STALL_MS`).
+    static let udpStallSeconds: TimeInterval = 1.5
+    /// Set while the stall bridge is on (audio thread only).
+    private var udpStallSince: Date?
+
+    /// True when the `:8089` relay carried media before and has been silent `udpStallSeconds`.
+    static func udpStalled(lastMediaRx: Date?, now: Date) -> Bool {
+        guard let last = lastMediaRx else { return false }
+        return now.timeIntervalSince(last) >= udpStallSeconds
+    }
+
     /// True when the :8089 UDP relay is a legitimate carrier right now: we have
     /// placed a register packet on the wire AND the server has answered inside
     /// `udpRelayStaleSeconds` (the very first send is always allowed, since no
@@ -11545,6 +11739,32 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
             }
         }
 
+        // __CALL_FLUIDITY_2026_11_21__ (gap 8) UDP stall bridge — the desktop's rule. The relay
+        // stays the primary for as long as it delivered inside the 2 s liveness window, and
+        // after that the blackout rotation probes one carrier per `txBlackoutRotateSeconds`:
+        // a relay path that died under us (Wi-Fi → 4G, a NAT that dropped the mapping) was
+        // written into for ~2–5 s before the WebSocket carried a frame. Once the relay has
+        // gone `udpStallSeconds` without the media it used to carry, ALSO send on the
+        // WebSocket and re-register at once. The peer keeps the first copy of a (type, seq)
+        // (rxDedupSeen) and the server drops the second inside 4 s, so nothing plays twice.
+        var stallBridge = false
+        if relaySent, isWebSocketConnected, let relay = self.udpRelay {
+            let now = Date()
+            if Self.udpStalled(lastMediaRx: snapshotTransportStats()[.udpRelay]?.lastRxAt, now: now) {
+                stallBridge = true
+                relay.nudge()
+                if udpStallSince == nil {
+                    udpStallSince = now
+                    let line = "DIAG_UDP_STALL_BRIDGE | relay silent ≥ \(Self.udpStallSeconds) s — also sending on the WebSocket, re-registering"
+                    OshiLog.call.info("\(line)"); fileLog.log(line)
+                }
+            } else if let since = udpStallSince {
+                udpStallSince = nil
+                let line = "DIAG_UDP_STALL_BRIDGE | relay delivering again after \(Int(now.timeIntervalSince(since) * 1000)) ms of bridging"
+                OshiLog.call.info("\(line)"); fileLog.log(line)
+            }
+        }
+
         // LAN mesh paths — REMOVED as a call-media carrier (2026-07-27, owner
         // decision). MultipeerConnectivity (iOS↔iOS LAN/Bluetooth/AWDL) and the
         // CrossPlatformMesh TCP bridge no longer carry voice or video media at all.
@@ -11584,7 +11804,8 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         // between the two checks). Without it the frame would be dropped on the
         // floor with no carrier at all.
         if (allowVPS && (primary == .ws || (duplicate && primary != .p2p) || (primary == .udpRelay && !relaySent)))
-            || (upgradeOverlap && !relaySent && txUpgradeOverlapFrom != nil) {
+            || (upgradeOverlap && !relaySent && txUpgradeOverlapFrom != nil)
+            || stallBridge {
             sendAudioViaWebSocket(data: packet)
             recordTx(isWebSocketConnected ? .vpsWebSocket : .vpsHttp, bytes: packet.count)
             if diagShouldLog {
@@ -12973,9 +13194,27 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         // caller stayed in .ringing → guard below rejected → silence one-way
         // even though the iPhone hears us. Audio from peer is unambiguous
         // proof of acceptance regardless of transport.
+        //
+        // __AUTO_ACCEPT_AUTHENTICATED_2026_11_21__ …but only a frame that DECRYPTS under
+        // this call's session key is proof of anything. This used to fire on the first
+        // packet of ANY kind, before a byte was authenticated: a cleartext keepAlive, a
+        // 9-byte video control, a leftover frame of the PREVIOUS call (the VPS audio
+        // queue is keyed by recipient only) or anyone's injected datagram moved the
+        // caller to `.inCall` — "connected" to a callee who never answered.
         if callState == .ringing && isOutgoingCall {
-            fileLog.log("📞 AUTO-ACCEPT: outgoing-ringing + audio (fromP2P=\(fromP2P)) → transitioning to inCall")
-            Task { try? await self.handleCallAccepted() }
+            let authenticated = encryptedData.count > 9
+                && VideoMediaControl.classify(encryptedData) == nil
+                && encryptedData[0] != VIDEO_PACKET_TYPE
+                && decryptAudioData(Data(encryptedData.suffix(from: 9))) != nil
+            if CallSignalGuards.mayAutoAcceptFromMedia(ringingOutgoing: true, decryptedUnderSessionKey: authenticated) {
+                fileLog.log("📞 AUTO-ACCEPT: outgoing-ringing + authenticated media (type=0x\(String(encryptedData[0], radix: 16)), fromP2P=\(fromP2P)) → transitioning to inCall")
+                Task { try? await self.handleCallAccepted() }
+            } else {
+                diagUnauthRingingMedia &+= 1
+                if diagUnauthRingingMedia == 1 || diagUnauthRingingMedia % 100 == 0 {
+                    fileLog.log("🛡️ DIAG_AUTO_ACCEPT_REFUSED | unauthenticated media while ringing | count=\(diagUnauthRingingMedia) | size=\(encryptedData.count)")
+                }
+            }
             // Don't process THIS packet (state isn't inCall yet); the next
             // packet that arrives ~20 ms later will play through normally.
             return
@@ -13533,6 +13772,23 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                 useOpus = true
                 fileLog.log("📞 Opus auto-upgrade (peer sent 0x19 before negotiation flipped)")
             }
+            // __CALL_FLUIDITY_2026_11_21__ Filed encoded, played by the clock (gaps 1-4, 6, 9).
+            if opusClockPlayoutEnabled {
+                guard opusPlayout.file(decryptedData) else {
+                    opusRxRejected &+= 1
+                    if opusRxRejected <= 3 || opusRxRejected % 500 == 0 {
+                        let line = "DIAG_OPUS_RX_REJECT | n=\(opusRxRejected) | reason=\(OpusWire.rejectReason(decryptedData) ?? "?") | size=\(decryptedData.count) | seq=\(sequenceNumber)"
+                        OshiLog.call.info("\(line)"); fileLog.log(line)
+                    }
+                    return
+                }
+                if useAdaptiveBitrate {
+                    adaptiveBitrate.reportPacketReceived()
+                }
+                audioReceived()
+                startOpusPlayoutClockIfNeeded()
+                return
+            }
             // __WB_RX_LOCK_2026_09_24__ same race as 0x18: the decoder and opusRxLastKey are
             // per-call state touched from several receive queues.
             wbRxLock.lock()
@@ -13993,7 +14249,35 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
     
     /// Play audio data (convert to buffer and schedule)
     private var playAudioCount = 0
-    private func playAudioData(_ audioData: Data) {
+
+    /// __CALL_FLUIDITY_2026_11_21__ Start the 0x19 playout clock (idempotent). It pulls only
+    /// while a player is running; the jitter buffer keeps the audio otherwise.
+    private func startOpusPlayoutClockIfNeeded() {
+        guard !opusPlayout.isRunning else { return }
+        fileLog.log("📞 Opus playout clock started (adaptive jitter buffer, \(OpusPlayoutClock.tickMs) ms tick, \(OpusPlayoutClock.deviceAheadFrames) frames ahead)")
+        opusPlayout.start(
+            queuedSamples: { [weak self] in
+                guard let self, let engine = self.audioEngine, engine.isRunning, self.playerNode != nil else { return nil }
+                self.audioQueueLock.lock(); defer { self.audioQueueLock.unlock() }
+                return self.scheduledAudioFrames
+            },
+            play: { [weak self] pcm, kind in
+                guard let self else { return }
+                // EXPAND / LOSS_CONCEAL / SILENCE / PRIMING are synthesised: the echo gate and
+                // the quality badge must not count them as the peer's voice.
+                self.diagPbNextIsConcealed = kind != .normal
+                if kind == .lossConceal || kind == .expand { self.diagPbPlcInjected &+= 1 }
+                let int16Data = pcm.withUnsafeBufferPointer { Data(buffer: $0) }
+                self.playAudioData(self.int16ToFloat32(int16Data), clockDriven: true)
+            },
+            diag: { line in OshiLog.call.info("\(line)"); fileLog.log(line) }
+        )
+    }
+
+    /// `clockDriven`: the frame comes from the Opus playout clock, which already holds the
+    /// device queue at ≤ 2 frames and time-stretches inside the jitter buffer — the
+    /// queue-depth trimmer (made for the arrival-driven path) must not cut it again.
+    private func playAudioData(_ audioData: Data, clockDriven: Bool = false) {
         // 🔧 FIX: Guard against audio not being ready yet
         // Audio packets can arrive before audio engine is fully initialized
         guard let engine = audioEngine, engine.isRunning else {
@@ -14136,10 +14420,11 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         let trimTargetMs = useAdvancedJitterBuffer
             ? Double(advancedJitterBuffer.targetDepthMs)
             : 180.0
-        let trimDecision = playoutTrimmer.decide(queuedMs: playerQueueDepthMs,
-                                                 targetMs: trimTargetMs,
-                                                 frameRms: Double(rxStats.rms),
-                                                 frameMs: rxDurationSeconds * 1000.0)
+        let trimDecision: PlayoutTrimmer.Decision = clockDriven ? .keep
+            : playoutTrimmer.decide(queuedMs: playerQueueDepthMs,
+                                    targetMs: trimTargetMs,
+                                    frameRms: Double(rxStats.rms),
+                                    frameMs: rxDurationSeconds * 1000.0)
         if case .trim = trimDecision {
             diagPbTrimmed &+= 1
             if diagPbTrimmed <= 3 || diagPbTrimmed % 100 == 0 {
@@ -14304,6 +14589,7 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
 
         // Also clear advanced components
         advancedJitterBuffer.reset()
+        opusPlayout.flush()   // __CALL_FLUIDITY_2026_11_21__ same backlog drop for the 0x19 buffer
         packetLossConcealer.reset()
         fecEncoder.reset()
         fecDecoder.reset()
@@ -15246,13 +15532,36 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
     // VPS routing + IPFS fallback can take several seconds on slow networks
     private let maxCallSignalAgeSeconds: TimeInterval = 30.0
 
+    /// The call server's `Date.now()` (epoch ms) from a poll / WebSocket envelope.
+    ///
+    /// The sender's 8-byte epoch-ms stamp of a `createCallPacket` packet, or nil when the
+    /// packet is too short to carry one (legacy).
+    static func envelopeStampMs(_ value: Any?) -> Int64? {
+        switch value {
+        case let n as NSNumber: return n.int64Value > 0 ? n.int64Value : nil
+        case let s as String: return Int64(s).flatMap { $0 > 0 ? $0 : nil }
+        default: return nil
+        }
+    }
+
+    static func peekPacketStampMs(_ data: Data) -> Int64? {
+        let d = Data(data)
+        guard d.count >= 9 else { return nil }
+        var v: UInt64 = 0
+        for b in d[1..<9] { v = (v << 8) | UInt64(b) }
+        return Int64(clamping: v)
+    }
+
     private func createCallPacket(type: CallPacketType, payload: Data) -> Data {
         var packet = Data()
         packet.append(type.rawValue)
 
         // 🔧 FIX: Add timestamp (8 bytes, milliseconds since 1970) to prevent stale signal issues
         // This allows receivers to reject old signals that might have been delayed in mesh relay
-        let timestampMs = UInt64(Date().timeIntervalSince1970 * 1000)
+        // __CALL_CLOCK_SKEW_2026_11_21__ server time when this phone is ≥ 5 s off it, so a
+        // receiver with a correct clock (or one that corrects itself the same way) does not
+        // throw our call away as stale / future-dated. Unchanged for a healthy clock.
+        let timestampMs = UInt64(max(0, ServerClock.signingNowMs()))
         var timestampBytes = timestampMs.bigEndian
         packet.append(Data(bytes: &timestampBytes, count: 8))
 
@@ -15262,7 +15571,10 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
 
     /// Validate a call packet's timestamp
     /// Returns the payload (without type byte and timestamp) if valid, nil if too old
-    private func validateAndExtractPayload(from data: Data, packetType: CallPacketType) -> Data? {
+    ///
+    /// `relayStampMs`: the call server's `Date.now()` from the poll / WebSocket envelope,
+    /// when the signal came through the relay (see ``ServerClock/judgeFreshness``).
+    private func validateAndExtractPayload(from data: Data, packetType: CallPacketType, relayStampMs: Int64? = nil) -> Data? {
         // Packet format: [type(1)] + [timestamp(8)] + [payload]
         guard data.count >= 9 else {
             // Legacy packet without timestamp - accept for backwards compatibility during transition
@@ -15283,8 +15595,6 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
             timestampData.copyBytes(to: dest)
         }
         timestampMs = UInt64(bigEndian: timestampMs)
-        let packetTime = Date(timeIntervalSince1970: Double(timestampMs) / 1000.0)
-        let age = Date().timeIntervalSince(packetTime)
 
         // Check if packet is too old. "Call is over" signals (end / decline /
         // answered-elsewhere) must stay honored for as long as the ring can live
@@ -15293,15 +15603,34 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         // applies to call *invitations* so a stale request never rings.
         let isTerminationSignal = (packetType == .callEnd || packetType == .callDecline || packetType == .callAnsweredElsewhere)
         let ageLimit = isTerminationSignal ? max(maxCallSignalAgeSeconds, 60.0) : maxCallSignalAgeSeconds
-        if age > ageLimit {
-            OshiLog.call.info("⚠️ VoiceCall: Rejecting stale call signal (age: \(String(format: "%.1f", age))s, max: \(ageLimit)s)")
-            OshiLog.call.info("   Packet type: \(packetType), timestamp: \(packetTime)")
-            return nil
-        }
 
-        // Check if packet is from the future (clock skew > 5 seconds)
-        if age < -5.0 {
+        // __CALL_CLOCK_SKEW_2026_11_21__ Freshness on the SERVER's clock when this phone
+        // is ≥ 5 s off it, and — for a signal that came through the relay — vouched for by
+        // the relay's own arrival stamp when the SENDER's clock is the wrong one. Same
+        // windows as before ([−5 s, +ageLimit]); a healthy pair of clocks without a relay
+        // stamp gets the pre-fix verdict exactly. `packetTime` is on THIS device's clock.
+        let verdict = ServerClock.judgeFreshness(senderStampMs: Int64(clamping: timestampMs),
+                                                 relayStampMs: relayStampMs,
+                                                 localNowMs: ServerClock.millis(Date()),
+                                                 rawOffsetMs: ServerClock.rawOffsetMs,
+                                                 maxAgeSeconds: ageLimit)
+        let packetTime: Date
+        switch verdict {
+        case .fresh(let local, let viaRelay):
+            packetTime = local
+            if viaRelay {
+                let senderAge = Double(ServerClock.millis(Date()) - (Int64(clamping: timestampMs) - ServerClock.currentEffectiveOffsetMs)) / 1000.0
+                fileLog.log("🕰️ DIAG_CLOCK_SKEW | peer stamp off by \(String(format: "%.1f", senderAge))s — accepted \(packetType) on the relay's stamp")
+            }
+        case .stale(let age):
+            OshiLog.call.info("⚠️ VoiceCall: Rejecting stale call signal (age: \(String(format: "%.1f", age))s, max: \(ageLimit)s)")
+            OshiLog.call.info("   Packet type: \(packetType)")
+            fileLog.log("⚠️ DIAG_SIGNAL_STALE | type=\(packetType) | age=\(String(format: "%.1f", age))s | max=\(ageLimit)s | relayStamp=\(relayStampMs != nil) | offsetMs=\(ServerClock.rawOffsetMs)")
+            return nil
+        case .future(let age):
+            // Check if packet is from the future (clock skew > 5 seconds)
             OshiLog.call.info("⚠️ VoiceCall: Rejecting future-dated call signal (age: \(String(format: "%.1f", age))s)")
+            fileLog.log("⚠️ DIAG_SIGNAL_FUTURE | type=\(packetType) | age=\(String(format: "%.1f", age))s | relayStamp=\(relayStampMs != nil) | offsetMs=\(ServerClock.rawOffsetMs)")
             return nil
         }
 
@@ -15407,7 +15736,9 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         var lastError: Error?
         for attempt in 1...3 {
             do {
+                let sigSentAt = Date()
                 let (responseData, response) = try await URLSession.shared.data(for: request)
+                ServerClock.observe(response: response, sentAt: sigSentAt)  // __CALL_CLOCK_SKEW_2026_11_21__
 
                 guard let httpResponse = response as? HTTPURLResponse else {
                     OshiLog.call.info("❌ VoiceCall: Invalid response from VPS (attempt \(attempt))")
@@ -16010,7 +16341,10 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
                let sender = json["sender"] as? String {
                 // 🔧 FIX: Use getDisplayName to show contact alias
                 let senderName = getDisplayName(for: sender)
-                handleReceivedCallSignal(from: sender, peerName: senderName, encryptedData: signalData)
+                // __CROSS_CALL_GUARD_2026_11_21__ the envelope's callId + server stamp ride along.
+                handleReceivedCallSignal(from: sender, peerName: senderName, encryptedData: signalData,
+                                         envelopeCallId: json["callId"] as? String,
+                                         relayStampMs: Self.envelopeStampMs(json["timestamp"]))
             }
             
         case "pong":
@@ -16246,6 +16580,9 @@ class VoiceCallManager: NSObject, ObservableObject, @unchecked Sendable {
         let signed = signRequest(&request)
         let started = Date()
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            // __CALL_CLOCK_SKEW_2026_11_21__ a `REFUSED expired` answer still carries the
+            // server's Date: the retry is then signed in server time.
+            ServerClock.observe(response: response, sentAt: started)
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0
             let token = (status == 200) ? data.flatMap(Self.parseRelayToken) : nil
             DispatchQueue.main.async {
@@ -19244,4 +19581,59 @@ extension Data {
 extension Notification.Name {
     static let didReceiveCallSignal = Notification.Name("didReceiveCallSignal")
     static let didReceiveCallAudio = Notification.Name("didReceiveCallAudio")
+}
+
+
+// MARK: - __CALL_WAKE_2026_11_22__ What the caller knows about the callee's phone
+
+/// Server states of `GET /call-reach/:callId` (ServerPatches/call_wake_2026_11_22). They
+/// only move forward; `unreachable` is overtaken by any sign of the callee.
+/// Same rules as Android `CallReach` / desktop `CallReach`.
+enum CallReach: Equatable {
+    case calling, pushed, delivered, ringing, unreachable
+
+    init?(server: String?) {
+        switch server {
+        case "calling": self = .calling
+        case "pushed": self = .pushed
+        case "delivered": self = .delivered
+        case "ringing": self = .ringing
+        case "unreachable": self = .unreachable
+        default: return nil
+        }
+    }
+
+    private var rank: Int {
+        switch self {
+        case .calling: return 0
+        case .unreachable: return 1
+        case .pushed: return 2
+        case .delivered: return 3
+        case .ringing: return 4
+        }
+    }
+
+    static func merge(_ old: CallReach?, _ new: CallReach?) -> CallReach? {
+        guard let new else { return old }
+        guard let old else { return new }
+        return new.rank >= old.rank ? new : old
+    }
+
+    enum Label: Equatable { case ringing, calling, unreachable }
+
+    /// nil (server without the route) keeps the old "Ringing…"; "not reachable" only
+    /// after 6 s so a late push never flashes it.
+    static func outgoingLabel(_ reach: CallReach?, ringingFor seconds: TimeInterval) -> Label {
+        switch reach {
+        case nil, .ringing?, .delivered?: return .ringing
+        case .unreachable?: return seconds >= 6 ? .unreachable : .calling
+        case .pushed?, .calling?: return .calling
+        }
+    }
+}
+
+enum CallReachWire {
+    static let ringingType = "callRinging"
+    /// `/signal` requires a non-empty `signal`; the server records and drops it.
+    static let ringingPlaceholder = "cmluZw=="
 }

@@ -1,5 +1,6 @@
 package com.oshi.messenger.network.ohttp
 
+import com.oshi.messenger.network.v2.CoverConnectionPolicy
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -16,6 +17,8 @@ data class OhttpTransport(
     val relayUrl: HttpUrl,
     val keyConfig: Ohttp.KeyConfig,
     val innerAuthority: String = OhttpConfig.INNER_AUTHORITY,
+    /** Harness only: the origin whose /v2 calls are eligible when it is not https://[innerAuthority]. */
+    val directOrigin: HttpUrl? = null,
 )
 
 /**
@@ -49,14 +52,65 @@ data class OhttpTransport(
 class OhttpInterceptor(
     private val transport: () -> OhttpTransport?,
     private val delegate: Interceptor,
+    /** __RELAY_FALLBACK_2026_11_19__ the built-in blocked-host relays in try order, or empty (feature off). */
+    private val fallback: () -> List<OhttpTransport> = RelayFallback::transports,
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
         val t = try { transport() } catch (e: IOException) { throw e } catch (e: Exception) {
             throw IOException("Privacy relay misconfigured", e)
-        } ?: return delegate.intercept(chain)
+        } ?: return withBlockedHostFallback(chain)
         if (!isEligible(original, t)) return delegate.intercept(chain)
+        return exchange(chain, original, t, fresh = false)
+    }
+
+    /**
+     * __RELAY_FALLBACK_2026_11_19__ Privacy relay OFF: direct (or cover) as before, unless
+     * [RelayFallback] says the OSHI host is blocked; then the call goes through the built-in
+     * relay. A direct transport failure that puts the fallback in force is retried once
+     * through the relay at once: same bytes, same signature — if the direct copy did reach
+     * the relay, its idempotency cache answers the duplicate with the original reply.
+     */
+    private fun withBlockedHostFallback(chain: Interceptor.Chain): Response {
+        val original = chain.request()
+        val relays = fallback()
+        if (relays.isEmpty() || !isEligible(original, relays[0])) return delegate.intercept(chain)
+        if (RelayFallback.active()) return viaRelays(chain, original, relays, null)
+        val direct = try { delegate.intercept(chain) } catch (e: IOException) {
+            if (!RelayFallback.onDirectFailure(e)) throw e
+            return viaRelays(chain, original, relays, e)
+        }
+        RelayFallback.onDirectSuccess()
+        return direct
+    }
+
+    /**
+     * __RELAY_LIST_CH1_2026_11_19__ Try [relays] in order, each once; the first that answers
+     * becomes preferred. A gateway key mismatch is not a relay failure (every relay forwards
+     * to the same gateway): it is thrown at once.
+     */
+    private fun viaRelays(chain: Interceptor.Chain, original: Request, relays: List<OhttpTransport>, directError: IOException?): Response {
+        var last: IOException? = null
+        for (r in relays) {
+            try {
+                val resp = exchange(chain, original, r, fresh = true)
+                RelayFallback.onRelaySuccess(r)
+                return resp
+            } catch (e: Ohttp.KeyMismatchException) {
+                directError?.let { e.addSuppressed(it) }; throw e
+            } catch (e: IOException) {
+                last?.let { e.addSuppressed(it) }
+                last = e
+            }
+        }
+        val e = last!!
+        RelayFallback.onRelayFailure(e)
+        directError?.let { e.addSuppressed(it) }
+        throw e
+    }
+
+    private fun exchange(chain: Interceptor.Chain, original: Request, t: OhttpTransport, fresh: Boolean): Response {
         try {
             val inner = toBhttp(original, t)
             val ctx = Ohttp.encapsulateRequest(t.keyConfig, Bhttp.encodeRequest(inner))
@@ -64,7 +118,17 @@ class OhttpInterceptor(
                 .url(t.relayUrl)
                 .post(ctx.encapsulatedRequest.toRequestBody(Ohttp.REQUEST_MEDIA_TYPE.toMediaType()))
                 .build() // deliberately NO other headers: nothing identifying reaches the relay
-            chain.proceed(outer).use { resp ->
+            // The fallback relay sits in the same kind of hosting as the main server: on a
+            // per-connection-capped network it gets the same short-connection policy.
+            val call: () -> Response = if (fresh && CoverConnectionPolicy.freshConnections()) {
+                { CoverConnectionPolicy.freshClient.newBuilder()
+                    .connectTimeout(chain.connectTimeoutMillis().toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
+                    .readTimeout(chain.readTimeoutMillis().toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
+                    .writeTimeout(chain.writeTimeoutMillis().toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
+                    .build().newCall(outer).execute() }
+            } else { { chain.proceed(outer) } }
+            val response = try { call() } catch (e: IOException) { if (fresh) CoverConnectionPolicy.onFailure(e); throw e }
+            response.use { resp ->
                 val bytes = resp.body?.byteStream()?.use { it.readBounded(MAX_RESPONSE) } ?: ByteArray(0)
                 val type = resp.header("Content-Type").orEmpty()
                 if (isKeyMismatch(resp.code, type, bytes)) {
@@ -87,7 +151,10 @@ class OhttpInterceptor(
 
         fun isEligible(req: Request, t: OhttpTransport): Boolean {
             val url = req.url
-            if (!url.isHttps || url.host != t.innerAuthority) return false
+            val origin = t.directOrigin
+            if (origin != null) {
+                if (url.scheme != origin.scheme || url.host != origin.host || url.port != origin.port) return false
+            } else if (!url.isHttps || url.host != t.innerAuthority) return false
             val path = url.encodedPath
             if (!path.startsWith("/v2/")) return false
             if (req.header("Upgrade") != null) return false
@@ -107,7 +174,7 @@ class OhttpInterceptor(
             val ct = req.body?.contentType()
             if (ct != null && headers.none { it.first == "content-type" }) headers += "content-type" to ct.toString()
             val path = req.url.encodedPath + (req.url.encodedQuery?.let { "?$it" } ?: "")
-            return Bhttp.Request(req.method, "https", authority(req.url), path, headers, body)
+            return Bhttp.Request(req.method, "https", if (t.directOrigin != null) t.innerAuthority else authority(req.url), path, headers, body)
         }
 
         /** RFC 9458 §5.3: problem type `https://iana.org/assignments/http-problem-types#ohttp-key`. */

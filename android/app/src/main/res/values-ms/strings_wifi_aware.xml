@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware (pautan dekat pantas)</string>
+    <string name="settings_wifi_aware_subtitle">Pautan terus ke telefon OSHI berdekatan, tanpa penghala. Wi-Fi anda kekal bersambung.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

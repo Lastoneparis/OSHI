@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Kommandoer</string>
+    <string name="bot_cmd_send_a11y">Send %1$s</string>
+    <string name="bot_cmd_sheet_title">Botkommandoer</string>
+    <string name="bot_cmd_tap_to_send">Trykk på en kommando for å sende den.</string>
+    <string name="bot_cmd_empty_none_title">Ingen boter her ennå</string>
+    <string name="bot_cmd_empty_none_body">Opprett en bot og legg den til i denne gruppen. Kommandoene vises her og når du skriver /.</string>
+    <string name="bot_cmd_empty_bot">Denne boten har ingen kommandoer ennå.</string>
+    <string name="bot_cmd_setup">Sett opp kommandoer</string>
+    <string name="bot_cmd_section">Kommandoer</string>
+    <string name="bot_cmd_section_hint">Medlemmer av botens grupper ser dem når de skriver / eller trykker på Kommandoer.</string>
+    <string name="bot_cmd_add">Legg til</string>
+    <string name="bot_cmd_add_title">Ny kommando</string>
+    <string name="bot_cmd_edit_title">Rediger kommando</string>
+    <string name="bot_cmd_field_name">Kommando</string>
+    <string name="bot_cmd_field_description">Beskrivelse (vises i menyen)</string>
+    <string name="bot_cmd_field_reply">Svar</string>
+    <string name="bot_cmd_field_reply_hint">Hva boten svarer. Du kan bruke {{input}}, {{bot_name}} og {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Sendes til webhooken din, som svarer.</string>
+    <string name="bot_cmd_empty_owner">Ingen kommandoer ennå. Legg til én, for eksempel /start eller /help, så alle vet hva denne boten kan.</string>
+    <string name="bot_cmd_err_empty">Skriv inn et kommandonavn.</string>
+    <string name="bot_cmd_err_invalid">Bare små bokstaver, sifre og _.</string>
+    <string name="bot_cmd_err_too_long">Maks. 32 tegn.</string>
+    <string name="bot_cmd_err_duplicate">Denne boten har allerede denne kommandoen.</string>
+    <string name="bot_cmd_err_too_many">En bot kan ha maks. 100 kommandoer.</string>
+    <string name="bot_cmd_err_description">Beskrivelsen er for lang (maks. 256 tegn).</string>
+    <string name="bot_cmd_sync_local">Lagret på denne telefonen, som kjører boten.</string>
+    <string name="bot_cmd_sync_syncing">Oppdaterer serveren …</string>
+    <string name="bot_cmd_sync_synced">Menyen er oppdatert på serveren.</string>
+    <string name="bot_cmd_sync_failed">Kunne ikke oppdatere serveren. Kommandoene dine er lagret på denne telefonen.</string>
+    <string name="bot_profile_edit">Rediger profil</string>
+    <string name="bot_profile_name">Navn</string>
+    <string name="bot_profile_description">Beskrivelse</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Gi boten din et navn.</string>
+    <string name="bot_profile_err_name_long">Navnet er for langt (maks. 64 tegn).</string>
+    <string name="bot_profile_err_desc_long">Beskrivelsen er for lang (maks. 512 tegn).</string>
+    <string name="bot_connect_title">Slik er den koblet til</string>
+    <string name="bot_connect_local">Denne boten kjører på denne telefonen: behold OSHI installert og boten slått på. Legg den til i en gruppe, så kan medlemmene bruke kommandoene der.</string>
+    <string name="bot_connect_webhook">Hver kommando sendes til webhook-URL-en din, og serveren din svarer med JSON {\"text\": \"…\"}. Serveren din kan også bruke tokenet nedenfor med OSHIs bot-API.</string>
+    <string name="bot_connect_token_warning">Hold tokenet hemmelig: alle som har det, kan snakke som boten din.</string>
+    <string name="bot_connect_groups">Grupper: %1$s</string>
+    <string name="bot_connect_no_groups">Ikke i noen gruppe ennå, så ingen kan bruke kommandoene.</string>
+</resources>

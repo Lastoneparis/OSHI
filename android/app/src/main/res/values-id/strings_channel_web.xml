@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Pratinjau web publik</string>
+    <string name="cw_toggle">Terbitkan postingan di web</string>
+    <string name="cw_footer">Postingan baru juga diterbitkan sebagai halaman web publik di oshi-messenger.com/c/%1$s. Siapa pun dapat membacanya, termasuk mesin pencari dan pratinjau tautan. Enkripsi end-to-end tidak berlaku untuk salinan web.</string>
+    <string name="cw_needs_link">Beri kanal ini tautan publik terlebih dahulu: pratinjau web memakai namanya.</string>
+    <string name="cw_create_link">Buat tautan publik</string>
+    <string name="cw_enable_title">Terbitkan postingan di web?</string>
+    <string name="cw_enable_confirm">Postingan di kanal ini akan terlihat oleh siapa pun di web di oshi-messenger.com/c/%1$s. Hanya postingan baru. Pratinjau tautan (WhatsApp, X, Telegram…) juga dapat membacanya, dan enkripsi end-to-end tidak berlaku untuk salinan web.</string>
+    <string name="cw_enable_action">Terbitkan</string>
+    <string name="cw_disable_title">Matikan pratinjau web?</string>
+    <string name="cw_disable_confirm">Semua postingan dan gambar yang diterbitkan di oshi-messenger.com/c/%1$s akan dihapus dari web. Postingan Anda di aplikasi tetap seperti semula.</string>
+    <string name="cw_disable_action">Matikan</string>
+    <string name="cw_indexing">Izinkan mesin pencari</string>
+    <string name="cw_indexing_footer">Jika nonaktif, halaman meminta mesin pencari untuk tidak mengindeksnya.</string>
+    <string name="cw_embed_code">Kode sematan</string>
+    <string name="cw_embed_title">Sematkan postingan ini</string>
+    <string name="cw_embed_hint">Tempel kode ini di situs Anda tempat postingan harus muncul.</string>
+    <string name="cw_embed_dark">Tema gelap</string>
+    <string name="cw_copy_code">Salin kode</string>
+    <string name="cw_code_copied">Kode disalin</string>
+    <string name="cw_not_on_web">Postingan ini tidak ada di web. Hanya postingan yang dikirim setelah pratinjau web diaktifkan yang diterbitkan.</string>
+    <string name="cw_error">Tidak dapat mengubah pratinjau web. Periksa koneksi Anda dan coba lagi.</string>
+</resources>

@@ -4,10 +4,7 @@
     <string name="app_tagline">מסנג\'ר Mesh מאובטח</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">ברוכים הבאים ל-OSHI</string>
-    <string name="onboarding_description">הודעות מוצפנות מקצה לקצה שעובדות גם ללא אינטרנט</string>
     <string name="onboarding_create_identity">צור זהות</string>
-    <string name="onboarding_restore_identity">שחזר זהות</string>
 
     <!-- Messages -->
     <string name="messages_title">הודעות</string>
@@ -61,6 +58,8 @@
     <string name="settings_theme_dark">כהה</string>
     <string name="settings_theme_oled_black">שחור OLED</string>
     <string name="settings_theme_oled_black_desc">רקעים בשחור מוחלט למסכי OLED. חל בכל פעם שערכת הנושא הכהה פעילה.</string>
+    <string name="appearance_glass_effect">אפקט זכוכית</string>
+    <string name="appearance_glass_effect_footer">סרגלים, כרטיסים ותפריטים שקופים למחצה כמו זכוכית חלבית. פועל עם בהיר, כהה ושחור OLED.</string>
     <string name="settings_backup">גיבוי מפתחות</string>
     <string name="settings_about">אודות</string>
     <string name="settings_version">גרסה %s</string>
@@ -385,22 +384,9 @@
     <string name="video_switch_to_voice">עבור לקול</string>
 
     <!-- Onboarding - Additional -->
-    <string name="onboarding_subtitle">הודעות מאובטחות ופרטיות שעובדות גם ללא אינטרנט</string>
-    <string name="onboarding_key_features">תכונות עיקריות</string>
-    <string name="onboarding_e2e_title">הצפנה מקצה לקצה</string>
-    <string name="onboarding_e2e_desc">כל ההודעות מוצפנות. רק אתה והנמען יכולים לקרוא אותן.</string>
-    <string name="onboarding_mesh_title">רשת Mesh</string>
-    <string name="onboarding_mesh_desc">שלח הודעות ישירות למשתמשים קרובים, גם ללא אינטרנט.</string>
-    <string name="onboarding_calls_title">שיחות מאובטחות</string>
-    <string name="onboarding_calls_desc">שיחות קוליות ווידאו עם הצפנה מלאה.</string>
-    <string name="onboarding_cross_platform_title">חוצה פלטפורמות</string>
-    <string name="onboarding_cross_platform_desc">עובד עם מכשירי iOS ואנדרואיד בצורה חלקה.</string>
-    <string name="onboarding_create_your_identity">צור את הזהות שלך</string>
-    <string name="onboarding_choose_display_name">בחר שם תצוגה עבור אנשי הקשר שלך</string>
     <string name="onboarding_display_name">שם תצוגה</string>
     <string name="onboarding_key_info">זוג מפתחות הצפנה ייחודי ייווצר עבורך. הקפד לגבות את המפתחות מאוחר יותר.</string>
     <string name="onboarding_back">חזרה</string>
-    <string name="onboarding_next">הבא</string>
     <string name="onboarding_creating">יוצר…</string>
     <string name="onboarding_error_create">יצירת הזהות נכשלה: %s</string>
 
@@ -820,8 +806,6 @@
     <string name="faq_q6_answer">עבור להודעה חדשה וסרוק את קוד ה-QR של איש הקשר, שתף את קוד ה-QR שלך, או הדבק את המפתח הציבורי שלהם.</string>
 
     <!-- Onboarding Disclaimer -->
-    <string name="onboarding_disclaimer_title">הודעה חשובה</string>
-    <string name="onboarding_disclaimer_subtitle">אנא קרא לפני השימוש ב-OSHI</string>
     <string name="onboarding_disclaimer_audit_title">טרם בוצע ביקורת אבטחה</string>
     <string name="onboarding_disclaimer_audit_desc">אפליקציה זו טרם עברה ביקורת אבטחה מקצועית. למרות שאנו משתמשים בהצפנה חזקה, השתמש לפי שיקול דעתך.</string>
     <string name="onboarding_disclaimer_anonymous_title">פרטיות קודם כל</string>
@@ -2147,24 +2131,10 @@
     <string name="new_message_sent">ההודעה נשלחה!</string>
     <string name="onboarding_conduct_subtitle">OSHI בנוי על אמון וכבוד. אנא עקוב אחר ההנחיות הבאות:</string>
     <string name="onboarding_conduct_title">הנחיות קהילה</string>
-    <string name="onboarding_message_description">התחבר למישהו על ידי סריקת קוד QR או הזנת מפתח ציבורי.</string>
-    <string name="onboarding_message_title">שלח את ההודעה הראשונה שלך</string>
-    <string name="onboarding_method_paste_title">שיטה 2: העתק/הדבק מפתח ציבורי</string>
-    <string name="onboarding_method_qr_title">שיטה 1: סרוק קוד QR</string>
     <string name="onboarding_reach_disclaimer">ה-mesh הלא מקוון הוא קצר טווח. בשני הטלפונים OSHI צריך להיות פתוח כדי שימצאו זה את זה, כ-100 מטר בשטח פתוח והרבה פחות דרך קירות. הוא מגיע רחוק יותר רק כאשר גם לאנשים אחרים בקרבת מקום OSHI פתוח כדי להעביר את ההודעה הלאה. אם אף אחד לא בטווח, OSHI שולח דרך האינטרנט במקום.</string>
-    <string name="onboarding_reach_offline_body">אין אינטרנט? ההודעות קופצות מטלפון לטלפון דרך אנשים קרובים שאצלם OSHI פתוח.</string>
-    <string name="onboarding_reach_offline_title">לא מקוון (mesh)</string>
-    <string name="onboarding_reach_online_body">עם אינטרנט, מגיעים לכל אחד בעולם באופן מיידי.</string>
-    <string name="onboarding_reach_online_title">מקוון</string>
     <string name="onboarding_reach_range1_dist">~100 m</string>
-    <string name="onboarding_reach_range1_label">טלפון לטלפון, ישירות</string>
     <string name="onboarding_reach_range2_dist">~500 m</string>
-    <string name="onboarding_reach_range2_label">רחוק יותר, כשאחרים מעבירים באמצע</string>
     <string name="onboarding_reach_range3_dist">~30 ק״מ</string>
-    <string name="onboarding_reach_range3_label">עם מכשיר קשר Meshtastic LoRa דרך Bluetooth</string>
-    <string name="onboarding_reach_subtitle">OSHI עובד בשתי דרכים — עם או בלי אינטרנט.</string>
-    <string name="onboarding_reach_tip">מצב לא מקוון דורש אנשים אחרים בקרבת מקום עם OSHI פתוח. ככל שיש יותר אנשים, ההודעה מגיעה רחוק יותר.</string>
-    <string name="onboarding_reach_title">איך ההודעות שלך נעות</string>
     <string name="onboarding_rule_backup">גבה את המפתחות שלך בצורה מאובטחת</string>
     <string name="onboarding_rule_no_abuse">ללא הטרדות או התעללות</string>
     <string name="onboarding_rule_no_illegal">ללא תוכן בלתי חוקי</string>
@@ -2579,6 +2549,7 @@
     <string name="gif_picker_title">GIF ומדבקות</string>
     <string name="gif_tab_gifs">GIF</string>
     <string name="gif_tab_stickers">מדבקות</string>
+    <string name="gif_oshi_hint">מדבקות OSHI מונפשות — בחרו אחת כדי לשלוח אותה</string>
     <string name="linked_device_alert_body">מכשיר חובר זה עתה לחשבון OSHI שלך. אם זה לא היית אתה, פתח «מכשירים מקושרים» והסר אותו עכשיו.</string>
     <string name="linked_device_alert_body_plural">%1$d מכשירים חוברו זה עתה לחשבון OSHI שלך. אם זה לא היית אתה, פתח «מכשירים מקושרים» והסר אותם עכשיו.</string>
     <string name="linked_device_alert_title">מכשיר חדש חובר לחשבון שלך</string>
@@ -2787,4 +2758,66 @@
     <string name="settings_animated_reactions">תגובות OSHI מונפשות</string>
     <string name="settings_animated_reactions_desc">כבוי: אמוג׳י רגיל</string>
     <string name="reactions_new_hint">חדש: מכשירי iPhone עם גרסה ישנה עשויים להציג אותן כ־👍</string>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="accessibility_updates">עדכונים ותחזוקה</string>
+    <string name="ai_download_failed_network">ההורדה נכשלה — בדקו את החיבור והקישו על „ניסיון חוזר”.</string>
+    <string name="ai_download_failed_server">שרת ההורדות לא הגיב. הקישו על „ניסיון חוזר” או נסו שוב מאוחר יותר.</string>
+    <string name="chat_welcome_creator_notice">נכתב על ידי OSHI, ומגיע ל-Hugo, שיצר אותו. הוא קורא את התשובות.</string>
+    <string name="conversation_pin">הצמדה למעלה</string>
+    <string name="conversation_unpin">בטל נעיצה</string>
+    <string name="group_block_member">חסימת המשתתף</string>
+    <string name="group_member_blocked">נחסם. ההודעות שלו בקבוצה הזו לא יגיעו אליך יותר.</string>
+    <string name="group_member_unblocked">החסימה בוטלה.</string>
+    <string name="group_report_member">דיווח על המשתתף</string>
+    <string name="group_unblock_member">ביטול חסימת המשתתף</string>
+    <string name="groups_show_fewer_members">הצג פחות</string>
+    <string name="lora_error_channel_unknown">הערוץ הזה לא קיים ברדיו המחובר — ייתכן ששמו שונה, שהוא הועבר או נמחק. לא נשלח דבר.</string>
+    <string name="lora_node_message">שליחת הודעה לצומת</string>
+    <string name="map_pois_hide">הסתרת מקומות</string>
+    <string name="map_pois_show">הצגת מקומות</string>
+    <string name="map_regions_insufficient_space">אין מספיק מקום פנוי במכשיר הזה כדי להתקין את האזור.</string>
+    <string name="markup_done">סיום</string>
+    <string name="markup_draw">ציור</string>
+    <string name="markup_undo">ביטול</string>
+    <string name="mesh_blocked_bluetooth">Bluetooth כבוי</string>
+    <string name="mesh_blocked_permission">ההרשאה למכשירים בקרבת מקום כבויה</string>
+    <string name="mesh_blocked_wifi">Wi‑Fi כבוי</string>
+    <string name="new_message_fab">חדש</string>
+    <string name="peers_connect_already">%1$s כבר מחובר</string>
+    <string name="peers_connect_dialing">מתחבר אל %1$s…</string>
+    <string name="peers_connect_searching">עדיין אין כתובת עבור %1$s — מחפש שוב…</string>
+    <string name="report_member_already_filed">כבר דיווחת על המשתתף הזה.</string>
+    <string name="report_member_dialog_title">דיווח על המשתתף</string>
+    <string name="updates_available">גרסה חדשה יותר של OSHI זמינה.</string>
+    <string name="updates_checking">מחפש גרסה חדשה יותר…</string>
+    <string name="updates_current_version">הגרסה שלך: OSHI %1$s</string>
+    <string name="updates_news_action">קריאת הערות הגרסה</string>
+    <string name="updates_news_body">תכונות חדשות, תיקונים והודעות תחזוקה מתפרסמים עם כל גרסה.</string>
+    <string name="updates_title">עדכונים ותחזוקה</string>
+    <string name="updates_up_to_date">יש לך את הגרסה העדכנית ביותר שידועה לנו.</string>
+    <string name="inapp_update_title">יש עדכון זמין</string>
+    <string name="inapp_update_body">גרסה חדשה של OSHI זמינה ב-Google Play. היא יורדת ברקע, כך שאפשר להמשיך להשתמש באפליקציה.</string>
+    <string name="inapp_update_now">עדכון</string>
+    <string name="inapp_update_later">אחר כך</string>
+    <string name="inapp_update_ready">העדכון מוכן</string>
+    <string name="inapp_update_restart">הפעלה מחדש</string>
+    <!-- __CALL_WAKE_2026_11_22__ -->
+    <string name="call_state_calling">מתקשר…</string>
+    <string name="call_reach_unreachable">לא זמין כרגע</string>
+    <string name="call_readiness_title">ייתכן ששיחות נכנסות לא יצלצלו</string>
+    <string name="call_readiness_notifications">ההתראות של OSHI כבויות — יש להקיש כדי לאפשר אותן</string>
+    <string name="call_readiness_channel">ההתראות „שיחות נכנסות” כבויות — יש להקיש כדי להפעיל אותן</string>
+    <string name="call_readiness_full_screen">התראות שיחה במסך מלא אינן מותרות — יש להקיש כדי לאפשר אותן</string>
+    <string name="call_readiness_background">Android מגביל את OSHI ברקע — יש להקיש ולהגדיר את הסוללה ל„ללא הגבלה”</string>
+    <string name="composer_format_bold">מודגש</string>
+    <string name="composer_format_underline">קו תחתון</string>
+    <!-- __GROUP_HEADER_ISLAND_2026_11_24__ floating group header -->
+    <string name="group_header_info_a11y">פרטי הקבוצה, %1$s</string>
+    <string name="group_header_search_a11y">חיפוש בשיחה</string>
+    <plurals name="group_header_subscribers">
+        <item quantity="one">%1$d מנוי</item>
+        <item quantity="two">%1$d מנויים</item>
+        <item quantity="many">%1$d מנויים</item>
+        <item quantity="other">%1$d מנויים</item>
+    </plurals>
 </resources>

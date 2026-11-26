@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Hopp over</string>
+    <string name="ob27_continue">Fortsett</string>
+    <string name="ob27_page_of">Side %1$d av %2$d</string>
+    <string name="ob27_private_title">Bare dere to</string>
+    <string name="ob27_private_body">Meldinger og samtaler er ende-til-ende-kryptert på telefonen din. Ingen underveis kan lese dem – ikke engang OSHI.</string>
+    <string name="ob27_offline_title">Virker uten internett</string>
+    <string name="ob27_offline_body">Ikke nett? Meldinger hopper fra telefon til telefon via folk i nærheten som har OSHI åpent. En LoRa-radio tar dem enda lenger.</string>
+    <string name="ob27_range_direct">direkte</string>
+    <string name="ob27_range_relayed">videresendt</string>
+    <string name="ob27_range_lora">LoRa-radio</string>
+    <string name="ob27_anon_title">Ikke noe nummer</string>
+    <string name="ob27_anon_body">Ingen konto, ingen e-post, ikke noe nummer å registrere deg med. Identiteten din er en nøkkel som lages på denne telefonen.</string>
+    <string name="ob27_together_title">Ta med folka dine</string>
+    <string name="ob27_together_body">Chat én til én eller i grupper. Legg til noen ved å skanne QR-koden deres eller sende en invitasjonslenke.</string>
+    <string name="ob27_rules_title">Før du begynner</string>
+    <string name="ob27_rules_subtitle">Noen husregler, og hva OSHI kan og ikke kan ennå.</string>
+    <string name="ob27_rules_do">Gjør dette</string>
+    <string name="ob27_rules_dont">Aldri</string>
+    <string name="ob27_good_to_know">Greit å vite</string>
+    <string name="ob27_show_details">Vis detaljer</string>
+    <string name="ob27_hide_details">Skjul detaljer</string>
+    <string name="ob27_agree">Jeg forstår</string>
+    <string name="ob27_notif_title">Ikke gå glipp av meldinger</string>
+    <string name="ob27_notif_body">Tillat varsler for å se nye meldinger og anrop. Du kan slå dem av når som helst i Innstillinger.</string>
+    <string name="ob27_notif_allow">Tillat varsler</string>
+    <string name="ob27_not_now">Ikke nå</string>
+    <string name="ob27_identity_title">Velg et navn</string>
+    <string name="ob27_identity_body">Det er dette kontaktene dine ser. Du kan endre det senere.</string>
+    <string name="ob27_already">Bruker du OSHI allerede?</string>
+</resources>

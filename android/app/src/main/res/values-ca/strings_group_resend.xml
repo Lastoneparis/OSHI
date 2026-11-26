@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">Enviat a %1$d de %2$d</string>
+    <string name="group_sent_partial_body">Encara no s\'ha lliurat a %1$d membre(s). OSHI ho torna a provar automàticament durant 7 dies.</string>
+    <string name="group_sent_partial_gave_up">Encara no s\'ha lliurat a %1$d membre(s) després de 7 dies.</string>
+    <string name="group_retry_now">Torna-ho a provar ara</string>
+</resources>

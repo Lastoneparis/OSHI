@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">وضع الأمان الصارم</string>
+    <string name="strict_status_on">مفعّل: لا نسخ ولا لقطات شاشة، ومخفي عن تطبيقات قراءة الشاشة</string>
+    <string name="strict_status_off">متوقف. يُحكم قفل OSHI حين قد يكون هاتفك مراقَبًا</string>
+    <string name="strict_hero_on">وضع الأمان الصارم مفعّل</string>
+    <string name="strict_intro">للحالات التي قد يكون فيها الهاتف مراقَبًا. بمفتاح واحد يُحكم قفل OSHI: لا شيء يمكن نسخه، ولا يمكن التقاط الشاشة، والتطبيقات التي تقرأ الشاشة، ومنها وكلاء الذكاء الاصطناعي، لا ترى شيئًا.</string>
+    <string name="strict_section_switch">الوضع</string>
+    <string name="strict_toggle_title">وضع الأمان الصارم</string>
+    <string name="strict_toggle_on">مفعّل على هذا الجهاز</string>
+    <string name="strict_toggle_off">متوقف</string>
+    <string name="strict_block_paste_title">منع اللصق أيضًا</string>
+    <string name="strict_block_paste_subtitle">لا يمكن لصق أي شيء في OSHI</string>
+    <string name="strict_hide_presence_title">إخفاء إشعارات القراءة والكتابة</string>
+    <string name="strict_hide_presence_subtitle">لا يرى الآخرون متى تقرأ أو تكتب</string>
+    <string name="strict_forced_subtitle">مفروض بواسطة وضع الأمان الصارم</string>
+    <string name="strict_blocked_toast">محظور بواسطة وضع الأمان الصارم</string>
+    <string name="strict_unlock_title">إيقاف وضع الأمان الصارم</string>
+    <string name="strict_unlock_subtitle">أكّد أنك أنت</string>
+    <string name="strict_threats_title">تطبيقات يمكنها قراءة شاشتك أو التحكم بها</string>
+    <string name="strict_threats_none">لم يُعثر على أي منها في هذا الهاتف.</string>
+    <string name="strict_threat_a11y">خدمة إمكانية وصول ليست أداة مساعدة</string>
+    <string name="strict_threat_remote">تطبيق تحكم عن بُعد أو عكس الشاشة</string>
+    <string name="strict_threats_open">مراجعة</string>
+    <string name="strict_threats_explainer">لا يستطيع OSHI إيقاف تطبيق آخر. إذا لم تتعرّف على أحد هذه التطبيقات، فأوقفه من إعدادات Android › تسهيل الاستخدام، أو احذفه.</string>
+    <string name="strict_banner_title">تطبيقات يمكنها قراءة هذه الشاشة أو التحكم بها</string>
+    <string name="strict_banner_body">%1$s. يخفي وضع الأمان الصارم OSHI عنها حيثما يسمح Android بذلك.</string>
+    <string name="strict_banner_dismiss">تجاهل</string>
+    <string name="strict_does_title">ما يفعله</string>
+    <string name="strict_does_copy">لا نسخ ولا قص ولا إعادة توجيه ولا مشاركة ولا حفظ للرسائل. لا يمكن تحديد النص، ويُمسح كل ما وضعه OSHI في الحافظة.</string>
+    <string name="strict_does_paste">يُمنع اللصق في OSHI عند تفعيل «منع اللصق أيضًا»، بما في ذلك أمر اللصق في لوحة المفاتيح.</string>
+    <string name="strict_does_screen">تظهر لقطات الشاشة وتسجيل الشاشة ومشاركتها سوداء. ومعاينة التطبيقات الأخيرة مخفية.</string>
+    <string name="strict_does_agents">التطبيقات التي تقرأ الشاشة عبر إمكانية الوصول، ومنها وكلاء الذكاء الاصطناعي، لا ترى أي محتوى من OSHI (Android 14 والأحدث). وتُتجاهل النقرات التي تحقنها.</string>
+    <string name="strict_does_overlays">تُتجاهل النقرات أثناء رسم تطبيق آخر فوق OSHI.</string>
+    <string name="strict_does_notifications">تقول الإشعارات «رسالة جديدة» فقط: بلا اسم ولا صورة ولا نص.</string>
+    <string name="strict_does_lock">قفل التطبيق في كل مرة تعود فيها إلى OSHI (إذا كان هاتفك يحتوي على قفل شاشة).</string>
+    <string name="strict_does_keyboard">لوحة مفاتيح متخفية: يُطلب من لوحة المفاتيح ألا تتعلّم ما تكتبه.</string>
+    <string name="strict_does_network">لا معاينات للروابط ولا بحث GIPHY: لا يُجلب شيء من مواقع الأطراف الثالثة.</string>
+    <string name="strict_does_presence">إشعارات القراءة ومؤشرات الكتابة متوقفة (إذا اخترت إخفاءها).</string>
+    <string name="strict_does_relay">يُفعَّل مرحّل الخصوصية عند توفّره.</string>
+    <string name="strict_does_restore">تعود إعداداتك السابقة عند إيقاف الوضع.</string>
+    <string name="strict_cannot_title">ما لا يستطيع فعله</string>
+    <string name="strict_cannot_malware">لا يستطيع أي تطبيق حمايتك تمامًا من البرمجيات الخبيثة أو من هاتف مخترَق (مُجذَّر).</string>
+    <string name="strict_cannot_keyboard">لوحة مفاتيحك ما زالت ترى ما تكتبه. واقتراح الحافظة الذي تكتبه عنك لا يمكن تمييزه عن الكتابة.</string>
+    <string name="strict_cannot_readers">تظل قارئات الشاشة لذوي الإعاقة البصرية تعمل، لكن تطبيقات إمكانية الوصول الأخرى لا تستطيع قراءة OSHI أثناء تفعيل الوضع.</string>
+    <string name="strict_cannot_old">في Android 13 وما قبله، لا يستطيع OSHI إخفاء محتواه عن تطبيقات إمكانية الوصول، بل يكتفي بتحذيرك منها.</string>
+    <string name="strict_cannot_camera">يمكن لأحد ما أن يصوّر الشاشة بجهاز آخر.</string>
+    <string name="strict_cannot_recipient">يحمي هذا الهاتف فقط، لا هواتف من تراسلهم.</string>
+    <string name="strict_auto_lock_immediate">فورًا (وضع الأمان الصارم)</string>
+</resources>

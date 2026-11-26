@@ -13,6 +13,8 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.*
 import com.oshi.messenger.network.encryption.CryptoManager
+import com.oshi.messenger.network.mesh.wifiaware.WifiAwareArbiter
+import com.oshi.messenger.network.mesh.wifiaware.WifiAwareTransport
 import com.oshi.messenger.service.AppPollState
 import com.oshi.messenger.service.MeshNetworkService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.update
 import java.io.*
 import java.net.InetSocketAddress
 import java.net.ServerSocket
@@ -70,6 +73,10 @@ class MeshNetworkManager @Inject constructor(
         private const val MAX_HOPS = 50  // ~10km at 200m per hop
         private const val MAX_RELAY_AGE_MS = 600_000L  // 10 minutes
         private const val MAX_CACHE_SIZE = 5000
+
+        /** __WIFI_AWARE_2026_11_25__ Peer ids of the Wi-Fi Aware lane: "aware:<publicKey>". */
+        const val AWARE_PEER_PREFIX = "aware:"
+        fun isAwarePeerId(id: String): Boolean = id.startsWith(AWARE_PEER_PREFIX)
     }
 
     // State
@@ -148,6 +155,116 @@ class MeshNetworkManager @Inject constructor(
 
     /** The watcher behind the second flush trigger — see [startCustodyFlushWatcher]. */
     private var custodyFlushJob: Job? = null
+
+    // ============================================================================
+    // WI-FI AWARE (__WIFI_AWARE_2026_11_25__, GitHub Lastoneparis/OSHI#4)
+    // ============================================================================
+    //
+    // One more offline lane, purely additive. A peer that passed the Aware
+    // handshake (proof of possession of its key — see WifiAwareProtocol) is listed
+    // in [connectedPeers] as ConnectionType.WIFI_AWARE with id "aware:<key>", and
+    // every existing send path reaches it through [sendMessageToPublicKey] /
+    // [sendMessage] without knowing it exists. The arbitration that keeps it out
+    // of the way of Wi-Fi, hotspot, Wi-Fi Direct, Bluetooth and LoRa lives in
+    // WifiAwareArbiter.
+
+    private val undeliveredCallbacks = java.util.concurrent.CopyOnWriteArrayList<(String) -> Unit>()
+
+    /**
+     * Called with each message id that was handed to a Wi-Fi Aware link and never
+     * acknowledged by the peer before the link closed. The send path has already
+     * marked such a message delivered (as it does for every mesh peer), so this is
+     * the only way it can learn otherwise.
+     */
+    fun addUndeliveredCallback(callback: (messageId: String) -> Unit) {
+        undeliveredCallbacks.add(callback)
+    }
+
+    private val awareListener = object : WifiAwareTransport.Listener {
+        override fun onPeerConnected(publicKey: String, displayName: String) {
+            val peer = MeshPeer(
+                id = AWARE_PEER_PREFIX + publicKey,
+                publicKey = publicKey,
+                displayName = displayName.ifBlank { publicKey.take(8) },
+                connectionType = ConnectionType.WIFI_AWARE
+            )
+            // Aware first, so a person reachable over several lanes is found on
+            // the fastest one by `find { it.publicKey == … }`.
+            _connectedPeers.update { list -> listOf(peer) + list.filter { it.id != peer.id } }
+            connectionCallbacks.forEach { it(peer, true) }
+            scope.launch { flushCustody() }
+        }
+
+        override fun onPeerDisconnected(publicKey: String, unackedMessageIds: List<String>) {
+            val id = AWARE_PEER_PREFIX + publicKey
+            val peer = _connectedPeers.value.find { it.id == id }
+            _connectedPeers.update { list -> list.filter { it.id != id } }
+            peer?.let { p -> connectionCallbacks.forEach { cb -> cb(p, false) } }
+            unackedMessageIds.forEach { mid -> undeliveredCallbacks.forEach { cb -> cb(mid) } }
+        }
+
+        override fun onEnvelope(publicKey: String, json: ByteArray) {
+            handleReceivedData(AWARE_PEER_PREFIX + publicKey, json)
+        }
+    }
+
+    private val wifiAware: WifiAwareTransport by lazy {
+        WifiAwareTransport(
+            context,
+            sharedSecret = { peerKey ->
+                try { if (cryptoManager.hasKeyPair()) cryptoManager.deriveSharedSecret(peerKey) else null }
+                catch (e: Exception) { null }
+            },
+            listener = awareListener
+        )
+    }
+
+    /** True when this phone can run Wi-Fi Aware at all (settings switch hidden otherwise). */
+    fun isWifiAwareSupported(): Boolean = wifiAware.isSupported()
+
+    /** Re-read the Wi-Fi Aware switch, permissions and radio state. Cheap; safe to call often. */
+    fun refreshWifiAware() {
+        if (myPublicKey.isNotEmpty() && _meshStarted) wifiAware.start(myPublicKey, myDisplayName)
+        wifiAware.refresh()
+    }
+
+    /** startMesh() ran and stopAll() did not — the lifecycle Wi-Fi Aware follows. */
+    @Volatile private var _meshStarted = false
+
+    /**
+     * Hand [bytes] to whichever lane [peerId] belongs to. An Aware peer whose link
+     * is gone falls back to a Nearby endpoint of the same person, if there is one.
+     */
+    private fun sendBytesToPeer(peerId: String, bytes: ByteArray, messageId: String?, onNearbyFailure: (() -> Unit)? = null) {
+        if (isAwarePeerId(peerId)) {
+            val key = peerId.removePrefix(AWARE_PEER_PREFIX)
+            if (wifiAware.send(key, bytes, messageId)) {
+                Log.d(TAG, "📤 Sent via Wi-Fi Aware to ${key.take(16)}…")
+                return
+            }
+            val nearby = _connectedPeers.value.find { it.publicKey == key && !isAwarePeerId(it.id) }
+            if (nearby == null) {
+                Log.w(TAG, "⚠️ Wi-Fi Aware link to ${key.take(16)}… gone and no other mesh lane")
+                // Reported a moment later: the caller marks the row delivered right
+                // after this returns, and the "not delivered" verdict must land last.
+                messageId?.let { mid ->
+                    scope.launch {
+                        delay(1_500)
+                        undeliveredCallbacks.forEach { cb -> cb(mid) }
+                    }
+                }
+                return
+            }
+            sendBytesToPeer(nearby.id, bytes, messageId, onNearbyFailure)
+            return
+        }
+        connectionsClient.sendPayload(peerId, Payload.fromBytes(bytes))
+            .addOnSuccessListener { Log.d(TAG, "📤 Message sent to: $peerId") }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "❌ Failed to send to $peerId: ${e.message}")
+                onNearbyFailure?.invoke()
+            }
+    }
 
     // ============================================================================
     // INITIALIZATION
@@ -271,6 +388,11 @@ class MeshNetworkManager @Inject constructor(
         // Also start WiFi Direct for Android-Android connections
         startWifiDirect()
 
+        // __WIFI_AWARE_2026_11_25__ Wi-Fi Aware: starts only if supported, switched
+        // on, permitted, and the radio is not busy with Wi-Fi Direct / hotspot.
+        _meshStarted = true
+        if (myPublicKey.isNotEmpty()) wifiAware.start(myPublicKey, myDisplayName)
+
         // Start CrossPlatformMesh for iOS ↔ Android direct communication
         startCrossPlatformMesh()
 
@@ -372,9 +494,13 @@ class MeshNetworkManager @Inject constructor(
 
         // NOTE: Do NOT stop CrossPlatformMesh here — it has independent lifecycle
         // and should keep running for iOS ↔ Android discovery
+        //
+        // __WIFI_AWARE_2026_11_25__ Same for Wi-Fi Aware: pull-to-refresh calls
+        // stopMesh()+startMesh(), and a live Aware link must not be torn down for
+        // a refresh. It stops with the mesh switch (stopAll), not here.
 
         _meshState.value = MeshState.IDLE
-        _connectedPeers.value = emptyList()
+        _connectedPeers.value = _connectedPeers.value.filter { it.connectionType == ConnectionType.WIFI_AWARE }
         _discoveredPeers.value = emptyList()
     }
 
@@ -385,6 +511,8 @@ class MeshNetworkManager @Inject constructor(
         Log.d(TAG, "🛑 Stopping ALL mesh networking...")
         stopMesh()
         crossPlatformMesh.stop()
+        _meshStarted = false
+        wifiAware.stop()
         // Nothing left to answer a read with — give the process back.
         MeshNetworkService.release(context)
     }
@@ -411,7 +539,14 @@ class MeshNetworkManager @Inject constructor(
         context.registerReceiver(wifiDirectReceiver, intentFilter)
 
         // Start peer discovery
-        if (hasRequiredPermissions()) {
+        //
+        // __WIFI_AWARE_2026_11_25__ Not while Wi-Fi Aware is running: on chips that
+        // cannot run P2P and Aware together the scan could cost the live Aware
+        // links, and nothing reads this scan's results. A scan already running is
+        // never stopped. See WifiAwareArbiter rule 4.
+        if (!WifiAwareArbiter.mayStartWifiDirectDiscovery(awareRunning = wifiAware.running.value)) {
+            Log.d(TAG, "📶 WiFi Direct discovery skipped: Wi-Fi Aware is running")
+        } else if (hasRequiredPermissions()) {
             wifiP2pManager?.discoverPeers(wifiP2pChannel, object : WifiP2pManager.ActionListener {
                 override fun onSuccess() {
                     Log.d(TAG, "📶 WiFi Direct discovery started")
@@ -559,25 +694,21 @@ class MeshNetworkManager @Inject constructor(
     fun sendMessage(toPeerId: String, message: MeshMessage) {
         val jsonData = message.toJson().toByteArray()
 
-        // Try Nearby Connections first
-        val payload = Payload.fromBytes(jsonData)
-        connectionsClient.sendPayload(toPeerId, payload)
-            .addOnSuccessListener {
-                Log.d(TAG, "📤 Message sent to: $toPeerId")
-            }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "❌ Failed to send message: ${e.message}")
-
-                // Fallback to WiFi Direct socket
-                sendViaWifiDirect(toPeerId, jsonData)
-            }
+        // Nearby Connections (or Wi-Fi Aware for an "aware:" peer); on a Nearby
+        // failure, fall back to the WiFi Direct socket as before.
+        sendBytesToPeer(toPeerId, jsonData, messageId = message.id) {
+            sendViaWifiDirect(toPeerId, jsonData)
+        }
     }
 
     /**
      * Send message to a peer by public key
      */
     fun sendMessageToPublicKey(publicKey: String, message: MeshMessage) {
-        val peer = _connectedPeers.value.find { it.publicKey == publicKey }
+        // __WIFI_AWARE_2026_11_25__ Prefer a live Wi-Fi Aware link, else any lane.
+        val peer = _connectedPeers.value.find { it.publicKey == publicKey && it.connectionType == ConnectionType.WIFI_AWARE && wifiAware.isConnected(publicKey) }
+            ?: _connectedPeers.value.find { it.publicKey == publicKey && it.connectionType != ConnectionType.WIFI_AWARE }
+            ?: _connectedPeers.value.find { it.publicKey == publicKey }
         if (peer != null) {
             sendMessage(peer.id, message)
         } else {
@@ -842,6 +973,10 @@ class MeshNetworkManager @Inject constructor(
      */
     private fun sendRelayMessage(endpointId: String, relayMsg: RelayMessage) {
         val jsonData = relayMsg.toJson().toByteArray()
+        if (isAwarePeerId(endpointId)) {
+            sendBytesToPeer(endpointId, jsonData, messageId = null)
+            return
+        }
         val payload = Payload.fromBytes(jsonData)
 
         connectionsClient.sendPayload(endpointId, payload)
@@ -870,7 +1005,8 @@ class MeshNetworkManager @Inject constructor(
         val targets = _connectedPeers.value
             .filter { it.id != excludeEndpoint && !relayMsg.seenBy.contains(it.publicKey) }
         targets.forEach { peer ->
-            connectionsClient.sendPayload(peer.id, payload)
+            if (isAwarePeerId(peer.id)) sendBytesToPeer(peer.id, jsonData, messageId = null)
+            else connectionsClient.sendPayload(peer.id, payload)
         }
 
         Log.d(TAG, "📡 Broadcast relay to ${targets.size} peer(s)")
@@ -1032,6 +1168,10 @@ class MeshNetworkManager @Inject constructor(
     private fun handleIdentityExchange(endpointId: String, message: MeshMessage) {
         Log.d(TAG, "🤝 Identity exchange from: ${message.senderName}")
 
+        // __WIFI_AWARE_2026_11_25__ A Wi-Fi Aware peer's key was PROVEN by the
+        // handshake; an unauthenticated JSON claim must never overwrite it.
+        if (isAwarePeerId(endpointId)) return
+
         // Update peer info
         _connectedPeers.value = _connectedPeers.value.map { peer ->
             if (peer.id == endpointId) {
@@ -1175,6 +1315,8 @@ class MeshNetworkManager @Inject constructor(
 
     fun cleanup() {
         stopMesh()
+        _meshStarted = false
+        wifiAware.stop()
         scope.cancel()
         serverSocket?.close()
         clientSockets.values.forEach { it.close() }
@@ -1200,7 +1342,9 @@ enum class ConnectionType {
     NEARBY,
     WIFI_DIRECT,
     BLUETOOTH,
-    CROSS_PLATFORM  // iOS ↔ Android via BLE/NSD/TCP
+    CROSS_PLATFORM,  // iOS ↔ Android via BLE/NSD/TCP
+    /** __WIFI_AWARE_2026_11_25__ Android ↔ Android over a Wi-Fi Aware (NAN) data path. */
+    WIFI_AWARE
 }
 
 data class MeshPeer(

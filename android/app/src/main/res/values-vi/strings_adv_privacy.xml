@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Quyền riêng tư nâng cao cho đoạn chat</string>
+    <string name="adv_privacy_subtitle">Ngăn mọi người trong đoạn chat này lưu phương tiện, xuất đoạn chat hoặc dùng AI với tin nhắn</string>
+    <string name="adv_privacy_learn_more">Tìm hiểu thêm</string>
+    <string name="adv_privacy_notice_on">%1$s đã bật quyền riêng tư nâng cao cho đoạn chat. Không ai có thể tự động lưu phương tiện, xuất đoạn chat hoặc dùng AI với tin nhắn trong đoạn chat này.</string>
+    <string name="adv_privacy_notice_off">%1$s đã tắt quyền riêng tư nâng cao cho đoạn chat. Lưu phương tiện, xuất đoạn chat và các tính năng AI đã dùng lại được.</string>
+    <string name="adv_privacy_notice_on_you">Bạn đã bật quyền riêng tư nâng cao cho đoạn chat. Không ai có thể tự động lưu phương tiện, xuất đoạn chat hoặc dùng AI với tin nhắn trong đoạn chat này.</string>
+    <string name="adv_privacy_notice_off_you">Bạn đã tắt quyền riêng tư nâng cao cho đoạn chat. Lưu phương tiện, xuất đoạn chat và các tính năng AI đã dùng lại được.</string>
+    <string name="adv_privacy_summary_on">Đã bật quyền riêng tư nâng cao cho đoạn chat</string>
+    <string name="adv_privacy_summary_off">Đã tắt quyền riêng tư nâng cao cho đoạn chat</string>
+    <string name="adv_privacy_sheet_intro">Khi bất kỳ ai bật, tính năng này áp dụng cho mọi người trong đoạn chat:</string>
+    <string name="adv_privacy_sheet_point_save">Không thể lưu phương tiện từ đoạn chat này vào thư viện hoặc Tệp đã tải xuống.</string>
+    <string name="adv_privacy_sheet_point_export">Đoạn chat này bị loại khỏi các bản xuất đoạn chat.</string>
+    <string name="adv_privacy_sheet_point_ai">AI trên thiết bị của OSHI không thể đọc đoạn chat này: không có gợi ý trả lời, không dịch, không có ngữ cảnh cho trợ lý viết.</string>
+    <string name="adv_privacy_sheet_point_screen">Chụp màn hình và quay màn hình đoạn chat này bị chặn.</string>
+    <string name="adv_privacy_sheet_limits">Bất kỳ ai trong đoạn chat đều có thể bật hoặc tắt. Tính năng này không ngăn được ai đó chụp ảnh màn hình của họ, và không ảnh hưởng đến người dùng phiên bản OSHI cũ.</string>
+    <string name="adv_privacy_blocked_toast">Quyền riêng tư nâng cao đang bật trong đoạn chat này</string>
+    <string name="adv_privacy_older_members">Thành viên dùng phiên bản OSHI cũ sẽ không áp dụng cho đến khi cập nhật: %1$d</string>
+</resources>

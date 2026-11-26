@@ -115,8 +115,9 @@ struct PortalView: View {
                     .accessibilityHint("a11y.portal.create_hint".localized)
                 }
             }
+            // __BOTS_PHASE1_2026_11_24__ BotFather's guided creation.
             .sheet(isPresented: $showCreateBot) {
-                BotCreationView(isPresented: $showCreateBot)
+                BotFatherFlowView()
             }
             .sheet(isPresented: $showCreateChannel) {
                 CreateGroupView(preselectedType: .publicGroup)
@@ -1492,6 +1493,43 @@ struct BotDetailView: View {
                 .padding(.vertical, 4)
             }
 
+            // __BOT_COMMANDS_2026_11_24__ Profile + commands, editable in place
+            // (Telegram: /setname, /setdescription, /setcommands at BotFather).
+            Section {
+                TextField("bot.name_placeholder".localized, text: Binding(
+                    get: { bot.name },
+                    set: { bot.name = String($0.prefix(64)); botManager.updateBot(bot) }
+                ))
+                .onSubmit { if BotManager.needsServerRegistration(bot) { botManager.registerBotWithServer(bot) } }
+                .accessibilityIdentifier("bot.profile.name")
+
+                TextField("bot.description_label".localized, text: Binding(
+                    get: { bot.description },
+                    set: { bot.description = String($0.prefix(BotCommandSpec.maxDescriptionLength)); botManager.updateBot(bot) }
+                ), axis: .vertical)
+                .lineLimit(1...4)
+
+                NavigationLink {
+                    BotCommandsEditorView(bot: $bot)
+                } label: {
+                    HStack {
+                        Label("bot.commands.title".localized, systemImage: "slash.circle")
+                        Spacer()
+                        Text("\(BotCommandList.commands(of: bot).count)")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .accessibilityIdentifier("bot.commands.open")
+            } header: {
+                Text("bot.profile.section".localized)
+            } footer: {
+                Text("bot.profile.footer".localized)
+            }
+
+            // __BOTS_PHASE1_2026_11_24__ @username, about, emoji, public, share
+            // link + QR, revoke token (BotFather's /setusername … /revoke).
+            BotPublicProfileSection(bot: $bot)
+
             // Status
             Section {
                 Toggle(isOn: Binding(
@@ -1793,8 +1831,11 @@ struct BotDetailView: View {
             }
             Button("common.cancel".localized, role: .cancel) {}
         }
+        // __BOTS_PHASE1_2026_11_24__ add as admin, with rights + remote notice.
         .sheet(isPresented: $showGroupPicker) {
-            BotGroupPickerView(bot: $bot)
+            BotAddToChatSheet(target: .owned(bot)) {
+                if let fresh = botManager.bots.first(where: { $0.id == bot.id }) { bot = fresh }
+            }
         }
         .onAppear {
             if selectedPostGroup == nil, let first = bot.assignedGroups.first {
@@ -1806,87 +1847,6 @@ struct BotDetailView: View {
     private func groupNameFor(_ groupId: UUID) -> String {
         MessageGroupManager.shared.groups.first(where: { $0.id == groupId })?.name
             ?? String(groupId.uuidString.prefix(8)) + "..."
-    }
-}
-
-// MARK: - Bot Group Picker
-
-struct BotGroupPickerView: View {
-    @Binding var bot: OSHIBot
-    @StateObject private var botManager = BotManager.shared
-    @Environment(\.dismiss) private var dismiss
-
-    private let brandColor = Theme.brand
-    private var groups: [MessageGroup] { MessageGroupManager.shared.groups }
-
-    var body: some View {
-        NavigationView {
-            List {
-                if groups.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(systemName: "person.3")
-                            .font(.scaled(36))
-                            .foregroundColor(.secondary)
-                        Text("bot.no_groups_available".localized)
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        Text("bot.no_groups_hint".localized)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 20)
-                } else {
-                    ForEach(groups) { group in
-                        let alreadyAssigned = bot.assignedGroups.contains(group.id)
-                        Button {
-                            if !alreadyAssigned {
-                                bot.assignedGroups.append(group.id)
-                                botManager.updateBot(bot)
-                                botManager.registerBotWithServer(bot)
-                                dismiss()
-                            }
-                        } label: {
-                            HStack(spacing: 12) {
-                                // __ONE_AVATAR_NOT_THREE_2026_11_07__ keyed on
-                                // the group id so this picker shows the same
-                                // colour the group list does.
-                                DefaultAvatar(key: group.id.uuidString,
-                                              name: group.name, size: 40)
-
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(group.name)
-                                        .font(.subheadline.weight(.medium))
-                                        .foregroundColor(.primary)
-                                    Text("\(group.members.count) " + "bot.group_members".localized)
-                                        .font(.caption2)
-                                        .foregroundColor(.secondary)
-                                }
-
-                                Spacer()
-
-                                if alreadyAssigned {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.green)
-                                } else {
-                                    Image(systemName: "plus.circle")
-                                        .foregroundColor(brandColor)
-                                }
-                            }
-                        }
-                        .disabled(alreadyAssigned)
-                    }
-                }
-            }
-            .navigationTitle("bot.add_to_group".localized)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("common.cancel".localized) { dismiss() }
-                }
-            }
-        }
     }
 }
 
@@ -2049,6 +2009,7 @@ struct ScriptEditorView: View {
 struct BotManagementView: View {
     @StateObject private var botManager = BotManager.shared
     @State private var showCreateBot = false
+    @State private var showCreateAutomation = false
 
     private let brandColor = Theme.brand
 
@@ -2090,7 +2051,7 @@ struct BotManagementView: View {
                                         Circle().fill(.green).frame(width: 6, height: 6)
                                     }
                                 }
-                                Text("@\(bot.username)")
+                                Text("@\(bot.publishedUsername ?? bot.username)")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -2109,18 +2070,33 @@ struct BotManagementView: View {
             }
 
             Section {
+                // __BOTS_PHASE1_2026_11_24__ "Create a bot" = BotFather (a bot
+                // driven by its token, for groups and channels). The on-phone
+                // automation (keywords, schedules) keeps its own builder.
                 Button {
                     showCreateBot = true
                 } label: {
-                    Label("bot.create_new".localized, systemImage: "plus.circle.fill")
+                    Label("bot.create_new".localized, systemImage: "wand.and.stars")
                         .foregroundColor(brandColor)
                 }
+                .accessibilityIdentifier("bots.create")
+                Button {
+                    showCreateAutomation = true
+                } label: {
+                    Label("bot.create_automation".localized, systemImage: "gearshape.2")
+                        .foregroundColor(brandColor)
+                }
+            } footer: {
+                Text("bot.create_footer".localized)
             }
         }
         .navigationTitle("bot.management_title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showCreateBot) {
-            BotCreationView(isPresented: $showCreateBot)
+            BotFatherFlowView()
+        }
+        .sheet(isPresented: $showCreateAutomation) {
+            BotCreationView(isPresented: $showCreateAutomation)
         }
     }
 }

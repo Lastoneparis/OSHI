@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Innsjekk bekreftet</string>
+    <string name="alive_a11y_neutral">Ingen innsjekk satt opp</string>
+    <string name="alive_a11y_overdue">Innsjekk forsinket</string>
+    <string name="alive_action_im_alive">Jeg lever</string>
+    <string name="alive_action_message_them">Skriv</string>
+    <string name="alive_bar_open_settings">Innstillinger for innsjekk</string>
+    <string name="alive_channel_description">Påminnelser om dine egne innsjekker, og varsler når noen du følger med på ikke har svart på sin.</string>
+    <string name="alive_channel_name">Sikkerhetsinnsjekker</string>
+    <string name="alive_confirmed_toast">Innsjekk sendt</string>
+    <string name="alive_duration_days_hours">%1$d d %2$d t</string>
+    <string name="alive_duration_hours_minutes">%1$d t %2$d min</string>
+    <string name="alive_duration_minutes">%1$d min</string>
+    <string name="alive_duration_now">under ett minutt</string>
+    <string name="alive_interval_24h">Hver 24. time</string>
+    <string name="alive_interval_48h">Hver 48. time</string>
+    <string name="alive_interval_72h">Hver 72. time</string>
+    <string name="alive_interval_custom">Egendefinert</string>
+    <string name="alive_interval_custom_hours">Hver %1$d. time</string>
+    <string name="alive_interval_every">hver %1$s</string>
+    <string name="alive_lane_you">Du</string>
+    <string name="alive_note_delivery">Påminnelser og varsler avhenger av nettverket ditt og av varslingstillatelsen. En glemt innsjekk betyr bare at ingen bekreftelse kom fram, ikke noe mer.</string>
+    <string name="alive_note_no_location">Ingen posisjon deles. En innsjekk inneholder ett tidsstempel og ingenting annet.</string>
+    <string name="alive_notification_mine_due_body">Bekreft at du lever, så %1$s ikke blir sittende og vente.</string>
+    <string name="alive_notification_mine_due_title">Tid for innsjekken din</string>
+    <string name="alive_notification_overdue_body">Innsjekken deres skulle ha kommet for %1$s siden. Det betyr bare at ingen bekreftelse har kommet fram.</string>
+    <string name="alive_notification_overdue_title">Ingen innsjekk fra %1$s</string>
+    <string name="alive_sheet_explainer">Bekreft etter en plan at du lever. %1$s ser nedtellingen din og får beskjed når den går ut uten svar.</string>
+    <string name="alive_sheet_interval">Hvor ofte</string>
+    <string name="alive_sheet_mine_switch">Sjekk inn hos %1$s</string>
+    <string name="alive_sheet_stop">Slutt å sjekke inn</string>
+    <string name="alive_sheet_their_next">Neste ventet %1$s</string>
+    <string name="alive_sheet_their_none">%1$s har ikke satt opp innsjekk her.</string>
+    <string name="alive_sheet_their_section">Innsjekk fra %1$s</string>
+    <string name="alive_state_confirmed_ago">bekreftet for %1$s siden</string>
+    <string name="alive_state_due_in">ventet om %1$s</string>
+    <string name="alive_state_not_set">ikke satt opp</string>
+    <string name="alive_state_overdue_by">ikke svart på %1$s</string>
+    <string name="alive_summary_confirmed">Bekreftet å være i live</string>
+    <string name="alive_summary_started">Sikkerhetssjekk startet</string>
+    <string name="alive_summary_stopped">Sikkerhetssjekk stoppet</string>
+    <string name="alive_title">Sikkerhetsinnsjekk</string>
+    <string name="alive_unknown_peer">denne kontakten</string>
+</resources>

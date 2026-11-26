@@ -113,6 +113,62 @@ object GroupUpdateAuthorizer {
         return SyncRequestDecision(true, true, "added-by-invite")
     }
 
+    /**
+     * __GROUP_SETTINGS_2026_11_20__ Link-join rules on top of [authorizeMemberSyncRequest]
+     * (docs/GROUP_INFO_SETTINGS_SPEC.md §3.3), for a request from a NON-member that the
+     * legacy rules would accept. Once a group has an invite token (an admin reset its link),
+     * a `member_sync_request` must carry it; a dissolved group admits nobody.
+     */
+    fun authorizeInviteToken(
+        base: SyncRequestDecision,
+        settings: com.oshi.messenger.data.model.GroupSettings?,
+        requestToken: String?,
+    ): SyncRequestDecision {
+        if (!base.addRequester) return base
+        if (settings?.dissolved == true) return SyncRequestDecision(false, false, "dissolved")
+        val expected = settings?.inviteToken ?: return base
+        val given = requestToken.orEmpty()
+        val ok = java.security.MessageDigest.isEqual(
+            expected.toByteArray(Charsets.UTF_8), given.toByteArray(Charsets.UTF_8)
+        )
+        return if (ok) SyncRequestDecision(true, true, "added-by-invite-token")
+        else SyncRequestDecision(false, false, "invite-revoked")
+    }
+
+    data class JoinDecision(val accept: Boolean, val alreadyMember: Boolean, val reason: String)
+
+    /**
+     * `join_request {handle}` from a public link (spec §3.1/§3.3). Only an ADMIN device of a
+     * group that is public under exactly that handle admits anyone; everything else is refused
+     * silently. [recentAccepts] = joins this device accepted for the group in the last hour.
+     */
+    fun authorizeJoinRequest(
+        sender: String?,
+        requesterFromBody: String?,
+        requestHandle: String?,
+        settings: com.oshi.messenger.data.model.GroupSettings?,
+        currentMemberKeys: List<String>,
+        evictedMemberKeys: List<String>,
+        weAreAdmin: Boolean,
+        recentAccepts: Int,
+        maxAcceptsPerHour: Int = 60,
+    ): JoinDecision {
+        val s = sender?.takeIf { it.isNotBlank() }?.let { canonicalIdentity(it) }
+            ?: return JoinDecision(false, false, "unauthenticated")
+        val body = requesterFromBody?.takeIf { it.isNotBlank() }?.let { canonicalIdentity(it) }
+        if (body != null && body != s) return JoinDecision(false, false, "body-names-a-third-party")
+        val h = com.oshi.messenger.data.model.GroupSettings.normalizeHandle(requestHandle)
+        if (h == null || settings == null || !settings.isPublic || settings.handle != h) {
+            return JoinDecision(false, false, "unknown-handle")
+        }
+        if (!weAreAdmin) return JoinDecision(false, false, "not-admin")
+        if (settings.dissolved) return JoinDecision(false, false, "dissolved")
+        if (evictedMemberKeys.any { canonicalIdentity(it) == s }) return JoinDecision(false, false, "banned")
+        if (currentMemberKeys.any { canonicalIdentity(it) == s }) return JoinDecision(true, true, "member")
+        if (recentAccepts >= maxAcceptsPerHour) return JoinDecision(false, false, "rate-limited")
+        return JoinDecision(true, false, "accepted")
+    }
+
     /** iOS `authorizeGroupUpdate` (GroupMessaging.swift:863-905). */
     fun authorize(
         currentMemberKeys: List<String>,
@@ -131,9 +187,15 @@ object GroupUpdateAuthorizer {
             )
         }
 
+        // 🔒 __GROUP_UNAUTH_TRANSPORT_2026_11_20__ No sender = nobody vouched for this
+        // payload (IPFS/VPS `group_update`, whose queue POST is unauthenticated and whose
+        // groupIds sit in public pins). It used to REPLACE the roster and the name: anyone
+        // on the internet holding a groupId could add their own key — and this phone would
+        // then wrap every later group message to them — or kick everyone. Cosmetic fields
+        // (picture, wallpaper, pin) still apply; roster, name and admins never do.
         if (sender.isNullOrBlank()) {
             return GroupUpdateDecision(
-                apply = true, keepAdminSet = true, keepMembership = false, keepName = false,
+                apply = true, keepAdminSet = true, keepMembership = true, keepName = true,
                 reason = "unauthenticated-transport"
             )
         }
@@ -170,6 +232,80 @@ object GroupUpdateAuthorizer {
                 )
         }
     }
+
+    /**
+     * 🔒 __GROUP_TOMBSTONE_AUTHZ_2026_11_20__ Eviction tombstones are MEMBERSHIP: they
+     * remove people. They are merged only when [decision] lets the sender change the
+     * roster. Before, the union ran for every applied update, so an ordinary member of an
+     * admin-only group (or an unauthenticated IPFS payload) could tombstone everyone —
+     * admins included — and the tombstones stuck.
+     */
+    fun mergeEvictedIfAuthorized(
+        decision: GroupUpdateDecision,
+        current: List<String>,
+        incoming: List<String>?,
+        /** Current admins: a non-admin may not tombstone them (__GROUP_TYPE_TAKEOVER_2026_11_20__). */
+        currentAdmins: List<String> = emptyList(),
+    ): List<String> {
+        if (!decision.apply || decision.keepMembership) return current
+        val allowed = if (decision.keepAdminSet) {
+            val admins = currentAdmins.map { canonicalIdentity(it) }.toSet()
+            incoming?.filter { canonicalIdentity(it) !in admins }
+        } else incoming
+        return unionEvicted(current, allowed)
+    }
+
+    /**
+     * 🔒 __GROUP_TYPE_TAKEOVER_2026_11_20__ A member who may change the roster but is not an
+     * admin (open group) may not REMOVE an admin: every current admin who is a member stays.
+     */
+    fun keepAdminsInRoster(
+        decision: GroupUpdateDecision,
+        incomingMembers: List<String>,
+        currentMembers: List<String>,
+        currentAdmins: List<String>,
+    ): List<String> {
+        if (!decision.keepAdminSet) return incomingMembers
+        val present = incomingMembers.map { canonicalIdentity(it) }.toSet()
+        val memberSet = currentMembers.map { canonicalIdentity(it) }.toSet()
+        val missingAdmins = currentAdmins.filter { canonicalIdentity(it) in memberSet && canonicalIdentity(it) !in present }
+        return incomingMembers + missingAdmins
+    }
+
+    /**
+     * 🔒 __GROUP_TOMBSTONE_AUTHZ_2026_11_20__ A definition's `stateVersion` is adopted only
+     * from a sender whose update could change the roster. Otherwise any member could push
+     * the counter to 2^31 and every later real admin update would be refused as stale.
+     */
+    fun mayAdoptStateVersion(decision: GroupUpdateDecision): Boolean =
+        decision.apply && !decision.keepMembership
+
+    /**
+     * 🔒 __GROUP_TYPE_TAKEOVER_2026_11_20__ The group TYPE is the permission model itself
+     * (admin_only / collaborative / public). Taking it from a non-admin let an ordinary
+     * member of an admin-only group send `type: collaborative` and gain add/remove/rename
+     * rights over everyone. Only an admin (the decision that may take the admin set) may
+     * change it.
+     */
+    fun mayChangeGroupType(decision: GroupUpdateDecision): Boolean = decision.apply && !decision.keepAdminSet
+
+    /**
+     * 🔒 __GROUP_TYPE_TAKEOVER_2026_11_20__ Description, picture, wallpaper, pin, avatar,
+     * isPublic: whoever may rename may change these (admin, or any member of an open
+     * group). A plain member of an admin-only group and an unauthenticated payload may not.
+     */
+    fun mayChangeGroupSettings(decision: GroupUpdateDecision): Boolean = decision.apply && !decision.keepName
+
+    /** Largest forward jump of `stateVersion` accepted in one update (desktop be19d428). */
+    const val MAX_STATE_VERSION_STEP = 1024
+
+    /**
+     * 🔒 __GROUP_TYPE_TAKEOVER_2026_11_20__ Even from an admin, a version far ahead of ours is
+     * not adopted: one update cannot push the counter so high that every later legitimate
+     * update is refused as stale.
+     */
+    fun isPlausibleVersionStep(current: Int?, incoming: Int): Boolean =
+        incoming >= 0 && incoming.toLong() - (current ?: 0).toLong() <= MAX_STATE_VERSION_STEP
 
     /**
      * The admin half of iOS `applyGroupUpdate` (GroupMessaging.swift:911-921): when the decision

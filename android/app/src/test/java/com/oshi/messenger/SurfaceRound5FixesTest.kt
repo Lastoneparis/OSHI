@@ -377,17 +377,18 @@ class SurfaceRound5FixesTest {
             // the spelling and stayed red. A test is an assertion; it goes stale like
             // any other line. So both spellings are accepted and the property is pinned
             // from the other side as well: the RAW wire body must never be copied.
+            // (__STRICT_MODE_2026_11_22__ `copyMessageText` = the same copy, refused in strict mode.)
             assertTrue(
                 "$name.onCopy must put the CATALOG's answer on the clipboard, not the raw body",
                 Regex(
-                    """(SensitiveClipboard\.copy\(\s*context\s*,\s*|""" +
+                    """(SensitiveClipboard\.copy(?:MessageText)?\(\s*context\s*,\s*|""" +
                         """clipboardManager\.setText\(AnnotatedString\()(textWithLink|displayContent)"""
                 ).containsMatchIn(onCopy)
             )
             assertFalse(
                 "$name.onCopy must never copy the raw wire body",
                 Regex(
-                    """(SensitiveClipboard\.copy\(\s*context\s*,\s*|""" +
+                    """(SensitiveClipboard\.copy(?:MessageText)?\(\s*context\s*,\s*|""" +
                         """clipboardManager\.setText\(AnnotatedString\()raw\b"""
                 ).containsMatchIn(onCopy)
             )

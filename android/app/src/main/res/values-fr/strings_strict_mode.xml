@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Mode sécurité renforcée</string>
+    <string name="strict_status_on">Activé : pas de copie, pas de capture d\'écran, invisible pour les applis de lecture d\'écran</string>
+    <string name="strict_status_off">Désactivé. Verrouille OSHI quand votre téléphone peut être surveillé</string>
+    <string name="strict_hero_on">Le mode sécurité renforcée est activé</string>
+    <string name="strict_intro">Pour quand un téléphone peut être surveillé. Un seul réglage verrouille OSHI : rien ne peut en être copié, l\'écran ne peut pas être capturé, et les applis qui lisent l\'écran, y compris les agents IA, ne voient rien.</string>
+    <string name="strict_section_switch">Mode</string>
+    <string name="strict_toggle_title">Mode sécurité renforcée</string>
+    <string name="strict_toggle_on">Activé sur cet appareil</string>
+    <string name="strict_toggle_off">Désactivé</string>
+    <string name="strict_block_paste_title">Bloquer aussi le collage</string>
+    <string name="strict_block_paste_subtitle">Rien ne peut non plus être collé dans OSHI</string>
+    <string name="strict_hide_presence_title">Masquer les accusés de lecture et la saisie</string>
+    <string name="strict_hide_presence_subtitle">Les autres ne voient pas quand vous lisez ou écrivez</string>
+    <string name="strict_forced_subtitle">Défini par le mode sécurité renforcée</string>
+    <string name="strict_blocked_toast">Bloqué par le mode sécurité renforcée</string>
+    <string name="strict_unlock_title">Désactiver le mode sécurité renforcée</string>
+    <string name="strict_unlock_subtitle">Confirmez que c\'est bien vous</string>
+    <string name="strict_threats_title">Applis pouvant lire ou contrôler votre écran</string>
+    <string name="strict_threats_none">Aucune trouvée sur ce téléphone.</string>
+    <string name="strict_threat_a11y">Service d\'accessibilité qui n\'est pas un outil d\'assistance</string>
+    <string name="strict_threat_remote">Appli de contrôle à distance ou de recopie d\'écran</string>
+    <string name="strict_threats_open">Vérifier</string>
+    <string name="strict_threats_explainer">OSHI ne peut pas désactiver une autre appli. Si vous n\'en reconnaissez pas une, désactivez-la dans Réglages Android › Accessibilité, ou désinstallez-la.</string>
+    <string name="strict_banner_title">Des applis peuvent lire ou contrôler cet écran</string>
+    <string name="strict_banner_body">%1$s. Le mode sécurité renforcée masque OSHI à leur vue là où Android le permet.</string>
+    <string name="strict_banner_dismiss">Ignorer</string>
+    <string name="strict_does_title">Ce qu\'il fait</string>
+    <string name="strict_does_copy">Aucune copie, coupe, transfert, partage ou enregistrement des messages. Le texte ne peut pas être sélectionné, et tout ce qu\'OSHI a placé dans le presse-papiers est effacé.</string>
+    <string name="strict_does_paste">Le collage dans OSHI est bloqué lorsque « Bloquer aussi le collage » est activé, y compris la commande coller du clavier.</string>
+    <string name="strict_does_screen">Les captures d\'écran, l\'enregistrement et le partage d\'écran affichent un écran noir. L\'aperçu des applis récentes est masqué.</string>
+    <string name="strict_does_agents">Les applis qui lisent l\'écran via l\'accessibilité, y compris les agents IA, ne voient aucun contenu OSHI (Android 14 et versions ultérieures). Les appuis qu\'elles simulent sont ignorés.</string>
+    <string name="strict_does_overlays">Les appuis sont ignorés quand une autre appli s\'affiche par-dessus OSHI.</string>
+    <string name="strict_does_notifications">Les notifications indiquent seulement « Nouveau message » : ni nom, ni photo, ni texte.</string>
+    <string name="strict_does_lock">Verrouillage de l\'appli à chaque retour dans OSHI (si votre téléphone a un verrouillage d\'écran).</string>
+    <string name="strict_does_keyboard">Clavier incognito : le clavier reçoit la consigne de ne pas apprendre ce que vous tapez.</string>
+    <string name="strict_does_network">Pas d\'aperçu de lien ni de recherche GIPHY : rien n\'est récupéré sur des sites tiers.</string>
+    <string name="strict_does_presence">Accusés de lecture et indicateurs de saisie désactivés (si vous avez choisi de les masquer).</string>
+    <string name="strict_does_relay">Relais de confidentialité activé lorsqu\'il y en a un de disponible.</string>
+    <string name="strict_does_restore">Vos réglages précédents reviennent quand vous désactivez le mode.</string>
+    <string name="strict_cannot_title">Ce qu\'il ne peut pas faire</string>
+    <string name="strict_cannot_malware">Aucune appli ne peut vous protéger totalement d\'un logiciel malveillant ni d\'un téléphone compromis (rooté).</string>
+    <string name="strict_cannot_keyboard">Votre clavier voit toujours ce que vous tapez. Une suggestion du presse-papiers qu\'il saisit pour vous ne se distingue pas d\'une frappe.</string>
+    <string name="strict_cannot_readers">Les lecteurs d\'écran pour personnes aveugles ou malvoyantes continuent de fonctionner, mais les autres applis d\'accessibilité ne peuvent pas lire OSHI tant que le mode est activé.</string>
+    <string name="strict_cannot_old">Sur Android 13 et versions antérieures, OSHI ne peut pas masquer son contenu aux applis d\'accessibilité. Il peut seulement vous les signaler.</string>
+    <string name="strict_cannot_camera">Quelqu\'un peut toujours photographier l\'écran avec un autre appareil.</string>
+    <string name="strict_cannot_recipient">Il protège ce téléphone uniquement, pas ceux des personnes à qui vous écrivez.</string>
+    <string name="strict_auto_lock_immediate">Immédiatement (mode sécurité renforcée)</string>
+</resources>

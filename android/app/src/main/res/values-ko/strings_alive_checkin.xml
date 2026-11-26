@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">안전 확인 완료</string>
+    <string name="alive_a11y_neutral">설정된 안전 확인 없음</string>
+    <string name="alive_a11y_overdue">안전 확인 기한 지남</string>
+    <string name="alive_action_im_alive">무사해요</string>
+    <string name="alive_action_message_them">메시지</string>
+    <string name="alive_bar_open_settings">안전 확인 설정</string>
+    <string name="alive_channel_description">내 안전 확인 알림과, 내가 지켜보는 사람이 응답하지 않았을 때의 알림입니다.</string>
+    <string name="alive_channel_name">안전 확인</string>
+    <string name="alive_confirmed_toast">안전 확인을 보냈습니다</string>
+    <string name="alive_duration_days_hours">%1$d일 %2$d시간</string>
+    <string name="alive_duration_hours_minutes">%1$d시간 %2$d분</string>
+    <string name="alive_duration_minutes">%1$d분</string>
+    <string name="alive_duration_now">1분 미만</string>
+    <string name="alive_interval_24h">24시간마다</string>
+    <string name="alive_interval_48h">48시간마다</string>
+    <string name="alive_interval_72h">72시간마다</string>
+    <string name="alive_interval_custom">사용자 지정</string>
+    <string name="alive_interval_custom_hours">%1$d시간마다</string>
+    <string name="alive_interval_every">%1$s마다</string>
+    <string name="alive_lane_you">나</string>
+    <string name="alive_note_delivery">알림은 네트워크와 알림 권한에 따라 달라집니다. 안전 확인을 놓쳤다는 것은 확인이 도착하지 않았다는 뜻일 뿐, 그 이상은 아닙니다.</string>
+    <string name="alive_note_no_location">위치는 공유되지 않습니다. 안전 확인에는 타임스탬프 하나만 담깁니다.</string>
+    <string name="alive_notification_mine_due_body">%1$s님이 기다리지 않도록 무사하다고 확인해 주세요.</string>
+    <string name="alive_notification_mine_due_title">안전 확인 시간입니다</string>
+    <string name="alive_notification_overdue_body">안전 확인 기한이 %1$s 전에 지났습니다. 확인이 도착하지 않았다는 뜻일 뿐입니다.</string>
+    <string name="alive_notification_overdue_title">%1$s님의 안전 확인 없음</string>
+    <string name="alive_sheet_explainer">정해진 주기로 무사함을 확인합니다. %1$s님은 카운트다운을 볼 수 있고, 응답 없이 시간이 지나면 알림을 받습니다.</string>
+    <string name="alive_sheet_interval">주기</string>
+    <string name="alive_sheet_mine_switch">%1$s님에게 안전 확인 보내기</string>
+    <string name="alive_sheet_stop">안전 확인 중지</string>
+    <string name="alive_sheet_their_next">다음 예정: %1$s</string>
+    <string name="alive_sheet_their_none">%1$s님은 여기에서 안전 확인을 설정하지 않았습니다.</string>
+    <string name="alive_sheet_their_section">%1$s님의 안전 확인</string>
+    <string name="alive_state_confirmed_ago">%1$s 전에 확인</string>
+    <string name="alive_state_due_in">%1$s 후 예정</string>
+    <string name="alive_state_not_set">설정 안 됨</string>
+    <string name="alive_state_overdue_by">%1$s째 응답 없음</string>
+    <string name="alive_summary_confirmed">살아 있음을 확인했습니다</string>
+    <string name="alive_summary_started">안전 확인을 시작했습니다</string>
+    <string name="alive_summary_stopped">안전 확인을 중지했습니다</string>
+    <string name="alive_title">안전 확인</string>
+    <string name="alive_unknown_peer">이 연락처</string>
+</resources>

@@ -1203,7 +1203,9 @@ class VoIPPushManager: NSObject, ObservableObject {
                 signRequest(&request)
 
                 do {
+                    let pollSentAt = Date()
                     let (data, response) = try await URLSession.shared.data(for: request)
+                    ServerClock.observe(response: response, sentAt: pollSentAt)  // __CALL_CLOCK_SKEW_2026_11_21__
 
                     guard let httpResponse = response as? HTTPURLResponse,
                           httpResponse.statusCode == 200 else {
@@ -1249,7 +1251,11 @@ class VoIPPushManager: NSObject, ObservableObject {
                                         object: nil,
                                         userInfo: [
                                             "senderPublicKey": callerPublicKey,
-                                            "encryptedData": encryptedData
+                                            "encryptedData": encryptedData,
+                                            // __CROSS_CALL_GUARD_2026_11_21__ / __CALL_CLOCK_SKEW_2026_11_21__
+                                            // the relay envelope: callId + server arrival stamp.
+                                            "callId": (signal["callId"] as? String) ?? "",
+                                            "serverTimestamp": (signal["timestamp"] as? NSNumber) ?? NSNumber(value: 0)
                                         ]
                                     )
                                 }
@@ -1900,7 +1906,9 @@ extension VoIPPushManager: PKPushRegistryDelegate {
             return nil
         }()
         if let ts = callTimestamp {
-            let age = Date().timeIntervalSince1970 - ts
+            // __CALL_CLOCK_SKEW_2026_11_21__ on the server's clock when this phone is ≥ 5 s
+            // off it (a phone a minute fast used to bury every incoming call here).
+            let age = ServerClock.pushAgeSeconds(callTimestampSeconds: ts)
             if age > 60 {
                 OshiLog.call.info("🪦 VoIPPush: STALE call (age \(Int(age))s) — reporting+ending, not ringing")
                 CallFileLogger.shared.log("🪦 VoIPPush: STALE callId=\(callId.prefix(8)) age=\(Int(age))s — suppressed ring")
@@ -2483,7 +2491,7 @@ extension VoIPPushManager {
             // Call start time (epoch seconds). The callee refuses to ring for a
             // push whose call is already stale (delivered/re-sent minutes late),
             // which is what caused the "ghost ring after the caller hung up".
-            "callTimestamp": Date().timeIntervalSince1970
+            "callTimestamp": Double(ServerClock.signingNowMs()) / 1000.0
         ]
         if isVideoCall {
             payload["isVideoCall"] = true
@@ -2514,7 +2522,9 @@ extension VoIPPushManager {
             shared.signRequest(&request)
 
             do {
+                let pushSentAt = Date()
                 let (responseData, response) = try await URLSession.shared.data(for: request)
+                ServerClock.observe(response: response, sentAt: pushSentAt)  // __CALL_CLOCK_SKEW_2026_11_21__
 
                 guard let httpResponse = response as? HTTPURLResponse else {
                     continue
@@ -2693,7 +2703,7 @@ final class VoIPMainBlockedSelfTest: NSObject, CXCallObserverDelegate {
                 "callerPublicKey": "SELFTEST0000000000000000000000000000000000A=",
                 "callerName": "VoIP self-test",
                 "callId": id,
-                "callTimestamp": Date().timeIntervalSince1970,
+                "callTimestamp": Double(ServerClock.signingNowMs()) / 1000.0,
                 "isVideoCall": false,
             ]
         }

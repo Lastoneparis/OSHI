@@ -127,8 +127,15 @@ struct MascotLaunchView: View {
     @State private var waveSkipped = false
     @State private var finished = false
 
-    private let neutral: UIImage? = OSHIMascotCatalog.launchWaveURL(index: 0)
+    /// __LAUNCH_LAG_2026_11_22__ Read ONCE per process. As a stored `let` it
+    /// was re-read from the bundle every time the App body rebuilt this struct
+    /// — and the App body rebuilds on every publish of its seven state objects,
+    /// which is constantly during launch — each time a NEW `UIImage`, so
+    /// SwiftUI also re-decoded the 512 px PNG on the main thread to draw it.
+    private static let neutralImage: UIImage? = OSHIMascotCatalog.launchWaveURL(index: 0)
         .flatMap { UIImage(contentsOfFile: $0.path) }
+        .map { $0.preparingForDisplay() ?? $0 }
+    private var neutral: UIImage? { Self.neutralImage }
 
     private typealias T = MascotLaunchTiming
 

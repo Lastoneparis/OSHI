@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Tiukka suojaustila</string>
+    <string name="strict_status_on">Päällä: ei kopiointia, ei kuvakaappauksia, piilossa näytönlukusovelluksilta</string>
+    <string name="strict_status_off">Pois. Lukitsee OSHIn, kun puhelinta voidaan vakoilla</string>
+    <string name="strict_hero_on">Tiukka suojaustila on päällä</string>
+    <string name="strict_intro">Tilanteisiin, joissa puhelinta voidaan vakoilla. Yksi kytkin lukitsee OSHIn: mitään ei voi kopioida, näyttöä ei voi tallentaa, eivätkä näyttöä lukevat sovellukset, tekoälyagentit mukaan lukien, näe mitään.</string>
+    <string name="strict_section_switch">Tila</string>
+    <string name="strict_toggle_title">Tiukka suojaustila</string>
+    <string name="strict_toggle_on">Päällä tällä laitteella</string>
+    <string name="strict_toggle_off">Pois</string>
+    <string name="strict_block_paste_title">Estä myös liittäminen</string>
+    <string name="strict_block_paste_subtitle">OSHIin ei voi myöskään liittää mitään</string>
+    <string name="strict_hide_presence_title">Piilota lukukuittaukset ja kirjoitus</string>
+    <string name="strict_hide_presence_subtitle">Muut eivät näe, milloin luet tai kirjoitat</string>
+    <string name="strict_forced_subtitle">Tiukan suojaustilan asettama</string>
+    <string name="strict_blocked_toast">Tiukka suojaustila esti tämän</string>
+    <string name="strict_unlock_title">Poista tiukka suojaustila käytöstä</string>
+    <string name="strict_unlock_subtitle">Vahvista, että se olet sinä</string>
+    <string name="strict_threats_title">Sovellukset, jotka voivat lukea tai ohjata näyttöäsi</string>
+    <string name="strict_threats_none">Tästä puhelimesta ei löytynyt mitään.</string>
+    <string name="strict_threat_a11y">Käytettävyyspalvelu, joka ei ole apuväline</string>
+    <string name="strict_threat_remote">Etäohjaus- tai näytönpeilaussovellus</string>
+    <string name="strict_threats_open">Tarkista</string>
+    <string name="strict_threats_explainer">OSHI ei voi sammuttaa toista sovellusta. Jos et tunnista jotakin niistä, poista se käytöstä Androidin kohdassa Asetukset › Käytettävyys tai poista se.</string>
+    <string name="strict_banner_title">Sovellukset voivat lukea tai ohjata tätä näyttöä</string>
+    <string name="strict_banner_body">%1$s. Tiukka suojaustila piilottaa OSHIn niiltä siellä, missä Android sallii.</string>
+    <string name="strict_banner_dismiss">Ohita</string>
+    <string name="strict_does_title">Mitä se tekee</string>
+    <string name="strict_does_copy">Viestejä ei voi kopioida, leikata, välittää, jakaa tai tallentaa. Tekstiä ei voi valita, ja kaikki, minkä OSHI laittoi leikepöydälle, tyhjennetään.</string>
+    <string name="strict_does_paste">Liittäminen OSHIin estetään, kun ”Estä myös liittäminen” on päällä, myös näppäimistön liitä-komento.</string>
+    <string name="strict_does_screen">Kuvakaappaukset, näytön tallennus ja näytön jako näyttävät mustaa. Viimeisimpien sovellusten esikatselu on piilotettu.</string>
+    <string name="strict_does_agents">Näyttöä käytettävyyden kautta lukevat sovellukset, tekoälyagentit mukaan lukien, eivät näe OSHIn sisältöä (Android 14 ja uudemmat). Niiden syöttämät napautukset ohitetaan.</string>
+    <string name="strict_does_overlays">Napautukset ohitetaan, kun toinen sovellus piirtää OSHIn päälle.</string>
+    <string name="strict_does_notifications">Ilmoituksissa lukee vain ”Uusi viesti”: ei nimeä, kuvaa eikä tekstiä.</string>
+    <string name="strict_does_lock">Sovelluslukitus aina, kun palaat OSHIin (jos puhelimessa on näytön lukitus).</string>
+    <string name="strict_does_keyboard">Incognito-näppäimistö: näppäimistöä pyydetään olemaan oppimatta kirjoittamaasi.</string>
+    <string name="strict_does_network">Ei linkkien esikatseluja eikä GIPHY-hakua: mitään ei haeta kolmansien osapuolten sivustoilta.</string>
+    <string name="strict_does_presence">Lukukuittaukset ja kirjoitusilmaisimet pois (jos valitsit niiden piilottamisen).</string>
+    <string name="strict_does_relay">Yksityisyysvälitin otetaan käyttöön, kun sellainen on saatavilla.</string>
+    <string name="strict_does_restore">Aiemmat asetuksesi palautuvat, kun poistat tilan käytöstä.</string>
+    <string name="strict_cannot_title">Mitä se ei voi tehdä</string>
+    <string name="strict_cannot_malware">Mikään sovellus ei suojaa täysin haittaohjelmilta tai murretulta (root) puhelimelta.</string>
+    <string name="strict_cannot_keyboard">Näppäimistösi näkee yhä, mitä kirjoitat. Sen puolestasi kirjoittamaa leikepöytäehdotusta ei voi erottaa kirjoittamisesta.</string>
+    <string name="strict_cannot_readers">Sokeiden ja heikkonäköisten näytönlukijat toimivat edelleen, mutta muut käytettävyyssovellukset eivät voi lukea OSHIa, kun tila on päällä.</string>
+    <string name="strict_cannot_old">Android 13:ssa ja vanhemmissa OSHI ei voi piilottaa sisältöään käytettävyyssovelluksilta. Se voi vain varoittaa niistä.</string>
+    <string name="strict_cannot_camera">Joku voi yhä valokuvata näytön toisella laitteella.</string>
+    <string name="strict_cannot_recipient">Se suojaa vain tätä puhelinta, ei niiden ihmisten puhelimia, joille kirjoitat.</string>
+    <string name="strict_auto_lock_immediate">Heti (Tiukka suojaustila)</string>
+</resources>

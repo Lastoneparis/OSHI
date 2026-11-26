@@ -193,6 +193,19 @@ struct MediaGalleryView: View {
         // Closing the gallery must silence a voice message that is still playing —
         // otherwise it keeps going with no visible control to stop it.
         .onDisappear { MediaAudioPlayback.shared.stop() }
+        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ The gallery knows its own
+        // conversation, so it reads the switch itself (it is also opened from
+        // the contact profile, outside the thread). Rows and the full-screen
+        // viewer below hide every way out for media while it is on — the
+        // gallery does not know who sent each item, so it treats all as others'.
+        .environment(\.advancedChatPrivacy, AdvancedChatPrivacyContext(isOn: isAdvancedPrivacyOn))
+    }
+
+    @ObservedObject private var advancedPrivacyStore = AdvancedChatPrivacyStore.shared
+    private var isAdvancedPrivacyOn: Bool {
+        if let groupId { return advancedPrivacyStore.isOn(groupId.uuidString) }
+        if let peerPublicKey { return advancedPrivacyStore.isOn(peerPublicKey) }
+        return false
     }
 
     // MARK: - Empty state
@@ -365,6 +378,12 @@ private struct MediaFileRow: View {
     let item: MediaFileItem
     @State private var showShare = false
     @ObservedObject private var playback = MediaAudioPlayback.shared
+    @Environment(\.advancedChatPrivacy) private var privacy
+    /// Strict mode, and advanced chat privacy (🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__).
+    private var mayExport: Bool {
+        StrictSecurityMode.allowsMediaExport
+            && AdvancedChatPrivacyPolicy.allowsSavingMedia(protected: privacy.isOn, isFromMe: nil)
+    }
 
     private var isPlaying: Bool { playback.playingId == item.id }
 
@@ -406,7 +425,7 @@ private struct MediaFileRow: View {
 
             // A voice message still needs a way out to Files/other apps; the row
             // tap is spent on playback, so give sharing its own affordance.
-            if item.isAudio {
+            if item.isAudio && mayExport {  // __STRICT_SECURITY_MODE_2026_11_22__
                 Button { showShare = true } label: {
                     Image(systemName: "square.and.arrow.up")
                         .font(.footnote)
@@ -417,7 +436,10 @@ private struct MediaFileRow: View {
             }
         }
         .contentShape(Rectangle())
-        .onTapGesture { if item.isAudio { playback.toggle(item) } else { showShare = true } }
+        .onTapGesture {
+            if item.isAudio { playback.toggle(item) }
+            else if mayExport { showShare = true }  // __STRICT_SECURITY_MODE_2026_11_22__
+        }
         .sheet(isPresented: $showShare) {
             MediaFileShareSheet(item: item)
         }
@@ -509,6 +531,7 @@ struct MediaGalleryItem: Identifiable {
 
 private struct MediaGalleryCell: View {
     let item: MediaGalleryItem
+    @Environment(\.advancedChatPrivacy) private var advancedChatPrivacy
     @State private var thumbnail: UIImage?
     @State private var showFullScreen = false
 
@@ -594,6 +617,7 @@ private struct MediaGalleryCell: View {
                     isCompressed: false
                 )
             )
+            .environment(\.advancedChatPrivacy, advancedChatPrivacy)
         }
     }
 }

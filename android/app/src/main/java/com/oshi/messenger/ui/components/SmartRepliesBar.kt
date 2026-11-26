@@ -2,6 +2,7 @@ package com.oshi.messenger.ui.components
 
 import com.oshi.messenger.ui.theme.glassHairline
 import com.oshi.messenger.ui.theme.GlassTier
+import com.oshi.messenger.ui.theme.glassOpaque
 import com.oshi.messenger.ui.theme.glassOn
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -73,7 +74,7 @@ fun SmartRepliesBar(
                     shape = RoundedCornerShape(16.dp),
                     // __OLED_GLASS_2026_11_16__ OLED black: glass chips, rim instead of outline.
                     colors = SuggestionChipDefaults.suggestionChipColors(
-                        containerColor = if (glass) GlassTier.Chip.opaque else Color(0xFF5616EC).copy(alpha = 0.08f)
+                        containerColor = if (glass) glassOpaque(GlassTier.Chip) else Color(0xFF5616EC).copy(alpha = 0.08f)
                     ),
                     border = if (glass) null else SuggestionChipDefaults.suggestionChipBorder(),
                     modifier = if (glass) Modifier.glassHairline(RoundedCornerShape(16.dp), highlight = false, visibleHeight = 32.dp) else Modifier

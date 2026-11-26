@@ -1074,11 +1074,15 @@ enum MessageExportV2 {
            let dict = try? JSONDecoder().decode([String: String].self, from: data) {
             aliases = dict
         }
-        return Snapshot(
+        let snapshot = Snapshot(
             direct: messageManager.messages, groups: items, aliases: aliases, myKey: me,
             directMedia: { [weak messageManager] m in messageManager?.exportMediaBytes(for: m) },
             groupMedia: { m in m.mediaType.flatMap { gm.loadGroupMediaAttachment(for: m.id.uuidString, type: $0) } }
         )
+        // __ADVANCED_CHAT_PRIVACY_2026_11_26__ A conversation with advanced chat
+        // privacy on is never exported — by whoever turned it on, or anyone else.
+        let privacy = AdvancedChatPrivacyStore.shared
+        return AdvancedChatPrivacyPolicy.filterForExport(snapshot) { privacy.isOn($0) }
     }
 
     /// Instantané → JSON v2. `mediaSkipped` = médias laissés hors budget.

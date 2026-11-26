@@ -23,7 +23,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,19 +54,164 @@ class GroupChatViewModel @Inject constructor(
     // __BOT_IN_THE_PIPELINE_2026_11_09__ for the `/` menu and the no-bot hint. Injecting it
     // also guarantees the singleton (and with it GroupManager's bot hook) exists.
     private val botManager: com.oshi.messenger.service.BotManager,
+    // __WALLPAPER_PERSIST_2026_11_21__ a personal wallpaper per group / channel.
+    private val wallpaperManager: com.oshi.messenger.service.WallpaperManager,
+    // __BOTS_PHASE1_2026_11_24__ bots added to this group + their public profile (username).
+    private val botGroupStore: com.oshi.messenger.service.BotGroupStore,
+    private val botDirectoryApi: com.oshi.messenger.network.bot.BotDirectoryApi,
+    // __CHANNEL_WEB_2026_11_26__ public post links / embed code / deep-link scroll.
+    private val channelWeb: com.oshi.messenger.service.channelweb.ChannelWebPublisher,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val groupId: String = savedStateHandle.get<String>("groupId") ?: ""
 
     /**
+     * __WALLPAPER_PERSIST_2026_11_21__ The wallpaper THIS user chose for this
+     * group or channel, on this device only (iOS keys `ChatWallpaperManager` by
+     * the group id the same way). Null = none of their own.
+     */
+    val personalWallpaper: StateFlow<com.oshi.messenger.ui.components.ChatWallpaper?> =
+        wallpaperManager.revision
+            .map { wallpaperManager.storedWallpaper(groupId) }
+            .flowOn(kotlinx.coroutines.Dispatchers.Default)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /**
+     * The app-wide default — the same fallback a 1:1 chat uses (Mesh until the
+     * user picks another): « les fonds d'écran sur les groupes comme sur les
+     * conversations privées ».
+     */
+    val chosenDefaultWallpaper: StateFlow<com.oshi.messenger.ui.components.ChatWallpaper?> =
+        wallpaperManager.globalWallpaper
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), wallpaperManager.globalWallpaper.value)
+
+    fun setPersonalWallpaper(wallpaper: com.oshi.messenger.ui.components.ChatWallpaper) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            wallpaperManager.setWallpaper(groupId, wallpaper)
+        }
+    }
+
+    fun clearPersonalWallpaper() {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            wallpaperManager.resetToGlobal(groupId)
+        }
+    }
+
+    /**
      * __BOT_IN_THE_PIPELINE_2026_11_09__ This group's bot commands for the `/` menu.
      * iOS lists them beside `/pay` (GroupViews.swift:4797-4800); Android listed `/pay` only,
      * so a bot's commands were something you had to be told about.
      */
-    val botCommands: StateFlow<List<com.oshi.messenger.util.SlashCommandCatalog.Entry>> =
-        botManager.slashCommandsForGroup(groupId)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val botCommands: StateFlow<List<com.oshi.messenger.util.SlashCommandCatalog.Entry>> by lazy {
+        // __BOT_COMMANDS_2026_11_24__ + the commands of PLATFORM bots seen in this thread.
+        combine(botManager.slashCommandsForGroup(groupId), _remoteBotCommands) { local, remote ->
+            com.oshi.messenger.util.BotCommandMenu.merge(local, com.oshi.messenger.util.BotCommandMenu.remoteEntries(remote))
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    }
+
+    /**
+     * __BOT_COMMANDS_2026_11_24__ The bots of this conversation, for the commands menu
+     * button: local bots this device runs here (with their id, so the owner can open their
+     * settings) and platform bots that have spoken in the thread.
+     */
+    data class BotHere(val name: String, val emoji: String, val localBotId: String?, val commandCount: Int)
+
+    val botsHere: StateFlow<List<BotHere>> by lazy {
+        combine(botManager.bots, botCommands, _remoteBotCommands, _seenPlatformBots) { bots, cmds, remote, seen ->
+            val me = runCatching { cryptoManager.getPublicKeyString() }.getOrDefault("")
+            val local = bots.filter { b ->
+                b.isEnabled && com.oshi.messenger.service.BotManager.isOwnedBy(b.ownerPublicKey, me) &&
+                    b.assignedGroups.split(",").any { it.trim().equals(groupId, ignoreCase = true) }
+            }.map { b ->
+                val label = "${b.avatarEmoji} ${b.name}".trim()
+                BotHere(b.name, b.avatarEmoji, b.id, cmds.count { it.botLabel == label })
+            }
+            local + seen.map { bot ->
+                BotHere(bot.name, "🤖", null, remote.entries.firstOrNull { it.key.botId == bot.botId }?.value?.size ?: 0)
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    }
+
+    /** Platform bots seen in the thread → their command lists, once fetched. */
+    private val _remoteBotCommands =
+        MutableStateFlow<Map<com.oshi.messenger.util.BotCommandMenu.SeenBot, List<com.oshi.messenger.util.BotCommandSyntax.Spec>>>(emptyMap())
+    private val _seenPlatformBots = MutableStateFlow<List<com.oshi.messenger.util.BotCommandMenu.SeenBot>>(emptyList())
+    private val queriedBotIds = java.util.Collections.synchronizedSet(HashSet<String>())
+
+    /**
+     * Ask the server, once per bot and per screen, for the commands of each platform bot
+     * that has spoken here. The member route is not deployed yet (see
+     * [com.oshi.messenger.network.bot.BotCommandDirectory]); until it is, nothing is listed
+     * for those bots, which is what happened before.
+     */
+    private fun discoverPlatformBots(messages: List<GroupMessage>) {
+        viewModelScope.launch {
+            val owned = runCatching { botManager.bots.first() }.getOrDefault(emptyList())
+                .map { botGroupStore.botIdFor(it) }.toSet()
+            val added = botGroupStore.botsIn(groupId).filterNot { it.botId.lowercase() in owned }
+            val seen = com.oshi.messenger.util.BotCommandMenu.withAdded(
+                com.oshi.messenger.util.BotCommandMenu.seenPlatformBots(
+                    messages.map { com.oshi.messenger.util.BotCommandMenu.Sender(it.senderPublicKey, it.botId, it.senderName) },
+                    owned
+                ),
+                added
+            )
+            if (seen != _seenPlatformBots.value) _seenPlatformBots.value = seen
+            for (seenBot in seen) {
+                if (!queriedBotIds.add(seenBot.botId)) continue
+                // __BOTS_PHASE1_2026_11_24__ learn the @username so `/cmd@username` routes.
+                val bot = if (seenBot.username != null) seenBot else {
+                    val profile = runCatching { botDirectoryApi.publicProfile(botId = seenBot.botId) }.getOrNull()
+                    (profile as? com.oshi.messenger.network.bot.BotApiResult.Ok)?.value
+                        ?.let { seenBot.copy(username = it.username) } ?: seenBot
+                }
+                val result = runCatching {
+                    botPlatformClient.publicCommands(bot.botId, groupId, _myPublicKey.value)
+                }.getOrNull()
+                val commands = (result as? com.oshi.messenger.network.bot.PublicCommands.Listed)?.commands
+                    ?: added.firstOrNull { it.botId.equals(bot.botId, ignoreCase = true) }?.commands.orEmpty()
+                if (commands.isNotEmpty()) {
+                    _remoteBotCommands.value = _remoteBotCommands.value + (bot to commands)
+                }
+            }
+        }
+    }
+
+    /**
+     * A command sent in the group is also DISPATCHED to each platform bot that advertises
+     * it: such a bot cannot read the encrypted thread, so without this it never hears the
+     * command it asked users to type. Local bots are answered by their owner's phone as
+     * before (GroupManager → BotManager.processMessage).
+     */
+    private fun dispatchToPlatformBots(content: String) {
+        val targets = com.oshi.messenger.util.BotCommandMenu.dispatchTargets(content, _remoteBotCommands.value)
+        if (targets.isEmpty()) return
+        viewModelScope.launch {
+            for (botId in targets) {
+                val result = botPlatformClient.dispatchCommand(
+                    auth = BotPlatformClient.BotAuth.ByBotId(botId),
+                    groupId = groupId,
+                    fromPublicKey = _myPublicKey.value,
+                    text = content.trim(),
+                    messageId = java.util.UUID.randomUUID().toString()
+                )
+                val notice = when (result) {
+                    is BotPlatformClient.DispatchResult.Ok -> null
+                    BotPlatformClient.DispatchResult.NotAMember -> R.string.bot_action_not_member
+                    BotPlatformClient.DispatchResult.UnknownBot -> R.string.bot_action_unknown_bot
+                    BotPlatformClient.DispatchResult.NoAuth -> R.string.bot_action_unavailable
+                    is BotPlatformClient.DispatchResult.Failed -> R.string.bot_action_failed
+                }
+                notice?.let { _botNotices.tryEmit(BotNotice.Message(it)) }
+            }
+        }
+    }
+
+    /** __BOT_COMMANDS_2026_11_24__ A tap on a bot command in the menu: send it right away. */
+    fun sendBotCommand(entry: com.oshi.messenger.util.SlashCommandCatalog.Entry) {
+        sendMessage(com.oshi.messenger.util.SlashCommandCatalog.sendText(entry))
+    }
 
     /** iOS __BOT_NO_BOT_HINT__: a `/command` sent where no bot listens says so, once per group. */
     private val _noBotHint = MutableStateFlow(false)
@@ -84,11 +232,45 @@ class GroupChatViewModel @Inject constructor(
      */
     val unreachableMembers: StateFlow<Map<String, Set<String>>> get() = groupManager.unreachableMembers
 
+    /** __GROUP_RESEND_2026_11_25__ msgId → members still owed that message (absent = all reached). */
+    val pendingDeliveries: StateFlow<Map<String, com.oshi.messenger.service.GroupPendingDeliveryStore.Entry>>
+        get() = groupManager.pendingDeliveries
+
+    fun retryPendingDelivery(msgId: String) = groupManager.retryPendingDelivery(msgId)
+
     private val _messages = MutableStateFlow<List<GroupMessage>>(emptyList())
     val messages: StateFlow<List<GroupMessage>> = _messages.asStateFlow()
 
+    /**
+     * __GROUP_COMMENTS_2026_11_21__ (spec §2.12) lower-case post id → its comments, oldest
+     * first. Comments are kept OUT of [messages] (they are not timeline rows).
+     */
+    private val _comments = MutableStateFlow<Map<String, List<GroupMessage>>>(emptyMap())
+    val comments: StateFlow<Map<String, List<GroupMessage>>> = _comments.asStateFlow()
+
+    /** Post id → result of the last send, for the thread's "too fast" message. */
+    fun sendComment(postId: String, text: String, replyTo: GroupMessage?): GroupManager.CommentSendResult {
+        val g = _group.value ?: return GroupManager.CommentSendResult.NO_POST
+        return groupManager.sendComment(g.id, postId, text, replyTo)
+    }
+
+    fun isCommentId(messageId: String): Boolean = groupManager.isCommentId(messageId)
+
+    /** A post can carry comments only when its author is a current admin (§2.12.3). */
+    fun isAdminKey(key: String): Boolean = groupManager.isAdminOf(groupId, key)
+
     private val _myPublicKey = MutableStateFlow(cryptoManager.getPublicKeyString())
     val myPublicKey: StateFlow<String> = _myPublicKey.asStateFlow()
+
+    init {
+        // __BOT_COMMANDS_2026_11_24__ learn which platform bots speak in this thread.
+        viewModelScope.launch {
+            _messages
+                .map { list -> list.filter { it.senderPublicKey.startsWith("bot:") && !it.botId.isNullOrBlank() } }
+                .distinctUntilChangedBy { list -> list.mapNotNull { it.botId }.toSet() }
+                .collect { if (it.isNotEmpty() || botGroupStore.botsIn(groupId).isNotEmpty()) discoverPlatformBots(it) }
+        }
+    }
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -168,6 +350,10 @@ class GroupChatViewModel @Inject constructor(
 
     /** Start observing group state (groups + messages) from GroupManager. */
     private fun observeGroup(id: String) {
+        // __GROUP_COMMENTS_2026_11_21__ the settings side document loads lazily on the first
+        // `settingsOf`; without this the `groupSettings` flow the screen reads (comments bars,
+        // channel banner) stayed empty after a cold start until something else touched it.
+        viewModelScope.launch(Dispatchers.IO) { groupManager.settingsOf(id) }
         // Observe group metadata changes
         viewModelScope.launch {
             groupManager.groups.collect { groups ->
@@ -189,9 +375,16 @@ class GroupChatViewModel @Inject constructor(
                 // ✅ PERF: sort on a worker — sortedBy on thousands of messages on the main
                 // dispatcher is what makes the first frame feel laggy. The StateFlow setter
                 // is thread-safe so we can hand the sorted list back from any context.
-                val sorted = withContext(Dispatchers.Default) {
-                    raw.sortedBy { it.timestamp }
+                val links = groupManager.commentLinks.value
+                val (sorted, byPost) = withContext(Dispatchers.Default) {
+                    val all = raw.sortedBy { it.timestamp }
+                    if (links.isEmpty()) all to emptyMap()
+                    else {
+                        val (comments, timeline) = all.partition { it.id.lowercase(java.util.Locale.US) in links }
+                        timeline to comments.groupBy { links.getValue(it.id.lowercase(java.util.Locale.US)).lowercase(java.util.Locale.US) }
+                    }
                 }
+                _comments.value = byPost
                 _messages.value = sorted
                 _messagesLoaded.value = true
                 val tailId = sorted.lastOrNull()?.id
@@ -263,11 +456,18 @@ class GroupChatViewModel @Inject constructor(
         }
     }
 
+    // __CHANNEL_WEB_2026_11_26__ PUBLIC_CHANNEL_WEB_SPEC §9.7-8.
+    /** The handle this channel's posts are public under, or null when the web preview is off. */
+    fun channelWebHandle(): String? = _group.value?.let { channelWeb.webHandle(it.id) }
+    suspend fun resolveChannelWebN(messageId: String): Int? = _group.value?.let { channelWeb.resolveN(it.id, messageId) }
+    suspend fun channelWebMessageFor(n: Int): String? = _group.value?.let { channelWeb.messageIdForN(it.id, n) }
+
     fun sendMessage(content: String, mentions: List<com.oshi.messenger.util.MentionWire.Mention> = emptyList()) {
         val currentGroup = _group.value ?: return
         groupManager.sendGroupMessage(currentGroup.id, content, mentions = mentions)
         // Clear typing state on this device and notify peers
         groupManager.sendGroupTypingStatus(currentGroup.id, isTyping = false)
+        if (com.oshi.messenger.util.BotCommandSyntax.parse(content) != null) dispatchToPlatformBots(content)
         viewModelScope.launch {
             if (runCatching { botManager.consumeNoBotHint(content, currentGroup.id) }.getOrDefault(false)) {
                 _noBotHint.value = true
@@ -282,6 +482,18 @@ class GroupChatViewModel @Inject constructor(
     fun sendPoll(poll: com.oshi.messenger.data.model.PollMessage) {
         val currentGroup = _group.value ?: return
         groupManager.sendGroupMessage(currentGroup.id, poll.toMessageString())
+    }
+
+    /** 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ any member may switch it (WhatsApp parity). */
+    fun setAdvancedChatPrivacy(on: Boolean) {
+        val currentGroup = _group.value ?: return
+        groupManager.setAdvancedChatPrivacy(currentGroup.id, on)
+    }
+
+    /** How many other members are on a build that will not apply it (info-sheet footer). */
+    fun advancedPrivacyNonReaderCount(): Int {
+        val currentGroup = _group.value ?: return 0
+        return groupManager.advancedPrivacyNonReaders(currentGroup.id).size
     }
 
     /**
@@ -486,7 +698,20 @@ class GroupChatViewModel @Inject constructor(
      * reaction per member — the map is sender → emoji). [addReaction] alone never
      * removes, so a second double-tap would have re-sent the same reaction.
      */
+    /** __GROUP_SETTINGS_2026_11_20__ one-shot notice (string res) the screen shows as a toast. */
+    private val _reactionNotice = MutableStateFlow<Int?>(null)
+    val reactionNotice: StateFlow<Int?> = _reactionNotice.asStateFlow()
+    fun consumeReactionNotice() { _reactionNotice.value = null }
+
     fun toggleReaction(messageId: String, emoji: String) {
+        // __GROUP_SETTINGS_2026_11_20__ reactions allowed (spec §2.3): receivers drop the rest.
+        val s = groupManager.settingsOf(groupId)
+        val mineNow = _messages.value.firstOrNull { it.id.equals(messageId, ignoreCase = true) }
+            ?.reactions?.entries?.firstOrNull { it.key.equals(myPublicKey.value, ignoreCase = true) }?.value
+        if (s != null && com.oshi.messenger.data.model.ReactionToggle.next(mineNow, emoji) != null && !s.isReactionAllowed(emoji)) {
+            _reactionNotice.value = com.oshi.messenger.R.string.gs_reactions_not_allowed
+            return
+        }
         val mine = _messages.value
             .firstOrNull { it.id.equals(messageId, ignoreCase = true) }
             ?.reactions?.entries
@@ -609,6 +834,21 @@ class GroupChatViewModel @Inject constructor(
                     TranslationState.Failed(R.string.translation_needs_download)
                 is NLPManager.TranslationOutcome.Failed ->
                     TranslationState.Failed(R.string.translation_unavailable)
+            }
+        }
+    }
+
+    /** __GROUP_SETTINGS_2026_11_20__ auto-translate cache: message id → translation (on-device). */
+    private val _autoTranslations = MutableStateFlow<Map<String, String>>(emptyMap())
+    val autoTranslations: StateFlow<Map<String, String>> = _autoTranslations.asStateFlow()
+    private val autoTranslateRequested = java.util.Collections.synchronizedSet(mutableSetOf<String>())
+
+    fun ensureAutoTranslation(messageId: String, text: String) {
+        if (!autoTranslateRequested.add(messageId)) return
+        viewModelScope.launch {
+            val outcome = runCatching { nlpManager.translateReceived(text) }.getOrNull()
+            if (outcome is NLPManager.TranslationOutcome.Translated && outcome.text.isNotBlank() && outcome.text != text) {
+                _autoTranslations.value = _autoTranslations.value + (messageId to outcome.text)
             }
         }
     }

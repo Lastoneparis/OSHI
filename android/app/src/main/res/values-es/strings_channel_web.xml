@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Vista previa web pública</string>
+    <string name="cw_toggle">Publicar las publicaciones en la web</string>
+    <string name="cw_footer">Las nuevas publicaciones también se publican como página web pública en oshi-messenger.com/c/%1$s. Cualquiera puede leerlas, incluidos los buscadores y las vistas previas de enlaces. El cifrado de extremo a extremo no se aplica a la copia web.</string>
+    <string name="cw_needs_link">Primero dale a este canal un enlace público: la vista previa web usa su identificador.</string>
+    <string name="cw_create_link">Crear enlace público</string>
+    <string name="cw_enable_title">¿Publicar las publicaciones en la web?</string>
+    <string name="cw_enable_confirm">Las publicaciones de este canal serán visibles para cualquiera en la web en oshi-messenger.com/c/%1$s. Solo las nuevas publicaciones. Las vistas previas de enlaces (WhatsApp, X, Telegram…) también pueden leerlas, y el cifrado de extremo a extremo no se aplica a la copia web.</string>
+    <string name="cw_enable_action">Publicar</string>
+    <string name="cw_disable_title">¿Desactivar la vista previa web?</string>
+    <string name="cw_disable_confirm">Todas las publicaciones e imágenes publicadas en oshi-messenger.com/c/%1$s se eliminarán de la web. Tus publicaciones en la app no cambian.</string>
+    <string name="cw_disable_action">Desactivar</string>
+    <string name="cw_indexing">Permitir buscadores</string>
+    <string name="cw_indexing_footer">Si está desactivado, las páginas piden a los buscadores que no las indexen.</string>
+    <string name="cw_embed_code">Código para insertar</string>
+    <string name="cw_embed_title">Insertar esta publicación</string>
+    <string name="cw_embed_hint">Pega este código en tu sitio web donde deba aparecer la publicación.</string>
+    <string name="cw_embed_dark">Tema oscuro</string>
+    <string name="cw_copy_code">Copiar código</string>
+    <string name="cw_code_copied">Código copiado</string>
+    <string name="cw_not_on_web">Esta publicación no está en la web. Solo se publican las enviadas después de activar la vista previa web.</string>
+    <string name="cw_error">No se pudo cambiar la vista previa web. Comprueba tu conexión e inténtalo de nuevo.</string>
+</resources>

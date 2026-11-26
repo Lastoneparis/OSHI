@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">Sent to %1$d of %2$d</string>
+    <string name="group_sent_partial_body">Not delivered yet to %1$d member(s). OSHI keeps retrying automatically for 7 days.</string>
+    <string name="group_sent_partial_gave_up">Still not delivered to %1$d member(s) after 7 days.</string>
+    <string name="group_retry_now">Retry now</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Privasi chat lanjutan</string>
+    <string name="adv_privacy_subtitle">Mencegah semua orang di chat ini menyimpan media, mengekspor chat, atau memakai AI pada pesannya</string>
+    <string name="adv_privacy_learn_more">Pelajari lebih lanjut</string>
+    <string name="adv_privacy_notice_on">%1$s mengaktifkan privasi chat lanjutan. Tidak ada yang bisa menyimpan media secara otomatis, mengekspor chat, atau memakai AI pada pesan di chat ini.</string>
+    <string name="adv_privacy_notice_off">%1$s menonaktifkan privasi chat lanjutan. Menyimpan media, mengekspor chat, dan fitur AI tersedia lagi.</string>
+    <string name="adv_privacy_notice_on_you">Anda mengaktifkan privasi chat lanjutan. Tidak ada yang bisa menyimpan media secara otomatis, mengekspor chat, atau memakai AI pada pesan di chat ini.</string>
+    <string name="adv_privacy_notice_off_you">Anda menonaktifkan privasi chat lanjutan. Menyimpan media, mengekspor chat, dan fitur AI tersedia lagi.</string>
+    <string name="adv_privacy_summary_on">Privasi chat lanjutan diaktifkan</string>
+    <string name="adv_privacy_summary_off">Privasi chat lanjutan dinonaktifkan</string>
+    <string name="adv_privacy_sheet_intro">Jika seseorang mengaktifkannya, ini berlaku untuk semua orang di chat ini:</string>
+    <string name="adv_privacy_sheet_point_save">Media dari chat ini tidak dapat disimpan ke galeri atau Download.</string>
+    <string name="adv_privacy_sheet_point_export">Chat ini tidak disertakan dalam ekspor chat.</string>
+    <string name="adv_privacy_sheet_point_ai">AI di perangkat OSHI tidak dapat membaca chat ini: tanpa saran balasan, tanpa terjemahan, tanpa konteks untuk asisten menulis.</string>
+    <string name="adv_privacy_sheet_point_screen">Tangkapan layar dan perekaman layar chat ini diblokir.</string>
+    <string name="adv_privacy_sheet_limits">Siapa pun di chat dapat mengaktifkan atau menonaktifkannya. Ini tidak dapat mencegah seseorang memotret layarnya, dan tidak berlaku bagi pengguna OSHI versi lama.</string>
+    <string name="adv_privacy_blocked_toast">Privasi chat lanjutan aktif di chat ini</string>
+    <string name="adv_privacy_older_members">Anggota dengan OSHI versi lama yang belum akan menerapkannya sampai memperbarui: %1$d</string>
+</resources>

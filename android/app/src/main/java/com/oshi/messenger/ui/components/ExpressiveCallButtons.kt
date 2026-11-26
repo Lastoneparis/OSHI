@@ -76,7 +76,7 @@ fun ExpressiveCallToggle(
     // __OLED_GLASS_2026_11_16__ OLED black: an idle control is a pane of dark
     // glass with a lit rim instead of a white 18 % wash (which reads as grey
     // fog on a black ground). Active stays solid white — the state must shout.
-    val glass = com.oshi.messenger.ui.theme.glassOn()
+    val glass = com.oshi.messenger.ui.theme.oledGlassOn()
     val idle = if (glass) com.oshi.messenger.ui.theme.glassFill(com.oshi.messenger.ui.theme.GlassTier.Control)
         else Color.White.copy(alpha = 0.18f)
     val container by animateColorAsState(

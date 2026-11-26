@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Strikte beveiligingsmodus</string>
+    <string name="strict_status_on">Aan: niet kopiëren, geen schermopnames, verborgen voor schermlezer-apps</string>
+    <string name="strict_status_off">Uit. Zet OSHI op slot als je telefoon bekeken kan worden</string>
+    <string name="strict_hero_on">Strikte beveiligingsmodus is aan</string>
+    <string name="strict_intro">Voor als een telefoon bekeken kan worden. Eén schakelaar zet OSHI op slot: er kan niets uit worden gekopieerd, het scherm kan niet worden vastgelegd en apps die het scherm lezen, ook AI-agents, zien niets.</string>
+    <string name="strict_section_switch">Modus</string>
+    <string name="strict_toggle_title">Strikte beveiligingsmodus</string>
+    <string name="strict_toggle_on">Aan op dit apparaat</string>
+    <string name="strict_toggle_off">Uit</string>
+    <string name="strict_block_paste_title">Ook plakken blokkeren</string>
+    <string name="strict_block_paste_subtitle">Er kan ook niets in OSHI worden geplakt</string>
+    <string name="strict_hide_presence_title">Leesbevestigingen en typen verbergen</string>
+    <string name="strict_hide_presence_subtitle">Anderen zien niet wanneer je leest of typt</string>
+    <string name="strict_forced_subtitle">Ingesteld door de strikte beveiligingsmodus</string>
+    <string name="strict_blocked_toast">Geblokkeerd door de strikte beveiligingsmodus</string>
+    <string name="strict_unlock_title">Strikte beveiligingsmodus uitzetten</string>
+    <string name="strict_unlock_subtitle">Bevestig dat jij het bent</string>
+    <string name="strict_threats_title">Apps die je scherm kunnen lezen of bedienen</string>
+    <string name="strict_threats_none">Geen gevonden op deze telefoon.</string>
+    <string name="strict_threat_a11y">Toegankelijkheidsservice die geen hulpmiddel is</string>
+    <string name="strict_threat_remote">App voor bediening op afstand of schermspiegeling</string>
+    <string name="strict_threats_open">Bekijken</string>
+    <string name="strict_threats_explainer">OSHI kan een andere app niet uitzetten. Herken je er een niet, zet die dan uit in Android-instellingen › Toegankelijkheid of verwijder de app.</string>
+    <string name="strict_banner_title">Apps kunnen dit scherm lezen of bedienen</string>
+    <string name="strict_banner_body">%1$s. De strikte beveiligingsmodus verbergt OSHI voor hen waar Android dat toestaat.</string>
+    <string name="strict_banner_dismiss">Sluiten</string>
+    <string name="strict_does_title">Wat het doet</string>
+    <string name="strict_does_copy">Geen kopiëren, knippen, doorsturen, delen of opslaan van berichten. Tekst kan niet worden geselecteerd en alles wat OSHI op het klembord heeft gezet, wordt gewist.</string>
+    <string name="strict_does_paste">Plakken in OSHI is geblokkeerd als “Ook plakken blokkeren” aan staat, ook via de plakopdracht van het toetsenbord.</string>
+    <string name="strict_does_screen">Schermafbeeldingen, schermopnames en scherm delen tonen een zwart scherm. De voorbeeldweergave bij recente apps is verborgen.</string>
+    <string name="strict_does_agents">Apps die het scherm lezen via Toegankelijkheid, ook AI-agents, zien geen OSHI-inhoud (Android 14 en nieuwer). Tikken die ze simuleren worden genegeerd.</string>
+    <string name="strict_does_overlays">Tikken worden genegeerd zolang een andere app over OSHI heen tekent.</string>
+    <string name="strict_does_notifications">Meldingen zeggen alleen “Nieuw bericht”: geen naam, geen foto, geen tekst.</string>
+    <string name="strict_does_lock">App-vergrendeling elke keer dat je terugkeert naar OSHI (als je telefoon een schermvergrendeling heeft).</string>
+    <string name="strict_does_keyboard">Incognitotoetsenbord: het toetsenbord wordt gevraagd niet te leren wat je typt.</string>
+    <string name="strict_does_network">Geen linkvoorbeelden en geen GIPHY-zoekfunctie: er wordt niets opgehaald van sites van derden.</string>
+    <string name="strict_does_presence">Leesbevestigingen en typindicatoren uit (als je ervoor koos ze te verbergen).</string>
+    <string name="strict_does_relay">Privacyrelay ingeschakeld wanneer die beschikbaar is.</string>
+    <string name="strict_does_restore">Je vorige instellingen komen terug als je de modus uitzet.</string>
+    <string name="strict_cannot_title">Wat het niet kan</string>
+    <string name="strict_cannot_malware">Geen enkele app kan je volledig beschermen tegen malware of tegen een gecompromitteerde (geroote) telefoon.</string>
+    <string name="strict_cannot_keyboard">Je toetsenbord ziet nog steeds wat je typt. Een klembordsuggestie die het voor je intypt, is niet te onderscheiden van typen.</string>
+    <string name="strict_cannot_readers">Schermlezers voor blinde en slechtziende mensen blijven werken, maar andere toegankelijkheidsapps kunnen OSHI niet lezen zolang de modus aan staat.</string>
+    <string name="strict_cannot_old">Op Android 13 en ouder kan OSHI zijn inhoud niet verbergen voor toegankelijkheidsapps. Het kan je er alleen voor waarschuwen.</string>
+    <string name="strict_cannot_camera">Iemand kan het scherm nog steeds fotograferen met een ander apparaat.</string>
+    <string name="strict_cannot_recipient">Het beschermt alleen deze telefoon, niet de telefoons van mensen naar wie je schrijft.</string>
+    <string name="strict_auto_lock_immediate">Direct (Strikte beveiligingsmodus)</string>
+</resources>

@@ -56,7 +56,15 @@ object GroupLegacyCompat {
      * media. Changing this value makes [V2MessageRouter] republish the account bundle once
      * (caps drift, zero new one-time pre-keys).
      */
-    const val MY_CAPS: Int = CAP_RESEND_LIST or CAP_GROUP_V2 or V2Padding.CAP_PADDING or V2Padding.CAP_MEDIA_PADDING
+    /**
+     * __ADV_CHAT_PRIVACY_2026_11_26__ Prekey-bundle capability bit: "reads 🛡ADV_PRIVACY🛡"
+     * (iOS `RatchetHealSignal.Caps.advancedPrivacy`, same value). Desktop does not
+     * advertise it, so a desktop peer is never sent the payload.
+     */
+    const val CAP_ADVANCED_PRIVACY: Int = 1 shl 4
+
+    const val MY_CAPS: Int = CAP_RESEND_LIST or CAP_GROUP_V2 or V2Padding.CAP_PADDING or V2Padding.CAP_MEDIA_PADDING or
+        CAP_ADVANCED_PRIVACY
 
     const val CONFIG_KEY = "group_legacy_compat"
 
@@ -125,6 +133,18 @@ object GroupLegacyCompat {
         if (candidates.isEmpty()) return emptyList()
         val reached = v2Reached.mapTo(HashSet()) { canon(it) }
         return candidates.filter { k -> !(canon(k) in reached && readsV2Groups(k)) }.distinct()
+    }
+
+    /**
+     * __GROUP_FANOUT_2026_11_24__ Pure: a member the v2 send could not reach ONLY because the relay
+     * rate-limited us is never handed to the legacy path for it. Legacy is for builds that cannot
+     * read v2 groups; a 429 says nothing about the member, and the legacy envelope (groupId-derived
+     * key) is weaker than the per-member ratchet it would replace.
+     */
+    fun withoutRateLimited(legacy: List<String>, rateLimited: Collection<String>): List<String> {
+        if (rateLimited.isEmpty() || legacy.isEmpty()) return legacy
+        val limited = rateLimited.mapTo(HashSet()) { canon(it) }
+        return legacy.filter { canon(it) !in limited }
     }
 
     enum class LegacyEnvelope { V4_WRAPPED, GROUP_ID_KEY }

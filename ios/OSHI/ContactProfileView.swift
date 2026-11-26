@@ -70,7 +70,7 @@ struct ContactProfileView: View {
     @AppStorage(SharedNickname.defaultsKey) private var sharedNicknamesData: Data = Data()
 
     private var sharedNickname: String? {
-        SharedNickname.nickname(for: publicKey, in: SharedNickname.decode(sharedNicknamesData))
+        SharedNickname.table(sharedNicknamesData).nickname(for: publicKey)
     }
 
     private var profileImage: UIImage? {
@@ -115,6 +115,9 @@ struct ContactProfileView: View {
                 } else if let onRename {
                     Section { renameButton(onRename) }
                 }
+                // __WIFI_AWARE_2026_11_25__ Renders nothing unless this
+                // iPhone (iOS 26+) and build support Wi-Fi Aware.
+                WiFiAwareContactSection(publicKey: publicKey, displayName: displayName)
                 Section("profile.public_key".localized) {
                     publicKeyRow
                     // __CONTACT_CARD_CARRIES_THE_CODE_2026_10_27__ Reporter's N9

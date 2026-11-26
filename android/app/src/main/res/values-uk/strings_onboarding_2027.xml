@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Пропустити</string>
+    <string name="ob27_continue">Далі</string>
+    <string name="ob27_page_of">Сторінка %1$d з %2$d</string>
+    <string name="ob27_private_title">Лише ви та вони</string>
+    <string name="ob27_private_body">Повідомлення й дзвінки захищені наскрізним шифруванням на вашому телефоні. Ніхто посередині не зможе їх прочитати — навіть OSHI.</string>
+    <string name="ob27_offline_title">Працює без інтернету</string>
+    <string name="ob27_offline_body">Немає мережі? Повідомлення передаються від телефону до телефону через людей поруч, у яких відкритий OSHI. Радіо LoRa несе їх ще далі.</string>
+    <string name="ob27_range_direct">напряму</string>
+    <string name="ob27_range_relayed">ланцюжком</string>
+    <string name="ob27_range_lora">радіо LoRa</string>
+    <string name="ob27_anon_title">Номер не потрібен</string>
+    <string name="ob27_anon_body">Жодного акаунта, пошти чи номера для реєстрації. Ваша особистість — це ключ, створений на цьому телефоні.</string>
+    <string name="ob27_together_title">Покличте своїх</string>
+    <string name="ob27_together_body">Спілкуйтеся вдвох або в групах. Додайте людину, відсканувавши її QR-код або надіславши посилання-запрошення.</string>
+    <string name="ob27_rules_title">Перед початком</string>
+    <string name="ob27_rules_subtitle">Кілька правил і що OSHI вже вміє, а що ще ні.</string>
+    <string name="ob27_rules_do">Що робити</string>
+    <string name="ob27_rules_dont">Ніколи</string>
+    <string name="ob27_good_to_know">Варто знати</string>
+    <string name="ob27_show_details">Показати деталі</string>
+    <string name="ob27_hide_details">Сховати деталі</string>
+    <string name="ob27_agree">Зрозуміло</string>
+    <string name="ob27_notif_title">Не пропустіть повідомлення</string>
+    <string name="ob27_notif_body">Дозвольте сповіщення, щоб бачити нові повідомлення та дзвінки. Їх можна вимкнути будь-коли в налаштуваннях.</string>
+    <string name="ob27_notif_allow">Дозволити сповіщення</string>
+    <string name="ob27_not_now">Не зараз</string>
+    <string name="ob27_identity_title">Виберіть ім’я</string>
+    <string name="ob27_identity_body">Це ім’я бачитимуть ваші контакти. Його можна змінити пізніше.</string>
+    <string name="ob27_already">Уже користуєтеся OSHI?</string>
+</resources>

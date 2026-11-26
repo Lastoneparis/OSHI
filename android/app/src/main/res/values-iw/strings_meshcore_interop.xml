@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · ללא הצפנה מקצה לקצה של OSHI</string>
+    <string name="meshcore_error_not_connected">אין מכשיר קשר MeshCore מחובר</string>
+    <string name="meshcore_channels_title">ערוצי MeshCore</string>
+    <string name="meshcore_channel_public">ציבורי · קריא לכל מי שיודע את השם</string>
+    <string name="meshcore_channel_private">פרטי · מפתח סודי</string>
+    <string name="meshcore_join_hashtag">הצטרפות לערוץ האשטאג</string>
+    <string name="meshcore_join_private">הצטרפות לערוץ פרטי</string>
+    <string name="meshcore_contacts_title">אנשי קשר MeshCore</string>
+    <string name="meshcore_refresh_contacts">רענון אנשי קשר</string>
+    <string name="meshcore_join_refused">מכשיר הקשר דחה את הערוץ הזה.</string>
+    <string name="meshcore_join_no_slot">אין משבצת ערוץ פנויה במכשיר הקשר הזה.</string>
+    <string name="meshcore_join_bad_name">הזן שם ערוץ תקין (עד 31 בתים, ללא רווחים בערוץ האשטאג).</string>
+    <string name="meshcore_join_bad_secret">הסוד חייב להיות באורך 16 בתים: 32 תווים הקסדצימליים או base64.</string>
+    <string name="meshcore_hashtag_hint">המפתח נגזר מהשם: כל מי שיודע את השם יכול לקרוא את הערוץ.</string>
+    <string name="meshcore_private_hint">הזן את שם הערוץ ואת הסוד המשותף לחבריו.</string>
+    <string name="meshcore_channel_name">שם הערוץ</string>
+    <string name="meshcore_channel_secret">סוד (hex או base64)</string>
+    <string name="meshcore_join">הצטרפות</string>
+    <string name="meshcore_note_dm">מוצפן על ידי MeshCore בין מכשירי הקשר, לא מקצה לקצה על ידי OSHI.</string>
+    <string name="meshcore_note_public">ערוץ ציבורי: כל מי שמכיר את שמו יכול לקרוא אותו.</string>
+    <string name="meshcore_note_private">ערוץ פרטי: כל מי שיש לו את הסוד שלו יכול לקרוא אותו.</string>
+    <string name="meshcore_radio_offline">מכשיר הקשר של MeshCore לא מחובר. ההודעות ממתינות כאן כלא נמסרו.</string>
+    <string name="meshcore_connect">התחברות</string>
+    <string name="meshcore_parts">%1$d הודעות</string>
+    <string name="meshcore_sending">ממתין למכשיר הקשר</string>
+    <string name="meshcore_failed_dm">אין תשובה ממכשיר הקשר שלהם (מחוץ לטווח?). יש להקיש כדי לנסות שוב.</string>
+    <string name="meshcore_error_pairing">ההתאמה נכשלה. יש לבדוק את קוד ה-PIN ולנסות שוב. אם מכשיר הקשר אופס, יש להסיר אותו קודם בהגדרות ה-Bluetooth של Android.</string>
+    <string name="meshcore_error_no_answer">מכשיר הקשר לא ענה. יש לוודא שהוא מריץ קושחת MeshCore companion ל-Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">החיבור אבד. יתחבר מחדש כשמכשיר הקשר יחזור לטווח…</string>
+    <string name="meshcore_state_pin">יש להקליד את קוד ה-PIN של מכשיר הקשר בחלון של Android</string>
+    <string name="meshcore_state_reading">קורא אנשי קשר וערוצים…</string>
+    <string name="meshcore_state_connecting">מתחבר…</string>
+    <string name="meshcore_seen_as">מחובר · משתמשי MeshCore רואים אותך בשם %1$s</string>
+    <string name="meshcore_connected">מחובר</string>
+    <string name="meshcore_footer_users">שיחה עם משתמשי MeshCore (הודעות ישירות וערוצים) והעברת הודעות OSHI דרך ממסרי MeshCore. נדרשת קושחת MeshCore companion ל-Bluetooth. ‏OSHI מוסיפה ערוץ אחד, #oshi-bridge, במקום פנוי ולעולם לא משנה את הערוצים האחרים שלך.</string>
+    <string name="meshcore_scan_below">מכשירי קשר של MeshCore מופיעים למטה במכשירי קשר בקרבת מקום, מסומנים MeshCore.</string>
+    <string name="meshcore_contacts_footer">יש להקיש על מישהו כדי לכתוב לו. ההודעות מוצפנות על ידי MeshCore, לא מקצה לקצה על ידי OSHI.</string>
+    <string name="meshcore_no_contacts">עדיין לא נשמע אף אחד. משתמשי MeshCore מופיעים כאן כשמכשיר הקשר שלהם מכריז על עצמו. אפשר להכריז על שלך כדי שימצאו אותך.</string>
+    <string name="meshcore_heard">נשמע %1$s</string>
+    <string name="meshcore_announce">להכריז עליי</string>
+    <string name="meshcore_announce_done">ההכרזה נשלחה. משתמשי MeshCore בטווח יכולים עכשיו להוסיף אותך ולכתוב לך.</string>
+    <string name="meshcore_announce_failed">מכשיר הקשר לא הצליח לשלוח את ההכרזה.</string>
+    <string name="meshcore_channels_footer">יש להקיש על ערוץ כדי לפתוח אותו. ערוצים ציבוריים וערוצי האשטאג גלויים לכל מי שמכיר את שמם.</string>
+    <string name="meshcore_pin_title">התאמה עם %1$s</string>
+    <string name="meshcore_pin_body">‏Android יבקש עכשיו את קוד ה-PIN של מכשיר הקשר. אם יש למכשיר מסך, הקוד מוצג עליו.</string>
+    <string name="meshcore_pin_default">אין מסך? קוד ה-PIN הוא 123456, אלא אם שונה באפליקציית MeshCore.</string>
+    <string name="meshcore_pin_continue">המשך</string>
+    <string name="meshcore_no_free_channel_chat">כל 8 מקומות הערוצים תפוסים. עדיין אפשר לשוחח עם משתמשי MeshCore; יש לפנות מקום באפליקציית MeshCore כדי שהודעות OSHI יוכלו להשתמש ב-#oshi-bridge.</string>
+    <string name="meshcore_contact_kind">משתמש MeshCore</string>
+    <string name="meshcore_too_long">ארוך מדי: עד %1$d הודעות</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Reacties</string>
+    <string name="gs_comments_footer">Leden kunnen onder elk bericht reageren. Alleen beheerders plaatsen berichten.</string>
+    <string name="cm_leave_comment">Reageer</string>
+    <string name="cm_thread_title">Reacties</string>
+    <string name="cm_empty">Nog geen reacties.</string>
+    <string name="cm_composer_hint">Reageer…</string>
+    <string name="cm_replying_to">Antwoord aan %1$s</string>
+    <string name="cm_disabled">Reacties zijn uitgeschakeld.</string>
+    <string name="cm_post_unavailable">Dit bericht is niet meer beschikbaar.</string>
+    <string name="cm_too_fast">Je reageert te snel. Wacht even.</string>
+    <string name="cm_notif_reply">%1$s heeft op je reactie gereageerd</string>
+    <string name="cm_delete_comment">Reactie verwijderen</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d reactie</item>
+        <item quantity="other">%d reacties</item>
+    </plurals>
+</resources>

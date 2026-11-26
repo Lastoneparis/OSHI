@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Strict security mode</string>
+    <string name="strict_status_on">On: no copying, no screen capture, hidden from screen-reading apps</string>
+    <string name="strict_status_off">Off. Locks OSHI down when your phone may be watched</string>
+    <string name="strict_hero_on">Strict security mode is on</string>
+    <string name="strict_intro">For when a phone may be watched. One switch locks OSHI down: nothing can be copied out, the screen can\'t be captured, and apps that read the screen, including AI agents, see nothing.</string>
+    <string name="strict_section_switch">Mode</string>
+    <string name="strict_toggle_title">Strict security mode</string>
+    <string name="strict_toggle_on">On for this device</string>
+    <string name="strict_toggle_off">Off</string>
+    <string name="strict_block_paste_title">Block paste too</string>
+    <string name="strict_block_paste_subtitle">Nothing can be pasted into OSHI either</string>
+    <string name="strict_hide_presence_title">Hide read receipts and typing</string>
+    <string name="strict_hide_presence_subtitle">Others don\'t see when you read or type</string>
+    <string name="strict_forced_subtitle">Set by strict security mode</string>
+    <string name="strict_blocked_toast">Blocked by strict security mode</string>
+    <string name="strict_unlock_title">Turn off strict security mode</string>
+    <string name="strict_unlock_subtitle">Confirm it\'s you</string>
+    <string name="strict_threats_title">Apps that can read or control your screen</string>
+    <string name="strict_threats_none">None found on this phone.</string>
+    <string name="strict_threat_a11y">Accessibility service that is not an assistive tool</string>
+    <string name="strict_threat_remote">Remote control or screen mirroring app</string>
+    <string name="strict_threats_open">Review</string>
+    <string name="strict_threats_explainer">OSHI can\'t switch another app off. If you don\'t recognise one of these, turn it off in Android Settings › Accessibility, or uninstall it.</string>
+    <string name="strict_banner_title">Apps can read or control this screen</string>
+    <string name="strict_banner_body">%1$s. Strict security mode hides OSHI from them where Android allows it.</string>
+    <string name="strict_banner_dismiss">Dismiss</string>
+    <string name="strict_does_title">What it does</string>
+    <string name="strict_does_copy">No copy, cut, forward, share or save of messages. Text can\'t be selected, and anything OSHI put on the clipboard is wiped.</string>
+    <string name="strict_does_paste">Paste into OSHI is blocked when “Block paste too” is on, including the keyboard\'s paste command.</string>
+    <string name="strict_does_screen">Screenshots, screen recording and screen sharing show a black screen. The recent-apps preview is hidden.</string>
+    <string name="strict_does_agents">Apps that read the screen through Accessibility, including AI agents, see no OSHI content (Android 14 and later). Taps they inject are ignored.</string>
+    <string name="strict_does_overlays">Taps are ignored while another app draws over OSHI.</string>
+    <string name="strict_does_notifications">Notifications only say “New message”: no name, no photo, no text.</string>
+    <string name="strict_does_lock">App lock every time you come back to OSHI (when your phone has a screen lock).</string>
+    <string name="strict_does_keyboard">Incognito keyboard: the keyboard is asked not to learn what you type.</string>
+    <string name="strict_does_network">No link previews and no GIPHY search: nothing is fetched from third-party sites.</string>
+    <string name="strict_does_presence">Read receipts and typing indicators off (if you chose to hide them).</string>
+    <string name="strict_does_relay">Privacy relay turned on when one is available.</string>
+    <string name="strict_does_restore">Your previous settings come back when you turn the mode off.</string>
+    <string name="strict_cannot_title">What it cannot do</string>
+    <string name="strict_cannot_malware">No app can fully protect you from malware or from a compromised (rooted) phone.</string>
+    <string name="strict_cannot_keyboard">Your keyboard still sees what you type. A clipboard suggestion it types for you can\'t be told apart from typing.</string>
+    <string name="strict_cannot_readers">Screen readers for blind and low-vision people keep working, but other accessibility apps can\'t read OSHI while the mode is on.</string>
+    <string name="strict_cannot_old">On Android 13 and older, OSHI can\'t hide its content from accessibility apps. It can only warn you about them.</string>
+    <string name="strict_cannot_camera">Someone can still photograph the screen with another device.</string>
+    <string name="strict_cannot_recipient">It protects this phone only, not the phones of the people you write to.</string>
+    <string name="strict_auto_lock_immediate">Immediately (strict security mode)</string>
+</resources>

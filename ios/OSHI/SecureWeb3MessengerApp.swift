@@ -56,6 +56,9 @@ struct SecureWeb3MessengerApp: App {
     @AppStorage(GlassEffect.oledStorageKey) private var glassEffectOLED = GlassEffect.oledDefaultEnabled
 
     init() {
+        // __LAUNCH_LAG_2026_11_22__ "Launch" signpost interval (Points of
+        // Interest): App.init → splash gone. See LaunchTimingLogger.
+        LaunchTimingLogger.beginLaunch()
         // __PLAINTEXT_LEFTOVERS_2026_09_24__ Avant toute requête et tout écran:
         // URLCache mémoire seulement + balayage des copies en clair d'un lancement
         // précédent (tmp, enregistrements vocaux, partages non consommés).
@@ -140,6 +143,7 @@ struct SecureWeb3MessengerApp: App {
                 if showLaunchMotion {
                     MascotLaunchView(isAppReady: !isInitializing) {
                         showLaunchMotion = false
+                        LaunchTimingLogger.endLaunch()
                     }
                     .ignoresSafeArea()
                     .zIndex(1000)
@@ -369,6 +373,11 @@ struct SecureWeb3MessengerApp: App {
             .sheet(isPresented: $sharedContentHandler.showPublicJoin) {
                 PublicGroupJoinSheet(rawHandle: sharedContentHandler.pendingPublicHandle ?? "")
             }
+            // __BOTS_PHASE1_2026_11_24__ a bot link opens the bot's card.
+            .sheet(item: $sharedContentHandler.pendingBotLink) { link in
+                BotProfileSheet(link: link)
+                    .environmentObject(identityManager)
+            }
             // ✅ SHARE EXTENSION: Handle oshi:// URL scheme
             .onOpenURL { url in
                 OshiLog.app.info("📥 Received URL: \(url)")
@@ -383,6 +392,9 @@ struct SecureWeb3MessengerApp: App {
             .onChange(of: biometricEnabled) { _, _ in
                 WatchBridgeService.requestSnapshotPush()
             }
+            // __STRICT_SECURITY_MODE_2026_11_22__ the person just authenticated to
+            // turn the mode on, which forces the app lock on: that counts as an unlock.
+            .strictSecurityRoot(onAuthenticated: { isUnlocked = true })
             .onChange(of: scenePhase) { _, newPhase in
                 if newPhase == .active {
                     // 🔧 FIX (2026-08-06, badge stuck at 50): every notification
@@ -438,6 +450,8 @@ struct SecureWeb3MessengerApp: App {
                     CovertChannelReceiver.shared.setActivePolling(true)
                 } else if newPhase == .background || newPhase == .inactive {
                     if newPhase == .background { DevSyncManager.shared.appDidEnterBackground() }  // __DEVSYNC_DIRECT_2026_09_23__
+                    // __STRICT_SECURITY_MODE_2026_11_22__ nothing OSHI copied outlives the visit.
+                    if StrictSecurityMode.isOn { StrictSecurityMode.clearClipboardIfOSHIWroteIt() }
                     // 🔐 AUTO-LOCK: Re-lock app when going to background
                     if biometricEnabled && autoLockEnabled {
                         isUnlocked = false
@@ -472,6 +486,10 @@ struct SecureWeb3MessengerApp: App {
                 // would mean a customer who paid, lost signal, and never
                 // reopened the sheet stays charged and un-upgraded.
                 PremiumManager.shared.start(mail: OSHIMailClient.shared)
+                // __MAIL_UNREAD_REFRESH_2026_11_22__ The unread-mail count is kept true from
+                // here on — foreground, network back, every minute, mail push — not only
+                // when the Email screen is opened. See MailUnreadRefresher.
+                MailUnreadRefresher.shared.start(identity: identityManager)
                 #if DEBUG
                 AudioSessionTracer.log("afterInitializeApp")
                 #endif
@@ -809,6 +827,10 @@ struct SecureWeb3MessengerApp: App {
             let displayName = UserDefaults.standard.string(forKey: "userName") ?? "OSHI User"
             CrossPlatformMesh.shared.start(publicKey: publicKey, displayName: displayName)
             OshiLog.app.info("✅ CrossPlatformMesh started - iOS ↔ Android mesh enabled")
+            // __WIFI_AWARE_2026_11_25__ Extra link for PAIRED contacts only.
+            // No-op unless the build enables it and this iPhone (iOS 26+)
+            // supports Wi-Fi Aware; never touches the transports above.
+            WiFiAwareBridge.shared.startIfEnabled(myPublicKey: publicKey)
         } else {
             OshiLog.app.info("⚠️ CrossPlatformMesh deferred - waiting for identity")
         }
@@ -890,6 +912,8 @@ struct SecureWeb3MessengerApp: App {
         // slower when it is not.
         DispatchQueue.main.async {
             LaunchTimingLogger.mark("isInitializing→false (splash dismissing)")
+            // No mascot (launch from a notification): the splash ends here.
+            if !showLaunchMotion { LaunchTimingLogger.endLaunch() }
             withAnimation(.easeInOut(duration: 0.3)) {
                 isInitializing = false
                 OshiLog.app.info("✅ App initialization complete")
@@ -970,7 +994,9 @@ private struct PrivateTypingModifier: ViewModifier {
     @AppStorage(KeyboardPrivacy.privateKeyboardKey) private var privateKeyboard = false
 
     func body(content: Content) -> some View {
-        content.autocorrectionDisabled(privateKeyboard)
+        content
+            .autocorrectionDisabled(privateKeyboard)
+            .strictWritingToolsOptOut()  // __STRICT_SECURITY_MODE_2026_11_22__
     }
 }
 
@@ -1222,8 +1248,13 @@ enum SecureClipboard {
         [[textType: text]]
     }
 
+    /// __STRICT_SECURITY_MODE_2026_11_22__ `changeCount` right after OSHI's last
+    /// write, so strict mode can clear OSHI's copy — and only OSHI's.
+    static var lastWrittenChangeCount: Int?
+
     static func copy(_ text: String, to pasteboard: UIPasteboard = .general) {
         pasteboard.setItems(items(for: text), options: options())
+        if pasteboard === UIPasteboard.general { lastWrittenChangeCount = pasteboard.changeCount }
         scheduleExpiry(on: pasteboard)
     }
 
@@ -1301,9 +1332,17 @@ class OshiAppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
+        // 🔴 __DEAD10CC_2026_11_26__ FIRST: every ratchet-lock hold must run
+        // under a background task, or iOS kills the app (0xdead10cc) when it
+        // suspends it mid-hold. Nothing below may take the lock before this.
+        CrossProcessLockBackgroundTask.install()
         OshiLog.app.info("📱 OshiAppDelegate: Setting up notification system...")
         PlaintextLeftovers.applyAtLaunch()  // __PLAINTEXT_LEFTOVERS_2026_09_24__ idempotent
         PrivacyCoverController.shared.install()  // __LEAK_FIX_2026_09_25__ app-switcher cover
+        // __STRICT_SECURITY_MODE_2026_11_22__ copy/paste filter on every text
+        // field (inert while the mode is off) + capture/mirroring cover.
+        StrictTextInputGuard.install()
+        StrictCaptureShield.shared.install()
         MessageBannerPolicy.mirrorShowsNames()   // __NOTIFICATION_NAMES_HIDDEN_2026_11_20__ for the NSE
         // __POISONED_TILE_PURGE_2026_11_16__ delete OSM 'Access blocked' tiles saved
         // since 13/11 (background queue, once per app version).
@@ -1312,6 +1351,8 @@ class OshiAppDelegate: NSObject, UIApplicationDelegate {
         // ✅ Register BGTaskScheduler for scheduled message delivery (even when app killed)
         ScheduledMessageManager.registerBackgroundTask()
         OshiLog.app.info("📋 BGTaskScheduler: Scheduled message delivery registered")
+        // __MAIL_UNREAD_REFRESH_2026_11_22__ background mail check (unread badge + generic banner).
+        MailUnreadRefresher.registerBackgroundTask()
 
         // ⌚️ Activate the Watch session HERE.
         //
@@ -1603,6 +1644,17 @@ class OshiAppDelegate: NSObject, UIApplicationDelegate {
             Task { @MainActor in
                 await VoiceCallManager.shared.pollCallSignalsForCancelPush()
                 completionHandler(.newData)
+            }
+            return
+        }
+
+        // __MAIL_UNREAD_REFRESH_2026_11_22__ A mail wake refreshes the MAILBOX (badge,
+        // and a generic banner if nothing announced it). It used to fall through to the
+        // chat poll below, which never looks at mail.
+        if let type = userInfo["type"] as? String, type == "mail" {
+            Task { @MainActor in
+                let outcome = await MailUnreadRefresher.shared.trigger(.push)
+                completionHandler(outcome == .failed ? .failed : .newData)
             }
             return
         }

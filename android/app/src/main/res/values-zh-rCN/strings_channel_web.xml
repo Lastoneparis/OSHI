@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">公开网页预览</string>
+    <string name="cw_toggle">将帖子发布到网页</string>
+    <string name="cw_footer">新帖子也会以公开网页的形式发布在 oshi-messenger.com/c/%1$s。任何人都能阅读，包括搜索引擎和链接预览。网页副本不受端到端加密保护。</string>
+    <string name="cw_needs_link">请先为此频道创建公开链接：网页预览使用它的名称。</string>
+    <string name="cw_create_link">创建公开链接</string>
+    <string name="cw_enable_title">将帖子发布到网页？</string>
+    <string name="cw_enable_confirm">此频道的帖子将在 oshi-messenger.com/c/%1$s 上对所有人可见。仅限新帖子。链接预览（WhatsApp、X、Telegram…）也能读取，且网页副本不受端到端加密保护。</string>
+    <string name="cw_enable_action">发布</string>
+    <string name="cw_disable_title">关闭网页预览？</string>
+    <string name="cw_disable_confirm">在 oshi-messenger.com/c/%1$s 发布的所有帖子和图片都将从网页上移除。你在应用中的帖子保持不变。</string>
+    <string name="cw_disable_action">关闭</string>
+    <string name="cw_indexing">允许搜索引擎</string>
+    <string name="cw_indexing_footer">关闭时，页面会要求搜索引擎不要将其编入索引。</string>
+    <string name="cw_embed_code">嵌入代码</string>
+    <string name="cw_embed_title">嵌入此帖子</string>
+    <string name="cw_embed_hint">将此代码粘贴到你网站中需要显示帖子的位置。</string>
+    <string name="cw_embed_dark">深色主题</string>
+    <string name="cw_copy_code">复制代码</string>
+    <string name="cw_code_copied">代码已复制</string>
+    <string name="cw_not_on_web">此帖子不在网页上。只有开启网页预览后发送的帖子才会发布。</string>
+    <string name="cw_error">无法更改网页预览。请检查网络连接后重试。</string>
+</resources>

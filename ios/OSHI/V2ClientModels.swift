@@ -262,6 +262,23 @@ public enum V2 {
         public let blobId: String
         public let chunkSize: Int
         public let missing: [Int]
+        /// __GROUP_BLOB_2026_11_25__ How many readers a server that understood `recipientKeys`
+        /// stored for this blob. Absent = an older server: only `recipientKey` may read it.
+        public var recipients: Int? = nil
+
+        public init(blobId: String, chunkSize: Int, missing: [Int], recipients: Int? = nil) {
+            self.blobId = blobId; self.chunkSize = chunkSize; self.missing = missing; self.recipients = recipients
+        }
+
+        private enum CodingKeys: String, CodingKey { case blobId, chunkSize, missing, recipients }
+
+        public init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            blobId = try c.decode(String.self, forKey: .blobId)
+            chunkSize = try c.decode(Int.self, forKey: .chunkSize)
+            missing = try c.decode([Int].self, forKey: .missing)
+            recipients = try c.decodeIfPresent(Int.self, forKey: .recipients)
+        }
     }
 
     /// Response to `GET /v2/blobs/:id/status`.

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">По умолчанию для всех чатов. У каждого чата могут быть свои обои.</string>
+    <string name="wallpaper_tone_settings_title">Тон обоев</string>
+    <string name="wallpaper_personal_note">Эти обои видите только вы, на этом устройстве.</string>
+</resources>

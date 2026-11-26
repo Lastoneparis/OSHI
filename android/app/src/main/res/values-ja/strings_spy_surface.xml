@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">OSHIを読み取れるアプリ</string>
+    <string name="spy_surface_dialog_body">この端末の次のアプリは、画面や通知に表示される内容を読み取れます。OSHIが復号した後のメッセージも含まれます:\n\n%1$s\n\nご自身でインストールまたは許可していないものがあれば、スパイソフトの可能性があります。Androidの設定で権限をオフにするか、アンインストールしてください。OSHIは何もブロックしていません。</string>
+    <string name="spy_surface_power_accessibility">画面と入力(ユーザー補助)</string>
+    <string name="spy_surface_power_notifications">通知</string>
+    <string name="spy_surface_power_admin">デバイス管理者</string>
+</resources>

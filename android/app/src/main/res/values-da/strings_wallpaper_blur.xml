@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">Standardbaggrund for alle chats. Hver chat kan stadig have sin egen.</string>
+    <string name="wallpaper_tone_settings_title">Baggrundens tone</string>
+    <string name="wallpaper_personal_note">Kun du ser denne baggrund, på denne enhed.</string>
+</resources>

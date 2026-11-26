@@ -49,10 +49,12 @@ class MeshGifWireTypeTest {
     // =====================================================================
 
     @Test
-    fun a_gif_on_the_mesh_path_is_labelled_gif_not_image() {
+    fun a_gif_on_the_mesh_path_is_labelled_image_for_ios_1043() {
+        // __GIF_COMPAT_IOS1043_2026_11_21__ was `gif`; iOS 1.0.43 turned that into an
+        // empty bubble. The `.gif` extension (below) is what still says GIF.
         val isGif = GifBytes.isGif(gifBytes)
         assertTrue("GIF89a header must sniff as a GIF", isGif)
-        assertEquals("gif", MessageRepository.crossPlatformMeshWireType(MediaType.IMAGE, isGif))
+        assertEquals("image", MessageRepository.crossPlatformMeshWireType(MediaType.IMAGE, isGif))
     }
 
     @Test
@@ -67,7 +69,7 @@ class MeshGifWireTypeTest {
 
     /** The whole envelope, as the iPhone parses it. */
     @Test
-    fun the_mesh_envelope_for_a_gif_says_gif_in_both_places() {
+    fun the_mesh_envelope_for_a_gif_is_an_image_named_gif() {
         val isGif = GifBytes.isGif(gifBytes)
         val ext = MessageRepository.crossPlatformMeshExtension(MediaType.IMAGE, isGif)
         val wire = MessageRepository.crossPlatformMediaEnvelope(
@@ -79,7 +81,7 @@ class MeshGifWireTypeTest {
             isViewOnce = false,
         )
         val json = JSONObject(wire)
-        assertEquals("gif", json.getString("mediaType"))
+        assertEquals("image", json.getString("mediaType"))
         assertEquals("msg-1.gif", json.getString("fileName"))
     }
 
@@ -122,7 +124,7 @@ class MeshGifWireTypeTest {
     @Test
     fun the_sniff_beats_the_enum_even_when_the_enum_is_wrong() {
         // A share-sheet GIF that arrived labelled DOCUMENT is still a GIF.
-        assertEquals("gif", MessageRepository.crossPlatformMeshWireType(MediaType.DOCUMENT, true))
+        assertEquals("image", MessageRepository.crossPlatformMeshWireType(MediaType.DOCUMENT, true))
         assertEquals("gif", MessageRepository.crossPlatformMeshExtension(MediaType.DOCUMENT, true))
     }
 

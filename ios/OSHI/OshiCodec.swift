@@ -534,16 +534,34 @@ enum OpusWire {
     /// Keep in step with `OpusWire.RESYNC_FRAMES` in the Kotlin copies.
     static let resyncFrames = 100
 
-    static func pack(seq: UInt16, frames: [Data]) -> Data {
-        precondition(!frames.isEmpty && frames.count <= 16)
+    static func pack(seq: UInt16, frames all: [Data]) -> Data {
+        precondition(!all.isEmpty && all.count <= 16)
+        // __CALL_FLUIDITY_2026_11_21__ (gap 10) a length byte must never lie: this used to
+        // write `min(count, 255)` and then the WHOLE frame, so a non-last frame over 255 B
+        // would have had its tail read as the start of the next frame — and the surplus
+        // folded into the last one. Such a frame (and the older ones before it) is now left
+        // out, as the Kotlin `pack` refuses it. The encoder never offers one (it stops the
+        // redundancy at the first frame over 255 B), so every payload it builds is unchanged.
+        let firstFitting = (all.indices.dropLast().last { all[$0].count > 255 }).map { $0 + 1 } ?? 0
+        let frames = all[firstFitting...]
         var out = Data(capacity: headerBytes + frames.reduce(0) { $0 + $1.count + 1 })
         out.append((version << 4) | UInt8(frames.count - 1))
         out.append(UInt8(seq >> 8)); out.append(UInt8(seq & 0xFF))
         for (i, f) in frames.enumerated() {
-            if i < frames.count - 1 { out.append(UInt8(min(f.count, 255))) }
+            if i < frames.count - 1 { out.append(UInt8(f.count)) }
             out.append(f)
         }
         return out
+    }
+
+    /// __CALL_FLUIDITY_2026_11_21__ (gap 10) Why `unpack` refused `data`, for the log — a
+    /// 0x19 that does not parse used to vanish without a trace. nil when it parses.
+    static func rejectReason(_ data: Data) -> String? {
+        guard unpack(data) == nil else { return nil }
+        guard let h = data.first else { return "empty" }
+        if data.count <= headerBytes { return "short(\(data.count)B)" }
+        if h >> 4 != version { return "version=\(h >> 4) header=0x\(String(h, radix: 16))" }
+        return "malformed(frames=\(Int(h & 0x0F) + 1) size=\(data.count)B)"
     }
 
     static func unpack(_ data: Data) -> (seq: UInt16, frames: [Data])? {
@@ -578,8 +596,16 @@ final class OpusCallEncoder {
     private var scratch = [UInt8](repeating: 0, count: 1275)
 
     /// 28 kbit/s: libopus 1.5.2's best PESQ-WB per byte on the lab voices (4.27 mean).
-    init?(bitrate: Int32 = 28_000, complexity: Int32 = 10, redundancy: Int = OpusWire.maxRedundant) {
-        guard let e = oshi_opus_enc_create(bitrate, complexity) else { return nil }
+    /// `inbandFecLossPct` (__CALL_FLUIDITY_2026_11_21__): Opus in-band FEC (LBRR) with this
+    /// packet-loss hint, 0 = off — the default, so the call path's bytes are unchanged (as on
+    /// Android/desktop). Inside the Opus bitstream: every decoder plays such a frame normally
+    /// and ignores the FEC unless asked for it, so turning it on never breaks a peer.
+    init?(bitrate: Int32 = 28_000, complexity: Int32 = 10, redundancy: Int = OpusWire.maxRedundant,
+          inbandFecLossPct: Int32 = 0) {
+        let made = inbandFecLossPct > 0
+            ? oshi_opus_enc_create_fec(bitrate, complexity, inbandFecLossPct)
+            : oshi_opus_enc_create(bitrate, complexity)
+        guard let e = made else { return nil }
         enc = e; self.redundancy = redundancy
         fifo.reserveCapacity(OpusWire.frameSamples * 8)
     }
@@ -712,4 +738,102 @@ final class OpusCallDecoder {
         }
         out.append((offset, n > 0 ? Array(buf[0..<Int(n)]) : [Int16](repeating: 0, count: OpusWire.frameSamples)))
     }
+}
+
+// MARK: - Playout decode — __CALL_FLUIDITY_2026_11_21__
+
+/// The Opus half of `AdaptiveJitterBuffer` — SWIFT PORT of `OpusPlayoutDecoder` in the Kotlin
+/// `OpusCallCodec.kt` (desktop + Android). Frames are queued ENCODED and decoded here at
+/// playout time, in playout order, so the decoder's state always follows what the speaker
+/// actually plays.
+///
+/// Concealment of a missing frame: when the NEXT frame is already queued, it is decoded with
+/// `decode_fec = 1` — if the sender put in-band FEC (LBRR) in it, that recovers the lost frame;
+/// if not, libopus falls back to its own PLC, so this is never worse than plain PLC. With
+/// nothing queued, plain Opus PLC. Not thread-safe on its own: only the jitter buffer calls it,
+/// under its lock.
+final class OpusPlayoutDecoder: JitterFrameDecoder {
+    private var dec: UnsafeMutableRawPointer?
+    private var buf = [Int16](repeating: 0, count: 5760)
+
+    /// Concealed frames that came from the next frame's in-band FEC path. Diagnostic.
+    private(set) var fecDecodes: Int64 = 0
+
+    init() { dec = oshi_opus_dec_create() }
+    deinit { if let d = dec { oshi_opus_dec_destroy(d) } }
+
+    func decode(_ frame: Data) -> [Int16] {
+        guard let d = dec, !frame.isEmpty else { return [] }
+        let n: Int32 = frame.withUnsafeBytes { src in
+            buf.withUnsafeMutableBufferPointer { dst in
+                oshi_opus_decode(d, src.bindMemory(to: UInt8.self).baseAddress, Int32(frame.count),
+                                 dst.baseAddress!, Int32(dst.count))
+            }
+        }
+        return n > 0 ? Array(buf[0..<Int(n)]) : []
+    }
+
+    func conceal(next: Data?) -> [Int16]? {
+        guard let d = dec else { return nil }
+        let n: Int32
+        if let next, !next.isEmpty {
+            n = next.withUnsafeBytes { src in
+                buf.withUnsafeMutableBufferPointer { dst in
+                    oshi_opus_decode_fec(d, src.bindMemory(to: UInt8.self).baseAddress, Int32(next.count),
+                                         dst.baseAddress!, Int32(OpusWire.frameSamples))
+                }
+            }
+            if n > 0 { fecDecodes += 1 }
+        } else {
+            n = buf.withUnsafeMutableBufferPointer { dst in
+                oshi_opus_decode(d, nil, 0, dst.baseAddress!, Int32(OpusWire.frameSamples))
+            }
+        }
+        return n > 0 ? Array(buf[0..<Int(n)]) : nil
+    }
+
+    func reset() {
+        if let d = dec { oshi_opus_dec_destroy(d) }
+        dec = oshi_opus_dec_create()
+    }
+
+    /// Queue every frame a 0x19 payload carries (the newest and its redundant copies) in
+    /// `jb`, keyed by the codec's own 20 ms counter unwrapped against `unwrap`. Returns false
+    /// for a payload that does not parse.
+    ///
+    /// Keyed by the CODEC seq, not the outer media seq (gap 9): the outer seq is shared with
+    /// control/video packets, so keying audio by it made a hole of every control packet.
+    @discardableResult
+    static func file(_ payload: Data, into jb: AdaptiveJitterBuffer, unwrap: SeqUnwrapper) -> Bool {
+        guard let p = OpusWire.unpack(payload) else { return false }
+        // Several transports deliver on their own queues: one packet is filed atomically.
+        jb.lock.lock(); defer { jb.lock.unlock() }
+        let newest = unwrap.unwrap(p.seq)
+        let n = p.frames.count
+        for i in 0..<n { jb.put(newest - Int64(n - 1 - i), p.frames[i]) }
+        return true
+    }
+}
+
+/// 16-bit codec seq → monotonic Int64, relative to the last one seen (Kotlin `SeqUnwrapper`).
+///
+/// One deliberate difference: the first seq maps to `origin + seq16` instead of `seq16`. The
+/// Kotlin copy starts at `seq16` itself, so a stream first heard at seq 0 or 1 files its
+/// redundant copies under −1, −2 — and −1 is the jitter buffer's "nothing yet" mark. Only
+/// differences between keys matter to the buffer, so the offset changes nothing else.
+final class SeqUnwrapper {
+    static let origin: Int64 = 1 << 32
+    private var last: UInt16?
+    private var base: Int64 = 0
+    private let lock = NSLock()
+
+    func unwrap(_ seq16: UInt16) -> Int64 {
+        lock.lock(); defer { lock.unlock() }
+        guard let l = last else { last = seq16; base = Self.origin + Int64(seq16); return base }
+        base += Int64(OpusWire.dist(seq16, l))
+        last = seq16
+        return base
+    }
+
+    func reset() { lock.lock(); last = nil; base = 0; lock.unlock() }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">उन्नत चैट गोपनीयता</string>
+    <string name="adv_privacy_subtitle">इस चैट में किसी को भी मीडिया सेव करने, चैट एक्सपोर्ट करने या संदेशों पर AI इस्तेमाल करने से रोकती है</string>
+    <string name="adv_privacy_learn_more">और जानें</string>
+    <string name="adv_privacy_notice_on">%1$s ने उन्नत चैट गोपनीयता चालू की। कोई भी मीडिया अपने-आप सेव नहीं कर सकता, चैट एक्सपोर्ट नहीं कर सकता और इस चैट के संदेशों पर AI इस्तेमाल नहीं कर सकता।</string>
+    <string name="adv_privacy_notice_off">%1$s ने उन्नत चैट गोपनीयता बंद की। मीडिया सेव करना, चैट एक्सपोर्ट करना और AI सुविधाएँ फिर से उपलब्ध हैं।</string>
+    <string name="adv_privacy_notice_on_you">आपने उन्नत चैट गोपनीयता चालू की। कोई भी मीडिया अपने-आप सेव नहीं कर सकता, चैट एक्सपोर्ट नहीं कर सकता और इस चैट के संदेशों पर AI इस्तेमाल नहीं कर सकता।</string>
+    <string name="adv_privacy_notice_off_you">आपने उन्नत चैट गोपनीयता बंद की। मीडिया सेव करना, चैट एक्सपोर्ट करना और AI सुविधाएँ फिर से उपलब्ध हैं।</string>
+    <string name="adv_privacy_summary_on">उन्नत चैट गोपनीयता चालू की गई</string>
+    <string name="adv_privacy_summary_off">उन्नत चैट गोपनीयता बंद की गई</string>
+    <string name="adv_privacy_sheet_intro">जब कोई इसे चालू करता है, तो यह इस चैट में सभी पर लागू होती है:</string>
+    <string name="adv_privacy_sheet_point_save">इस चैट का मीडिया गैलरी या डाउनलोड में सेव नहीं किया जा सकता।</string>
+    <string name="adv_privacy_sheet_point_export">यह चैट चैट एक्सपोर्ट में शामिल नहीं होती।</string>
+    <string name="adv_privacy_sheet_point_ai">OSHI का डिवाइस पर चलने वाला AI इस चैट को नहीं पढ़ सकता: कोई सुझाए गए जवाब नहीं, कोई अनुवाद नहीं, लेखन सहायक के लिए कोई संदर्भ नहीं।</string>
+    <string name="adv_privacy_sheet_point_screen">इस चैट के स्क्रीनशॉट और स्क्रीन रिकॉर्डिंग ब्लॉक हैं।</string>
+    <string name="adv_privacy_sheet_limits">चैट में कोई भी इसे चालू या बंद कर सकता है। यह किसी को अपनी स्क्रीन की फ़ोटो लेने से नहीं रोक सकती, और OSHI का पुराना वर्शन इस्तेमाल करने वालों पर इसका असर नहीं होता।</string>
+    <string name="adv_privacy_blocked_toast">इस चैट में उन्नत चैट गोपनीयता चालू है</string>
+    <string name="adv_privacy_older_members">OSHI के पुराने वर्शन वाले सदस्य, जो अपडेट करने तक इसे लागू नहीं करेंगे: %1$d</string>
+</resources>

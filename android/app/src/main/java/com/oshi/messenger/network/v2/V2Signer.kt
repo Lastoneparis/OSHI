@@ -48,7 +48,8 @@ class V2Signer @Inject constructor(
         bodyToHash: ByteArray,
         withUserHeader: Boolean = false,
     ): Map<String, String> {
-        val timestamp = System.currentTimeMillis().toString()
+        // __CALL_CLOCK_SKEW_2026_11_21__ the server's clock when this phone's is >= 5 s off.
+        val timestamp = com.oshi.messenger.network.auth.ServerClock.signingNowMs().toString()
         val canonical = canonicalString(method, path, bodyToHash, timestamp)
         val signature = Base64.encodeToString(
             cryptoManager.sign(canonical.toByteArray(Charsets.UTF_8)), Base64.NO_WRAP
@@ -60,6 +61,11 @@ class V2Signer @Inject constructor(
             "x-oshi-signing-pubkey" to signingPubKey,
         )
         if (withUserHeader) headers["x-oshi-user"] = userKey()
+        // __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ remember how to sign this request again,
+        // so ServerClock can re-send it ONCE when the server refused it for the clock.
+        if (bodyToHash.size <= MAX_RESIGN_BODY_BYTES) {
+            remember(signature) { sign(method, path, bodyToHash, withUserHeader) }
+        }
         return headers
     }
 
@@ -73,6 +79,32 @@ class V2Signer @Inject constructor(
     fun encodeIdentity(identity: String): String = Companion.encodeIdentity(identity)
 
     companion object {
+        /** Bodies above this are not kept for a re-sign (a blob chunk hashes `""` anyway). */
+        const val MAX_RESIGN_BODY_BYTES = 64 * 1024
+        private const val MAX_RESIGNERS = 64
+
+        private val resigners = object : LinkedHashMap<String, () -> Map<String, String>>(MAX_RESIGNERS, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, () -> Map<String, String>>?) =
+                size > MAX_RESIGNERS
+        }
+
+        internal fun remember(signature: String?, again: () -> Map<String, String>) {
+            if (signature.isNullOrEmpty()) return
+            synchronized(resigners) { resigners[signature] = again }
+        }
+
+        /**
+         * Fresh headers (new timestamp from [com.oshi.messenger.network.auth.ServerClock])
+         * for the request that carried [signature], or null when this process did not sign
+         * it. One use per signature: the re-signed request is not re-signed again.
+         */
+        fun resignFor(signature: String): Map<String, String>? {
+            val again = synchronized(resigners) { resigners.remove(signature) } ?: return null
+            val fresh = again()
+            fresh["x-oshi-signature"]?.let { synchronized(resigners) { resigners.remove(it) } }
+            return fresh
+        }
+
         /**
          * Percent-encode an identity path segment exactly like iOS `encodeIdentity`
          * (V2Client.swift:734-735): only ASCII alphanumerics pass through, every other

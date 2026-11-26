@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Geavanceerde chatprivacy</string>
+    <string name="adv_privacy_subtitle">Voorkom dat iedereen in deze chat media opslaat, de chat exporteert of AI op de berichten gebruikt</string>
+    <string name="adv_privacy_learn_more">Meer informatie</string>
+    <string name="adv_privacy_notice_on">%1$s heeft geavanceerde chatprivacy aangezet. Niemand kan media automatisch opslaan, de chat exporteren of AI gebruiken op berichten in deze chat.</string>
+    <string name="adv_privacy_notice_off">%1$s heeft geavanceerde chatprivacy uitgezet. Media opslaan, de chat exporteren en AI-functies zijn weer beschikbaar.</string>
+    <string name="adv_privacy_notice_on_you">Je hebt geavanceerde chatprivacy aangezet. Niemand kan media automatisch opslaan, de chat exporteren of AI gebruiken op berichten in deze chat.</string>
+    <string name="adv_privacy_notice_off_you">Je hebt geavanceerde chatprivacy uitgezet. Media opslaan, de chat exporteren en AI-functies zijn weer beschikbaar.</string>
+    <string name="adv_privacy_summary_on">Geavanceerde chatprivacy aangezet</string>
+    <string name="adv_privacy_summary_off">Geavanceerde chatprivacy uitgezet</string>
+    <string name="adv_privacy_sheet_intro">Zodra iemand het aanzet, geldt het voor iedereen in deze chat:</string>
+    <string name="adv_privacy_sheet_point_save">Media uit deze chat kunnen niet in de galerij of bij Downloads worden opgeslagen.</string>
+    <string name="adv_privacy_sheet_point_export">Deze chat wordt uitgesloten van chatexports.</string>
+    <string name="adv_privacy_sheet_point_ai">De AI van OSHI op het apparaat kan deze chat niet lezen: geen voorgestelde antwoorden, geen vertaling, geen context voor de schrijfassistent.</string>
+    <string name="adv_privacy_sheet_point_screen">Screenshots en schermopnames van deze chat zijn geblokkeerd.</string>
+    <string name="adv_privacy_sheet_limits">Iedereen in de chat kan het aan- of uitzetten. Het kan niet voorkomen dat iemand het scherm fotografeert, en mensen met een oudere versie van OSHI merken er niets van.</string>
+    <string name="adv_privacy_blocked_toast">Geavanceerde chatprivacy staat aan in deze chat</string>
+    <string name="adv_privacy_older_members">Leden met een oudere versie van OSHI die het pas toepassen na een update: %1$d</string>
+</resources>

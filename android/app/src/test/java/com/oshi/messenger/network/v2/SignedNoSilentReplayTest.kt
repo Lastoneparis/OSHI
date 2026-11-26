@@ -68,9 +68,12 @@ class SignedNoSilentReplayTest {
         // each attempt carries a new timestamp (never the first attempt's headers).
         val src = SourceText.stripComments(SourceText.read("src/main/java/com/oshi/messenger/network/v2/V2MessagesClient.kt"))
         val send = src.substring(src.indexOf("suspend fun send("))
-        val loop = send.indexOf("for (attempt in")
+        // __GROUP_FANOUT_2026_11_24__ the loop is RateLimitBackoff.retrying; `call` is one attempt.
+        val loop = send.indexOf("RateLimitBackoff.retrying(")
+        val call = send.indexOf("call = {", loop)
         val sign = send.indexOf("signer.sign(\"POST\"")
-        assertTrue("send() retries in a loop", loop >= 0)
-        assertTrue("…and signs inside it", sign > loop)
+        val status = send.indexOf("status = {", loop)
+        assertTrue("send() retries in a loop", loop >= 0 && call > loop)
+        assertTrue("…and signs inside each attempt", sign > call && sign < status)
     }
 }

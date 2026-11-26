@@ -81,7 +81,11 @@ class ScreenshotProtectionManager @Inject constructor(
 
     /** What windows actually get: the user's choice, unless a debug build asked for capture. */
     private fun effectiveEnabled(): Boolean = ScreenshotProtectionPolicy.effectiveProtection(
-        userChoice = _isProtectionEnabled.value,
+        // 🛡 __STRICT_MODE_2026_11_22__ strict mode holds protection on even if the stored
+        // choice were off (the mode also writes it ON; this is the belt to that brace).
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ and so does a protected conversation on screen.
+        userChoice = _isProtectionEnabled.value || com.oshi.messenger.security.StrictModeGate.active ||
+            AdvancedChatPrivacyStore.secureWindowRequested,
         isDebugBuild = com.oshi.messenger.BuildConfig.DEBUG,
         debugCaptureOverride = debugCaptureOverride,
     )
@@ -196,6 +200,7 @@ class ScreenshotProtectionManager @Inject constructor(
             for (root in android.view.inspector.WindowInspector.getGlobalWindowViews()) {
                 if (root === activity.window.decorView) continue // handled by setFlags
                 val lp = root.layoutParams as? WindowManager.LayoutParams ?: continue
+                if (root.isAttachedToWindow) markAccessibilitySensitive(root, enabled)
                 val newFlags = ScreenshotProtectionPolicy.reconcile(lp.flags, enabled) ?: continue
                 if (!root.isAttachedToWindow) continue
                 lp.flags = newFlags
@@ -205,6 +210,11 @@ class ScreenshotProtectionManager @Inject constructor(
         } catch (e: Exception) {
             Log.e(TAG, "Failed to reconcile auxiliary windows: ${e.message}")
         }
+    }
+
+    /** 🛡 __STRICT_MODE_2026_11_22__ Re-applies the effective state to every registered window. */
+    fun reapplyAll() {
+        activities.forEach { if (effectiveEnabled()) applyProtection(it) else removeProtection(it) }
     }
 
     /**
@@ -281,6 +291,7 @@ class ScreenshotProtectionManager @Inject constructor(
                 WindowManager.LayoutParams.FLAG_SECURE
             )
             applyRecentsPolicy(activity, secure = true)
+            applySpywareShields(activity, secure = true)
             reconcileAuxiliaryWindows(activity)
             Log.d(TAG, "Screenshot protection applied to ${activity.javaClass.simpleName}")
         } catch (e: Exception) {
@@ -295,11 +306,45 @@ class ScreenshotProtectionManager @Inject constructor(
         try {
             activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
             applyRecentsPolicy(activity, secure = false)
+            applySpywareShields(activity, secure = false)
             reconcileAuxiliaryWindows(activity)
             Log.d(TAG, "Removed protection from ${activity.javaClass.simpleName}")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to remove protection: ${e.message}")
         }
+    }
+
+    /**
+     * 🕵️ __ANTI_STALKERWARE_2026_11_20__ The two shields commercial spy apps run into,
+     * tied to the same "Screenshot protection" setting as FLAG_SECURE (ON by default) so a
+     * person who explicitly turned capture back on gets the old behaviour everywhere.
+     *
+     *  • Accessibility (API 34+). Stalkerware's #1 technique is an AccessibilityService:
+     *    it reads every text node on screen and every keystroke event, and FLAG_SECURE
+     *    does nothing against it. `accessibilityDataSensitive = YES` on the window root
+     *    (inherited by every view and Compose node below it) hides OSHI's windows and
+     *    their events from any service that is NOT flagged `isAccessibilityTool`. Real
+     *    assistive tech — TalkBack, Switch Access, Voice Access, Braille — declares that
+     *    flag and keeps working; blind users are not locked out.
+     *  • Overlays (API 31+, HIDE_OVERLAY_WINDOWS, normal permission). Hides other apps'
+     *    TYPE_APPLICATION_OVERLAY windows while an OSHI window is shown, so a "draw over
+     *    other apps" spy/tapjacking layer cannot sit on top of the composer or a PIN.
+     *    System overlays (calls, IME, notifications) are untouched.
+     */
+    private fun applySpywareShields(activity: Activity, secure: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try { activity.window.setHideOverlayWindows(secure) } catch (e: Exception) {
+                Log.w(TAG, "setHideOverlayWindows failed: ${e.message}")
+            }
+        }
+        markAccessibilitySensitive(activity.window.decorView, secure)
+    }
+
+    private fun markAccessibilitySensitive(root: android.view.View, secure: Boolean) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return
+        // Idempotent and cheap: the setter only notifies when the value changes.
+        try { root.setAccessibilityDataSensitive(ScreenshotProtectionPolicy.accessibilityDataSensitive(secure)) }
+        catch (e: Exception) { Log.w(TAG, "setAccessibilityDataSensitive failed: ${e.message}") }
     }
 
     /**

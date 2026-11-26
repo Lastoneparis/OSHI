@@ -439,6 +439,13 @@ private fun ExportTab(
             label = { Text(stringResource(R.string.key_backup_passphrase_label)) },
             placeholder = { Text(stringResource(R.string.key_backup_passphrase_placeholder)) },
             visualTransformation = if (showPassphrase) VisualTransformation.None else PasswordVisualTransformation(),
+            // __ANTI_STALKERWARE_2026_11_20__ a passphrase is a password to the keyboard:
+            // no suggestions, no learning, no autocorrect — even when the incognito
+            // keyboard toggle is off.
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Password,
+                autoCorrect = false
+            ),
             trailingIcon = {
                 IconButton(onClick = { showPassphrase = !showPassphrase }) {
                     Icon(
@@ -468,6 +475,13 @@ private fun ExportTab(
             label = { Text(stringResource(R.string.key_backup_confirm_passphrase)) },
             placeholder = { Text(stringResource(R.string.key_backup_reenter_passphrase)) },
             visualTransformation = if (showPassphrase) VisualTransformation.None else PasswordVisualTransformation(),
+            // __ANTI_STALKERWARE_2026_11_20__ a passphrase is a password to the keyboard:
+            // no suggestions, no learning, no autocorrect — even when the incognito
+            // keyboard toggle is off.
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Password,
+                autoCorrect = false
+            ),
             isError = confirmPassphrase.isNotEmpty() && !doPassphrasesMatch,
             supportingText = {
                 if (confirmPassphrase.isNotEmpty() && !doPassphrasesMatch) {
@@ -968,6 +982,13 @@ private fun ImportTab(
             label = { Text(stringResource(R.string.key_backup_passphrase)) },
             placeholder = { Text(stringResource(R.string.key_backup_enter_passphrase)) },
             visualTransformation = if (showPassphrase) VisualTransformation.None else PasswordVisualTransformation(),
+            // __ANTI_STALKERWARE_2026_11_20__ a passphrase is a password to the keyboard:
+            // no suggestions, no learning, no autocorrect — even when the incognito
+            // keyboard toggle is off.
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Password,
+                autoCorrect = false
+            ),
             trailingIcon = {
                 IconButton(onClick = { showPassphrase = !showPassphrase }) {
                     Icon(

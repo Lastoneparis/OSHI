@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · χωρίς κρυπτογράφηση από άκρο σε άκρο του OSHI</string>
+    <string name="meshcore_error_not_connected">Δεν υπάρχει συνδεδεμένος ασύρματος MeshCore</string>
+    <string name="meshcore_channels_title">Κανάλια MeshCore</string>
+    <string name="meshcore_channel_public">Δημόσιο · αναγνώσιμο από όποιον ξέρει το όνομα</string>
+    <string name="meshcore_channel_private">Ιδιωτικό · μυστικό κλειδί</string>
+    <string name="meshcore_join_hashtag">Συμμετοχή σε κανάλι hashtag</string>
+    <string name="meshcore_join_private">Συμμετοχή σε ιδιωτικό κανάλι</string>
+    <string name="meshcore_contacts_title">Επαφές MeshCore</string>
+    <string name="meshcore_refresh_contacts">Ανανέωση επαφών</string>
+    <string name="meshcore_join_refused">Ο ασύρματος απέρριψε αυτό το κανάλι.</string>
+    <string name="meshcore_join_no_slot">Δεν υπάρχει ελεύθερη θέση καναλιού σε αυτόν τον ασύρματο.</string>
+    <string name="meshcore_join_bad_name">Εισαγάγετε έγκυρο όνομα καναλιού (έως 31 byte, χωρίς κενά για κανάλι hashtag).</string>
+    <string name="meshcore_join_bad_secret">Το μυστικό πρέπει να είναι 16 byte: 32 δεκαεξαδικοί χαρακτήρες ή base64.</string>
+    <string name="meshcore_hashtag_hint">Το κλειδί προκύπτει από το όνομα: όποιος γνωρίζει το όνομα μπορεί να διαβάσει το κανάλι.</string>
+    <string name="meshcore_private_hint">Εισαγάγετε το όνομα του καναλιού και το μυστικό που μοιράζονται τα μέλη του.</string>
+    <string name="meshcore_channel_name">Όνομα καναλιού</string>
+    <string name="meshcore_channel_secret">Μυστικό (hex ή base64)</string>
+    <string name="meshcore_join">Συμμετοχή</string>
+    <string name="meshcore_note_dm">Κρυπτογραφείται από το MeshCore μεταξύ των ασυρμάτων, όχι από άκρο σε άκρο από το OSHI.</string>
+    <string name="meshcore_note_public">Δημόσιο κανάλι: όποιος γνωρίζει το όνομά του μπορεί να το διαβάσει.</string>
+    <string name="meshcore_note_private">Ιδιωτικό κανάλι: όποιος έχει το μυστικό του μπορεί να το διαβάσει.</string>
+    <string name="meshcore_radio_offline">Ο ασύρματος MeshCore δεν είναι συνδεδεμένος. Τα μηνύματα περιμένουν εδώ ως μη παραδοθέντα.</string>
+    <string name="meshcore_connect">Σύνδεση</string>
+    <string name="meshcore_parts">%1$d μηνύματα</string>
+    <string name="meshcore_sending">Αναμονή για τον ασύρματο</string>
+    <string name="meshcore_failed_dm">Καμία απάντηση από τον ασύρματό τους (εκτός εμβέλειας;). Πατήστε για νέα προσπάθεια.</string>
+    <string name="meshcore_error_pairing">Η σύζευξη απέτυχε. Ελέγξτε το PIN και δοκιμάστε ξανά. Αν ο ασύρματος επαναφέρθηκε, αφαιρέστε τον πρώτα από τις ρυθμίσεις Bluetooth του Android.</string>
+    <string name="meshcore_error_no_answer">Ο ασύρματος δεν απάντησε. Ελέγξτε ότι τρέχει το υλικολογισμικό MeshCore companion για Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Η σύνδεση χάθηκε. Επανασύνδεση όταν ο ασύρματος επιστρέψει σε εμβέλεια…</string>
+    <string name="meshcore_state_pin">Πληκτρολογήστε το PIN του ασυρμάτου στο παράθυρο του Android</string>
+    <string name="meshcore_state_reading">Ανάγνωση επαφών και καναλιών…</string>
+    <string name="meshcore_state_connecting">Σύνδεση…</string>
+    <string name="meshcore_seen_as">Συνδέθηκε · οι χρήστες του MeshCore σας βλέπουν ως %1$s</string>
+    <string name="meshcore_connected">Συνδέθηκε</string>
+    <string name="meshcore_footer_users">Συνομιλήστε με χρήστες του MeshCore (άμεσα μηνύματα και κανάλια) και στείλτε μηνύματα OSHI μέσω αναμεταδοτών MeshCore. Απαιτεί το υλικολογισμικό MeshCore companion για Bluetooth. Το OSHI προσθέτει ένα κανάλι, το #oshi-bridge, σε μια ελεύθερη θέση και δεν αλλάζει ποτέ τα άλλα κανάλια σας.</string>
+    <string name="meshcore_scan_below">Οι ασύρματοι MeshCore εμφανίζονται παρακάτω στους Κοντινούς ασυρμάτους, με την ένδειξη MeshCore.</string>
+    <string name="meshcore_contacts_footer">Πατήστε σε κάποιον για να του γράψετε. Τα μηνύματα κρυπτογραφούνται από το MeshCore, όχι από άκρο σε άκρο από το OSHI.</string>
+    <string name="meshcore_no_contacts">Δεν ακούστηκε κανείς ακόμα. Οι χρήστες του MeshCore εμφανίζονται εδώ όταν ο ασύρματός τους ανακοινώνεται. Ανακοινώστε τον δικό σας για να σας βρουν.</string>
+    <string name="meshcore_heard">Ακούστηκε %1$s</string>
+    <string name="meshcore_announce">Ανακοίνωσέ με</string>
+    <string name="meshcore_announce_done">Ανακοινώθηκε. Οι χρήστες του MeshCore σε εμβέλεια μπορούν τώρα να σας προσθέσουν και να σας γράψουν.</string>
+    <string name="meshcore_announce_failed">Ο ασύρματος δεν μπόρεσε να στείλει την ανακοίνωση.</string>
+    <string name="meshcore_channels_footer">Πατήστε ένα κανάλι για να το ανοίξετε. Τα δημόσια κανάλια και τα κανάλια hashtag τα διαβάζει όποιος γνωρίζει το όνομά τους.</string>
+    <string name="meshcore_pin_title">Σύζευξη με %1$s</string>
+    <string name="meshcore_pin_body">Το Android θα ζητήσει τώρα το PIN του ασυρμάτου. Αν ο ασύρματος έχει οθόνη, το PIN εμφανίζεται εκεί.</string>
+    <string name="meshcore_pin_default">Χωρίς οθόνη; Το PIN είναι 123456, εκτός αν άλλαξε στην εφαρμογή MeshCore.</string>
+    <string name="meshcore_pin_continue">Συνέχεια</string>
+    <string name="meshcore_no_free_channel_chat">Και οι 8 θέσεις καναλιών είναι κατειλημμένες. Μπορείτε ακόμα να συνομιλείτε με χρήστες του MeshCore· ελευθερώστε μια θέση στην εφαρμογή MeshCore ώστε τα μηνύματα OSHI να χρησιμοποιούν το #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">Χρήστης MeshCore</string>
+    <string name="meshcore_too_long">Πολύ μεγάλο: έως %1$d μηνύματα</string>
+</resources>

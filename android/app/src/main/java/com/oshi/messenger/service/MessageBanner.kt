@@ -49,6 +49,32 @@ object MessageBanner {
     fun postedRecently(id: Int, active: List<Pair<Int, Long>>, now: Long): Boolean =
         active.any { (nid, postTime) -> nid == id && now - postTime in 0 until RECENT_WINDOW_MS }
 
+    /**
+     * __PREVIEW_ONE_IN_TWO_2026_11_24__ What the DECRYPTED-message path does with its banner.
+     *
+     * Reported 24/11 (FR): « l'aperçu des messages dans le centre de notification … une
+     * fois sur deux le message s'affiche ». With "notification preview" ON, two paths race
+     * for the same conversation id:
+     *  - the FCM push lands, [FCMService] posts at once with the GENERIC body (the push
+     *    never carries text) and starts the poll;
+     *  - the poll decrypts ~1 s later and reaches the local banner with the real text —
+     *    which saw the FCM banner "posted < [RECENT_WINDOW_MS] ago" and gave up.
+     * So the text showed only when the socket/poll beat the push (app alive), and the
+     * generic sentence stayed when the push won (app in background or killed): one time
+     * out of two. Same for the second of two messages sent within 20 s.
+     *
+     * The anti-double-ring rule was right about SOUND and wrong about CONTENT. A recent
+     * banner now means "update it quietly" when this path has something better to show
+     * (the text), and still "do nothing" when it would only repeat the generic sentence.
+     */
+    enum class LocalPost { POST, UPDATE_QUIETLY, SKIP }
+
+    fun localPostDecision(shownRecently: Boolean, carriesText: Boolean): LocalPost = when {
+        !shownRecently -> LocalPost.POST
+        carriesText -> LocalPost.UPDATE_QUIETLY
+        else -> LocalPost.SKIP
+    }
+
     fun shownRecently(context: Context, id: Int, now: Long = System.currentTimeMillis()): Boolean = try {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         postedRecently(id, nm.activeNotifications.map { it.id to it.postTime }, now)
@@ -74,9 +100,19 @@ object MessageBanner {
 
     fun genericBody(context: Context): String = context.getString(R.string.notification_new_message)
 
+    /**
+     * 🛡 __STRICT_MODE_2026_11_22__ Strict security mode: no sender, no group name, no
+     * photo, no text — every message banner reads "OSHI · New message".
+     */
+    fun anonymous(context: Context): Boolean = com.oshi.messenger.security.StrictModeStore.isActive(context)
+
+    fun anonymousTitle(context: Context): String = context.getString(R.string.app_name)
+
     /** The body to display: generic unless previews were explicitly enabled. */
     fun body(context: Context, decryptedPreview: String): String =
-        if (showsMessageText(context) && decryptedPreview.isNotBlank()) decryptedPreview else genericBody(context)
+        if (!anonymous(context) && showsMessageText(context) && decryptedPreview.isNotBlank())
+            com.oshi.messenger.util.MessageFormatting.strip(decryptedPreview) // __TEXT_FORMATTING_2026_11_24__
+        else genericBody(context)
 
     /**
      * __NOTIFICATION_HAS_NO_FACE_2026_10_27__ Owner report N7: "afficher la photo

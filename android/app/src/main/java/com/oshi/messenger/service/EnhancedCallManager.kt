@@ -293,7 +293,7 @@ class EnhancedCallManager @Inject constructor(
 
         // ──────────────────────────────────────────────────────────────
         // P2P Internet Call stack — Phase 2 (reserved, not wired up yet).
-        // See OSHI-P2P-PLAN.md §2.
+        // See /Users/HUGOMORICEAU/Documents/Genesis/OSHI-P2P-PLAN.md §2.
         // Must match iOS CallPacketType values in VoiceCallManager.swift.
         // ──────────────────────────────────────────────────────────────
         private const val ICE_CANDIDATE_EXCHANGE_TYPE: Byte = 0x30
@@ -333,6 +333,34 @@ class EnhancedCallManager @Inject constructor(
      */
     private val _lastEndReason = MutableStateFlow<CallEndReason?>(null)
     val lastEndReason: StateFlow<CallEndReason?> = _lastEndReason.asStateFlow()
+    /**
+     * __LATE_ACCEPT_2026_11_23__ normalized callId of a callEnd that named the current call
+     * exactly ([LateAcceptPolicy.isEndForThisCall]). Such an end is never "stale": it may
+     * end a CONNECTING / just-connected call, which [endCall]'s guards otherwise refuse.
+     */
+    @Volatile private var remoteEndConfirmedCallId: String? = null
+    private fun remoteEndConfirmedFor(callId: String?): Boolean {
+        val c = CallSignalGuards.normalizeCallId(callId)
+        return c.isNotEmpty() && c == remoteEndConfirmedCallId
+    }
+    /** A callEnd naming THIS call (exact id) is real, even mid-accept: remember it. */
+    private fun noteRemoteEnd(signalCallId: String?) {
+        if (LateAcceptPolicy.isEndForThisCall(signalCallId, _currentCall.value?.callId)) {
+            remoteEndConfirmedCallId = CallSignalGuards.normalizeCallId(signalCallId)
+        }
+    }
+    /** __EGRESS_STALL_2026_11_23__ how long no carrier could take our frames. */
+    private val egressStall = EgressStallPolicy.Tracker()
+
+    // __CALL_WAKE_2026_11_22__ caller side: did the callee's phone get the call?
+    // (GET /call-reach, polled with the fast accept poll while the call rings). null =
+    // unknown / server without the route: the screen keeps its old wording.
+    private val _calleeReach = MutableStateFlow<CallReach?>(null)
+    val calleeReach: StateFlow<CallReach?> = _calleeReach.asStateFlow()
+    private val _outgoingRingingSince = MutableStateFlow(0L)
+    val outgoingRingingSince: StateFlow<Long> = _outgoingRingingSince.asStateFlow()
+    /** Callee side: callIds we already reported as ringing (one report per call). */
+    private val reportedRingingCallIds = java.util.Collections.synchronizedSet(LinkedHashSet<String>())
 
     private val _connectionQuality = MutableStateFlow(NetworkQuality.GOOD)
     val connectionQuality: StateFlow<NetworkQuality> = _connectionQuality.asStateFlow()
@@ -518,6 +546,25 @@ class EnhancedCallManager @Inject constructor(
         maxDepthMs = 200
     )
 
+    /**
+     * __CALL_FLUIDITY_2026_11_21__ The Opus (0x19) receive path: frames queued ENCODED by
+     * codec seq and decoded at playout ([AdaptiveJitterBuffer] + [OpusPlayoutDecoder]),
+     * the same engine as the desktop. Every other codec keeps [jitterBuffer].
+     * Measured (FluiditySimBench, virtual time, same impairments as the desktop bench):
+     * see the commit / AdaptiveJitterBuffer's doc.
+     */
+    private val opusPlayout = com.oshi.messenger.service.audio.OpusPlayoutDecoder()
+    private val opusJitter = com.oshi.messenger.service.audio.AdaptiveJitterBuffer(opusPlayout)
+    private val opusSeq = com.oshi.messenger.service.audio.SeqUnwrapper()
+    /** Set by the first 0x19 received: from then on the playout loop plays [opusJitter]. */
+    @Volatile private var opusRxActive = false
+
+    private fun resetOpusPlayout() {
+        opusRxActive = false
+        opusJitter.reset()
+        opusSeq.reset()
+    }
+
     // Adaptive bitrate controller (iOS compatible)
     private val adaptiveBitrate = com.oshi.messenger.service.audio.AdaptiveBitrateController()
 
@@ -579,8 +626,6 @@ class EnhancedCallManager @Inject constructor(
     private var opusTx: com.oshi.messenger.service.audio.OpusCallEncoder? = null
     /** __CALL_TX_SILENT_DROP_2026_11_10__ every way a captured frame failed to leave. */
     private val txHealth = com.oshi.messenger.service.audio.TxHealth()
-    private var opusRx: com.oshi.messenger.service.audio.OpusCallDecoder? = null
-    private var opusRxLastKey = -1L
     private val wbTxState = com.oshi.messenger.service.audio.WbAdpcmCodec.EncoderState()
     private val wbTxResampler = com.oshi.messenger.service.audio.WbResampler()
     private val wbRxResampler = com.oshi.messenger.service.audio.WbResampler()
@@ -1169,6 +1214,53 @@ class EnhancedCallManager @Inject constructor(
      * An empty callId cannot be deduplicated, so it is always allowed through
      * (better to ring than to silently drop a call whose id we never learned).
      */
+    /**
+     * __CALL_WAKE_2026_11_22__ Callee side: tell the caller (through the call server) that
+     * this phone is ringing for [callId]. Once per call, fire-and-forget; raised from the
+     * in-app ring and from the FCM full-screen ring (whichever comes first).
+     */
+    fun reportRinging(callerPublicKey: String?, callId: String?) {
+        if (callerPublicKey.isNullOrEmpty() || callId.isNullOrEmpty()) return
+        if (!reportedRingingCallIds.add(callId)) return
+        if (reportedRingingCallIds.size > 32) {
+            synchronized(reportedRingingCallIds) {
+                val it = reportedRingingCallIds.iterator()
+                while (reportedRingingCallIds.size > 16 && it.hasNext()) { it.next(); it.remove() }
+            }
+        }
+        scope.launch {
+            val sent = runCatching { vpsClient.sendCallRinging(callerPublicKey, callId) }.getOrDefault(false)
+            if (!sent) reportedRingingCallIds.remove(callId)   // the in-app ring may try again
+        }
+    }
+
+    /**
+     * __CALL_WAKE_2026_11_22__ An FCM call push arrived while the app is in the
+     * FOREGROUND. FCMService used to drop it ("the in-app overlay handles it") — but the
+     * overlay only exists once the offer itself arrives over the socket or the poll, and
+     * when that copy is lost (zombie socket, a poll dropped by a wrong clock: 21/11) the
+     * phone never rang. Fetch the offer now; if after 3 s nothing rings for this call,
+     * raise the system ringer ([startSystemRinger]) like a backgrounded phone would.
+     */
+    fun onCallPushWhileForeground(callId: String, startSystemRinger: () -> Unit) {
+        scope.launch {
+            runCatching { vpsClient.pollCallSignals().forEach { handleCallSignal(it) } }
+            delay(3000)
+            val state = _callState.value
+            val sameCall = _currentCall.value?.callId?.equals(callId, ignoreCase = true) == true
+            if (ForegroundCallPushPolicy.shouldRaiseSystemRinger(
+                    callId = callId,
+                    idle = state == CallState.IDLE || state == CallState.ENDED,
+                    alreadyThisCall = sameCall,
+                    recentlyEnded = isCallIdRecentlyEnded(callId),
+                ) && tryPresentIncomingSurface(callId)
+            ) {
+                Log.w(TAG, "📞 FCM call ${callId.take(8)} in foreground and no offer arrived — raising the system ringer")
+                startSystemRinger()
+            }
+        }
+    }
+
     fun tryPresentIncomingSurface(callId: String?): Boolean {
         val key = callId?.takeIf { it.isNotEmpty() } ?: return true
         // Set.add() returns false when the element was already present.
@@ -1385,12 +1477,14 @@ class EnhancedCallManager @Inject constructor(
         beginRelayTokenFetch(peerKey, callId)
         val client = UDPRelayClient()
         client.tokenProvider = { force -> relayTokenFor(callId, peerKey, force) }
-        client.onAudioPacket = { payload ->
+        client.onAudioPacket = { payload, origin ->
             // Received-media evidence for chooseAudioTxPrimary — iOS `recordRx(.udpRelay)`.
             notePathRx(AudioTxPrimary.UDP_RELAY)
             scope.launch {
                 val peerForPipe = _currentCall.value?.peerPublicKey ?: return@launch
-                handleAudioData(payload, peerForPipe)
+                // The relay-stamped origin is the only thing that can vouch for a
+                // legacy bare 0x04 hang-up (__BARE_CALLEND_ATTESTED_2026_11_21__).
+                handleAudioData(payload, peerForPipe, relayOrigin = origin)
             }
         }
         // 📹 Video-over-UDP receive (interop-critical, iOS parity).
@@ -1846,6 +1940,8 @@ class EnhancedCallManager @Inject constructor(
                 }
             }
 
+            _calleeReach.value = null  // __CALL_WAKE_2026_11_22__
+            _outgoingRingingSince.value = System.currentTimeMillis()
             _callState.value = CallState.RINGING
             playRingbackTone()
 
@@ -1867,6 +1963,13 @@ class EnhancedCallManager @Inject constructor(
                         }
                     } catch (e: Exception) {
                         Log.w(TAG, "Fast poll #$pollCount failed: ${e.message}")
+                    }
+                    // __CALL_WAKE_2026_11_22__ ringing / delivered / pushed / unreachable
+                    if (_callState.value == CallState.RINGING && _currentCall.value?.callId == callId) {
+                        val reach = runCatching { vpsClient.fetchCallReach(callId) }.getOrNull()
+                        if (reach != null && _currentCall.value?.callId == callId) {
+                            _calleeReach.value = CallReach.merge(_calleeReach.value, reach)
+                        }
                     }
                 }
             }
@@ -1898,9 +2001,41 @@ class EnhancedCallManager @Inject constructor(
     // INCOMING CALLS
     // ============================================================================
 
+    /** __LATE_ACCEPT_2026_11_23__ May [acceptCall] still start media for [call]? */
+    private fun lateAcceptVerdict(call: CurrentCall, serverSaysEnded: Boolean): LateAcceptPolicy.Verdict =
+        LateAcceptPolicy.verdict(
+            serverSaysEnded = serverSaysEnded,
+            remoteEndForThisCall = remoteEndConfirmedFor(call.callId),
+            callIdRecentlyEnded = isCallIdRecentlyEnded(call.callId),
+            stillThisCall = _currentCall.value?.callId == call.callId,
+            endingOrEnded = isEndingCall || _callState.value == CallState.ENDED,
+        )
+
+    /**
+     * __LATE_ACCEPT_2026_11_23__ The call [acceptCall] is answering is already over: tear it
+     * down now, before any media starts, and let the ended overlay say "Call ended"
+     * ([CallEndReason.PEER_ENDED]). Nothing to do when endCall is already running (its own
+     * reason stands) or another call has become current (not ours to end).
+     */
+    private fun finishLateAccept(call: CurrentCall, why: String) {
+        CallDiag.urgent(TAG, "DIAG_LATE_ACCEPT | callId=${call.callId.take(8)} | $why — media not started")
+        if (_currentCall.value?.callId != call.callId) return
+        if (isEndingCall || _callState.value == CallState.ENDED) return
+        remoteEndConfirmedCallId = CallSignalGuards.normalizeCallId(call.callId)
+        receivedRemoteEndSignal = true  // the caller is gone: no in-band 0x0D echo, no sibling dismissal
+        endCall(CallEndReason.PEER_ENDED)
+    }
+
     suspend fun acceptCall() {
         val call = _currentCall.value ?: return
         stopRingtoneAndRingback()
+
+        // __LATE_ACCEPT_2026_11_23__ Accept tapped on a call that is already over (its
+        // callEnd arrived a moment ago, the ended overlay is still up): no accept, no media.
+        if (lateAcceptVerdict(call, serverSaysEnded = false) == LateAcceptPolicy.Verdict.CALL_OVER) {
+            finishLateAccept(call, "call already over when Accept was tapped")
+            return
+        }
 
         try {
             _callState.value = CallState.CONNECTING
@@ -2002,14 +2137,27 @@ class EnhancedCallManager @Inject constructor(
             )
             // P2P-preferred: optimistic MESH_DIRECT label; P2P.onStateChanged adjusts to RELAY/VPS on fallback.
             _connectionType.value = ConnectionType.MESH_DIRECT
-            repeat(3) { attempt ->
-                try {
-                    vpsClient.sendCallSignal(call.peerPublicKey, acceptSignal)
+            // __LATE_ACCEPT_2026_11_23__ the server's answer is kept: it may say the caller
+            // already gave up. (The old `repeat` + `return@repeat` never broke out: every
+            // accept went three times, and a failed POST — `false`, not a throw — had no
+            // back-off. Now: stop at the first delivery, retry only a failure.)
+            var acceptReplySaysEnded = false
+            for (attempt in 0 until 3) {
+                val r = vpsClient.sendCallSignalForResult(call.peerPublicKey, acceptSignal)
+                if (r.callEnded) { acceptReplySaysEnded = true; break }
+                if (r.delivered) {
                     Log.d(TAG, "📞 Accept sent via VPS (attempt ${attempt + 1})")
-                    return@repeat
-                } catch (e: Exception) {
-                    delay(200L * (attempt + 1))
+                    break
                 }
+                delay(200L * (attempt + 1))
+            }
+            if (lateAcceptVerdict(call, acceptReplySaysEnded) == LateAcceptPolicy.Verdict.CALL_OVER) {
+                finishLateAccept(
+                    call,
+                    if (acceptReplySaysEnded) "call server answered the accept with callEnd"
+                    else "call ended while the accept was in flight"
+                )
+                return
             }
 
             // Also try mesh for lower latency (best-effort, won't cause duplicates — receiver deduplicates by callId)
@@ -2021,6 +2169,12 @@ class EnhancedCallManager @Inject constructor(
                 } catch (e: Exception) {
                     Log.d(TAG, "📞 Mesh accept failed, VPS delivery will handle it")
                 }
+            }
+
+            // __LATE_ACCEPT_2026_11_23__ last look before any media machinery starts.
+            if (lateAcceptVerdict(call, serverSaysEnded = false) == LateAcceptPolicy.Verdict.CALL_OVER) {
+                finishLateAccept(call, "call ended during transport setup")
+                return
             }
 
             // 🧭 P2P Phase 3/4 (callee): start our own UDP socket + STUN gather and
@@ -2050,8 +2204,23 @@ class EnhancedCallManager @Inject constructor(
                 CallDiag.d(TAG, "📹 acceptCall: video started")
             }
 
+            // __LATE_ACCEPT_2026_11_23__ endCall may have run WHILE audio/video started (the
+            // callEnd landed mid-start): its teardown can have passed stopAudio() already, so
+            // stop what we just started instead of overwriting ENDED with IN_CALL.
+            if (_callState.value != CallState.CONNECTING || _currentCall.value?.callId != call.callId) {
+                CallDiag.urgent(TAG, "DIAG_LATE_ACCEPT | callId=${call.callId.take(8)} | ended while media was starting (state=${_callState.value}) — stopping it")
+                // Only if no OTHER call has taken the audio since (theirs is not ours to stop).
+                val current = _currentCall.value
+                if (current == null || current.callId == call.callId) {
+                    stopAudio()
+                    if (call.isVideoCall) scope.launch { videoCallManager.stopVideo() }
+                }
+                return
+            }
+
             callConnectedTime = System.currentTimeMillis()
             lastAudioReceivedTime = System.currentTimeMillis()
+            egressStall.reset()  // __EGRESS_STALL_2026_11_23__
             _callState.value = CallState.IN_CALL
             Log.w(TAG, "DIAG: STATE TRANSITION -> IN_CALL (from acceptCall, video=${call.isVideoCall}, wsConnected=${vpsClient.isCallWebSocketConnected})")
             CallDiag.d(TAG, "📞 acceptCall: state → IN_CALL")
@@ -2239,7 +2408,10 @@ class EnhancedCallManager @Inject constructor(
 
         // 🔧 FIX: Protect CONNECTING state from stale remote end signals
         // When we're in the middle of accepting a call, ignore remote hangup signals
-        if (_callState.value == CallState.CONNECTING && reason == CallEndReason.PEER_ENDED) {
+        // __LATE_ACCEPT_2026_11_23__ ...unless the end names this exact call: then it is the
+        // caller who gave up before our accept landed (call ea1fac0f, 22/11), not a straggler.
+        val endIsForThisCall = reason == CallEndReason.PEER_ENDED && remoteEndConfirmedFor(call.callId)
+        if (_callState.value == CallState.CONNECTING && reason == CallEndReason.PEER_ENDED && !endIsForThisCall) {
             Log.w(TAG, "⚠️ Blocking endCall - call is still connecting (likely stale signal)")
             return
         }
@@ -2256,7 +2428,7 @@ class EnhancedCallManager @Inject constructor(
 
             // 🔧 NEW: For remote-initiated hangup, use 3 second protection
             // This prevents stale callEnd signals from previous call attempts
-            if (reason == CallEndReason.PEER_ENDED && receivedRemoteEndSignal && timeSinceConnect < RINGING_GRACE_PERIOD_MS) {
+            if (reason == CallEndReason.PEER_ENDED && receivedRemoteEndSignal && !endIsForThisCall && timeSinceConnect < RINGING_GRACE_PERIOD_MS) {
                 Log.w(TAG, "⚠️ Blocking remote endCall - call just connected ${timeSinceConnect}ms ago (stale signal)")
                 return
             }
@@ -2530,6 +2702,7 @@ class EnhancedCallManager @Inject constructor(
             }
             videoReplayWindow.reset()
             jitterBuffer.reset()
+            resetOpusPlayout()
             aacEldCodec?.release()
             aacEldCodec = null
             useAacEld = false
@@ -2552,8 +2725,6 @@ class EnhancedCallManager @Inject constructor(
             wbTxState.predictor = 0; wbTxState.index = 0
             wbTxResampler.reset()
             synchronized(wbRxLock) {
-                opusRx = null
-                opusRxLastKey = -1L
                 wbRxResampler.reset()
                 wbRxPostFilter.reset()
             }
@@ -2658,12 +2829,22 @@ class EnhancedCallManager @Inject constructor(
             processedCallSignalIDs.add(signalId)
         }
 
+        // __CROSS_CALL_GUARD_2026_11_21__ an accept / decline / end for ANOTHER callId
+        // (a late signal from the previous call with this peer) must not touch this one.
+        // See [CallSignalGuards]; iOS and desktop already refuse these.
+        val activeCallId = _currentCall.value?.callId
+        if (CallSignalGuards.isForeignCallSignal(resolvedSignal.type, resolvedSignal.callId, activeCallId)) {
+            Log.w(TAG, "🛡️ Ignoring ${resolvedSignal.type} for foreign callId ${resolvedSignal.callId.take(8)} — active call is ${activeCallId?.take(8)} (state ${_callState.value})")
+            return
+        }
+
         when (resolvedSignal.type) {
             CallSignalType.CALL_REQUEST -> handleIncomingCall(resolvedSignal)
             CallSignalType.CALL_ACCEPT -> handleCallAccepted(resolvedSignal)
             CallSignalType.CALL_REJECT -> handleCallRejected()
             CallSignalType.CALL_END -> {
                 receivedRemoteEndSignal = true
+                noteRemoteEnd(resolvedSignal.callId)  // __LATE_ACCEPT_2026_11_23__
                 handleCallEnded()
             }
             CallSignalType.AUDIO_DATA -> handleAudioData(resolvedSignal.payload, resolvedSignal.senderPublicKey)
@@ -3164,6 +3345,7 @@ class EnhancedCallManager @Inject constructor(
             isEndingCall = false
             receivedRemoteEndSignal = false
             _callState.value = CallState.RINGING
+            reportRinging(signal.senderPublicKey, callId)  // __CALL_WAKE_2026_11_22__
             // ⏱️ Callee-side ring watchdog — iOS `calleeRingWatchdog`,
             // VoiceCallManager.swift:4006-4016. Without it the incoming-call state
             // never ended: IncomingCallService silenced the ringtone at 45 s and
@@ -3315,6 +3497,7 @@ class EnhancedCallManager @Inject constructor(
 
             callConnectedTime = System.currentTimeMillis()
             lastAudioReceivedTime = System.currentTimeMillis()
+            egressStall.reset()  // __EGRESS_STALL_2026_11_23__
             _callState.value = CallState.IN_CALL
             Log.w(TAG, "DIAG: STATE TRANSITION -> IN_CALL (from handleCallAccepted, video=${call?.isVideoCall}, wsConnected=${vpsClient.isCallWebSocketConnected}, binaryWs=${vpsClient.serverSupportsBinary})")
 
@@ -3583,7 +3766,39 @@ class EnhancedCallManager @Inject constructor(
     // WHY: DIAG_WS audio_rx counter (for rate-limited logging).
     private val diagWsAudioRxCount = java.util.concurrent.atomic.AtomicLong(0)
 
-    private fun handleAudioData(encryptedData: ByteArray, senderPublicKey: String, fromP2P: Boolean = false) {
+    /**
+     * AUTO-ACCEPT: if we are the OUTGOING caller and still RINGING, an authenticated media
+     * frame from the peer means it has accepted (iOS starts media before its accept lands).
+     * Only a frame that decrypted under this call's session key counts — see
+     * [CallSignalGuards.mayAutoAcceptFromMedia].
+     */
+    private fun maybeAutoAcceptFromMedia(senderPublicKey: String) {
+        val call = _currentCall.value
+        if (!CallSignalGuards.mayAutoAcceptFromMedia(
+                ringingOutgoing = _callState.value == CallState.RINGING && call?.isOutgoing == true,
+                alreadyAutoAccepted = hasAutoAcceptedFromMedia,
+                decryptedUnderSessionKey = true,
+                senderKey = senderPublicKey,
+                peerKey = call?.peerPublicKey,
+            )) return
+        hasAutoAcceptedFromMedia = true
+        Log.w(TAG, "DIAG: AUTO-ACCEPT — authenticated media from peer while RINGING (outgoing), triggering handleCallAccepted")
+        scope.launch {
+            handleCallAccepted(null)
+        }
+    }
+
+    /**
+     * @param relayOrigin sender + callId stamped by the per-call UDP relay on the frame that
+     *   carried [encryptedData]; null on every other transport. Only consulted for the legacy
+     *   bare `0x04` hang-up (see [CallSignalGuards.mayEndFromBareMediaCallEnd]).
+     */
+    private fun handleAudioData(
+        encryptedData: ByteArray,
+        senderPublicKey: String,
+        fromP2P: Boolean = false,
+        relayOrigin: UDPRelayClient.RelayOrigin? = null,
+    ) {
         // 🛟 SILENCE FIX (mirrors iOS 1.0.9): the previous unconditional
         // strict-P2P drop killed every mesh/VPS-WebSocket audio frame even
         // when P2P UDP hadn't (or couldn't) hole-punch — the common case for
@@ -3613,13 +3828,8 @@ class EnhancedCallManager @Inject constructor(
         // AUTO-ACCEPT: If we're the OUTGOING caller in RINGING state and receive media,
         // the peer has accepted the call. iOS sends accept via HTTP (polled every ~30s)
         // but starts sending video immediately — receiving media IS the implicit accept.
-        if (_callState.value == CallState.RINGING && _currentCall.value?.isOutgoing == true && !hasAutoAcceptedFromMedia) {
-            hasAutoAcceptedFromMedia = true
-            Log.w(TAG, "DIAG: AUTO-ACCEPT — received media from peer while RINGING (outgoing), triggering handleCallAccepted")
-            scope.launch {
-                handleCallAccepted(null)
-            }
-        }
+        // __AUTO_ACCEPT_AUTHENTICATED_2026_11_21__ no longer on the raw packet: see
+        // [maybeAutoAcceptFromMedia], called once a frame has DECRYPTED under this call's key.
 
         sessionKey?.let { key ->
             try {
@@ -3739,9 +3949,33 @@ class EnhancedCallManager @Inject constructor(
                     return
                 }
 
-                // Handle callEnd signal received via WebSocket (dual-path delivery from iOS)
+                // Legacy bare callEnd `[0x04][ts BE8]` on the media path (Android's
+                // endCall "Path 1"). Cleartext and callId-less, so it is honoured ONLY when
+                // the per-call UDP relay attests it came from this call's peer for this
+                // callId (__BARE_CALLEND_ATTESTED_2026_11_21__). Otherwise it is dropped —
+                // never handed to the decoders — and the hang-up arrives through the
+                // sealed, callId-guarded signal or the sealed in-band 0x0D every sender
+                // also emits.
                 if (packetType == 0x04.toByte()) {
-                    Log.d(TAG, "📞 Received callEnd via WebSocket (dual-path)")
+                    val call = _currentCall.value
+                    val state = _callState.value
+                    val accepted = CallSignalGuards.mayEndFromBareMediaCallEnd(
+                        packetSize = encryptedData.size,
+                        callLive = call != null && state != CallState.IDLE && state != CallState.ENDED,
+                        attestedSender = relayOrigin?.sender,
+                        attestedCallId = relayOrigin?.callId,
+                        peerKey = call?.peerPublicKey,
+                        activeCallId = call?.callId,
+                    )
+                    if (!accepted) {
+                        CallDiag.w(
+                            TAG,
+                            "DIAG_BARE_CALLEND_DROPPED | size=${encryptedData.size} | relay=${relayOrigin != null} | " +
+                                "frameCall=${relayOrigin?.callId?.take(8)} | call=${call?.callId?.take(8)} | state=$state"
+                        )
+                        return
+                    }
+                    Log.w(TAG, "📞 Received relay-attested bare callEnd (0x04) for the current call")
                     receivedRemoteEndSignal = true
                     handleCallEnded()
                     return
@@ -3997,6 +4231,7 @@ class EnhancedCallManager @Inject constructor(
                     val encryptedVideoData = encryptedData.copyOfRange(9, encryptedData.size)
                     val rawVideoData = decryptVideoPacket(encryptedVideoData, key)
                     if (rawVideoData != null) {
+                        maybeAutoAcceptFromMedia(senderPublicKey)
                         // __VUPG_SELF_HEAL_2026_09_14__ Recevoir des trames vidéo
                         // PROUVE que le pair est passé en vidéo. On le suit.
                         //
@@ -4074,6 +4309,7 @@ OshiConnection.updateCallHasVideo(true)
                     }
                     throw de
                 }
+                maybeAutoAcceptFromMedia(senderPublicKey)
 
                 // 📊 Feed the adaptive-bitrate controller from REAL received media.
                 // Before this its ONLY feed sites were inside the broken keepalive-RTT
@@ -4165,26 +4401,15 @@ OshiConnection.updateCallHasVideo(true)
                         useOpus = true
                         Log.w(TAG, "📞 Opus auto-upgrade — peer sent 0x19")
                     }
-                    val keyed = synchronized(wbRxLock) {
-                        val dec = opusRx ?: com.oshi.messenger.service.audio.OpusCallDecoder().also { opusRx = it }
-                        val frames = dec.decode(decrypted)
-                        val k = com.oshi.messenger.service.audio.OpusCallDecoder.keyed(frames, sequenceNumber, opusRxLastKey)
-                        if (k.isNotEmpty()) opusRxLastKey = k.last().first
-                        k
-                    }
-                    if (keyed.isEmpty()) return
-                    // __OPUS_LOOKAHEAD_2026_09_23__ keep one frame queued beyond the one playing
-                    // so the copy of a lost frame carried by the NEXT packet arrives before its
-                    // slot is concealed (+20 ms; 3 % loss PESQ-WB 3.44 → 4.27, audio_lab).
-                    jitterBuffer.lookAheadFrames = 1
-                    for ((key, pcm) in keyed) {
-                        val bytes = ByteArray(pcm.size * 2)
-                        for (i in pcm.indices) { val v = pcm[i].toInt(); bytes[2 * i] = v.toByte(); bytes[2 * i + 1] = (v shr 8).toByte() }
-                        jitterBuffer.addPacket(key, bytes)
-                    }
+                    // __CALL_FLUIDITY_2026_11_21__ queued encoded (newest + its redundant
+                    // copies) under the codec seq, decoded at playout. Was: decoded here, a hole
+                    // filled with PLC on the spot, the real frames discarded when they turned up
+                    // 20-60 ms later, and late frames dropped by a slot clock that never waited.
+                    if (!com.oshi.messenger.service.audio.OpusPlayoutDecoder.file(decrypted, opusJitter, opusSeq)) return
+                    opusRxActive = true
                     audioPacketsReceived++
                     if (audioPacketsReceived <= 3 || audioPacketsReceived % 100 == 0L) {
-                        Log.w(TAG, "📞 Opus audio packet #$audioPacketsReceived — seq=$sequenceNumber, wire=${decrypted.size}B → ${keyed.size} frame(s)")
+                        Log.w(TAG, "📞 Opus audio packet #$audioPacketsReceived — seq=$sequenceNumber, wire=${decrypted.size}B | ${opusJitter.stats()}")
                     }
                     if (diagRxShouldLog) {
                         CallDiag.w(TAG, "DIAG_RX_AUDIO_FIRST | path=$diagRxPath | typeByte=0x%02X | size=${encryptedData.size} | seq=$sequenceNumber | decryptOk=true | decryptedSize=${decrypted.size} | enqueuedToJitter=true".format(packetType))
@@ -4547,6 +4772,7 @@ OshiConnection.updateCallHasVideo(true)
 
         // Reset jitter buffer and packet counters
         jitterBuffer.reset()
+        resetOpusPlayout()
         qualityTracker.reset()
         qualityRealFrames = 0L
         qualityConcealedFrames = 0L
@@ -4680,12 +4906,26 @@ OshiConnection.updateCallHasVideo(true)
                 diagPbLoopIters++
 
                 // Get packet from jitter buffer (codec-agnostic)
-                val compressedData = jitterBuffer.getNextPacket()
+                // __CALL_FLUIDITY_2026_11_21__ Opus plays from the adaptive buffer: always
+                // exactly 20 ms, real / concealed told by what it was made of.
+                val fromOpus = opusRxActive
+                val compressedData = if (fromOpus) {
+                    val pcm = opusJitter.pull()
+                    val b = ByteArray(pcm.size * 2)
+                    for (i in pcm.indices) { val v = pcm[i].toInt(); b[2 * i] = v.toByte(); b[2 * i + 1] = (v shr 8).toByte() }
+                    b
+                } else jitterBuffer.getNextPacket()
 
                 if (compressedData != null) {
                     // PLC fade gain: 1.0 for real packets, <1.0 for concealment frames
                     // consecutiveLosses is updated inside getNextPacket(), so read after
-                    val fadeGain = jitterBuffer.plcFadeGain()
+                    val fadeGain = if (fromOpus) {
+                        when (opusJitter.kind()) {
+                            com.oshi.messenger.service.audio.AdaptiveJitterBuffer.Kind.NORMAL,
+                            com.oshi.messenger.service.audio.AdaptiveJitterBuffer.Kind.PRIMING -> 1.0f
+                            else -> 0.5f
+                        }
+                    } else jitterBuffer.plcFadeGain()
 
                     // Classify real vs concealed by fade gain (1.0 = fresh packet, <1.0 = PLC repeat).
                     if (fadeGain >= 1.0f) diagPbRealPackets++ else diagPbConcealed++
@@ -6378,6 +6618,7 @@ OshiConnection.updateCallHasVideo(true)
      */
     private fun flushPlaybackForResync(why: String) {
         jitterBuffer.reset()
+        opusJitter.reset()
         synchronized(audioTrackLock) {
             val track = audioTrack ?: return@synchronized
             try {
@@ -7101,6 +7342,37 @@ OshiConnection.updateCallHasVideo(true)
                     }
                 }
 
+                // __EGRESS_STALL_2026_11_23__ Stop streaming to nobody: no carrier can take
+                // our frames (WS down / refused / clogged, UDP relay refused or silent, no
+                // P2P) AND nothing comes in, for EgressStallPolicy.STALL_MS → "Connection lost".
+                if (_callState.value == CallState.IN_CALL && !isEndingCall) {
+                    val nowMs = System.currentTimeMillis()
+                    val relay = udpRelay
+                    val udpReplyAt = relay?.lastServerReplyAtMs ?: 0L
+                    val blocked = EgressStallPolicy.egressBlocked(
+                        p2pCarrying = p2pCanCarryAudio(),
+                        udpRegistered = relay?.isRegistered == true,
+                        udpAuthRefused = relay?.isAuthRefused == true,
+                        msSinceUdpReply = if (udpReplyAt > 0L) nowMs - udpReplyAt else null,
+                        wsConnected = vpsClient.isCallWebSocketConnected,
+                        wsAuthRefused = vpsClient.callWebSocketAuthRefused,
+                        wsQueuedBytes = vpsClient.callWebSocketQueuedBytes,
+                        msSinceHttpOk = vpsClient.lastCallAudioPostOkAtMs.takeIf { it > 0L }?.let { nowMs - it },
+                    )
+                    val msBlocked = egressStall.update(nowMs, blocked)
+                    if (EgressStallPolicy.shouldEnd(msBlocked, timeSincePeerProof)) {
+                        CallDiag.urgent(
+                            TAG,
+                            "DIAG_EGRESS_STALL | egress blocked ${msBlocked}ms + no inbound ${timeSincePeerProof}ms — ending | " +
+                                "ws=${vpsClient.isCallWebSocketConnected} wsRefused=${vpsClient.callWebSocketAuthRefused} " +
+                                "wsQueue=${vpsClient.callWebSocketQueuedBytes} udpReg=${relay?.isRegistered} " +
+                                "udpRefused=${relay?.isAuthRefused} udpReplyAge=${if (udpReplyAt > 0L) nowMs - udpReplyAt else -1} | " +
+                                "sent=$audioPacketsSent/$videoPacketsSent"
+                        )
+                        endCall(CallEndReason.CONNECTION_LOST)
+                    }
+                }
+
                 // Cross-platform audio diagnostic — structured snapshot every ~2s.
                 diagSnapshotTick++
                 if (diagSnapshotTick % 4 == 0) {
@@ -7253,7 +7525,13 @@ OshiConnection.updateCallHasVideo(true)
             }
         }
         networkCallback = callback
-        val request = NetworkRequest.Builder().build()
+        // __WIFI_AWARE_2026_11_25__ INTERNET only. A bare Builder() also matches
+        // local-only networks — a Wi-Fi Aware data path to a nearby phone among
+        // them — and their coming and going would restart ICE and flag the call
+        // RECONNECTING although the call's own path never changed.
+        val request = NetworkRequest.Builder()
+            .addCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .build()
         cm.registerNetworkCallback(request, callback)
     }
 

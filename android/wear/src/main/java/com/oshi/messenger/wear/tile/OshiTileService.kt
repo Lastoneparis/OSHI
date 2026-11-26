@@ -2,21 +2,31 @@ package com.oshi.messenger.wear.tile
 
 import android.content.Context
 import androidx.wear.protolayout.ActionBuilders
-import androidx.wear.protolayout.ColorBuilders.argb
-import androidx.wear.protolayout.DimensionBuilders.dp
+import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
-import androidx.wear.protolayout.DimensionBuilders.sp
-import androidx.wear.protolayout.DimensionBuilders.wrap
 import androidx.wear.protolayout.LayoutElementBuilders
-import androidx.wear.protolayout.LayoutElementBuilders.Box
-import androidx.wear.protolayout.LayoutElementBuilders.Column
-import androidx.wear.protolayout.LayoutElementBuilders.FontStyle
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
-import androidx.wear.protolayout.LayoutElementBuilders.Spacer
-import androidx.wear.protolayout.LayoutElementBuilders.Text
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.material3.ButtonColors
+import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
+import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
+import androidx.wear.protolayout.material3.ColorScheme
+import androidx.wear.protolayout.material3.MaterialScope
+import androidx.wear.protolayout.material3.Typography
+import androidx.wear.protolayout.material3.buttonGroup
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.material3.textButton
+import androidx.wear.protolayout.material3.textEdgeButton
+import androidx.wear.protolayout.modifiers.LayoutModifier
+import androidx.wear.protolayout.modifiers.border
+import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.modifiers.contentDescription
+import androidx.wear.protolayout.types.LayoutColor
+import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
@@ -28,7 +38,10 @@ import com.oshi.messenger.wear.R
 import com.oshi.messenger.wear.data.Outcome
 import com.oshi.messenger.wear.data.PhoneWearSource
 import com.oshi.messenger.wear.data.Reason
+import com.oshi.messenger.wear.data.WearInbox
+import com.oshi.wearbridge.WearAvatar
 import com.oshi.wearbridge.WearConversation
+import com.oshi.wearbridge.WearNet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -37,10 +50,19 @@ import kotlinx.coroutines.guava.future
 import kotlinx.coroutines.withTimeoutOrNull
 
 /**
- * __WEAR_BRIDGE_2026_11_17__ The OSHI tile: unread count and the three most
- * recent conversations (names and unread count only — never message text).
- * Asked of the phone on each tile request, kept nowhere by this app; tapping
- * a row opens that conversation, tapping elsewhere opens the app.
+ * __WEAR_BRIDGE_2026_11_17__ / __WEAR_POLISH_2026_11_25__ The OSHI tile,
+ * Material 3 Expressive ("golden" contacts-style layout):
+ *
+ *   title    OSHI · 5 unread
+ *   main     up to 3 recent chats as round avatar buttons (initials in the
+ *            person's own avatar colour; a violet ring = unread) — tap opens
+ *            that conversation
+ *   label    how the PHONE is connected (internet / nearby / LoRa / offline)
+ *   edge     Reply — straight to the reply screen of the newest unread chat
+ *
+ * Names never appear as text, only as accessibility labels, and never any
+ * message text. In the phone's strict mode the avatars are dropped and only
+ * the count remains. Asked of the phone on each tile request, kept nowhere.
  */
 class OshiTileService : TileService() {
 
@@ -50,14 +72,11 @@ class OshiTileService : TileService() {
         scope.future {
             val source = DebugSources.fake(this@OshiTileService) ?: PhoneWearSource(this@OshiTileService)
             val outcome = try {
-                withTimeoutOrNull(6_000) { source.conversations() } ?: Outcome.Fail(Reason.NO_PHONE)
+                withTimeoutOrNull(6_000) { source.inbox() } ?: Outcome.Fail(Reason.NO_PHONE)
             } finally {
                 source.close()
             }
-            val layout = when (outcome) {
-                is Outcome.Ok -> TileLayout.content(this@OshiTileService, outcome.value)
-                is Outcome.Fail -> TileLayout.status(this@OshiTileService, outcome.reason)
-            }
+            val layout = TileLayout.layout(this@OshiTileService, requestParams.deviceConfiguration, outcome)
             TileBuilders.Tile.Builder()
                 .setResourcesVersion(RESOURCES_VERSION)
                 .setFreshnessIntervalMillis(15 * 60_000L)
@@ -73,111 +92,161 @@ class OshiTileService : TileService() {
         scope.cancel()
     }
 
-    companion object { const val RESOURCES_VERSION = "1" }
+    companion object { const val RESOURCES_VERSION = "2" }
 }
 
-/** Pure layout, so the screenshot harness and the service draw the same thing. */
+/** Pure layout, so tests and the service draw the same thing. */
 object TileLayout {
     private const val INK = 0xFFB899FF.toInt()
     private const val TEXT = 0xFFF2F2F7.toInt()
     private const val MUTED = 0xFFA1A1AA.toInt()
-    private const val CARD = 0xFF141414.toInt()
-    private const val RIM = 0x2EFFFFFF
     private const val VIOLET = 0xFF5616EC.toInt()
+    private const val AMBER = 0xFFFFC266.toInt()
 
-    private fun launch(context: Context, conv: WearConversation? = null): ModifiersBuilders.Clickable {
+    private fun c(argb: Int) = LayoutColor(argb)
+
+    /** The OSHI glass-on-black palette; dynamic colour off so the brand survives any watch face. */
+    private val scheme = ColorScheme(
+        primary = c(INK),
+        onPrimary = c(0xFF1B0B4D.toInt()),
+        primaryContainer = c(VIOLET),
+        onPrimaryContainer = c(0xFFFFFFFF.toInt()),
+        surfaceContainerLow = c(0xFF0E0E10.toInt()),
+        surfaceContainer = c(0xFF141414.toInt()),
+        surfaceContainerHigh = c(0xFF1C1C1E.toInt()),
+        onSurface = c(TEXT),
+        onSurfaceVariant = c(MUTED),
+        background = c(0xFF000000.toInt()),
+        onBackground = c(TEXT),
+    )
+
+    /** The conversation the edge button answers: newest unread, else newest repliable. */
+    fun replyTarget(convs: List<WearConversation>): WearConversation? =
+        convs.filter { it.canReply }.let { r -> r.firstOrNull { it.unread > 0 } ?: r.firstOrNull() }
+
+    /** The chats drawn as avatars: unread first, then recent; 2 on a small round screen, 3 otherwise. */
+    fun avatars(convs: List<WearConversation>, screenWidthDp: Int): List<WearConversation> {
+        val n = if (screenWidthDp < 210) 2 else 3
+        return (convs.filter { it.unread > 0 } + convs.filter { it.unread <= 0 }).take(n)
+    }
+
+    /** "Internet · 2 nearby" / "Offline · …", or null when the phone did not say. */
+    fun netLine(context: Context, net: WearNet?): String? {
+        net ?: return null
+        if (net.isOffline) return context.getString(R.string.net_offline_short)
+        return buildList {
+            if (net.internet) add(context.getString(R.string.net_internet))
+            if (net.meshPeers > 0) add(context.getString(R.string.net_nearby, net.meshPeers))
+            if (net.lora) add(context.getString(R.string.net_lora))
+        }.joinToString(" · ")
+    }
+
+    private fun launch(context: Context, conv: WearConversation? = null, reply: Boolean = false): ModifiersBuilders.Clickable {
         val activity = ActionBuilders.AndroidActivity.Builder()
             .setPackageName(context.packageName)
             .setClassName(MainActivity::class.java.name)
         if (conv != null) {
             activity.addKeyToExtraMapping(MainActivity.EXTRA_KIND, ActionBuilders.AndroidStringExtra.Builder().setValue(conv.kind.wire).build())
             activity.addKeyToExtraMapping(MainActivity.EXTRA_ID, ActionBuilders.AndroidStringExtra.Builder().setValue(conv.id).build())
+            if (reply) {
+                activity.addKeyToExtraMapping(
+                    MainActivity.EXTRA_ACTION, ActionBuilders.AndroidStringExtra.Builder().setValue(MainActivity.ACTION_REPLY).build(),
+                )
+            }
         }
-        return ModifiersBuilders.Clickable.Builder()
-            .setId(conv?.let { "open:" + it.kind.wire + it.id.take(16) } ?: "open")
-            .setOnClick(ActionBuilders.LaunchAction.Builder().setAndroidActivity(activity.build()).build())
-            .build()
-    }
-
-    private fun text(s: String, size: Float, color: Int, bold: Boolean = false, maxLines: Int = 1): Text =
-        Text.Builder().setText(s).setMaxLines(maxLines)
-            .setMultilineAlignment(LayoutElementBuilders.TEXT_ALIGN_CENTER)
-            .setOverflow(LayoutElementBuilders.TEXT_OVERFLOW_ELLIPSIZE)
-            .setFontStyle(
-                FontStyle.Builder().setSize(sp(size)).setColor(argb(color))
-                    .setWeight(if (bold) LayoutElementBuilders.FONT_WEIGHT_BOLD else LayoutElementBuilders.FONT_WEIGHT_NORMAL)
-                    .build()
-            ).build()
-
-    private fun spacer(h: Float) = Spacer.Builder().setHeight(dp(h)).build()
-
-    private fun row(context: Context, c: WearConversation): LayoutElement {
-        val unread = c.unread > 0
-        val name = Box.Builder().setWidth(dp(if (unread) 104f else 126f)).setHeight(wrap())
-            .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_START)
-            .addContent(text(c.name, 13f, if (unread) TEXT else MUTED, bold = unread))
-            .build()
-        val line = LayoutElementBuilders.Row.Builder()
-            .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
-            .addContent(name)
-        if (unread) {
-            line.addContent(Spacer.Builder().setWidth(dp(4f)).build())
-            line.addContent(
-                Box.Builder().setWidth(dp(if (c.unread > 9) 26f else 20f)).setHeight(dp(20f))
-                    .setModifiers(
-                        ModifiersBuilders.Modifiers.Builder().setBackground(
-                            ModifiersBuilders.Background.Builder().setColor(argb(VIOLET))
-                                .setCorner(ModifiersBuilders.Corner.Builder().setRadius(dp(10f)).build()).build()
-                        ).build()
-                    )
-                    .addContent(text(if (c.unread > 99) "99+" else c.unread.toString(), 11f, 0xFFFFFFFF.toInt(), bold = true))
-                    .build()
-            )
+        val id = when {
+            conv == null -> "open"
+            reply -> "reply:" + conv.kind.wire + conv.id.take(16)
+            else -> "open:" + conv.kind.wire + conv.id.take(16)
         }
-        return Box.Builder()
-            .setWidth(dp(150f)).setHeight(dp(30f))
-            .setModifiers(
-                ModifiersBuilders.Modifiers.Builder()
-                    .setClickable(launch(context, c))
-                    .setBackground(
-                        ModifiersBuilders.Background.Builder().setColor(argb(CARD))
-                            .setCorner(ModifiersBuilders.Corner.Builder().setRadius(dp(15f)).build()).build()
-                    )
-                    .setBorder(ModifiersBuilders.Border.Builder().setWidth(dp(1f)).setColor(argb(RIM)).build())
-                    .build()
-            )
-            .addContent(line.build())
-            .build()
+        return clickable(ActionBuilders.LaunchAction.Builder().setAndroidActivity(activity.build()).build(), id)
     }
 
-    private fun frame(context: Context, vararg children: LayoutElement): LayoutElement {
-        val col = Column.Builder().setWidth(wrap()).setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
-        children.forEach { col.addContent(it) }
-        return Box.Builder().setWidth(expand()).setHeight(expand())
-            .setModifiers(ModifiersBuilders.Modifiers.Builder().setClickable(launch(context)).build())
-            .addContent(col.build())
-            .build()
-    }
+    fun layout(context: Context, device: DeviceParameters, outcome: Outcome<WearInbox>): LayoutElement =
+        materialScope(context, device, allowDynamicTheme = false, defaultColorScheme = scheme) {
+            when (outcome) {
+                is Outcome.Ok -> content(context, outcome.value)
+                is Outcome.Fail -> status(context, outcome.reason)
+            }
+        }
 
-    fun content(context: Context, convs: List<WearConversation>): LayoutElement {
+    private fun MaterialScope.title(s: String): LayoutElement =
+        text(s.layoutString, typography = Typography.TITLE_SMALL, color = c(INK), maxLines = 1)
+
+    private fun MaterialScope.content(ctx: Context, inbox: WearInbox): LayoutElement {
+        val convs = inbox.conversations
         val unread = convs.sumOf { it.unread }
-        val top = convs.take(3)
-        val parts = mutableListOf<LayoutElement>(
-            text("OSHI", 13f, INK, bold = true),
-            spacer(2f),
-            text(if (unread > 999) "999+" else unread.toString(), 34f, if (unread > 0) TEXT else MUTED, bold = true),
-            text(context.getString(if (unread > 0) R.string.unread_label else R.string.all_read), 11f, MUTED),
-            spacer(6f),
+        val countText = if (unread > 999) "999+" else unread.toString()
+        val target = replyTarget(convs)
+        val shown = if (inbox.strict) emptyList() else avatars(convs, deviceConfiguration.screenWidthDp)
+        val net = netLine(ctx, inbox.net)
+        return primaryLayout(
+            titleSlot = {
+                title(if (unread > 0) "OSHI · " + ctx.getString(R.string.unread_count, unread) else "OSHI")
+            },
+            mainSlot = {
+                if (shown.isEmpty()) {
+                    // Strict mode or no chats: the count, big, and nothing that names anyone.
+                    LayoutElementBuilders.Column.Builder()
+                        .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
+                        .addContent(text(countText.layoutString, typography = Typography.NUMERAL_MEDIUM,
+                            color = c(if (unread > 0) TEXT else MUTED)))
+                        .addContent(text(ctx.getString(if (unread > 0) R.string.unread_label else R.string.all_read).layoutString,
+                            typography = Typography.LABEL_SMALL, color = c(MUTED)))
+                        .setModifiers(ModifiersBuilders.Modifiers.Builder().setClickable(launch(ctx)).build())
+                        .build()
+                } else {
+                    buttonGroup(width = expand(), height = expand(), spacing = 6f) {
+                        shown.forEach { conv -> buttonGroupItem { avatar(ctx, conv) } }
+                    }
+                }
+            },
+            bottomSlot = {
+                if (target != null) {
+                    textEdgeButton(
+                        onClick = launch(ctx, target, reply = true),
+                        modifier = LayoutModifier.contentDescription(
+                            if (inbox.strict) ctx.getString(R.string.reply) else ctx.getString(R.string.tile_reply_to, target.name),
+                        ),
+                        colors = filledButtonColors(),
+                    ) { text(ctx.getString(R.string.reply).layoutString) }
+                } else {
+                    textEdgeButton(onClick = launch(ctx), colors = filledTonalButtonColors()) {
+                        text(ctx.getString(R.string.tile_open).layoutString)
+                    }
+                }
+            },
+            labelForBottomSlot = net?.let { line ->
+                {
+                    text(line.layoutString, typography = Typography.LABEL_SMALL,
+                        color = c(if (inbox.net?.isOffline == true) AMBER else MUTED), maxLines = 1)
+                }
+            },
         )
-        top.forEachIndexed { i, c ->
-            if (i > 0) parts += spacer(4f)
-            parts += row(context, c)
-        }
-        if (top.isEmpty()) parts += text(context.getString(R.string.tile_open), 13f, INK)
-        return frame(context, *parts.toTypedArray())
     }
 
-    fun status(context: Context, reason: Reason): LayoutElement {
+    /** One chat as a round button in its own avatar colour; a violet ring when it has unread messages. */
+    private fun MaterialScope.avatar(ctx: Context, conv: WearConversation): LayoutElement {
+        val entry = WearAvatar.entry(conv.avatarKey)
+        var mod = LayoutModifier.contentDescription(
+            if (conv.unread > 0) ctx.getString(R.string.tile_chat_unread, conv.name, conv.unread) else conv.name,
+        )
+        if (conv.unread > 0) mod = mod.border(3f, c(INK))
+        return textButton(
+            onClick = launch(ctx, conv),
+            labelContent = {
+                text(WearAvatar.initials(conv.name, conv.avatarKey).layoutString,
+                    typography = Typography.TITLE_MEDIUM, color = c(entry.ink.toInt()))
+            },
+            modifier = mod,
+            width = expand(),
+            height = expand(),
+            shape = shapes.full,
+            colors = ButtonColors(containerColor = c(entry.start.toInt()), labelColor = c(entry.ink.toInt())),
+        )
+    }
+
+    private fun MaterialScope.status(ctx: Context, reason: Reason): LayoutElement {
         val msg = when (reason) {
             Reason.DISABLED -> R.string.tile_off
             Reason.LOCKED -> R.string.tile_locked
@@ -185,24 +254,16 @@ object TileLayout {
             Reason.UNAVAILABLE -> R.string.status_unavailable_body
             else -> R.string.status_error_title
         }
-        return frame(
-            context,
-            text("OSHI", 13f, INK, bold = true),
-            spacer(8f),
-            Box.Builder().setWidth(dp(150f)).setHeight(wrap())
-                .addContent(text(context.getString(msg), 13f, TEXT, maxLines = 3)).build(),
-            spacer(10f),
-            Box.Builder().setWidth(dp(110f)).setHeight(dp(34f))
-                .setModifiers(
-                    ModifiersBuilders.Modifiers.Builder()
-                        .setClickable(launch(context))
-                        .setBackground(
-                            ModifiersBuilders.Background.Builder().setColor(argb(VIOLET))
-                                .setCorner(ModifiersBuilders.Corner.Builder().setRadius(dp(17f)).build()).build()
-                        ).build()
-                )
-                .addContent(text(context.getString(R.string.tile_open), 13f, 0xFFFFFFFF.toInt(), bold = true))
-                .build(),
+        return primaryLayout(
+            titleSlot = { title("OSHI") },
+            mainSlot = {
+                text(ctx.getString(msg).layoutString, typography = Typography.BODY_MEDIUM, color = c(TEXT), maxLines = 3)
+            },
+            bottomSlot = {
+                textEdgeButton(onClick = launch(ctx), colors = filledButtonColors()) {
+                    text(ctx.getString(R.string.tile_open).layoutString)
+                }
+            },
         )
     }
 }

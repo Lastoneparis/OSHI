@@ -369,6 +369,8 @@ class MessageReactionManager @Inject constructor(
         recipientPublicKey: String,
         isAdding: Boolean
     ) {
+        // __MESHCORE_INTEROP_2026_11_25__ A MeshCore user's app cannot read an OSHI reaction: it stays local.
+        if (com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(recipientPublicKey)) return
         // Apple reference date offset: seconds between Unix epoch and Jan 1, 2001
         val appleEpochOffset = 978307200L
         val timestampApple = (System.currentTimeMillis() / 1000.0) - appleEpochOffset

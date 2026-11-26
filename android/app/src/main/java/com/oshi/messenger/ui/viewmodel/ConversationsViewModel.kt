@@ -138,6 +138,16 @@ class ConversationsViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val lora = MeshtasticManager.getInstance(appContext)
+    private val meshCore = com.oshi.messenger.service.lora.MeshCoreManager.getInstance(appContext)
+
+    /**
+     * __MESHCORE_INTEROP_2026_11_25__ A MeshCore radio counts too: READY (chatting) → the MeshCore users heard
+     * in the last [LoRaOnline]-style window; null while not connected. Folded into one flow so the badge's
+     * `combine` keeps its five inputs.
+     */
+    private val loraState = combine(lora.state, meshCore.state, meshCore.heardAt) { mt, mc, heard ->
+        Triple(mt, mc == com.oshi.messenger.service.lora.MeshCoreManager.ConnState.READY, heard)
+    }
 
     /** Re-evaluated every 30 s so a LoRa node ages out of the count on time. */
     private val clock = flow {
@@ -165,15 +175,17 @@ class ConversationsViewModel @Inject constructor(
 
     val meshBadge: StateFlow<MeshBadgeState> = combine(
         debouncedPeers,
-        lora.state,
+        loraState,
         lora.nodes,
         lora.myNodeNum,
         clock
-    ) { peers, state, nodes, myNum, now ->
+    ) { peers, (state, meshCoreReady, heard), nodes, myNum, now ->
+        val meshtastic = if (state == MeshtasticManager.ConnState.READY) LoRaOnline.count(nodes, myNum, now) else null
+        val meshCoreHeard = if (meshCoreReady) heard.values.count { now - it < MESHCORE_ONLINE_MS } else null
         MeshBadgeState(
             meshPeers = peers,
-            loraOnline = if (state == MeshtasticManager.ConnState.READY)
-                LoRaOnline.count(nodes, myNum, now) else null,
+            loraOnline = if (meshtastic == null && meshCoreHeard == null) null
+                else (meshtastic ?: 0) + (meshCoreHeard ?: 0),
             // __SEARCHING_IS_NOT_ALWAYS_TRUE_2026_10_28__ (N15) Read fresh on every tick:
             // a person who turns Bluetooth back on must see the badge stop blaming it
             // without reopening the app.
@@ -216,5 +228,7 @@ class ConversationsViewModel @Inject constructor(
 
     companion object {
         const val PEER_DROP_GRACE_MS = 8_000L
+        /** A MeshCore user counts as reachable for this long after their last advert (adverts are hourly-ish). */
+        const val MESHCORE_ONLINE_MS = 30 * 60_000L
     }
 }

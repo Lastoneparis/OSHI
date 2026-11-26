@@ -116,6 +116,8 @@ class OkHttpRelayConnector(
 ) : RelayConnector {
 
     private val client = OkHttpClient.Builder()
+        // __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ the upgrade's answer teaches the clock offset.
+        .addInterceptor(com.oshi.messenger.network.auth.ServerClock.interceptor)
         .followRedirects(false)
         .followSslRedirects(false)
         .connectTimeout(10, TimeUnit.SECONDS)

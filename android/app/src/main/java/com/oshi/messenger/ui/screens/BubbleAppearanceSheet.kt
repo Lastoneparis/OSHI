@@ -188,14 +188,14 @@ fun BubbleAppearanceSheet(
                 modifier = Modifier
                     .bubbleSurface(
                         silhouette = silhouette,
-                        brush = accent.brush,
+                        brush = accent.surfaceBrush(com.oshi.messenger.ui.theme.isDarkScheme()),
                         fallbackShape = RoundedCornerShape(18.dp),
-                        rim = accent.onAccent
+                        rim = accent.ink(com.oshi.messenger.ui.theme.isDarkScheme())
                     )
             ) {
                 Text(
                     text = stringResource(R.string.chat_empty_title),
-                    color = accent.onAccent,
+                    color = accent.ink(com.oshi.messenger.ui.theme.isDarkScheme()),
                     fontSize = 15.sp,
                     fontWeight = if (boldText) FontWeight.SemiBold else FontWeight.Normal,
                     modifier = Modifier.padding(12.dp)

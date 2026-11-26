@@ -22,5 +22,45 @@
 			<string>%d komentarza</string>
 		</dict>
 	</dict>
+	<key>group_header_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@members@</string>
+		<key>members</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d członek</string>
+			<key>few</key>
+			<string>%d członkowie</string>
+			<key>many</key>
+			<string>%d członków</string>
+			<key>other</key>
+			<string>%d członka</string>
+		</dict>
+	</dict>
+	<key>group_header_subscribers</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@subscribers@</string>
+		<key>subscribers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d subskrybent</string>
+			<key>few</key>
+			<string>%d subskrybentów</string>
+			<key>many</key>
+			<string>%d subskrybentów</string>
+			<key>other</key>
+			<string>%d subskrybenta</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

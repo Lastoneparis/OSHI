@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Komennot</string>
+    <string name="bot_cmd_send_a11y">Lähetä %1$s</string>
+    <string name="bot_cmd_sheet_title">Botin komennot</string>
+    <string name="bot_cmd_tap_to_send">Lähetä komento napauttamalla sitä.</string>
+    <string name="bot_cmd_empty_none_title">Täällä ei ole vielä botteja</string>
+    <string name="bot_cmd_empty_none_body">Luo botti ja lisää se tähän ryhmään. Sen komennot näkyvät täällä ja kun kirjoitat /.</string>
+    <string name="bot_cmd_empty_bot">Tällä botilla ei ole vielä komentoja.</string>
+    <string name="bot_cmd_setup">Määritä komennot</string>
+    <string name="bot_cmd_section">Komennot</string>
+    <string name="bot_cmd_section_hint">Botin ryhmien jäsenet näkevät nämä kirjoittaessaan / tai napauttaessaan Komennot.</string>
+    <string name="bot_cmd_add">Lisää</string>
+    <string name="bot_cmd_add_title">Uusi komento</string>
+    <string name="bot_cmd_edit_title">Muokkaa komentoa</string>
+    <string name="bot_cmd_field_name">Komento</string>
+    <string name="bot_cmd_field_description">Kuvaus (näkyy valikossa)</string>
+    <string name="bot_cmd_field_reply">Vastaus</string>
+    <string name="bot_cmd_field_reply_hint">Mitä botti vastaa. Voit käyttää merkintöjä {{input}}, {{bot_name}} ja {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Lähetetään webhookiisi, joka vastaa.</string>
+    <string name="bot_cmd_empty_owner">Ei vielä komentoja. Lisää esimerkiksi /start tai /help, jotta kaikki tietävät, mitä botti osaa.</string>
+    <string name="bot_cmd_err_empty">Anna komennon nimi.</string>
+    <string name="bot_cmd_err_invalid">Vain pieniä kirjaimia, numeroita ja _.</string>
+    <string name="bot_cmd_err_too_long">Enintään 32 merkkiä.</string>
+    <string name="bot_cmd_err_duplicate">Botilla on jo tämä komento.</string>
+    <string name="bot_cmd_err_too_many">Botilla voi olla enintään 100 komentoa.</string>
+    <string name="bot_cmd_err_description">Kuvaus on liian pitkä (enintään 256 merkkiä).</string>
+    <string name="bot_cmd_sync_local">Tallennettu tähän puhelimeen, jossa botti toimii.</string>
+    <string name="bot_cmd_sync_syncing">Päivitetään palvelinta…</string>
+    <string name="bot_cmd_sync_synced">Valikko päivitetty palvelimelle.</string>
+    <string name="bot_cmd_sync_failed">Palvelinta ei voitu päivittää. Komentosi on tallennettu tähän puhelimeen.</string>
+    <string name="bot_profile_edit">Muokkaa profiilia</string>
+    <string name="bot_profile_name">Nimi</string>
+    <string name="bot_profile_description">Kuvaus</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Anna botillesi nimi.</string>
+    <string name="bot_profile_err_name_long">Nimi on liian pitkä (enintään 64 merkkiä).</string>
+    <string name="bot_profile_err_desc_long">Kuvaus on liian pitkä (enintään 512 merkkiä).</string>
+    <string name="bot_connect_title">Näin se on yhdistetty</string>
+    <string name="bot_connect_local">Tämä botti toimii tässä puhelimessa: pidä OSHI asennettuna ja botti päällä. Lisää se ryhmään, niin jäsenet voivat käyttää sen komentoja siellä.</string>
+    <string name="bot_connect_webhook">Jokainen komento lähetetään webhookisi URL-osoitteeseen, ja palvelimesi vastaa JSON-muodossa {\"text\": \"…\"}. Palvelimesi voi myös käyttää alla olevaa tunnusta OSHIn botti-API:n kanssa.</string>
+    <string name="bot_connect_token_warning">Pidä tunnus salassa: kuka tahansa, jolla se on, voi puhua bottisi nimissä.</string>
+    <string name="bot_connect_groups">Ryhmät: %1$s</string>
+    <string name="bot_connect_no_groups">Ei vielä missään ryhmässä, joten kukaan ei voi käyttää sen komentoja.</string>
+</resources>

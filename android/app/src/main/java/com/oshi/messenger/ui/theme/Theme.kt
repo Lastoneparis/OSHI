@@ -242,26 +242,63 @@ fun isOledScheme(): Boolean = LocalOledBlack.current && isDarkScheme()
  * [oledBlack] selects the OLED black variant of the dark scheme; it is ignored
  * when [dark] is false.
  */
-fun oshiColorScheme(dark: Boolean, oledBlack: Boolean = false): ColorScheme = when {
+fun oshiColorScheme(dark: Boolean, oledBlack: Boolean = false, glass: Boolean = false): ColorScheme = when {
     dark && oledBlack -> OledColorScheme
     dark -> DarkColorScheme
+    glass -> LightGlassColorScheme
     else -> LightColorScheme
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// __GLASS_ALL_THEMES_2026_11_21__ The light ground under frosted glass.
+//
+// White glass on a white ground is invisible: there is nothing for the pane to
+// be brighter than. So while « Effet verre » is on in Light, the ground takes a
+// faint cool tint (the iOS grouped-background family, a hair towards the brand
+// violet) and the panes — cards, fields, chips (`surfaceVariant`), sheets,
+// dialogs, menus — are white. Ink is unchanged; every pair is held by
+// `GlassThemesTest` (onSurfaceVariant #5E5E66 on the ground: 5.9:1).
+// `surfaceTint` is neutral for the same reason as OLED's: brand purple would
+// tint every elevated container a lilac-grey.
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Ground (window, lists) under light glass. */
+val LightGlassGround = Color(0xFFF3F2F8)
+
+/** Top bars / list surface under light glass: between the ground and the white panes. */
+val LightGlassSurface = Color(0xFFF7F6FB)
+
+private val LightGlassColorScheme = LightColorScheme.copy(
+    background = LightGlassGround,
+    surface = LightGlassSurface,
+    surfaceVariant = LightGlassCard,
+    onSurfaceVariant = Color(0xFF5E5E66),
+    surfaceTint = Color(0xFF9A98A8),
+    outlineVariant = Color(0xFFDCDAE6),
+)
 
 @Composable
 fun OSHITheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     oledBlack: Boolean = false,
+    /**
+     * __GLASS_ALL_THEMES_2026_11_21__ « Effet verre »: null = never touched
+     * (each ground's [GlassDefaults]), true / false = on / off in every theme.
+     */
+    glass: Boolean? = null,
+    /** High contrast requested by the system: glass keeps its rims, drops translucency and blur. */
+    reduceTransparency: Boolean = false,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val oled = ThemeSelection.resolveOled(darkTheme, oledBlack)
+    val glassOnHere = GlassDefaults.resolve(glass, GlassDefaults.styleFor(darkTheme, oled))
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        else -> oshiColorScheme(darkTheme, oled)
+        else -> oshiColorScheme(darkTheme, oled, glassOnHere)
     }
 
     val view = LocalView.current
@@ -294,7 +331,11 @@ fun OSHITheme(
         }
     }
 
-    CompositionLocalProvider(LocalOledBlack provides oled) {
+    CompositionLocalProvider(
+        LocalOledBlack provides oled,
+        LocalGlassPref provides glass,
+        LocalGlassReduceTransparency provides reduceTransparency,
+    ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,

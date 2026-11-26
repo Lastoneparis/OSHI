@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">نظرها</string>
+    <string name="gs_comments_footer">اعضا می‌توانند زیر هر پست نظر بدهند. فقط مدیران پست می‌گذارند.</string>
+    <string name="cm_leave_comment">نظر بدهید</string>
+    <string name="cm_thread_title">نظرها</string>
+    <string name="cm_empty">هنوز نظری نیست.</string>
+    <string name="cm_composer_hint">نظر…</string>
+    <string name="cm_replying_to">پاسخ به %1$s</string>
+    <string name="cm_disabled">نظرها خاموش است.</string>
+    <string name="cm_post_unavailable">این پست دیگر در دسترس نیست.</string>
+    <string name="cm_too_fast">خیلی سریع نظر می‌دهید. کمی صبر کنید.</string>
+    <string name="cm_notif_reply">%1$s به نظر شما پاسخ داد</string>
+    <string name="cm_delete_comment">حذف نظر</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d نظر</item>
+        <item quantity="other">%d نظر</item>
+    </plurals>
+</resources>

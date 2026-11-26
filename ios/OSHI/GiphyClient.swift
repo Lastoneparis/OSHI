@@ -75,7 +75,9 @@ actor GiphyClient {
     // and identifiers before talking to GIPHY. (The key that used to live here was
     // extractable from the binary and let anyone drain the shared quota.)
     static let proxyBase = "https://oshi-messenger.com/api/giphy/"
-    static var isConfigured: Bool { true }
+    /// __STRICT_SECURITY_MODE_2026_11_22__ no GIF/sticker web search while strict
+    /// mode is on: the local pack still works, offline.
+    static var isConfigured: Bool { StrictSecurityMode.allowsGifWebSearch }
 
     static let searchDebounce: Duration = .milliseconds(500)
 

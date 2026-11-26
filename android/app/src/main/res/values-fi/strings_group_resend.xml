@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">Lähetetty %1$d/%2$d jäsenelle</string>
+    <string name="group_sent_partial_body">Ei vielä toimitettu %1$d jäsenelle. OSHI yrittää automaattisesti uudelleen 7 päivän ajan.</string>
+    <string name="group_sent_partial_gave_up">Ei vieläkään toimitettu %1$d jäsenelle 7 päivän jälkeen.</string>
+    <string name="group_retry_now">Yritä nyt uudelleen</string>
+</resources>

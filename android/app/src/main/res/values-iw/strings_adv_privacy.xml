@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">פרטיות צ\'אט מתקדמת</string>
+    <string name="adv_privacy_subtitle">מונעת מכל המשתתפים בצ\'אט לשמור מדיה, לייצא את הצ\'אט או להשתמש בבינה מלאכותית על ההודעות</string>
+    <string name="adv_privacy_learn_more">מידע נוסף</string>
+    <string name="adv_privacy_notice_on">%1$s הפעיל/ה פרטיות צ\'אט מתקדמת. אף אחד לא יכול לשמור מדיה אוטומטית, לייצא את הצ\'אט או להשתמש בבינה מלאכותית על הודעות בצ\'אט הזה.</string>
+    <string name="adv_privacy_notice_off">%1$s כיבה/תה פרטיות צ\'אט מתקדמת. שמירת מדיה, ייצוא הצ\'אט ותכונות הבינה המלאכותית זמינים שוב.</string>
+    <string name="adv_privacy_notice_on_you">הפעלת פרטיות צ\'אט מתקדמת. אף אחד לא יכול לשמור מדיה אוטומטית, לייצא את הצ\'אט או להשתמש בבינה מלאכותית על הודעות בצ\'אט הזה.</string>
+    <string name="adv_privacy_notice_off_you">כיבית פרטיות צ\'אט מתקדמת. שמירת מדיה, ייצוא הצ\'אט ותכונות הבינה המלאכותית זמינים שוב.</string>
+    <string name="adv_privacy_summary_on">פרטיות צ\'אט מתקדמת הופעלה</string>
+    <string name="adv_privacy_summary_off">פרטיות צ\'אט מתקדמת כובתה</string>
+    <string name="adv_privacy_sheet_intro">כשמישהו מפעיל אותה, היא חלה על כל המשתתפים בצ\'אט:</string>
+    <string name="adv_privacy_sheet_point_save">לא ניתן לשמור מדיה מהצ\'אט הזה בגלריה או בהורדות.</string>
+    <string name="adv_privacy_sheet_point_export">הצ\'אט הזה לא נכלל בייצוא צ\'אטים.</string>
+    <string name="adv_privacy_sheet_point_ai">הבינה המלאכותית של OSHI במכשיר לא יכולה לקרוא את הצ\'אט הזה: אין תשובות מוצעות, אין תרגום ואין הקשר לעוזר הכתיבה.</string>
+    <string name="adv_privacy_sheet_point_screen">צילומי מסך והקלטת מסך של הצ\'אט הזה חסומים.</string>
+    <string name="adv_privacy_sheet_limits">כל משתתף בצ\'אט יכול להפעיל או לכבות אותה. היא לא מונעת ממישהו לצלם את המסך, והיא לא משפיעה על מי שמשתמש בגרסה ישנה של OSHI.</string>
+    <string name="adv_privacy_blocked_toast">פרטיות מתקדמת פעילה בצ\'אט הזה</string>
+    <string name="adv_privacy_older_members">חברים עם גרסה ישנה של OSHI שלא יחילו אותה עד שיעדכנו: %1$d</string>
+</resources>

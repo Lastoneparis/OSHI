@@ -39,6 +39,14 @@ object CallPushAuth {
      * own requests, some with a non-body hash (`""` on verify-first blob routes), and a
      * second signature would overwrite theirs.
      */
+    /**
+     * __CALL_WAKE_2026_11_22__ Re-sign once when the server refused the signature (401/403)
+     * AND the response just moved the clock correction by >= 5 s: the refusal was the
+     * phone's clock, not the key. Never loops: the retry is not checked again.
+     */
+    fun shouldResignAfter(code: Int, offsetBeforeMs: Long, offsetAfterMs: Long): Boolean =
+        (code == 401 || code == 403) && kotlin.math.abs(offsetAfterMs - offsetBeforeMs) >= ServerClock.SIGNING_THRESHOLD_MS
+
     fun covers(encodedPath: String): Boolean =
         encodedPath.startsWith("/api/call/") ||
             encodedPath.startsWith("/voip/") ||
@@ -61,7 +69,8 @@ object CallPushAuth {
         method: String,
         path: String,
         body: ByteArray,
-        timestampMs: Long,
+        // __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ server time, never the raw local clock.
+        timestampMs: Long = ServerClock.signingNowMs(),
         signingPublicKey: ByteArray,
         sign: (ByteArray) -> ByteArray,
     ): Map<String, String> {
@@ -102,9 +111,8 @@ class CallPushAuthInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
         val path = original.url.encodedPath
-        if (!CallPushAuth.covers(path) || original.header(CallPushAuth.HEADER_SIGNATURE) != null) {
-            return chain.proceed(original)
-        }
+        if (!CallPushAuth.covers(path)) return chain.proceed(original)
+        if (original.header(CallPushAuth.HEADER_SIGNATURE) != null) return observeClock(chain, original)
         val originalBody = original.body
         val bytes = if (originalBody == null) ByteArray(0) else {
             val buffer = Buffer()
@@ -118,12 +126,39 @@ class CallPushAuthInterceptor(
         } catch (e: Exception) {
             throw IOException("call/push request not sent: signing unavailable (${e.message})", e)
         }
+        val offsetBefore = ServerClock.effectiveOffset(ServerClock.rawOffsetMs())
+        val response = observeClock(chain, build(original, signed, bytes))
+        // __CALL_WAKE_2026_11_22__ The first request of a process signs with the raw clock
+        // (no server sample yet). On a phone > 30 s off it is refused ('expired' -> 401/403
+        // for a bound identity, e.g. the FCM token registration at startup) — and THAT
+        // answer's Date header is the sample that fixes the clock. Re-sign once with it.
+        val offsetAfter = ServerClock.effectiveOffset(ServerClock.rawOffsetMs())
+        if (!CallPushAuth.shouldResignAfter(response.code, offsetBefore, offsetAfter)) return response
+        val again = try { headersFor(original.method, path, bytes) } catch (e: Exception) { return response }
+        response.close()
+        return observeClock(chain, build(original, again, bytes))
+    }
+
+    private fun build(original: Request, signed: Map<String, String>, bytes: ByteArray): Request {
         val builder: Request.Builder = original.newBuilder()
         signed.forEach { (name, value) -> builder.header(name, value) }
         builder.header("User-Agent", userAgent)
+        val originalBody = original.body
         if (originalBody != null) {
             builder.method(original.method, bytes.toRequestBody(originalBody.contentType()))
         }
-        return chain.proceed(builder.build())
+        return builder.build()
+    }
+
+    // __CALL_CLOCK_SKEW_2026_11_21__ every call/push server answer carries `Date`; learn
+    // the phone's offset from it so polled signals and signatures use the server's clock.
+    // __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ a 401/403 whose Date disagrees by >= 5 s
+    // restarts the estimate from that Date (ServerClock.observeRefusal), so the one
+    // re-sign above uses the server's clock instead of a median still full of old samples.
+    private fun observeClock(chain: Interceptor.Chain, request: Request): Response {
+        val sentAt = System.currentTimeMillis()
+        val response = chain.proceed(request)
+        ServerClock.observeResponse(response, sentAt, System.currentTimeMillis())
+        return response
     }
 }

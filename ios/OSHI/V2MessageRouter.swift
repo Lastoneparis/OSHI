@@ -933,7 +933,20 @@ actor V2MessageRouter {
         // inside it. (`withPeerSession` is NOT reentrant; nesting deadlocks.)
         if let existing = try store.withPeerSession(key, { try store.loadSession(peerUserKey: key) }) {
             do {
-                return try store.withPeerSession(key) { try attempt(existing, opkToConsume: nil) }
+                // __DEAD10CC_2026_11_26__ Re-read INSIDE this hold: `existing` was read
+                // under the previous one, and OSHIShare may have advanced the sending
+                // chain in between. Decrypting against (and saving) the older copy
+                // would discard that advance — the very race the lock exists for.
+                return try store.withPeerSession(key) {
+                    try attempt(try store.loadSession(peerUserKey: key) ?? existing, opkToConsume: nil)
+                }
+            } catch let lockError as CrossProcessLock.LockError {
+                // __DEAD10CC_2026_11_26__ A lock that could not be taken (timeout,
+                // process being suspended, hold revoked) says NOTHING about the
+                // session. Before this clause it fell into the recovery below and a
+                // mere lock timeout re-established the session from the X3DH header.
+                // Surface it: the message stays parked and is retried.
+                throw lockError
             } catch {
                 // [RATCHET-H1] Existing session can't open this message. If it
                 // carries an X3DH header, the peer has started a NEW session
@@ -1088,7 +1101,7 @@ actor V2MessageRouter {
     @discardableResult
     func sendGroupText(groupId: String, members: [String], _ text: String,
                        ts: Int64? = nil,
-                       selfCopy: (msgId: String, plaintext: Data)? = nil) async -> (handled: [String], msgIds: [String]) {
+                       selfCopy: (msgId: String, plaintext: Data)? = nil) async -> (handled: [String], msgIds: [String], rateLimited: [String]) {
         // __GROUP_E2E_V2_2026_09_23__ §2.1 `ts` = the message's own date (Unix ms); §7.2 one
         // `sent-copy` per group message to this account's other devices (device mode only).
         let envTs = ts ?? Int64(Date().timeIntervalSince1970 * 1000)
@@ -1104,13 +1117,10 @@ actor V2MessageRouter {
                 targets.append(FanoutTarget(peer: member, type: .group, groupId: groupId, msgId: UUID().uuidString,
                                             plaintext: Data(text.utf8), padGate: padGate))
             }
-            guard !targets.isEmpty else { return ([], []) }
-            do {
-                let r = try await sendFanout(targets, selfCopy: selfCopy, ts: envTs)
-                return (r.handled, r.accepted)
-            } catch {
-                return ([], [])
-            }
+            guard !targets.isEmpty else { return ([], [], []) }
+            // __GROUP_FANOUT_2026_11_24__ batches of <= 50 members, 429 waited out per batch.
+            let r = await sendFanoutBatched(targets, selfCopy: selfCopy, ts: envTs)
+            return (r.handled, r.accepted, r.rateLimited)
         }
         var envelopes: [V2.Envelope] = []
         var handled: [String] = []
@@ -1134,13 +1144,58 @@ actor V2MessageRouter {
                 continue   // this member falls back to legacy
             }
         }
-        guard !envelopes.isEmpty else { return ([], []) }
-        do {
-            let ids = try await client.sendBatch(envelopes)
-            return (handled, ids)
-        } catch {
-            return ([], [])   // batch failed → caller uses legacy for everyone
+        guard !envelopes.isEmpty else { return ([], [], []) }
+        // __GROUP_FANOUT_2026_11_24__ one relay batch per <= 50 members (one batch for the whole group
+        // was refused with 429 forever above 60 members). A failed batch costs only its own members.
+        let r = await sendBatched(envelopes, members: handled)
+        return (r.handled, r.accepted, r.rateLimited)
+    }
+
+    /// __GROUP_FANOUT_2026_11_24__ `envelopes[i]` goes to `members[i]` (account mode, one envelope
+    /// per member). Each batch is retried on 429 by `V2Client.sendBatch`; once one is still refused,
+    /// the rest are not sent (they would wait the same budget) and are reported `rateLimited`.
+    func sendBatched(_ envelopes: [V2.Envelope], members: [String]) async -> (accepted: [String], handled: [String], rateLimited: [String]) {
+        var accepted: [String] = [], handled: [String] = [], limited: [String] = []
+        for r in GroupFanoutBatcher.ranges(count: envelopes.count) {
+            let who = Array(members[r])
+            if !limited.isEmpty { limited += who; continue }
+            do {
+                accepted += try await client.sendBatch(Array(envelopes[r]))
+                handled += who
+            } catch where V2RateLimitBackoff.isRateLimited(error) {
+                OshiLog.messaging.info("⏳ [V2] group batch still rate-limited after the wait budget — \(envelopes.count - r.lowerBound) member(s) left for the next attempt")
+                limited += who
+            } catch {
+                OshiLog.messaging.info("⚠️ [V2] group batch \(r) failed: \(error)")
+            }
         }
+        return (accepted, handled, limited)
+    }
+
+    /// __GROUP_FANOUT_2026_11_24__ Device mode: `sendFanout` per batch of <= 50 members (the relay
+    /// counts a member's per-device copies once). The self copy rides the first batch that is
+    /// accepted. Same rate-limit rule as `sendBatched`.
+    func sendFanoutBatched(_ targets: [FanoutTarget],
+                           selfCopy: (msgId: String, plaintext: Data)?,
+                           ts: Int64) async -> (accepted: [String], handled: [String], rateLimited: [String]) {
+        var accepted: [String] = [], handled: [String] = [], limited: [String] = []
+        var copy = selfCopy
+        for r in GroupFanoutBatcher.ranges(count: targets.count, firstReserve: selfCopy == nil ? 0 : 1) {
+            let chunk = Array(targets[r])
+            if !limited.isEmpty { limited += chunk.map(\.peer); continue }
+            do {
+                let res = try await sendFanout(chunk, selfCopy: copy, ts: ts)
+                accepted += res.accepted
+                handled += res.handled
+                if !res.handled.isEmpty { copy = nil }
+            } catch where V2RateLimitBackoff.isRateLimited(error) {
+                OshiLog.messaging.info("⏳ [V2] group fan-out still rate-limited after the wait budget — \(targets.count - r.lowerBound) member(s) left for the next attempt")
+                limited += chunk.map(\.peer)
+            } catch {
+                OshiLog.messaging.info("⚠️ [V2] group fan-out batch \(r) failed: \(error)")
+            }
+        }
+        return (accepted, handled, limited)
     }
 
     /// Encrypt a file, upload its (already-AEAD-sealed) chunks to the blob store,
@@ -1366,6 +1421,13 @@ actor V2MessageRouter {
     /// `V2SendResumeStore` ledger. Returns the members v2 delivered to, so the
     /// caller can Pinata-fall-back for the rest exactly like `sendGroupText`.
     ///
+    /// ─── __GROUP_BLOB_2026_11_25__ NOW: ONE BLOB PER MESSAGE ─────────────────
+    /// ServerPatches/group_blob_2026_11_25 lets a reservation list every member
+    /// (`recipientKeys`). The file is encrypted once and uploaded ONCE; each member's
+    /// key message (its own E2E envelope) names the same blobId. A server without the
+    /// patch does not echo `recipients`: the blob then serves the first member only and
+    /// the text below applies to the others. The history of that decision follows.
+    ///
     /// ─── THE FAN-OUT DECISION: ONE BLOB PER MEMBER ────────────────────────────
     /// A 1:1 send reserves ONE blob for ONE `recipientKey`. A group has N members.
     /// The attractive option is one blob + N key envelopes — the file key already
@@ -1409,28 +1471,49 @@ actor V2MessageRouter {
                        mediaType: String? = nil,
                        groupMessageB64: String,
                        msgId: String,
-                       videoNote: VideoNoteMetadata? = nil) async -> (handled: [String], msgIds: [String]) {
+                       videoNote: VideoNoteMetadata? = nil) async -> (handled: [String], msgIds: [String], rateLimited: [String]) {
         guard data.count <= V2.maxPlaintextBytes else {
             OshiLog.messaging.info("⚠️ [V2] group file \(data.count) B over the \(V2.maxPlaintextBytes) B cap — legacy fan-out")
-            return ([], [])
+            return ([], [], [])
         }
         let me = crypto.userKey
         let recipients = members.filter { $0 != me }
-        guard !recipients.isEmpty else { return ([], []) }
+        guard !recipients.isEmpty else { return ([], [], []) }
         // __V2_PADDING_2026_11_09__ one old member ⇒ no member's key message is padded.
         let padGate = V2PaddingPeers.groupAllows(members: recipients, me: me)
 
-        // ── Resume lookup, per member ─────────────────────────────────────────
-        // The ledger is keyed per (message, recipient) because each member has its
-        // OWN blobId. The file key material is identical across members, so the
-        // first valid record supplies it for the whole fan-out; the digest binding
-        // in `record(for:)` still refuses to hand it back for different bytes.
+        // __GROUP_BLOB_2026_11_25__ Reachability first: the shared blob is reserved for exactly
+        // the members whose key message can go out now (a member with no bundle, or whose
+        // bundle fetch failed, must not be a reader of a blob it will never be told about).
+        var reachable: [String] = []
+        var noBundle: Set<String> = []
+        for member in recipients {
+            switch await capabilities(peerUserKey: member) {
+            case .available: reachable.append(member)
+            case .unavailable: noBundle.insert(member)
+            default: break   // unknown right now: not sent to this attempt, still listed below
+            }
+        }
+        guard !reachable.isEmpty else { return ([], [], []) }
+
+        // ── Resume lookup ─────────────────────────────────────────────────────
+        // ONE record for the group blob (sentinel recipient `group:<groupId>`), plus the old
+        // per-member records for members served by a blob of their own (old-server fallback).
+        // The file key material is identical across all of them; the digest binding in
+        // `record(for:)` still refuses to hand it back for different bytes.
         let plaintextDigest = V2SendResumeStore.digest(data)
+        let groupKey = V2SendResumeStore.groupRecipient(groupId: groupId)
+        let groupLedgerId = V2SendResumeStore.fanoutId(msgId: msgId, recipientKey: groupKey)
+        var groupRecord = V2SendResumeStore.record(for: groupLedgerId, recipientKey: groupKey,
+                                                   plaintextSHA256: plaintextDigest)
         var blobIdByMember: [String: String] = [:]
         var reuseKey: Data?
         var reuseNonce: Data?
         var records: [String: V2SendResumeStore.Record] = [:]
         var keyRecord: V2SendResumeStore.Record?
+        if let g = groupRecord, let k = Data(base64Encoded: g.fileKeyB64), let n = Data(base64Encoded: g.fileNonceB64) {
+            reuseKey = k; reuseNonce = n; keyRecord = g
+        }
         for member in recipients {
             guard let r = V2SendResumeStore.record(
                 for: V2SendResumeStore.fanoutId(msgId: msgId, recipientKey: member),
@@ -1447,9 +1530,9 @@ actor V2MessageRouter {
         }
         // __MEDIA_PADDING_2026_11_10__ one file for every member ⇒ pad only when every
         // member's devices read padded media. The key record's padding decision binds
-        // the resume; a member blob is continued only if it was cut from the SAME
-        // encryption (same key, same padding) — anything else would top a blob up with
-        // chunks of a different plaintext under the same (key, nonce).
+        // the resume; a blob is continued only if it was cut from the SAME encryption
+        // (same key, same padding) — anything else would top a blob up with chunks of a
+        // different plaintext under the same (key, nonce).
         let mediaPadGate = await mediaPaddingAllowed(recipients: recipients, includeOwnDevices: false)
         let padMedia: Bool
         switch V2SendResumeStore.resolveMediaPadding(record: keyRecord, gate: mediaPadGate, plaintextSize: data.count) {
@@ -1460,26 +1543,30 @@ actor V2MessageRouter {
             reuseKey = nil
             reuseNonce = nil
             records.removeAll()
+            groupRecord = nil
         }
-        for (member, r) in records
-        where r.fileKeyB64 == keyRecord?.fileKeyB64 && r.fileNonceB64 == keyRecord?.fileNonceB64
-            && (r.mediaPadded ?? false) == padMedia {
+        func sameEncryption(_ r: V2SendResumeStore.Record) -> Bool {
+            r.fileKeyB64 == keyRecord?.fileKeyB64 && r.fileNonceB64 == keyRecord?.fileNonceB64
+                && (r.mediaPadded ?? false) == padMedia
+        }
+        for (member, r) in records where sameEncryption(r) {
             blobIdByMember[member] = r.blobId
         }
+        if let g = groupRecord, !sameEncryption(g) { groupRecord = nil }
         // Both-or-neither, same invariant as `sendFile`: an old blobId paired with a
         // FRESH key would upload chunks that don't match the ones already stored.
         if reuseKey == nil || reuseNonce == nil {
             reuseKey = nil
             reuseNonce = nil
             blobIdByMember.removeAll()
+            groupRecord = nil
         } else {
-            OshiLog.messaging.info("↩️ [V2] resuming group send \(msgId.prefix(8))… — \(blobIdByMember.count)/\(recipients.count) member blob(s) known")
+            OshiLog.messaging.info("↩️ [V2] resuming group send \(msgId.prefix(8))… — group blob \(groupRecord == nil ? "new" : "known"), \(blobIdByMember.count) member blob(s) known")
         }
 
         // ── Encrypt ONCE ──────────────────────────────────────────────────────
         // Above the streaming threshold the ciphertext lives on disk (peak RAM ≈ one
-        // chunk); below it, in memory. Either way it is produced exactly once and
-        // every member's reservation receives those same bytes.
+        // chunk); below it, in memory. Either way it is produced exactly once.
         let work = FileManager.default.temporaryDirectory
             .appendingPathComponent("v2groupsend-\(UUID().uuidString)", isDirectory: true)
         defer { try? FileManager.default.removeItem(at: work) }
@@ -1515,19 +1602,83 @@ actor V2MessageRouter {
             }
         } catch {
             OshiLog.messaging.info("⚠️ [V2] group file encrypt failed: \(error) — legacy fan-out")
-            return ([], [])
+            return ([], [], [])
         }
 
         let fileKeyB64 = fileKey.base64EncodedString()
         let fileNonceB64 = fileNonce.base64EncodedString()
         let manifestB64 = manifest.base64EncodedString()
 
-        // ── Upload per member, SEQUENTIALLY, then one relay batch ─────────────
+        // ── ONE upload for every reachable member ─────────────────────────────
+        // __GROUP_BLOB_2026_11_25__ reserve with the member list; a server that stored it
+        // echoes `recipients` and every listed member reads this one blob. An older server
+        // does not: the blob serves `listed[0]` only and the others get a blob of their own
+        // below (the previous behaviour, minus one upload).
+        let memChunks = chunksInMemory
+        let diskChunks = chunkURLs
+        let chunkSource: @Sendable (Int) throws -> Data = { n in
+            diskChunks.isEmpty ? memChunks[n] : try Data(contentsOf: diskChunks[n], options: .mappedIfSafe)
+        }
+        var totalSize = 0
+        if diskChunks.isEmpty {
+            totalSize = memChunks.reduce(0) { $0 + $1.count }
+        } else {
+            for u in diskChunks { totalSize += ((try? FileManager.default.attributesOfItem(atPath: u.path))?[.size] as? Int) ?? 0 }
+        }
+        // The list = every member except those the server says have NO v2 bundle — including
+        // members whose bundle fetch failed right now: the automatic resend later hands them a
+        // key message for this SAME (resumed) blob, which they must be allowed to read.
+        // Reachable members first, so an old server's single reader is one we send to now.
+        let listed = Array(V2GroupBlobPlan.readers(reachable: reachable, recipients: recipients, noBundle: noBundle)
+            .prefix(V2GroupBlobPlan.maxRecipients))
+        // A resumed shared blob is reused only if it lets every reachable member read it; one
+        // that predates a member (its bundle fetch failed the first time) is replaced by a new
+        // shared reservation rather than giving that member a blob of its own.
+        let resumeCovered = groupRecord?.covered ?? []
+        let canResumeGroup = groupRecord.map {
+            $0.shared == false || V2GroupBlobPlan.needOwnBlob(reachable: reachable, covered: resumeCovered).isEmpty
+        } ?? false
+        var sharedBlobId: String?
+        var covered: Set<String> = []
+        do {
+            let r = try await client.uploadGroupBlob(
+                recipientKeys: listed,
+                chunkCount: chunkCount,
+                totalSize: totalSize,
+                chunk: chunkSource,
+                useBackground: true,
+                resumeBlobId: canResumeGroup ? groupRecord?.blobId : nil,
+                resumeShared: groupRecord?.shared ?? false,
+                onReserved: { newBlobId, shared in
+                    V2SendResumeStore.put(msgId: groupLedgerId,
+                                          recipientKey: groupKey,
+                                          plaintextSHA256: plaintextDigest,
+                                          blobId: newBlobId,
+                                          fileKey: fileKey,
+                                          fileNonce: fileNonce,
+                                          chunkCount: chunkCount,
+                                          mediaPadded: padMedia,
+                                          shared: shared,
+                                          covered: V2GroupBlobPlan.covered(listed: listed, shared: shared))
+                })
+            sharedBlobId = r.blobId
+            covered = Set(canResumeGroup ? resumeCovered : V2GroupBlobPlan.covered(listed: listed, shared: r.shared))
+            OshiLog.messaging.info("✅ [V2] group blob \(r.blobId.prefix(12))… uploaded once — \(r.shared ? "shared by \(covered.count) member(s)" : "old server, per-member fallback")")
+        } catch where V2Client.isTransient(error) {
+            // Network / 5xx / 429: every other member's upload would fail the same way. Nobody
+            // is reached this attempt; the ledger keeps the reservation, the group resend queue
+            // retries and resumes into it.
+            OshiLog.messaging.info("⚠️ [V2] group blob upload interrupted: \(error) — left for the next attempt")
+            return ([], [], V2RateLimitBackoff.isRateLimited(error) ? reachable : [])
+        } catch {
+            OshiLog.messaging.info("⚠️ [V2] group blob upload refused: \(error) — one blob per member")
+        }
+
+        // ── Key messages (and, old server only, the per-member blobs) ─────────
         var envelopes: [V2.Envelope] = []
         var handled: [String] = []
         var deviceTargets: [FanoutTarget] = []
-        for member in recipients {
-            guard case .available = await capabilities(peerUserKey: member) else { continue }
+        for member in reachable {
             let ledgerId = V2SendResumeStore.fanoutId(msgId: msgId, recipientKey: member)
             let onReserved: @Sendable (String) -> Void = { newBlobId in
                 V2SendResumeStore.put(msgId: ledgerId,
@@ -1541,7 +1692,9 @@ actor V2MessageRouter {
             }
             do {
                 let blobId: String
-                if chunkURLs.isEmpty {
+                if let shared = sharedBlobId, covered.contains(member) {
+                    blobId = shared
+                } else if chunkURLs.isEmpty {
                     blobId = try await client.uploadBlob(recipientKey: member,
                                                          chunks: chunksInMemory,
                                                          useBackground: true,
@@ -1602,34 +1755,26 @@ actor V2MessageRouter {
                 continue
             }
         }
+        // __GROUP_FANOUT_2026_11_24__ key envelopes in batches of <= 50 members. Only a member whose
+        // key envelope was ACCEPTED loses its resume record (blob committed AND key accepted, same
+        // ordering rule as `sendFile`); the others keep it, so a retry resumes into their blobs.
         if !deviceTargets.isEmpty {
-            do {
-                let r = try await sendFanout(deviceTargets, selfCopy: nil, ts: Int64(Date().timeIntervalSince1970 * 1000))
-                for member in handled {
-                    V2SendResumeStore.remove(msgId: V2SendResumeStore.fanoutId(msgId: msgId, recipientKey: member))
-                }
-                return (r.handled, r.accepted)
-            } catch {
-                OshiLog.messaging.info("⚠️ [V2] group media batch (devices) rejected: \(error) — legacy fan-out")
-                return ([], [])
-            }
-        }
-        guard !envelopes.isEmpty else { return ([], []) }
-        do {
-            let ids = try await client.sendBatch(envelopes)
-            // Only now is every member's send durable (blob committed AND the key
-            // envelope accepted). Same ordering rule as `sendFile`.
-            for member in handled {
+            let r = await sendFanoutBatched(deviceTargets, selfCopy: nil, ts: Int64(Date().timeIntervalSince1970 * 1000))
+            for member in r.handled {
                 V2SendResumeStore.remove(msgId: V2SendResumeStore.fanoutId(msgId: msgId, recipientKey: member))
             }
-            OshiLog.messaging.info("✅ [V2] group media: \(handled.count)/\(recipients.count) member blob(s), \(chunkCount) chunk(s) each")
-            return (handled, ids)
-        } catch {
-            // Batch rejected → nobody got the key material. Keep every ledger record
-            // so the retry resumes into the blobs already uploaded.
-            OshiLog.messaging.info("⚠️ [V2] group media batch rejected: \(error) — legacy fan-out")
-            return ([], [])
+            // __GROUP_BLOB_2026_11_25__ the group blob's record goes once nobody is left to resend to.
+            if Set(r.handled).count >= recipients.count { V2SendResumeStore.remove(msgId: groupLedgerId) }
+            return (r.handled, r.accepted, r.rateLimited)
         }
+        guard !envelopes.isEmpty else { return ([], [], []) }
+        let r = await sendBatched(envelopes, members: handled)
+        for member in r.handled {
+            V2SendResumeStore.remove(msgId: V2SendResumeStore.fanoutId(msgId: msgId, recipientKey: member))
+        }
+        if Set(r.handled).count >= recipients.count { V2SendResumeStore.remove(msgId: groupLedgerId) }
+        OshiLog.messaging.info("✅ [V2] group media: \(r.handled.count)/\(recipients.count) member(s), \(chunkCount) chunk(s), shared blob: \(sharedBlobId != nil), \(r.rateLimited.count) rate-limited")
+        return (r.handled, r.accepted, r.rateLimited)
     }
 
     /// Fan a plaintext out to a group and send the batch in one relay request.
@@ -2070,7 +2215,15 @@ enum V2SendResumeStore {
         /// __MEDIA_PADDING_2026_11_10__ Was this reservation's plaintext PADDED?
         /// nil = a record written before media padding existed = unpadded.
         var mediaPadded: Bool? = nil
+        /// __GROUP_BLOB_2026_11_25__ group blob only: did the server store the member list?
+        var shared: Bool? = nil
+        /// __GROUP_BLOB_2026_11_25__ group blob only: the members this blob lets read.
+        var covered: [String]? = nil
     }
+
+    /// __GROUP_BLOB_2026_11_25__ The sentinel recipient of the ONE blob a group message uploads.
+    /// Never a userKey (those are base64 and never contain `:`).
+    static func groupRecipient(groupId: String) -> String { "group:\(groupId)" }
 
     /// __MEDIA_PADDING_2026_11_10__ How a send continues given its resume record.
     enum MediaPaddingResume: Equatable, Sendable {
@@ -2155,7 +2308,9 @@ enum V2SendResumeStore {
                     fileKey: Data,
                     fileNonce: Data,
                     chunkCount: Int,
-                    mediaPadded: Bool = false) {
+                    mediaPadded: Bool = false,
+                    shared: Bool? = nil,
+                    covered: [String]? = nil) {
         guard enabled else { return }
         var all = load()
         all[msgId] = Record(msgId: msgId,
@@ -2166,7 +2321,9 @@ enum V2SendResumeStore {
                             fileNonceB64: fileNonce.base64EncodedString(),
                             chunkCount: chunkCount,
                             createdAt: Date(),
-                            mediaPadded: mediaPadded)
+                            mediaPadded: mediaPadded,
+                            shared: shared,
+                            covered: covered)
         save(all)
         OshiLog.messaging.info("💾 [V2] resume point saved for \(msgId.prefix(8))… blob=\(blobId.prefix(12))… chunks=\(chunkCount)")
     }
@@ -2848,5 +3005,32 @@ enum V2MediaPaddingPeers {
 nonisolated enum V2EnvelopeTimestamp {
     static func ms(original: Date?, now: Date = Date()) -> Int64 {
         Int64((original ?? now).timeIntervalSince1970 * 1000)
+    }
+}
+
+
+// MARK: - __GROUP_FANOUT_2026_11_24__ group batches
+
+/// How a group fan-out is cut into relay requests. The relay charges one token per member (a
+/// member's per-device copies count once), and the bucket of 2026-11-24 holds 60: one batch for a
+/// whole group of more than 60 members was refused on every retry. 50 also keeps a batch's body
+/// far under the relay (4 MB) and OHTTP gateway (2 MB) caps. Same constant on Android and desktop.
+nonisolated enum GroupFanoutBatcher {
+    static let maxMembersPerBatch = 50
+
+    /// Consecutive ranges covering `0..<count`, each at most `max` long; the first one leaves
+    /// `firstReserve` slots free (the self copy rides it).
+    static func ranges(count: Int, max: Int = maxMembersPerBatch, firstReserve: Int = 0) -> [Range<Int>] {
+        guard count > 0, max > 0 else { return [] }
+        var out: [Range<Int>] = []
+        var start = 0
+        var size = Swift.max(1, max - firstReserve)
+        while start < count {
+            let end = Swift.min(count, start + size)
+            out.append(start..<end)
+            start = end
+            size = max
+        }
+        return out
     }
 }

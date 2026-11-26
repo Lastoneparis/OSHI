@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Публічний вебперегляд</string>
+    <string name="cw_toggle">Публікувати дописи в інтернеті</string>
+    <string name="cw_footer">Нові дописи також публікуються як загальнодоступна вебсторінка за адресою oshi-messenger.com/c/%1$s. Їх може прочитати будь-хто, зокрема пошукові системи та попередній перегляд посилань. Наскрізне шифрування не поширюється на вебкопію.</string>
+    <string name="cw_needs_link">Спочатку створіть для каналу публічне посилання: вебперегляд використовує його ім\'я.</string>
+    <string name="cw_create_link">Створити публічне посилання</string>
+    <string name="cw_enable_title">Публікувати дописи в інтернеті?</string>
+    <string name="cw_enable_confirm">Дописи цього каналу будуть видимі всім в інтернеті за адресою oshi-messenger.com/c/%1$s. Лише нові дописи. Попередній перегляд посилань (WhatsApp, X, Telegram…) теж зможе їх прочитати, а наскрізне шифрування не поширюється на вебкопію.</string>
+    <string name="cw_enable_action">Опублікувати</string>
+    <string name="cw_disable_title">Вимкнути вебперегляд?</string>
+    <string name="cw_disable_confirm">Усі дописи й зображення, опубліковані за адресою oshi-messenger.com/c/%1$s, буде видалено з інтернету. Ваші дописи в застосунку не зміняться.</string>
+    <string name="cw_disable_action">Вимкнути</string>
+    <string name="cw_indexing">Дозволити пошукові системи</string>
+    <string name="cw_indexing_footer">Якщо вимкнено, сторінки просять пошукові системи не індексувати їх.</string>
+    <string name="cw_embed_code">Код для вбудовування</string>
+    <string name="cw_embed_title">Вбудувати цей допис</string>
+    <string name="cw_embed_hint">Вставте цей код на свій сайт там, де має з\'явитися допис.</string>
+    <string name="cw_embed_dark">Темна тема</string>
+    <string name="cw_copy_code">Копіювати код</string>
+    <string name="cw_code_copied">Код скопійовано</string>
+    <string name="cw_not_on_web">Цього допису немає в інтернеті. Публікуються лише дописи, надіслані після ввімкнення вебперегляду.</string>
+    <string name="cw_error">Не вдалося змінити вебперегляд. Перевірте з\'єднання та спробуйте ще раз.</string>
+</resources>

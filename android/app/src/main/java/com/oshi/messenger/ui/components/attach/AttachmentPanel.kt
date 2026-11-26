@@ -138,6 +138,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.oshi.messenger.R
 import com.oshi.messenger.ui.components.ChatMediaSelection
 import com.oshi.messenger.ui.theme.GlassTier
+import com.oshi.messenger.ui.theme.glassOpaque
 import com.oshi.messenger.ui.theme.brandInk
 import com.oshi.messenger.ui.theme.GlassWindowBlurEffect
 import com.oshi.messenger.ui.theme.glassEdge
@@ -307,12 +308,37 @@ private fun PanelBody(
         loading = true
         scope.launch {
             val page = RecentMedia.page(context, items.size)
-            val known = items.mapTo(HashSet()) { it.id }
-            items.addAll(page.filter { it.id !in known })
+            val merged = AttachmentPanelLogic.appendPage(items, page)
+            items.addAll(merged.subList(items.size, merged.size))
             endReached = page.size < AttachmentPanelLogic.PAGE_SIZE
             loading = false
             firstPageLoaded = true
         }
+    }
+
+    // __RECENT_PHOTOS_ORDER_2026_11_21__ Re-read the newest page when the gallery changes
+    // under an open panel (a screenshot, a photo taken in the camera app, a deletion) or
+    // when the user comes back to it — the grid must never stay frozen on what was there
+    // when it first opened. The pages already scrolled through are kept.
+    var refreshJob by remember { mutableStateOf<Job?>(null) }
+    fun refreshHead() {
+        if (access == GalleryAccess.NONE || !firstPageLoaded) return
+        refreshJob?.cancel()
+        refreshJob = scope.launch {
+            kotlinx.coroutines.delay(300) // MediaStore fires a burst of changes per file
+            val head = RecentMedia.page(context, 0)
+            val merged = AttachmentPanelLogic.mergeFreshHead(items.toList(), head)
+            if (merged != items.toList()) {
+                items.clear(); items.addAll(merged)
+                val kept = AttachmentPanelLogic.prune(selection.toList(), merged.mapTo(HashSet()) { it.id })
+                if (kept != selection.toList()) { selection.clear(); selection.addAll(kept) }
+                if (head.size < AttachmentPanelLogic.PAGE_SIZE) endReached = true
+            }
+        }
+    }
+    DisposableEffect(access) {
+        val stop = if (access != GalleryAccess.NONE) RecentMedia.observe(context) { refreshHead() } else ({})
+        onDispose { stop() }
     }
 
     LaunchedEffect(access, reloadKey) {
@@ -326,7 +352,7 @@ private fun PanelBody(
         val obs = LifecycleEventObserver { _, e ->
             if (e == Lifecycle.Event.ON_RESUME) {
                 val now = RecentMedia.currentAccess(context)
-                if (now != access) access = now else if (now == GalleryAccess.PARTIAL) reloadKey++
+                if (now != access) access = now else if (now == GalleryAccess.PARTIAL) reloadKey++ else refreshHead()
             }
         }
         lifecycle.addObserver(obs)
@@ -587,7 +613,7 @@ private fun PanelBody(
         val barColor = when {
             // Near-opaque: this bar sits over the photo grid, not over a calm
             // wallpaper, and thumbnails bleeding through the labels read as noise.
-            glass -> GlassTier.Sheet.opaque
+            glass -> glassOpaque(GlassTier.Sheet)
             dark -> MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
             else -> MaterialTheme.colorScheme.surface
         }

@@ -50,7 +50,9 @@ fun MediaViewerScreen(
     mediaData: ByteArray,
     mediaType: String, // "IMAGE", "VIDEO", "DOCUMENT"
     caption: String = "",
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    /** 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ false hides "Save to gallery" (protected chat). */
+    allowSave: Boolean = true
 ) {
     val context = LocalContext.current
     var scale by remember { mutableFloatStateOf(1f) }
@@ -69,7 +71,7 @@ fun MediaViewerScreen(
                     IconButton(onClick = { shareMedia(context, mediaData, mediaType, caption) }) {
                         Icon(Icons.Default.Share, contentDescription = stringResource(R.string.accessibility_share))
                     }
-                    IconButton(onClick = { saveToGallery(context, mediaData, mediaType) }) {
+                    if (allowSave) IconButton(onClick = { saveToGallery(context, mediaData, mediaType) }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_notification),
                             contentDescription = stringResource(R.string.save_to_gallery)

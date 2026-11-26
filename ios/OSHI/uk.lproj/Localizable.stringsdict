@@ -22,5 +22,45 @@
 			<string>%d коментаря</string>
 		</dict>
 	</dict>
+	<key>group_header_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@members@</string>
+		<key>members</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d учасник</string>
+			<key>few</key>
+			<string>%d учасники</string>
+			<key>many</key>
+			<string>%d учасників</string>
+			<key>other</key>
+			<string>%d учасника</string>
+		</dict>
+	</dict>
+	<key>group_header_subscribers</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@subscribers@</string>
+		<key>subscribers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d підписник</string>
+			<key>few</key>
+			<string>%d підписники</string>
+			<key>many</key>
+			<string>%d підписників</string>
+			<key>other</key>
+			<string>%d підписника</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

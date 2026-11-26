@@ -54,6 +54,8 @@ import androidx.compose.ui.platform.LocalContext
  * A chip that cannot price itself says so ("Price unavailable") and stays tappable.
  */
 private sealed interface ChipState {
+    /** __TICKER_FETCH_ON_TAP_2026_11_20__ nothing fetched yet; the next tap asks for a price. */
+    data object Idle : ChipState
     data object Loading : ChipState
     data class Loaded(val quote: TickerQuote) : ChipState
     data object Failed : ChipState
@@ -88,9 +90,14 @@ fun TickerChip(
         mutableStateOf(
             frozen?.let { ChipState.Loaded(it) }
                 ?: TickerQuoteCache.cached(match.symbol)
-                    ?.let { ChipState.Loaded(it) } ?: ChipState.Loading
+                    ?.let { ChipState.Loaded(it) } ?: ChipState.Idle
         )
     }
+    // 🔒 __TICKER_FETCH_ON_TAP_2026_11_20__ The quote is fetched from a third party
+    // (Yahoo) only after the person taps the chip. Fetching on DISPLAY told that third
+    // party the reader's IP and the moment a received message was read — and the
+    // symbol is chosen by the SENDER, so a contact could use it as a read beacon.
+    var requested by remember(match.symbol) { mutableStateOf(false) }
 
     // Stale-while-revalidate, both halves of it:
     //  • the refresh runs even when a price is already on screen (it used to bail
@@ -102,8 +109,9 @@ fun TickerChip(
     //
     // A message that already has a frozen price skips this entirely: no request,
     // so reopening an old conversation no longer tells Yahoo which symbol is read.
-    LaunchedEffect(match.symbol, frozen) {
-        if (frozen != null) return@LaunchedEffect
+    LaunchedEffect(match.symbol, frozen, requested) {
+        if (frozen != null || !requested) return@LaunchedEffect
+        if (state !is ChipState.Loaded) state = ChipState.Loading
         val hadPrice = state is ChipState.Loaded
         val q = TickerQuoteCache.get(match.symbol)
         when {
@@ -119,7 +127,12 @@ fun TickerChip(
     Row(
         modifier = modifier
             .background(tint.copy(alpha = 0.20f), CircleShape)
-            .bubbleClickable { runCatching { uriHandler.openUri(match.url) } }
+            .bubbleClickable {
+                // First tap on a chip without a price fetches it; once a price is shown
+                // (or the fetch failed) a tap opens the quote page as before.
+                if (state is ChipState.Idle) requested = true
+                else runCatching { uriHandler.openUri(match.url) }
+            }
             .padding(horizontal = 8.dp, vertical = 3.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -134,6 +147,7 @@ fun TickerChip(
         )
 
         when (val s = state) {
+            is ChipState.Idle -> Unit
             is ChipState.Loading -> CircularProgressIndicator(
                 modifier = Modifier.size(12.dp),
                 strokeWidth = 1.5.dp,

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Bezpečnostní kontrola potvrzena</string>
+    <string name="alive_a11y_neutral">Bezpečnostní kontrola není nastavena</string>
+    <string name="alive_a11y_overdue">Bezpečnostní kontrola je po termínu</string>
+    <string name="alive_action_im_alive">Jsem naživu</string>
+    <string name="alive_action_message_them">Napsat</string>
+    <string name="alive_bar_open_settings">Nastavení kontroly</string>
+    <string name="alive_channel_description">Připomínky vašich vlastních kontrol a upozornění, když někdo, koho sledujete, na tu svou neodpověděl.</string>
+    <string name="alive_channel_name">Bezpečnostní kontroly</string>
+    <string name="alive_confirmed_toast">Potvrzení odesláno</string>
+    <string name="alive_duration_days_hours">%1$d d %2$d h</string>
+    <string name="alive_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="alive_duration_minutes">%1$d min</string>
+    <string name="alive_duration_now">méně než minuta</string>
+    <string name="alive_interval_24h">Každých 24 hodin</string>
+    <string name="alive_interval_48h">Každých 48 hodin</string>
+    <string name="alive_interval_72h">Každých 72 hodin</string>
+    <string name="alive_interval_custom">Vlastní</string>
+    <string name="alive_interval_custom_hours">Každých %1$d h</string>
+    <string name="alive_interval_every">každých %1$s</string>
+    <string name="alive_lane_you">Vy</string>
+    <string name="alive_note_delivery">Připomínky a upozornění závisí na vaší síti a na oprávnění k oznámením. Zmeškaná kontrola znamená jen to, že nedorazilo potvrzení, nic víc.</string>
+    <string name="alive_note_no_location">Poloha se nesdílí. Kontrola nese jedno časové razítko a nic jiného.</string>
+    <string name="alive_notification_mine_due_body">Potvrďte, že jste naživu, ať %1$s nemusí čekat.</string>
+    <string name="alive_notification_mine_due_title">Je čas na vaši kontrolu</string>
+    <string name="alive_notification_overdue_body">Kontrola měla přijít před %1$s. Znamená to jen, že nedorazilo potvrzení.</string>
+    <string name="alive_notification_overdue_title">Žádná kontrola od %1$s</string>
+    <string name="alive_sheet_explainer">Pravidelně potvrzujte, že jste naživu. %1$s vidí vaše odpočítávání a dostane upozornění, když vyprší bez odpovědi.</string>
+    <string name="alive_sheet_interval">Jak často</string>
+    <string name="alive_sheet_mine_switch">Potvrzovat pro %1$s</string>
+    <string name="alive_sheet_stop">Ukončit kontroly</string>
+    <string name="alive_sheet_their_next">Další očekávána %1$s</string>
+    <string name="alive_sheet_their_none">%1$s tu nemá nastavenou bezpečnostní kontrolu.</string>
+    <string name="alive_sheet_their_section">Bezpečnostní kontrola: %1$s</string>
+    <string name="alive_state_confirmed_ago">potvrzeno před %1$s</string>
+    <string name="alive_state_due_in">termín za %1$s</string>
+    <string name="alive_state_not_set">nenastaveno</string>
+    <string name="alive_state_overdue_by">bez odpovědi %1$s</string>
+    <string name="alive_summary_confirmed">Potvrdil(a), že je naživu</string>
+    <string name="alive_summary_started">Bezpečnostní kontrola zahájena</string>
+    <string name="alive_summary_stopped">Bezpečnostní kontrola ukončena</string>
+    <string name="alive_title">Bezpečnostní kontrola</string>
+    <string name="alive_unknown_peer">tento kontakt</string>
+</resources>

@@ -49,4 +49,27 @@
     <string name="qr_no">No</string>
     <string name="qr_busy">Can\'t talk now</string>
     <string name="end_to_end">End-to-end encrypted by your phone</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Pinned</string>
+    <string name="net_internet">Internet</string>
+    <string name="net_nearby">%1$d nearby</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Phone offline · messages wait on your phone</string>
+    <string name="net_offline_short">Phone offline</string>
+    <string name="voice_message">Voice message</string>
+    <string name="voice_send">Send voice message</string>
+    <string name="voice_cancel">Cancel</string>
+    <string name="voice_permission">Allow the microphone to record voice messages. Nothing is kept on the watch.</string>
+    <string name="voice_mic_busy">The microphone is busy. Try again.</string>
+    <string name="voice_too_short">Too short. Speak a little longer.</string>
+    <string name="voice_not_sent">Not sent. Keep your phone nearby and try again.</string>
+    <string name="send_emoji">Send an emoji</string>
+    <string name="delivery_sending">Sending</string>
+    <string name="delivery_sent">Sent</string>
+    <string name="delivery_delivered">Delivered</string>
+    <string name="delivery_read">Read</string>
+    <string name="delivery_failed">Not delivered</string>
+    <string name="complication_none">No unread messages</string>
+    <string name="tile_reply_to">Reply to %1$s</string>
+    <string name="tile_chat_unread">%1$s, %2$d unread</string>
 </resources>

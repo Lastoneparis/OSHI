@@ -24,6 +24,14 @@ android {
             // would yield emptyList() for ANY input and a round-trip assertion
             // would pass vacuously. Do not test the Base64 codec this way.
             isReturnDefaultValues = true
+            // __DESIGN_SHOTS_2026_11_24__ Robolectric design screenshots (DesignShotsTest):
+            // the real composables rendered to PNG on the JVM, no emulator. Opt-in:
+            // `-Pshots=<dir>` becomes the `design.shots` property; without it the shot
+            // tests are skipped. Resources must be on the test classpath for them.
+            isIncludeAndroidResources = true
+            all { t ->
+                (project.findProperty("shots") as String?)?.let { t.systemProperty("design.shots", it) }
+            }
         }
     }
 
@@ -71,6 +79,16 @@ android {
         }
     }
     namespace = "com.oshi.messenger"
+
+    // __PER_APP_LANGUAGE_2026_11_20__ The in-app / per-app language picker can switch to a
+    // language the phone itself is not set to. With Play's default per-language splits the
+    // install would only carry the phone's languages and the switch would fall back to
+    // English. Ship every language in the base APK (strings only: a few hundred KB).
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
     compileSdk = 36
 
     // NDK r28 emits 16 KB-aligned ELF LOAD segments by default. Android 16
@@ -83,8 +101,8 @@ android {
         applicationId = "com.oshi.messenger"
         minSdk = 26
         targetSdk = 36
-        versionCode = 141
-        versionName = "1.7.0"
+        versionCode = 145
+        versionName = "1.7.4"
 
         // Include arm64-v8a native libs for llama.cpp
         ndk {
@@ -306,7 +324,7 @@ dependencies {
     // c'est le KEM hybride qu'iOS utilise via CryptoKit. Le ML-KEM de FIPS 203
     // n'est pas non plus le Kyber round-3 des versions antérieures — prendre le
     // mauvais donnerait deux implémentations qui ne se parlent pas.
-    implementation("org.bouncycastle:bcprov-jdk18on:1.81")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.85")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
     // NO WebRTC. `io.getstream:stream-webrtc-android:1.0.2` was declared here
@@ -411,6 +429,9 @@ dependencies {
 
     // Testing
     testImplementation("junit:junit:4.13.2")
+    // __MESHCORE_INTEROP_2026_11_25__ virtual time for MeshCoreEndToEndTest (retries, ACK waits, 1.5 s part
+    // pacing run in milliseconds). Same version as kotlinx-coroutines-android above; test-only.
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     // Real org.json for JVM unit tests (android.jar's org.json is a throwing stub),
     // so wire-format round-trip tests (e.g. CheckInMessage epoch conversion) can run.
     testImplementation("org.json:json:20231013")
@@ -418,6 +439,13 @@ dependencies {
     // against a real HTTP server. Matches the okhttp already used at runtime
     // (4.12.0); test-only, nothing ships with it.
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    // __DESIGN_SHOTS_2026_11_24__ Robolectric native graphics renders the real
+    // composables to PNG for design review (DesignShotsTest; skipped unless -Pshots).
+    // Same versions as the Freedom VPN Android project, already in the offline cache.
+    testImplementation("org.robolectric:robolectric:4.13")
+    testImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    testImplementation("androidx.compose.ui:ui-test-junit4")
+    testImplementation("androidx.test:core:1.5.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))

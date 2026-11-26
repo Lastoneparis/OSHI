@@ -107,14 +107,14 @@ fun BotWebAppDialog(
         )
     ) {
         // __OLED_GLASS_2026_11_16__ OLED black: black ground, glass header bar.
-        val glass = com.oshi.messenger.ui.theme.glassOn()
+        val glass = com.oshi.messenger.ui.theme.oledGlassOn()
         Surface(color = if (glass) Color.Black else Color(0xFF12121F), modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // Header: whose mini-app this is, and the way out. Both are required —
                 // a full-screen WebView with no attribution and no close control is
                 // indistinguishable from the app itself having navigated somewhere.
                 Surface(
-                    color = if (glass) com.oshi.messenger.ui.theme.GlassTier.Bar.opaque else Color(0xFF1A1A2E),
+                    color = if (glass) com.oshi.messenger.ui.theme.glassOpaque(com.oshi.messenger.ui.theme.GlassTier.Bar) else Color(0xFF1A1A2E),
                     modifier = Modifier.fillMaxWidth()
                         .then(if (glass) Modifier.glassEdge(top = false) else Modifier)
                 ) {

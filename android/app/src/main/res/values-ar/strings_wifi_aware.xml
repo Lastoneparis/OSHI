@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware (اتصال قريب سريع)</string>
+    <string name="settings_wifi_aware_subtitle">اتصال مباشر بهواتف OSHI القريبة دون الحاجة إلى موجّه. يبقى Wi-Fi لديك متصلاً.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

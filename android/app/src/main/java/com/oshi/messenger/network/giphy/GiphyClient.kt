@@ -73,7 +73,9 @@ object GiphyClient {
     // rate-limits, and strips the caller's IP/identifiers before reaching GIPHY.
     const val PROXY_BASE = "https://oshi-messenger.com/api/giphy/"
 
-    val isConfigured: Boolean get() = true
+    // 🛡 __STRICT_MODE_2026_11_22__ GIPHY search is a third-party request: off in strict mode
+    // (the picker then shows only the packs bundled in the app).
+    val isConfigured: Boolean get() = com.oshi.messenger.security.StrictModeGate.thirdPartyFetchAllowed
 
     /** Une frappe ne vaut PAS un appel. Seule la PREMIÈRE page attend. */
     const val SEARCH_DEBOUNCE_MS = 500L

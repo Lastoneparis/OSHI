@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">پیش‌نمایش عمومی وب</string>
+    <string name="cw_toggle">انتشار پست‌ها در وب</string>
+    <string name="cw_footer">پست‌های جدید به‌صورت یک صفحهٔ وب عمومی در oshi-messenger.com/c/%1$s هم منتشر می‌شوند. هر کسی می‌تواند آن‌ها را بخواند، از جمله موتورهای جستجو و پیش‌نمایش پیوندها. رمزگذاری سرتاسری شامل نسخهٔ وب نمی‌شود.</string>
+    <string name="cw_needs_link">ابتدا برای این کانال یک پیوند عمومی بسازید: پیش‌نمایش وب از نام آن استفاده می‌کند.</string>
+    <string name="cw_create_link">ساخت پیوند عمومی</string>
+    <string name="cw_enable_title">پست‌ها در وب منتشر شوند؟</string>
+    <string name="cw_enable_confirm">پست‌های این کانال برای همه در وب در oshi-messenger.com/c/%1$s قابل مشاهده خواهند بود. فقط پست‌های جدید. پیش‌نمایش پیوندها (WhatsApp، X، Telegram…) هم می‌توانند آن‌ها را بخوانند و رمزگذاری سرتاسری شامل نسخهٔ وب نمی‌شود.</string>
+    <string name="cw_enable_action">انتشار</string>
+    <string name="cw_disable_title">پیش‌نمایش وب خاموش شود؟</string>
+    <string name="cw_disable_confirm">همهٔ پست‌ها و تصاویر منتشرشده در oshi-messenger.com/c/%1$s از وب حذف می‌شوند. پست‌های شما در برنامه تغییری نمی‌کنند.</string>
+    <string name="cw_disable_action">خاموش کردن</string>
+    <string name="cw_indexing">اجازه به موتورهای جستجو</string>
+    <string name="cw_indexing_footer">وقتی خاموش است، صفحه‌ها از موتورهای جستجو می‌خواهند آن‌ها را نمایه نکنند.</string>
+    <string name="cw_embed_code">کد جاسازی</string>
+    <string name="cw_embed_title">جاسازی این پست</string>
+    <string name="cw_embed_hint">این کد را در وب‌سایت خود جایی که پست باید نمایش داده شود قرار دهید.</string>
+    <string name="cw_embed_dark">پوستهٔ تیره</string>
+    <string name="cw_copy_code">کپی کد</string>
+    <string name="cw_code_copied">کد کپی شد</string>
+    <string name="cw_not_on_web">این پست در وب نیست. فقط پست‌هایی که پس از روشن شدن پیش‌نمایش وب ارسال شده‌اند منتشر می‌شوند.</string>
+    <string name="cw_error">تغییر پیش‌نمایش وب ممکن نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید.</string>
+</resources>

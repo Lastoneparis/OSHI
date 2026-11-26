@@ -63,7 +63,7 @@ class BubbleContrastTest {
     @Test
     fun `the received bubble carries its ink in both schemes`() {
         val receivedLight = white
-        val receivedDark = hex(0x1E1B2E)
+        val receivedDark = hex(0x22252B) // __BUBBLE_MEDIA_2026_11_21__ neutral elevated grey
         val pairs = listOf(
             Triple("light/onSurface", receivedLight, black),
             Triple("light/onSurfaceVariant", receivedLight, hex(0x606060)),
@@ -87,11 +87,12 @@ class BubbleContrastTest {
         val chat = SourceText.read("src/main/java/com/oshi/messenger/ui/screens/ChatScreen.kt")
         assertTrue(
             "the outgoing bubble is no longer painted from the accent — re-check this guard",
-            chat.contains("appearance.accent.brush"),
+            // __BUBBLE_MEDIA_2026_11_21__ painted by the accent's scheme-aware surface.
+            chat.contains("appearance.accent.surfaceBrush(darkScheme)"),
         )
         assertTrue(
-            "outgoing ink should come from accent.onAccent",
-            chat.contains("appearance.accent.onAccent"),
+            "outgoing ink should come from the same accent (accent.ink)",
+            chat.contains("appearance.accent.ink(isDarkScheme())"),
         )
         val strayPairing = Regex(
             """color\s*=\s*if\s*\(isFromMe\)\s*\n\s*MaterialTheme\.colorScheme\.onPrimary"""
@@ -131,11 +132,11 @@ class BubbleContrastTest {
         val group = SourceText.read("src/main/java/com/oshi/messenger/ui/screens/GroupChatScreen.kt")
         assertTrue(
             "the group bubble is no longer accent-painted — re-check this guard",
-            group.contains("appearance.accent.brush"),
+            group.contains("appearance.accent.surfaceBrush(darkScheme)"),
         )
         assertTrue(
             "group outgoing ink should read the painted accent",
-            group.contains("isOwnMessage -> LocalBubbleAppearance.current.accent.onAccent"),
+            group.contains("outgoingLook -> accentNow.ink(darkNow)"),
         )
         assertTrue(
             "group outgoing ink is back on a hard-coded white",

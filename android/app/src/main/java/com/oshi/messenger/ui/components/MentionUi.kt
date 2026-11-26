@@ -62,6 +62,16 @@ fun mentionAnnotated(text: String, spans: List<MentionWire.Span>, tint: Color): 
         append(text.substring(at))
     }
 
+/** [mentionAnnotated] over a rendered body, with its bold / underline / inline markup on top. */
+fun formattedMentionAnnotated(body: BodyMarkup.Result, spans: List<MentionWire.Span>, tint: Color): AnnotatedString {
+    val base = mentionAnnotated(body.text, spans, tint)
+    if (body.spans.isEmpty()) return base
+    return buildAnnotatedString {
+        append(base)
+        for (s in body.spans) addStyle(bodyMarkupStyle(s.kind), s.start, s.end)
+    }
+}
+
 /** The ranges a ticker chip must not claim: a picked person always wins over a symbol. */
 fun mentionRanges(text: String, mentions: List<MentionWire.Mention>): List<IntRange> =
     MentionWire.spans(text, mentions).map { it.start until it.endExclusive }
@@ -72,10 +82,12 @@ fun mentionRanges(text: String, mentions: List<MentionWire.Mention>): List<IntRa
  */
 @Composable
 fun MentionText(text: String, mentions: List<MentionWire.Mention>, color: Color, tint: Color, style: TextStyle) {
-    val spans = remember(text, mentions) { MentionWire.spans(text, mentions) }
+    // __TEXT_FORMATTING_2026_11_24__ markers removed first; mentions found in what is shown.
+    val body = remember(text) { BodyMarkup.render(text) }
+    val spans = remember(body, mentions) { MentionWire.spans(body.text, mentions) }
     var shown by remember { mutableStateOf<MentionWire.Span?>(null) }
     ClickableText(
-        text = mentionAnnotated(text, spans, tint),
+        text = remember(body, spans, tint) { formattedMentionAnnotated(body, spans, tint) },
         style = style.copy(color = color),
         onClick = { offset -> shown = spans.firstOrNull { offset >= it.start && offset < it.endExclusive } },
     )

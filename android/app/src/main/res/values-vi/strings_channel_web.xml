@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Xem trước công khai trên web</string>
+    <string name="cw_toggle">Đăng bài lên web</string>
+    <string name="cw_footer">Bài đăng mới cũng được xuất bản thành trang web công khai tại oshi-messenger.com/c/%1$s. Bất kỳ ai cũng có thể đọc, kể cả công cụ tìm kiếm và bản xem trước liên kết. Mã hóa đầu cuối không áp dụng cho bản sao trên web.</string>
+    <string name="cw_needs_link">Hãy tạo liên kết công khai cho kênh này trước: bản xem trước web dùng tên của nó.</string>
+    <string name="cw_create_link">Tạo liên kết công khai</string>
+    <string name="cw_enable_title">Đăng bài lên web?</string>
+    <string name="cw_enable_confirm">Bài đăng trong kênh này sẽ hiển thị với mọi người trên web tại oshi-messenger.com/c/%1$s. Chỉ bài đăng mới. Bản xem trước liên kết (WhatsApp, X, Telegram…) cũng có thể đọc, và mã hóa đầu cuối không áp dụng cho bản sao trên web.</string>
+    <string name="cw_enable_action">Đăng</string>
+    <string name="cw_disable_title">Tắt bản xem trước web?</string>
+    <string name="cw_disable_confirm">Mọi bài đăng và hình ảnh đã xuất bản tại oshi-messenger.com/c/%1$s sẽ bị xóa khỏi web. Bài đăng của bạn trong ứng dụng vẫn giữ nguyên.</string>
+    <string name="cw_disable_action">Tắt</string>
+    <string name="cw_indexing">Cho phép công cụ tìm kiếm</string>
+    <string name="cw_indexing_footer">Khi tắt, các trang yêu cầu công cụ tìm kiếm không lập chỉ mục.</string>
+    <string name="cw_embed_code">Mã nhúng</string>
+    <string name="cw_embed_title">Nhúng bài đăng này</string>
+    <string name="cw_embed_hint">Dán mã này vào trang web của bạn ở nơi bài đăng cần xuất hiện.</string>
+    <string name="cw_embed_dark">Giao diện tối</string>
+    <string name="cw_copy_code">Sao chép mã</string>
+    <string name="cw_code_copied">Đã sao chép mã</string>
+    <string name="cw_not_on_web">Bài đăng này không có trên web. Chỉ những bài gửi sau khi bật bản xem trước web mới được xuất bản.</string>
+    <string name="cw_error">Không thể thay đổi bản xem trước web. Hãy kiểm tra kết nối và thử lại.</string>
+</resources>

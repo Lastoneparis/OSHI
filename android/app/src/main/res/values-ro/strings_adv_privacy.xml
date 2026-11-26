@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Confidențialitate avansată a conversației</string>
+    <string name="adv_privacy_subtitle">Împiedică pe toată lumea din această conversație să salveze conținut media, să exporte conversația sau să folosească IA pe mesaje</string>
+    <string name="adv_privacy_learn_more">Află mai multe</string>
+    <string name="adv_privacy_notice_on">%1$s a activat confidențialitatea avansată a conversației. Nimeni nu poate salva automat conținut media, exporta conversația sau folosi IA pe mesajele din această conversație.</string>
+    <string name="adv_privacy_notice_off">%1$s a dezactivat confidențialitatea avansată a conversației. Salvarea conținutului media, exportul conversației și funcțiile IA sunt din nou disponibile.</string>
+    <string name="adv_privacy_notice_on_you">Ai activat confidențialitatea avansată a conversației. Nimeni nu poate salva automat conținut media, exporta conversația sau folosi IA pe mesajele din această conversație.</string>
+    <string name="adv_privacy_notice_off_you">Ai dezactivat confidențialitatea avansată a conversației. Salvarea conținutului media, exportul conversației și funcțiile IA sunt din nou disponibile.</string>
+    <string name="adv_privacy_summary_on">Confidențialitate avansată activată</string>
+    <string name="adv_privacy_summary_off">Confidențialitate avansată dezactivată</string>
+    <string name="adv_privacy_sheet_intro">Când cineva o activează, se aplică tuturor din această conversație:</string>
+    <string name="adv_privacy_sheet_point_save">Conținutul media din această conversație nu poate fi salvat în galerie sau în Descărcări.</string>
+    <string name="adv_privacy_sheet_point_export">Această conversație este exclusă din exporturile de conversații.</string>
+    <string name="adv_privacy_sheet_point_ai">IA de pe dispozitiv a OSHI nu poate citi această conversație: fără răspunsuri sugerate, fără traducere, fără context pentru asistentul de scriere.</string>
+    <string name="adv_privacy_sheet_point_screen">Capturile de ecran și înregistrarea ecranului acestei conversații sunt blocate.</string>
+    <string name="adv_privacy_sheet_limits">Oricine din conversație o poate activa sau dezactiva. Nu împiedică pe nimeni să fotografieze ecranul, iar persoanele care folosesc o versiune mai veche de OSHI nu sunt afectate.</string>
+    <string name="adv_privacy_blocked_toast">Confidențialitatea avansată este activată în această conversație</string>
+    <string name="adv_privacy_older_members">Membri cu o versiune mai veche de OSHI care nu o vor aplica până nu actualizează: %1$d</string>
+</resources>

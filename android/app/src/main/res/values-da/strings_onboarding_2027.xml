@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Spring over</string>
+    <string name="ob27_continue">Fortsæt</string>
+    <string name="ob27_page_of">Side %1$d af %2$d</string>
+    <string name="ob27_private_title">Kun jer to</string>
+    <string name="ob27_private_body">Beskeder og opkald er end-to-end-krypteret på din telefon. Ingen undervejs kan læse dem – heller ikke OSHI.</string>
+    <string name="ob27_offline_title">Virker uden internet</string>
+    <string name="ob27_offline_body">Intet netværk? Beskeder hopper fra telefon til telefon via folk i nærheden, der har OSHI åbent. En LoRa-radio bringer dem endnu længere.</string>
+    <string name="ob27_range_direct">direkte</string>
+    <string name="ob27_range_relayed">videresendt</string>
+    <string name="ob27_range_lora">LoRa-radio</string>
+    <string name="ob27_anon_title">Intet nummer nødvendigt</string>
+    <string name="ob27_anon_body">Ingen konto, ingen e-mail, intet nummer at tilmelde dig med. Din identitet er en nøgle, der oprettes på denne telefon.</string>
+    <string name="ob27_together_title">Tag dine folk med</string>
+    <string name="ob27_together_body">Chat én til én eller i grupper. Tilføj nogen ved at scanne deres QR-kode eller sende dem et invitationslink.</string>
+    <string name="ob27_rules_title">Før du starter</string>
+    <string name="ob27_rules_subtitle">Et par husregler, og hvad OSHI kan og endnu ikke kan.</string>
+    <string name="ob27_rules_do">Gør dette</string>
+    <string name="ob27_rules_dont">Aldrig</string>
+    <string name="ob27_good_to_know">Godt at vide</string>
+    <string name="ob27_show_details">Vis detaljer</string>
+    <string name="ob27_hide_details">Skjul detaljer</string>
+    <string name="ob27_agree">Jeg forstår</string>
+    <string name="ob27_notif_title">Gå ikke glip af beskeder</string>
+    <string name="ob27_notif_body">Tillad notifikationer for at se nye beskeder og opkald. Du kan slå dem fra når som helst i Indstillinger.</string>
+    <string name="ob27_notif_allow">Tillad notifikationer</string>
+    <string name="ob27_not_now">Ikke nu</string>
+    <string name="ob27_identity_title">Vælg et navn</string>
+    <string name="ob27_identity_body">Det er det, dine kontakter ser. Du kan ændre det senere.</string>
+    <string name="ob27_already">Bruger du allerede OSHI?</string>
+</resources>

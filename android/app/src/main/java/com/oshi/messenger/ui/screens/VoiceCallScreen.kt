@@ -68,12 +68,16 @@ fun VoiceCallScreen(
     val isSpeaker by viewModel.isSpeaker.collectAsState()
     val duration by viewModel.duration.collectAsState()
     val connectionQuality by viewModel.connectionQuality.collectAsState()
-    val oledCall = com.oshi.messenger.ui.theme.glassOn()
+    // __GLASS_ALL_THEMES_2026_11_21__ the black ground is OLED black's; the glass
+    // controls on it follow « Effet verre » (oledGlassOn at each control).
+    val oledCall = com.oshi.messenger.ui.theme.isOledScheme()
     val connectionType by viewModel.connectionType.collectAsState()
     val latencyMs by viewModel.latencyMs.collectAsState()
     val micLevel by viewModel.micLevel.collectAsState()
     val remoteLevel by viewModel.remoteLevel.collectAsState()
     val lastEndReason by viewModel.lastEndReason.collectAsState()
+    val calleeReach by viewModel.calleeReach.collectAsState()  // __CALL_WAKE_2026_11_22__
+    val outgoingRingingSince by viewModel.outgoingRingingSince.collectAsState()
 
     // Video upgrade request from peer — tasks 2.2.3-2.2.5
     val pendingVideoUpgrade by viewModel.pendingVideoUpgrade.collectAsState()
@@ -357,7 +361,9 @@ fun VoiceCallScreen(
                 CallStatusText(
                     callState = callState,
                     quality = connectionQuality,
-                    isOutgoing = currentCall?.isOutgoing ?: true
+                    isOutgoing = currentCall?.isOutgoing ?: true,
+                    calleeReach = calleeReach,
+                    ringingSince = outgoingRingingSince
                 )
 
                 // Duration
@@ -721,7 +727,7 @@ private fun ConnectionTypeBadge(connectionType: ConnectionType) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .then(if (com.oshi.messenger.ui.theme.glassOn()) Modifier.glassSurface(RoundedCornerShape(16.dp), com.oshi.messenger.ui.theme.GlassTier.Chip.opaque) else Modifier.background(Color.Black.copy(alpha = 0.2f), RoundedCornerShape(16.dp)))
+            .then(if (com.oshi.messenger.ui.theme.oledGlassOn()) Modifier.glassSurface(RoundedCornerShape(16.dp), com.oshi.messenger.ui.theme.glassOpaque(com.oshi.messenger.ui.theme.GlassTier.Chip)) else Modifier.background(Color.Black.copy(alpha = 0.2f), RoundedCornerShape(16.dp)))
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
         Icon(
@@ -870,8 +876,22 @@ private fun AvatarWithQualityRing(
 private fun CallStatusText(
     callState: CallState,
     quality: NetworkQuality,
-    isOutgoing: Boolean
+    isOutgoing: Boolean,
+    calleeReach: com.oshi.messenger.service.CallReach? = null,
+    ringingSince: Long = 0L
 ) {
+    // __CALL_WAKE_2026_11_22__ "Ringing…" only once the callee's phone has the call;
+    // "Calling…" before, "Not reachable right now" when no push device / socket exists.
+    // Re-evaluated every second so the 6 s grace of the unreachable label can elapse.
+    var nowMs by remember { mutableStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(callState, isOutgoing) {
+        while (callState == CallState.RINGING && isOutgoing) {
+            nowMs = System.currentTimeMillis()
+            kotlinx.coroutines.delay(1000)
+        }
+    }
+    val outgoingLabel = com.oshi.messenger.service.CallReachLabel.forOutgoing(
+        calleeReach, if (ringingSince > 0L) nowMs - ringingSince else 0L)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
@@ -893,7 +913,11 @@ private fun CallStatusText(
                 quality == NetworkQuality.RECONNECTING -> stringResource(R.string.call_state_reconnecting)
                 callState == CallState.IDLE -> stringResource(R.string.call_state_disconnected)
                 callState == CallState.RINGING ->
-                    if (isOutgoing) stringResource(R.string.call_state_ringing)
+                    if (isOutgoing) when (outgoingLabel) {
+                        com.oshi.messenger.service.CallReachLabel.Label.RINGING -> stringResource(R.string.call_state_ringing)
+                        com.oshi.messenger.service.CallReachLabel.Label.CALLING -> stringResource(R.string.call_state_calling)
+                        com.oshi.messenger.service.CallReachLabel.Label.UNREACHABLE -> stringResource(R.string.call_reach_unreachable)
+                    }
                     else stringResource(R.string.call_summary_incoming)
                 callState == CallState.CONNECTING -> stringResource(R.string.call_connecting)
                 callState == CallState.IN_CALL -> stringResource(R.string.call_state_on_call)
@@ -915,7 +939,7 @@ private fun QualityIndicator(
 ) {
     Row(
         modifier = modifier
-            .then(if (com.oshi.messenger.ui.theme.glassOn()) Modifier.glassSurface(RoundedCornerShape(12.dp), com.oshi.messenger.ui.theme.GlassTier.Chip.opaque) else Modifier.background(Color.Black.copy(alpha = 0.2f), RoundedCornerShape(12.dp)))
+            .then(if (com.oshi.messenger.ui.theme.oledGlassOn()) Modifier.glassSurface(RoundedCornerShape(12.dp), com.oshi.messenger.ui.theme.glassOpaque(com.oshi.messenger.ui.theme.GlassTier.Chip)) else Modifier.background(Color.Black.copy(alpha = 0.2f), RoundedCornerShape(12.dp)))
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -1010,7 +1034,7 @@ private fun EncryptionBadge() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .then(if (com.oshi.messenger.ui.theme.glassOn()) Modifier.glassSurface(RoundedCornerShape(16.dp), com.oshi.messenger.ui.theme.GlassTier.Chip.opaque) else Modifier.background(Color.Black.copy(alpha = 0.15f), RoundedCornerShape(16.dp)))
+            .then(if (com.oshi.messenger.ui.theme.oledGlassOn()) Modifier.glassSurface(RoundedCornerShape(16.dp), com.oshi.messenger.ui.theme.glassOpaque(com.oshi.messenger.ui.theme.GlassTier.Chip)) else Modifier.background(Color.Black.copy(alpha = 0.15f), RoundedCornerShape(16.dp)))
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
         Icon(

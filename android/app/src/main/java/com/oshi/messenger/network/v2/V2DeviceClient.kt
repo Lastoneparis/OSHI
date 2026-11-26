@@ -54,7 +54,7 @@ class V2DeviceClient @Inject constructor(
     private fun unb64(s: String) = Base64.decode(s, Base64.NO_WRAP)
 
     /** Raw HTTP answer: status + body text. `status == -1` = network failure. */
-    data class Answer(val status: Int, val body: String?) {
+    data class Answer(val status: Int, val body: String?, val retryAfter: String? = null) {
         val outcome: DeviceHttpOutcome get() = if (status < 0) DeviceHttpOutcome.Failed(status, "network") else DeviceHttpOutcome.classify(status, body)
     }
 
@@ -72,7 +72,7 @@ class V2DeviceClient @Inject constructor(
             val b = Request.Builder().url(baseUrl + path + (query?.let { "?$it" } ?: ""))
             if (method == "GET") b.get() else b.method(method, bytes.toRequestBody(json))
             h.forEach { (k, v) -> b.header(k, v) }
-            client.newCall(b.build()).execute().use { r -> Answer(r.code, r.body?.string()) }
+            client.newCall(b.build()).execute().use { r -> Answer(r.code, r.body?.string(), r.header("Retry-After")) }
         } catch (e: CancellationException) { throw e }
         catch (e: Exception) {
             Log.w(TAG, "$method $path failed: ${e.javaClass.simpleName}")
@@ -220,17 +220,17 @@ class V2DeviceClient @Inject constructor(
     suspend fun sendBatch(envelopes: List<V2Envelope>): BatchResult {
         val body = JSONObject().put("envelopes", JSONArray().apply { envelopes.forEach { put(it.toJson()) } })
             .toString().toByteArray(Charsets.UTF_8)
-        var last = Answer(-1, null)
-        for (attempt in 0..2) {
-            last = call("POST", "/v2/messages", body = body)
-            if (last.status in 200..299) {
-                val acc = runCatching { JSONObject(last.body.orEmpty()).optJSONArray("accepted") }.getOrNull() ?: JSONArray()
-                return BatchResult.Accepted((0 until acc.length()).map { acc.getString(it) })
-            }
-            DeviceListMismatch.parse(last.body)?.let { return BatchResult.Mismatch(it) }
-            if (last.status != 429 && last.status !in 500..599 && last.status != -1) break
-            if (attempt < 2) delay(1000L shl attempt)
+        // __GROUP_FANOUT_2026_11_24__ a 429 waits Retry-After (see RateLimitBackoff); 5xx unchanged.
+        val last = RateLimitBackoff.retrying(
+            call = { call("POST", "/v2/messages", body = body) },
+            status = { a -> if (DeviceListMismatch.parse(a.body) != null) 409 else a.status },
+            retryAfter = { it.retryAfter },
+        )
+        if (last.status in 200..299) {
+            val acc = runCatching { JSONObject(last.body.orEmpty()).optJSONArray("accepted") }.getOrNull() ?: JSONArray()
+            return BatchResult.Accepted((0 until acc.length()).map { acc.getString(it) })
         }
+        DeviceListMismatch.parse(last.body)?.let { return BatchResult.Mismatch(it) }
         return BatchResult.Refused(last.status, runCatching { JSONObject(last.body ?: "{}").optString("error") }.getOrNull())
     }
 

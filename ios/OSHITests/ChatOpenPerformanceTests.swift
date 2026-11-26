@@ -592,3 +592,26 @@ private struct SeededRNG: RandomNumberGenerator {
         return z ^ (z >> 31)
     }
 }
+
+
+/// __LORA_ROOM_SPEAKERS_2026_11_25__ An open LoRa room shows every speaker, not only our own lines.
+final class LoRaRoomThreadPipelineTests: XCTestCase {
+    private func row(_ id: String, from: String, to: String) -> SecureMessage {
+        SecureMessage(id: id, senderAddress: from, recipientAddress: to,
+                      encryptedContent: EncryptedMessage(ciphertext: "", signature: "", senderPublicKey: from, timestamp: Date()),
+                      timestamp: Date(timeIntervalSince1970: Double(id.count)), isRead: true, deliveryStatus: .delivered,
+                      senderPublicKey: from, recipientPublicKey: to, plaintextContent: id)
+    }
+
+    func testALoRaRoomShowsEverySpeaker() {
+        let room = LoRaChannelThread.key(channelIndex: 0, channelName: "LongFast")
+        let other = LoRaChannelThread.key(channelIndex: 1, channelName: "Alps")
+        let source = [row("a", from: "lora!0a0b0c0d", to: room),
+                      row("bb", from: "me", to: room),
+                      row("ccc", from: "lora!0a0b0c0d", to: "me"),     // a DM, not the room
+                      row("dddd", from: "lora!11223344", to: other)]   // another room
+        XCTAssertEqual(ChatThreadPipeline.threadMessages(from: source, peerKey: room, myKey: "me").map(\.id), ["a", "bb"])
+        // A one-to-one thread keeps the two-party rule.
+        XCTAssertEqual(ChatThreadPipeline.threadMessages(from: source, peerKey: "lora!0a0b0c0d", myKey: "me").map(\.id), ["ccc"])
+    }
+}

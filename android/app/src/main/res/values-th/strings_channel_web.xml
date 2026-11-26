@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">ตัวอย่างบนเว็บแบบสาธารณะ</string>
+    <string name="cw_toggle">เผยแพร่โพสต์บนเว็บ</string>
+    <string name="cw_footer">โพสต์ใหม่จะถูกเผยแพร่เป็นหน้าเว็บสาธารณะที่ oshi-messenger.com/c/%1$s ด้วย ทุกคนอ่านได้ รวมถึงเครื่องมือค้นหาและตัวอย่างลิงก์ การเข้ารหัสแบบต้นทางถึงปลายทางไม่ครอบคลุมสำเนาบนเว็บ</string>
+    <string name="cw_needs_link">ตั้งลิงก์สาธารณะให้ช่องนี้ก่อน: ตัวอย่างบนเว็บจะใช้ชื่อของลิงก์นั้น</string>
+    <string name="cw_create_link">สร้างลิงก์สาธารณะ</string>
+    <string name="cw_enable_title">เผยแพร่โพสต์บนเว็บไหม</string>
+    <string name="cw_enable_confirm">โพสต์ในช่องนี้จะมองเห็นได้โดยทุกคนบนเว็บที่ oshi-messenger.com/c/%1$s เฉพาะโพสต์ใหม่เท่านั้น ตัวอย่างลิงก์ (WhatsApp, X, Telegram…) ก็อ่านได้เช่นกัน และการเข้ารหัสแบบต้นทางถึงปลายทางไม่ครอบคลุมสำเนาบนเว็บ</string>
+    <string name="cw_enable_action">เผยแพร่</string>
+    <string name="cw_disable_title">ปิดตัวอย่างบนเว็บไหม</string>
+    <string name="cw_disable_confirm">โพสต์และรูปภาพทั้งหมดที่เผยแพร่ที่ oshi-messenger.com/c/%1$s จะถูกลบออกจากเว็บ โพสต์ของคุณในแอปยังคงเหมือนเดิม</string>
+    <string name="cw_disable_action">ปิด</string>
+    <string name="cw_indexing">อนุญาตเครื่องมือค้นหา</string>
+    <string name="cw_indexing_footer">เมื่อปิด หน้าเว็บจะขอให้เครื่องมือค้นหาไม่จัดทำดัชนี</string>
+    <string name="cw_embed_code">โค้ดสำหรับฝัง</string>
+    <string name="cw_embed_title">ฝังโพสต์นี้</string>
+    <string name="cw_embed_hint">วางโค้ดนี้ในเว็บไซต์ของคุณตรงที่ต้องการให้โพสต์แสดง</string>
+    <string name="cw_embed_dark">ธีมมืด</string>
+    <string name="cw_copy_code">คัดลอกโค้ด</string>
+    <string name="cw_code_copied">คัดลอกโค้ดแล้ว</string>
+    <string name="cw_not_on_web">โพสต์นี้ไม่ได้อยู่บนเว็บ จะเผยแพร่เฉพาะโพสต์ที่ส่งหลังจากเปิดตัวอย่างบนเว็บแล้วเท่านั้น</string>
+    <string name="cw_error">เปลี่ยนตัวอย่างบนเว็บไม่ได้ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง</string>
+</resources>

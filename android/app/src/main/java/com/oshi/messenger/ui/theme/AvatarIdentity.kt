@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -208,7 +207,9 @@ object AvatarNameColors {
  */
 @Composable
 fun rememberNameColor(key: String): Color {
-    val dark = isSystemInDarkTheme()
+    // __BUBBLE_MEDIA_2026_11_21__ the APP's scheme, not the phone's: with the theme
+    // forced to Light on a dark phone the dark-tuned names landed on white bubbles.
+    val dark = isDarkScheme()
     return remember(key, dark) { AvatarNameColors.forKey(key, dark) }
 }
 

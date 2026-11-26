@@ -109,6 +109,36 @@ enum class BubbleAccent(
      */
     val onAccent: Color get() = Color.White
 
+    /**
+     * __BUBBLE_MEDIA_2026_11_21__ What an outgoing bubble is ACTUALLY painted with.
+     * [OSHI] — the default, i.e. nearly everyone — is tonal and follows the scheme
+     * (Oshi.Bubble.outgoing*); the five opt-in accents keep their saturated ramp.
+     * Paint and ink come from the same accent and the same `dark`, never separately.
+     */
+    fun isTonal(dark: Boolean): Boolean = this == OSHI
+
+    fun surfaceBrush(dark: Boolean): Brush = if (this != OSHI) brush else Brush.linearGradient(
+        colors = if (dark) listOf(Oshi.Bubble.outgoingDarkStart, Oshi.Bubble.outgoingDarkEnd)
+        else listOf(Oshi.Bubble.outgoingLightStart, Oshi.Bubble.outgoingLightEnd),
+        start = Offset.Zero,
+        end = Offset.Infinite
+    )
+
+    /** The two stops of [surfaceBrush], for contrast checks and flat previews. */
+    fun surfaceStops(dark: Boolean): Pair<Color, Color> = if (this != OSHI) stopStart to stopEnd
+        else if (dark) Oshi.Bubble.outgoingDarkStart to Oshi.Bubble.outgoingDarkEnd
+        else Oshi.Bubble.outgoingLightStart to Oshi.Bubble.outgoingLightEnd
+
+    /** Body ink on [surfaceBrush]. */
+    fun ink(dark: Boolean): Color = if (this == OSHI && !dark) Oshi.Bubble.onOutgoingLight else onAccent
+
+    /** Timestamp / edited / tick ink on [surfaceBrush]. */
+    fun metaInk(dark: Boolean): Color =
+        if (this == OSHI) Oshi.Bubble.metaOnOutgoing(dark) else onAccent.copy(alpha = 0.8f)
+
+    /** Links and mentions on [surfaceBrush]: brand violet on the pale ramp, the ink elsewhere. */
+    fun linkInk(dark: Boolean): Color = if (this == OSHI && !dark) OSHIPurple else ink(dark)
+
     companion object {
         fun fromStored(raw: Int): BubbleAccent = entries.getOrNull(raw) ?: OSHI
     }

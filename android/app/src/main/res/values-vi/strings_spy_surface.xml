@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">Ứng dụng có thể đọc OSHI</string>
+    <string name="spy_surface_dialog_body">Các ứng dụng này trên điện thoại có thể đọc nội dung trên màn hình hoặc trong thông báo, kể cả tin nhắn của bạn sau khi OSHI giải mã:\n\n%1$s\n\nNếu bạn không tự cài hoặc cho phép một trong số đó, đó có thể là phần mềm gián điệp. Hãy tắt quyền của nó trong Cài đặt Android hoặc gỡ cài đặt. OSHI không chặn gì cả.</string>
+    <string name="spy_surface_power_accessibility">màn hình và nhập liệu (hỗ trợ tiếp cận)</string>
+    <string name="spy_surface_power_notifications">thông báo</string>
+    <string name="spy_surface_power_admin">quản trị viên thiết bị</string>
+</resources>

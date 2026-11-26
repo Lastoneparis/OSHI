@@ -48,4 +48,27 @@
     <string name="qr_no">Không</string>
     <string name="qr_busy">Giờ không nói được</string>
     <string name="end_to_end">Mã hóa đầu cuối bởi điện thoại của bạn</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Đã ghim</string>
+    <string name="net_internet">Internet</string>
+    <string name="net_nearby">%1$d ở gần</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Điện thoại ngoại tuyến · tin nhắn đang chờ trên điện thoại</string>
+    <string name="net_offline_short">Điện thoại ngoại tuyến</string>
+    <string name="voice_message">Tin nhắn thoại</string>
+    <string name="voice_send">Gửi tin nhắn thoại</string>
+    <string name="voice_cancel">Hủy</string>
+    <string name="voice_permission">Cho phép micrô để ghi tin nhắn thoại. Không có gì được lưu trên đồng hồ.</string>
+    <string name="voice_mic_busy">Micrô đang bận. Hãy thử lại.</string>
+    <string name="voice_too_short">Quá ngắn. Hãy nói lâu hơn một chút.</string>
+    <string name="voice_not_sent">Chưa gửi. Giữ điện thoại ở gần và thử lại.</string>
+    <string name="send_emoji">Gửi emoji</string>
+    <string name="delivery_sending">Đang gửi</string>
+    <string name="delivery_sent">Đã gửi</string>
+    <string name="delivery_delivered">Đã nhận</string>
+    <string name="delivery_read">Đã đọc</string>
+    <string name="delivery_failed">Chưa nhận</string>
+    <string name="complication_none">Không có tin nhắn chưa đọc</string>
+    <string name="tile_reply_to">Trả lời %1$s</string>
+    <string name="tile_chat_unread">%1$s, %2$d chưa đọc</string>
 </resources>

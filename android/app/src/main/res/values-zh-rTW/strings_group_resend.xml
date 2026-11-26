@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">已傳送給 %2$d 人中的 %1$d 人</string>
+    <string name="group_sent_partial_body">尚未送達 %1$d 名成員。OSHI 會在 7 天內自動重試。</string>
+    <string name="group_sent_partial_gave_up">7 天後仍未送達 %1$d 名成員。</string>
+    <string name="group_retry_now">立即重試</string>
+</resources>

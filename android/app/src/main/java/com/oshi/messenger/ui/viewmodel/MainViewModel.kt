@@ -771,6 +771,16 @@ class MainViewModel @Inject constructor(
 
     val isMeshEnabled: Boolean get() = com.oshi.messenger.network.mesh.MeshPrefs.isEnabled(context)
 
+    /** __WIFI_AWARE_2026_11_25__ Settings → Network → "Wi-Fi Aware (fast nearby link)". Hidden when unsupported. */
+    val isWifiAwareSupported: Boolean
+        get() = com.oshi.messenger.network.mesh.wifiaware.WifiAwarePrefs.isSupported(context)
+    val isWifiAwareEnabled: Boolean
+        get() = com.oshi.messenger.network.mesh.wifiaware.WifiAwarePrefs.isEnabled(context)
+    fun setWifiAwareEnabled(enabled: Boolean) {
+        com.oshi.messenger.network.mesh.wifiaware.WifiAwarePrefs.setEnabled(context, enabled)
+        try { meshManager.refreshWifiAware() } catch (e: Exception) { Log.e(TAG, "Wi-Fi Aware toggle: ${e.message}") }
+    }
+
     fun setMeshEnabled(enabled: Boolean) {
         com.oshi.messenger.network.mesh.MeshPrefs.setEnabled(context, enabled)
         if (enabled) {
@@ -816,13 +826,30 @@ class MainViewModel @Inject constructor(
      *   then send a member_sync_request to the inviter so they reply with the
      *   full canonical state (matches existing iOS↔Android sync flow).
      */
-    fun joinGroupFromInvite(gid: String, inviterKey: String?, name: String?) {
+    fun joinGroupFromInvite(gid: String, inviterKey: String?, name: String?, inviteToken: String? = null) {
         viewModelScope.launch {
             try {
-                groupManager.joinGroupFromInvite(gid, inviterKey, name)
+                groupManager.joinGroupFromInvite(gid, inviterKey, name, inviteToken)
             } catch (e: Exception) {
                 Log.e(TAG, "joinGroupFromInvite failed: ${e.message}")
             }
         }
     }
+
+    // __GROUP_SETTINGS_2026_11_20__ public group link (GROUP_INFO_SETTINGS_SPEC §3.1)
+    sealed class PublicGroupLookup {
+        data class Found(val resolved: com.oshi.messenger.network.v2.V2GroupHandleClient.Resolved) : PublicGroupLookup()
+        object NotFound : PublicGroupLookup()
+        object Network : PublicGroupLookup()
+    }
+
+    suspend fun resolvePublicGroup(handle: String): PublicGroupLookup = try {
+        groupManager.resolvePublicHandle(handle)?.let { PublicGroupLookup.Found(it) } ?: PublicGroupLookup.NotFound
+    } catch (e: Exception) {
+        Log.w(TAG, "resolvePublicGroup failed: ${e.message}")
+        PublicGroupLookup.Network
+    }
+
+    suspend fun requestPublicGroupJoin(resolved: com.oshi.messenger.network.v2.V2GroupHandleClient.Resolved): Boolean =
+        groupManager.sendJoinRequest(resolved.handle, resolved.joinKeys)
 }

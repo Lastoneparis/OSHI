@@ -12,6 +12,7 @@ struct MeshtasticSettingsView: View {
     @ObservedObject private var meshCore = MeshCoreManager.shared
     @AppStorage(LoRaCrossBridge.enabledKey) private var crossBridge = true
     @State private var showForgetMeshCore = false
+    @State private var showJoinMeshCoreChannel = false
     /// __LORA_MANUAL_LINK_2026_10_28__ The node awaiting a contact, and a
     /// counter that forces the rows to redraw after a link changes — the map is
     /// a plain object, not an ObservableObject, so nothing here observes it.
@@ -31,6 +32,10 @@ struct MeshtasticSettingsView: View {
 
     var body: some View {
         List {
+            // __MESHCORE_INTEROP_2026_11_25__ The radio in use comes first: with only a MeshCore radio, the
+            // screen used to open on "No radio paired" (the Meshtastic card) above a connected MeshCore radio.
+            if meshCoreFirst { meshCoreSection }
+
             // MARK: Status / paired radio
             Section {
                 HStack(spacing: 14) {
@@ -137,7 +142,7 @@ struct MeshtasticSettingsView: View {
                 }
             }
 
-            meshCoreSection
+            if !meshCoreFirst { meshCoreSection }
 
             // MARK: Mesh nodes seen by the radio
             if mesh.isReady {
@@ -320,8 +325,13 @@ struct MeshtasticSettingsView: View {
             }
         }
         .navigationTitle("meshtastic.title".localized)
-        .onAppear { if mesh.connectedName == nil { mesh.startScan() } }
-        .onDisappear { mesh.stopScan() }
+        // Both families are looked for at once: a MeshCore radio is found by its own service, so the person
+        // never has to know which firmware their radio runs to pick the right list.
+        .onAppear {
+            if mesh.connectedName == nil { mesh.startScan() }
+            if !MeshCoreManager.isPaired { meshCore.startScan() }
+        }
+        .onDisappear { mesh.stopScan(); meshCore.stopScan() }
         // __LORA_MANUAL_LINK_2026_10_28__ Reuses the app's own contact picker
         // rather than a second list of contacts: it already searches, already
         // resolves shared nicknames over local aliases, and is already
@@ -343,19 +353,41 @@ struct MeshtasticSettingsView: View {
             HStack(spacing: 14) {
                 Image(systemName: "point.3.connected.trianglepath.dotted")
                     .font(.scaled(24))
-                    .foregroundColor(meshCore.isReady ? .green : .secondary)
+                    .foregroundColor(meshCore.isTextReady ? .green : .secondary)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(meshCore.connectedName ?? "meshcore.none".localized).font(.headline)
-                    Text(meshCoreStatusLine).font(.caption).foregroundColor(.secondary)
+                    if let line = meshCoreStatusLine {
+                        Text(line).font(.caption)
+                            .foregroundColor(MeshCoreError.needsAction(meshCore.lastError) && meshCore.state == .off
+                                             ? .orange : .secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    if meshCore.isTextReady, let name = meshCore.selfName {
+                        Text("meshcore.seenAs".localized(with: name)).font(.caption2).foregroundColor(.secondary)
+                    }
                 }
                 Spacer()
-                if meshCore.state == .connecting || meshCore.state == .configuring { ProgressView() }
+                if meshCore.state == .connecting || meshCore.state == .configuring || meshCore.awaitingPin { ProgressView() }
             }
-            if meshCore.lastError == "meshcore.noFreeChannel" {
+            if meshCore.awaitingPin {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Image(systemName: "key.fill").foregroundColor(.blue).accessibilityHidden(true)
+                    Text("meshcore.state.pin.detail".localized)
+                        .foregroundColor(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .font(.caption)
+            }
+            if meshCore.lastError == MeshCoreError.noFreeChannel {
                 Label("meshcore.noFreeChannel".localized, systemImage: "exclamationmark.triangle")
                     .font(.caption).foregroundColor(.orange)
             }
-            if meshCore.connectedName != nil {
+            if MeshCoreError.needsAction(meshCore.lastError) && MeshCoreManager.isPaired && meshCore.state == .off {
+                Button { meshCore.retryConnection() } label: {
+                    Label("meshcore.retry".localized, systemImage: "arrow.clockwise")
+                }
+            }
+            if meshCore.connectedName != nil || MeshCoreManager.isPaired {
                 Button(role: .destructive) { showForgetMeshCore = true } label: {
                     Label("meshcore.forget".localized, systemImage: "xmark.circle")
                 }
@@ -376,7 +408,10 @@ struct MeshtasticSettingsView: View {
                     Button { meshCore.connect(p) } label: {
                         HStack {
                             Image(systemName: "flipphone")
-                            Text(p.name ?? "MeshCore")
+                            VStack(alignment: .leading) {
+                                Text(p.name ?? "MeshCore")
+                                Text(meshCoreFoundCaption(p.identifier)).font(.caption2).foregroundColor(.secondary)
+                            }
                             Spacer()
                             Text("meshtastic.pair".localized).foregroundColor(.accentColor)
                         }
@@ -397,15 +432,134 @@ struct MeshtasticSettingsView: View {
                 Text("meshcore.bridge.footer".localized)
             }
         }
+
+        if meshCore.isTextReady {
+            meshCoreChannelsSection
+            meshCoreContactsSection
+        }
     }
 
-    private var meshCoreStatusLine: String {
-        switch meshCore.state {
-        case .ready: return meshCore.isReady ? "meshcore.ready".localized : "meshtastic.state.configuring".localized
-        case .connecting, .configuring: return "meshtastic.state.configuring".localized
-        case .scanning: return "meshtastic.searching".localized
-        case .off: return MeshCoreManager.isPaired ? "meshtastic.state.connecting".localized : ""
+    // MARK: MeshCore users (__MESHCORE_INTEROP_2026_11_25__)
+
+    private func openMeshCore(_ key: String, title: String) {
+        MessageManager.shared?.openMeshCoreThread(key: key, title: title)
+    }
+
+    @ViewBuilder private var meshCoreChannelsSection: some View {
+        Section {
+            ForEach(meshCore.userChannels, id: \.idx) { ch in
+                Button {
+                    if let key = MeshCoreInterop.channelKey(name: ch.name) { openMeshCore(key, title: ch.name) }
+                } label: {
+                    HStack {
+                        Image(systemName: "number").foregroundColor(.secondary)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(ch.name)
+                            Text((MeshCoreInterop.isPubliclyReadable(name: ch.name, secret: ch.secret)
+                                  ? "meshcore.interop.channel.public" : "meshcore.interop.channel.private").localized)
+                                .font(.caption2).foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right").font(.caption2).foregroundColor(.secondary.opacity(0.6))
+                    }
+                }
+                .buttonStyle(.plain)
+                .swipeActions {
+                    if ch.idx > 0 {
+                        Button(role: .destructive) { meshCore.leaveChannel(idx: ch.idx) } label: {
+                            Text("meshcore.channel.leave".localized)
+                        }
+                    }
+                }
+            }
+            if meshCore.lastError == MeshCoreError.channelFailed {
+                Label("meshcore.channel.failed".localized, systemImage: "exclamationmark.triangle")
+                    .font(.caption).foregroundColor(.orange)
+            }
+            Button { showJoinMeshCoreChannel = true } label: {
+                Label("meshcore.channel.join".localized, systemImage: "plus.circle")
+            }
+        } header: {
+            Text("meshcore.channels".localized)
+        } footer: {
+            Text("meshcore.channels.footer".localized)
         }
+        .sheet(isPresented: $showJoinMeshCoreChannel) {
+            MeshCoreJoinChannelSheet()
+        }
+        // Joining is for talking: once the radio accepts the channel, its thread opens (as on Android).
+        .onChange(of: meshCore.lastJoinedChannelKey) { _, key in
+            if let key, let name = MeshCoreInterop.channelName(fromKey: key) { openMeshCore(key, title: name) }
+        }
+    }
+
+    @ViewBuilder private var meshCoreContactsSection: some View {
+        Section {
+            // People only: repeaters, room servers and sensors are infrastructure, not someone to write to.
+            let people = meshCore.contacts.filter { $0.type == 1 }
+            if people.isEmpty {
+                Text("meshcore.contacts.none".localized).font(.caption).foregroundColor(.secondary)
+            }
+            ForEach(people.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending },
+                    id: \.hex) { c in
+                Button {
+                    openMeshCore(MeshCoreInterop.contactKey(publicKey: c.publicKey),
+                                 title: c.name.isEmpty ? String(c.hex.prefix(8)) : c.name)
+                } label: {
+                    HStack {
+                        Image(systemName: "person.crop.circle")
+                            .foregroundColor(.secondary)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(c.name.isEmpty ? String(c.hex.prefix(8)) : c.name)
+                            Text(meshCoreHeard(c))
+                                .font(.caption2).foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right").font(.caption2).foregroundColor(.secondary.opacity(0.6))
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+            Button { meshCore.refreshContacts() } label: {
+                Label("meshcore.contacts.refresh".localized, systemImage: "arrow.clockwise")
+            }
+            Button { meshCore.announce() } label: {
+                Label("meshcore.announce".localized, systemImage: "megaphone")
+            }
+            if meshCore.lastAdvertAt != nil {
+                Label("meshcore.announce.done".localized, systemImage: "checkmark.circle")
+                    .font(.caption).foregroundColor(.green)
+            }
+        } header: {
+            Text("meshcore.contacts".localized)
+        } footer: {
+            Text("meshcore.contacts.footer".localized)
+        }
+    }
+
+    /// "2 min ago · 26aa9155" — when the contact last announced itself (the radio's clock), and its key.
+    private func meshCoreHeard(_ c: MeshCore.Contact) -> String {
+        let key = String(c.hex.prefix(8))
+        guard c.lastAdvert > 1_600_000_000 else { return key }
+        let when = Date(timeIntervalSince1970: TimeInterval(c.lastAdvert))
+        let f = RelativeDateTimeFormatter()
+        f.unitsStyle = .short
+        return f.localizedString(for: min(when, Date()), relativeTo: Date()) + " · " + key
+    }
+
+    private var meshCoreFirst: Bool {
+        mesh.connectedName == nil && (meshCore.connectedName != nil || MeshCoreManager.isPaired)
+    }
+
+    private var meshCoreStatusLine: String? {
+        MeshCoreUI.statusKey(state: meshCore.state, awaitingPin: meshCore.awaitingPin, lastError: meshCore.lastError,
+                             isPaired: MeshCoreManager.isPaired, bridgeReady: meshCore.isReady)?.localized
+    }
+
+    /// "MeshCore firmware · −67 dBm": the scan only finds MeshCore companion radios, so the firmware is known.
+    private func meshCoreFoundCaption(_ id: UUID) -> String {
+        guard let rssi = meshCore.discoveredRSSI[id] else { return "meshcore.found".localized }
+        return "meshcore.found".localized + " · \(rssi) dBm"
     }
 
     private var statusLine: String {
@@ -523,6 +677,71 @@ struct LoRaJammingWarningSection: View {
                 Label("lora.congested".localized, systemImage: "antenna.radiowaves.left.and.right")
                     .font(.caption)
                     .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+
+/// __MESHCORE_INTEROP_2026_11_25__ Join a MeshCore channel: a hashtag one (key derived from the name, so
+/// readable by anyone who knows it) or a private one (name + the 16-byte secret its owner shared).
+private struct MeshCoreJoinChannelSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var meshCore = MeshCoreManager.shared
+    @State private var isPrivate = false
+    @State private var name = ""
+    @State private var secret = ""
+    @State private var failed = false
+
+    private var parsed: (name: String, secret: Data)? {
+        if isPrivate {
+            let n = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !n.isEmpty, n.utf8.count <= 31, let s = MeshCoreInterop.parseSecret(secret),
+                  MeshCoreInterop.channelKey(name: n) != nil else { return nil }
+            return (n, s)
+        }
+        guard let n = MeshCoreInterop.normalizedHashtag(name), MeshCoreInterop.channelKey(name: n) != nil else { return nil }
+        return (n, MeshCoreInterop.hashtagSecret(n))
+    }
+
+    var body: some View {
+        NavigationView {
+            Form {
+                Section {
+                    Picker("", selection: $isPrivate) {
+                        Text("meshcore.join.hashtag".localized).tag(false)
+                        Text("meshcore.join.private".localized).tag(true)
+                    }
+                    .pickerStyle(.segmented)
+                    TextField(isPrivate ? "meshcore.join.name".localized : "#paris", text: $name)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                    if isPrivate {
+                        TextField("meshcore.join.secret".localized, text: $secret)
+                            .font(.body.monospaced())
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                    }
+                } footer: {
+                    Text((isPrivate ? "meshcore.join.private.footer" : "meshcore.join.hashtag.footer").localized)
+                }
+                if failed {
+                    Label("meshcore.noFreeChannel".localized, systemImage: "exclamationmark.triangle")
+                        .font(.caption).foregroundColor(.orange)
+                }
+            }
+            .navigationTitle("meshcore.channel.join".localized)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("cancel".localized) { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("meshcore.join.button".localized) {
+                        guard let p = parsed else { return }
+                        if meshCore.joinChannel(name: p.name, secret: p.secret) { dismiss() } else { failed = true }
+                    }
+                    .disabled(parsed == nil)
+                }
             }
         }
     }

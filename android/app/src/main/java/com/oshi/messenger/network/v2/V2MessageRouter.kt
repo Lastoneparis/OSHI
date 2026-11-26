@@ -188,6 +188,16 @@ class V2MessageRouter @Inject constructor(
         }
     }
 
+    /**
+     * __GROUP_BLOB_2026_11_25__ ciphertext chunks of downloads that did not finish (see
+     * [V2PartialChunks]). Pruned of week-old leftovers on first use.
+     */
+    private val partialDownloads: java.io.File by lazy {
+        java.io.File(context.filesDir, "v2_partial_dl").also {
+            try { V2PartialChunks.prune(it) } catch (_: Throwable) {}
+        }
+    }
+
     /** Bounded hold-the-ack budget, persisted across process restarts (iOS parity). */
     private val retryBudget = V2RetryBudget(object : V2RetryBudget.Store {
         override fun read(): Map<String, V2RetryBudget.Entry> {
@@ -357,7 +367,19 @@ class V2MessageRouter @Inject constructor(
     // ==================================================================
 
     /** Outcome of one group fan-out: who got it, and who has no v2 bundle at all (spec §6). */
-    data class GroupSendResult(val handled: Set<String>, val unreachable: Set<String>)
+    /**
+     * [rateLimited] (__GROUP_FANOUT_2026_11_24__): members NOT sent to because the relay kept
+     * answering 429 past the whole wait budget. Not "unreachable" (they need no update) and never a
+     * reason for the legacy path: they are still v2 members, the message is simply not out yet.
+     */
+    data class GroupSendResult(val handled: Set<String>, val unreachable: Set<String>, val rateLimited: Set<String> = emptySet())
+
+    /**
+     * __GROUP_FANOUT_2026_11_24__ The send that just ran under [outboundMutex] ended on a relay 429
+     * after the whole Retry-After budget ([RateLimitBackoff]). Reset at the start of every
+     * [sendTextLocked]; read by the group fan-outs right after it returns.
+     */
+    @Volatile private var lastSendRateLimited = false
 
     /**
      * Whether [peerUserKey] can receive v2 at all: a session, a per-device list, or an account
@@ -436,15 +458,23 @@ class V2MessageRouter @Inject constructor(
         val unreachable = LinkedHashSet<String>()
         // __V2_PADDING_2026_11_09__ one member that cannot strip padding ⇒ no member's copy is padded.
         val padGate = V2PaddingPeers.groupAllows(members, me)
+        val rateLimited = LinkedHashSet<String>()
         for (member in members.distinct()) {
             if (member.isBlank() ||
                 com.oshi.messenger.network.v2.devicemailbox.DeviceAuth.normalizeIdentity(member) == meCanon) continue
+            // __GROUP_FANOUT_2026_11_24__ the relay already refused us past the whole wait budget:
+            // the rest would each wait it again. Not sent, not "must update", not legacy.
+            if (rateLimited.isNotEmpty()) { rateLimited += member; continue }
+            var limited = false
             val ok = try {
-                outboundMutex.withLock { sendTextLocked(member, plaintext, msgId, originalTimestampMs, groupId, padGate) }
+                outboundMutex.withLock {
+                    sendTextLocked(member, plaintext, msgId, originalTimestampMs, groupId, padGate).also { limited = lastSendRateLimited }
+                }
             } catch (e: Exception) {
                 Log.w(TAG, "group send to ${member.take(8)} failed: ${e.message}"); false
             }
             if (ok) handled += member
+            else if (limited) rateLimited += member
             else if (v2Reach(member) == V2Reach.NO_BUNDLE) unreachable += member
         }
         if (selfCopy && handled.isNotEmpty() && deviceMailbox.deviceModeActive()) {
@@ -459,16 +489,24 @@ class V2MessageRouter @Inject constructor(
                 Log.w(TAG, "group self copy failed: ${e.message}")
             }
         }
-        Log.i(TAG, "DIAG_V2_GROUP_TX gid=${groupId.take(8)} ok=${handled.size} unreachable=${unreachable.size} of=${members.size}")
-        return GroupSendResult(handled, unreachable)
+        Log.i(TAG, "DIAG_V2_GROUP_TX gid=${groupId.take(8)} ok=${handled.size} unreachable=${unreachable.size} rateLimited=${rateLimited.size} of=${members.size}")
+        return GroupSendResult(handled, unreachable, rateLimited)
     }
 
     /**
      * Group MEDIA fan-out (spec §4): the bytes are sealed ONCE (one file key, one nonce, identical
-     * chunks) and PUT into one blob reservation PER MEMBER (the blob store authorises exactly one
-     * recipient); each member then gets a `type:"group"` envelope whose plaintext is the `v2file`
-     * key JSON carrying [groupMessageB64] (the GroupMessage with its media stripped).
+     * chunks); each member then gets a `type:"group"` envelope whose plaintext is the `v2file` key
+     * JSON carrying [groupMessageB64] (the GroupMessage with its media stripped).
      * Over the cap ⇒ nobody (never inline, never IPFS).
+     *
+     * __GROUP_BLOB_2026_11_25__ ONE reservation and ONE upload for every reachable member
+     * (`recipientKeys`, ServerPatches/group_blob_2026_11_25); every member's key message carries
+     * the same blobId, its file key wrapped only inside that member's own E2E envelope. A server
+     * that does not echo `recipients` gets the old shape: the first blob serves the first member,
+     * the others get one reservation each. The shared reservation is recorded in the digest-bound
+     * resume ledger under [GROUP_BLOB_LEDGER_PREFIX]+groupId, so a retry (app killed mid-upload,
+     * or the automatic resend to members a send missed) tops up the same blob instead of
+     * uploading again.
      */
     suspend fun sendGroupFile(
         groupId: String,
@@ -499,53 +537,99 @@ class V2MessageRouter @Inject constructor(
         }
         val me = cryptoManager.getPublicKeyString()
         val meCanon = com.oshi.messenger.network.v2.devicemailbox.DeviceAuth.normalizeIdentity(me)
-        // __MEDIA_PADDING_2026_11_10__ ONE encryption is shared by every member's blob (same key,
-        // same nonce), so it is padded only when EVERY other member's devices read padded media.
-        val padMedia = V2PaddingPeers.groupMediaAllows(
-            members.distinct().filter { it.isNotBlank() }.associateWith { mediaPaddingAllowedFor(it) }, me)
-        val enc = try { OSHICryptoV2.encryptFile(data, filename, mime, pad = padMedia) } catch (e: Exception) {
-            Log.w(TAG, "group file encrypt failed: ${e.message}"); return GroupSendResult(emptySet(), emptySet())
-        }
         val handled = LinkedHashSet<String>()
         val unreachable = LinkedHashSet<String>()
-        // __V2_PADDING_2026_11_09__ one member that cannot strip padding ⇒ no member's key message is padded.
-        val padGate = V2PaddingPeers.groupAllows(members, me)
+        // __NO_BUNDLE_IS_NOT_A_TIMEOUT_2026_11_02__ only a SERVER-confirmed absence of a bundle
+        // may be reported as "this member must update"; UNKNOWN skips the member for this send
+        // and says nothing about them (the caller's resend queue tries them again).
+        val reachable = ArrayList<String>()
+        // Listed on the shared blob too: a member whose bundle could not be fetched right now is
+        // not sent to on this attempt, but the automatic resend will hand them a key message for
+        // THIS blob, so they must already be allowed to read it.
+        val unknown = ArrayList<String>()
         for (member in members.distinct()) {
             if (member.isBlank() ||
                 com.oshi.messenger.network.v2.devicemailbox.DeviceAuth.normalizeIdentity(member) == meCanon) continue
-            // __NO_BUNDLE_IS_NOT_A_TIMEOUT_2026_11_02__ only a SERVER-confirmed
-            // absence of a bundle may be reported as "this member must update";
-            // UNKNOWN skips the member for this send and says nothing about them.
             when (v2Reach(member)) {
-                V2Reach.NO_BUNDLE -> { unreachable += member; continue }
-                V2Reach.UNKNOWN -> continue
-                V2Reach.REACHABLE -> Unit
+                V2Reach.NO_BUNDLE -> unreachable += member
+                V2Reach.UNKNOWN -> unknown += member
+                V2Reach.REACHABLE -> reachable += member
             }
+        }
+        if (reachable.isEmpty()) return GroupSendResult(handled, unreachable)
+        // __MEDIA_PADDING_2026_11_10__ ONE encryption is shared by every member (same key, same
+        // nonce), so it is padded only when EVERY other member's devices read padded media.
+        val padMedia = V2PaddingPeers.groupMediaAllows((reachable + unknown).associateWith { mediaPaddingAllowedFor(it) }, me)
+        val ledgerKey = GROUP_BLOB_LEDGER_PREFIX + groupId
+        val digest = com.oshi.messenger.service.media.V2SendResumeStore.digest(data)
+        val prior = try { resumeStore.record(msgId, ledgerKey, digest, padded = padMedia) } catch (_: Throwable) { null }
+        val resume = prior?.takeIf { it.chunkCount == OSHICryptoV2.mediaChunkCount(data.size.toLong(), padMedia) }
+        val enc = try {
+            OSHICryptoV2.encryptFile(data, filename, mime,
+                reuseFileKey = resume?.fileKey, reuseFileNonce = resume?.fileNonce, pad = padMedia)
+        } catch (e: Exception) {
+            Log.w(TAG, "group file encrypt failed: ${e.message}"); return GroupSendResult(handled, unreachable)
+        }
+        fun keyFor(blobId: String) = V2FileKeyMessage(
+            blobId = blobId,
+            fileKey = enc.fileKey,
+            fileNonce = enc.fileNonce,
+            chunkCount = enc.chunks.size,
+            manifest = enc.manifest,
+            filename = filename,
+            mime = mime,
+            mediaType = mediaType,
+            isViewOnce = null,
+            revealId = null, revealLayerIndex = null, revealLayerCount = null, revealTotalMs = null,
+            videoNote = if (videoNote) true else null,
+            durationMs = if (videoNote) durationMs else null,
+            groupMessage = groupMessageB64,
+        )
+        val shared = try {
+            blobClient.uploadGroupBlob(
+                members = reachable + unknown,
+                chunks = enc.chunks,
+                resumeBlobId = resume?.blobId,
+                onReserved = { blobId, isShared ->
+                    if (isShared) resumeStore.put(msgId, ledgerKey, digest, blobId, enc.fileKey, enc.fileNonce,
+                        enc.chunks.size, padded = padMedia)
+                },
+            )
+        } catch (e: Exception) {
+            Log.w(TAG, "group blob upload failed: ${e.message}"); null
+        }
+        if (shared == null) {
+            Log.i(TAG, "DIAG_V2_GROUP_FILE_TX gid=${groupId.take(8)} upload failed, of=${members.size}")
+            return GroupSendResult(handled, unreachable)
+        }
+        // __V2_PADDING_2026_11_09__ one member that cannot strip padding ⇒ no member's key message is padded.
+        val padGate = V2PaddingPeers.groupAllows(members, me)
+        val rateLimited = LinkedHashSet<String>()
+        var uploads = 1
+        for ((index, member) in reachable.withIndex()) {
+            // __GROUP_FANOUT_2026_11_24__ see sendGroupText: no further send once the relay refused us.
+            if (rateLimited.isNotEmpty()) { rateLimited += member; continue }
             try {
-                val blobId = blobClient.uploadBlob(recipientKey = member, chunks = enc.chunks) ?: continue
-                val key = V2FileKeyMessage(
-                    blobId = blobId,
-                    fileKey = enc.fileKey,
-                    fileNonce = enc.fileNonce,
-                    chunkCount = enc.chunks.size,
-                    manifest = enc.manifest,
-                    filename = filename,
-                    mime = mime,
-                    mediaType = mediaType,
-                    isViewOnce = null,
-                    revealId = null, revealLayerIndex = null, revealLayerCount = null, revealTotalMs = null,
-                    videoNote = if (videoNote) true else null,
-                    durationMs = if (videoNote) durationMs else null,
-                    groupMessage = groupMessageB64,
-                )
-                val ok = outboundMutex.withLock { sendTextLocked(member, key.toBytes(), msgId, null, groupId, padGate) }
-                if (ok) handled += member
+                // An older blob store authorised only the first member: the others get their own
+                // blob, exactly the pre-2026-11-25 path.
+                val blobId = if (shared.shared || index == 0) shared.blobId
+                    else blobClient.uploadBlob(recipientKey = member, chunks = enc.chunks)?.also { uploads++ } ?: continue
+                var limited = false
+                val ok = outboundMutex.withLock {
+                    sendTextLocked(member, keyFor(blobId).toBytes(), msgId, null, groupId, padGate).also { limited = lastSendRateLimited }
+                }
+                if (ok) handled += member else if (limited) rateLimited += member
             } catch (e: Exception) {
                 Log.w(TAG, "group blob for ${member.take(8)} failed: ${e.message}")
             }
         }
-        Log.i(TAG, "DIAG_V2_GROUP_FILE_TX gid=${groupId.take(8)} ok=${handled.size} unreachable=${unreachable.size} of=${members.size}")
-        return GroupSendResult(handled, unreachable)
+        // The ledger record stays while a member is still owed this file: the resend reuses the
+        // shared blob. It expires with the ledger (V2SendResumeStore.MAX_AGE_MS) regardless.
+        if (shared.shared && handled.size == reachable.size && unknown.isEmpty()) {
+            try { resumeStore.remove(msgId, ledgerKey) } catch (_: Throwable) {}
+        }
+        Log.i(TAG, "DIAG_V2_GROUP_FILE_TX gid=${groupId.take(8)} shared=${shared.shared} uploads=$uploads ok=${handled.size} unreachable=${unreachable.size} rateLimited=${rateLimited.size} of=${members.size}")
+        return GroupSendResult(handled, unreachable, rateLimited)
     }
 
     private suspend fun sendTextLocked(
@@ -560,6 +644,7 @@ class V2MessageRouter @Inject constructor(
         // padding); the per-session capability is checked at the encrypt, where the slot is known.
         padGate: Boolean = true,
     ): Boolean {
+        lastSendRateLimited = false   // __GROUP_FANOUT_2026_11_24__
         if (!config.isEnabledCached()) return false      // hot path: no network on the gate
         // __NEVER_OVER_THE_INTERNET_2026_10_20__ One of the doors to the
         // internet. Every one of them is closed by the same call, because the
@@ -574,6 +659,8 @@ class V2MessageRouter @Inject constructor(
         if (deviceMailbox.deviceModeActive()) {
             try {
                 sendFannedOut(peerUserKey, plaintext, msgId, originalTimestampMs, myUserKey, groupId, padGate)?.let { return it }
+                // __GROUP_FANOUT_2026_11_24__ the account path pays the SAME relay bucket: no point.
+                if (lastSendRateLimited) return false
             } catch (e: Exception) {
                 Log.w(TAG, "device fan-out failed, using the account path: ${e.message}")
             }
@@ -584,6 +671,7 @@ class V2MessageRouter @Inject constructor(
             if (msgId != null) {
                 pendingEnvelopes.load(myUserKey, peerUserKey, msgId, plaintext)?.let { saved ->
                     val accepted = messagesClient.send(V2Envelope.fromJson(saved)).contains(msgId)
+                    if (!accepted && messagesClient.lastSendRateLimited) lastSendRateLimited = true
                     if (accepted) pendingEnvelopes.remove(myUserKey, peerUserKey, msgId)
                     return accepted
                 }
@@ -654,6 +742,7 @@ class V2MessageRouter @Inject constructor(
             // Network send is OUTSIDE the lock (slow I/O).
             if (msgId != null) pendingEnvelopes.save(myUserKey, peerUserKey, msgId, plaintext, env.toJson())
             val accepted = messagesClient.send(env).contains(env.msgId)
+            if (!accepted && messagesClient.lastSendRateLimited) lastSendRateLimited = true   // __GROUP_FANOUT_2026_11_24__
             if (accepted && msgId != null) pendingEnvelopes.remove(myUserKey, peerUserKey, msgId)
             return accepted
         } catch (e: Exception) {
@@ -778,6 +867,9 @@ class V2MessageRouter @Inject constructor(
                 val envs = saved.optJSONArray("envelopes")?.let { a -> (0 until a.length()).map { V2Envelope.fromJson(a.getJSONObject(it)) } }.orEmpty()
                 when (val r = deviceClient.sendBatch(envs)) {
                     is V2DeviceClient.BatchResult.Accepted -> { pendingEnvelopes.remove(me, pendingKey, msgId); return r.msgIds.contains(msgId) }
+                    // __GROUP_FANOUT_2026_11_24__ still rate-limited: keep the SAME ciphertexts for the next try.
+                    is V2DeviceClient.BatchResult.Refused -> if (r.status == 429) { lastSendRateLimited = true; return false }
+                        else pendingEnvelopes.remove(me, pendingKey, msgId)
                     else -> pendingEnvelopes.remove(me, pendingKey, msgId)   // re-plan with fresh copies below
                 }
             }
@@ -835,6 +927,14 @@ class V2MessageRouter @Inject constructor(
                     return r.msgIds.contains(id)
                 }
                 is V2DeviceClient.BatchResult.Refused -> {
+                    // __GROUP_FANOUT_2026_11_24__ 429 after the whole Retry-After budget: NOT the account
+                    // path (same relay bucket). The batch stays pending — same ciphertexts, same X3DH
+                    // headers — and the next attempt for this message resends it as is.
+                    if (r.status == 429) {
+                        Log.w(TAG, "device batch rate-limited past the wait budget — kept for the next attempt")
+                        lastSendRateLimited = true
+                        return false
+                    }
                     if (msgId != null) pendingEnvelopes.remove(me, pendingKey, msgId)
                     if (r.status == 409 && r.error == "device-mailbox-disabled") deviceMailbox.handleOutcome(
                         com.oshi.messenger.network.v2.devicemailbox.DeviceHttpOutcome.MailboxDisabled)
@@ -1467,6 +1567,7 @@ class V2MessageRouter @Inject constructor(
                 fileNonce = key.fileNonce,
                 manifest = key.manifest,
                 out = tmp,
+                partialRoot = partialDownloads,   // __GROUP_BLOB_2026_11_25__ resume after a drop / app kill
             ) ?: return false
             // GROUP media is the one consumer that still has to hold the whole file in
             // RAM: `dispatchV2GroupFile` base64s the bytes into a `GroupMessage` for
@@ -1670,6 +1771,12 @@ class V2MessageRouter @Inject constructor(
     private fun setLastSeq(v: Long) = seqPrefs.edit().putLong("last_seq", v).apply()
 
     internal companion object {
+        /**
+         * __GROUP_BLOB_2026_11_25__ resume-ledger "recipient" of a group's SHARED blob. A userKey is
+         * base64 and never starts with `group:`, so it cannot collide with a 1:1 record.
+         */
+        internal const val GROUP_BLOB_LEDGER_PREFIX = "group:"
+
         /**
          * Codec for the un-downloaded-blob ledger: a JSON object keyed by msgId whose
          * values are the `v2file` payloads themselves, so the format is the wire format

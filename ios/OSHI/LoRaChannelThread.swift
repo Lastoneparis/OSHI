@@ -73,8 +73,12 @@ enum LoRaChannelThread {
     }
 
     /// True for a key produced by ``key(channelIndex:channelName:)``.
+    ///
+    /// __MESHCORE_INTEROP_2026_11_25__ A MeshCore channel (`mcchan!<name>`) is a room too, with the same
+    /// rules: filed under the channel, never in a speaker's one-to-one thread. Its radio is the MeshCore
+    /// one, so `channelIndex(forKey:)` (Meshtastic slots) never matches it.
     static func isChannelKey(_ key: String) -> Bool {
-        key.hasPrefix(prefix) || key.hasPrefix(slotPrefix)
+        key.hasPrefix(prefix) || key.hasPrefix(slotPrefix) || MeshCoreInterop.isChannelKey(key)
     }
 
     /// What to call the room on screen.
@@ -83,6 +87,7 @@ enum LoRaChannelThread {
     /// Meshtastic install uses for it, rather than as "#0". A secondary slot
     /// with no name keeps its number, because there is nothing truer to call it.
     static func displayName(_ key: String) -> String {
+        if let name = MeshCoreInterop.channelName(fromKey: key) { return name }
         if key.hasPrefix(prefix) { return String(key.dropFirst(prefix.count)) }
         guard key.hasPrefix(slotPrefix) else { return key }
         guard let index = Int(key.dropFirst(slotPrefix.count)) else { return key }
@@ -104,6 +109,15 @@ enum LoRaChannelThread {
     /// proved an OSHI identity, so their contact alias is the right name and
     /// `MessageManager.resolveContactAlias` already knows it.
     static func speakerName(senderKey: String, nodes: [MeshtasticNode]) -> String {
+        // A MeshCore speaker is a node NAME (channel text carries nothing else) or a MeshCore contact.
+        if MeshCoreInterop.isSpeakerKey(senderKey),
+           let name = MeshCoreInterop.displayName(forKey: senderKey, contacts: []) {
+            return name
+        }
+        if MeshCoreInterop.isContactKey(senderKey),
+           let name = MeshCoreInterop.displayName(forKey: senderKey, contacts: MeshCoreManager.shared.contacts) {
+            return name
+        }
         guard LoRaNodeIdentityMap.isFallbackConversationKey(senderKey),
               let num = LoRaNodeIdentityMap.nodeNumber(fromFallbackKey: senderKey) else {
             let alias = MessageManager.resolveContactAlias(senderKey)

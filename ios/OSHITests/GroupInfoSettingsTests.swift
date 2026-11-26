@@ -99,6 +99,9 @@ final class GroupInfoSettingsTests: XCTestCase {
         // __GROUP_COMMENTS_2026_11_21__ §2.12.1: every subkey is emitted, and this
         // vector predates `comments` (absent ⇒ default false, emitted as false).
         expected["comments"] = false
+        // __CHANNEL_WEB_2026_11_26__ same for the web-preview subkeys.
+        expected["webPreview"] = false
+        expected["webIndexing"] = false
         XCTAssertEqual(NSDictionary(dictionary: s), NSDictionary(dictionary: expected),
                        "emitted settings object must equal the shared vector's")
         XCTAssertEqual(obj["description"] as? String, "Quant research, daily notes.")

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Privasi sembang lanjutan</string>
+    <string name="adv_privacy_subtitle">Menghalang semua orang dalam sembang ini daripada menyimpan media, mengeksport sembang atau menggunakan AI pada mesejnya</string>
+    <string name="adv_privacy_learn_more">Ketahui lebih lanjut</string>
+    <string name="adv_privacy_notice_on">%1$s menghidupkan privasi sembang lanjutan. Tiada sesiapa boleh menyimpan media secara automatik, mengeksport sembang atau menggunakan AI pada mesej dalam sembang ini.</string>
+    <string name="adv_privacy_notice_off">%1$s mematikan privasi sembang lanjutan. Menyimpan media, mengeksport sembang dan ciri AI tersedia semula.</string>
+    <string name="adv_privacy_notice_on_you">Anda menghidupkan privasi sembang lanjutan. Tiada sesiapa boleh menyimpan media secara automatik, mengeksport sembang atau menggunakan AI pada mesej dalam sembang ini.</string>
+    <string name="adv_privacy_notice_off_you">Anda mematikan privasi sembang lanjutan. Menyimpan media, mengeksport sembang dan ciri AI tersedia semula.</string>
+    <string name="adv_privacy_summary_on">Privasi sembang lanjutan dihidupkan</string>
+    <string name="adv_privacy_summary_off">Privasi sembang lanjutan dimatikan</string>
+    <string name="adv_privacy_sheet_intro">Apabila sesiapa menghidupkannya, ia terpakai kepada semua orang dalam sembang ini:</string>
+    <string name="adv_privacy_sheet_point_save">Media daripada sembang ini tidak boleh disimpan ke galeri atau Muat Turun.</string>
+    <string name="adv_privacy_sheet_point_export">Sembang ini dikecualikan daripada eksport sembang.</string>
+    <string name="adv_privacy_sheet_point_ai">AI pada peranti OSHI tidak boleh membaca sembang ini: tiada cadangan balasan, tiada terjemahan, tiada konteks untuk pembantu penulisan.</string>
+    <string name="adv_privacy_sheet_point_screen">Tangkapan skrin dan rakaman skrin sembang ini disekat.</string>
+    <string name="adv_privacy_sheet_limits">Sesiapa dalam sembang boleh menghidupkan atau mematikannya. Ia tidak dapat menghalang seseorang daripada mengambil gambar skrin mereka, dan pengguna versi OSHI yang lama tidak terjejas.</string>
+    <string name="adv_privacy_blocked_toast">Privasi sembang lanjutan dihidupkan dalam sembang ini</string>
+    <string name="adv_privacy_older_members">Ahli dengan versi OSHI yang lama yang tidak akan menggunakannya sehingga mereka mengemas kini: %1$d</string>
+</resources>

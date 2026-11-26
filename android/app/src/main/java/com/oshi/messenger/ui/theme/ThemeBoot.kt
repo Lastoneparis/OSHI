@@ -102,6 +102,24 @@ object ThemeBoot {
         return true
     }
 
+    // __GLASS_ALL_THEMES_2026_11_21__ « Effet verre » mirrored for the first
+    // frames (the light ground changes under glass): absent = never touched.
+    private const val KEY_GLASS = "glass_effect"
+
+    fun readGlass(context: Context): Boolean? = readGlass(prefs(context))
+    fun writeGlass(context: Context, glass: Boolean?) = writeGlass(prefs(context), glass)
+
+    fun readGlass(p: SharedPreferences): Boolean? = if (p.contains(KEY_GLASS)) p.getBoolean(KEY_GLASS, true) else null
+
+    /** Same contract as [write]: commit, only on change; null removes the key. Returns whether it wrote. */
+    fun writeGlass(p: SharedPreferences, glass: Boolean?): Boolean {
+        if (readGlass(p) == glass) return false
+        val e = p.edit()
+        if (glass == null) e.remove(KEY_GLASS) else e.putBoolean(KEY_GLASS, glass)
+        e.commit()
+        return true
+    }
+
     private fun systemDark(activity: Activity): Boolean =
         (activity.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 

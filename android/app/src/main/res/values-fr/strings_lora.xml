@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_channel_apply">Écrire le canal sur le nœud</string>
+    <string name="lora_channel_footer">Le canal détermine le mesh sur lequel vous êtes : deux radios ne s\'entendent que si le nom ET la clé correspondent. Laissez les deux vides pour LongFast, le canal par défaut de l\'app Meshtastic. Saisissez un nom pour rejoindre un mesh communautaire, et collez sa clé s\'il en a une.</string>
+    <string name="lora_channel_key">Clé du canal (facultative)</string>
+    <string name="lora_channel_key_default">Clé par défaut</string>
+    <string name="lora_channel_key_hint">Vide = clé publique par défaut, comme un nœud Meshtastic d\'origine. Collez la clé base64 d\'une URL de canal pour utiliser un canal privé.</string>
+    <string name="lora_channel_key_invalid">Ce n\'est pas une clé de canal. Collez la clé base64 d\'une URL de canal Meshtastic (16 ou 32 octets), ou laissez vide pour la clé par défaut.</string>
+    <string name="lora_channel_last">Dernière écriture depuis ce téléphone : %1$s</string>
+    <string name="lora_channel_name">Nom du canal</string>
+    <string name="lora_channel_name_budget">%1$d sur %2$d octets</string>
+    <string name="lora_channel_section">Canal mesh</string>
+    <string name="lora_channel_written">Envoyé au nœud : %1$s</string>
+    <string name="lora_channels_footer">Un canal est le mesh sur lequel se trouve votre radio. Deux radios ne s\'entendent que si le nom et la clé correspondent.</string>
+    <string name="lora_channels_no_key">Pas de chiffrement — les messages partent en clair</string>
+    <string name="lora_channels_none">Aucun canal lu sur le nœud pour l\'instant. Connectez-le et cette liste se remplira d\'elle-même.</string>
+    <string name="lora_channels_primary">Principal</string>
+    <string name="lora_channels_private_key">Clé privée</string>
+    <string name="lora_channels_public_key">Clé publique — tout le monde peut lire ce canal</string>
+    <string name="lora_channels_secondary">Secondaire</string>
+    <string name="lora_channels_section">Canaux de ce nœud</string>
+    <string name="lora_chile_apply">Utiliser les réglages de la communauté chilienne</string>
+    <string name="lora_chile_confirm_apply">Utiliser le mesh public</string>
+    <string name="lora_chile_confirm_body">Cela remplace le canal principal de ce nœud. Ne l\'utilisez que si vous voulez quitter un mesh principal privé et rejoindre le mesh public LongFast du Chili.</string>
+    <string name="lora_chile_confirm_title">Rejoindre le mesh public du Chili ?</string>
+    <string name="lora_chile_detail">Règle US 902–928 MHz (la bande du Chili), LongFast et le canal principal public LongFast.</string>
+    <string name="lora_configure_hide">Masquer les réglages radio</string>
+    <string name="lora_configure_section">Configurer la radio</string>
+    <string name="lora_configure_show">Afficher les réglages radio</string>
+    <string name="lora_hero_channel">Canal</string>
+    <string name="lora_hero_heard">Radios entendues</string>
+    <string name="lora_hero_heard_present">%1$d maintenant, %2$d au total</string>
+    <string name="lora_interop_unverified">Non vérifié · en clair</string>
+    <string name="lora_interop_unverified_detail">Il s\'agit d\'un simple nœud Meshtastic, pas d\'un contact OSHI. Les messages ici ne sont pas chiffrés de bout en bout et l\'expéditeur n\'est pas vérifié.</string>
+    <string name="lora_join_apply">Rejoindre ce canal</string>
+    <string name="lora_join_done">C\'est fait. Le nœud est maintenant sur %1$s.</string>
+    <string name="lora_join_footer">Collez un lien meshtastic.org/e/#. Le lien contient la clé du canal : toute personne qui a le lien est sur le canal.</string>
+    <string name="lora_join_invalid">Ce n\'est pas un lien de canal.</string>
+    <string name="lora_join_label">Lien du canal</string>
+    <string name="lora_join_preview_many">Ce lien rejoint %1$s, et %2$d autres.</string>
+    <string name="lora_join_preview_one">Ce lien rejoint %1$s.</string>
+    <string name="lora_join_replaces">Rejoindre remplace tous les canaux de ce nœud.</string>
+    <string name="lora_join_section">Rejoindre un canal via un lien</string>
+    <string name="lora_nodes_days">il y a %1$d j</string>
+    <string name="lora_nodes_direct">Direct</string>
+    <string name="lora_nodes_empty">Rien d\'entendu pour l\'instant. Un nœud s\'annonce toutes les quelques minutes, cette liste se remplira d\'elle-même.</string>
+    <string name="lora_nodes_footer">Toutes les radios que ce nœud a entendues. La distance est estimée d\'après la force du signal, sauf si la radio indique sa position.</string>
+    <string name="lora_nodes_hops">%1$d sauts</string>
+    <string name="lora_nodes_hours">il y a %1$d h</string>
+    <string name="lora_nodes_me_badge">Ce nœud</string>
+    <string name="lora_nodes_minutes">il y a %1$d min</string>
+    <string name="lora_nodes_now">Maintenant</string>
+    <string name="lora_nodes_on_map">Sur la carte</string>
+    <string name="lora_nodes_range_estimate">~%1$s–%2$s km</string>
+    <string name="lora_nodes_section">Radios autour de vous</string>
+    <string name="lora_nodes_signal_a11y">Signal %1$d sur 4, %2$s</string>
+    <string name="lora_share_copied">Lien copié.</string>
+    <string name="lora_share_copy">Copier le lien du canal</string>
+    <string name="lora_share_footer">Toute personne qui ouvre ce lien rejoint le même mesh. Il contient la clé du canal : ne le partagez qu\'avec les personnes que vous voulez sur le mesh.</string>
+    <string name="lora_share_section">Partager ce mesh</string>
+</resources>

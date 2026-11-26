@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">고급 채팅 개인정보 보호</string>
+    <string name="adv_privacy_subtitle">이 채팅의 모든 사람이 미디어를 저장하거나 채팅을 내보내거나 메시지에 AI를 사용하지 못하게 합니다</string>
+    <string name="adv_privacy_learn_more">자세히 알아보기</string>
+    <string name="adv_privacy_notice_on">%1$s님이 고급 채팅 개인정보 보호를 켰습니다. 이 채팅에서는 누구도 미디어를 자동 저장하거나 채팅을 내보내거나 메시지에 AI를 사용할 수 없습니다.</string>
+    <string name="adv_privacy_notice_off">%1$s님이 고급 채팅 개인정보 보호를 껐습니다. 미디어 저장, 채팅 내보내기, AI 기능을 다시 사용할 수 있습니다.</string>
+    <string name="adv_privacy_notice_on_you">고급 채팅 개인정보 보호를 켰습니다. 이 채팅에서는 누구도 미디어를 자동 저장하거나 채팅을 내보내거나 메시지에 AI를 사용할 수 없습니다.</string>
+    <string name="adv_privacy_notice_off_you">고급 채팅 개인정보 보호를 껐습니다. 미디어 저장, 채팅 내보내기, AI 기능을 다시 사용할 수 있습니다.</string>
+    <string name="adv_privacy_summary_on">고급 채팅 개인정보 보호 켜짐</string>
+    <string name="adv_privacy_summary_off">고급 채팅 개인정보 보호 꺼짐</string>
+    <string name="adv_privacy_sheet_intro">누군가 이 기능을 켜면 이 채팅의 모든 사람에게 적용됩니다:</string>
+    <string name="adv_privacy_sheet_point_save">이 채팅의 미디어는 갤러리나 다운로드에 저장할 수 없습니다.</string>
+    <string name="adv_privacy_sheet_point_export">이 채팅은 채팅 내보내기에서 제외됩니다.</string>
+    <string name="adv_privacy_sheet_point_ai">OSHI의 기기 내 AI가 이 채팅을 읽을 수 없습니다. 추천 답장, 번역, 글쓰기 도우미용 맥락이 제공되지 않습니다.</string>
+    <string name="adv_privacy_sheet_point_screen">이 채팅의 스크린샷과 화면 녹화가 차단됩니다.</string>
+    <string name="adv_privacy_sheet_limits">채팅의 누구나 켜거나 끌 수 있습니다. 화면을 사진으로 찍는 것은 막을 수 없으며, 이전 버전의 OSHI를 사용하는 사람에게는 적용되지 않습니다.</string>
+    <string name="adv_privacy_blocked_toast">이 채팅에서 고급 개인정보 보호가 켜져 있습니다</string>
+    <string name="adv_privacy_older_members">이전 버전의 OSHI를 사용 중이라 업데이트 전까지 적용되지 않는 멤버: %1$d</string>
+</resources>

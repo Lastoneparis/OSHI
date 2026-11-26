@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Jelentkezés megerősítve</string>
+    <string name="alive_a11y_neutral">Nincs beállított jelentkezés</string>
+    <string name="alive_a11y_overdue">A jelentkezés elmaradt</string>
+    <string name="alive_action_im_alive">Élek</string>
+    <string name="alive_action_message_them">Üzenet</string>
+    <string name="alive_bar_open_settings">Jelentkezési beállítások</string>
+    <string name="alive_channel_description">Emlékeztetők a saját jelentkezéseidhez, és értesítések, ha valaki, akit figyelsz, nem jelentkezett.</string>
+    <string name="alive_channel_name">Biztonsági jelentkezések</string>
+    <string name="alive_confirmed_toast">Jelentkezés elküldve</string>
+    <string name="alive_duration_days_hours">%1$d nap %2$d óra</string>
+    <string name="alive_duration_hours_minutes">%1$d óra %2$d perc</string>
+    <string name="alive_duration_minutes">%1$d perc</string>
+    <string name="alive_duration_now">kevesebb mint egy perc</string>
+    <string name="alive_interval_24h">24 óránként</string>
+    <string name="alive_interval_48h">48 óránként</string>
+    <string name="alive_interval_72h">72 óránként</string>
+    <string name="alive_interval_custom">Egyéni</string>
+    <string name="alive_interval_custom_hours">%1$d óránként</string>
+    <string name="alive_interval_every">%1$s időközönként</string>
+    <string name="alive_lane_you">Te</string>
+    <string name="alive_note_delivery">Az emlékeztetők és értesítések a hálózattól és az értesítési engedélytől függenek. Az elmaradt jelentkezés csak annyit jelent, hogy nem érkezett megerősítés.</string>
+    <string name="alive_note_no_location">Helyadat nem kerül megosztásra. A jelentkezés egyetlen időbélyeget tartalmaz, semmi mást.</string>
+    <string name="alive_notification_mine_due_body">Erősítsd meg, hogy élsz, hogy %1$s ne várjon hiába.</string>
+    <string name="alive_notification_mine_due_title">Itt az ideje jelentkezni</string>
+    <string name="alive_notification_overdue_body">A jelentkezésnek %1$s ezelőtt kellett volna megérkeznie. Ez csak annyit jelent, hogy nem jött megerősítés.</string>
+    <string name="alive_notification_overdue_title">Nincs jelentkezés tőle: %1$s</string>
+    <string name="alive_sheet_explainer">Erősítsd meg rendszeresen, hogy élsz. %1$s látja a visszaszámlálást, és értesítést kap, ha válasz nélkül lejár.</string>
+    <string name="alive_sheet_interval">Milyen gyakran</string>
+    <string name="alive_sheet_mine_switch">Jelentkezés neki: %1$s</string>
+    <string name="alive_sheet_stop">Jelentkezés leállítása</string>
+    <string name="alive_sheet_their_next">Következő várható: %1$s</string>
+    <string name="alive_sheet_their_none">%1$s nem állított be itt jelentkezést.</string>
+    <string name="alive_sheet_their_section">%1$s jelentkezése</string>
+    <string name="alive_state_confirmed_ago">megerősítve %1$s ezelőtt</string>
+    <string name="alive_state_due_in">esedékes %1$s múlva</string>
+    <string name="alive_state_not_set">nincs beállítva</string>
+    <string name="alive_state_overdue_by">%1$s óta nincs válasz</string>
+    <string name="alive_summary_confirmed">Megerősítette, hogy él</string>
+    <string name="alive_summary_started">Biztonsági jelentkezés elindítva</string>
+    <string name="alive_summary_stopped">Biztonsági jelentkezés leállítva</string>
+    <string name="alive_title">Biztonsági jelentkezés</string>
+    <string name="alive_unknown_peer">ez a kapcsolat</string>
+</resources>

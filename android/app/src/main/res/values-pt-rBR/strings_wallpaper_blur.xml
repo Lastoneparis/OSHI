@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">Papel de parede padrão para todas as conversas. Cada conversa ainda pode ter o seu.</string>
+    <string name="wallpaper_tone_settings_title">Tom do papel de parede</string>
+    <string name="wallpaper_personal_note">Só você vê este papel de parede, neste aparelho.</string>
+</resources>

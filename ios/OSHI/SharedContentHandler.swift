@@ -50,6 +50,8 @@ class SharedContentHandler: ObservableObject {
     @Published var pendingGroupInviteToken: String?
     @Published var pendingPublicHandle: String?
     @Published var showPublicJoin = false
+    /// __BOTS_PHASE1_2026_11_24__ `…/bot/<username>` → the bot's profile sheet.
+    @Published var pendingBotLink: BotLink?
     
     private let appGroupIdentifier = "group.Moriceau-lab.Genesis"
     
@@ -90,6 +92,20 @@ class SharedContentHandler: ObservableObject {
             return
         }
         
+        // __CHANNEL_WEB_2026_11_26__ channel web links: oshi://channel?h=&n= and
+        // https://oshi-messenger.com/c/<h>[/<n>] → open the channel (scroll to the
+        // post), or the public join flow when we are not a member.
+        if ChannelWeb.parseLink(effectiveURL) != nil {
+            OshiLog.messaging.info("🌐 Deep link: channel web link")
+            DispatchQueue.main.async {
+                _ = ChannelWebRouter.handle(effectiveURL) { raw in
+                    self.pendingPublicHandle = raw
+                    self.showPublicJoin = true
+                }
+            }
+            return
+        }
+
         // __GROUP_INFO_SETTINGS_2026_11_20__ public group links (§3.1):
         // https://oshi-messenger.com/g/<h>, oshi://g/<h>, oshi://group/join?h=<h>.
         if let h = GroupPublicLink.rawHandle(from: effectiveURL) {
@@ -98,6 +114,15 @@ class SharedContentHandler: ObservableObject {
                 self.pendingPublicHandle = h
                 self.showPublicJoin = true
             }
+            return
+        }
+
+        // __BOTS_PHASE1_2026_11_24__ https://oshi-messenger.com/bot/<username>
+        // and oshi://bot/<username>: the bot's card, with "Add to group /
+        // channel". Checked before the switch: no other route is named "bot".
+        if let botLink = BotLink.parse(effectiveURL) {
+            OshiLog.messaging.info("🤖 Deep link: bot profile")
+            DispatchQueue.main.async { self.pendingBotLink = botLink }
             return
         }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Kihagyás</string>
+    <string name="ob27_continue">Tovább</string>
+    <string name="ob27_page_of">%1$d. oldal / %2$d</string>
+    <string name="ob27_private_title">Csak ti ketten</string>
+    <string name="ob27_private_body">Az üzenetek és hívások végponttól végpontig titkosítva vannak a telefonodon. Útközben senki sem olvashatja el őket — még az OSHI sem.</string>
+    <string name="ob27_offline_title">Internet nélkül is megy</string>
+    <string name="ob27_offline_body">Nincs hálózat? Az üzenetek telefonról telefonra jutnak a közelben lévő emberek által, akiknél nyitva van az OSHI. Egy LoRa rádió még messzebbre viszi őket.</string>
+    <string name="ob27_range_direct">közvetlen</string>
+    <string name="ob27_range_relayed">továbbítva</string>
+    <string name="ob27_range_lora">LoRa rádió</string>
+    <string name="ob27_anon_title">Nem kell telefonszám</string>
+    <string name="ob27_anon_body">Nincs fiók, e-mail vagy telefonszám a regisztrációhoz. Az identitásod egy kulcs, amely ezen a telefonon jön létre.</string>
+    <string name="ob27_together_title">Hívd meg a tieidet</string>
+    <string name="ob27_together_body">Csevegj kettesben vagy csoportban. Adj hozzá valakit a QR-kódja beolvasásával vagy egy meghívó link elküldésével.</string>
+    <string name="ob27_rules_title">Mielőtt elkezded</string>
+    <string name="ob27_rules_subtitle">Néhány házszabály, és hogy mit tud már az OSHI, és mit még nem.</string>
+    <string name="ob27_rules_do">Ezt kérjük</string>
+    <string name="ob27_rules_dont">Soha</string>
+    <string name="ob27_good_to_know">Jó tudni</string>
+    <string name="ob27_show_details">Részletek megjelenítése</string>
+    <string name="ob27_hide_details">Részletek elrejtése</string>
+    <string name="ob27_agree">Értem</string>
+    <string name="ob27_notif_title">Ne maradj le semmiről</string>
+    <string name="ob27_notif_body">Engedélyezd az értesítéseket, hogy lásd az új üzeneteket és hívásokat. Bármikor kikapcsolhatod őket a Beállításokban.</string>
+    <string name="ob27_notif_allow">Értesítések engedélyezése</string>
+    <string name="ob27_not_now">Most nem</string>
+    <string name="ob27_identity_title">Válassz nevet</string>
+    <string name="ob27_identity_body">Ezt látják a partnereid. Később módosíthatod.</string>
+    <string name="ob27_already">Már használod az OSHI-t?</string>
+</resources>

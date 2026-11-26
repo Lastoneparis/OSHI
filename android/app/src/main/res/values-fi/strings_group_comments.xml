@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Kommentit</string>
+    <string name="gs_comments_footer">Jäsenet voivat kommentoida jokaista julkaisua. Vain ylläpitäjät julkaisevat.</string>
+    <string name="cm_leave_comment">Kommentoi</string>
+    <string name="cm_thread_title">Kommentit</string>
+    <string name="cm_empty">Ei vielä kommentteja.</string>
+    <string name="cm_composer_hint">Kommentti…</string>
+    <string name="cm_replying_to">Vastaus käyttäjälle %1$s</string>
+    <string name="cm_disabled">Kommentit on poistettu käytöstä.</string>
+    <string name="cm_post_unavailable">Tämä julkaisu ei ole enää saatavilla.</string>
+    <string name="cm_too_fast">Kommentoit liian nopeasti. Odota hetki.</string>
+    <string name="cm_notif_reply">%1$s vastasi kommenttiisi</string>
+    <string name="cm_delete_comment">Poista kommentti</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d kommentti</item>
+        <item quantity="other">%d kommenttia</item>
+    </plurals>
+</resources>

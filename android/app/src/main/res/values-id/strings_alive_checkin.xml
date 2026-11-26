@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Check-in dikonfirmasi</string>
+    <string name="alive_a11y_neutral">Belum ada check-in yang diatur</string>
+    <string name="alive_a11y_overdue">Check-in terlambat</string>
+    <string name="alive_action_im_alive">Saya baik-baik saja</string>
+    <string name="alive_action_message_them">Kirim pesan</string>
+    <string name="alive_bar_open_settings">Pengaturan check-in</string>
+    <string name="alive_channel_description">Pengingat untuk check-in Anda sendiri, dan pemberitahuan saat orang yang Anda pantau belum menjawab check-in mereka.</string>
+    <string name="alive_channel_name">Check-in keselamatan</string>
+    <string name="alive_confirmed_toast">Check-in terkirim</string>
+    <string name="alive_duration_days_hours">%1$d hr %2$d j</string>
+    <string name="alive_duration_hours_minutes">%1$d j %2$d mnt</string>
+    <string name="alive_duration_minutes">%1$d mnt</string>
+    <string name="alive_duration_now">kurang dari semenit</string>
+    <string name="alive_interval_24h">Setiap 24 jam</string>
+    <string name="alive_interval_48h">Setiap 48 jam</string>
+    <string name="alive_interval_72h">Setiap 72 jam</string>
+    <string name="alive_interval_custom">Kustom</string>
+    <string name="alive_interval_custom_hours">Setiap %1$d jam</string>
+    <string name="alive_interval_every">setiap %1$s</string>
+    <string name="alive_lane_you">Anda</string>
+    <string name="alive_note_delivery">Pengingat dan pemberitahuan bergantung pada jaringan Anda dan izin notifikasi. Check-in yang terlewat hanya berarti tidak ada konfirmasi yang tiba, tidak lebih.</string>
+    <string name="alive_note_no_location">Tidak ada lokasi yang dibagikan. Check-in hanya membawa satu stempel waktu, tidak ada yang lain.</string>
+    <string name="alive_notification_mine_due_body">Konfirmasi bahwa Anda baik-baik saja agar %1$s tidak terus menunggu.</string>
+    <string name="alive_notification_mine_due_title">Waktunya check-in Anda</string>
+    <string name="alive_notification_overdue_body">Check-in mereka seharusnya %1$s yang lalu. Ini hanya berarti belum ada konfirmasi yang tiba.</string>
+    <string name="alive_notification_overdue_title">Tidak ada check-in dari %1$s</string>
+    <string name="alive_sheet_explainer">Konfirmasi bahwa Anda baik-baik saja sesuai jadwal. %1$s melihat hitung mundur Anda, dan diberi tahu jika waktunya lewat tanpa jawaban.</string>
+    <string name="alive_sheet_interval">Seberapa sering</string>
+    <string name="alive_sheet_mine_switch">Check-in dengan %1$s</string>
+    <string name="alive_sheet_stop">Hentikan check-in</string>
+    <string name="alive_sheet_their_next">Berikutnya diharapkan %1$s</string>
+    <string name="alive_sheet_their_none">%1$s belum mengatur check-in di sini.</string>
+    <string name="alive_sheet_their_section">Check-in %1$s</string>
+    <string name="alive_state_confirmed_ago">dikonfirmasi %1$s lalu</string>
+    <string name="alive_state_due_in">jatuh tempo dalam %1$s</string>
+    <string name="alive_state_not_set">belum diatur</string>
+    <string name="alive_state_overdue_by">tidak ada respons selama %1$s</string>
+    <string name="alive_summary_confirmed">Mengonfirmasi masih hidup</string>
+    <string name="alive_summary_started">Check-in keselamatan dimulai</string>
+    <string name="alive_summary_stopped">Check-in keselamatan dihentikan</string>
+    <string name="alive_title">Check-in keselamatan</string>
+    <string name="alive_unknown_peer">kontak ini</string>
+</resources>

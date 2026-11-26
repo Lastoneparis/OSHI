@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">Sovellukset, jotka voivat lukea OSHIa</string>
+    <string name="spy_surface_dialog_body">Nämä puhelimen sovellukset voivat lukea näytön tai ilmoitusten sisällön, myös viestisi sen jälkeen, kun OSHI on purkanut niiden salauksen:\n\n%1$s\n\nJos et itse asentanut tai sallinut jotain niistä, se voi olla vakoiluohjelma. Poista sen käyttöoikeus Androidin asetuksista tai poista sovellus. OSHI ei estänyt mitään.</string>
+    <string name="spy_surface_power_accessibility">näyttö ja kirjoitus (esteettömyys)</string>
+    <string name="spy_surface_power_notifications">ilmoitukset</string>
+    <string name="spy_surface_power_admin">laitteen järjestelmänvalvoja</string>
+</resources>

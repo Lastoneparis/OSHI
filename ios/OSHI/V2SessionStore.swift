@@ -257,6 +257,12 @@ nonisolated final class V2SessionStore: @unchecked Sendable {
 
     /// Persist (create or replace) a peer session.
     func saveSession(_ record: SessionRecord) throws {
+        // 🔴 __DEAD10CC_2026_11_26__ If this thread is inside a `withPeerSession`
+        // hold whose background time expired, the `flock` has already been dropped
+        // (so iOS could suspend us without a 0xdead10cc kill). What `body` read under
+        // it may be stale by now: refuse the write, leave the stored ratchet at its
+        // pre-hold state, and let the caller retry. No-op outside a revoked hold.
+        try CrossProcessLock.forPeer(record.peerUserKey).throwIfHoldRevoked()
         let data = try encoder.encode(record)
         let account = sessionAccount(record.peerUserKey)
         // Shared group so both processes advance the SAME record.

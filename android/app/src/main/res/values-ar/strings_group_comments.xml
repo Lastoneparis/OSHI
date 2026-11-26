@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">التعليقات</string>
+    <string name="gs_comments_footer">يمكن للأعضاء التعليق أسفل كل منشور. النشر للمشرفين فقط.</string>
+    <string name="cm_leave_comment">اترك تعليقًا</string>
+    <string name="cm_thread_title">التعليقات</string>
+    <string name="cm_empty">لا توجد تعليقات بعد.</string>
+    <string name="cm_composer_hint">تعليق…</string>
+    <string name="cm_replying_to">الرد على %1$s</string>
+    <string name="cm_disabled">التعليقات متوقفة.</string>
+    <string name="cm_post_unavailable">هذا المنشور لم يعد متاحًا.</string>
+    <string name="cm_too_fast">أنت تعلّق بسرعة كبيرة. انتظر قليلًا.</string>
+    <string name="cm_notif_reply">ردّ %1$s على تعليقك</string>
+    <string name="cm_delete_comment">حذف التعليق</string>
+    <plurals name="cm_comments_count">
+        <item quantity="zero">%d تعليق</item>
+        <item quantity="one">تعليق واحد</item>
+        <item quantity="two">تعليقان</item>
+        <item quantity="few">%d تعليقات</item>
+        <item quantity="many">%d تعليقًا</item>
+        <item quantity="other">%d تعليق</item>
+    </plurals>
+</resources>

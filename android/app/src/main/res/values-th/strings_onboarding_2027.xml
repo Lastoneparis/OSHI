@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">ข้าม</string>
+    <string name="ob27_continue">ต่อไป</string>
+    <string name="ob27_page_of">หน้า %1$d จาก %2$d</string>
+    <string name="ob27_private_title">แค่คุณกับเขา</string>
+    <string name="ob27_private_body">ข้อความและการโทรถูกเข้ารหัสตั้งแต่ต้นทางถึงปลายทางบนโทรศัพท์ของคุณ ไม่มีใครระหว่างทางอ่านได้ แม้แต่ OSHI</string>
+    <string name="ob27_offline_title">ใช้ได้แม้ไม่มีเน็ต</string>
+    <string name="ob27_offline_body">ไม่มีสัญญาณใช่ไหม ข้อความจะส่งต่อจากโทรศัพท์สู่โทรศัพท์ผ่านคนใกล้ๆ ที่เปิด OSHI อยู่ และวิทยุ LoRa ช่วยส่งได้ไกลขึ้นอีก</string>
+    <string name="ob27_range_direct">โดยตรง</string>
+    <string name="ob27_range_relayed">ส่งต่อ</string>
+    <string name="ob27_range_lora">วิทยุ LoRa</string>
+    <string name="ob27_anon_title">ไม่ต้องใช้เบอร์โทร</string>
+    <string name="ob27_anon_body">ไม่ต้องมีบัญชี อีเมล หรือเบอร์โทรเพื่อสมัคร ตัวตนของคุณคือกุญแจที่สร้างขึ้นบนโทรศัพท์เครื่องนี้</string>
+    <string name="ob27_together_title">ชวนคนของคุณมา</string>
+    <string name="ob27_together_body">แชตแบบตัวต่อตัวหรือเป็นกลุ่ม เพิ่มคนอื่นได้ด้วยการสแกนรหัส QR ของเขาหรือส่งลิงก์คำเชิญ</string>
+    <string name="ob27_rules_title">ก่อนเริ่มใช้งาน</string>
+    <string name="ob27_rules_subtitle">กติกาเล็กน้อย และสิ่งที่ OSHI ทำได้และยังทำไม่ได้</string>
+    <string name="ob27_rules_do">ควรทำ</string>
+    <string name="ob27_rules_dont">ห้ามเด็ดขาด</string>
+    <string name="ob27_good_to_know">ควรรู้</string>
+    <string name="ob27_show_details">แสดงรายละเอียด</string>
+    <string name="ob27_hide_details">ซ่อนรายละเอียด</string>
+    <string name="ob27_agree">เข้าใจแล้ว</string>
+    <string name="ob27_notif_title">ไม่พลาดข้อความใหม่</string>
+    <string name="ob27_notif_body">อนุญาตการแจ้งเตือนเพื่อดูข้อความและสายเรียกเข้าใหม่ คุณปิดได้ทุกเมื่อในการตั้งค่า</string>
+    <string name="ob27_notif_allow">อนุญาตการแจ้งเตือน</string>
+    <string name="ob27_not_now">ไว้ทีหลัง</string>
+    <string name="ob27_identity_title">เลือกชื่อ</string>
+    <string name="ob27_identity_body">นี่คือชื่อที่ผู้ติดต่อของคุณจะเห็น เปลี่ยนได้ภายหลัง</string>
+    <string name="ob27_already">ใช้ OSHI อยู่แล้วใช่ไหม</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_RESEND_2026_11_25__ a group message some members have not received yet -->
+<resources>
+    <string name="group_sent_partial">Verzonden naar %1$d van %2$d</string>
+    <string name="group_sent_partial_body">Nog niet afgeleverd bij %1$d lid/leden. OSHI probeert het 7 dagen lang automatisch opnieuw.</string>
+    <string name="group_sent_partial_gave_up">Na 7 dagen nog steeds niet afgeleverd bij %1$d lid/leden.</string>
+    <string name="group_retry_now">Nu opnieuw proberen</string>
+</resources>

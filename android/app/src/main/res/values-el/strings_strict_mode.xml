@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Αυστηρή λειτουργία ασφάλειας</string>
+    <string name="strict_status_on">Ενεργή: χωρίς αντιγραφή, χωρίς λήψη οθόνης, κρυφό από εφαρμογές ανάγνωσης οθόνης</string>
+    <string name="strict_status_off">Ανενεργή. Θωρακίζει το OSHI όταν το τηλέφωνο μπορεί να παρακολουθείται</string>
+    <string name="strict_hero_on">Η αυστηρή λειτουργία ασφάλειας είναι ενεργή</string>
+    <string name="strict_intro">Για όταν ένα τηλέφωνο μπορεί να παρακολουθείται. Ένας διακόπτης θωρακίζει το OSHI: τίποτα δεν αντιγράφεται, η οθόνη δεν καταγράφεται και οι εφαρμογές που διαβάζουν την οθόνη, μαζί με πράκτορες AI, δεν βλέπουν τίποτα.</string>
+    <string name="strict_section_switch">Λειτουργία</string>
+    <string name="strict_toggle_title">Αυστηρή λειτουργία ασφάλειας</string>
+    <string name="strict_toggle_on">Ενεργή σε αυτή τη συσκευή</string>
+    <string name="strict_toggle_off">Ανενεργή</string>
+    <string name="strict_block_paste_title">Φραγή και της επικόλλησης</string>
+    <string name="strict_block_paste_subtitle">Ούτε στο OSHI μπορεί να επικολληθεί κάτι</string>
+    <string name="strict_hide_presence_title">Απόκρυψη αποδείξεων ανάγνωσης και πληκτρολόγησης</string>
+    <string name="strict_hide_presence_subtitle">Οι άλλοι δεν βλέπουν πότε διαβάζετε ή πληκτρολογείτε</string>
+    <string name="strict_forced_subtitle">Ορίζεται από την αυστηρή λειτουργία ασφάλειας</string>
+    <string name="strict_blocked_toast">Αποκλείστηκε από την αυστηρή λειτουργία ασφάλειας</string>
+    <string name="strict_unlock_title">Απενεργοποίηση αυστηρής λειτουργίας ασφάλειας</string>
+    <string name="strict_unlock_subtitle">Επιβεβαιώστε ότι είστε εσείς</string>
+    <string name="strict_threats_title">Εφαρμογές που μπορούν να διαβάζουν ή να ελέγχουν την οθόνη σας</string>
+    <string name="strict_threats_none">Δεν βρέθηκε καμία σε αυτό το τηλέφωνο.</string>
+    <string name="strict_threat_a11y">Υπηρεσία προσβασιμότητας που δεν είναι βοηθητικό εργαλείο</string>
+    <string name="strict_threat_remote">Εφαρμογή απομακρυσμένου ελέγχου ή κατοπτρισμού οθόνης</string>
+    <string name="strict_threats_open">Έλεγχος</string>
+    <string name="strict_threats_explainer">Το OSHI δεν μπορεί να απενεργοποιήσει άλλη εφαρμογή. Αν δεν αναγνωρίζετε κάποια, απενεργοποιήστε την στις Ρυθμίσεις › Προσβασιμότητα του Android ή απεγκαταστήστε την.</string>
+    <string name="strict_banner_title">Εφαρμογές μπορούν να διαβάζουν ή να ελέγχουν αυτή την οθόνη</string>
+    <string name="strict_banner_body">%1$s. Η αυστηρή λειτουργία ασφάλειας κρύβει το OSHI από αυτές όπου το επιτρέπει το Android.</string>
+    <string name="strict_banner_dismiss">Παράβλεψη</string>
+    <string name="strict_does_title">Τι κάνει</string>
+    <string name="strict_does_copy">Χωρίς αντιγραφή, αποκοπή, προώθηση, κοινοποίηση ή αποθήκευση μηνυμάτων. Το κείμενο δεν επιλέγεται και ό,τι έβαλε το OSHI στο πρόχειρο διαγράφεται.</string>
+    <string name="strict_does_paste">Η επικόλληση στο OSHI μπλοκάρεται όταν είναι ενεργό το «Φραγή και της επικόλλησης», ακόμα και με την εντολή επικόλλησης του πληκτρολογίου.</string>
+    <string name="strict_does_screen">Τα στιγμιότυπα οθόνης, η εγγραφή και η κοινή χρήση οθόνης δείχνουν μαύρη οθόνη. Η προεπισκόπηση στις πρόσφατες εφαρμογές είναι κρυμμένη.</string>
+    <string name="strict_does_agents">Οι εφαρμογές που διαβάζουν την οθόνη μέσω προσβασιμότητας, μαζί με πράκτορες AI, δεν βλέπουν περιεχόμενο του OSHI (Android 14 και νεότερο). Τα αγγίγματα που εισάγουν αγνοούνται.</string>
+    <string name="strict_does_overlays">Τα αγγίγματα αγνοούνται όσο άλλη εφαρμογή σχεδιάζει πάνω από το OSHI.</string>
+    <string name="strict_does_notifications">Οι ειδοποιήσεις γράφουν μόνο «Νέο μήνυμα»: χωρίς όνομα, φωτογραφία ή κείμενο.</string>
+    <string name="strict_does_lock">Κλείδωμα εφαρμογής κάθε φορά που επιστρέφετε στο OSHI (όταν το τηλέφωνο έχει κλείδωμα οθόνης).</string>
+    <string name="strict_does_keyboard">Πληκτρολόγιο ανώνυμης περιήγησης: ζητείται από το πληκτρολόγιο να μη μαθαίνει ό,τι πληκτρολογείτε.</string>
+    <string name="strict_does_network">Χωρίς προεπισκοπήσεις συνδέσμων και χωρίς αναζήτηση GIPHY: δεν φορτώνεται τίποτα από ιστότοπους τρίτων.</string>
+    <string name="strict_does_presence">Οι αποδείξεις ανάγνωσης και οι ενδείξεις πληκτρολόγησης είναι απενεργοποιημένες (αν επιλέξατε να κρύβονται).</string>
+    <string name="strict_does_relay">Το ιδιωτικό ρελέ ενεργοποιείται όταν είναι διαθέσιμο.</string>
+    <string name="strict_does_restore">Οι προηγούμενες ρυθμίσεις σας επανέρχονται όταν απενεργοποιήσετε τη λειτουργία.</string>
+    <string name="strict_cannot_title">Τι δεν μπορεί να κάνει</string>
+    <string name="strict_cannot_malware">Καμία εφαρμογή δεν σας προστατεύει πλήρως από κακόβουλο λογισμικό ή από παραβιασμένο (root) τηλέφωνο.</string>
+    <string name="strict_cannot_keyboard">Το πληκτρολόγιό σας βλέπει ακόμα ό,τι πληκτρολογείτε. Μια πρόταση από το πρόχειρο που πληκτρολογεί για εσάς δεν ξεχωρίζει από πληκτρολόγηση.</string>
+    <string name="strict_cannot_readers">Οι αναγνώστες οθόνης για τυφλούς και χαμηλής όρασης συνεχίζουν να λειτουργούν, αλλά άλλες εφαρμογές προσβασιμότητας δεν μπορούν να διαβάσουν το OSHI όσο η λειτουργία είναι ενεργή.</string>
+    <string name="strict_cannot_old">Στο Android 13 και παλαιότερο, το OSHI δεν μπορεί να κρύψει το περιεχόμενό του από εφαρμογές προσβασιμότητας. Μπορεί μόνο να σας προειδοποιήσει γι\' αυτές.</string>
+    <string name="strict_cannot_camera">Κάποιος μπορεί ακόμα να φωτογραφίσει την οθόνη με άλλη συσκευή.</string>
+    <string name="strict_cannot_recipient">Προστατεύει μόνο αυτό το τηλέφωνο, όχι τα τηλέφωνα όσων γράφετε.</string>
+    <string name="strict_auto_lock_immediate">Αμέσως (Αυστηρή λειτουργία ασφάλειας)</string>
+</resources>

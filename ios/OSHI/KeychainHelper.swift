@@ -123,6 +123,36 @@ class KeychainHelper {
         ]
         applyAccessGroup(accessGroup, to: &query)
 
+        // 🔴 __DEAD10CC_2026_11_26__ With an explicit group (the shared ratchet
+        // sessions), REPLACE IN PLACE instead of delete-then-add. 14 of the 16
+        // 0xdead10cc kills froze the app inside `V2SessionStore.saveSession`
+        // between the two calls (8 in `SecItemDelete`, 6 in `SecItemAdd`):
+        // securityd completes the delete, the app is killed before (or during)
+        // the add, and the peer's session can simply be GONE on the next launch. `SecItemUpdate` is one atomic securityd operation — a kill
+        // leaves either the old or the new ratchet, never none. Group-less calls
+        // keep the old path: an update without a group would match the first item
+        // in ANY reachable group, which is not what those 30-odd callers mean.
+        if accessGroup != nil {
+            var match = query
+            match.removeValue(forKey: kSecValueData as String)
+            match.removeValue(forKey: kSecAttrAccessible as String)
+            let changes: [String: Any] = [
+                kSecValueData as String: data,
+                kSecAttrAccessible as String: accessibility,
+            ]
+            var status = SecItemUpdate(match as CFDictionary, changes as CFDictionary)
+            if status == errSecItemNotFound {
+                status = SecItemAdd(query as CFDictionary, nil)
+                if status == errSecDuplicateItem {   // the other process added it first
+                    status = SecItemUpdate(match as CFDictionary, changes as CFDictionary)
+                }
+            }
+            guard status == errSecSuccess else {
+                throw KeychainError.unhandledError(status: status)
+            }
+            return
+        }
+
         // Delete any existing item. Scoped to the SAME group as the add: deleting
         // without the attribute would reach across every accessible group and
         // could take out the copy we are about to migrate from.

@@ -32,6 +32,8 @@ struct MediaMessageView: View {
     /// edge to edge (no inner rounding — the bubble clips the corners). nil =
     /// the old fixed square.
     var displaySize: CGSize? = nil
+    /// 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ handed on explicitly to the viewer.
+    @Environment(\.advancedChatPrivacy) private var advancedChatPrivacy
 
     @State private var showFullScreen = false
     @State private var isLoading = false
@@ -208,7 +210,8 @@ struct MediaMessageView: View {
                 // Fullscreen must show the SAME bytes the bubble is showing.
                 // Handing it `attachment` while a reveal is running would open
                 // a sharper picture than the one on screen.
-                MediaFullScreenView(attachment: displayAttachment)
+                MediaFullScreenView(attachment: displayAttachment, isFromCurrentUser: isFromCurrentUser)
+                    .environment(\.advancedChatPrivacy, advancedChatPrivacy)
             }
         }
 
@@ -851,8 +854,19 @@ struct ZoomableImageView: View {
 
 struct MediaFullScreenView: View {
     let attachment: MediaManager.MediaAttachment
+    /// 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ who sent it, when the caller knows;
+    /// nil is treated as someone else's media.
+    var isFromCurrentUser: Bool? = nil
     @Environment(\.dismiss) var dismiss
+    @Environment(\.advancedChatPrivacy) private var privacy
     @State private var showSaveConfirmation = false
+
+    /// Save to Photos / Save to Files: refused by strict mode, and — for other
+    /// people's media — by advanced chat privacy.
+    private var mayExport: Bool {
+        StrictSecurityMode.allowsMediaExport
+            && AdvancedChatPrivacyPolicy.allowsSavingMedia(protected: privacy.isOn, isFromMe: isFromCurrentUser)
+    }
 
     var body: some View {
         NavigationView {
@@ -878,7 +892,8 @@ struct MediaFullScreenView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    if attachment.type == .image {
+                    // __STRICT_SECURITY_MODE_2026_11_22__ nothing leaves OSHI.
+                    if attachment.type == .image && mayExport {
                         Button {
                             saveImageToPhotos()
                         } label: {
@@ -1008,6 +1023,7 @@ struct MediaFullScreenView: View {
             )
             .padding()
             
+            if mayExport {  // __STRICT_SECURITY_MODE_2026_11_22__
             Button {
                 shareDocument()
             } label: {
@@ -1019,6 +1035,7 @@ struct MediaFullScreenView: View {
                 .padding()
                 .background(appBrandColor)
                 .cornerRadius(12)
+            }
             }
             
             Spacer()
@@ -1050,6 +1067,7 @@ struct MediaFullScreenView: View {
     }
 
     private func shareDocument() {
+        guard mayExport else { return }  // __STRICT_SECURITY_MODE_2026_11_22__
         // __PLAINTEXT_LEFTOVERS_2026_09_24__ Copie de PARTAGE (purgée au partage
         // suivant / au lancement), distincte de la copie de lecture: l'autre app
         // peut encore la lire après la fermeture de ce visualiseur.

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Privacy avanzata della chat</string>
+    <string name="adv_privacy_subtitle">Impedisce a tutti in questa chat di salvare i contenuti multimediali, esportare la chat o usare l\'IA sui suoi messaggi</string>
+    <string name="adv_privacy_learn_more">Scopri di più</string>
+    <string name="adv_privacy_notice_on">%1$s ha attivato la privacy avanzata della chat. Nessuno può salvare automaticamente i contenuti multimediali, esportare la chat o usare l\'IA sui messaggi di questa chat.</string>
+    <string name="adv_privacy_notice_off">%1$s ha disattivato la privacy avanzata della chat. Il salvataggio dei contenuti, l\'esportazione della chat e le funzioni di IA sono di nuovo disponibili.</string>
+    <string name="adv_privacy_notice_on_you">Hai attivato la privacy avanzata della chat. Nessuno può salvare automaticamente i contenuti multimediali, esportare la chat o usare l\'IA sui messaggi di questa chat.</string>
+    <string name="adv_privacy_notice_off_you">Hai disattivato la privacy avanzata della chat. Il salvataggio dei contenuti, l\'esportazione della chat e le funzioni di IA sono di nuovo disponibili.</string>
+    <string name="adv_privacy_summary_on">Privacy avanzata della chat attivata</string>
+    <string name="adv_privacy_summary_off">Privacy avanzata della chat disattivata</string>
+    <string name="adv_privacy_sheet_intro">Quando qualcuno la attiva, vale per tutti in questa chat:</string>
+    <string name="adv_privacy_sheet_point_save">I contenuti multimediali di questa chat non possono essere salvati nella galleria o in Download.</string>
+    <string name="adv_privacy_sheet_point_export">Questa chat viene esclusa dalle esportazioni delle chat.</string>
+    <string name="adv_privacy_sheet_point_ai">L\'IA sul dispositivo di OSHI non può leggere questa chat: niente risposte suggerite, niente traduzione, niente contesto per l\'assistente di scrittura.</string>
+    <string name="adv_privacy_sheet_point_screen">Screenshot e registrazioni dello schermo di questa chat sono bloccati.</string>
+    <string name="adv_privacy_sheet_limits">Chiunque nella chat può attivarla o disattivarla. Non impedisce di fotografare lo schermo e non riguarda chi usa una versione precedente di OSHI.</string>
+    <string name="adv_privacy_blocked_toast">La privacy avanzata è attiva in questa chat</string>
+    <string name="adv_privacy_older_members">Membri con una versione precedente di OSHI che non la applicheranno finché non aggiornano: %1$d</string>
+</resources>

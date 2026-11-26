@@ -17,8 +17,13 @@ data class RecentMediaItem(
     /** Video length in ms; 0 for a photo or when MediaStore does not know it. */
     val durationMs: Long,
     val dateAddedSec: Long,
+    /** MediaStore `datetaken` (ms, from EXIF / the camera); null or 0 when unknown. */
+    val dateTakenMs: Long? = null,
 ) {
     val isGif: Boolean get() = mimeType.equals("image/gif", ignoreCase = true)
+
+    /** The time the grid sorts on — see [AttachmentPanelLogic.sortTimeMs]. */
+    val sortTimeMs: Long get() = AttachmentPanelLogic.sortTimeMs(dateTakenMs, dateAddedSec)
 }
 
 /** How much of the gallery the app may read. */
@@ -35,6 +40,69 @@ object AttachmentPanelLogic {
 
     /** Thumbnails per MediaStore query. A screenful is ~15; two pages ahead is plenty. */
     const val PAGE_SIZE = 60
+
+    // ── Order of the "Recent" grid ─────────────────────────────────────────
+    //
+    // __RECENT_PHOTOS_ORDER_2026_11_21__ User report: "the recent tab shows photos from a
+    // month ago, not the recent ones". The query passed QUERY_ARG_SORT_COLUMNS =
+    // [date_added, _id] with QUERY_ARG_SORT_DIRECTION = DESCENDING, and the platform
+    // builds that as `date_added, _id DESC` — the direction is appended ONCE, after the
+    // last column, so the grid was sorted OLDEST first (reproduced on an API 35
+    // emulator). The order is now a literal SQL clause, every column with its own
+    // direction, pinned by AttachmentPanelLogicTest and RecentMediaOrderInstrumentedTest.
+    //
+    // It also sorts on when the photo was TAKEN, not when MediaStore indexed it: after a
+    // phone migration, a backup restore or a media-database rebuild every old photo gets
+    // the same fresh date_added, and an index-time order puts them all before (or among)
+    // the photos of this week. date_added (seconds) is only the fallback — ×1000 to be
+    // comparable with datetaken (ms) — for a file with no capture time (a PNG, most
+    // downloads, many received images).
+
+    /** The capture time in ms when known (and > 0), else the index time in ms. */
+    fun sortTimeMs(dateTakenMs: Long?, dateAddedSec: Long): Long =
+        if (dateTakenMs != null && dateTakenMs > 0L) dateTakenMs else dateAddedSec * 1000L
+
+    /**
+     * The SQL ORDER BY the MediaStore query uses — the same rule as [sortTimeMs] and
+     * [newestFirst], each term with its OWN direction. `_id` breaks ties (a burst shot
+     * of 10 photos in one second) so paging by offset never repeats or skips a tile.
+     */
+    const val SQL_SORT_ORDER = "COALESCE(NULLIF(datetaken, 0), date_added * 1000) DESC, _id DESC"
+
+    /** What the grid falls back to if a provider refuses [SQL_SORT_ORDER]'s expression. */
+    const val SQL_SORT_ORDER_FALLBACK = "date_added DESC, _id DESC"
+
+    /** Newest first, ties broken by the larger `_id` — exactly [SQL_SORT_ORDER]. */
+    val newestFirst: Comparator<RecentMediaItem> =
+        compareByDescending<RecentMediaItem> { it.sortTimeMs }.thenByDescending { it.id }
+
+    /**
+     * Fold a freshly queried FIRST page ([freshHead], newest first) into what the grid
+     * already shows ([shown]) — on panel resume or when MediaStore reports a change —
+     * without throwing away the pages the user has scrolled through.
+     *
+     *  * New photos (taken since the panel opened) come first.
+     *  * A shown item that falls inside the fresh page's time range but is no longer in
+     *    it was deleted: it goes.
+     *  * Shown items older than everything in the fresh page are kept, in order.
+     *  * A short fresh page is the whole gallery: it replaces everything.
+     */
+    fun mergeFreshHead(shown: List<RecentMediaItem>, freshHead: List<RecentMediaItem>, pageSize: Int = PAGE_SIZE): List<RecentMediaItem> {
+        val head = freshHead.distinctBy { it.id }.sortedWith(newestFirst)
+        if (head.size < pageSize || head.isEmpty()) return head
+        val oldestOfHead = head.last()
+        val headIds = head.mapTo(HashSet()) { it.id }
+        val tail = shown.filter { it.id !in headIds && newestFirst.compare(it, oldestOfHead) > 0 }
+            .distinctBy { it.id }
+            .sortedWith(newestFirst)
+        return head + tail
+    }
+
+    /** Append a further page, ignoring anything already shown (an insert between pages shifts offsets). */
+    fun appendPage(shown: List<RecentMediaItem>, page: List<RecentMediaItem>): List<RecentMediaItem> {
+        val known = shown.mapTo(HashSet()) { it.id }
+        return shown + page.filter { known.add(it.id) }
+    }
 
     /** Start the next page when the user is this close to the end of what is loaded. */
     const val PREFETCH_DISTANCE = 24

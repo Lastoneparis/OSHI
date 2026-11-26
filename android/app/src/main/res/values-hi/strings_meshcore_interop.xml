@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · OSHI द्वारा एंड-टू-एंड एन्क्रिप्टेड नहीं</string>
+    <string name="meshcore_error_not_connected">कोई MeshCore रेडियो कनेक्ट नहीं है</string>
+    <string name="meshcore_channels_title">MeshCore चैनल</string>
+    <string name="meshcore_channel_public">सार्वजनिक · नाम जानने वाला कोई भी पढ़ सकता है</string>
+    <string name="meshcore_channel_private">निजी · गुप्त कुंजी</string>
+    <string name="meshcore_join_hashtag">हैशटैग चैनल से जुड़ें</string>
+    <string name="meshcore_join_private">निजी चैनल से जुड़ें</string>
+    <string name="meshcore_contacts_title">MeshCore संपर्क</string>
+    <string name="meshcore_refresh_contacts">संपर्क रीफ़्रेश करें</string>
+    <string name="meshcore_join_refused">रेडियो ने यह चैनल अस्वीकार कर दिया।</string>
+    <string name="meshcore_join_no_slot">इस रेडियो पर कोई खाली चैनल स्लॉट नहीं है।</string>
+    <string name="meshcore_join_bad_name">मान्य चैनल नाम दर्ज करें (अधिकतम 31 बाइट, हैशटैग चैनल के लिए बिना स्पेस)।</string>
+    <string name="meshcore_join_bad_secret">सीक्रेट 16 बाइट का होना चाहिए: 32 हेक्स अक्षर या base64।</string>
+    <string name="meshcore_hashtag_hint">कुंजी नाम से बनती है: नाम जानने वाला कोई भी चैनल पढ़ सकता है।</string>
+    <string name="meshcore_private_hint">चैनल का नाम और उसके सदस्यों द्वारा साझा किया गया सीक्रेट दर्ज करें।</string>
+    <string name="meshcore_channel_name">चैनल का नाम</string>
+    <string name="meshcore_channel_secret">सीक्रेट (hex या base64)</string>
+    <string name="meshcore_join">जुड़ें</string>
+    <string name="meshcore_note_dm">रेडियो के बीच MeshCore द्वारा एन्क्रिप्ट किया गया, OSHI द्वारा एंड-टू-एंड नहीं।</string>
+    <string name="meshcore_note_public">सार्वजनिक चैनल: जो भी इसका नाम जानता है, इसे पढ़ सकता है।</string>
+    <string name="meshcore_note_private">निजी चैनल: जिसके पास इसका सीक्रेट है, वह इसे पढ़ सकता है।</string>
+    <string name="meshcore_radio_offline">MeshCore रेडियो कनेक्ट नहीं है। संदेश यहाँ डिलीवर नहीं हुए के रूप में इंतज़ार करते हैं।</string>
+    <string name="meshcore_connect">कनेक्ट करें</string>
+    <string name="meshcore_parts">%1$d संदेश</string>
+    <string name="meshcore_sending">रेडियो की प्रतीक्षा</string>
+    <string name="meshcore_failed_dm">उनके रेडियो से कोई जवाब नहीं (रेंज से बाहर?)। फिर से कोशिश करने के लिए टैप करें।</string>
+    <string name="meshcore_error_pairing">पेयरिंग विफल रही। PIN जाँचें और फिर से कोशिश करें। अगर रेडियो रीसेट हुआ था, तो पहले उसे Android की ब्लूटूथ सेटिंग में हटा दें।</string>
+    <string name="meshcore_error_no_answer">रेडियो ने जवाब नहीं दिया। जाँचें कि उसमें ब्लूटूथ के लिए MeshCore companion फ़र्मवेयर चल रहा है।</string>
+    <string name="meshcore_state_reconnecting">कनेक्शन टूट गया। रेडियो के रेंज में लौटने पर फिर से कनेक्ट होगा…</string>
+    <string name="meshcore_state_pin">Android प्रॉम्प्ट में रेडियो का PIN लिखें</string>
+    <string name="meshcore_state_reading">संपर्क और चैनल पढ़े जा रहे हैं…</string>
+    <string name="meshcore_state_connecting">कनेक्ट हो रहा है…</string>
+    <string name="meshcore_seen_as">कनेक्टेड · MeshCore उपयोगकर्ता आपको %1$s के रूप में देखते हैं</string>
+    <string name="meshcore_connected">कनेक्टेड</string>
+    <string name="meshcore_footer_users">MeshCore उपयोगकर्ताओं से चैट करें (सीधे संदेश और चैनल) और OSHI संदेश MeshCore रिपीटर के ज़रिए भेजें। ब्लूटूथ के लिए MeshCore companion फ़र्मवेयर चाहिए। OSHI एक खाली स्लॉट में एक चैनल, #oshi-bridge, जोड़ता है और आपके दूसरे चैनल कभी नहीं बदलता।</string>
+    <string name="meshcore_scan_below">MeshCore रेडियो नीचे आस-पास के रेडियो में MeshCore चिह्न के साथ दिखते हैं।</string>
+    <string name="meshcore_contacts_footer">किसी को लिखने के लिए उन पर टैप करें। संदेश MeshCore द्वारा एन्क्रिप्ट होते हैं, OSHI द्वारा एंड-टू-एंड नहीं।</string>
+    <string name="meshcore_no_contacts">अभी तक कोई सुनाई नहीं दिया। MeshCore उपयोगकर्ता तब यहाँ दिखते हैं जब उनका रेडियो खुद की घोषणा करता है। अपना घोषित करें ताकि वे आपको ढूँढ सकें।</string>
+    <string name="meshcore_heard">सुना गया %1$s</string>
+    <string name="meshcore_announce">मेरी घोषणा करें</string>
+    <string name="meshcore_announce_done">घोषणा हो गई। रेंज में मौजूद MeshCore उपयोगकर्ता अब आपको जोड़ सकते हैं और लिख सकते हैं।</string>
+    <string name="meshcore_announce_failed">रेडियो घोषणा नहीं भेज सका।</string>
+    <string name="meshcore_channels_footer">चैनल खोलने के लिए उस पर टैप करें। सार्वजनिक और हैशटैग चैनल कोई भी पढ़ सकता है जो उनका नाम जानता है।</string>
+    <string name="meshcore_pin_title">%1$s के साथ पेयर करें</string>
+    <string name="meshcore_pin_body">Android अब रेडियो का PIN माँगेगा। अगर रेडियो में स्क्रीन है, तो PIN उस पर दिखता है।</string>
+    <string name="meshcore_pin_default">स्क्रीन नहीं है? PIN 123456 है, जब तक इसे MeshCore ऐप में बदला न गया हो।</string>
+    <string name="meshcore_pin_continue">जारी रखें</string>
+    <string name="meshcore_no_free_channel_chat">सभी 8 चैनल स्लॉट भरे हैं। आप अब भी MeshCore उपयोगकर्ताओं से चैट कर सकते हैं; MeshCore ऐप में एक स्लॉट खाली करें ताकि OSHI संदेश #oshi-bridge का उपयोग कर सकें।</string>
+    <string name="meshcore_contact_kind">MeshCore उपयोगकर्ता</string>
+    <string name="meshcore_too_long">बहुत लंबा: अधिकतम %1$d संदेश</string>
+</resources>

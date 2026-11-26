@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · sense xifratge d\'extrem a extrem d\'OSHI</string>
+    <string name="meshcore_error_not_connected">Cap ràdio MeshCore connectada</string>
+    <string name="meshcore_channels_title">Canals de MeshCore</string>
+    <string name="meshcore_channel_public">Públic · llegible per qualsevol que en conegui el nom</string>
+    <string name="meshcore_channel_private">Privat · clau secreta</string>
+    <string name="meshcore_join_hashtag">Uneix-te a un canal hashtag</string>
+    <string name="meshcore_join_private">Uneix-te a un canal privat</string>
+    <string name="meshcore_contacts_title">Contactes de MeshCore</string>
+    <string name="meshcore_refresh_contacts">Actualitza els contactes</string>
+    <string name="meshcore_join_refused">La ràdio ha rebutjat aquest canal.</string>
+    <string name="meshcore_join_no_slot">No hi ha cap posició de canal lliure en aquesta ràdio.</string>
+    <string name="meshcore_join_bad_name">Introdueix un nom de canal vàlid (màx. 31 bytes, sense espais per a un canal hashtag).</string>
+    <string name="meshcore_join_bad_secret">El secret ha de tenir 16 bytes: 32 caràcters hexadecimals o base64.</string>
+    <string name="meshcore_hashtag_hint">La clau es deriva del nom: qualsevol que el conegui pot llegir el canal.</string>
+    <string name="meshcore_private_hint">Introdueix el nom del canal i el secret compartit pels membres.</string>
+    <string name="meshcore_channel_name">Nom del canal</string>
+    <string name="meshcore_channel_secret">Secret (hex o base64)</string>
+    <string name="meshcore_join">Uneix-t\'hi</string>
+    <string name="meshcore_note_dm">Xifrat per MeshCore entre les ràdios, no d\'extrem a extrem per OSHI.</string>
+    <string name="meshcore_note_public">Canal públic: qualsevol que en conegui el nom el pot llegir.</string>
+    <string name="meshcore_note_private">Canal privat: qualsevol que en tingui el secret el pot llegir.</string>
+    <string name="meshcore_radio_offline">Ràdio MeshCore no connectada. Els missatges esperen aquí com a no lliurats.</string>
+    <string name="meshcore_connect">Connecta</string>
+    <string name="meshcore_parts">%1$d missatges</string>
+    <string name="meshcore_sending">Esperant la ràdio</string>
+    <string name="meshcore_failed_dm">Cap resposta de la seva ràdio (fora d\'abast?). Toca per tornar-ho a provar.</string>
+    <string name="meshcore_error_pairing">L\'emparellament ha fallat. Comprova el PIN i torna-ho a provar. Si la ràdio s\'ha restablert, primer elimina-la a la configuració de Bluetooth d\'Android.</string>
+    <string name="meshcore_error_no_answer">La ràdio no ha respost. Comprova que fa servir el firmware MeshCore companion per a Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Connexió perduda. Es reconnectarà quan la ràdio torni a ser a l\'abast…</string>
+    <string name="meshcore_state_pin">Escriu el PIN de la ràdio a l\'avís d\'Android</string>
+    <string name="meshcore_state_reading">Llegint contactes i canals…</string>
+    <string name="meshcore_state_connecting">Connectant…</string>
+    <string name="meshcore_seen_as">Connectada · els usuaris de MeshCore et veuen com a %1$s</string>
+    <string name="meshcore_connected">Connectada</string>
+    <string name="meshcore_footer_users">Xateja amb usuaris de MeshCore (missatges directes i canals) i fes passar els missatges d\'OSHI pels repetidors MeshCore. Cal el firmware MeshCore companion per a Bluetooth. OSHI afegeix un canal, #oshi-bridge, en un espai lliure i mai no canvia els altres canals.</string>
+    <string name="meshcore_scan_below">Les ràdios MeshCore apareixen més avall a Ràdios properes, marcades com a MeshCore.</string>
+    <string name="meshcore_contacts_footer">Toca algú per escriure-li. Els missatges els xifra MeshCore, no OSHI d\'extrem a extrem.</string>
+    <string name="meshcore_no_contacts">Encara no s\'ha sentit ningú. Els usuaris de MeshCore apareixen aquí quan la seva ràdio s\'anuncia. Anuncia la teva perquè et trobin.</string>
+    <string name="meshcore_heard">Sentit %1$s</string>
+    <string name="meshcore_announce">Anuncia\'m</string>
+    <string name="meshcore_announce_done">Anunciat. Els usuaris de MeshCore a l\'abast ja et poden afegir i escriure.</string>
+    <string name="meshcore_announce_failed">La ràdio no ha pogut enviar l\'anunci.</string>
+    <string name="meshcore_channels_footer">Toca un canal per obrir-lo. Els canals públics i d\'etiqueta els pot llegir qualsevol que en conegui el nom.</string>
+    <string name="meshcore_pin_title">Emparella amb %1$s</string>
+    <string name="meshcore_pin_body">Android et demanarà ara el PIN de la ràdio. Si la ràdio té pantalla, el PIN s\'hi mostra.</string>
+    <string name="meshcore_pin_default">Sense pantalla? El PIN és 123456, tret que s\'hagi canviat a l\'app de MeshCore.</string>
+    <string name="meshcore_pin_continue">Continua</string>
+    <string name="meshcore_no_free_channel_chat">Els 8 espais de canal estan ocupats. Encara pots xatejar amb usuaris de MeshCore; allibera un espai a l\'app de MeshCore perquè els missatges d\'OSHI puguin fer servir #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">Usuari de MeshCore</string>
+    <string name="meshcore_too_long">Massa llarg: %1$d missatges màx.</string>
+</resources>

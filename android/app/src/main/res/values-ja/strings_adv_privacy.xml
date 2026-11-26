@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">高度なチャットプライバシー</string>
+    <string name="adv_privacy_subtitle">このチャットの全員がメディアの保存、チャットのエクスポート、メッセージへのAIの使用をできないようにします</string>
+    <string name="adv_privacy_learn_more">詳細</string>
+    <string name="adv_privacy_notice_on">%1$sさんが高度なチャットプライバシーをオンにしました。このチャットでは、誰もメディアの自動保存、チャットのエクスポート、メッセージへのAIの使用ができません。</string>
+    <string name="adv_privacy_notice_off">%1$sさんが高度なチャットプライバシーをオフにしました。メディアの保存、チャットのエクスポート、AI機能が再び使えるようになりました。</string>
+    <string name="adv_privacy_notice_on_you">高度なチャットプライバシーをオンにしました。このチャットでは、誰もメディアの自動保存、チャットのエクスポート、メッセージへのAIの使用ができません。</string>
+    <string name="adv_privacy_notice_off_you">高度なチャットプライバシーをオフにしました。メディアの保存、チャットのエクスポート、AI機能が再び使えるようになりました。</string>
+    <string name="adv_privacy_summary_on">高度なチャットプライバシーがオンになりました</string>
+    <string name="adv_privacy_summary_off">高度なチャットプライバシーがオフになりました</string>
+    <string name="adv_privacy_sheet_intro">誰かがオンにすると、このチャットの全員に適用されます：</string>
+    <string name="adv_privacy_sheet_point_save">このチャットのメディアはギャラリーやダウンロードに保存できません。</string>
+    <string name="adv_privacy_sheet_point_export">このチャットはチャットのエクスポートから除外されます。</string>
+    <string name="adv_privacy_sheet_point_ai">OSHIの端末上のAIはこのチャットを読めません。返信の候補、翻訳、文章アシスタントへのコンテキストはありません。</string>
+    <string name="adv_privacy_sheet_point_screen">このチャットのスクリーンショットと画面録画はブロックされます。</string>
+    <string name="adv_privacy_sheet_limits">チャットの誰でもオン・オフを切り替えられます。画面を撮影されることは防げません。また、古いバージョンのOSHIを使っている人には適用されません。</string>
+    <string name="adv_privacy_blocked_toast">このチャットでは高度なプライバシーがオンです</string>
+    <string name="adv_privacy_older_members">古いバージョンのOSHIを使っていて、アップデートするまで適用されないメンバー：%1$d</string>
+</resources>

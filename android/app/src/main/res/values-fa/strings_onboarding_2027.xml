@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">رد شدن</string>
+    <string name="ob27_continue">ادامه</string>
+    <string name="ob27_page_of">صفحهٔ %1$d از %2$d</string>
+    <string name="ob27_private_title">فقط شما و آن‌ها</string>
+    <string name="ob27_private_body">پیام‌ها و تماس‌ها روی گوشی شما به‌صورت سرتاسری رمزگذاری می‌شوند. هیچ‌کس در این میان نمی‌تواند آن‌ها را بخواند، حتی OSHI.</string>
+    <string name="ob27_offline_title">بدون اینترنت هم کار می‌کند</string>
+    <string name="ob27_offline_body">شبکه ندارید؟ پیام‌ها از طریق افراد نزدیکی که OSHI را باز دارند، گوشی به گوشی می‌رسند. رادیوی LoRa آن‌ها را دورتر هم می‌برد.</string>
+    <string name="ob27_range_direct">مستقیم</string>
+    <string name="ob27_range_relayed">با واسطه</string>
+    <string name="ob27_range_lora">رادیوی LoRa</string>
+    <string name="ob27_anon_title">بدون شماره تلفن</string>
+    <string name="ob27_anon_body">نه حساب، نه ایمیل، نه شماره برای ثبت‌نام. هویت شما کلیدی است که روی همین گوشی ساخته می‌شود.</string>
+    <string name="ob27_together_title">عزیزانتان را دعوت کنید</string>
+    <string name="ob27_together_body">گفتگوی دونفره یا گروهی. با اسکن کد QR کسی یا فرستادن پیوند دعوت، او را اضافه کنید.</string>
+    <string name="ob27_rules_title">پیش از شروع</string>
+    <string name="ob27_rules_subtitle">چند قانون ساده، و اینکه OSHI چه کارهایی می‌کند و چه کارهایی هنوز نه.</string>
+    <string name="ob27_rules_do">این کارها را بکنید</string>
+    <string name="ob27_rules_dont">هرگز</string>
+    <string name="ob27_good_to_know">خوب است بدانید</string>
+    <string name="ob27_show_details">نمایش جزئیات</string>
+    <string name="ob27_hide_details">پنهان کردن جزئیات</string>
+    <string name="ob27_agree">متوجه شدم</string>
+    <string name="ob27_notif_title">پیامی را از دست ندهید</string>
+    <string name="ob27_notif_body">اعلان‌ها را مجاز کنید تا پیام‌ها و تماس‌های تازه را ببینید. هر وقت خواستید می‌توانید از تنظیمات خاموششان کنید.</string>
+    <string name="ob27_notif_allow">مجاز کردن اعلان‌ها</string>
+    <string name="ob27_not_now">اکنون نه</string>
+    <string name="ob27_identity_title">یک نام انتخاب کنید</string>
+    <string name="ob27_identity_body">این همان نامی است که مخاطبانتان می‌بینند. بعداً می‌توانید تغییرش دهید.</string>
+    <string name="ob27_already">از قبل از OSHI استفاده می‌کنید؟</string>
+</resources>

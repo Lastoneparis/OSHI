@@ -103,6 +103,8 @@ fun LoRaSettingsScreen(
      * class note. Wire it to the app's location source at the call site.
      */
     deviceLocation: Pair<Double, Double>? = null,
+    /** __MESHCORE_INTEROP_2026_11_25__ Open the thread of a MeshCore user or channel tapped here. */
+    onOpenChat: (String) -> Unit = {},
     viewModel: LoRaViewModel = viewModel(
         factory = LoRaViewModel.Factory(LocalContext.current.applicationContext)
     )
@@ -134,10 +136,32 @@ fun LoRaSettingsScreen(
     var testText by remember { mutableStateOf("") }
     var showForgetConfirm by remember { mutableStateOf(false) }
 
+    // __MESHCORE_INTEROP_2026_11_25__ One scan finds both firmwares: a radio advertising the MeshCore
+    // companion service shows up in "Nearby radios" marked MeshCore and pairs as one (PIN explained first).
+    val meshCore = remember { com.oshi.messenger.service.lora.MeshCoreManager.getInstance(context.applicationContext) }
+    val meshCoreFound by meshCore.discovered.collectAsState()
+    val meshCoreState by meshCore.state.collectAsState()
+    val meshCoreName by meshCore.connectedName.collectAsState()
+    val meshCoreFree = meshCoreName == null && !meshCore.isPaired
+    var meshCorePinFor by remember { mutableStateOf<com.oshi.messenger.service.lora.MeshCoreManager.Device?>(null) }
+
     // iOS `:204-205`: scan while nothing is paired, stop on leave.
     DisposableEffect(connectedName) {
-        if (connectedName == null) viewModel.startScan()
-        onDispose { viewModel.stopScan() }
+        if (connectedName == null) {
+            viewModel.startScan()
+            if (meshCoreFree) meshCore.startScan()
+        }
+        onDispose {
+            viewModel.stopScan()
+            if (meshCore.state.value == com.oshi.messenger.service.lora.MeshCoreManager.ConnState.SCANNING) meshCore.stopScan()
+        }
+    }
+    meshCorePinFor?.let { d ->
+        MeshCorePinDialog(d.name, onDismiss = { meshCorePinFor = null }, onContinue = {
+            meshCorePinFor = null
+            viewModel.stopScan()
+            meshCore.connect(d.id)
+        })
     }
 
     Scaffold(
@@ -323,7 +347,14 @@ fun LoRaSettingsScreen(
             }
 
             // ------------------------------------------- MeshCore radio (iOS meshCoreSection)
-            item { MeshCoreSection(meshtasticReady = isReady, bluetoothOn = bluetoothOn) }
+            item {
+                MeshCoreSection(
+                    meshtasticReady = isReady, bluetoothOn = bluetoothOn,
+                    // Nearby radios (below) lists MeshCore radios while it is shown.
+                    ownScanList = connectedName != null || permissionDenied || !bluetoothOn,
+                    onOpenChat = onOpenChat,
+                )
+            }
 
             // ------------------------------------------- Detection
             if (connectedName == null) {
@@ -339,7 +370,13 @@ fun LoRaSettingsScreen(
                                 val scanning = connState == LoRaConnState.SCANNING
                                 TextButton(
                                     onClick = {
-                                        if (scanning) viewModel.stopScan() else viewModel.startScan()
+                                        if (scanning) {
+                                            viewModel.stopScan()
+                                            if (meshCoreState == com.oshi.messenger.service.lora.MeshCoreManager.ConnState.SCANNING) meshCore.stopScan()
+                                        } else {
+                                            viewModel.startScan()
+                                            if (meshCoreFree) meshCore.startScan()
+                                        }
                                     }
                                 ) {
                                     Icon(
@@ -355,7 +392,12 @@ fun LoRaSettingsScreen(
                                         )
                                     )
                                 }
-                                if (scanning && discovered.isEmpty()) {
+                                // MeshCore radios found by the same scan, tagged so the two firmwares
+                                // are never confused; pairing one explains its PIN first.
+                                if (meshCoreFree) meshCoreFound.forEach { d ->
+                                    MeshCoreDeviceRow(d) { meshCorePinFor = d }
+                                }
+                                if (scanning && discovered.isEmpty() && (!meshCoreFree || meshCoreFound.isEmpty())) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         CircularProgressIndicator(
                                             Modifier.size(18.dp),

@@ -17,6 +17,7 @@ import com.oshi.messenger.wear.ui.ConversationListScreen
 import com.oshi.messenger.wear.ui.OshiWearTheme
 import com.oshi.messenger.wear.ui.ReplyScreen
 import com.oshi.messenger.wear.ui.ThreadScreen
+import com.oshi.messenger.wear.ui.VoiceScreen
 import com.oshi.wearbridge.WearConvKind
 
 /**
@@ -29,6 +30,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // A voice note left by a process killed mid-recording never survives a launch.
+        com.oshi.messenger.wear.data.VoiceRecorder.sweep(this)
         setContent { OshiWearApp(session, intent) }
     }
 
@@ -52,6 +55,9 @@ class MainActivity : ComponentActivity() {
     companion object {
         const val EXTRA_KIND = "oshi.wear.kind"
         const val EXTRA_ID = "oshi.wear.id"
+        /** __WEAR_POLISH_2026_11_25__ "reply": the tile's Reply button opens the reply screen directly. */
+        const val EXTRA_ACTION = "oshi.wear.action"
+        const val ACTION_REPLY = "reply"
     }
 }
 
@@ -59,10 +65,12 @@ object Routes {
     const val LIST = "list"
     const val THREAD = "thread/{kind}/{id}"
     const val REPLY = "reply/{kind}/{id}?mid={mid}"
+    const val VOICE = "voice/{kind}/{id}"
 
     fun thread(kind: WearConvKind, id: String) = "thread/${kind.wire}/${Uri.encode(id)}"
     fun reply(kind: WearConvKind, id: String, messageId: String?) =
         "reply/${kind.wire}/${Uri.encode(id)}?mid=${Uri.encode(messageId.orEmpty())}"
+    fun voice(kind: WearConvKind, id: String) = "voice/${kind.wire}/${Uri.encode(id)}"
 }
 
 @Composable
@@ -83,7 +91,15 @@ fun OshiWearApp(session: WearSession, intent: Intent?) {
                     val kind = WearConvKind.of(entry.arguments?.getString("kind")) ?: WearConvKind.DIRECT
                     val id = entry.arguments?.getString("id").orEmpty()
                     val mid = entry.arguments?.getString("mid")?.takeIf { it.isNotEmpty() }
-                    ReplyScreen(session, kind, id, mid) { nav.popBackStack() }
+                    ReplyScreen(session, kind, id, mid, onVoice = { nav.navigate(Routes.voice(kind, id)) }) { nav.popBackStack() }
+                }
+                composable(Routes.VOICE) { entry ->
+                    val kind = WearConvKind.of(entry.arguments?.getString("kind")) ?: WearConvKind.DIRECT
+                    val id = entry.arguments?.getString("id").orEmpty()
+                    // Sent: back to the thread (skip the reply screen it came from).
+                    VoiceScreen(session, kind, id) {
+                        if (!nav.popBackStack(Routes.THREAD, inclusive = false)) nav.popBackStack()
+                    }
                 }
             }
             // Tile / complication deep link straight into a conversation.
@@ -91,10 +107,13 @@ fun OshiWearApp(session: WearSession, intent: Intent?) {
                 val kind = WearConvKind.of(intent?.getStringExtra(MainActivity.EXTRA_KIND))
                 val id = intent?.getStringExtra(MainActivity.EXTRA_ID)
                 if (kind != null && !id.isNullOrEmpty()) {
+                    val action = intent.getStringExtra(MainActivity.EXTRA_ACTION)
                     // Consume the deep link: a later recomposition must not open it again.
                     intent.removeExtra(MainActivity.EXTRA_KIND)
                     intent.removeExtra(MainActivity.EXTRA_ID)
+                    intent.removeExtra(MainActivity.EXTRA_ACTION)
                     nav.navigate(Routes.thread(kind, id))
+                    if (action == MainActivity.ACTION_REPLY) nav.navigate(Routes.reply(kind, id, null))
                 }
             }
         }

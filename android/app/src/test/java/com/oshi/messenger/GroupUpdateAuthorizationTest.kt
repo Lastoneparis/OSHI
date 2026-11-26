@@ -129,9 +129,40 @@ class GroupUpdateAuthorizationTest {
             assertTrue(d.apply)
             assertEquals("unauthenticated-transport", d.reason)
             assertTrue("sender=[$sender] must not be able to promote anyone", d.keepAdminSet)
-            assertFalse(d.keepMembership)
-            assertFalse(d.keepName)
+            // __GROUP_UNAUTH_TRANSPORT_2026_11_20__ nor add/kick anyone, nor rename.
+            assertTrue("sender=[$sender] must not be able to change the roster", d.keepMembership)
+            assertTrue("sender=[$sender] must not be able to rename", d.keepName)
         }
+    }
+
+    // ---------------------------------------- __GROUP_TOMBSTONE_AUTHZ_2026_11_20__
+
+    @Test
+    fun `a plain member of an admin-only group cannot tombstone anyone`() {
+        val d = GroupUpdateAuthorizer.authorize(
+            currentMemberKeys = members,
+            currentAdminKeys = admins,
+            currentType = GroupType.ADMIN_ONLY,
+            sender = members.first { it !in admins }
+        )
+        val merged = GroupUpdateAuthorizer.mergeEvictedIfAuthorized(d, emptyList(), members)
+        assertTrue("non-admin evicted ${merged.size} keys", merged.isEmpty())
+        assertFalse(GroupUpdateAuthorizer.mayAdoptStateVersion(d))
+    }
+
+    @Test
+    fun `an unauthenticated payload cannot tombstone anyone or bump the version`() {
+        val d = GroupUpdateAuthorizer.authorize(members, admins, GroupType.COLLABORATIVE, sender = null)
+        assertTrue(GroupUpdateAuthorizer.mergeEvictedIfAuthorized(d, listOf("x"), members) == listOf("x"))
+        assertFalse(GroupUpdateAuthorizer.mayAdoptStateVersion(d))
+    }
+
+    @Test
+    fun `an admin's tombstones are merged and its version adopted`() {
+        val d = GroupUpdateAuthorizer.authorize(members, admins, GroupType.ADMIN_ONLY, sender = admins.first())
+        val victim = members.first { it !in admins }
+        assertTrue(victim in GroupUpdateAuthorizer.mergeEvictedIfAuthorized(d, emptyList(), listOf(victim)))
+        assertTrue(GroupUpdateAuthorizer.mayAdoptStateVersion(d))
     }
 
     // -------------------------------------------------------------- replay
@@ -237,5 +268,53 @@ class GroupUpdateAuthorizationTest {
     fun `a group whose roster contains us in any spelling is materialised`() {
         assertTrue(GroupUpdateAuthorizer.isSelfInRoster(memberKey, members))
         assertTrue(GroupUpdateAuthorizer.isSelfInRoster("abc-def_ghi", listOf("abc+def/ghi=")))
+    }
+
+    // ---------------------------------------- __GROUP_TYPE_TAKEOVER_2026_11_20__
+
+    @Test
+    fun `a plain member of an admin-only group cannot change the type or settings`() {
+        val d = GroupUpdateAuthorizer.authorize(members, admins, GroupType.ADMIN_ONLY, sender = memberKey)
+        assertFalse("type is the permission model", GroupUpdateAuthorizer.mayChangeGroupType(d))
+        assertFalse(GroupUpdateAuthorizer.mayChangeGroupSettings(d))
+    }
+
+    @Test
+    fun `a member of an open group may change settings but not the type`() {
+        val d = GroupUpdateAuthorizer.authorize(members, admins, GroupType.COLLABORATIVE, sender = memberKey)
+        assertTrue(GroupUpdateAuthorizer.mayChangeGroupSettings(d))
+        assertFalse(GroupUpdateAuthorizer.mayChangeGroupType(d))
+    }
+
+    @Test
+    fun `an admin may change type and settings, an unauthenticated payload neither`() {
+        val a = GroupUpdateAuthorizer.authorize(members, admins, GroupType.ADMIN_ONLY, sender = adminKey)
+        assertTrue(GroupUpdateAuthorizer.mayChangeGroupType(a))
+        assertTrue(GroupUpdateAuthorizer.mayChangeGroupSettings(a))
+        val u = GroupUpdateAuthorizer.authorize(members, admins, GroupType.ADMIN_ONLY, sender = null)
+        assertFalse(GroupUpdateAuthorizer.mayChangeGroupType(u))
+        assertFalse(GroupUpdateAuthorizer.mayChangeGroupSettings(u))
+    }
+
+    @Test
+    fun `a version jump beyond 1024 is not adopted`() {
+        assertTrue(GroupUpdateAuthorizer.isPlausibleVersionStep(null, 5))
+        assertTrue(GroupUpdateAuthorizer.isPlausibleVersionStep(10, 11))
+        assertTrue(GroupUpdateAuthorizer.isPlausibleVersionStep(10, 1034))
+        assertFalse(GroupUpdateAuthorizer.isPlausibleVersionStep(10, 1035))
+        assertFalse(GroupUpdateAuthorizer.isPlausibleVersionStep(10, Int.MAX_VALUE))
+        assertFalse(GroupUpdateAuthorizer.isPlausibleVersionStep(null, -1))
+    }
+
+    @Test
+    fun `an open-group member cannot remove or tombstone the admin`() {
+        val d = GroupUpdateAuthorizer.authorize(members, admins, GroupType.COLLABORATIVE, sender = memberKey)
+        val roster = GroupUpdateAuthorizer.keepAdminsInRoster(d, listOf(memberKey), members, admins)
+        assertTrue(adminKey in roster)
+        val evicted = GroupUpdateAuthorizer.mergeEvictedIfAuthorized(d, emptyList(), listOf(adminKey, "X"), admins)
+        assertFalse(adminKey in evicted)
+        assertTrue("X" in evicted)
+        val byAdmin = GroupUpdateAuthorizer.authorize(members, admins, GroupType.COLLABORATIVE, sender = adminKey)
+        assertEquals(listOf(adminKey), GroupUpdateAuthorizer.keepAdminsInRoster(byAdmin, listOf(adminKey), members, admins))
     }
 }

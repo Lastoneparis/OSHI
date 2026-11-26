@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">ישיר</string>
+    <string name="lora_node_card_from_you">ממך</string>
+    <string name="lora_node_card_heard_day">נשמע לפני %1$d ימ׳</string>
+    <string name="lora_node_card_heard_hour">נשמע לפני %1$d שע׳</string>
+    <string name="lora_node_card_heard_min">נשמע לפני %1$d דק׳</string>
+    <string name="lora_node_card_heard_now">נשמע זה עתה</string>
+    <string name="lora_node_card_hops">%1$d קפיצות</string>
+    <string name="lora_node_card_in_range">בטווח</string>
+    <string name="lora_node_card_km">%1$.1f ק״מ</string>
+    <string name="lora_node_card_metres">%1$d מ׳</string>
+    <string name="lora_node_card_never_heard">לא נשמע מעולם</string>
+    <string name="lora_node_card_not_heard">עדיין לא נשמע</string>
+    <string name="lora_node_card_relayed">הועבר</string>
+</resources>

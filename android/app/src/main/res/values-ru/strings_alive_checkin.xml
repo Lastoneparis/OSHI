@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Отметка подтверждена</string>
+    <string name="alive_a11y_neutral">Отметка не настроена</string>
+    <string name="alive_a11y_overdue">Отметка просрочена</string>
+    <string name="alive_action_im_alive">Я жив</string>
+    <string name="alive_action_message_them">Написать</string>
+    <string name="alive_bar_open_settings">Настройки отметок</string>
+    <string name="alive_channel_description">Напоминания о ваших собственных отметках и уведомления, когда тот, за кем вы следите, не ответил на свою.</string>
+    <string name="alive_channel_name">Проверки безопасности</string>
+    <string name="alive_confirmed_toast">Отметка отправлена</string>
+    <string name="alive_duration_days_hours">%1$d дн. %2$d ч</string>
+    <string name="alive_duration_hours_minutes">%1$d ч %2$d мин</string>
+    <string name="alive_duration_minutes">%1$d мин</string>
+    <string name="alive_duration_now">меньше минуты</string>
+    <string name="alive_interval_24h">Каждые 24 часа</string>
+    <string name="alive_interval_48h">Каждые 48 часов</string>
+    <string name="alive_interval_72h">Каждые 72 часа</string>
+    <string name="alive_interval_custom">Своё</string>
+    <string name="alive_interval_custom_hours">Каждые %1$d ч</string>
+    <string name="alive_interval_every">каждые %1$s</string>
+    <string name="alive_lane_you">Вы</string>
+    <string name="alive_note_delivery">Напоминания и уведомления зависят от вашей сети и разрешения на уведомления. Пропущенная отметка означает лишь, что подтверждение не пришло, и ничего больше.</string>
+    <string name="alive_note_no_location">Местоположение не передаётся. Отметка содержит только время и ничего больше.</string>
+    <string name="alive_notification_mine_due_body">Подтвердите, что вы в порядке, чтобы %1$s не ждал(а) напрасно.</string>
+    <string name="alive_notification_mine_due_title">Пора отметиться</string>
+    <string name="alive_notification_overdue_body">Отметка ожидалась %1$s назад. Это означает лишь, что подтверждение не пришло.</string>
+    <string name="alive_notification_overdue_title">Нет отметки от %1$s</string>
+    <string name="alive_sheet_explainer">Подтверждайте по расписанию, что вы в порядке. %1$s видит обратный отсчёт и получит уведомление, если время истечёт без ответа.</string>
+    <string name="alive_sheet_interval">Как часто</string>
+    <string name="alive_sheet_mine_switch">Отмечаться для %1$s</string>
+    <string name="alive_sheet_stop">Прекратить отметки</string>
+    <string name="alive_sheet_their_next">Следующая ожидается %1$s</string>
+    <string name="alive_sheet_their_none">%1$s не настроил(а) здесь отметки.</string>
+    <string name="alive_sheet_their_section">Отметки: %1$s</string>
+    <string name="alive_state_confirmed_ago">подтверждено %1$s назад</string>
+    <string name="alive_state_due_in">через %1$s</string>
+    <string name="alive_state_not_set">не настроено</string>
+    <string name="alive_state_overdue_by">нет ответа %1$s</string>
+    <string name="alive_summary_confirmed">Подтвердил, что жив</string>
+    <string name="alive_summary_started">Проверка безопасности начата</string>
+    <string name="alive_summary_stopped">Проверка безопасности остановлена</string>
+    <string name="alive_title">Проверка безопасности</string>
+    <string name="alive_unknown_peer">этот контакт</string>
+</resources>

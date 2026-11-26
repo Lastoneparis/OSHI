@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">ความคิดเห็น</string>
+    <string name="gs_comments_footer">สมาชิกแสดงความคิดเห็นใต้แต่ละโพสต์ได้ เฉพาะแอดมินที่โพสต์ได้</string>
+    <string name="cm_leave_comment">แสดงความคิดเห็น</string>
+    <string name="cm_thread_title">ความคิดเห็น</string>
+    <string name="cm_empty">ยังไม่มีความคิดเห็น</string>
+    <string name="cm_composer_hint">ความคิดเห็น…</string>
+    <string name="cm_replying_to">ตอบกลับ %1$s</string>
+    <string name="cm_disabled">ปิดความคิดเห็นอยู่</string>
+    <string name="cm_post_unavailable">โพสต์นี้ไม่มีแล้ว</string>
+    <string name="cm_too_fast">คุณแสดงความคิดเห็นเร็วเกินไป โปรดรอสักครู่</string>
+    <string name="cm_notif_reply">%1$s ตอบกลับความคิดเห็นของคุณ</string>
+    <string name="cm_delete_comment">ลบความคิดเห็น</string>
+    <plurals name="cm_comments_count">
+        <item quantity="other">%d ความคิดเห็น</item>
+    </plurals>
+</resources>

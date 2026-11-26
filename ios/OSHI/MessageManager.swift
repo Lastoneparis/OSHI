@@ -125,6 +125,8 @@ class MessageManager: ObservableObject {
     /// Pending conversations created via QR scan before any message is exchanged.
     /// These survive updateConversations() rebuilds until a real message exists.
     private var pendingConversations: [String: Conversation] = [:]
+    /// __MESHCORE_INTEROP_2026_11_25__ Tests drive a radio without Bluetooth through this.
+    var meshCoreRadioOverride: MeshCoreManager?
     private var ipfsCache: [String: SecureMessage] = [:]
     private var ipfsCacheTimestamps: [String: Date] = [:]
     private let ipfsCacheTimeout: TimeInterval = 300 // 5 minutes
@@ -1013,6 +1015,11 @@ class MessageManager: ObservableObject {
             // per-message one — see `permanentlyFailedMessageIds`. It stays
             // `.failed` and stays tap-to-retry; we just stop re-driving it.
             if permanentlyFailedMessageIds.contains(msg.id) { continue }
+            // __MESHCORE_INTEROP_2026_11_25__ Radio-only threads have no OSHI key and no relay mailbox:
+            // a failed MeshCore / raw-Meshtastic text is retried by the user over its radio, never here.
+            if MeshCoreInterop.isInteropKey(msg.recipientPublicKey)
+                || LoRaNodeIdentityMap.isFallbackConversationKey(msg.recipientPublicKey)
+                || LoRaChannelThread.isChannelKey(msg.recipientPublicKey) { continue }
             // Skip control/special payloads that must never be auto-resent.
             let content = msg.plaintextContent ?? ""
             if content.hasPrefix("📞CALL_SIGNAL") || content.hasPrefix("📸PROFILE") { continue }
@@ -3411,11 +3418,38 @@ class MessageManager: ObservableObject {
             let answerText = json["text"] as? String ?? ""
             let showAlert = (json["showAlert"] as? Bool) ?? ((json["showAlert"] as? NSNumber)?.boolValue ?? false)
             let answerBotName = json["botName"] as? String ?? "Bot"
+            // __BOTS_PHASE1_2026_11_24__ S7 client obligation: a toast for a group
+            // or channel this device is not in is dropped (rosters given to
+            // addToGroup are not verifiable server-side).
+            if let gid = (json["groupId"] as? String).flatMap(UUID.init(uuidString:)) {
+                let isMine = await MainActor.run { MessageGroupManager.shared.groups.contains { $0.id == gid } }
+                if !isMine {
+                    msgLog("⚠️ [Bot] callback answer for a group we are not in — dropped")
+                    await clearBotFromQueue(envelope: envelope, publicKey: publicKey)
+                    return
+                }
+            }
             msgLog("🤖 [Bot] callback answer: alert=\(showAlert), text=\(answerText.prefix(60))")
             await MainActor.run {
                 BotManager.shared.presentCallbackAnswer(text: answerText,
                                                         showAlert: showAlert,
                                                         botName: answerBotName)
+            }
+            await clearBotFromQueue(envelope: envelope, publicKey: publicKey)
+            return
+        }
+
+        // __BOTS_PHASE1_2026_11_24__ The bot edited, deleted or (un)pinned one of
+        // ITS OWN posts (editMessageText / editMessageReplyMarkup / deleteMessage
+        // / pinChatMessage): the post changes in place, nothing new lands.
+        // Contract S5: outer AND inner `type:"bot_message_action"`; the inner
+        // botId must be the outer one. Anything malformed is dropped + acked.
+        if (json["type"] as? String) == BotPostUpdate.type || (outerJSON["type"] as? String) == BotPostUpdate.type {
+            if let update = BotPostUpdate.parse(json, outerBotId: outerJSON["botId"] as? String) {
+                msgLog("🤖 [Bot] post action \(update.messageId.prefix(8)) in \(update.groupId.uuidString.prefix(8))")
+                await MainActor.run { _ = MessageGroupManager.shared.applyBotPostUpdate(update) }
+            } else {
+                msgLog("⚠️ [Bot] malformed bot_message_action dropped")
             }
             await clearBotFromQueue(envelope: envelope, publicKey: publicKey)
             return
@@ -3533,7 +3567,9 @@ class MessageManager: ObservableObject {
         }
 
         var groupMessage = GroupMessage(
-            id: UUID(uuidString: messageId) ?? UUID(),
+            // __BOTS_PHASE1_2026_11_24__ stable for a non-UUID server id, so a
+            // later edit/delete of this post finds it (was a random UUID).
+            id: BotPostUpdate.localId(forServerId: messageId),
             groupId: groupUUID,
             senderPublicKey: senderKey,
             encryptedContent: encryptedContentData,
@@ -3604,6 +3640,12 @@ class MessageManager: ObservableObject {
             // 🔒 __BOT_E2E_2026_09_23__ Remember how this group's bot messages
             // arrive, for the honest caption under bot bubbles (spec §3).
             BotSealedEnvelope.recordKind(sealKind, groupId: groupUUID)
+            // __BOTS_PHASE1_2026_11_24__ this bot serves this group: its commands
+            // join the `/` menu and a typed `/cmd` is dispatched to it.
+            if let botId = json["botId"] as? String, !botId.isEmpty {
+                GroupBotDirectory.shared.note(botId: botId, name: botName, groupId: groupUUID)
+                BotPostAuthors.record(botId: botId, localId: finalGroupMessage.id)
+            }
 
             let existingMessages = mgr.groupMessages[groupUUID] ?? []
             if existingMessages.contains(where: { $0.id == finalGroupMessage.id }) {
@@ -4478,6 +4520,16 @@ class MessageManager: ObservableObject {
             // Bot content is JSON string: {"botName":"...", "text":"...", ...}
             // Try raw UTF-8 first (server sends JSON string), then base64 fallback
             let botContentData = Data(payload.content.utf8)
+            // __BOTS_PHASE1_2026_11_24__ an edit/delete of the bot's own post
+            // (may carry no `text`: a buttons-only edit), read before the guard.
+            if var updateJSON = (try? JSONSerialization.jsonObject(with: botContentData)) as? [String: Any],
+               (updateJSON["type"] as? String) == BotPostUpdate.type {
+                if updateJSON["groupId"] == nil { updateJSON["groupId"] = groupId }
+                if let update = BotPostUpdate.parse(updateJSON) {
+                    await MainActor.run { _ = MessageGroupManager.shared.applyBotPostUpdate(update) }
+                }
+                throw NSError(domain: "BotMessage", code: 0, userInfo: [NSLocalizedDescriptionKey: "Bot post action handled"])
+            }
             guard let botContent = try? JSONSerialization.jsonObject(with: botContentData) as? [String: Any],
                   let botText = botContent["text"] as? String else {
                 OshiLog.messaging.infoPublic("❌ Invalid bot message content format (\(payload.content.count) chars)")
@@ -4500,7 +4552,7 @@ class MessageManager: ObservableObject {
 
             // Create a GroupMessage with the bot's sender key and plaintext content
             var groupMessage = GroupMessage(
-                id: UUID(uuidString: payload.id) ?? UUID(),
+                id: BotPostUpdate.localId(forServerId: payload.id),
                 groupId: UUID(uuidString: groupId) ?? UUID(),
                 senderPublicKey: payload.senderKey,  // "bot:tokenPrefix"
                 encryptedContent: Data(botText.utf8),
@@ -4536,7 +4588,14 @@ class MessageManager: ObservableObject {
 
             // Forward to group manager (same as regular group messages)
             msgLog("🤖 Storing bot message: id=\(finalGroupMessage.id), groupId=\(finalGroupMessage.groupId), text=\(finalGroupMessage.plaintextContent?.prefix(40) ?? "nil")")
+            let noteBotId = (botContent["botId"] as? String) ?? ""
             await MainActor.run {
+                // __BOTS_PHASE1_2026_11_24__ see the queue path above.
+                if !noteBotId.isEmpty,
+                   MessageGroupManager.shared.groups.contains(where: { $0.id == finalGroupMessage.groupId }) {
+                    GroupBotDirectory.shared.note(botId: noteBotId, name: botName, groupId: finalGroupMessage.groupId)
+                    BotPostAuthors.record(botId: noteBotId, localId: finalGroupMessage.id)
+                }
                 let existingMessages = MessageGroupManager.shared.groupMessages[finalGroupMessage.groupId] ?? []
                 if existingMessages.contains(where: { $0.id == finalGroupMessage.id }) {
                     OshiLog.messaging.info("⏭️ Bot message already exists, skipping")
@@ -5197,14 +5256,22 @@ class MessageManager: ObservableObject {
         let routing = TransportPolicy.Conditions(
             physicalPath: NetworkReachabilityManager.shared.hasPhysicalPath,
             peerOnMesh: false,
-            radioReady: await MainActor.run(resultType: Bool.self, body: { MeshtasticManager.shared.isReady }),
+            // __MESHCORE_INTEROP_2026_11_25__ A MeshCore radio is a radio: a phone holding only one used to
+            // be routed as radio-less, so LoRa was never tried ahead of (or instead of) the relay.
+            radioReady: await MainActor.run(resultType: Bool.self, body: {
+                MeshCoreInterop.radioReady(meshtasticReady: MeshtasticManager.shared.isReady,
+                                           meshCoreReady: MeshCoreManager.shared.isReady)
+            }),
             peerLikelyOnline: await isPeerLikelyOnline(recipientPublicKey),
             carriesMedia: branchCarriesMedia,
             // __ANTI_JAMMING_PHASE1_2026_11_13__ A jammed channel (and no "send
             // anyway" from the user) takes LoRa out of the order. The off-grid
             // shortcut above is covered too: `queueOrSendSecureMessage` holds the
             // message and returns false while the channel is excluded.
-            radioJammed: await MainActor.run(resultType: Bool.self, body: { MeshtasticManager.shared.excludesLoRaForJamming }))
+            radioJammed: await MainActor.run(resultType: Bool.self, body: {
+                MeshCoreInterop.radioJammed(meshtasticJammed: MeshtasticManager.shared.excludesLoRaForJamming,
+                                            meshCoreReady: MeshCoreManager.shared.isReady)
+            }))
 
         if !excludeRadio, TransportPolicy.radioComesBeforeRelay(routing) {
             if await deliverViaLoRa(message: message, messageId: messageId) {
@@ -6121,6 +6188,152 @@ class MessageManager: ObservableObject {
         return .sent
     }
 
+    /// __MESHCORE_INTEROP_2026_11_25__ Reply to a MeshCore user, or speak in a MeshCore channel.
+    ///
+    /// The MeshCore twin of `sendLoRaInteropReply` / `sendToLoRaChannel`, with the same three honesty
+    /// rules: stamped `.loraPlaintext` with the `meshcore_interop` signature so the bubble says
+    /// "MeshCore · not OSHI end-to-end encrypted"; refused (never parked for the relay) when no MeshCore
+    /// radio is connected, since a MeshCore id has no OSHI key to encrypt to; and never `.delivered`
+    /// unless the recipient's radio ACKed every part — a channel message stays `.sent`.
+    ///
+    /// Unlike the Meshtastic lane, long text is split into numbered parts ("(1/3) …"): MeshCore clients
+    /// show each part as a message and the numbers make the order readable without any reassembly.
+    func sendToMeshCore(
+        content: String,
+        conversationKey: String,
+        identityManager: IdentityManager,
+        mediaAttachment: Data?
+    ) -> MessageSendOutcome {
+        guard mediaAttachment == nil else {
+            OshiLog.messaging.info("🚫 MeshCore: media cannot ride this lane")
+            return .loRaInteropMediaUnsupported
+        }
+        let radio = meshCoreRadio
+        // MeshCore has no reply envelope: a swipe-to-reply leaves as the typed text, not as OSHI's JSON.
+        var content = content
+        if content.hasPrefix(MessageWithReply.replyPrefix),
+           let parsed = MessageWithReply.fromMessageString(content) { content = parsed.content }
+        // No radio right now (out of reach, switched off, reconnecting): what was typed is kept as a failed
+        // row with tap-to-retry, as on Android, and the note above the composer says why. It used to be an
+        // alert, and a person who walked out of range lost the thread of what they were writing.
+        guard radio.isTextReady else {
+            OshiLog.messaging.info("🚫 MeshCore: no radio attached — kept as not delivered")
+            let budget = MeshCoreInterop.isChannelKey(conversationKey)
+                ? MeshCoreInterop.channelTextBytes(nodeName: radio.selfName) : MeshCoreInterop.dmTextBytes
+            guard MeshCoreInterop.splitText(content, maxBytes: budget) != nil else {
+                let bytes = content.utf8.count
+                if bytes == 0 { return .loRaUnidentified }
+                return .loRaInteropTooLong(bytes: bytes, limit: MeshCore.maxTextBytes * MeshCoreInterop.maxParts)
+            }
+            addMessage(meshCoreRow(content: content, conversationKey: conversationKey,
+                                   identityManager: identityManager, status: .failed))
+            return .sent
+        }
+        let target: MeshCoreManager.TextTarget
+        if MeshCoreInterop.isChannelKey(conversationKey) {
+            guard let slot = radio.channelSlot(forKey: conversationKey) else {
+                OshiLog.messaging.info("🚫 MeshCore: \(conversationKey.prefix(24)) is not on this radio")
+                return .loRaChannelUnknown
+            }
+            target = .channel(slot)
+        } else {
+            guard let key = MeshCoreInterop.publicKeyBytes(fromContactKey: conversationKey) else {
+                return .loRaUnidentified
+            }
+            target = .contact(Data(key.prefix(6)))
+        }
+        let bytes = content.utf8.count
+        guard let parts = radio.textParts(content, for: target) else {
+            if bytes == 0 { return .loRaUnidentified }
+            return .loRaInteropTooLong(bytes: bytes, limit: MeshCore.maxTextBytes * MeshCoreInterop.maxParts)
+        }
+
+        let sent = meshCoreRow(content: content, conversationKey: conversationKey,
+                               identityManager: identityManager, status: .pending)
+        // Stored first, then handed to the radio on the same queue, so the radio's first status report
+        // always finds the row.
+        DispatchQueue.main.async { [weak self] in
+            self?.addMessage(sent)
+            if !radio.sendText(parts, to: target, messageId: sent.id) {
+                self?.meshCoreTextStatus(messageId: sent.id, status: .failed)
+            }
+        }
+        OshiLog.messaging.info("📡 MeshCore text \(bytes) B in \(parts.count) part(s) → \(conversationKey.prefix(24))")
+        return .sent
+    }
+
+    private func meshCoreRow(content: String, conversationKey: String, identityManager: IdentityManager,
+                             status: DeliveryStatus) -> SecureMessage {
+        let ts = MessageSendClock.next()
+        return SecureMessage(
+            id: UUID().uuidString,
+            senderAddress: identityManager.publicKey,
+            recipientAddress: MeshCoreInterop.displayName(forKey: conversationKey, contacts: meshCoreRadio.contacts)
+                ?? conversationKey,
+            encryptedContent: EncryptedMessage(ciphertext: "",
+                                               signature: MeshCoreInterop.signature,
+                                               senderPublicKey: identityManager.publicKey,
+                                               timestamp: ts),
+            timestamp: ts,
+            isRead: true,
+            deliveryStatus: status,
+            senderPublicKey: identityManager.publicKey,
+            recipientPublicKey: conversationKey,
+            plaintextContent: content,
+            deliveryMethod: .loraPlaintext
+        )
+    }
+
+    /// The MeshCore radio this manager talks through (a test radio in tests).
+    var meshCoreRadio: MeshCoreManager { meshCoreRadioOverride ?? MeshCoreManager.shared }
+
+    /// Tap-to-retry on a failed MeshCore bubble: the SAME row goes back to the radio (pending → sent →
+    /// delivered/failed), so the conversation keeps its order and nothing typed is ever deleted. A refusal
+    /// (no radio, channel gone) leaves the row failed and says why.
+    @discardableResult
+    func retryMeshCoreText(messageId: String) -> MessageSendOutcome {
+        guard let i = messages.firstIndex(where: { $0.id == messageId }) else { return .loRaUnidentified }
+        let row = messages[i]
+        let key = row.recipientPublicKey
+        let radio = meshCoreRadio
+        guard radio.isTextReady else { return .loRaInteropNoRadio }
+        let target: MeshCoreManager.TextTarget
+        if MeshCoreInterop.isChannelKey(key) {
+            guard let slot = radio.channelSlot(forKey: key) else { return .loRaChannelUnknown }
+            target = .channel(slot)
+        } else {
+            guard let bytes = MeshCoreInterop.publicKeyBytes(fromContactKey: key) else { return .loRaUnidentified }
+            target = .contact(Data(bytes.prefix(6)))
+        }
+        guard let parts = radio.textParts(row.plaintextContent ?? "", for: target) else { return .loRaUnidentified }
+        messages[i].deliveryStatus = .pending
+        saveMessages()
+        objectWillChange.send()
+        if !radio.sendText(parts, to: target, messageId: messageId) {
+            meshCoreTextStatus(messageId: messageId, status: .failed)
+            return .loRaInteropNoRadio
+        }
+        return .sent
+    }
+
+    /// The MeshCore radio's verdict on a text it was handed. Forward moves only; `.failed` never
+    /// overrides a message something already confirmed delivered.
+    func meshCoreTextStatus(messageId: String, status: DeliveryStatus) {
+        guard let i = messages.firstIndex(where: { $0.id == messageId }) else { return }
+        let current = messages[i].deliveryStatus
+        let next: DeliveryStatus
+        if status == .failed {
+            guard current.rank < DeliveryStatus.delivered.rank, current != .failed else { return }
+            next = .failed
+        } else {
+            next = current.advanced(to: status)
+        }
+        guard next != current else { return }
+        messages[i].deliveryStatus = next
+        saveMessages()
+        objectWillChange.send()
+    }
+
     func sendMessage(
         content: String,
         recipientAddress: String,
@@ -6173,6 +6386,21 @@ class MessageManager: ObservableObject {
         // cannot work, and the attempt used to fail silently — the user pressed
         // Send and nothing whatsoever happened. Refuse here, at the same choke
         // point as blocking and the rate limiter, so every composer says why.
+        // __MESHCORE_INTEROP_2026_11_25__ A MeshCore person or channel: plain MeshCore text through the
+        // MeshCore radio, or a refusal saying why. Checked before the LoRa channel branch, whose
+        // `isChannelKey` also matches `mcchan!` rooms (for the room behaviour) but whose radio is Meshtastic.
+        // Protocol traffic (receipts, typing, profile) never reaches a MeshCore id: there is nobody on the OSHI
+        // side to read it, and the radio must not carry it as text. Typed text that merely looks like JSON does.
+        if MeshCoreInterop.isContactKey(recipientAddress) || MeshCoreInterop.isChannelKey(recipientAddress) {
+            let typed = isUserAction || (mediaAttachment == nil && !content.isEmpty
+                && !MessageTextSplitter.controlPrefixes.contains { content.hasPrefix($0) })
+            guard typed else { return .loRaUnidentified }
+            return sendToMeshCore(content: content,
+                                  conversationKey: recipientAddress,
+                                  identityManager: identityManager,
+                                  mediaAttachment: mediaAttachment)
+        }
+
         if isUserAction, LoRaNodeIdentityMap.isFallbackConversationKey(recipientAddress) {
             return sendLoRaInteropReply(content: content,
                                         conversationKey: recipientAddress,
@@ -6216,7 +6444,7 @@ class MessageManager: ObservableObject {
             // `TransportPolicy.order(_:)` uses to decide whether the radio is
             // tried, so the text is sized for the transport that will carry it.
             let limit = MessageTextSplitter.maxUTF8Bytes(
-                radioPaired: MeshtasticManager.isRadioPaired,
+                radioPaired: MeshCoreManager.anyLoRaRadioPaired,
                 hasPhysicalPath: NetworkReachabilityManager.shared.hasPhysicalPath,
                 internetAllowedForSending: TransportPolicy.internetAllowedForSending,
                 prefersRadioOverRelay: TransportPolicy.preferRadioOverRelay,
@@ -6634,8 +6862,19 @@ class MessageManager: ObservableObject {
 
                 // 🕵️ Check if covert channel mode is enabled
                 let covertEnabled = UserDefaults.standard.bool(forKey: "covertChannelEnabled")
-                
-                if covertEnabled && !meshAvailableNow {
+
+                // __WIFI_AWARE_2026_11_25__ A paired contact with a live,
+                // identity-verified Wi-Fi Aware link gets the envelope (photos and
+                // files included) over that link first. `false` — not paired, not
+                // nearby, no ACK in time, or no Wi-Fi Aware on this build/device —
+                // returns instantly in the common case and leaves the chain below
+                // exactly as it was. See WiFiAwareCore.swift.
+                let wifiAwareDelivered = await self.trySendViaWiFiAware(
+                    message: message, messageId: messageId, recipientPublicKey: recipientPublicKey)
+
+                if wifiAwareDelivered {
+                    OshiLog.messaging.info("   📶 Route: WI-FI AWARE (paired contact, acknowledged)")
+                } else if covertEnabled && !meshAvailableNow {
                     // Covert channel mode: route through disguised web traffic
                     OshiLog.messaging.info("   🕵️ Route: COVERT CHANNEL (steganographic transport)")
                     OshiLog.messaging.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -7279,6 +7518,14 @@ class MessageManager: ObservableObject {
                 if offlineOnly.isAck { return }
             }
 
+            // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ A peer turned advanced chat
+            // privacy on or off. Applied, then NOT swallowed: the message is the
+            // centred notice row in the thread (quiet: no unread, no banner).
+            if AdvancedPrivacyChange.isPayload(plaintext) {
+                let sender = message.senderPublicKey
+                Task { @MainActor in self.handleAdvancedPrivacyPayload(plaintext, from: sender) }
+            }
+
             // 💓 __ALIVE_CHECK_IN_2026_11_04__ A peer's liveness event.
             //
             // NOT swallowed, in any case — unlike the offline-only answer above,
@@ -7433,6 +7680,13 @@ class MessageManager: ObservableObject {
                         // Also update last seen
                         ContactPresenceManager.shared.updateLastSeen(publicKey: message.senderPublicKey)
                         return  // Don't store wallpaper updates as regular messages
+                    }
+
+                    // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ same as the plaintext
+                    // branch: apply, then let the notice row be stored.
+                    if AdvancedPrivacyChange.isPayload(decrypted) {
+                        let sender = message.senderPublicKey
+                        Task { @MainActor in self.handleAdvancedPrivacyPayload(decrypted, from: sender) }
                     }
 
                     // ⌨️ Typing ping in decrypted content — 1:1.
@@ -7624,7 +7878,11 @@ class MessageManager: ObservableObject {
         // les pings intermédiaires.
         let isSilentLocationPing = receivedMessage.plaintextContent
             .map { LocationMessage.isSilentPushContent($0) } ?? false
-        if !isSilentLocationPing {
+        // __ADVANCED_CHAT_PRIVACY_2026_11_26__ the Watch posts a sounding
+        // notification for everything it is handed: a quiet notice never goes.
+        let isQuietNotice = receivedMessage.plaintextContent
+            .map(OSHIControlPayload.isQuietNotice) ?? false
+        if !isSilentLocationPing && !isQuietNotice {
             WatchConnectivityManager.shared.sendChatMessageToWatch(
                 receivedMessage,
                 contactAlias: MessageManager.resolveContactAlias(receivedMessage.senderPublicKey))
@@ -7635,7 +7893,7 @@ class MessageManager: ObservableObject {
         // enough (rule 3, same as Android/desktop): no banner for it.
         let isBlockedNotice = receivedMessage.plaintextContent?
             .hasPrefix(OSHIControlPayload.blockedNoticePrefix) ?? false
-        if MessageManager.sharedIdentityManager != nil, !suppressNotification, !isBlockedNotice {
+        if MessageManager.sharedIdentityManager != nil, !suppressNotification, !isBlockedNotice, !isQuietNotice {
             // Determine notification text based on message type
             let notificationText: String
             if receivedMessage.mediaType == .audio {
@@ -7665,22 +7923,29 @@ class MessageManager: ObservableObject {
                 // l'écran verrouillé. Un résumé d'appel, une position, un
                 // check-in ou un rendez-vous y deviennent une phrase; un texte
                 // ordinaire en ressort inchangé.
-                notificationText = OSHIControlPayload.previewText(for: plaintext)
+                notificationText = InlineMarkup.stripped(OSHIControlPayload.previewText(for: plaintext))
             } else {
                 notificationText = "notification.encrypted_message".localized
             }
             
+            // __MESHCORE_INTEROP_2026_11_25__ A channel message belongs to the CHANNEL: the banner is
+            // titled with the room, says who spoke, and its tap opens the room. It used to carry the
+            // speaker's key, so the tap looked for a one-to-one thread that does not exist (LoRa rooms
+            // had the same flaw).
+            let banner = MessageManager.radioBanner(sender: receivedMessage.senderPublicKey,
+                                                    recipient: receivedMessage.recipientPublicKey,
+                                                    text: notificationText)
             NotificationManager.shared.sendMessageNotification(
-                from: receivedMessage.senderPublicKey,
-                messageText: notificationText,
+                from: banner.threadKey,
+                messageText: banner.text,
                 messageId: receivedMessage.id,
-                conversationId: receivedMessage.senderPublicKey
+                conversationId: banner.threadKey
             )
 
             // In-app Dynamic Island banner for a live incoming message (only
             // while the app is foreground — system push covers backgrounded).
-            let senderKey = receivedMessage.senderPublicKey
-            let preview = notificationText
+            let senderKey = banner.threadKey
+            let preview = banner.text
             DispatchQueue.main.async {
                 // __ONE_NOTICE_IN_FOREGROUND_2026_11_09__ and not for the thread
                 // the user is reading — the message lands right in front of them.
@@ -7698,7 +7963,9 @@ class MessageManager: ObservableObject {
                 #if DEBUG
                 if ProcessInfo.processInfo.arguments.contains("-OSHIScreens") { return }
                 #endif
-                let name = MessageManager.resolveContactAlias(senderKey)
+                let name = MeshCoreInterop.threadTitle(forKey: senderKey)
+                    ?? (LoRaChannelThread.isChannelKey(senderKey) ? LoRaChannelThread.displayName(senderKey) : nil)
+                    ?? MessageManager.resolveContactAlias(senderKey)
                 DynamicIslandNotifier.shared.showIncoming(sender: name, preview: preview)
             }
         }
@@ -7821,6 +8088,14 @@ class MessageManager: ObservableObject {
     /// historique, suit la regle alias > pseudo partage > prefixe depuis le
     /// 22/09 — tous ses appelants sont des surfaces d'AFFICHAGE (en-tetes,
     /// notifications, CallKit, profil).
+    /// The thread a radio message's banner belongs to and the text it shows: a channel message is filed under
+    /// the channel with "speaker: " in front; everything else under its sender, unchanged.
+    static func radioBanner(sender: String, recipient: String, text: String) -> (threadKey: String, text: String) {
+        guard LoRaChannelThread.isChannelKey(recipient) else { return (sender, text) }
+        let speaker = LoRaChannelThread.speakerName(senderKey: sender, nodes: MeshtasticManager.shared.nodes)
+        return (recipient, "\(speaker): \(text)")
+    }
+
     static func resolveContactAlias(_ publicKey: String) -> String {
         return lookupContactDisplayName(publicKey) ?? (String(publicKey.prefix(8)) + "…")
     }
@@ -10349,7 +10624,9 @@ class MessageManager: ObservableObject {
                 : recipientKey == myKey
             if !message.isRead,
                countsAsReceived,
-               !(message.plaintextContent.map(OSHIControlPayload.isHiddenFromThread) ?? false) {
+               // __ADVANCED_CHAT_PRIVACY_2026_11_26__ `countsAsUnread` = not hidden
+               // AND not a quiet notice (the privacy switch row is drawn, not counted).
+               message.plaintextContent.map(OSHIControlPayload.countsAsUnread) ?? true {
                 unreadCounts[otherPartyKey, default: 0] += 1
             }
 

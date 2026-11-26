@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">الأوامر</string>
+    <string name="bot_cmd_send_a11y">إرسال %1$s</string>
+    <string name="bot_cmd_sheet_title">أوامر البوت</string>
+    <string name="bot_cmd_tap_to_send">اضغط على أمر لإرساله.</string>
+    <string name="bot_cmd_empty_none_title">لا توجد بوتات هنا بعد</string>
+    <string name="bot_cmd_empty_none_body">أنشئ بوتًا وأضِفه إلى هذه المجموعة. ستظهر أوامره هنا وعند كتابة /.</string>
+    <string name="bot_cmd_empty_bot">لا توجد أوامر لهذا البوت بعد.</string>
+    <string name="bot_cmd_setup">إعداد الأوامر</string>
+    <string name="bot_cmd_section">الأوامر</string>
+    <string name="bot_cmd_section_hint">يرى أعضاء مجموعات البوت هذه الأوامر عند كتابة / أو الضغط على «الأوامر».</string>
+    <string name="bot_cmd_add">إضافة</string>
+    <string name="bot_cmd_add_title">أمر جديد</string>
+    <string name="bot_cmd_edit_title">تعديل الأمر</string>
+    <string name="bot_cmd_field_name">الأمر</string>
+    <string name="bot_cmd_field_description">الوصف (يظهر في القائمة)</string>
+    <string name="bot_cmd_field_reply">الرد</string>
+    <string name="bot_cmd_field_reply_hint">ما يردّ به البوت. يمكنك استخدام {{input}} و{{bot_name}} و{{date}}.</string>
+    <string name="bot_cmd_webhook_note">يُرسَل إلى الـ webhook الخاص بك، وهو الذي يردّ.</string>
+    <string name="bot_cmd_empty_owner">لا توجد أوامر بعد. أضِف أمرًا مثل /start أو /help ليعرف الجميع ما يفعله هذا البوت.</string>
+    <string name="bot_cmd_err_empty">أدخل اسم الأمر.</string>
+    <string name="bot_cmd_err_invalid">أحرف لاتينية صغيرة وأرقام و_ فقط.</string>
+    <string name="bot_cmd_err_too_long">32 حرفًا كحد أقصى.</string>
+    <string name="bot_cmd_err_duplicate">لدى هذا البوت هذا الأمر بالفعل.</string>
+    <string name="bot_cmd_err_too_many">يمكن أن يكون للبوت 100 أمر كحد أقصى.</string>
+    <string name="bot_cmd_err_description">الوصف طويل جدًا (256 حرفًا كحد أقصى).</string>
+    <string name="bot_cmd_sync_local">محفوظ على هذا الهاتف الذي يشغّل البوت.</string>
+    <string name="bot_cmd_sync_syncing">جارٍ تحديث الخادم…</string>
+    <string name="bot_cmd_sync_synced">تم تحديث القائمة على الخادم.</string>
+    <string name="bot_cmd_sync_failed">تعذّر تحديث الخادم. أوامرك محفوظة على هذا الهاتف.</string>
+    <string name="bot_profile_edit">تعديل الملف الشخصي</string>
+    <string name="bot_profile_name">الاسم</string>
+    <string name="bot_profile_description">الوصف</string>
+    <string name="bot_profile_avatar">الصورة الرمزية</string>
+    <string name="bot_profile_err_name_empty">اختر اسمًا لبوتك.</string>
+    <string name="bot_profile_err_name_long">الاسم طويل جدًا (64 حرفًا كحد أقصى).</string>
+    <string name="bot_profile_err_desc_long">الوصف طويل جدًا (512 حرفًا كحد أقصى).</string>
+    <string name="bot_connect_title">طريقة الاتصال</string>
+    <string name="bot_connect_local">يعمل هذا البوت على هذا الهاتف: أبقِ OSHI مثبّتًا والبوت مفعّلًا. أضِفه إلى مجموعة ليتمكن أعضاؤها من استخدام أوامره فيها.</string>
+    <string name="bot_connect_webhook">يُرسَل كل أمر إلى عنوان الـ webhook الخاص بك ويردّ خادمك بـ JSON ‏{\"text\": \"…\"}. يمكن لخادمك أيضًا استخدام الرمز أدناه مع واجهة برمجة بوتات OSHI.</string>
+    <string name="bot_connect_token_warning">أبقِ الرمز سرًّا: أي شخص يملكه يمكنه التحدث باسم بوتك.</string>
+    <string name="bot_connect_groups">المجموعات: %1$s</string>
+    <string name="bot_connect_no_groups">ليس في أي مجموعة بعد، لذلك لا يمكن لأحد استخدام أوامره.</string>
+</resources>

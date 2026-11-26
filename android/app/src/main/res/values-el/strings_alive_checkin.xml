@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Το check-in επιβεβαιώθηκε</string>
+    <string name="alive_a11y_neutral">Δεν έχει ρυθμιστεί check-in</string>
+    <string name="alive_a11y_overdue">Το check-in καθυστερεί</string>
+    <string name="alive_action_im_alive">Είμαι καλά</string>
+    <string name="alive_action_message_them">Μήνυμα</string>
+    <string name="alive_bar_open_settings">Ρυθμίσεις check-in</string>
+    <string name="alive_channel_description">Υπενθυμίσεις για τα δικά σου check-in και ειδοποιήσεις όταν κάποιος που παρακολουθείς δεν απάντησε στο δικό του.</string>
+    <string name="alive_channel_name">Check-in ασφαλείας</string>
+    <string name="alive_confirmed_toast">Το check-in στάλθηκε</string>
+    <string name="alive_duration_days_hours">%1$d ημ. %2$d ώ.</string>
+    <string name="alive_duration_hours_minutes">%1$d ώ. %2$d λ.</string>
+    <string name="alive_duration_minutes">%1$d λ.</string>
+    <string name="alive_duration_now">λιγότερο από ένα λεπτό</string>
+    <string name="alive_interval_24h">Κάθε 24 ώρες</string>
+    <string name="alive_interval_48h">Κάθε 48 ώρες</string>
+    <string name="alive_interval_72h">Κάθε 72 ώρες</string>
+    <string name="alive_interval_custom">Προσαρμογή</string>
+    <string name="alive_interval_custom_hours">Κάθε %1$d ώρες</string>
+    <string name="alive_interval_every">κάθε %1$s</string>
+    <string name="alive_lane_you">Εσύ</string>
+    <string name="alive_note_delivery">Οι υπενθυμίσεις και οι ειδοποιήσεις εξαρτώνται από το δίκτυό σου και την άδεια ειδοποιήσεων. Ένα χαμένο check-in σημαίνει μόνο ότι δεν έφτασε επιβεβαίωση, τίποτα περισσότερο.</string>
+    <string name="alive_note_no_location">Δεν κοινοποιείται τοποθεσία. Ένα check-in περιέχει μόνο μια χρονοσφραγίδα και τίποτα άλλο.</string>
+    <string name="alive_notification_mine_due_body">Επιβεβαίωσε ότι είσαι καλά, για να μην περιμένει ο/η %1$s.</string>
+    <string name="alive_notification_mine_due_title">Ώρα για το check-in σου</string>
+    <string name="alive_notification_overdue_body">Το check-in του/της έπρεπε να γίνει πριν από %1$s. Αυτό σημαίνει μόνο ότι δεν έχει φτάσει επιβεβαίωση.</string>
+    <string name="alive_notification_overdue_title">Κανένα check-in από %1$s</string>
+    <string name="alive_sheet_explainer">Επιβεβαίωνε ότι είσαι καλά σε τακτά διαστήματα. Ο/Η %1$s βλέπει την αντίστροφη μέτρηση και ειδοποιείται αν λήξει χωρίς απάντηση.</string>
+    <string name="alive_sheet_interval">Πόσο συχνά</string>
+    <string name="alive_sheet_mine_switch">Check-in με %1$s</string>
+    <string name="alive_sheet_stop">Διακοπή check-in</string>
+    <string name="alive_sheet_their_next">Επόμενο αναμένεται %1$s</string>
+    <string name="alive_sheet_their_none">Ο/Η %1$s δεν έχει ρυθμίσει check-in εδώ.</string>
+    <string name="alive_sheet_their_section">Check-in: %1$s</string>
+    <string name="alive_state_confirmed_ago">επιβεβαιώθηκε πριν από %1$s</string>
+    <string name="alive_state_due_in">λήγει σε %1$s</string>
+    <string name="alive_state_not_set">δεν έχει ρυθμιστεί</string>
+    <string name="alive_state_overdue_by">καμία απάντηση εδώ και %1$s</string>
+    <string name="alive_summary_confirmed">Επιβεβαίωσε ότι είναι καλά</string>
+    <string name="alive_summary_started">Το check-in ασφαλείας ξεκίνησε</string>
+    <string name="alive_summary_stopped">Το check-in ασφαλείας σταμάτησε</string>
+    <string name="alive_title">Check-in ασφαλείας</string>
+    <string name="alive_unknown_peer">αυτή η επαφή</string>
+</resources>

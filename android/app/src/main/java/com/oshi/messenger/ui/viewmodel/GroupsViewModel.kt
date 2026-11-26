@@ -103,7 +103,9 @@ class GroupsViewModel @Inject constructor(
     private val cryptoManager: CryptoManager,
     private val messageRepository: MessageRepository,
     private val meshManager: MeshNetworkManager,
-    @ApplicationContext private val appContext: Context
+    @ApplicationContext private val appContext: Context,
+    // __CHANNEL_WEB_2026_11_26__ public web preview toggle (channel settings).
+    private val channelWeb: com.oshi.messenger.service.channelweb.ChannelWebPublisher,
 ) : ViewModel() {
 
     /** __MENTIONS_2026_09_23__ groups with an unread message that mentions us (canonical, uppercase). */
@@ -689,6 +691,37 @@ class GroupsViewModel @Inject constructor(
         return group.adminPublicKeys.contains(myPublicKey) ||
                group.creatorPublicKey == myPublicKey
     }
+
+    // ---- __GROUP_SETTINGS_2026_11_20__ group info settings (GROUP_INFO_SETTINGS_SPEC §5) ----
+
+    /** UPPER-case group id → settings (absent = defaults). */
+    val groupSettings: kotlinx.coroutines.flow.StateFlow<Map<String, com.oshi.messenger.data.model.GroupSettings>>
+        get() = groupManager.groupSettings
+    val autoTranslateGroups: kotlinx.coroutines.flow.StateFlow<Set<String>> get() = groupManager.autoTranslateGroups
+
+    fun settingsFor(groupId: String): com.oshi.messenger.data.model.GroupSettings =
+        groupManager.settingsOf(groupId) ?: com.oshi.messenger.data.model.GroupSettings.DEFAULT
+    fun isGroupAdmin(groupId: String): Boolean = groupManager.isAdminOf(groupId, myPublicKey)
+    fun updateGroupSettings(groupId: String, t: (com.oshi.messenger.data.model.GroupSettings) -> com.oshi.messenger.data.model.GroupSettings) =
+        groupManager.updateSettings(groupId, t)
+    fun setGroupDescription(groupId: String, text: String) = groupManager.setDescription(groupId, text)
+    fun setGroupPermissions(groupId: String, type: GroupType) = groupManager.setGroupType(groupId, type)
+    suspend fun setGroupVisibility(groupId: String, handle: String?, showPreview: Boolean) =
+        groupManager.setVisibility(groupId, handle, showPreview)
+    suspend fun setChannelWebPreview(groupId: String, on: Boolean) =
+        if (on) channelWeb.enable(groupId) else channelWeb.disable(groupId)
+    suspend fun setChannelWebIndexing(groupId: String, on: Boolean) = channelWeb.setIndexing(groupId, on)
+    fun resetInviteLink(groupId: String) = groupManager.resetInviteLink(groupId)
+    fun inviteLink(groupId: String): String? = groupManager.inviteLinkFor(groupId)
+    fun unbanMember(groupId: String, key: String) = groupManager.unbanMember(groupId, key)
+    fun promoteMember(groupId: String, key: String) = groupManager.promoteToAdmin(groupId, key)
+    fun demoteMember(groupId: String, key: String) = groupManager.demoteFromAdmin(groupId, key)
+    fun adminLog(groupId: String) = groupManager.adminLogOf(groupId)
+    fun setAutoTranslate(groupId: String, on: Boolean) = groupManager.setAutoTranslate(groupId, on)
+    suspend fun dissolveGroup(groupId: String) = groupManager.dissolveGroup(groupId)
+    fun deleteGroupNow(groupId: String) = groupManager.deleteGroup(groupId)
+    fun leaveGroupNow(groupId: String) = groupManager.leaveGroup(groupId)
+    val myKey: String get() = myPublicKey
 
     /** iOS parity: permission for add/remove/rename/wallpaper respects groupType. */
     fun canManageGroup(group: Group): Boolean = group.canAddMembers(myPublicKey)

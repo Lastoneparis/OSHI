@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">可以读取 OSHI 的应用</string>
+    <string name="spy_surface_dialog_body">此手机上的以下应用可以读取屏幕或通知中的内容,包括 OSHI 解密后的消息:\n\n%1$s\n\n如果其中某个不是你自己安装或授权的,它可能是间谍软件。请在 Android 设置中关闭其权限或将其卸载。OSHI 没有阻止任何内容。</string>
+    <string name="spy_surface_power_accessibility">屏幕和输入(无障碍)</string>
+    <string name="spy_surface_power_notifications">通知</string>
+    <string name="spy_surface_power_admin">设备管理员</string>
+</resources>

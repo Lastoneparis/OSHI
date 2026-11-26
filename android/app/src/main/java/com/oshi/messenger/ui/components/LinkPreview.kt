@@ -76,6 +76,12 @@ fun LinkPreviewCard(
     modifier: Modifier = Modifier,
     autoFetch: Boolean = true,
 ) {
+    // 🛡 __STRICT_MODE_2026_11_22__ No link previews at all in strict mode: no fetch,
+    // not even from cache (a cached card still shows a third party's content/image).
+    val strictContext = androidx.compose.ui.platform.LocalContext.current
+    val strict by remember(strictContext) { com.oshi.messenger.security.StrictModeStore.get(strictContext) }
+        .active.collectAsState()
+    if (strict) return
     var previewData by remember { mutableStateOf<LinkPreviewData?>(null) }
     var previewImage by remember { mutableStateOf<Bitmap?>(null) }
     var isLoading by remember { mutableStateOf(true) }
@@ -489,7 +495,14 @@ fun LinkifyText(
      * TextStyle.Default — see the note on `style` below — so callers now get the
      * app's typography instead of the platform default.
      */
-    fontWeight: androidx.compose.ui.text.font.FontWeight? = null
+    fontWeight: androidx.compose.ui.text.font.FontWeight? = null,
+    /**
+     * __BUBBLE_MEDIA_2026_11_21__ Link ink. Null = brand violet as an INK for the
+     * surface the body [color] implies (dark body → pale bubble → #5616EC, light body
+     * → dark bubble → #B899FF). The old fixed #64B5F6 measured 2.3:1 on the white
+     * incoming bubble and 1.9:1 on the lavender outgoing one.
+     */
+    linkColor: androidx.compose.ui.graphics.Color? = null
 ) {
     // __LONG_TEXT_ONE_MESSAGE_2026_09_28__ Android lays out paragraphs on LF
     // only; a CR / U+2028 / U+2029 line break from an older iOS or Desktop
@@ -498,7 +511,9 @@ fun LinkifyText(
     val shown = remember(text) { com.oshi.messenger.service.MessageSendPolicy.normalizeLineBreaks(text) }
     val uriHandler = LocalUriHandler.current
     val context = androidx.compose.ui.platform.LocalContext.current
-    val linkColor = androidx.compose.ui.graphics.Color(0xFF64B5F6) // Light blue for links
+    val linkColor = linkColor ?: com.oshi.messenger.ui.theme.Oshi.brandInk(
+        darkTheme = com.oshi.messenger.ui.theme.Contrast.luminance(color) > 0.5
+    )
 
     // Street addresses become tappable too (iOS ClickableTextView does the same
     // with NSDataDetector) and open with the app chosen in "Open locations in".
@@ -506,12 +521,25 @@ fun LinkifyText(
     // answers — or where it isn't available — the text simply has no address link.
     val addressRanges by produceState(initialValue = emptyList<IntRange>(), shown) {
         value = withContext(Dispatchers.Default) {
-            MapOpener.detectAddresses(context, InlineMarkup.parse(shown).first)
+            MapOpener.detectAddresses(context, BodyMarkup.render(shown).text)
         }
     }
 
-    val annotatedString = remember(shown, addressRanges) {
-        buildLinkAnnotatedString(shown, linkColor, color, addressRanges)
+    // 🌗 THE INK IS NOT CACHED (__INK_SURVIVES_THEME_SWITCH_2026_11_21__).
+    //
+    // This was `remember(shown, addressRanges) { build(shown, linkColor, color, …) }`:
+    // the body ink and the link ink were BAKED into span styles, but neither colour
+    // was a key. Flip light/dark with a chat open and the activity is not recreated
+    // (uiMode is in configChanges), so every bubble repainted with the new scheme
+    // while its text kept the old ink — white on the white light bubble, black on
+    // the dark one — until the row left the LazyColumn and was composed afresh.
+    //
+    // Fixed at both ends: the body ink no longer lives in the cached string at all
+    // (it is applied through `style` below, read on every recomposition from the
+    // same caller that paints the bubble), and the link ink, which must stay a span,
+    // is a key.
+    val annotatedString = remember(shown, addressRanges, linkColor) {
+        buildLinkAnnotatedString(shown, linkColor, addressRanges)
     }
 
     // __LONG_PRESS_ANYWHERE_ON_THE_BUBBLE_2026_11_09__ was `ClickableText`,
@@ -563,7 +591,7 @@ fun LinkifyText(
         //
         // Taking LocalTextStyle.current makes this behave like any other Text: it
         // picks up the theme by default and still honours a caller's ProvideTextStyle.
-        style = LocalTextStyle.current.copy(fontWeight = fontWeight),
+        style = LocalTextStyle.current.copy(color = color, fontWeight = fontWeight),
         maxLines = maxLines,
         overflow = overflow,
     )
@@ -586,17 +614,27 @@ private data class LinkToken(
     val underline: Boolean
 )
 
-private fun buildLinkAnnotatedString(
+/**
+ * The tappable runs and inline markup of a message body. Carries NO body colour:
+ * the caller's current ink is applied through the text style, so a result held
+ * across a light/dark switch cannot go stale. [linkColor] is the only colour in
+ * here, and whoever caches the result must key on it.
+ *
+ * [urlPattern] exists for the JVM unit test, where `Patterns.WEB_URL` is a stub.
+ */
+internal fun buildLinkAnnotatedString(
     text: String,
     linkColor: androidx.compose.ui.graphics.Color,
-    textColor: androidx.compose.ui.graphics.Color,
-    addressRanges: List<IntRange> = emptyList()
+    addressRanges: List<IntRange> = emptyList(),
+    urlPattern: Pattern = Patterns.WEB_URL,
 ): androidx.compose.ui.text.AnnotatedString {
     // Strip iOS-compatible inline markup (*bold* _italic_ ~strike~ `code`) and get
     // the runs to style; run link detection on the CLEANED text so URLs and markup
     // coexist. Previously the raw markers rendered literally — an iPhone's *bold*
     // showed as "*bold*" on Android.
-    val (clean, markupSpans) = InlineMarkup.parse(text)
+    // __TEXT_FORMATTING_2026_11_24__ `**bold**` / `__underline__` first, then the
+    // single-char markup on what is left, never inside a URL (BodyMarkup).
+    val (clean, markupSpans) = BodyMarkup.render(text)
     val builder = androidx.compose.ui.text.AnnotatedString.Builder()
 
     // 📈 TICKERS IN THE BUBBLE ITSELF (`OSHI/ClickableTextView.swift:143-155`).
@@ -618,7 +656,7 @@ private fun buildLinkAnnotatedString(
         tokens += LinkToken(t.start, t.end, t.display, t.url, underline = false)
     }
 
-    val matcher = Patterns.WEB_URL.matcher(clean)
+    val matcher = urlPattern.matcher(clean)
     while (matcher.find()) {
         val start = matcher.start()
         val end = matcher.end()
@@ -655,11 +693,7 @@ private fun buildLinkAnnotatedString(
         // Plain run before the token, 1:1 with `clean`.
         val shift = builder.length - lastEnd
         for (i in lastEnd..token.start) offsets[i] = i + shift
-        if (token.start > lastEnd) {
-            builder.pushStyle(androidx.compose.ui.text.SpanStyle(color = textColor))
-            builder.append(clean.substring(lastEnd, token.start))
-            builder.pop()
-        }
+        if (token.start > lastEnd) builder.append(clean.substring(lastEnd, token.start))
 
         val outStart = builder.length
         builder.pushStyle(
@@ -685,28 +719,15 @@ private fun buildLinkAnnotatedString(
     // Add remaining text
     val tailShift = builder.length - lastEnd
     for (i in lastEnd..clean.length) offsets[i] = i + tailShift
-    if (lastEnd < clean.length) {
-        builder.pushStyle(androidx.compose.ui.text.SpanStyle(color = textColor))
-        builder.append(clean.substring(lastEnd))
-        builder.pop()
-    }
+    if (lastEnd < clean.length) builder.append(clean.substring(lastEnd))
 
     // Overlay the markup runs. Offsets are in `clean` coordinates and must be
     // translated through `offsets` — before tickers existed they could be used
     // raw, because nothing changed the length.
     for (span in markupSpans) {
-        val style = when (span.kind) {
-            InlineMarkup.Kind.BOLD ->
-                androidx.compose.ui.text.SpanStyle(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
-            InlineMarkup.Kind.ITALIC ->
-                androidx.compose.ui.text.SpanStyle(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
-            InlineMarkup.Kind.STRIKETHROUGH ->
-                androidx.compose.ui.text.SpanStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough)
-            InlineMarkup.Kind.CODE ->
-                androidx.compose.ui.text.SpanStyle(fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
-        }
-        val from = span.location.coerceIn(0, clean.length)
-        val to = (span.location + span.length).coerceIn(0, clean.length)
+        val style = bodyMarkupStyle(span.kind)
+        val from = span.start.coerceIn(0, clean.length)
+        val to = span.end.coerceIn(0, clean.length)
         if (from >= to) continue
         val outFrom = offsets[from]
         val outTo = offsets[to]
@@ -714,4 +735,22 @@ private fun buildLinkAnnotatedString(
     }
 
     return builder.toAnnotatedString()
+}
+
+/**
+ * __TEXT_FORMATTING_2026_11_24__ The look of each [BodyMarkup.Kind]. Bold and underline
+ * are separate spans, so `**__x__**` gets both; an underline over a link merges with the
+ * link's own underline.
+ */
+internal fun bodyMarkupStyle(kind: BodyMarkup.Kind): androidx.compose.ui.text.SpanStyle = when (kind) {
+    BodyMarkup.Kind.BOLD ->
+        androidx.compose.ui.text.SpanStyle(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+    BodyMarkup.Kind.UNDERLINE ->
+        androidx.compose.ui.text.SpanStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline)
+    BodyMarkup.Kind.ITALIC ->
+        androidx.compose.ui.text.SpanStyle(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
+    BodyMarkup.Kind.STRIKETHROUGH ->
+        androidx.compose.ui.text.SpanStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough)
+    BodyMarkup.Kind.CODE ->
+        androidx.compose.ui.text.SpanStyle(fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
 }

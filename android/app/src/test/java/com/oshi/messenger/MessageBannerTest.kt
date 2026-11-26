@@ -44,4 +44,40 @@ class MessageBannerTest {
         assertFalse(MessageBanner.postedRecently(id, listOf(id to now - MessageBanner.RECENT_WINDOW_MS - 1), now))
         assertFalse(MessageBanner.postedRecently(id, listOf((id + 1) to now), now))
     }
+
+    // __PREVIEW_ONE_IN_TWO_2026_11_24__ « une fois sur deux le message s'affiche »:
+    // the FCM banner (generic) went up first and the decrypted banner, carrying the
+    // text, saw it as "posted recently" and gave up.
+    @Test
+    fun decryptedTextReplacesARecentGenericBannerQuietly() {
+        assertEquals(MessageBanner.LocalPost.UPDATE_QUIETLY,
+            MessageBanner.localPostDecision(shownRecently = true, carriesText = true))
+    }
+
+    @Test
+    fun genericBodyStillNeverRingsTwice() {
+        assertEquals(MessageBanner.LocalPost.SKIP,
+            MessageBanner.localPostDecision(shownRecently = true, carriesText = false))
+    }
+
+    @Test
+    fun noRecentBannerMeansANormalPost() {
+        assertEquals(MessageBanner.LocalPost.POST,
+            MessageBanner.localPostDecision(shownRecently = false, carriesText = true))
+        assertEquals(MessageBanner.LocalPost.POST,
+            MessageBanner.localPostDecision(shownRecently = false, carriesText = false))
+    }
+
+    /** Both decrypted paths (1:1 and group) must go through the decision, not the bare window. */
+    @Test
+    fun bothDecryptedPathsUseTheDecision() {
+        val root = java.io.File("src/main/java/com/oshi/messenger")
+        for (rel in listOf("data/repository/MessageRepository.kt", "service/GroupManager.kt")) {
+            val src = java.io.File(root, rel).readText()
+            assertTrue("$rel must call localPostDecision", src.contains("localPostDecision("))
+            assertFalse("$rel must not skip on the bare window any more",
+                Regex("""if \((com\.oshi\.messenger\.service\.)?MessageBanner\.shownRecently\(context, bannerId\)\)""").containsMatchIn(src))
+            assertTrue("$rel must not re-ring on a quiet update", src.contains("setOnlyAlertOnce(post =="))
+        }
+    }
 }

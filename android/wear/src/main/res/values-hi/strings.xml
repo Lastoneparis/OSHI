@@ -48,4 +48,27 @@
     <string name="qr_no">नहीं</string>
     <string name="qr_busy">अभी बात नहीं कर सकता</string>
     <string name="end_to_end">आपके फ़ोन द्वारा एंड-टू-एंड एन्क्रिप्टेड</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">पिन की गई</string>
+    <string name="net_internet">इंटरनेट</string>
+    <string name="net_nearby">%1$d आस-पास</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">फ़ोन ऑफ़लाइन · संदेश आपके फ़ोन पर इंतज़ार कर रहे हैं</string>
+    <string name="net_offline_short">फ़ोन ऑफ़लाइन</string>
+    <string name="voice_message">वॉइस संदेश</string>
+    <string name="voice_send">वॉइस संदेश भेजें</string>
+    <string name="voice_cancel">रद्द करें</string>
+    <string name="voice_permission">वॉइस संदेश रिकॉर्ड करने के लिए माइक्रोफ़ोन की अनुमति दें। घड़ी पर कुछ भी नहीं रखा जाता।</string>
+    <string name="voice_mic_busy">माइक्रोफ़ोन व्यस्त है। फिर से कोशिश करें।</string>
+    <string name="voice_too_short">बहुत छोटा। थोड़ा और देर बोलें।</string>
+    <string name="voice_not_sent">नहीं भेजा गया। फ़ोन पास रखें और फिर से कोशिश करें।</string>
+    <string name="send_emoji">इमोजी भेजें</string>
+    <string name="delivery_sending">भेजा जा रहा है</string>
+    <string name="delivery_sent">भेजा गया</string>
+    <string name="delivery_delivered">डिलीवर हुआ</string>
+    <string name="delivery_read">पढ़ा गया</string>
+    <string name="delivery_failed">डिलीवर नहीं हुआ</string>
+    <string name="complication_none">कोई अपठित संदेश नहीं</string>
+    <string name="tile_reply_to">%1$s को जवाब दें</string>
+    <string name="tile_chat_unread">%1$s, %2$d अपठित</string>
 </resources>

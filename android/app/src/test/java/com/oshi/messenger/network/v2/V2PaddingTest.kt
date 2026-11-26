@@ -120,7 +120,8 @@ class V2PaddingTest {
     @Test fun thisBuildAdvertisesPadding() {
         assertTrue((GroupLegacyCompat.MY_CAPS and V2Padding.CAP_PADDING) != 0)
         // __MEDIA_PADDING_2026_11_10__ + CAP_MEDIA_PADDING (8).
-        assertEquals(15, GroupLegacyCompat.MY_CAPS)
+        // __ADV_CHAT_PRIVACY_2026_11_26__ + CAP_ADVANCED_PRIVACY (16)
+        assertEquals(31, GroupLegacyCompat.MY_CAPS)
     }
 
     @Test fun oldOrUnknownPeerIsNeverPadded() {

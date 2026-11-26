@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">Direct</string>
+    <string name="lora_node_card_from_you">de la tine</string>
+    <string name="lora_node_card_heard_day">auzit acum %1$d z</string>
+    <string name="lora_node_card_heard_hour">auzit acum %1$d h</string>
+    <string name="lora_node_card_heard_min">auzit acum %1$d min</string>
+    <string name="lora_node_card_heard_now">auzit chiar acum</string>
+    <string name="lora_node_card_hops">%1$d salturi</string>
+    <string name="lora_node_card_in_range">în raza de acțiune</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_never_heard">niciodată auzit</string>
+    <string name="lora_node_card_not_heard">încă neauzit</string>
+    <string name="lora_node_card_relayed">retransmis</string>
+</resources>

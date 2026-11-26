@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">تخطي</string>
+    <string name="ob27_continue">متابعة</string>
+    <string name="ob27_page_of">الصفحة %1$d من %2$d</string>
+    <string name="ob27_private_title">بينكما فقط</string>
+    <string name="ob27_private_body">الرسائل والمكالمات مشفرة تمامًا بين الطرفين على هاتفك. لا أحد في المنتصف يستطيع قراءتها، ولا حتى OSHI.</string>
+    <string name="ob27_offline_title">يعمل دون إنترنت</string>
+    <string name="ob27_offline_body">لا توجد شبكة؟ تنتقل الرسائل من هاتف إلى هاتف عبر الأشخاص القريبين الذين يفتحون OSHI، وراديو LoRa يوصلها أبعد من ذلك.</string>
+    <string name="ob27_range_direct">مباشر</string>
+    <string name="ob27_range_relayed">عبر وسيط</string>
+    <string name="ob27_range_lora">راديو LoRa</string>
+    <string name="ob27_anon_title">لا حاجة لرقم هاتف</string>
+    <string name="ob27_anon_body">لا حساب ولا بريد إلكتروني ولا رقم للتسجيل. هويتك مفتاح يُنشأ على هذا الهاتف.</string>
+    <string name="ob27_together_title">ادعُ من تحب</string>
+    <string name="ob27_together_body">دردش فرديًا أو في مجموعات. أضف شخصًا بمسح رمز QR الخاص به أو بإرسال رابط دعوة إليه.</string>
+    <string name="ob27_rules_title">قبل أن تبدأ</string>
+    <string name="ob27_rules_subtitle">بعض القواعد، وما يستطيع OSHI فعله وما لا يستطيعه بعد.</string>
+    <string name="ob27_rules_do">افعل</string>
+    <string name="ob27_rules_dont">لا تفعل أبدًا</string>
+    <string name="ob27_good_to_know">معلومات مفيدة</string>
+    <string name="ob27_show_details">إظهار التفاصيل</string>
+    <string name="ob27_hide_details">إخفاء التفاصيل</string>
+    <string name="ob27_agree">فهمت</string>
+    <string name="ob27_notif_title">لا تفوّت أي رسالة</string>
+    <string name="ob27_notif_body">اسمح بالإشعارات لترى الرسائل والمكالمات الجديدة. يمكنك إيقافها في أي وقت من الإعدادات.</string>
+    <string name="ob27_notif_allow">السماح بالإشعارات</string>
+    <string name="ob27_not_now">ليس الآن</string>
+    <string name="ob27_identity_title">اختر اسمًا</string>
+    <string name="ob27_identity_body">هذا ما تراه جهات اتصالك. يمكنك تغييره لاحقًا.</string>
+    <string name="ob27_already">هل تستخدم OSHI بالفعل؟</string>
+</resources>

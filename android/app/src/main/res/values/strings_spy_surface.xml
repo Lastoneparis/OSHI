@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">Apps that can read OSHI</string>
+    <string name="spy_surface_dialog_body">These apps on this phone can read what is on your screen or in your notifications, including your messages once OSHI has decrypted them:\n\n%1$s\n\nIf you did not install or allow one of them yourself, it may be spy software. Turn its permission off in Android Settings or uninstall it. OSHI has not blocked anything.</string>
+    <string name="spy_surface_power_accessibility">screen and typing (accessibility)</string>
+    <string name="spy_surface_power_notifications">notifications</string>
+    <string name="spy_surface_power_admin">device administrator</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">सीधा</string>
+    <string name="lora_node_card_from_you">आपसे</string>
+    <string name="lora_node_card_heard_day">%1$d दिन पहले सुना</string>
+    <string name="lora_node_card_heard_hour">%1$d घंटे पहले सुना</string>
+    <string name="lora_node_card_heard_min">%1$d मिनट पहले सुना</string>
+    <string name="lora_node_card_heard_now">अभी सुना</string>
+    <string name="lora_node_card_hops">%1$d हॉप</string>
+    <string name="lora_node_card_in_range">पहुँच में</string>
+    <string name="lora_node_card_km">%1$.1f किमी</string>
+    <string name="lora_node_card_metres">%1$d मी</string>
+    <string name="lora_node_card_never_heard">कभी नहीं सुना</string>
+    <string name="lora_node_card_not_heard">अभी तक नहीं सुना</string>
+    <string name="lora_node_card_relayed">रिले किया गया</string>
+</resources>

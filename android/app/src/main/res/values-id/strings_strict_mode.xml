@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Mode keamanan ketat</string>
+    <string name="strict_status_on">Aktif: tanpa salin, tanpa tangkapan layar, tersembunyi dari aplikasi pembaca layar</string>
+    <string name="strict_status_off">Nonaktif. Mengunci OSHI rapat saat ponsel mungkin diawasi</string>
+    <string name="strict_hero_on">Mode keamanan ketat aktif</string>
+    <string name="strict_intro">Untuk saat ponsel mungkin diawasi. Satu sakelar mengunci OSHI rapat: tidak ada yang bisa disalin, layar tidak bisa ditangkap, dan aplikasi pembaca layar, termasuk agen AI, tidak melihat apa pun.</string>
+    <string name="strict_section_switch">Mode</string>
+    <string name="strict_toggle_title">Mode keamanan ketat</string>
+    <string name="strict_toggle_on">Aktif untuk perangkat ini</string>
+    <string name="strict_toggle_off">Nonaktif</string>
+    <string name="strict_block_paste_title">Blokir tempel juga</string>
+    <string name="strict_block_paste_subtitle">Tidak ada yang bisa ditempel ke OSHI</string>
+    <string name="strict_hide_presence_title">Sembunyikan tanda dibaca dan mengetik</string>
+    <string name="strict_hide_presence_subtitle">Orang lain tidak melihat kapan Anda membaca atau mengetik</string>
+    <string name="strict_forced_subtitle">Diatur oleh mode keamanan ketat</string>
+    <string name="strict_blocked_toast">Diblokir oleh mode keamanan ketat</string>
+    <string name="strict_unlock_title">Matikan mode keamanan ketat</string>
+    <string name="strict_unlock_subtitle">Konfirmasi bahwa ini Anda</string>
+    <string name="strict_threats_title">Aplikasi yang dapat membaca atau mengendalikan layar Anda</string>
+    <string name="strict_threats_none">Tidak ada yang ditemukan di ponsel ini.</string>
+    <string name="strict_threat_a11y">Layanan aksesibilitas yang bukan alat bantu</string>
+    <string name="strict_threat_remote">Aplikasi kendali jarak jauh atau mirroring layar</string>
+    <string name="strict_threats_open">Tinjau</string>
+    <string name="strict_threats_explainer">OSHI tidak bisa mematikan aplikasi lain. Jika Anda tidak mengenali salah satunya, matikan di Setelan Android › Aksesibilitas, atau hapus instalasinya.</string>
+    <string name="strict_banner_title">Aplikasi dapat membaca atau mengendalikan layar ini</string>
+    <string name="strict_banner_body">%1$s. Mode keamanan ketat menyembunyikan OSHI dari mereka sejauh yang diizinkan Android.</string>
+    <string name="strict_banner_dismiss">Tutup</string>
+    <string name="strict_does_title">Fungsinya</string>
+    <string name="strict_does_copy">Tidak ada salin, potong, teruskan, bagikan, atau simpan pesan. Teks tidak bisa dipilih, dan apa pun yang ditaruh OSHI di papan klip dihapus.</string>
+    <string name="strict_does_paste">Tempel ke OSHI diblokir saat “Blokir tempel juga” aktif, termasuk perintah tempel dari keyboard.</string>
+    <string name="strict_does_screen">Tangkapan layar, perekaman layar, dan berbagi layar hanya menampilkan layar hitam. Pratinjau aplikasi terbaru disembunyikan.</string>
+    <string name="strict_does_agents">Aplikasi yang membaca layar lewat Aksesibilitas, termasuk agen AI, tidak melihat konten OSHI (Android 14 ke atas). Ketukan yang mereka suntikkan diabaikan.</string>
+    <string name="strict_does_overlays">Ketukan diabaikan saat aplikasi lain menggambar di atas OSHI.</string>
+    <string name="strict_does_notifications">Notifikasi hanya berbunyi “Pesan baru”: tanpa nama, foto, atau teks.</string>
+    <string name="strict_does_lock">Kunci aplikasi setiap kali Anda kembali ke OSHI (jika ponsel Anda memakai kunci layar).</string>
+    <string name="strict_does_keyboard">Keyboard penyamaran: keyboard diminta untuk tidak mempelajari yang Anda ketik.</string>
+    <string name="strict_does_network">Tanpa pratinjau tautan dan tanpa pencarian GIPHY: tidak ada yang diambil dari situs pihak ketiga.</string>
+    <string name="strict_does_presence">Tanda dibaca dan indikator mengetik nonaktif (jika Anda memilih menyembunyikannya).</string>
+    <string name="strict_does_relay">Relai privasi diaktifkan jika tersedia.</string>
+    <string name="strict_does_restore">Setelan Anda sebelumnya kembali saat mode dimatikan.</string>
+    <string name="strict_cannot_title">Yang tidak bisa dilakukannya</string>
+    <string name="strict_cannot_malware">Tidak ada aplikasi yang bisa sepenuhnya melindungi Anda dari malware atau ponsel yang telah diretas (di-root).</string>
+    <string name="strict_cannot_keyboard">Keyboard Anda tetap melihat yang Anda ketik. Saran papan klip yang diketikkannya untuk Anda tidak bisa dibedakan dari ketikan.</string>
+    <string name="strict_cannot_readers">Pembaca layar untuk tunanetra dan penglihatan lemah tetap berfungsi, tetapi aplikasi aksesibilitas lain tidak bisa membaca OSHI saat mode ini aktif.</string>
+    <string name="strict_cannot_old">Di Android 13 dan yang lebih lama, OSHI tidak bisa menyembunyikan kontennya dari aplikasi aksesibilitas. Ia hanya bisa memperingatkan Anda tentangnya.</string>
+    <string name="strict_cannot_camera">Seseorang masih bisa memotret layar dengan perangkat lain.</string>
+    <string name="strict_cannot_recipient">Hanya melindungi ponsel ini, bukan ponsel orang yang Anda kirimi pesan.</string>
+    <string name="strict_auto_lock_immediate">Segera (Mode keamanan ketat)</string>
+</resources>

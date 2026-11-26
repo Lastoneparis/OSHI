@@ -36,6 +36,8 @@ import javax.inject.Inject
  *       -a com.oshi.messenger.debug.INCOMING --es target dm|group [--es text "…"] [--ez long true]
  *   adb shell am broadcast -n com.oshi.messenger/.debug.DebugChatSeedReceiver \
  *       -a com.oshi.messenger.debug.AVATARS
+ *   adb shell am broadcast -n com.oshi.messenger/.debug.DebugChatSeedReceiver \
+ *       -a com.oshi.messenger.debug.MEDIA   (group + channel with photos, see seedMedia)
  *     (__AVATAR_PALETTE_V2_2026_11_17__ a dozen picture-less contacts and six groups,
  *      one message each, so the default-avatar palette can be looked at in the lists)
  *
@@ -59,6 +61,8 @@ class DebugChatSeedReceiver : BroadcastReceiver() {
                         unread = intent.getIntExtra("unread", 35)
                     )
                     ACTION_AVATARS -> seedAvatars(context)
+                    ACTION_COMMENTS -> seedComments(context)
+                    ACTION_MEDIA -> seedMedia(context)
                     ACTION_INCOMING -> {
                         // `--ei n 30` = a burst of 30 unread incoming rows (every 7th a
                         // photo, every 5th long), oldest first, one second apart.
@@ -147,6 +151,177 @@ class DebugChatSeedReceiver : BroadcastReceiver() {
         }
         saveGroupMessages()
         Log.i(TAG, "SEEDED dm=$PEER_A group=$groupId count=$count unread=$unread")
+    }
+
+    /**
+     * __GROUP_COMMENTS_2026_11_21__ A channel (only admins post, comments on) where WE are the
+     * admin, two posts, and member comments pushed through the REAL receive path
+     * (`handleIncomingGroupMessage`), so the spec §2.12.4 rules run on the device:
+     *   adb shell am broadcast -n com.oshi.messenger/.debug.DebugChatSeedReceiver \
+     *       -a com.oshi.messenger.debug.COMMENTS
+     * Verdicts are logged under `GroupManager` / `DebugSeed`.
+     */
+    private suspend fun seedComments(context: Context) {
+        database.contactDao().insert(Contact(publicKey = PEER_A, alias = "Alice Martin"))
+        database.contactDao().insert(Contact(publicKey = PEER_B, alias = "Bob Keller"))
+        val me = cryptoManager.getPublicKeyString()
+        val prefs = context.getSharedPreferences("debug_seed", Context.MODE_PRIVATE)
+        val groupId = prefs.getString("comments_group_id", null)
+            ?.takeIf { id -> groupManager.groups.value.any { it.id == id } }
+            ?: groupManager.createGroup(name = "Swiss Quant Daily", memberPublicKeys = listOf(PEER_A, PEER_B)).id
+        prefs.edit().putString("comments_group_id", groupId).apply()
+        groupManager.updateSettings(groupId) {
+            it.copy(postPolicy = com.oshi.messenger.data.model.GroupSettings.PostPolicy.ADMINS, comments = true)
+        }
+        val now = System.currentTimeMillis()
+        val posts = listOf(
+            "dbg-post-1" to "Weekly position: BTC 40% long, ETH flat. Volatility target 20%.",
+            "dbg-post-2" to "Tonight 21:00 CET: live Q&A on the new crypto trend model.",
+        )
+        val have = groupManager.groupMessages.value[groupId].orEmpty().map { it.id }.toSet()
+        posts.forEachIndexed { i, (id, text) ->
+            if (id !in have) addGroupMessage(groupId, GroupMessage(
+                id = id, groupId = groupId, senderPublicKey = me, senderName = "Me", content = text,
+                timestamp = now - (3 - i) * 3_600_000L, isFromMe = true, isRead = true
+            ))
+        }
+        saveGroupMessages()
+        fun inject(id: String, sender: String, body: String, commentOn: String?, ts: Long) {
+            val json = GroupManager.wireGroupMessageJson(
+                id = id, wireGroupId = GroupManager.canonicalGroupId(groupId), senderPublicKey = sender,
+                appleTimestamp = ts / 1000.0 - 978307200.0,
+                encryptedContentB64 = Base64.encodeToString(body.toByteArray(), Base64.NO_WRAP),
+                iosMediaType = null, mediaFileName = null, body = body, includeBodyCompat = true,
+                commentOn = commentOn,
+            )
+            groupManager.handleIncomingGroupMessage("\uD83D\uDC65GROUP_MESSAGE\uD83D\uDC65$json", sender)
+        }
+        val p1 = posts[0].first
+        val t0 = now - 2 * 3_600_000L
+        inject("DBG-C-1", PEER_A, GroupManager.buildReplyEnvelope("Why 40 and not 50 this week?", p1, me, posts[0].second, now), p1, t0)
+        inject("DBG-C-2", PEER_B, GroupManager.buildReplyEnvelope("Vol is up, that is the cap.", "DBG-C-1", PEER_A, "Why 40 and not 50 this week?", t0), p1, t0 + 60_000)
+        inject("DBG-C-3", PEER_B, GroupManager.buildReplyEnvelope("Thanks for the clear notes 🙏", p1, me, posts[0].second, now), p1, t0 + 120_000)
+        // must be DROPPED: a member's plain post in a channel, and a comment on a comment
+        inject("DBG-X-1", PEER_B, "plain post from a member (must not show)", null, t0 + 180_000)
+        inject("DBG-X-2", PEER_A, GroupManager.buildReplyEnvelope("comment on a comment (must not show)", "DBG-C-1", PEER_A, "x", t0), "DBG-C-1", t0 + 240_000)
+        // a comment on the second post
+        inject("DBG-C-4", PEER_A, GroupManager.buildReplyEnvelope("Will there be a replay?", "dbg-post-2", me, posts[1].second, now), "dbg-post-2", t0 + 300_000)
+        val all = groupManager.groupMessages.value[groupId].orEmpty().map { it.id }
+        val links = groupManager.commentLinks.value
+        Log.i(TAG, "SEEDED comments group=$groupId rows=${all.size} comments=${links.size} " +
+            "X1present=${"DBG-X-1" in all} X2present=${"DBG-X-2" in all} " +
+            "C1=${groupManager.commentPostOf("DBG-C-1")} C4=${groupManager.commentPostOf("DBG-C-4")}")
+    }
+
+    /**
+     * __BUBBLE_MEDIA_2026_11_21__ BUBBLE_MEDIA_SPEC §3 proof fixture: a group with text, a
+     * landscape, a portrait, a small image and captioned photos (incoming and outgoing),
+     * and a channel (admins post, comments on) with a captioned photo post.
+     *   adb shell am broadcast -n com.oshi.messenger/.debug.DebugChatSeedReceiver \
+     *       -a com.oshi.messenger.debug.MEDIA
+     * Fake member keys, generated pictures; nothing leaves the device.
+     */
+    private suspend fun seedMedia(context: Context) {
+        database.contactDao().insert(Contact(publicKey = PEER_A, alias = "Alice Martin"))
+        database.contactDao().insert(Contact(publicKey = PEER_B, alias = "Bob Keller"))
+        database.contactDao().insert(Contact(publicKey = PEER_C, alias = "Carol Diaz"))
+        val me = cryptoManager.getPublicKeyString()
+        val prefs = context.getSharedPreferences("debug_seed", Context.MODE_PRIVATE)
+        val now = System.currentTimeMillis()
+
+        val groupId = prefs.getString("media_group_id", null)
+            ?.takeIf { id -> groupManager.groups.value.any { it.id == id } }
+            ?: groupManager.createGroup(name = "Weekend Hike", memberPublicKeys = listOf(PEER_A, PEER_B, PEER_C)).id
+        prefs.edit().putString("media_group_id", groupId).apply()
+        val g = groupManager.groupMessages.value[groupId].orEmpty().map { it.id }.toSet()
+        data class Row(val id: String, val key: String, val name: String, val text: String, val photo: ByteArray?)
+        val rows = listOf(
+            Row("dbg-md-1", PEER_A, "Alice Martin", "Look at these from Saturday 👇", null),
+            Row("dbg-md-2", PEER_A, "Alice Martin", "", scene(1600, 1000, 0)),
+            Row("dbg-md-3", PEER_B, "Bob Keller", "", scene(900, 1600, 1)),
+            Row("dbg-md-4", PEER_C, "Carol Diaz", "", scene(160, 120, 2)),
+            Row("dbg-md-5", me, "Me", "Sunset from the ridge — worth the climb.", scene(1200, 900, 3)),
+            Row("dbg-md-6", PEER_B, "Bob Keller", "The trail sign, for next time.", scene(1000, 1500, 4)),
+            Row("dbg-md-7", me, "Me", "", scene(1080, 1920, 1)),
+            Row("dbg-md-8", me, "Me", "Same again next month?", null),
+        )
+        rows.forEachIndexed { i, r ->
+            if (r.id in g) return@forEachIndexed
+            addGroupMessage(groupId, GroupMessage(
+                id = r.id, groupId = groupId, senderPublicKey = r.key, senderName = r.name,
+                content = r.text, timestamp = now - (rows.size - i) * 120_000L,
+                isFromMe = r.key == me, isRead = true,
+                mediaType = if (r.photo != null) MediaType.IMAGE else null, mediaData = r.photo
+            ))
+        }
+
+        val channelId = prefs.getString("media_channel_id", null)
+            ?.takeIf { id -> groupManager.groups.value.any { it.id == id } }
+            ?: groupManager.createGroup(name = "Alpine News", memberPublicKeys = listOf(PEER_A, PEER_B)).id
+        prefs.edit().putString("media_channel_id", channelId).apply()
+        groupManager.updateSettings(channelId) {
+            it.copy(postPolicy = com.oshi.messenger.data.model.GroupSettings.PostPolicy.ADMINS, comments = true)
+        }
+        val c = groupManager.groupMessages.value[channelId].orEmpty().map { it.id }.toSet()
+        val posts = listOf(
+            Triple("dbg-ch-1", "First snow on the pass this morning. Road open, chains advised above 1800 m.", scene(1600, 1066, 0)),
+            Triple("dbg-ch-2", "Hut opening hours for the winter season are now online.", null),
+            Triple("dbg-ch-3", "", scene(1000, 1400, 4)),
+        )
+        posts.forEachIndexed { i, (id, text, photo) ->
+            if (id in c) return@forEachIndexed
+            addGroupMessage(channelId, GroupMessage(
+                id = id, groupId = channelId, senderPublicKey = me, senderName = "Me", content = text,
+                timestamp = now - (posts.size - i) * 3_600_000L, isFromMe = true, isRead = true,
+                mediaType = if (photo != null) MediaType.IMAGE else null, mediaData = photo
+            ))
+        }
+        saveGroupMessages()
+        Log.i(TAG, "SEEDED media group=$groupId channel=$channelId")
+    }
+
+    /** A generated "photo": sky gradient, sun, two mountain layers, a frame line and its size. */
+    private fun scene(w: Int, h: Int, palette: Int): ByteArray {
+        val skies = listOf(
+            intArrayOf(Color.rgb(255, 170, 110), Color.rgb(120, 90, 200)),
+            intArrayOf(Color.rgb(130, 200, 255), Color.rgb(230, 245, 255)),
+            intArrayOf(Color.rgb(255, 220, 120), Color.rgb(255, 120, 120)),
+            intArrayOf(Color.rgb(250, 120, 80), Color.rgb(60, 40, 110)),
+            intArrayOf(Color.rgb(120, 220, 180), Color.rgb(30, 90, 120)),
+        )
+        val sky = skies[palette % skies.size]
+        val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val cv = Canvas(bmp)
+        val p = Paint().apply { isAntiAlias = true }
+        p.shader = android.graphics.LinearGradient(0f, 0f, 0f, h.toFloat(), sky[0], sky[1], android.graphics.Shader.TileMode.CLAMP)
+        cv.drawRect(0f, 0f, w.toFloat(), h.toFloat(), p)
+        p.shader = null
+        p.color = Color.argb(230, 255, 245, 200)
+        cv.drawCircle(w * 0.72f, h * 0.32f, minOf(w, h) * 0.09f, p)
+        fun ridge(base: Float, amp: Float, color: Int) {
+            val path = android.graphics.Path()
+            path.moveTo(0f, h.toFloat())
+            val n = 6
+            for (k in 0..n) {
+                val x = w * k / n.toFloat()
+                val y = h * base - (if (k % 2 == 1) amp else amp * 0.35f) * h
+                path.lineTo(x, y)
+            }
+            path.lineTo(w.toFloat(), h.toFloat()); path.close()
+            p.color = color
+            cv.drawPath(path, p)
+        }
+        ridge(0.78f, 0.22f, Color.argb(255, 70, 60, 110))
+        ridge(0.92f, 0.12f, Color.argb(255, 35, 30, 60))
+        // A 2-px frame: any crop or letterbox band is visible at a glance.
+        p.style = Paint.Style.STROKE; p.strokeWidth = maxOf(2f, w / 200f); p.color = Color.WHITE
+        cv.drawRect(p.strokeWidth / 2, p.strokeWidth / 2, w - p.strokeWidth / 2, h - p.strokeWidth / 2, p)
+        p.style = Paint.Style.FILL; p.textSize = maxOf(12f, w / 14f)
+        cv.drawText("${w}×$h", w * 0.05f, h * 0.12f + p.textSize / 2, p)
+        val out = ByteArrayOutputStream()
+        bmp.compress(Bitmap.CompressFormat.JPEG, 82, out)
+        bmp.recycle()
+        return out.toByteArray()
     }
 
     private suspend fun seedAvatars(context: Context) {
@@ -286,6 +461,8 @@ class DebugChatSeedReceiver : BroadcastReceiver() {
         const val ACTION_SEED = "com.oshi.messenger.debug.SEED"
         const val ACTION_INCOMING = "com.oshi.messenger.debug.INCOMING"
         const val ACTION_AVATARS = "com.oshi.messenger.debug.AVATARS"
+        const val ACTION_COMMENTS = "com.oshi.messenger.debug.COMMENTS"
+        const val ACTION_MEDIA = "com.oshi.messenger.debug.MEDIA"
         private fun key(seed: Int) = Base64.encodeToString(ByteArray(32) { (it * 7 + seed).toByte() }, Base64.NO_WRAP)
         val PEER_A = key(11)
         val PEER_B = key(23)

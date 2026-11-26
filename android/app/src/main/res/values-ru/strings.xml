@@ -4,10 +4,7 @@
     <string name="app_tagline">Безопасный Mesh-мессенджер</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">Добро пожаловать в OSHI</string>
-    <string name="onboarding_description">Сквозное шифрование, работающее даже без интернета</string>
     <string name="onboarding_create_identity">Создать личность</string>
-    <string name="onboarding_restore_identity">Восстановить личность</string>
 
     <!-- Messages -->
     <string name="messages_title">Сообщения</string>
@@ -61,6 +58,8 @@
     <string name="settings_theme_dark">Тёмная</string>
     <string name="settings_theme_oled_black">Чёрный OLED</string>
     <string name="settings_theme_oled_black_desc">Полностью чёрный фон для OLED-экранов. Действует, когда включена тёмная тема.</string>
+    <string name="appearance_glass_effect">Эффект стекла</string>
+    <string name="appearance_glass_effect_footer">Полупрозрачные панели, карточки и меню, как матовое стекло. Работает со светлой, тёмной темой и Чёрным OLED.</string>
     <string name="settings_backup">Резервное копирование ключей</string>
     <string name="settings_about">О приложении</string>
     <string name="settings_version">Версия %s</string>
@@ -385,22 +384,9 @@
     <string name="video_switch_to_voice">Переключить на голос</string>
 
     <!-- Onboarding - Additional -->
-    <string name="onboarding_subtitle">Безопасный обмен сообщениями, работающий даже без интернета</string>
-    <string name="onboarding_key_features">Основные функции</string>
-    <string name="onboarding_e2e_title">Сквозное шифрование</string>
-    <string name="onboarding_e2e_desc">Все сообщения зашифрованы. Только вы и получатель можете их прочитать.</string>
-    <string name="onboarding_mesh_title">Mesh-сеть</string>
-    <string name="onboarding_mesh_desc">Отправляйте сообщения напрямую ближайшим пользователям, даже без интернета.</string>
-    <string name="onboarding_calls_title">Безопасные вызовы</string>
-    <string name="onboarding_calls_desc">Голосовые и видеовызовы с полным шифрованием.</string>
-    <string name="onboarding_cross_platform_title">Кроссплатформенность</string>
-    <string name="onboarding_cross_platform_desc">Работает с устройствами iOS и Android без проблем.</string>
-    <string name="onboarding_create_your_identity">Создайте свою личность</string>
-    <string name="onboarding_choose_display_name">Выберите отображаемое имя для ваших контактов</string>
     <string name="onboarding_display_name">Отображаемое имя</string>
     <string name="onboarding_key_info">Для вас будет сгенерирована уникальная пара ключей шифрования. Обязательно сделайте резервную копию ключей позже.</string>
     <string name="onboarding_back">Назад</string>
-    <string name="onboarding_next">Далее</string>
     <string name="onboarding_creating">Создание…</string>
     <string name="onboarding_error_create">Не удалось создать личность: %s</string>
 
@@ -820,8 +806,6 @@
     <string name="faq_q6_answer">Перейдите в Новое сообщение и отсканируйте QR-код контакта, поделитесь своим QR-кодом или вставьте его публичный ключ.</string>
 
     <!-- Onboarding Disclaimer -->
-    <string name="onboarding_disclaimer_title">Важное Уведомление</string>
-    <string name="onboarding_disclaimer_subtitle">Прочитайте перед использованием OSHI</string>
     <string name="onboarding_disclaimer_audit_title">Аудит Безопасности Ещё Не Проведён</string>
     <string name="onboarding_disclaimer_audit_desc">Это приложение ещё не прошло профессиональный аудит безопасности. Хотя мы используем надёжное шифрование, используйте по своему усмотрению.</string>
     <string name="onboarding_disclaimer_anonymous_title">Приватность Прежде Всего</string>
@@ -2147,24 +2131,10 @@
     <string name="new_message_sent">Сообщение отправлено!</string>
     <string name="onboarding_conduct_subtitle">OSHI построен на доверии и уважении. Пожалуйста, следуйте этим правилам:</string>
     <string name="onboarding_conduct_title">Правила Сообщества</string>
-    <string name="onboarding_message_description">Подключитесь к кому-либо, отсканировав QR-код или введя публичный ключ.</string>
-    <string name="onboarding_message_title">Отправьте Первое Сообщение</string>
-    <string name="onboarding_method_paste_title">Способ 2: Копировать/Вставить Публичный Ключ</string>
-    <string name="onboarding_method_qr_title">Способ 1: Сканировать QR-код</string>
     <string name="onboarding_reach_disclaimer">У офлайн-mesh небольшая дальность. Чтобы найти друг друга, на обоих телефонах должен быть открыт OSHI: примерно 100 м на открытом месте и намного меньше через стены. Дальше сообщение уходит только тогда, когда у других людей поблизости тоже открыт OSHI и они передают его дальше. Если рядом никого нет, OSHI отправляет через интернет.</string>
-    <string name="onboarding_reach_offline_body">Нет интернета? Сообщения перескакивают с телефона на телефон через близких людей с открытым OSHI.</string>
-    <string name="onboarding_reach_offline_title">Офлайн (mesh)</string>
-    <string name="onboarding_reach_online_body">С интернетом мгновенно свяжитесь с кем угодно в мире.</string>
-    <string name="onboarding_reach_online_title">Онлайн</string>
     <string name="onboarding_reach_range1_dist">~100 м</string>
-    <string name="onboarding_reach_range1_label">Телефон к телефону, напрямую</string>
     <string name="onboarding_reach_range2_dist">~500 м</string>
-    <string name="onboarding_reach_range2_label">Дальше, когда другие ретранслируют по пути</string>
     <string name="onboarding_reach_range3_dist">~30 км</string>
-    <string name="onboarding_reach_range3_label">С радио Meshtastic LoRa по Bluetooth</string>
-    <string name="onboarding_reach_subtitle">OSHI работает двумя способами — с интернетом и без него.</string>
-    <string name="onboarding_reach_tip">Офлайн-режиму нужны другие люди рядом с открытым OSHI. Чем больше людей, тем дальше уходит сообщение.</string>
-    <string name="onboarding_reach_title">Как путешествуют ваши сообщения</string>
     <string name="onboarding_rule_backup">Делайте резервные копии ключей безопасно</string>
     <string name="onboarding_rule_no_abuse">Без притеснений или оскорблений</string>
     <string name="onboarding_rule_no_illegal">Без незаконного контента</string>
@@ -2579,6 +2549,7 @@
     <string name="gif_picker_title">GIF и стикеры</string>
     <string name="gif_tab_gifs">GIF</string>
     <string name="gif_tab_stickers">Стикеры</string>
+    <string name="gif_oshi_hint">Анимированные стикеры OSHI — выберите один, чтобы отправить</string>
     <string name="linked_device_alert_body">К вашему аккаунту OSHI только что привязано устройство. Если это были не вы, откройте «Привязанные устройства» и удалите его сейчас.</string>
     <string name="linked_device_alert_body_plural">К вашему аккаунту OSHI только что привязано устройств: %1$d. Если это были не вы, откройте «Привязанные устройства» и удалите их сейчас.</string>
     <string name="linked_device_alert_title">К вашему аккаунту привязано новое устройство</string>
@@ -2787,4 +2758,66 @@
     <string name="settings_animated_reactions">Анимированные реакции OSHI</string>
     <string name="settings_animated_reactions_desc">Выкл.: обычные эмодзи</string>
     <string name="reactions_new_hint">Новое: на iPhone со старой версией они могут отображаться как 👍</string>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="accessibility_updates">Обновления и обслуживание</string>
+    <string name="ai_download_failed_network">Загрузка не удалась — проверьте подключение и нажмите «Повторить».</string>
+    <string name="ai_download_failed_server">Сервер загрузки не ответил. Нажмите «Повторить» или попробуйте позже.</string>
+    <string name="chat_welcome_creator_notice">Написано OSHI и доходит до Hugo, создателя приложения. Он читает ответы.</string>
+    <string name="conversation_pin">Закрепить наверху</string>
+    <string name="conversation_unpin">Открепить</string>
+    <string name="group_block_member">Заблокировать участника</string>
+    <string name="group_member_blocked">Заблокирован. Его сообщения в этой группе больше не будут до вас доходить.</string>
+    <string name="group_member_unblocked">Разблокирован.</string>
+    <string name="group_report_member">Пожаловаться на участника</string>
+    <string name="group_unblock_member">Разблокировать участника</string>
+    <string name="groups_show_fewer_members">Свернуть</string>
+    <string name="lora_error_channel_unknown">Этого канала нет на подключённой рации — возможно, он переименован, перемещён или удалён. Ничего не отправлено.</string>
+    <string name="lora_node_message">Написать этому узлу</string>
+    <string name="map_pois_hide">Скрыть места</string>
+    <string name="map_pois_show">Показать места</string>
+    <string name="map_regions_insufficient_space">Недостаточно свободного места на устройстве для установки этого региона.</string>
+    <string name="markup_done">Готово</string>
+    <string name="markup_draw">Рисовать</string>
+    <string name="markup_undo">Отменить</string>
+    <string name="mesh_blocked_bluetooth">Bluetooth выключен</string>
+    <string name="mesh_blocked_permission">Разрешение «Устройства поблизости» выключено</string>
+    <string name="mesh_blocked_wifi">Wi‑Fi выключен</string>
+    <string name="new_message_fab">Новое</string>
+    <string name="peers_connect_already">%1$s уже подключён</string>
+    <string name="peers_connect_dialing">Подключение к %1$s…</string>
+    <string name="peers_connect_searching">Адрес %1$s пока неизвестен — повторный поиск…</string>
+    <string name="report_member_already_filed">Вы уже пожаловались на этого участника.</string>
+    <string name="report_member_dialog_title">Пожаловаться на участника</string>
+    <string name="updates_available">Доступна новая версия OSHI.</string>
+    <string name="updates_checking">Поиск новой версии…</string>
+    <string name="updates_current_version">У вас OSHI %1$s</string>
+    <string name="updates_news_action">Читать примечания к выпуску</string>
+    <string name="updates_news_body">С каждым выпуском публикуются новые функции, исправления и уведомления об обслуживании.</string>
+    <string name="updates_title">Обновления и обслуживание</string>
+    <string name="updates_up_to_date">У вас последняя известная нам версия.</string>
+    <string name="inapp_update_title">Доступно обновление</string>
+    <string name="inapp_update_body">В Google Play вышла новая версия OSHI. Она загружается в фоне, так что можно продолжать пользоваться приложением.</string>
+    <string name="inapp_update_now">Обновить</string>
+    <string name="inapp_update_later">Позже</string>
+    <string name="inapp_update_ready">Обновление готово</string>
+    <string name="inapp_update_restart">Перезапустить</string>
+    <!-- __CALL_WAKE_2026_11_22__ -->
+    <string name="call_state_calling">Вызов…</string>
+    <string name="call_reach_unreachable">Сейчас недоступен</string>
+    <string name="call_readiness_title">Входящие звонки могут не звонить</string>
+    <string name="call_readiness_notifications">Уведомления OSHI отключены — нажмите, чтобы разрешить</string>
+    <string name="call_readiness_channel">Уведомления «Входящие звонки» отключены — нажмите, чтобы включить</string>
+    <string name="call_readiness_full_screen">Полноэкранные оповещения о звонках запрещены — нажмите, чтобы разрешить</string>
+    <string name="call_readiness_background">Android ограничивает OSHI в фоне — нажмите и выберите для батареи «Без ограничений»</string>
+    <string name="composer_format_bold">Жирный</string>
+    <string name="composer_format_underline">Подчёркнутый</string>
+    <!-- __GROUP_HEADER_ISLAND_2026_11_24__ floating group header -->
+    <string name="group_header_info_a11y">Информация о группе, %1$s</string>
+    <string name="group_header_search_a11y">Поиск в беседе</string>
+    <plurals name="group_header_subscribers">
+        <item quantity="one">%1$d подписчик</item>
+        <item quantity="few">%1$d подписчика</item>
+        <item quantity="many">%1$d подписчиков</item>
+        <item quantity="other">%1$d подписчика</item>
+    </plurals>
 </resources>

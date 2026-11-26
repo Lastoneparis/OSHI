@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">Doğrudan</string>
+    <string name="lora_node_card_from_you">senden</string>
+    <string name="lora_node_card_heard_day">%1$d g önce duyuldu</string>
+    <string name="lora_node_card_heard_hour">%1$d sa önce duyuldu</string>
+    <string name="lora_node_card_heard_min">%1$d dk önce duyuldu</string>
+    <string name="lora_node_card_heard_now">az önce duyuldu</string>
+    <string name="lora_node_card_hops">%1$d atlama</string>
+    <string name="lora_node_card_in_range">menzilde</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_never_heard">hiç duyulmadı</string>
+    <string name="lora_node_card_not_heard">henüz duyulmadı</string>
+    <string name="lora_node_card_relayed">aktarıldı</string>
+</resources>

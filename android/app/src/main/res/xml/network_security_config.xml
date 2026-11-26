@@ -21,9 +21,14 @@
             <certificates src="system" />
         </trust-anchors>
         <pin-set expiration="2027-06-01">
-            <pin digest="SHA-256">0nAG9HjNRcCEVoDETqe5BKVXl97VZqmyVK+VikDj1r4=</pin>
-            <pin digest="SHA-256">s/tdAOmUzd8syaTuqfgGvFcn6DzA5Cmb+Vby1ST+U3Y=</pin>
-            <pin digest="SHA-256">sCkq5UWXjg+7mKu9lMhhYF5bGLsy7VI/UNW3tccdR7w=</pin>
+            <!-- __PIN_UNION_2026_11_20__ the SAME union on Android, iOS and Desktop
+                 (OSHI-Desktop net/CertificatePins.kt). Android lacked the current leaf
+                 and YE1; iOS lacked Root YE. -->
+            <pin digest="SHA-256">0nAG9HjNRcCEVoDETqe5BKVXl97VZqmyVK+VikDj1r4=</pin> <!-- previous leaf -->
+            <pin digest="SHA-256">tcs1FWdgXPmNWGfDyxW1PXxrJ6C5uP1xyppLl1E/Wdg=</pin> <!-- current leaf -->
+            <pin digest="SHA-256">brzvtCELCIZUo4sD/qPX0ccRtPsd3DY6RfmxpOU9oB4=</pin> <!-- Let's Encrypt YE1 -->
+            <pin digest="SHA-256">s/tdAOmUzd8syaTuqfgGvFcn6DzA5Cmb+Vby1ST+U3Y=</pin> <!-- Let's Encrypt YE2 -->
+            <pin digest="SHA-256">sCkq5UWXjg+7mKu9lMhhYF5bGLsy7VI/UNW3tccdR7w=</pin> <!-- ISRG Root YE -->
         </pin-set>
     </domain-config>
 

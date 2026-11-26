@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Comandi</string>
+    <string name="bot_cmd_send_a11y">Invia %1$s</string>
+    <string name="bot_cmd_sheet_title">Comandi del bot</string>
+    <string name="bot_cmd_tap_to_send">Tocca un comando per inviarlo.</string>
+    <string name="bot_cmd_empty_none_title">Ancora nessun bot qui</string>
+    <string name="bot_cmd_empty_none_body">Crea un bot e aggiungilo a questo gruppo. I suoi comandi appariranno qui e quando scrivi /.</string>
+    <string name="bot_cmd_empty_bot">Questo bot non ha ancora comandi.</string>
+    <string name="bot_cmd_setup">Configura i comandi</string>
+    <string name="bot_cmd_section">Comandi</string>
+    <string name="bot_cmd_section_hint">Chi è nei gruppi del bot li vede scrivendo / o toccando Comandi.</string>
+    <string name="bot_cmd_add">Aggiungi</string>
+    <string name="bot_cmd_add_title">Nuovo comando</string>
+    <string name="bot_cmd_edit_title">Modifica comando</string>
+    <string name="bot_cmd_field_name">Comando</string>
+    <string name="bot_cmd_field_description">Descrizione (mostrata nel menu)</string>
+    <string name="bot_cmd_field_reply">Risposta</string>
+    <string name="bot_cmd_field_reply_hint">Cosa risponde il bot. Puoi usare {{input}}, {{bot_name}} e {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Inviato al tuo webhook, che risponde.</string>
+    <string name="bot_cmd_empty_owner">Ancora nessun comando. Aggiungine uno, come /start o /help, così tutti sanno cosa fa questo bot.</string>
+    <string name="bot_cmd_err_empty">Inserisci il nome del comando.</string>
+    <string name="bot_cmd_err_invalid">Solo lettere minuscole, cifre e _.</string>
+    <string name="bot_cmd_err_too_long">Al massimo 32 caratteri.</string>
+    <string name="bot_cmd_err_duplicate">Questo bot ha già questo comando.</string>
+    <string name="bot_cmd_err_too_many">Un bot può avere al massimo 100 comandi.</string>
+    <string name="bot_cmd_err_description">Descrizione troppo lunga (al massimo 256 caratteri).</string>
+    <string name="bot_cmd_sync_local">Salvato su questo telefono, che fa funzionare il bot.</string>
+    <string name="bot_cmd_sync_syncing">Aggiornamento del server…</string>
+    <string name="bot_cmd_sync_synced">Menu aggiornato sul server.</string>
+    <string name="bot_cmd_sync_failed">Impossibile aggiornare il server. I tuoi comandi sono salvati su questo telefono.</string>
+    <string name="bot_profile_edit">Modifica profilo</string>
+    <string name="bot_profile_name">Nome</string>
+    <string name="bot_profile_description">Descrizione</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Dai un nome al tuo bot.</string>
+    <string name="bot_profile_err_name_long">Nome troppo lungo (al massimo 64 caratteri).</string>
+    <string name="bot_profile_err_desc_long">Descrizione troppo lunga (al massimo 512 caratteri).</string>
+    <string name="bot_connect_title">Come si collega</string>
+    <string name="bot_connect_local">Questo bot funziona su questo telefono: tieni OSHI installato e il bot attivo. Aggiungilo a un gruppo e i membri potranno usarne i comandi.</string>
+    <string name="bot_connect_webhook">Ogni comando viene inviato all’URL del tuo webhook e il tuo server risponde in JSON {\"text\": \"…\"}. Il tuo server può anche usare il token qui sotto con l’API bot di OSHI.</string>
+    <string name="bot_connect_token_warning">Tieni segreto il token: chi lo possiede può parlare come il tuo bot.</string>
+    <string name="bot_connect_groups">Gruppi: %1$s</string>
+    <string name="bot_connect_no_groups">Non è ancora in nessun gruppo: nessuno può usarne i comandi.</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">Priame</string>
+    <string name="lora_node_card_from_you">od vás</string>
+    <string name="lora_node_card_heard_day">počutý pred %1$d d</string>
+    <string name="lora_node_card_heard_hour">počutý pred %1$d h</string>
+    <string name="lora_node_card_heard_min">počutý pred %1$d min</string>
+    <string name="lora_node_card_heard_now">počutý práve teraz</string>
+    <string name="lora_node_card_hops">%1$d skokov</string>
+    <string name="lora_node_card_in_range">v dosahu</string>
+    <string name="lora_node_card_km">%1$.1f km</string>
+    <string name="lora_node_card_metres">%1$d m</string>
+    <string name="lora_node_card_never_heard">nikdy nepočutý</string>
+    <string name="lora_node_card_not_heard">zatiaľ nepočutý</string>
+    <string name="lora_node_card_relayed">preposlané</string>
+</resources>

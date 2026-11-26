@@ -47,11 +47,13 @@ import com.oshi.messenger.service.GroupManager
 import com.oshi.messenger.ui.components.ChatSheetItem
 import com.oshi.messenger.ui.components.ChatSheetDivider
 import com.oshi.messenger.ui.theme.GlassTier
+import com.oshi.messenger.ui.theme.glassOpaque
 import com.oshi.messenger.ui.theme.OSHIPurple
 import com.oshi.messenger.ui.theme.OshiModalBottomSheet
 import com.oshi.messenger.ui.theme.avatarFill
 import com.oshi.messenger.ui.theme.glassGlow
 import com.oshi.messenger.ui.theme.glassHairline
+import com.oshi.messenger.ui.theme.glassLift
 import com.oshi.messenger.ui.theme.glassOn
 import com.oshi.messenger.ui.theme.glassTextFieldColors
 import com.oshi.messenger.ui.theme.thenIf
@@ -107,7 +109,10 @@ internal fun MergedChatsBody(
     var teaserDismissed by rememberSaveable { mutableStateOf(false) }
     var nearbyDismissed by rememberSaveable { mutableStateOf(emptyList<String>()) }
 
-    val isRadio: (String) -> Boolean = com.oshi.messenger.service.lora.LoRaChannelThread::isChannelKey
+    val isRadio: (String) -> Boolean = {
+        com.oshi.messenger.service.lora.LoRaChannelThread.isChannelKey(it) ||
+            com.oshi.messenger.service.lora.MeshCoreThread.isChannelKey(it)
+    }
     val items = remember(conversations, groups) { ChatListMerge.itemsOf(conversations, groups, isRadio) }
     val counts = remember(items) { ChatListMerge.counts(items) }
     val shown = remember(items, pinned, filter, query, groupType) { ChatListMerge.arrange(items, pinned, filter, query, groupType) }
@@ -142,7 +147,7 @@ internal fun MergedChatsBody(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 6.dp)
-                .thenIf(glassOn()) { glassHairline(RoundedCornerShape(percent = 50)) },
+                .thenIf(glassOn()) { glassLift(RoundedCornerShape(percent = 50), spread = 6.dp).glassHairline(RoundedCornerShape(percent = 50)) },
             colors = if (glassOn()) glassTextFieldColors() else OutlinedTextFieldDefaults.colors(),
             placeholder = { Text(stringResource(R.string.search), maxLines = 1, overflow = TextOverflow.Ellipsis) },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
@@ -270,7 +275,7 @@ private fun MergedChip(label: String, count: Int, selected: Boolean, onClick: ()
     val shape = RoundedCornerShape(percent = 50)
     val container = when {
         selected -> MaterialTheme.colorScheme.primary
-        glass -> GlassTier.Chip.opaque
+        glass -> glassOpaque(GlassTier.Chip)
         else -> MaterialTheme.colorScheme.surfaceVariant
     }
     val ink = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
@@ -279,7 +284,7 @@ private fun MergedChip(label: String, count: Int, selected: Boolean, onClick: ()
         modifier = Modifier
             .heightIn(min = 34.dp)
             .thenIf(glass && selected) { glassGlow(shape, alpha = 0.22f, spread = 6.dp) }
-            .thenIf(glass && !selected) { glassHairline(shape, highlight = false) }
+            .thenIf(glass && !selected) { glassLift(shape, spread = 4.dp, drop = 1.dp).glassHairline(shape, highlight = false) }
             .clip(shape)
             .background(container)
             // One target per chip, announced as a selectable tab with its count.
@@ -554,7 +559,7 @@ internal fun NearbyGroupsCard(
             .fillMaxWidth()
             .thenIf(glass) { glassHairline(shape) }
             .clip(shape)
-            .background(if (glass) GlassTier.Card.opaque else OSHIPurple.copy(alpha = 0.10f))
+            .background(if (glass) glassOpaque(GlassTier.Card) else OSHIPurple.copy(alpha = 0.10f))
             .clickable(onClick = onOpen)
             .padding(start = 14.dp, top = 10.dp, bottom = 10.dp, end = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -672,7 +677,7 @@ private fun NewSheetRow(icon: ImageVector, title: String, description: String, t
             .fillMaxWidth()
             .thenIf(glass) { glassHairline(shape, highlight = false) }
             .clip(shape)
-            .background(if (glass) GlassTier.Card.opaque else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f))
+            .background(if (glass) glassOpaque(GlassTier.Card) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f))
             .clickable(onClick = onClick)
             .semantics(mergeDescendants = true) {}
             .padding(horizontal = 12.dp, vertical = 12.dp),

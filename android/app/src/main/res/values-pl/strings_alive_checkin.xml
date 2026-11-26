@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Sprawdzanie bezpieczeństwa potwierdzone</string>
+    <string name="alive_a11y_neutral">Brak skonfigurowanego sprawdzania bezpieczeństwa</string>
+    <string name="alive_a11y_overdue">Sprawdzanie bezpieczeństwa zaległe</string>
+    <string name="alive_action_im_alive">Żyję</string>
+    <string name="alive_action_message_them">Napisz</string>
+    <string name="alive_bar_open_settings">Ustawienia sprawdzania</string>
+    <string name="alive_channel_description">Przypomnienia o Twoich potwierdzeniach oraz powiadomienia, gdy ktoś, kogo obserwujesz, nie potwierdził swojego.</string>
+    <string name="alive_channel_name">Sprawdzanie bezpieczeństwa</string>
+    <string name="alive_confirmed_toast">Potwierdzenie wysłane</string>
+    <string name="alive_duration_days_hours">%1$d d %2$d godz.</string>
+    <string name="alive_duration_hours_minutes">%1$d godz. %2$d min</string>
+    <string name="alive_duration_minutes">%1$d min</string>
+    <string name="alive_duration_now">niecała minuta</string>
+    <string name="alive_interval_24h">Co 24 godziny</string>
+    <string name="alive_interval_48h">Co 48 godzin</string>
+    <string name="alive_interval_72h">Co 72 godziny</string>
+    <string name="alive_interval_custom">Własny</string>
+    <string name="alive_interval_custom_hours">Co %1$d godz.</string>
+    <string name="alive_interval_every">co %1$s</string>
+    <string name="alive_lane_you">Ty</string>
+    <string name="alive_note_delivery">Przypomnienia i powiadomienia zależą od Twojej sieci i uprawnień do powiadomień. Brak potwierdzenia oznacza tylko, że żadne nie dotarło — nic więcej.</string>
+    <string name="alive_note_no_location">Lokalizacja nie jest udostępniana. Potwierdzenie zawiera jeden znacznik czasu i nic poza tym.</string>
+    <string name="alive_notification_mine_due_body">Potwierdź, że żyjesz, aby %1$s nie musiał(a) czekać.</string>
+    <string name="alive_notification_mine_due_title">Czas na Twoje potwierdzenie</string>
+    <string name="alive_notification_overdue_body">Potwierdzenie miało nadejść %1$s temu. Oznacza to tylko, że żadne nie dotarło.</string>
+    <string name="alive_notification_overdue_title">Brak potwierdzenia od %1$s</string>
+    <string name="alive_sheet_explainer">Potwierdzaj regularnie, że żyjesz. %1$s widzi Twoje odliczanie i dostaje powiadomienie, gdy minie bez odpowiedzi.</string>
+    <string name="alive_sheet_interval">Jak często</string>
+    <string name="alive_sheet_mine_switch">Potwierdzaj dla %1$s</string>
+    <string name="alive_sheet_stop">Zakończ potwierdzanie</string>
+    <string name="alive_sheet_their_next">Następne oczekiwane %1$s</string>
+    <string name="alive_sheet_their_none">%1$s nie skonfigurował(a) tu sprawdzania bezpieczeństwa.</string>
+    <string name="alive_sheet_their_section">Sprawdzanie bezpieczeństwa: %1$s</string>
+    <string name="alive_state_confirmed_ago">potwierdzono %1$s temu</string>
+    <string name="alive_state_due_in">termin za %1$s</string>
+    <string name="alive_state_not_set">nieskonfigurowane</string>
+    <string name="alive_state_overdue_by">brak odpowiedzi przez %1$s</string>
+    <string name="alive_summary_confirmed">Potwierdził(a), że żyje</string>
+    <string name="alive_summary_started">Rozpoczęto sprawdzanie bezpieczeństwa</string>
+    <string name="alive_summary_stopped">Zatrzymano sprawdzanie bezpieczeństwa</string>
+    <string name="alive_title">Sprawdzanie bezpieczeństwa</string>
+    <string name="alive_unknown_peer">ten kontakt</string>
+</resources>

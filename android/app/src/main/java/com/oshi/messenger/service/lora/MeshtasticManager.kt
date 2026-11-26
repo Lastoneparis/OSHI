@@ -523,7 +523,12 @@ class MeshtasticManager private constructor(context: Context) {
         suspend fun stillWanted(messageId: String): Boolean
         /** A held message's frames reached the radio. */
         suspend fun onHeldSent(messageId: String)
-        /** It will never go out over this radio (too large for it, evicted, unreadable): show it failed. */
+        /**
+         * It will never go out over this radio (too large for it, evicted, unreadable), or it went out and
+         * the radio says it was not delivered (OMP FAILED/REJECTED, a stock routing failure, or no answer
+         * within [LoRaSendTimeout]): show it failed. The listener must leave a row alone that was delivered
+         * some other way; a later mesh confirmation (`loraAcked`) upgrades it again.
+         */
         suspend fun onHeldUndeliverable(messageId: String)
     }
     @Volatile var heldListener: HeldListener? = null
@@ -531,6 +536,11 @@ class MeshtasticManager private constructor(context: Context) {
     /** __LORA_AIRTIME_HINT_2026_11_18__ OMP QUEUED without SENT; published as [awaitingAirtime]. */
     private val airtimeWait = LoRaAirtimeWait()
     private var airtimeTickJob: Job? = null
+
+    /** __LORA_SEND_TIMEOUT_2026_11_23__ OMP sends with no terminal status yet; see [LoRaSendTimeout]. */
+    private val sendTimeout = LoRaSendTimeout()
+    private var sendTimeoutJob: Job? = null
+    private val sendTimeoutLock = Any()
 
     /** packet id → (message id, sent-at millis) for sends awaiting an ACK. :564-568 */
     private val loraPendingAck = HashMap<UInt, Pair<String, Long>>()
@@ -1745,6 +1755,7 @@ class MeshtasticManager private constructor(context: Context) {
             log("←", "LoRa ACK for ${pending.first.take(8)}")
         } else {
             log("←", "LoRa delivery FAILED for ${pending.first.take(8)} (reason $reason)")
+            reportNotDelivered(pending.first)
         }
     }
 
@@ -1880,7 +1891,10 @@ class MeshtasticManager private constructor(context: Context) {
             reason in LINK_FAILURE_REASONS -> {
                 val pending = synchronized(loraPendingAck) { loraPendingAck.remove(requestId) }
                 jam { onAckResult(System.currentTimeMillis(), false) }
-                pending?.let { log("←", "LoRa delivery FAILED for ${it.first.take(8)} (reason $reason, no ack after retries)") }
+                pending?.let {
+                    log("←", "LoRa delivery FAILED for ${it.first.take(8)} (reason $reason, no ack after retries)")
+                    reportNotDelivered(it.first)
+                }
             }
         }
     }
@@ -2048,6 +2062,8 @@ class MeshtasticManager private constructor(context: Context) {
             ompOutgoing[msgId] = messageId
         }
         frames.forEach { enqueuePacket(_myNodeNum.value, LoRaPacketParser.PORT_OSHI, it, wantAck = false) }
+        sendTimeout.onHandover(messageId, frames.size, broadcast = to == BROADCAST_ADDR, nowMs = System.currentTimeMillis())
+        startSendTimeoutTick()
         log("→", "OSHI msg ${messageId.take(8)} to OSHI Mesh radio (${frames.size} frame${if (frames.size > 1) "s" else ""}, ${body.size}B)")
         clearRefusal()
         return true
@@ -2096,6 +2112,7 @@ class MeshtasticManager private constructor(context: Context) {
                     airtimeWait.onProgress(id)
                 }
                 publishAirtimeWait()
+                sendTimeout.onStatus(id, st.state, System.currentTimeMillis())
                 when (st.state) {
                     OshiMeshProtocol.State.DELIVERED -> {
                         _loraInCustody.value = _loraInCustody.value - id
@@ -2111,6 +2128,8 @@ class MeshtasticManager private constructor(context: Context) {
                         _loraInCustody.value = _loraInCustody.value - id
                         synchronized(ompOutgoing) { ompOutgoing.remove(st.msgId) }
                         log("←", "OSHI msg ${id.take(8)} ${if (st.state == OshiMeshProtocol.State.FAILED) "expired undelivered" else "refused by the radio"}")
+                        // __LORA_SEND_FAILED_VISIBLE_2026_11_23__ Was log-only: the bubble stayed "sent".
+                        reportNotDelivered(id)
                     }
                     else -> Unit
                 }
@@ -2152,6 +2171,45 @@ class MeshtasticManager private constructor(context: Context) {
                 publishAirtimeWait()
             }
             publishAirtimeWait()
+        }
+    }
+
+    /**
+     * __LORA_SEND_FAILED_VISIBLE_2026_11_23__ The radio (or its silence) says [messageId] did not reach the
+     * peer over LoRa. Ignored when the mesh already confirmed it; otherwise the listener decides, and it
+     * never downgrades a row delivered some other way.
+     */
+    private fun reportNotDelivered(messageId: String) {
+        if (messageId in _loraAcked.value) return
+        val listener = heldListener ?: return
+        scope.launch { listener.onHeldUndeliverable(messageId) }
+    }
+
+    /**
+     * Checks [sendTimeout] while anything is tracked; stops itself when nothing is. The stop decision and
+     * the start decision share [sendTimeoutLock], so a send tracked just as the loop ends is never orphaned.
+     */
+    private fun startSendTimeoutTick() {
+        synchronized(sendTimeoutLock) {
+            if (sendTimeoutJob?.isActive == true) return
+            sendTimeoutJob = scope.launch {
+                while (true) {
+                    delay(LoRaSendTimeout.TICK_MS)
+                    for (id in sendTimeout.expired(System.currentTimeMillis())) {
+                        // The msgId → id mapping stays in [ompOutgoing]: a late DELIVERED still upgrades the row.
+                        airtimeWait.onProgress(id)
+                        log("!", "OSHI msg ${id.take(8)}: no delivery news from the radio in time, shown not delivered")
+                        reportNotDelivered(id)
+                    }
+                    publishAirtimeWait()
+                    synchronized(sendTimeoutLock) {
+                        if (!sendTimeout.hasPending()) {
+                            sendTimeoutJob = null
+                            return@launch
+                        }
+                    }
+                }
+            }
         }
     }
 

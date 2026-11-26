@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Advanced chat privacy</string>
+    <string name="adv_privacy_subtitle">Stop everyone in this chat from saving media, exporting the chat or using AI on its messages</string>
+    <string name="adv_privacy_learn_more">Learn more</string>
+    <string name="adv_privacy_notice_on">%1$s turned on advanced chat privacy. No one can auto-save media, export the chat, or use AI on messages in this chat.</string>
+    <string name="adv_privacy_notice_off">%1$s turned off advanced chat privacy. Saving media, exporting the chat and AI features are available again.</string>
+    <string name="adv_privacy_notice_on_you">You turned on advanced chat privacy. No one can auto-save media, export the chat, or use AI on messages in this chat.</string>
+    <string name="adv_privacy_notice_off_you">You turned off advanced chat privacy. Saving media, exporting the chat and AI features are available again.</string>
+    <string name="adv_privacy_summary_on">Advanced chat privacy turned on</string>
+    <string name="adv_privacy_summary_off">Advanced chat privacy turned off</string>
+    <string name="adv_privacy_sheet_intro">When anyone turns it on, it applies to everyone in this chat:</string>
+    <string name="adv_privacy_sheet_point_save">Media from this chat can\'t be saved to the gallery or Downloads.</string>
+    <string name="adv_privacy_sheet_point_export">This chat is left out of chat exports.</string>
+    <string name="adv_privacy_sheet_point_ai">OSHI\'s on-device AI can\'t read this chat: no smart replies, no translation, no context for the writing assistant.</string>
+    <string name="adv_privacy_sheet_point_screen">Screenshots and screen recording of this chat are blocked.</string>
+    <string name="adv_privacy_sheet_limits">Anyone in the chat can turn it on or off. It can\'t stop someone photographing their screen, and people using an older version of OSHI aren\'t affected.</string>
+    <string name="adv_privacy_blocked_toast">Advanced chat privacy is on in this chat</string>
+    <string name="adv_privacy_older_members">Members on an older version of OSHI won\'t apply it until they update: %1$d</string>
+</resources>

@@ -27,6 +27,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
@@ -102,7 +103,7 @@ fun OshiAlertDialog(
         title = title,
         text = text,
         shape = shape,
-        containerColor = if (containerColor == Color.Unspecified || containerColor == MaterialTheme.colorScheme.surface) GlassTier.Dialog.fill(canBlur) else containerColor,
+        containerColor = if (containerColor == Color.Unspecified || containerColor == MaterialTheme.colorScheme.surface) glassFill(GlassTier.Dialog, canBlur) else containerColor,
         iconContentColor = iconContentColor,
         titleContentColor = titleContentColor,
         textContentColor = textContentColor,
@@ -120,8 +121,13 @@ fun OshiAlertDialog(
  */
 @Composable
 private fun GlassButtonInk(content: @Composable () -> Unit) {
+    // __GLASS_ALL_THEMES_2026_11_21__ the light palette keeps brand #5616EC
+    // (8:1 on its white dialog glass); only the dark grounds swap.
+    val p = currentGlass()
+    val ink = p?.buttonInk
+    if (ink == null) { content(); return }
     MaterialTheme(
-        colorScheme = MaterialTheme.colorScheme.copy(primary = Oshi.BrandInkDark, onPrimary = GlassOnBrandInk),
+        colorScheme = MaterialTheme.colorScheme.copy(primary = ink, onPrimary = p.onButtonInk ?: GlassOnBrandInk),
         shapes = MaterialTheme.shapes,
         typography = MaterialTheme.typography,
         content = content,
@@ -183,7 +189,7 @@ fun OshiModalBottomSheet(
     }
     val canBlur = rememberCrossWindowBlur()
     // An explicit `colorScheme.surface` is what most call sites pass to mean "the default".
-    val container = if (containerColor == Color.Unspecified || containerColor == MaterialTheme.colorScheme.surface) GlassTier.Sheet.fill(canBlur) else containerColor
+    val container = if (containerColor == Color.Unspecified || containerColor == MaterialTheme.colorScheme.surface) glassFill(GlassTier.Sheet, canBlur) else containerColor
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         // NOT `modifier.glassHairline(shape)`: M3 1.1 applies the caller's
@@ -222,20 +228,22 @@ private val SheetRimDepth = 160.dp
  * lands on the rounded top. It fades out by [SheetRimDepth] — light catches
  * the top edge and corners of a sheet; its sides run off the screen anyway.
  */
-private fun Modifier.glassSheetRim(shape: Shape): Modifier = this.drawWithCache {
+private fun Modifier.glassSheetRim(shape: Shape): Modifier = composed {
+    val p = currentGlass() ?: GlassPalette.Oled
+    Modifier.drawWithCache {
     val strokePx = OledGlass.HairlineWidth.toPx()
     val depth = SheetRimDepth.toPx()
     val outline = shape.createOutline(Size(size.width - strokePx, depth * 2), layoutDirection, this)
     val rim = Brush.verticalGradient(
-        0f to OledGlass.HairlineTop,
-        0.5f to OledGlass.HairlineBottom,
-        1f to Color.Transparent,
+        0f to p.hairlineTop,
+        0.5f to p.hairlineBottom,
+        1f to p.hairlineBottom.copy(alpha = 0f),
         startY = 0f, endY = depth,
     )
     val sheenH = OledGlass.HighlightDepth.toPx().coerceAtMost(size.height)
     val sheen = Brush.verticalGradient(
-        0f to Color.White.copy(alpha = OledGlass.HIGHLIGHT_ALPHA),
-        1f to Color.White.copy(alpha = 0f),
+        0f to p.highlight,
+        1f to p.highlight.copy(alpha = 0f),
         startY = 0f, endY = sheenH.coerceAtLeast(1f),
     )
     onDrawBehind {
@@ -243,6 +251,7 @@ private fun Modifier.glassSheetRim(shape: Shape): Modifier = this.drawWithCache 
         translate(strokePx / 2f, strokePx / 2f) {
             drawOutline(outline, brush = rim, style = Stroke(width = strokePx))
         }
+    }
     }
 }
 
@@ -267,7 +276,7 @@ fun OshiDropdownMenu(
     // around `modifier`; re-scoping those two theme values is the only way in.
     // A menu is a popup window with nothing blurred behind it: translucency
     // would only let the row under it show through as a stray shade.
-    val fill = GlassTier.Menu.opaque
+    val fill = glassOpaque(GlassTier.Menu)
     MaterialTheme(
         colorScheme = MaterialTheme.colorScheme.withGlassSurface(fill),
         shapes = MaterialTheme.shapes.copy(extraSmall = GlassMenuShape),
@@ -299,7 +308,7 @@ fun OshiCard(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     androidx.compose.material3.Card(
-        modifier = if (glassOn()) modifier.glassHairline(shape) else modifier,
+        modifier = if (glassOn()) modifier.glassLift(shape).glassHairline(shape) else modifier,
         shape = shape,
         colors = colors,
         elevation = elevation,
@@ -325,7 +334,7 @@ fun OshiCard(
 ) {
     androidx.compose.material3.Card(
         onClick = onClick,
-        modifier = if (glassOn()) modifier.glassHairline(shape) else modifier,
+        modifier = if (glassOn()) modifier.glassLift(shape).glassHairline(shape) else modifier,
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -388,7 +397,7 @@ fun OshiFilterChip(
  */
 @Composable
 fun glassDialogSurfaceColor(default: Color = MaterialTheme.colorScheme.surface): Color =
-    if (glassOn()) GlassTier.Dialog.fill(rememberCrossWindowBlur()) else default
+    if (glassOn()) glassFill(GlassTier.Dialog, rememberCrossWindowBlur()) else default
 
 /** The dialog rim (on the dialog's own Surface modifier) under OLED black. */
 @Composable

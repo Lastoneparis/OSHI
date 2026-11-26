@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Суворий режим безпеки</string>
+    <string name="strict_status_on">Увімк.: без копіювання, без знімків екрана, приховано від застосунків для читання екрана</string>
+    <string name="strict_status_off">Вимк. Захищає OSHI, коли за телефоном можуть стежити</string>
+    <string name="strict_hero_on">Суворий режим безпеки увімкнено</string>
+    <string name="strict_intro">Для випадків, коли за телефоном можуть стежити. Один перемикач захищає OSHI: нічого не можна скопіювати, екран не можна зняти, а застосунки, що читають екран, зокрема ШІ-агенти, нічого не бачать.</string>
+    <string name="strict_section_switch">Режим</string>
+    <string name="strict_toggle_title">Суворий режим безпеки</string>
+    <string name="strict_toggle_on">Увімкнено на цьому пристрої</string>
+    <string name="strict_toggle_off">Вимк.</string>
+    <string name="strict_block_paste_title">Заборонити й вставлення</string>
+    <string name="strict_block_paste_subtitle">Вставляти щось в OSHI теж не можна</string>
+    <string name="strict_hide_presence_title">Приховати сповіщення про прочитання та набір</string>
+    <string name="strict_hide_presence_subtitle">Інші не бачать, коли ви читаєте чи друкуєте</string>
+    <string name="strict_forced_subtitle">Задано суворим режимом безпеки</string>
+    <string name="strict_blocked_toast">Заблоковано суворим режимом безпеки</string>
+    <string name="strict_unlock_title">Вимкнути суворий режим безпеки</string>
+    <string name="strict_unlock_subtitle">Підтвердьте, що це ви</string>
+    <string name="strict_threats_title">Застосунки, які можуть читати екран або керувати ним</string>
+    <string name="strict_threats_none">На цьому телефоні нічого не знайдено.</string>
+    <string name="strict_threat_a11y">Служба спеціальних можливостей, що не є допоміжним засобом</string>
+    <string name="strict_threat_remote">Застосунок для віддаленого керування або дзеркалення екрана</string>
+    <string name="strict_threats_open">Перевірити</string>
+    <string name="strict_threats_explainer">OSHI не може вимкнути інший застосунок. Якщо ви не впізнаєте один із них, вимкніть його в розділі «Налаштування › Спеціальні можливості» Android або видаліть.</string>
+    <string name="strict_banner_title">Застосунки можуть читати цей екран або керувати ним</string>
+    <string name="strict_banner_body">%1$s. Суворий режим безпеки приховує OSHI від них там, де це дозволяє Android.</string>
+    <string name="strict_banner_dismiss">Закрити</string>
+    <string name="strict_does_title">Що він робить</string>
+    <string name="strict_does_copy">Не можна копіювати, вирізати, пересилати, надсилати чи зберігати повідомлення. Текст не можна виділити, а все, що OSHI помістив у буфер обміну, стирається.</string>
+    <string name="strict_does_paste">Вставлення в OSHI блокується, коли ввімкнено «Заборонити й вставлення», зокрема командою вставлення з клавіатури.</string>
+    <string name="strict_does_screen">Знімки екрана, запис і трансляція екрана показують чорний екран. Попередній перегляд у списку нещодавніх застосунків приховано.</string>
+    <string name="strict_does_agents">Застосунки, що читають екран через спеціальні можливості, зокрема ШІ-агенти, не бачать вмісту OSHI (Android 14 і новіші). Дотики, які вони імітують, ігноруються.</string>
+    <string name="strict_does_overlays">Дотики ігноруються, поки інший застосунок малює поверх OSHI.</string>
+    <string name="strict_does_notifications">У сповіщеннях лише «Нове повідомлення»: без імені, фото й тексту.</string>
+    <string name="strict_does_lock">Блокування застосунку щоразу, коли ви повертаєтеся до OSHI (якщо на телефоні налаштовано блокування екрана).</string>
+    <string name="strict_does_keyboard">Клавіатура інкогніто: клавіатуру просять не запам’ятовувати те, що ви вводите.</string>
+    <string name="strict_does_network">Без попереднього перегляду посилань і пошуку GIPHY: нічого не завантажується зі сторонніх сайтів.</string>
+    <string name="strict_does_presence">Сповіщення про прочитання та індикатори набору вимкнено (якщо ви обрали їх приховати).</string>
+    <string name="strict_does_relay">Приватний ретранслятор вмикається, якщо він доступний.</string>
+    <string name="strict_does_restore">Попередні налаштування повертаються, коли ви вимикаєте режим.</string>
+    <string name="strict_cannot_title">Чого він не може</string>
+    <string name="strict_cannot_malware">Жоден застосунок не захистить повністю від шкідливого ПЗ чи зламаного (root) телефона.</string>
+    <string name="strict_cannot_keyboard">Клавіатура все одно бачить, що ви вводите. Підказку з буфера, яку вона вставляє за вас, не відрізнити від набору.</string>
+    <string name="strict_cannot_readers">Програми читання з екрана для незрячих і слабозорих продовжують працювати, але інші застосунки спеціальних можливостей не можуть читати OSHI, поки режим увімкнено.</string>
+    <string name="strict_cannot_old">На Android 13 і старших OSHI не може приховати вміст від застосунків спеціальних можливостей. Він може лише попередити про них.</string>
+    <string name="strict_cannot_camera">Екран усе одно можна сфотографувати іншим пристроєм.</string>
+    <string name="strict_cannot_recipient">Захист діє лише на цьому телефоні, а не на телефонах тих, кому ви пишете.</string>
+    <string name="strict_auto_lock_immediate">Одразу (Суворий режим безпеки)</string>
+</resources>

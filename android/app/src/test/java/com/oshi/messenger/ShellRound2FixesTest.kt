@@ -5,7 +5,7 @@ import com.oshi.messenger.data.model.GroupConversation
 import com.oshi.messenger.data.model.GroupMessage
 import com.oshi.messenger.data.model.GroupType
 import com.oshi.messenger.service.GroupManager
-import com.oshi.messenger.ui.screens.OnboardingPage
+import com.oshi.messenger.ui.onboarding.OnboardingPage
 import com.oshi.messenger.ui.screens.groupDocumentLabel
 import com.oshi.messenger.ui.viewmodel.GroupsViewModel
 import org.json.JSONObject
@@ -276,16 +276,22 @@ class ShellRound2FixesTest {
     // Onboarding
     // =====================================================================
 
+    /**
+     * __ONBOARDING_2027__ The 2027 redesign replaced the seven iOS-ordered pages with
+     * four one-idea slides, one RULES page carrying both safety disclosures, the
+     * in-context notification ask and the terminal identity step. Pinned whole here;
+     * the content of RULES is pinned by `OnboardingRedesignTest`.
+     */
     @Test
-    fun `onboarding shows every page iOS shows, in iOS's order`() {
+    fun `onboarding shows the 2027 steps in order`() {
         assertEquals(
             listOf(
-                OnboardingPage.WELCOME,
-                OnboardingPage.SEND_MESSAGE,
-                OnboardingPage.CONNECTIVITY,
-                OnboardingPage.FEATURES,
-                OnboardingPage.GOOD_CONDUCT,
-                OnboardingPage.DISCLAIMER,
+                OnboardingPage.PRIVATE,
+                OnboardingPage.OFFLINE,
+                OnboardingPage.ANONYMOUS,
+                OnboardingPage.TOGETHER,
+                OnboardingPage.RULES,
+                OnboardingPage.NOTIFICATIONS,
                 OnboardingPage.IDENTITY
             ),
             OnboardingPage.ORDER

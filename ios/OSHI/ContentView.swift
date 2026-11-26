@@ -358,6 +358,7 @@ struct MainTabView: View {
     @State private var captureMap = false
     @State private var captureGroupChat = false
     @State private var captureVideoNoteChat = false  // __VIDEO_NOTE_2026_09_24__
+    @State private var captureMeshCoreSettings = false  // __MESHCORE_INTEROP_2026_11_25__
     @State private var captureVideoNoteConversation: Conversation?
     @State private var captureShareLoc = false
     @State private var captureGroupObj: MessageGroup?
@@ -372,6 +373,8 @@ struct MainTabView: View {
     #endif
 
     @ObservedObject private var updateManager = AppUpdateManager.shared
+    /// __MAIL_UNREAD_REFRESH_2026_11_22__ observed so the Chats tab badge counts unread mail.
+    @ObservedObject private var mailClient = OSHIMailClient.shared
 
     // Notification deep link: pending navigation targets
     @State private var pendingGroupId: String?
@@ -394,7 +397,10 @@ struct MainTabView: View {
             .tabItem {
                 Label("tab_messages".localized, systemImage: "message.fill")
             }
-            .badge(totalUnreadCount + totalGroupUnreadCount)
+            // __MAIL_UNREAD_REFRESH_2026_11_22__ + unread Inbox mail: the Email segment lives
+            // in this tab, and a mail-only unread left the tab bar blank.
+            .badge(ChatsTabBadge.count(oneToOne: totalUnreadCount, groups: totalGroupUnreadCount,
+                                       mailInbox: mailClient.unreadInboxCount))
             .tag(0)
 
             // Tab 2: AI Chat (Offline AI Assistant)
@@ -467,6 +473,15 @@ struct MainTabView: View {
         // __BUBBLE_MEDIA_2026_11_21__ `-OSHIScreens -OSHIBubblePreview group|group2|channel|direct`.
         if ProcessInfo.processInfo.arguments.contains("-OSHIBubblePreview") {
             return AnyView(BubbleMediaPreviewHost())
+        }
+        // __STRICT_SECURITY_MODE_2026_11_22__ review screenshots:
+        // `-OSHIScreens -OSHIStrictSettings` / `-OSHIStrictExplainer [-OSHIStrictConfirm]`.
+        if ProcessInfo.processInfo.arguments.contains("-OSHIStrictSettings") {
+            return AnyView(NavigationStack { StrictSecurityModeView() })
+        }
+        if ProcessInfo.processInfo.arguments.contains("-OSHIStrictExplainer") {
+            let confirm = ProcessInfo.processInfo.arguments.contains("-OSHIStrictConfirm")
+            return AnyView(StrictSecurityExplainerView(onEnable: confirm ? {} : nil))
         }
         if ProcessInfo.processInfo.arguments.contains("-OSHIPrivacySettings") {
             return AnyView(NavigationStack { PrivacySettingsView() })
@@ -557,6 +572,9 @@ struct MainTabView: View {
                 NavigationView { ChatView(conversation: c) }
             }
         }
+        .fullScreenCover(isPresented: $captureMeshCoreSettings) {
+            NavigationStack { MeshtasticSettingsView() }
+        }
         .fullScreenCover(isPresented: $captureShareLoc) {
             LocationShareSheet(onShareLocation: { _ in }, conversationId: DemoDataManager.aliceKey)
         }
@@ -589,6 +607,17 @@ struct MainTabView: View {
                             NotificationCenter.default.post(name: NSNotification.Name("NearbyGroupDiscovered"),
                                                             object: nil,
                                                             userInfo: ["groupName": "Café Lumière", "memberCount": 7])
+                        }
+                    }
+                    // __MESHCORE_INTEROP_2026_11_25__ DEBUG capture of the MeshCore screens.
+                    if MeshCoreDemo.screen != nil {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                            if let conv = MeshCoreDemo.seed(identity: identityManager) {
+                                captureVideoNoteConversation = conv
+                                captureVideoNoteChat = true
+                            } else if MeshCoreDemo.screen == "settings" {
+                                captureMeshCoreSettings = true
+                            }
                         }
                     }
                     // __VIDEO_NOTE_2026_09_24__ DEBUG capture: seed round notes, open Alice.
@@ -671,7 +700,9 @@ struct MainTabView: View {
                         // demo mailbox — no server, no account — to capture the
                         // inbox | message split. `-OSHIMailDemoOpen` also opens one.
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            MailDemoFixture.install()
+                            // `-OSHIMailDemoOffline`: no mailbox installed (MailView fakes the
+                            // offline failure), to capture "can't reach mail".
+                            if !args.contains("-OSHIMailDemoOffline") { MailDemoFixture.install() }
                             selectedTab = 0
                             pendingMailMessageId = args.contains("-OSHIMailDemoOpen") ? MailDemoFixture.openId : ""
                         }

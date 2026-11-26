@@ -66,6 +66,7 @@ import com.oshi.messenger.service.CoverOutbox
 import com.oshi.messenger.service.WallpaperManager
 import com.oshi.messenger.service.LoRaDeliveryLedger
 import com.oshi.messenger.service.MessageSendPolicy
+import com.oshi.messenger.service.MessageTextSplitter
 import com.oshi.messenger.service.media.GifBytes
 import com.oshi.messenger.service.lora.LoRaEncryptedContent
 import com.oshi.messenger.service.lora.LoRaIdentityBridge
@@ -75,6 +76,8 @@ import com.oshi.messenger.service.lora.LoRaNodeIdentityMap
 import com.oshi.messenger.service.lora.LoRaReceivedMessage
 import com.oshi.messenger.service.lora.LoRaWireMessage
 import com.oshi.messenger.service.lora.MeshCoreManager
+import com.oshi.messenger.service.lora.MeshCoreThread
+import com.oshi.messenger.service.lora.LoRaRadios
 import com.oshi.messenger.service.LastReactionStore
 import com.oshi.messenger.service.LoRaLinkService
 import com.oshi.messenger.service.lora.MeshtasticManager
@@ -198,6 +201,69 @@ class MessageRepository @Inject constructor(
         private const val V2_INLINE_MEDIA_MAX_BYTES = 256 * 1024
 
         /**
+         * __GIF_COMPAT_IOS1043_2026_11_21__ The `mediaType` a 1:1 GIF (or OSHI mascot
+         * sticker) carries on EVERY 1:1 wire: `image`, never `gif`.
+         *
+         * iOS 1.0.43 — the build on sale, so every iPhone until the next one is approved —
+         * has no `.gif` case (`MediaManager.MediaType`: image/video/audio/document/contact,
+         * commit 4befbea0). What it does with `"gif"` depends on the path:
+         *  - V2 blob: `MediaType(rawValue:)` is nil, then the `?? v2MediaType(forMime:)`
+         *    fallback reads `image/gif` → `.image`. Shown (first frame).
+         *  - V2 inline (`v2ParseEmbeddedMediaJSON`, no MIME fallback) and the legacy /
+         *    LAN-mesh envelope (`parseAndStoreMedia`): `mediaType` = nil, and
+         *    `MediaMessageView.loadMedia()` stops on a nil type → an EMPTY bubble.
+         * With `image` all three paths land on `.image`. No receiver needs the `gif` label
+         * to animate: Android maps `gif` and `image` to the same IMAGE and Coil animates
+         * from the bytes (since 1.6.17), desktop sniffs `GIF8` (`GifBubble.isGifFile`), iOS
+         * ≥ the GIF work sniffs `MediaManager.isGIFData` (`renderType`). What still says
+         * "GIF" is the MIME (`image/gif`) and the `.gif` file name, which 1.0.43 ignores.
+         */
+        internal const val GIF_WIRE_MEDIA_TYPE = "image"
+
+        /** The 1:1 V2 `mediaType` label (blob key message AND inline envelope). */
+        internal fun v2WireMediaType(mediaType: MediaType, isGif: Boolean): String = when {
+            isGif -> GIF_WIRE_MEDIA_TYPE
+            mediaType == MediaType.IMAGE -> "image"
+            mediaType == MediaType.VIDEO -> "video"
+            mediaType == MediaType.AUDIO -> "audio"
+            mediaType == MediaType.CONTACT -> "contact"
+            else -> "document"
+        }
+
+        /**
+         * The V2 INLINE media envelope (blob upload failed, payload ≤ [V2_INLINE_MEDIA_MAX_BYTES]):
+         * iOS's own wrapper, read by `v2ParseEmbeddedMediaJSON`. That parser has NO MIME to
+         * fall back on — the label alone decides — which is why a GIF must be `image` here
+         * (__GIF_COMPAT_IOS1043_2026_11_21__). Pure, so the exact bytes are testable.
+         */
+        internal fun v2InlineMediaEnvelope(
+            iosMediaType: String,
+            dataBase64: String,
+            fileName: String,
+            size: Int,
+            caption: String?,
+            isViewOnce: Boolean,
+            noteFragment: String = "",
+        ): String {
+            // Same escaper as the V2 wire codec — a bare CR or TAB in a caption
+            // is as fatal to `JSONSerialization` as a backslash.
+            val escaped = com.oshi.messenger.network.v2.OSHICryptoV2.jsonEscape(caption ?: "")
+            val escapedName = com.oshi.messenger.network.v2.OSHICryptoV2.jsonEscape(fileName)
+            val t = com.oshi.messenger.network.v2.OSHICryptoV2.jsonEscape(iosMediaType)
+            return """{"type":"media","mediaType":"$t","content":"$dataBase64","fileName":"$escapedName","size":$size,"caption":"$escaped","isViewOnce":$isViewOnce$noteFragment}"""
+        }
+
+        /** The 1:1 V2 MIME. A GIF keeps `image/gif` — the label is `image`, the MIME is not. */
+        internal fun v2WireMime(mediaType: MediaType, isGif: Boolean): String = when {
+            isGif -> "image/gif"
+            mediaType == MediaType.IMAGE -> "image/jpeg"
+            mediaType == MediaType.VIDEO -> "video/mp4"
+            mediaType == MediaType.AUDIO -> "audio/m4a"
+            mediaType == MediaType.CONTACT -> "text/vcard"
+            else -> "application/octet-stream"
+        }
+
+        /**
          * The LEGACY 1:1 media envelope — the shape that rides the Double-Ratchet
          * VPS/IPFS path when the peer has no v2 bundle.
          *
@@ -268,12 +334,16 @@ class MessageRepository @Inject constructor(
          * envelope in, or null to keep the Android-direct form every shipped iPhone
          * already reads (and which stays byte-identical for photos, videos, voice notes
          * and documents). A contact card needs the wrapper to be recognised at all; a
-         * GIF needs it to animate (the direct form can only say IMAGE — iOS then keeps
-         * `mediaType` = nil/`gif` and sniffs the bytes).
+         * GIF keeps the wrapper for its `.gif` fileName, labelled `image`
+         * ([GIF_WIRE_MEDIA_TYPE]) — every iOS build reads that, and newer ones animate
+         * from the bytes.
          */
         internal fun legacyWireMediaType(mediaType: MediaType, isGif: Boolean): String? = when {
             mediaType == MediaType.CONTACT -> "contact"
-            mediaType == MediaType.IMAGE && isGif -> "gif"
+            // __GIF_COMPAT_IOS1043_2026_11_21__ `image`, not `gif`: iOS 1.0.43's
+            // `parseAndStoreMedia` turns `gif` into a nil type → empty bubble. Newer iOS
+            // animates from the bytes; the `.gif` fileName still rides along.
+            mediaType == MediaType.IMAGE && isGif -> GIF_WIRE_MEDIA_TYPE
             else -> null
         }
 
@@ -334,7 +404,8 @@ class MessageRepository @Inject constructor(
          * rester octet pour octet ce qui est déjà livré.
          */
         internal fun crossPlatformMeshWireType(mediaType: MediaType, isGif: Boolean): String = when {
-            isGif -> "gif"
+            // __GIF_COMPAT_IOS1043_2026_11_21__ (envelope no longer sent; kept consistent)
+            isGif -> GIF_WIRE_MEDIA_TYPE
             mediaType == MediaType.IMAGE -> "image"
             mediaType == MediaType.VIDEO -> "video"
             mediaType == MediaType.AUDIO -> "audio"
@@ -1604,10 +1675,17 @@ class MessageRepository @Inject constructor(
                 )
             }.getOrNull()
             val bannerId = com.oshi.messenger.service.MessageBanner.contactNotificationId(senderPublicKey)
-            if (com.oshi.messenger.service.MessageBanner.shownRecently(context, bannerId)) {
+            // __PREVIEW_ONE_IN_TWO_2026_11_24__ a recent (FCM, generic) banner is UPDATED
+            // with the text, quietly, instead of winning the race and hiding it.
+            val post = com.oshi.messenger.service.MessageBanner.localPostDecision(
+                shownRecently = com.oshi.messenger.service.MessageBanner.shownRecently(context, bannerId),
+                carriesText = displayPreview != com.oshi.messenger.service.MessageBanner.genericBody(context)
+            )
+            if (post == com.oshi.messenger.service.MessageBanner.LocalPost.SKIP) {
                 Log.d(TAG, "🔕 banner for ${senderPublicKey.take(8)}… already up — not posting a second one")
                 return
             }
+            val quiet = silent || post == com.oshi.messenger.service.MessageBanner.LocalPost.UPDATE_QUIETLY
 
             val intent = Intent(context, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -1620,14 +1698,22 @@ class MessageRepository @Inject constructor(
             val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val notification = NotificationCompat.Builder(context, FCMService.CHANNEL_MESSAGES)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(senderName)
+                // 🛡 __STRICT_MODE_2026_11_22__ strict: no sender name, no photo.
+                .setContentTitle(if (com.oshi.messenger.service.MessageBanner.anonymous(context)) com.oshi.messenger.service.MessageBanner.anonymousTitle(context) else senderName)
                 .setContentText(displayPreview)
-                .setLargeIcon(avatar)
+                .setLargeIcon(if (com.oshi.messenger.service.MessageBanner.anonymous(context)) null else avatar)
                 .setAutoCancel(true)
-                .setSound(if (silent) null else soundUri)
-                .setSilent(silent)
+                .setSound(if (quiet) null else soundUri)
+                .setSilent(quiet)
+                .setOnlyAlertOnce(post == com.oshi.messenger.service.MessageBanner.LocalPost.UPDATE_QUIETLY)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ no system "smart" actions on a protected chat's banner.
+                .setAllowSystemGeneratedContextualActions(
+                    com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.systemGeneratedRepliesAllowed(
+                        com.oshi.messenger.service.AdvancedChatPrivacyStore.isOn(senderPublicKey)
+                    )
+                )
                 // __BOT_E2E_2026_09_23__ Lock screen: generic public version, as FCMService.
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setPublicVersion(
@@ -2013,6 +2099,21 @@ class MessageRepository @Inject constructor(
             }
         }
 
+        // __WIFI_AWARE_2026_11_25__ A message handed to a Wi-Fi Aware link that closed
+        // before the peer acknowledged it. The mesh branch of the send path marks a
+        // row delivered on hand-off (as it always has for Nearby), so without this
+        // a dropped link would leave a ✓ on a message that never arrived. Only our
+        // own rows still labelled MESH are touched; the bubble then shows the usual
+        // "Not delivered" + retry.
+        meshManager.addUndeliveredCallback { messageId ->
+            scope.launch {
+                val row = try { messageDao.getMessageById(messageId) } catch (_: Exception) { null }
+                if (row != null && row.isFromMe && row.deliveryMethod == DeliveryMethod.MESH && !row.isRead) {
+                    markSendFailed(messageId)
+                }
+            }
+        }
+
         // Setup cross-platform mesh callback (iOS-Android via TCP/BLE)
         crossPlatformMesh.addMessageCallback { crossPlatformMessage ->
             scope.launch {
@@ -2227,6 +2328,12 @@ class MessageRepository @Inject constructor(
             }
         }
 
+        // __BOTS_PHASE1_2026_11_24__ a bot edits / deletes its own post in place.
+        vpsClient.onBotPostUpdate = { update ->
+            scope.launch { groupManager.applyBotPostUpdate(update) }
+        }
+        vpsClient.isMemberOfGroup = { gid -> groupManager.isInGroup(gid) }
+
         // Handle iOS full-group-update broadcasts (group rename, member change, picture/wallpaper from broadcastFullGroupUpdate)
         vpsClient.onGroupUpdateBroadcast = {
             groupId, groupName, membersJson, groupImageBytes, adminPublicKey, groupType,
@@ -2367,7 +2474,8 @@ class MessageRepository @Inject constructor(
                     ?: if (com.oshi.messenger.data.model.SavedContactThreads.showsEmptyThread(
                             canonical.publicKey,
                             savedContacts,
-                            isRadioKey = isChannelThread || canonical.publicKey.startsWith("lora!")
+                            isRadioKey = isChannelThread || canonical.publicKey.startsWith("lora!") ||
+                                MeshCoreThread.isMeshCoreKey(canonical.publicKey)
                         )
                     ) {
                         Message(
@@ -2835,7 +2943,100 @@ class MessageRepository @Inject constructor(
         if (LoRaChannelThread.isChannelKey(recipientPublicKey)) {
             return sendToLoRaChannel(recipientPublicKey, content)
         }
-                // 🔧 P0 FIX (device walkthrough #2, 2026-08-13).
+        // __MESHCORE_INTEROP_2026_11_25__ A MeshCore user or channel: no OSHI key, no ratchet, no relay.
+        // The MeshCore radio is the only route (sendMeshCoreText).
+        if (MeshCoreThread.isMeshCoreKey(recipientPublicKey)) {
+            return sendMeshCoreText(recipientPublicKey, content, resendOf)
+        }
+
+        // ✂️ THE BYTE BUDGET, CHECKED BEFORE ANY EXPENSIVE WORK.
+        //
+        // iOS decides this FIRST, before the row exists and before the ratchet is
+        // touched (`MessageManager.swift:4861-4871` → `MessageSendPolicy.swift:56-60`).
+        // Android used to compose, encrypt, chunk and only THEN refuse at frame
+        // 13 inside `sendSecureMessage` — the user watched a bubble appear and
+        // then quietly fail, having spent a ratchet step on it.
+        //
+        // The limit is the route's: 500 UTF-8 bytes for a stock LoRa radio, 4,000 for
+        // an OSHI Mesh radio, 16,000 otherwise (MessageSendPolicy.maxUTF8Bytes).
+        //
+        // __LONG_TEXT_ONE_MESSAGE_2026_09_28__ The 500 B radio budget applies
+        // only when LoRa IS the route (paired AND off-grid) — it used to apply to
+        // every message as soon as a radio had ever been paired.
+        // Either radio counts: a MeshCore radio carries the same OMP frames (MeshCoreManager.kt).
+        val loRaPaired = runCatching {
+            MeshtasticManager.isRadioPaired(context) || MeshCoreManager.isPaired(context)
+        }.getOrDefault(false)
+        val loRaBudget = MessageSendPolicy.loRaBudgetApplies(
+            radioPaired = loRaPaired,
+            hasPhysicalPath = !loRaPaired || hasPhysicalNetworkPath(),
+        )
+        // __LORA_LONG_TEXT_OMP_2026_11_18__ A radio that answered the OSHI Mesh probe carries the whole
+        // envelope as OMP (64 x 182 B), so the budget is 4,000 B, not 500. Remembered per paired radio,
+        // because the decision is made here — often while the radio is out of Bluetooth range.
+        val oshiFirmware = loRaBudget && runCatching { MeshtasticManager.lastKnownOshiFirmware(context) }.getOrDefault(false)
+        val limit = MessageSendPolicy.maxUTF8Bytes(loRaBudget, oshiFirmware)
+        // __LONG_TEXT_SPLIT_2026_11_23__ Over the budget is now SPLIT, as iOS does
+        // (`MessageManager.swift` → `MessageTextSplitter.splitForSend`), and refused only when
+        // splitting cannot help: a Cashu token, an envelope that does not parse, or more than
+        // MessageTextSplitter.MAX_PARTS parts.
+        val parts = when (val plan = MessageTextSplitter.splitForSend(content, limit)) {
+            is MessageTextSplitter.Outcome.Single -> null
+            is MessageTextSplitter.Outcome.Parts -> plan.parts
+            is MessageTextSplitter.Outcome.TooLong -> {
+                val bytes = MessageSendPolicy.utf8Size(content)
+                Log.w(TAG, "⛔️ send refused: $bytes B over the $limit B budget, ${plan.partsNeeded} parts needed (loRaBudget=$loRaBudget)")
+                // Surfaced, not swallowed: `ChatViewModel.reportSendResult`
+                // (`ChatViewModel.kt:330-334`) turns this exception's message into
+                // the toast `ChatScreen` already renders. No row is inserted, so the
+                // refusal does not leave a failed bubble behind either.
+                //
+                // Resolved through resources rather than shipped as English prose —
+                // `lora_error_too_large` is the very string the LoRa settings screen
+                // uses for the radio's own version of this refusal.
+                return Result.failure(
+                    com.oshi.messenger.service.MessageTooLongException(
+                        context.getString(R.string.lora_error_too_large, bytes, limit)
+                    )
+                )
+            }
+        }
+        if (parts == null) return sendSingleTextMessage(recipientPublicKey, content, resendOf, loRaPaired)
+
+        // The parts go out in order through the one-message path below, each its own row. Callers only
+        // read success/failure (none uses the returned row), so: stop at the first part that fails and
+        // return that failure (the rest are not sent; the failed part's row, if it has one, shows
+        // "Not delivered · tap to retry"); otherwise return the LAST part, the one that completes the
+        // text. A retry ([resendOf]) keeps its id and date on the first part. Dates step by 1 ms so the
+        // parts can never sort out of order, whatever the clock does.
+        Log.i(TAG, "✂️ splitting ${MessageSendPolicy.utf8Size(content)} B into ${parts.size} messages (limit $limit B)")
+        val baseTimestamp = resendOf?.timestamp ?: System.currentTimeMillis()
+        var last: Result<Message>? = null
+        for ((index, part) in parts.withIndex()) {
+            val result = sendSingleTextMessage(
+                recipientPublicKey, part,
+                resendOf = if (index == 0) resendOf else null,
+                loRaPaired = loRaPaired,
+                timestampOverride = baseTimestamp + index,
+            )
+            if (result.isFailure) {
+                Log.w(TAG, "✂️ part ${index + 1}/${parts.size} failed; ${parts.size - index - 1} not sent")
+                return result
+            }
+            last = result
+        }
+        return last!!
+    }
+
+    /** One message row, one envelope: the body of [sendTextMessage] once the text fits its budget. */
+    private suspend fun sendSingleTextMessage(
+        recipientPublicKey: String,
+        content: String,
+        resendOf: Message?,
+        loRaPaired: Boolean,
+        timestampOverride: Long? = null,
+    ): Result<Message> {
+        // 🔧 P0 FIX (device walkthrough #2, 2026-08-13).
         //
         // The local row is inserted BEFORE any transport is attempted (so the bubble
         // appears instantly). When a transport then threw — e.g. `bad base-64` on a
@@ -2853,51 +3054,6 @@ class MessageRepository @Inject constructor(
         // `MessageSendPolicy` / `DeliveryStatus.failed` and renders it in
         // `DeliveryMethodBadge.swift:54,74`.
         var persistedMessageId: String? = null
-
-        // ✂️ THE BYTE BUDGET, CHECKED BEFORE ANY EXPENSIVE WORK.
-        //
-        // iOS decides this FIRST, before the row exists and before the ratchet is
-        // touched (`MessageManager.swift:4861-4871` → `MessageSendPolicy.swift:56-60`).
-        // Android used to compose, encrypt, chunk and only THEN refuse at frame
-        // 13 inside `sendSecureMessage` — the user watched a bubble appear and
-        // then quietly fail, having spent a ratchet step on it.
-        //
-        // The limit is 500 UTF-8 bytes only while a radio is PAIRED (the LoRa
-        // lane is reachable); 4000 otherwise, which nothing typed ever hits.
-        //
-        // __LONG_TEXT_ONE_MESSAGE_2026_09_28__ The 500 B radio budget applies
-        // only when LoRa IS the route (paired AND off-grid) — it used to apply to
-        // every message as soon as a radio had ever been paired.
-        // Either radio counts: a MeshCore radio carries the same OMP frames (MeshCoreManager.kt).
-        val loRaPaired = runCatching {
-            MeshtasticManager.isRadioPaired(context) || MeshCoreManager.isPaired(context)
-        }.getOrDefault(false)
-        val loRaBudget = MessageSendPolicy.loRaBudgetApplies(
-            radioPaired = loRaPaired,
-            hasPhysicalPath = !loRaPaired || hasPhysicalNetworkPath(),
-        )
-        // __LORA_LONG_TEXT_OMP_2026_11_18__ A radio that answered the OSHI Mesh probe carries the whole
-        // envelope as OMP (64 x 182 B), so the budget is 4,000 B, not 500. Remembered per paired radio,
-        // because the decision is made here — often while the radio is out of Bluetooth range.
-        val oshiFirmware = loRaBudget && runCatching { MeshtasticManager.lastKnownOshiFirmware(context) }.getOrDefault(false)
-        if (MessageSendPolicy.check(content, loRaBudget, oshiFirmware) == MessageSendPolicy.Outcome.TOO_LONG) {
-            val limit = MessageSendPolicy.maxUTF8Bytes(loRaBudget, oshiFirmware)
-            val bytes = MessageSendPolicy.utf8Size(content)
-            Log.w(TAG, "⛔️ send refused: $bytes B over the $limit B budget (loRaBudget=$loRaBudget)")
-            // Surfaced, not swallowed: `ChatViewModel.reportSendResult`
-            // (`ChatViewModel.kt:330-334`) turns this exception's message into
-            // the toast `ChatScreen` already renders. No row is inserted, so the
-            // refusal does not leave a failed bubble behind either.
-            //
-            // Resolved through resources rather than shipped as English prose —
-            // `lora_error_too_large` is the very string the LoRa settings screen
-            // uses for the radio's own version of this refusal.
-            return Result.failure(
-                com.oshi.messenger.service.MessageTooLongException(
-                    context.getString(R.string.lora_error_too_large, bytes, limit)
-                )
-            )
-        }
 
         // 🚫 BLOCKED: refuse at the REPOSITORY, not only in the UI.
         //
@@ -2942,7 +3098,7 @@ class MessageRepository @Inject constructor(
                 content = content,
                 // ...and its date. A resend delivers the message that was written,
                 // not a new one written now (see `resendOf`).
-                timestamp = resendOf?.timestamp ?: System.currentTimeMillis(),
+                timestamp = timestampOverride ?: resendOf?.timestamp ?: System.currentTimeMillis(),
                 isFromMe = true,
                 // 🔧 P0/P1 FIX (device walkthrough #2, 2026-08-13): this was
                 // `isRead = true`. Every outgoing message was born READ, so the
@@ -3086,8 +3242,12 @@ class MessageRepository @Inject constructor(
             // waits for the disguised path. Checked BEFORE the legacy encrypt so a
             // parked message does not spend a ratchet step it will never use.
             val coverOn = isCovertChannelEnabled()
+            // __MESHCORE_INTEROP_2026_11_25__ Either radio: a MeshCore-only phone can carry it too.
             if (!CoverOutbox.legacyRelayAllowed(coverOn) && meshPeer == null && iosPeer == null &&
-                MeshtasticManager.instanceOrNull?.isReady != true &&
+                !LoRaRadios.anyReady(
+                    MeshtasticManager.instanceOrNull?.isReady == true,
+                    MeshCoreManager.instanceOrNull?.isReady == true,
+                ) &&
                 com.oshi.messenger.service.TransportPreferences.internetAllowedForSending(context, recipientPublicKey)
             ) {
                 val v2Bytes = v2Content.toByteArray(Charsets.UTF_8)
@@ -3187,10 +3347,13 @@ class MessageRepository @Inject constructor(
                     // the no-live-mesh-peer case. `carriesMedia = false` because
                     // this is `sendTextMessage`; media has its own path.
                     val radio = MeshtasticManager.instanceOrNull
+                    // __MESHCORE_INTEROP_2026_11_25__ A MeshCore radio alone is a ready radio
+                    // (deliverViaLoRa sends on it); it used to be ignored here.
+                    val meshCoreReady = MeshCoreManager.instanceOrNull?.isReady == true
                     val routing = MessageSendPolicy.RoutingConditions(
                         hasPhysicalPath = true,   // we are here, so a path exists
                         peerOnMesh = false,
-                        radioReady = radio?.isReady == true,
+                        radioReady = LoRaRadios.anyReady(radio?.isReady == true, meshCoreReady),
                         peerLikelyOnline = MessageSendPolicy.isPeerLikelyOnline(
                             existingContact?.lastSeen, System.currentTimeMillis()),
                         carriesMedia = false,
@@ -3198,7 +3361,7 @@ class MessageRepository @Inject constructor(
                             com.oshi.messenger.service.TransportPreferences.internetAllowedForSending(context),
                         preferRadioOverRelay =
                             com.oshi.messenger.service.TransportPreferences.preferRadioOverRelay(context),
-                        radioJammed = radio?.isJammed == true,
+                        radioJammed = LoRaRadios.routeJammed(radio?.isReady == true, radio?.isJammed == true, meshCoreReady),
                     )
                     if (MessageSendPolicy.radioComesBeforeRelay(routing)) {
                         if (deliverViaLoRa(messageId, recipientPublicKey, encrypted, message.timestamp)) {
@@ -3577,23 +3740,12 @@ class MessageRepository @Inject constructor(
                 // exactement ce qu'iOS émet depuis `MediaManager.gifWireType`, et
                 // [MediaType.fromWireLabel] mappe déjà `"gif"` → IMAGE à l'arrivée,
                 // sur Android comme sur les vieux builds iOS.
+                // __GIF_COMPAT_IOS1043_2026_11_21__ …but the LABEL is `image` (see
+                // [GIF_WIRE_MEDIA_TYPE]): `gif` drew an empty bubble on iOS 1.0.43 over
+                // the inline fallback below. The MIME and the `.gif` name stay.
                 val isGif = GifBytes.isGif(compressedData)
-                val iosMediaType = when {
-                    isGif -> "gif"
-                    mediaType == MediaType.IMAGE -> "image"
-                    mediaType == MediaType.VIDEO -> "video"
-                    mediaType == MediaType.AUDIO -> "audio"
-                    mediaType == MediaType.CONTACT -> "contact"
-                    else -> "document"
-                }
-                val mime = when {
-                    isGif -> "image/gif"
-                    mediaType == MediaType.IMAGE -> "image/jpeg"
-                    mediaType == MediaType.VIDEO -> "video/mp4"
-                    mediaType == MediaType.AUDIO -> "audio/m4a"
-                    mediaType == MediaType.CONTACT -> "text/vcard"
-                    else -> "application/octet-stream"
-                }
+                val iosMediaType = v2WireMediaType(mediaType, isGif)
+                val mime = v2WireMime(mediaType, isGif)
                 val fileName = wireFileName(messageId, mediaType, peerFileName, isGif)
                 coverRetry = {
                     v2MessageRouter.sendFile(
@@ -3637,11 +3789,10 @@ class MessageRepository @Inject constructor(
                 }
 
                 if (compressedData.size <= V2_INLINE_MEDIA_MAX_BYTES) {
-                    // Same escaper as the V2 wire codec — a bare CR or TAB in a caption
-                    // is as fatal to `JSONSerialization` as a backslash.
-                    val escaped = com.oshi.messenger.network.v2.OSHICryptoV2.jsonEscape(peerCaption ?: "")
-                    val escapedName = com.oshi.messenger.network.v2.OSHICryptoV2.jsonEscape(fileName)
-                    val iosInline = """{"type":"media","mediaType":"$iosMediaType","content":"$mediaBase64","fileName":"$escapedName","size":${compressedData.size},"caption":"$escaped","isViewOnce":$isViewOnce$noteFragment}"""
+                    val iosInline = v2InlineMediaEnvelope(
+                        iosMediaType, mediaBase64, fileName, compressedData.size,
+                        peerCaption, isViewOnce, noteFragment,
+                    )
                     val mediaSentViaV2 = try {
                         // __ATTACHMENT_DATED_AT_UPLOAD_2026_09_17__ Media is dated
                         // when it is SENT, not when it was picked — same rule as the
@@ -4150,6 +4301,12 @@ class MessageRepository @Inject constructor(
                 handleOfflineOnly(decrypted, meshMessage.senderPublicKey)) {
                 return
             }
+            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Applied AND stored here (read, no
+            // banner) — never falls through to the ordinary text path.
+            if (com.oshi.messenger.data.model.AdvancedChatPrivacyChange.isPayload(decrypted)) {
+                handleAdvancedChatPrivacy(decrypted, meshMessage.senderPublicKey, meshMessage.id, DeliveryMethod.MESH)
+                return
+            }
             // 💓 __ALIVE_CHECK_IN_2026_11_04__ Apply the peer's liveness event, then
             // fall through: it is `.rendered`, so it also becomes a line in the
             // thread. The handler never consumes the message — a confirmation the
@@ -4601,6 +4758,11 @@ class MessageRepository @Inject constructor(
                 handleOfflineOnly(decrypted, vpsMessage.senderPublicKey)) {
                 return
             }
+            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ see the mesh lane.
+            if (com.oshi.messenger.data.model.AdvancedChatPrivacyChange.isPayload(decrypted)) {
+                handleAdvancedChatPrivacy(decrypted, vpsMessage.senderPublicKey, vpsMessage.id, DeliveryMethod.VPS)
+                return
+            }
             // 💓 __ALIVE_CHECK_IN_2026_11_04__ Apply the peer's liveness event, then
             // fall through: it is `.rendered`, so it also becomes a line in the
             // thread. The handler never consumes the message — a confirmation the
@@ -4848,6 +5010,11 @@ class MessageRepository @Inject constructor(
             if (decrypted.startsWith("🔑KEY_ROTATION🔑")) {
                 keyRotationManager.handleKeyRotationNotification(decrypted, senderPublicKey); return
             }
+            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ The V2 lane has its own prefix chain
+            // (it is NOT handleVPSMessage), so the handler is wired here too.
+            if (com.oshi.messenger.data.model.AdvancedChatPrivacyChange.isPayload(decrypted)) {
+                handleAdvancedChatPrivacy(decrypted, senderPublicKey, messageId, method); return
+            }
             // 👥 Group message
             if (decrypted.startsWith(GROUP_MESSAGE_PREFIX)) {
                 groupManager.handleIncomingGroupMessage(decrypted, senderPublicKey); return
@@ -4945,6 +5112,14 @@ class MessageRepository @Inject constructor(
     private val loraAckPromoted = Collections.synchronizedSet(mutableSetOf<String>())
 
     /**
+     * __LORA_SEND_FAILED_VISIBLE_2026_11_23__ Our messages the PEER confirmed with a delivery receipt.
+     * `isDelivered` cannot say it (every transport stamps it on hand-off), so a late LoRa failure checks
+     * this before marking the row failed. In memory: a receipt and the radio's verdict on the same
+     * message arrive within one process lifetime.
+     */
+    private val peerConfirmedIds = Collections.synchronizedSet(mutableSetOf<String>())
+
+    /**
      * Wire the radio into this pipeline. Called once from [initialize].
      *
      * The manager is constructed unconditionally rather than only when a radio is
@@ -4985,7 +5160,14 @@ class MessageRepository @Inject constructor(
             }
 
             override suspend fun onHeldUndeliverable(messageId: String) {
-                if (runCatching { stillUndelivered(messageId) }.getOrDefault(false)) markSendFailed(messageId)
+                // __LORA_SEND_FAILED_VISIBLE_2026_11_23__ Also reached AFTER the frames were on the radio
+                // (OMP FAILED/REJECTED, a stock routing failure, the send timeout). Such a row already says
+                // delivered (LoRaDeliveryLedger.afterSendAttempt), so `stillUndelivered` alone would ignore
+                // every one of them; the ledger rule fails it only while LoRa is what carried it and nothing
+                // confirmed it (read, a delivery receipt, a mesh ack).
+                val row = runCatching { messageDao.getMessageById(messageId) }.getOrNull()
+                val confirmed = messageId in peerConfirmedIds || messageId in loraAckPromoted
+                if (LoRaDeliveryLedger.mayMarkNotDelivered(row, confirmed)) markSendFailed(messageId)
             }
         }
 
@@ -5050,6 +5232,8 @@ class MessageRepository @Inject constructor(
         // pipeline through `radio.receivedMessages` (MeshtasticManager.deliverForeignEnvelope).
         runCatching { MeshCoreManager.getInstance(context) }
             .onFailure { Log.w(TAG, "📡 MeshCore radio unavailable: ${it.message}") }
+            .getOrNull()
+            ?.let { attachMeshCoreUsers(it) }
 
         Log.d(TAG, "📡 LoRa bridge attached (paired=${MeshtasticManager.isRadioPaired(context)}, meshCore=${MeshCoreManager.isPaired(context)})")
     }
@@ -5308,8 +5492,10 @@ class MessageRepository @Inject constructor(
         // a merely-queued message, which is the single rule that keeps a queued
         // message from being shown as sent, and it is unit-tested.
         messageDao.getMessageById(messageId)?.let { row ->
-            LoRaDeliveryLedger.afterSendAttempt(row, framesWritten)
-                ?.let { updateMessage(it) }
+            LoRaDeliveryLedger.afterSendAttempt(
+                row, framesWritten,
+                acknowledgeable = LoRaRadios.handOffCountsAsDelivered(viaMeshtastic, viaMeshCore),
+            )?.let { updateMessage(it) }
         }
         return framesWritten
     }
@@ -6255,36 +6441,32 @@ class MessageRepository @Inject constructor(
             return
         }
 
-        // iOS-format plaintext mesh media: JSON envelope with `data` + (`mediaType`|`type`).
-        // Skip the DoubleRatchet decryption path — both platforms ship cross-platform
-        // mesh media as plaintext over the local TCP/BLE link (matches iOS sender's
-        // CrossPlatformMesh.sendMedia behavior). Without this bypass, decrypt failed,
-        // the plaintextContent fallback found no such field, and the image was dropped.
-        if (cpMessage.type == "MEDIA_MESSAGE") {
-            try {
-                val maybeIosMedia = JSONObject(cpMessage.payload)
-                if (maybeIosMedia.has("data") &&
-                    (maybeIosMedia.has("mediaType") || maybeIosMedia.has("type"))) {
-                    Log.d(TAG, "🖼️ iOS-format mesh media — bypassing decryption, routing direct")
-                    handleMediaContent(cpMessage.id, cpMessage.senderPublicKey, cpMessage.payload, DeliveryMethod.MESH)
-                    return
-                }
-            } catch (_: Exception) {
-                // Not iOS-format JSON — fall through to encrypted path below.
-            }
+        // 🔒 __MESH_UNAUTHENTICATED_CONTROL_2026_11_20__ iOS-format PLAINTEXT mesh media
+        // (`{data, mediaType|type}` in a MEDIA_MESSAGE frame) is no longer accepted. It
+        // was stored as a photo FROM `senderPublicKey`, a field nobody verified, so a
+        // LAN/BLE neighbour could drop a picture into any conversation as any contact
+        // (and the bytes crossed the LAN in clear). Current senders put media inside
+        // the ratchet-encrypted content (MeshMediaEncryptedWireTest); a plaintext frame
+        // from an old iPhone falls through to the encrypted path below and is dropped.
+        if (cpMessage.type == "MEDIA_MESSAGE" && runCatching {
+                val j = JSONObject(cpMessage.payload)
+                j.has("data") && (j.has("mediaType") || j.has("type"))
+            }.getOrDefault(false)
+        ) {
+            Log.w(TAG, "⚠️ Dropped plaintext (unauthenticated) mesh media frame")
+            return
         }
 
-        // Handle GROUP_UPDATE type directly — payload is plaintext GROUP_UPDATE_PREFIX + json
-        // No decryption needed; route straight to GroupManager
+        // 🔒 __MESH_UNAUTHENTICATED_CONTROL_2026_11_20__ A mesh frame of type
+        // GROUP_UPDATE is PLAINTEXT, and its `senderPublicKey` is a JSON field nobody
+        // verified: anyone on the same Wi-Fi / in BLE range could post one claiming to
+        // be a group's admin and add themselves to the roster (this phone then wraps
+        // every later group message to them), remove members, rename or delete the
+        // group. No current client emits this frame type — Android and iOS both send
+        // group updates as ratchet-encrypted content (`📢GROUP_UPDATE📢` INSIDE the
+        // decrypted text, handled by routeDecryptedMeshMessage). Dropped.
         if (cpMessage.type == "GROUP_UPDATE") {
-            val groupPayload = cpMessage.payload
-            val prefix = GroupManager.GROUP_UPDATE_PREFIX
-            if (groupPayload.startsWith(prefix)) {
-                Log.d(TAG, "📢 CrossPlatform GROUP_UPDATE: routing to GroupManager from ${cpMessage.senderPublicKey.take(8)}")
-                groupManager.handleGroupUpdate(groupPayload, cpMessage.senderPublicKey)
-            } else {
-                Log.w(TAG, "⚠️ GROUP_UPDATE type but payload missing prefix: ${groupPayload.take(60)}")
-            }
+            Log.w(TAG, "⚠️ Dropped unauthenticated mesh GROUP_UPDATE frame")
             return
         }
 
@@ -6360,22 +6542,16 @@ class MessageRepository @Inject constructor(
         } catch (e: Exception) {
             Log.e(TAG, "❌ Decryption failed for cross-platform message: ${e.message}")
 
-            // 🔧 FALLBACK: iOS sends plaintextContent in SecureMessage JSON (for mesh/local delivery).
-            // When DoubleRatchet is desynced, use plaintextContent as reliable fallback.
-            if (secureJson != null) {
-                val plaintextContent = secureJson!!.optString("plaintextContent", "")
-                if (plaintextContent.isNotEmpty()) {
-                    if (LOG_SENSITIVE) Log.d(TAG, "🔄 Using plaintextContent fallback: ${plaintextContent.take(80)}...")
-                    try {
-                        routeDecryptedMeshMessage(
-                            plaintextContent,
-                            cpMessage.copy(id = meshEnvelopeMessageId(payload, cpMessage.id))
-                        )
-                        return
-                    } catch (fallbackError: Exception) {
-                        Log.e(TAG, "❌ Fallback also failed: ${fallbackError.message}")
-                    }
-                }
+            // 🔒 __MESH_UNAUTHENTICATED_CONTROL_2026_11_20__ The old "plaintextContent
+            // fallback" is GONE. It routed the frame's cleartext `plaintextContent`
+            // through routeDecryptedMeshMessage — the path for AUTHENTICATED plaintext —
+            // whenever decryption failed. Failing decryption is free for an attacker, so
+            // any LAN/BLE neighbour could impersonate any contact (text, profile update,
+            // key rotation, edits/deletes, receipts, group control). Current iOS strips
+            // plaintextContent before the wire (meshWireSafe); only a desynced session
+            // with an old client loses that one message, which the ratchet heals.
+            if (secureJson?.optString("plaintextContent", "").isNullOrEmpty().not()) {
+                Log.w(TAG, "⚠️ Undecryptable mesh frame carried plaintextContent — ignored (unauthenticated)")
             }
 
             Log.e(TAG, "❌ No fallback available - message dropped", e)
@@ -6397,6 +6573,12 @@ class MessageRepository @Inject constructor(
         if (com.oshi.messenger.data.model.OfflineOnlyRequest.isRequest(decrypted)) {
             if (handleOfflineOnly(decrypted, cpMessage.senderPublicKey)) return
             // A request: fall through. No arm below claims a 🔒 payload.
+        }
+
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ see the mesh lane in handleMeshMessage.
+        if (com.oshi.messenger.data.model.AdvancedChatPrivacyChange.isPayload(decrypted)) {
+            handleAdvancedChatPrivacy(decrypted, cpMessage.senderPublicKey, cpMessage.id, deliveryMethod)
+            return
         }
 
         // 💓 __ALIVE_CHECK_IN_2026_11_04__ Same shape, and above the `when` for the
@@ -7081,6 +7263,7 @@ class MessageRepository @Inject constructor(
                 val currentWallpapers = _wallpapers.value.toMutableMap()
                 currentWallpapers[conversationId] = wallpaperData
                 _wallpapers.value = currentWallpapers
+                persistWallpaper(conversationId, wallpaperData)
 
                 // Emit change notification
                 _wallpaperChanges.emit(
@@ -7139,6 +7322,25 @@ class MessageRepository @Inject constructor(
     }
 
     /**
+     * __WALLPAPER_PERSIST_2026_11_21__ `_wallpapers` is memory only; without this
+     * a chat's wallpaper (chosen here or by the peer) was gone at the next launch.
+     */
+    private suspend fun persistWallpaper(conversationId: String, wallpaperData: ByteArray) {
+        try {
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                val decoded = com.oshi.messenger.ui.components.chatWallpaperFromBytes(wallpaperData)
+                val stored = if (decoded is com.oshi.messenger.ui.components.ChatWallpaper.ImageWallpaper)
+                    com.oshi.messenger.ui.components.ChatWallpaper.ImageWallpaper(
+                        com.oshi.messenger.ui.components.downscaleWallpaperImage(decoded.imageData)
+                    ) else decoded
+                wallpaperManager.persistConversationWallpaper(conversationId, stored)
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Wallpaper persist failed: ${e.message}")
+        }
+    }
+
+    /**
      * 🎨 Set wallpaper locally (and optionally broadcast)
      */
     suspend fun setWallpaper(
@@ -7154,6 +7356,7 @@ class MessageRepository @Inject constructor(
         val currentWallpapers = _wallpapers.value.toMutableMap()
         currentWallpapers[conversationId] = wallpaperData
         _wallpapers.value = currentWallpapers
+        persistWallpaper(conversationId, wallpaperData)
 
         // Broadcast to participant if requested
         if (broadcast) {
@@ -7441,7 +7644,8 @@ class MessageRepository @Inject constructor(
         if (!BLOCKED_NOTICE_ENABLED) return
         // A LoRa pseudo-identity (`lora!<nodehex>`) has no key to encrypt to and no
         // route back; an empty key has neither.
-        if (senderPublicKey.isEmpty() || senderPublicKey.startsWith("lora!")) return
+        if (senderPublicKey.isEmpty() || senderPublicKey.startsWith("lora!") ||
+            MeshCoreThread.isMeshCoreKey(senderPublicKey)) return
         if (senderPublicKey == myPublicKey) return
         if (plaintext != null && OSHIControlPayload.suppressesPush(plaintext)) return
 
@@ -7525,6 +7729,69 @@ class MessageRepository @Inject constructor(
         )
         messageDao.insert(sanitizeMediaForInsert(row))
         notifyWebSession(row)
+    }
+
+    // ============================================================================
+    // MESHCORE USERS — __MESHCORE_INTEROP_2026_11_25__
+    // ============================================================================
+
+    /**
+     * People on plain MeshCore apps, reached through a paired MeshCore radio. Their text is MeshCore's own
+     * AES-128 + 2-byte MAC, NOT OSHI end-to-end encryption, so every row is [DeliveryMethod.LORA_PLAINTEXT]
+     * and the thread says so (ChatScreen, "MeshCore · not OSHI end-to-end encrypted"). Keys are
+     * `meshcore!<hex>` / `mcchan!<name>` ([MeshCoreThread]), never the Meshtastic `lora!` families.
+     */
+    private val meshCoreChats: MeshCoreChats by lazy {
+        MeshCoreChats(
+            store = object : MeshCoreChats.Store {
+                override suspend fun insert(message: Message) { messageDao.insert(sanitizeMediaForInsert(message)) }
+                override suspend fun message(id: String) = messageDao.getMessageById(id)
+                override suspend fun update(message: Message) { updateMessage(message) }
+                override suspend fun contactAlias(key: String) = contactDao.getContactByPublicKey(key)?.alias
+                override suspend fun insertContact(key: String, alias: String) { contactDao.insert(Contact(publicKey = key, alias = alias)) }
+                override suspend fun renameContact(key: String, alias: String) {
+                    contactDao.getContactByPublicKey(key)?.let { contactDao.update(it.copy(alias = alias)) }
+                }
+                override suspend fun isBlocked(key: String) = isBlockedSender(key)
+                override suspend fun notify(key: String, preview: String) { showMessageNotification(key, preview) }
+                override fun mirror(message: Message) { notifyWebSession(message) }
+            },
+            radio = { MeshCoreManager.instanceOrNull?.link },
+            myKey = { myPublicKey },
+        )
+    }
+
+    private fun attachMeshCoreUsers(meshCore: MeshCoreManager) {
+        scope.launch {
+            meshCore.inboundText.collect { inbound ->
+                try {
+                    decryptionMutex.withLock { meshCoreChats.receive(inbound) }
+                } catch (e: Exception) {
+                    Log.e(TAG, "📡 MeshCore text handling failed: ${e.message}")
+                }
+            }
+        }
+        scope.launch {
+            meshCore.sendOutcomes.collect { outcome ->
+                runCatching { meshCoreChats.apply(outcome) }
+                    .onFailure { Log.w(TAG, "📡 MeshCore outcome ${outcome.messageId.take(8)}: ${it.message}") }
+            }
+        }
+        scope.launch {
+            meshCore.conversationRequests.collect { (key, name) ->
+                runCatching { meshCoreChats.ensureContact(key, name) }
+            }
+        }
+    }
+
+    /**
+     * Write to a MeshCore user or channel ([MeshCoreChats.send]). Never refused: with no radio the row is
+     * stored FAILED (tap to retry) instead of the text vanishing with a generic error.
+     */
+    private suspend fun sendMeshCoreText(key: String, content: String, resendOf: Message?): Result<Message> {
+        val message = meshCoreChats.send(key, content, resendOf)
+        Log.d(TAG, "📡 MeshCore → ${key.take(21)}: failed=${message.isFailed}")
+        return Result.success(message)
     }
 
     /**
@@ -7773,6 +8040,8 @@ class MessageRepository @Inject constructor(
         ).name.lowercase()
 
     private fun sendDeliveryReceipt(messageId: String, senderPublicKey: String) {
+        // __MESHCORE_INTEROP_2026_11_25__ A radio pseudo-identity has no OSHI key and no relay mailbox.
+        if (MeshCoreThread.isMeshCoreKey(senderPublicKey) || senderPublicKey.startsWith("lora!")) return
         scope.launch {
             try {
                 // iOS expects the exact form "📬DELIVERY_RECEIPT📬<bare messageId>" and
@@ -7796,6 +8065,8 @@ class MessageRepository @Inject constructor(
      * This updates the sender's badge from gray double checkmark → blue double checkmark
      */
     private fun sendReadReceipt(senderPublicKey: String) {
+        // __MESHCORE_INTEROP_2026_11_25__ Opening a MeshCore thread must not send OSHI protocol to the relay.
+        if (MeshCoreThread.isMeshCoreKey(senderPublicKey) || senderPublicKey.startsWith("lora!")) return
         scope.launch {
             try {
                 // Respect the Read Receipts privacy setting (previously ignored).
@@ -7830,8 +8101,10 @@ class MessageRepository @Inject constructor(
             if (messageId.isEmpty()) return
 
             val message = messageDao.getMessageById(messageId)
-            if (message != null && message.isFromMe && !message.isDelivered) {
-                updateMessage(message.copy(isDelivered = true))
+            if (message != null && message.isFromMe) peerConfirmedIds.add(messageId)
+            if (message != null && message.isFromMe && (!message.isDelivered || message.isFailed)) {
+                // A LoRa failure may have marked it failed before the receipt came: the receipt wins.
+                updateMessage(message.copy(isDelivered = true, isFailed = false))
                 Log.d(TAG, "📬 Message $messageId marked as delivered (receipt from ${senderPublicKey.take(8)}...)")
             }
             // __RATING_THREE_MOMENTS_2026_11_15__ ⭐️ Moment 2: the peer ACKED one of
@@ -8005,8 +8278,9 @@ class MessageRepository @Inject constructor(
                     runCatching { com.oshi.messenger.service.BlockedByPeerStore.get(context).clear(contact.publicKey) }
                     if (messageId.isNotEmpty()) {
                         val message = messageDao.getMessageById(messageId)
-                        if (message != null && message.isFromMe && !message.isDelivered) {
-                            updateMessage(message.copy(isDelivered = true))
+                        if (message != null && message.isFromMe) peerConfirmedIds.add(messageId)
+                        if (message != null && message.isFromMe && (!message.isDelivered || message.isFailed)) {
+                            updateMessage(message.copy(isDelivered = true, isFailed = false))
                             Log.d(TAG, "📬 iOS receipt: message $messageId marked as delivered")
                         } else {
                             Log.d(TAG, "📬 iOS receipt for $messageId (already delivered or not found)")
@@ -8280,6 +8554,77 @@ class MessageRepository @Inject constructor(
                 .onFailure { Log.w(TAG, "🔒 could not answer the offline-only request: ${it.javaClass.simpleName}") }
         }
         return false
+    }
+
+    /**
+     * 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Our own "You turned on …" row, stored
+     * WITHOUT sending: the peer does not read `🛡ADV_PRIVACY🛡` (see
+     * [com.oshi.messenger.service.AdvancedChatPrivacyReaders]), and a send would
+     * put raw JSON in their thread. Same row shape as [sendTextMessage] writes.
+     */
+    suspend fun recordLocalOutgoingNotice(recipientPublicKey: String, content: String) {
+        messageDao.insert(
+            Message(
+                senderPublicKey = myPublicKey,
+                recipientPublicKey = recipientPublicKey,
+                content = content,
+                isFromMe = true,
+                isRead = true,
+            )
+        )
+    }
+
+    /**
+     * 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ A peer switched advanced chat privacy for
+     * our 1:1 conversation.
+     *
+     * The author is the sender of the decrypted envelope (ratchet-authenticated),
+     * never a JSON field. The state is last-writer-wins by `at` (clamped to our
+     * now + 300 s); the NOTICE row is stored for every distinct message id, even a
+     * stale one, because it records something that did happen — but it is stored
+     * READ and never raises a banner: a settings change is not a message.
+     *
+     * Always consumes the payload. An unreadable one (a future `v`) is dropped
+     * rather than stored, so it can never print as raw JSON.
+     */
+    private suspend fun handleAdvancedChatPrivacy(
+        decrypted: String,
+        senderPublicKey: String,
+        messageId: String,
+        deliveryMethod: DeliveryMethod,
+    ) {
+        // Whatever its version, this peer reads the sentinel: it may be sent ours.
+        com.oshi.messenger.service.AdvancedChatPrivacyReaders.note(senderPublicKey)
+        val change = com.oshi.messenger.data.model.AdvancedChatPrivacyChange.fromMessageString(decrypted)
+        if (change == null) {
+            Log.w(TAG, "🛡 unreadable advanced-privacy payload from ${senderPublicKey.take(8)} — dropped")
+            return
+        }
+        val store = com.oshi.messenger.service.AdvancedChatPrivacyStore
+        store.attach(context)
+        val conversation = canonicalIdentity(senderPublicKey)
+        val nowSeconds = System.currentTimeMillis() / 1000L
+        val applied = store.applyIncoming(change, conversation, nowSeconds)
+        Log.d(TAG, "🛡 advanced privacy on=${change.on} from ${senderPublicKey.take(8)} (applied=$applied)")
+        if (messageDao.getMessageById(messageId) != null) return
+        val atMillis = com.oshi.messenger.data.model.AdvancedChatPrivacyChange
+            .clampedAt(change.atUnixSeconds, nowSeconds) * 1000L
+        messageDao.insert(
+            Message(
+                id = messageId,
+                senderPublicKey = conversation,
+                recipientPublicKey = myPublicKey,
+                content = decrypted,
+                timestamp = minOf(atMillis, System.currentTimeMillis()).takeIf { it > 0 } ?: System.currentTimeMillis(),
+                isFromMe = false,
+                // Never unread: it is a notice, not something to answer.
+                isRead = true,
+                deliveryMethod = deliveryMethod,
+            )
+        )
+        // Same courtesy as any stored row: the sender's copy stops waiting. A
+        // delivery receipt is silent in the catalog, so it wakes nobody.
+        runCatching { sendDeliveryReceipt(messageId, senderPublicKey) }
     }
 
     /**

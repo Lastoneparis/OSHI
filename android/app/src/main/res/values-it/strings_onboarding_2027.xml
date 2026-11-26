@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Salta</string>
+    <string name="ob27_continue">Continua</string>
+    <string name="ob27_page_of">Pagina %1$d di %2$d</string>
+    <string name="ob27_private_title">Solo tu e loro</string>
+    <string name="ob27_private_body">Messaggi e chiamate sono crittografati end-to-end sul tuo telefono. Nessuno nel mezzo può leggerli, nemmeno OSHI.</string>
+    <string name="ob27_offline_title">Funziona senza internet</string>
+    <string name="ob27_offline_body">Niente rete? I messaggi passano da telefono a telefono tramite le persone vicine che hanno OSHI aperto. Una radio LoRa li porta più lontano.</string>
+    <string name="ob27_range_direct">diretto</string>
+    <string name="ob27_range_relayed">inoltrato</string>
+    <string name="ob27_range_lora">radio LoRa</string>
+    <string name="ob27_anon_title">Nessun numero richiesto</string>
+    <string name="ob27_anon_body">Nessun account, nessuna email, nessun numero per iscriverti. La tua identità è una chiave creata su questo telefono.</string>
+    <string name="ob27_together_title">Porta i tuoi amici</string>
+    <string name="ob27_together_body">Chatta a due o in gruppo. Aggiungi qualcuno scansionando il suo codice QR o inviandogli un link di invito.</string>
+    <string name="ob27_rules_title">Prima di iniziare</string>
+    <string name="ob27_rules_subtitle">Qualche regola della casa, e cosa OSHI sa fare e cosa non ancora.</string>
+    <string name="ob27_rules_do">Cosa fare</string>
+    <string name="ob27_rules_dont">Mai</string>
+    <string name="ob27_good_to_know">Buono a sapersi</string>
+    <string name="ob27_show_details">Mostra dettagli</string>
+    <string name="ob27_hide_details">Nascondi dettagli</string>
+    <string name="ob27_agree">Ho capito</string>
+    <string name="ob27_notif_title">Non perderti i messaggi</string>
+    <string name="ob27_notif_body">Consenti le notifiche per vedere nuovi messaggi e chiamate. Puoi disattivarle quando vuoi nelle Impostazioni.</string>
+    <string name="ob27_notif_allow">Consenti notifiche</string>
+    <string name="ob27_not_now">Non ora</string>
+    <string name="ob27_identity_title">Scegli un nome</string>
+    <string name="ob27_identity_body">È quello che vedono i tuoi contatti. Puoi cambiarlo più tardi.</string>
+    <string name="ob27_already">Usi già OSHI?</string>
+</resources>

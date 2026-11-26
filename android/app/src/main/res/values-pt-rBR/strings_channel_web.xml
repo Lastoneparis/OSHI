@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Prévia pública na web</string>
+    <string name="cw_toggle">Publicar posts na web</string>
+    <string name="cw_footer">Os novos posts também são publicados como página web pública em oshi-messenger.com/c/%1$s. Qualquer pessoa pode lê-los, inclusive mecanismos de busca e prévias de links. A criptografia de ponta a ponta não se aplica à cópia web.</string>
+    <string name="cw_needs_link">Primeiro dê a este canal um link público: a prévia web usa o identificador dele.</string>
+    <string name="cw_create_link">Criar link público</string>
+    <string name="cw_enable_title">Publicar posts na web?</string>
+    <string name="cw_enable_confirm">Os posts deste canal ficarão visíveis para qualquer pessoa na web em oshi-messenger.com/c/%1$s. Somente posts novos. Prévias de links (WhatsApp, X, Telegram…) também podem lê-los, e a criptografia de ponta a ponta não se aplica à cópia web.</string>
+    <string name="cw_enable_action">Publicar</string>
+    <string name="cw_disable_title">Desativar a prévia web?</string>
+    <string name="cw_disable_confirm">Todos os posts e imagens publicados em oshi-messenger.com/c/%1$s serão removidos da web. Seus posts no app continuam como estão.</string>
+    <string name="cw_disable_action">Desativar</string>
+    <string name="cw_indexing">Permitir mecanismos de busca</string>
+    <string name="cw_indexing_footer">Desativado, as páginas pedem aos mecanismos de busca que não as indexem.</string>
+    <string name="cw_embed_code">Código de incorporação</string>
+    <string name="cw_embed_title">Incorporar este post</string>
+    <string name="cw_embed_hint">Cole este código no seu site onde o post deve aparecer.</string>
+    <string name="cw_embed_dark">Tema escuro</string>
+    <string name="cw_copy_code">Copiar código</string>
+    <string name="cw_code_copied">Código copiado</string>
+    <string name="cw_not_on_web">Este post não está na web. Só são publicados os posts enviados depois que a prévia web foi ativada.</string>
+    <string name="cw_error">Não foi possível alterar a prévia web. Verifique sua conexão e tente novamente.</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">ความเป็นส่วนตัวขั้นสูงของแชท</string>
+    <string name="adv_privacy_subtitle">ป้องกันไม่ให้ทุกคนในแชทนี้บันทึกสื่อ ส่งออกแชท หรือใช้ AI กับข้อความ</string>
+    <string name="adv_privacy_learn_more">ดูข้อมูลเพิ่มเติม</string>
+    <string name="adv_privacy_notice_on">%1$s เปิดความเป็นส่วนตัวขั้นสูงของแชท ไม่มีใครบันทึกสื่ออัตโนมัติ ส่งออกแชท หรือใช้ AI กับข้อความในแชทนี้ได้</string>
+    <string name="adv_privacy_notice_off">%1$s ปิดความเป็นส่วนตัวขั้นสูงของแชท การบันทึกสื่อ การส่งออกแชท และฟีเจอร์ AI ใช้งานได้อีกครั้ง</string>
+    <string name="adv_privacy_notice_on_you">คุณเปิดความเป็นส่วนตัวขั้นสูงของแชท ไม่มีใครบันทึกสื่ออัตโนมัติ ส่งออกแชท หรือใช้ AI กับข้อความในแชทนี้ได้</string>
+    <string name="adv_privacy_notice_off_you">คุณปิดความเป็นส่วนตัวขั้นสูงของแชท การบันทึกสื่อ การส่งออกแชท และฟีเจอร์ AI ใช้งานได้อีกครั้ง</string>
+    <string name="adv_privacy_summary_on">เปิดความเป็นส่วนตัวขั้นสูงของแชทแล้ว</string>
+    <string name="adv_privacy_summary_off">ปิดความเป็นส่วนตัวขั้นสูงของแชทแล้ว</string>
+    <string name="adv_privacy_sheet_intro">เมื่อมีคนเปิด จะมีผลกับทุกคนในแชทนี้:</string>
+    <string name="adv_privacy_sheet_point_save">ไม่สามารถบันทึกสื่อจากแชทนี้ลงในแกลเลอรีหรือดาวน์โหลดได้</string>
+    <string name="adv_privacy_sheet_point_export">แชทนี้จะไม่รวมอยู่ในการส่งออกแชท</string>
+    <string name="adv_privacy_sheet_point_ai">AI บนอุปกรณ์ของ OSHI อ่านแชทนี้ไม่ได้: ไม่มีคำตอบแนะนำ ไม่มีการแปล ไม่มีบริบทสำหรับผู้ช่วยเขียน</string>
+    <string name="adv_privacy_sheet_point_screen">การจับภาพหน้าจอและการบันทึกหน้าจอของแชทนี้ถูกบล็อก</string>
+    <string name="adv_privacy_sheet_limits">ทุกคนในแชทเปิดหรือปิดได้ ฟีเจอร์นี้ไม่สามารถห้ามใครถ่ายรูปหน้าจอของตน และไม่มีผลกับผู้ที่ใช้ OSHI เวอร์ชันเก่า</string>
+    <string name="adv_privacy_blocked_toast">ความเป็นส่วนตัวขั้นสูงเปิดอยู่ในแชทนี้</string>
+    <string name="adv_privacy_older_members">สมาชิกที่ใช้ OSHI เวอร์ชันเก่าซึ่งจะยังไม่ใช้การตั้งค่านี้จนกว่าจะอัปเดต: %1$d</string>
+</resources>

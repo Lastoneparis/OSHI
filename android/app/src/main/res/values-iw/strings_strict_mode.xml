@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">מצב אבטחה קפדני</string>
+    <string name="strict_status_on">פועל: ללא העתקה, ללא צילום מסך, מוסתר מאפליקציות שקוראות את המסך</string>
+    <string name="strict_status_off">כבוי. נועל את OSHI כשייתכן שעוקבים אחרי הטלפון</string>
+    <string name="strict_hero_on">מצב האבטחה הקפדני פועל</string>
+    <string name="strict_intro">למקרים שבהם ייתכן שעוקבים אחרי הטלפון. מתג אחד נועל את OSHI: אי אפשר להעתיק דבר, אי אפשר לצלם את המסך, ואפליקציות שקוראות את המסך, כולל סוכני בינה מלאכותית, לא רואות כלום.</string>
+    <string name="strict_section_switch">מצב</string>
+    <string name="strict_toggle_title">מצב אבטחה קפדני</string>
+    <string name="strict_toggle_on">פועל במכשיר הזה</string>
+    <string name="strict_toggle_off">כבוי</string>
+    <string name="strict_block_paste_title">לחסום גם הדבקה</string>
+    <string name="strict_block_paste_subtitle">אי אפשר להדביק דבר גם לתוך OSHI</string>
+    <string name="strict_hide_presence_title">הסתרת אישורי קריאה והקלדה</string>
+    <string name="strict_hide_presence_subtitle">אחרים לא רואים מתי אתה קורא או מקליד</string>
+    <string name="strict_forced_subtitle">נקבע על ידי מצב האבטחה הקפדני</string>
+    <string name="strict_blocked_toast">נחסם על ידי מצב האבטחה הקפדני</string>
+    <string name="strict_unlock_title">כיבוי מצב האבטחה הקפדני</string>
+    <string name="strict_unlock_subtitle">אשר שזה אתה</string>
+    <string name="strict_threats_title">אפליקציות שיכולות לקרוא או לשלוט במסך שלך</string>
+    <string name="strict_threats_none">לא נמצאו כאלה בטלפון הזה.</string>
+    <string name="strict_threat_a11y">שירות נגישות שאינו כלי עזר</string>
+    <string name="strict_threat_remote">אפליקציית שליטה מרחוק או שיקוף מסך</string>
+    <string name="strict_threats_open">בדיקה</string>
+    <string name="strict_threats_explainer">OSHI לא יכולה לכבות אפליקציה אחרת. אם אינך מזהה אחת מהן, כבה אותה ב‏הגדרות › נגישות של Android, או הסר אותה.</string>
+    <string name="strict_banner_title">אפליקציות יכולות לקרוא או לשלוט במסך הזה</string>
+    <string name="strict_banner_body">%1$s. מצב האבטחה הקפדני מסתיר מהן את OSHI במקומות ש-Android מאפשר.</string>
+    <string name="strict_banner_dismiss">סגירה</string>
+    <string name="strict_does_title">מה הוא עושה</string>
+    <string name="strict_does_copy">אין העתקה, גזירה, העברה, שיתוף או שמירה של הודעות. אי אפשר לבחור טקסט, וכל מה ש-OSHI הניחה בלוח ההעתקה נמחק.</string>
+    <string name="strict_does_paste">הדבקה ל-OSHI חסומה כש"לחסום גם הדבקה" פועל, כולל פקודת ההדבקה של המקלדת.</string>
+    <string name="strict_does_screen">צילומי מסך, הקלטת מסך ושיתוף מסך מציגים מסך שחור. תצוגת האפליקציות האחרונות מוסתרת.</string>
+    <string name="strict_does_agents">אפליקציות שקוראות את המסך דרך נגישות, כולל סוכני בינה מלאכותית, לא רואות תוכן של OSHI (Android 14 ומעלה). נגיעות שהן מזריקות מתעלמות.</string>
+    <string name="strict_does_overlays">מתעלמים מנגיעות כשאפליקציה אחרת מציירת מעל OSHI.</string>
+    <string name="strict_does_notifications">ההתראות אומרות רק "הודעה חדשה": בלי שם, תמונה או טקסט.</string>
+    <string name="strict_does_lock">נעילת אפליקציה בכל חזרה ל-OSHI (כשיש בטלפון נעילת מסך).</string>
+    <string name="strict_does_keyboard">מקלדת בגלישה בסתר: המקלדת מתבקשת לא ללמוד את מה שאתה מקליד.</string>
+    <string name="strict_does_network">בלי תצוגות מקדימות של קישורים ובלי חיפוש GIPHY: שום דבר לא נטען מאתרי צד שלישי.</string>
+    <string name="strict_does_presence">אישורי קריאה ומחווני הקלדה כבויים (אם בחרת להסתיר אותם).</string>
+    <string name="strict_does_relay">ממסר פרטיות מופעל כשהוא זמין.</string>
+    <string name="strict_does_restore">ההגדרות הקודמות שלך חוזרות כשמכבים את המצב.</string>
+    <string name="strict_cannot_title">מה הוא לא יכול לעשות</string>
+    <string name="strict_cannot_malware">שום אפליקציה לא יכולה להגן עליך לגמרי מתוכנה זדונית או מטלפון שנפרץ (עם root).</string>
+    <string name="strict_cannot_keyboard">המקלדת שלך עדיין רואה מה שאתה מקליד. הצעה מלוח ההעתקה שהיא מקלידה במקומך אינה ניתנת להבחנה מהקלדה.</string>
+    <string name="strict_cannot_readers">קוראי מסך לעיוורים וללקויי ראייה ממשיכים לעבוד, אבל אפליקציות נגישות אחרות לא יכולות לקרוא את OSHI כשהמצב פועל.</string>
+    <string name="strict_cannot_old">ב-Android 13 ומטה OSHI לא יכולה להסתיר את התוכן שלה מאפליקציות נגישות. היא יכולה רק להזהיר מפניהן.</string>
+    <string name="strict_cannot_camera">מישהו עדיין יכול לצלם את המסך במכשיר אחר.</string>
+    <string name="strict_cannot_recipient">זה מגן רק על הטלפון הזה, לא על הטלפונים של מי שאתה כותב להם.</string>
+    <string name="strict_auto_lock_immediate">מיד (מצב אבטחה קפדני)</string>
+</resources>

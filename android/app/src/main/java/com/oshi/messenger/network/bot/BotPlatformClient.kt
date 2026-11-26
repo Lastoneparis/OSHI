@@ -30,8 +30,14 @@ import javax.inject.Singleton
  */
 @Singleton
 class BotPlatformClient @Inject constructor(
-    private val botDao: BotDao
-) {
+    private val botDao: BotDao,
+    /**
+     * __BOT_USER_AUTH_2026_11_24__ (server amendment "night"): dispatch, miniapp/session and
+     * commands carry the Ed25519 request signature of the caller's identity, so a member
+     * can no longer tap, command or open a Mini App as ANOTHER member.
+     */
+    private val signer: com.oshi.messenger.network.v2.V2Signer
+) : BotCommandDirectory {
 
     companion object {
         private const val TAG = "BotPlatformClient"
@@ -56,6 +62,38 @@ class BotPlatformClient @Inject constructor(
             !botId.isNullOrEmpty() -> BotAuth.ByBotId(botId)
             else -> null
         }
+
+        /**
+         * __BOT_COMMANDS_2026_11_24__ The bot's PUBLIC id, as the server computes it
+         * (`botIdFor` in bot_platform.js: `sha256("oshi-bot-id:" + token)` hex, first 16).
+         * Lets the client recognise its OWN platform bot among a group's `bot:` senders.
+         */
+        @JvmStatic
+        fun publicIdFor(token: String): String =
+            java.security.MessageDigest.getInstance("SHA-256")
+                .digest(("oshi-bot-id:" + token).toByteArray(Charsets.UTF_8))
+                .joinToString("") { "%02x".format(it) }
+                .take(16)
+    }
+
+    /**
+     * Sign [path] over [body] (the exact bytes sent). Null when signing failed: the caller
+     * then does NOT fall back to an unsigned call (server rule) and reports a failure.
+     */
+    private fun signedHeaders(method: String, path: String, body: ByteArray): Map<String, String>? =
+        runCatching { signer.sign(method, path, body) }.getOrNull()
+
+    /**
+     * Execute a signed request; one fresh re-sign + retry on 401 `signature_required`
+     * (e.g. the clock moved). A 403 is returned as is — never looped.
+     */
+    private fun executeSigned(build: (Map<String, String>) -> Request, method: String, path: String, body: ByteArray): okhttp3.Response? {
+        val first = signedHeaders(method, path, body) ?: return null
+        val r = http.newCall(build(first)).execute()
+        if (r.code != 401) return r
+        r.close()
+        val again = signedHeaders(method, path, body) ?: return null
+        return http.newCall(build(again)).execute()
     }
 
     private val http = OkHttpClient.Builder()
@@ -193,19 +231,25 @@ class BotPlatformClient @Inject constructor(
 
     private suspend fun dispatch(body: JSONObject): DispatchResult = withContext(Dispatchers.IO) {
         try {
-            val request = Request.Builder()
-                .url("${BuildConfig.VPS_URL}$BASE/dispatch")
-                .post(body.toString().toRequestBody(JSON_MEDIA.toMediaType()))
-                .addHeader("Content-Type", JSON_MEDIA)
-                .build()
-            http.newCall(request).execute().use { response ->
+            val bytes = body.toString().toByteArray(Charsets.UTF_8)
+            val path = "$BASE/dispatch"
+            val response = executeSigned({ h ->
+                Request.Builder()
+                    .url("${BuildConfig.VPS_URL}$path")
+                    .post(bytes.toRequestBody(JSON_MEDIA.toMediaType()))
+                    .addHeader("Content-Type", JSON_MEDIA)
+                    .apply { h.forEach { (k, v) -> header(k, v) } }
+                    .build()
+            }, "POST", path, bytes) ?: return@withContext DispatchResult.Failed("could not sign")
+            response.use { response ->
                 val text = response.body?.string().orEmpty()
                 if (!response.isSuccessful) {
                     // The two refusals the user can act on get their own result, so the
                     // UI can say "you are not in a group this bot serves" instead of a
                     // generic failure the user cannot do anything about.
                     return@withContext when (response.code) {
-                        403 -> DispatchResult.NotAMember
+                        // `forbidden` = the signature did not prove us (clock/key): not "not a member".
+                        403 -> if (text.contains("\"forbidden\"")) DispatchResult.Failed("forbidden") else DispatchResult.NotAMember
                         404 -> DispatchResult.UnknownBot
                         else -> DispatchResult.Failed("HTTP ${response.code}")
                     }
@@ -253,12 +297,17 @@ class BotPlatformClient @Inject constructor(
                 put("userPublicKey", userPublicKey)
                 put("groupId", groupId)
             }
-            val request = Request.Builder()
-                .url("${BuildConfig.VPS_URL}$BASE/miniapp/session")
-                .post(body.toString().toRequestBody(JSON_MEDIA.toMediaType()))
-                .addHeader("Content-Type", JSON_MEDIA)
-                .build()
-            http.newCall(request).execute().use { response ->
+            val bytes = body.toString().toByteArray(Charsets.UTF_8)
+            val path = "$BASE/miniapp/session"
+            val signedResponse = executeSigned({ h ->
+                Request.Builder()
+                    .url("${BuildConfig.VPS_URL}$path")
+                    .post(bytes.toRequestBody(JSON_MEDIA.toMediaType()))
+                    .addHeader("Content-Type", JSON_MEDIA)
+                    .apply { h.forEach { (k, v) -> header(k, v) } }
+                    .build()
+            }, "POST", path, bytes) ?: return@withContext null
+            signedResponse.use { response ->
                 if (!response.isSuccessful) {
                     Log.w(TAG, "miniapp/session HTTP ${response.code}")
                     return@withContext null
@@ -306,4 +355,52 @@ class BotPlatformClient @Inject constructor(
             emptyList()
         }
     }
+
+    /**
+     * __BOT_COMMANDS_2026_11_24__ `POST /api/bot/setMyCommands` (owner-only, by token).
+     * Returns whether the server took the list. An empty list clears the menu.
+     */
+    suspend fun setMyCommands(token: String, commands: List<com.oshi.messenger.util.BotCommandSyntax.Spec>): Boolean =
+        withContext(Dispatchers.IO) {
+            try {
+                val array = org.json.JSONArray()
+                commands.forEach { c ->
+                    array.put(JSONObject().put("command", c.name).put("description", c.description))
+                }
+                val body = JSONObject().put("token", token).put("commands", array)
+                val request = Request.Builder()
+                    .url("${BuildConfig.VPS_URL}$BASE/setMyCommands")
+                    .post(body.toString().toRequestBody(JSON_MEDIA.toMediaType()))
+                    .addHeader("Content-Type", JSON_MEDIA)
+                    .build()
+                http.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) {
+                        Log.w(TAG, "setMyCommands HTTP ${response.code}")
+                        return@withContext false
+                    }
+                    JSONObject(response.body?.string().orEmpty()).optBoolean("success", false)
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "setMyCommands failed: ${e.message}")
+                false
+            }
+        }
+
+    /** See [BotCommandDirectory]: the member route this calls is not on the server yet. */
+    override suspend fun publicCommands(botId: String, groupId: String, userPublicKey: String): PublicCommands =
+        withContext(Dispatchers.IO) {
+            try {
+                val url = "${BuildConfig.VPS_URL}$BASE/commands" +
+                    "?botId=${android.net.Uri.encode(botId)}" +
+                    "&groupId=${android.net.Uri.encode(groupId)}" +
+                    "&userPublicKey=${android.net.Uri.encode(userPublicKey)}"
+                val response = executeSigned({ h ->
+                    Request.Builder().url(url).get().apply { h.forEach { (k, v) -> header(k, v) } }.build()
+                }, "GET", "$BASE/commands", ByteArray(0)) ?: return@withContext PublicCommands.Failed("could not sign")
+                response.use { r -> PublicCommands.parsePublicCommands(r.code, r.body?.string().orEmpty()) }
+            } catch (e: Exception) {
+                Log.w(TAG, "commands failed: ${e.message}")
+                PublicCommands.Failed(e.message ?: "network error")
+            }
+        }
 }

@@ -197,6 +197,12 @@ internal fun MailHtmlBody(
                 // the page loads, which scrolled the subject and sender off the top.
                 isFocusable = false
                 isFocusableInTouchMode = false
+                // 🛡 __STRICT_MODE_2026_11_22__ no text selection (hence no Copy) in strict mode.
+                if (com.oshi.messenger.security.StrictModeGate.active) {
+                    isLongClickable = false
+                    setOnLongClickListener { true }
+                    isHapticFeedbackEnabled = false
+                }
                 webViewClient = object : WebViewClient() {
                     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                         // Never navigate inside the reader; the tap goes to the caller.

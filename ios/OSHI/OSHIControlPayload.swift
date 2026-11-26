@@ -119,6 +119,11 @@ enum OSHIControlPayload {
         // to how a conversation is routed is exactly what a reader should be able
         // to see happen, and when. See `OfflineOnlyConversation.swift`.
         Entry("🔒OFFLINE_ONLY🔒", .rendered),
+        // __ADVANCED_CHAT_PRIVACY_2026_11_26__ Rendered as a centred notice ("X
+        // turned on advanced chat privacy…"), but never counted as unread and
+        // never a notification — see `isQuietNotice`. Same spelling as Android.
+        // See `AdvancedChatPrivacy.swift`.
+        Entry("🛡ADV_PRIVACY🛡", .rendered),
         Entry("MEDIA|||", .rendered),
 
         Entry("💬REPLY💬", .envelope),
@@ -129,6 +134,10 @@ enum OSHIControlPayload {
     /// routes on. These read from `catalog` positions by value so a typo here
     /// cannot introduce a 25th, un-catalogued prefix.
     static let offlineOnlyPrefix   = "🔒OFFLINE_ONLY🔒"
+    /// __ADVANCED_CHAT_PRIVACY_2026_11_26__ U+1F6E1 WITHOUT U+FE0F, exactly as
+    /// Android writes it. (The check-in sentinels spell the shield `🛡️`, with
+    /// the selector; this one deliberately does not, so the two never collide.)
+    static let advancedPrivacyPrefix = "🛡ADV_PRIVACY🛡"
     static let callSummaryPrefix   = "📱CALL_SUMMARY📱"
     static let missedCallPrefix    = "📱MISSED_CALL📱"
 
@@ -265,6 +274,11 @@ enum OSHIControlPayload {
                 out.append(Variant(spelling: stripped, prefix: entry.prefix, kind: entry.kind))
             }
         }
+        // __ADVANCED_CHAT_PRIVACY_2026_11_26__ The reverse case: this sentinel is
+        // canonical WITHOUT U+FE0F (Android sends it bare), but a keyboard or a
+        // future client may add the selector. Accepted on receive, never sent.
+        let shieldWithSelector = advancedPrivacyPrefix.replacingOccurrences(of: "🛡", with: "🛡\u{FE0F}")
+        out.append(Variant(spelling: shieldWithSelector, prefix: advancedPrivacyPrefix, kind: .rendered))
         // Longest variant first: `📱CALL_SUMMARY📱` and `📱MISSED_CALL📱` share
         // a leading emoji, and a shorter entry must never win over a longer one.
         return out.sorted { $0.spelling.count > $1.spelling.count }
@@ -358,8 +372,24 @@ enum OSHIControlPayload {
     /// Les deux tableaux supprimés les portaient déjà; les garder ici préserve
     /// le comportement au lieu de le changer en passant.
     private static let renderedButNotWorthWaking: Set<String> = [
-        "📸PROFILE_UPDATE📸", "🎨WALLPAPER_UPDATE🎨", "🚫BLOCKED🚫"
+        "📸PROFILE_UPDATE📸", "🎨WALLPAPER_UPDATE🎨", "🚫BLOCKED🚫",
+        // __ADVANCED_CHAT_PRIVACY_2026_11_26__ a settings change, not a message.
+        "🛡ADV_PRIVACY🛡"
     ]
+
+    /// __ADVANCED_CHAT_PRIVACY_2026_11_26__ The fifth question: a row of the
+    /// thread that must NOT be counted as unread and must NOT raise a banner
+    /// (local, in-app or on the Watch). It is drawn — a centred notice — and the
+    /// conversation list may show it as the last line, but nobody is told.
+    static func isQuietNotice(_ text: String) -> Bool {
+        matchedPrefix(text) == advancedPrivacyPrefix
+    }
+
+    /// Does this message count towards the unread badge? Never for what is not
+    /// drawn (`isHiddenFromThread`), never for a quiet notice.
+    static func countsAsUnread(_ text: String) -> Bool {
+        !isHiddenFromThread(text) && !isQuietNotice(text)
+    }
 
     /// Envoyer ce payload ne doit réveiller PERSONNE: le pair le traitera à son
     /// prochain sondage. La donnée part quand même — c'est la NOTIFICATION qui
@@ -518,6 +548,11 @@ enum OSHIControlPayload {
             // tout le contenu de la ligne: dire « hors-ligne uniquement » quand
             // quelqu'un vient de lever la restriction serait un contresens.
             return offlineOnlySummary(body: body)
+        case advancedPrivacyPrefix:
+            // __ADVANCED_CHAT_PRIVACY_2026_11_26__ Who did it is not in the body
+            // (it is the authenticated sender); the list preview says WHAT
+            // happened. The thread row adds the name (AdvancedPrivacyNoticeRow).
+            return advancedPrivacySummary(body: body)
         case mediaPrefix:
             return mediaMarkerSummary(body: body)
         default:
@@ -716,6 +751,18 @@ enum OSHIControlPayload {
         }
         return "🔒 " + (on ? "offline_only.summary.on".localized
                            : "offline_only.summary.off".localized)
+    }
+
+    /// An unreadable body reads as "on", for the reason `offlineOnlySummary`
+    /// gives: a damaged payload must not claim a protection was lifted.
+    private static func advancedPrivacySummary(body: String) -> String {
+        var on = true
+        if let data = body.data(using: .utf8),
+           let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let value = obj["on"] as? Bool {
+            on = value
+        }
+        return "🛡 " + (on ? "adv_privacy.summary.on".localized : "adv_privacy.summary.off".localized)
     }
 
     private static func pollSummary(body: String) -> String {

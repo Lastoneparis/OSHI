@@ -322,11 +322,11 @@ fun VideoNoteRecorder(
         properties = DialogProperties(usePlatformDefaultWidth = false, dismissOnClickOutside = false)
     ) {
         // __OLED_GLASS_2026_11_16__ OLED black: a black ground, glass disc.
-        val glassRecorder = com.oshi.messenger.ui.theme.glassOn()
+        val glassRecorder = com.oshi.messenger.ui.theme.oledGlassOn()
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(if (glassRecorder) Color.Black else Color.Black.copy(alpha = 0.82f)),
+                .background(if (com.oshi.messenger.ui.theme.isOledScheme()) Color.Black else Color.Black.copy(alpha = 0.82f)),
             contentAlignment = Alignment.Center
         ) {
             IconButton(

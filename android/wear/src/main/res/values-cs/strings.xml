@@ -48,4 +48,27 @@
     <string name="qr_no">Ne</string>
     <string name="qr_busy">Teď nemůžu mluvit</string>
     <string name="end_to_end">Koncově šifrováno vaším telefonem</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Připnuto</string>
+    <string name="net_internet">Internet</string>
+    <string name="net_nearby">%1$d poblíž</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Telefon je offline · zprávy čekají v telefonu</string>
+    <string name="net_offline_short">Telefon offline</string>
+    <string name="voice_message">Hlasová zpráva</string>
+    <string name="voice_send">Odeslat hlasovou zprávu</string>
+    <string name="voice_cancel">Zrušit</string>
+    <string name="voice_permission">Povolte mikrofon pro nahrávání hlasových zpráv. Na hodinkách se nic neukládá.</string>
+    <string name="voice_mic_busy">Mikrofon je obsazený. Zkuste to znovu.</string>
+    <string name="voice_too_short">Příliš krátké. Mluvte o trochu déle.</string>
+    <string name="voice_not_sent">Neodesláno. Mějte telefon poblíž a zkuste to znovu.</string>
+    <string name="send_emoji">Odeslat emoji</string>
+    <string name="delivery_sending">Odesílání</string>
+    <string name="delivery_sent">Odesláno</string>
+    <string name="delivery_delivered">Doručeno</string>
+    <string name="delivery_read">Přečteno</string>
+    <string name="delivery_failed">Nedoručeno</string>
+    <string name="complication_none">Žádné nepřečtené zprávy</string>
+    <string name="tile_reply_to">Odpovědět: %1$s</string>
+    <string name="tile_chat_unread">%1$s, nepřečtené: %2$d</string>
 </resources>

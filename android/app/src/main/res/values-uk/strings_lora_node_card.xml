@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">Напряму</string>
+    <string name="lora_node_card_from_you">від вас</string>
+    <string name="lora_node_card_heard_day">чути %1$d д тому</string>
+    <string name="lora_node_card_heard_hour">чути %1$d год тому</string>
+    <string name="lora_node_card_heard_min">чути %1$d хв тому</string>
+    <string name="lora_node_card_heard_now">чути щойно</string>
+    <string name="lora_node_card_hops">переходів: %1$d</string>
+    <string name="lora_node_card_in_range">у зоні досяжності</string>
+    <string name="lora_node_card_km">%1$.1f км</string>
+    <string name="lora_node_card_metres">%1$d м</string>
+    <string name="lora_node_card_never_heard">ніколи не чути</string>
+    <string name="lora_node_card_not_heard">ще не чути</string>
+    <string name="lora_node_card_relayed">ретрансльовано</string>
+</resources>

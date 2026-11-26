@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Комментарии</string>
+    <string name="gs_comments_footer">Участники могут комментировать каждый пост. Публикуют только админы.</string>
+    <string name="cm_leave_comment">Оставить комментарий</string>
+    <string name="cm_thread_title">Комментарии</string>
+    <string name="cm_empty">Комментариев пока нет.</string>
+    <string name="cm_composer_hint">Комментарий…</string>
+    <string name="cm_replying_to">Ответ для %1$s</string>
+    <string name="cm_disabled">Комментарии отключены.</string>
+    <string name="cm_post_unavailable">Этот пост больше недоступен.</string>
+    <string name="cm_too_fast">Вы комментируете слишком часто. Подождите немного.</string>
+    <string name="cm_notif_reply">%1$s ответил(а) на ваш комментарий</string>
+    <string name="cm_delete_comment">Удалить комментарий</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d комментарий</item>
+        <item quantity="few">%d комментария</item>
+        <item quantity="many">%d комментариев</item>
+        <item quantity="other">%d комментария</item>
+    </plurals>
+</resources>

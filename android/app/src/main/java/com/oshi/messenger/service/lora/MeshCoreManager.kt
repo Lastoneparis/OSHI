@@ -30,7 +30,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -69,6 +72,8 @@ class MeshCoreManager private constructor(context: Context) {
 
         /** Same key names as iOS, in the same prefs file as the Meshtastic radio. */
         private const val PAIRED_KEY = "oshi.meshcore.peripheralId"
+        /** The paired radio's Bluetooth name, so settings still name it while it is out of range. */
+        private const val PAIRED_NAME_KEY = "oshi.meshcore.peripheralName"
         const val CROSS_BRIDGE_KEY = "oshi.lora.crossBridge"
         private const val PREFS = "oshi.lora"
 
@@ -80,8 +85,17 @@ class MeshCoreManager private constructor(context: Context) {
         private const val BOND_TIMEOUT_MS = 60_000L
         const val REQUESTED_MTU = 512
 
-        /** A string KEY the UI localizes (R.string.meshcore_no_free_channel). */
+        /** Connected but the radio never finished its setup answers: not a MeshCore companion, or wedged. */
+        private const val SETUP_TIMEOUT_MS = 30_000L
+
+        /** String KEYS the UI localizes (MeshCoreUi.errorText). */
         const val ERROR_NO_FREE_CHANNEL = "meshcore.noFreeChannel"
+        /** Android pairing failed: wrong PIN, cancelled prompt, or an old bond the radio forgot. */
+        const val ERROR_PAIRING_FAILED = "meshcore.pairingFailed"
+        /** Connected, but no MeshCore answer in [SETUP_TIMEOUT_MS]. */
+        const val ERROR_NO_ANSWER = "meshcore.noAnswer"
+        /** The link dropped (out of range, radio off); reconnecting on its own. */
+        const val ERROR_CONNECTION_LOST = "meshcore.connectionLost"
 
         @Volatile
         private var INSTANCE: MeshCoreManager? = null
@@ -117,18 +131,60 @@ class MeshCoreManager private constructor(context: Context) {
     private val _connectedName = MutableStateFlow<String?>(null)
     val connectedName: StateFlow<String?> = _connectedName.asStateFlow()
 
-    /** The slot "#oshi-bridge" lives in, or null while unknown / when every slot is taken. */
-    private val _channelIdx = MutableStateFlow<Int?>(null)
-    val channelIdx: StateFlow<Int?> = _channelIdx.asStateFlow()
-
     private val _lastError = MutableStateFlow<String?>(null)
     val lastError: StateFlow<String?> = _lastError.asStateFlow()
+
+    /** Android's pairing prompt is (or should be) on screen: the person has to type the radio's PIN. */
+    private val _awaitingPin = MutableStateFlow(false)
+    val awaitingPin: StateFlow<Boolean> = _awaitingPin.asStateFlow()
 
     private val _framesSent = MutableStateFlow(0)
     val framesSent: StateFlow<Int> = _framesSent.asStateFlow()
 
     private val _messagesReceived = MutableStateFlow(0)
     val messagesReceived: StateFlow<Int> = _messagesReceived.asStateFlow()
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    /** The companion conversation (pure, JVM-tested); this class only gives it a BLE link. */
+    val link = MeshCoreLink(scope, write = { gattWrite(it) }).also { l ->
+        l.onBridgeReady = { becomeReady() }
+        l.onNoFreeChannel = {
+            _lastError.value = ERROR_NO_FREE_CHANNEL
+            Log.i(TAG, "every channel slot is in use; OSHI cannot add #oshi-bridge")
+        }
+        l.onOmpFrame = { receive(it) }
+        l.onChatReady = {
+            // A radio with no slot for #oshi-bridge still chats with MeshCore users: it is connected.
+            if (_state.value != ConnState.READY) markPaired()
+            setupWatchdog?.cancel()
+            _awaitingPin.value = false
+            if (_lastError.value != ERROR_NO_FREE_CHANNEL) _lastError.value = null
+            _state.value = ConnState.READY
+        }
+    }
+
+    /** The slot "#oshi-bridge" lives in, or null while unknown / when every slot is taken. */
+    val channelIdx: StateFlow<Int?> get() = link.channelIdx
+    /** The radio's contact table: MeshCore users (and repeaters / rooms) it has heard adverts from. */
+    val contacts: StateFlow<List<MeshCore.Contact>> get() = link.contacts
+    /** The owner's channels (named slots), "#oshi-bridge" left out. */
+    val channels: StateFlow<List<MeshCore.ChannelInfo>> get() = link.channels
+    /** MeshCore users can be written to: every slot read (with or without "#oshi-bridge"). */
+    val chatReady: StateFlow<Boolean> get() = link.chatReady
+    /** Public-key hex → phone clock (ms) of the last advert heard this session, for the "online" count. */
+    val heardAt: StateFlow<Map<String, Long>> get() = link.heardAt
+    /** How MeshCore users see this radio. */
+    val selfName: StateFlow<String?> get() = link.selfName
+    val pendingTexts: StateFlow<Set<String>> get() = link.pendingTexts
+    val inboundText: SharedFlow<MeshCoreInboundText> get() = link.inboundText
+    val sendOutcomes: SharedFlow<MeshCoreSendOutcome> get() = link.sendOutcomes
+    val joinResults: SharedFlow<Pair<Int, Boolean>> get() = link.joinResults
+    val advertResults: SharedFlow<Boolean> get() = link.advertResults
+
+    /** A contact or channel the person picked in settings, to be listed among their chats. key → name. */
+    private val _conversationRequests = MutableSharedFlow<Pair<String, String>>(extraBufferCapacity = 8)
+    val conversationRequests: SharedFlow<Pair<String, String>> = _conversationRequests.asSharedFlow()
 
     private val prefs = appContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
@@ -141,18 +197,19 @@ class MeshCoreManager private constructor(context: Context) {
         _crossBridgeEnabled.value = enabled
     }
 
-    val isReady: Boolean get() = _state.value == ConnState.READY && session.isReady
+    val isReady: Boolean get() = _state.value == ConnState.READY && link.session.isReady
 
     val isPaired: Boolean get() = prefs.getString(PAIRED_KEY, null) != null
 
+    /** The paired radio's name, connected or not. */
+    val pairedName: String? get() = if (isPaired) prefs.getString(PAIRED_NAME_KEY, null) else null
+
     // ─────────────────────────── Internals ───────────────────────────
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val bluetoothManager: BluetoothManager? =
         ContextCompat.getSystemService(appContext, BluetoothManager::class.java)
     private val adapter: BluetoothAdapter? get() = bluetoothManager?.adapter
 
-    private val session = MeshCoreSession()
     private val reassembler = OmpReassembler()
 
     private var gatt: BluetoothGatt? = null
@@ -162,15 +219,12 @@ class MeshCoreManager private constructor(context: Context) {
     private var scanning = false
     private var reconnectJob: Job? = null
     private var datagramJob: Job? = null
+    private var setupWatchdog: Job? = null
 
     private val gattMutex = Mutex()
     private var writeAck: CompletableDeferred<Boolean>? = null
     private var descriptorAck: CompletableDeferred<Boolean>? = null
     private var bondAck: CompletableDeferred<Boolean>? = null
-
-    /** Companion requests written so far / answered so far — the reply watchdog compares the two. */
-    @Volatile private var requestsWritten = 0L
-    @Volatile private var repliesSeen = 0L
 
     /** SEND_CHANNEL_DATA commands waiting for their slot on the air, paced [SEND_GAP_MS] apart. */
     private val datagrams = Channel<ByteArray>(Channel.UNLIMITED)
@@ -182,7 +236,12 @@ class MeshCoreManager private constructor(context: Context) {
                     if (adapter?.isEnabled == true) reconnectIfPaired() else { teardown(); _state.value = ConnState.OFF }
                 }
                 BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
+                    // Only OUR radio's bond: headphones pairing at the same time must not resolve it.
+                    @Suppress("DEPRECATION")
+                    val dev = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                    if (dev != null && gatt != null && dev.address != gatt?.device?.address) return
                     val s = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE)
+                    if (s == BluetoothDevice.BOND_BONDING) _awaitingPin.value = true
                     if (s == BluetoothDevice.BOND_BONDED) bondAck?.complete(true)
                     else if (s == BluetoothDevice.BOND_NONE) bondAck?.complete(false)
                 }
@@ -251,6 +310,7 @@ class MeshCoreManager private constructor(context: Context) {
         val device = runCatching { adapter?.getRemoteDevice(id) }.getOrNull() ?: return
         stopScan()
         teardown()
+        _lastError.value = null
         _state.value = ConnState.CONNECTING
         pendingPairId = id
         gatt = device.connectGatt(appContext, autoConnect, gattCallback, BluetoothDevice.TRANSPORT_LE)
@@ -258,7 +318,7 @@ class MeshCoreManager private constructor(context: Context) {
 
     fun forget() {
         pendingPairId = null
-        prefs.edit().remove(PAIRED_KEY).apply()
+        prefs.edit().remove(PAIRED_KEY).remove(PAIRED_NAME_KEY).apply()
         teardown()
         _state.value = ConnState.OFF
         _lastError.value = null
@@ -273,6 +333,8 @@ class MeshCoreManager private constructor(context: Context) {
     private fun teardown() {
         reconnectJob?.cancel(); reconnectJob = null
         datagramJob?.cancel(); datagramJob = null
+        setupWatchdog?.cancel(); setupWatchdog = null
+        _awaitingPin.value = false
         while (datagrams.tryReceive().isSuccess) Unit
         runCatching { gatt?.disconnect() }
         runCatching { gatt?.close() }
@@ -280,15 +342,29 @@ class MeshCoreManager private constructor(context: Context) {
         writeAck?.complete(false); writeAck = null
         descriptorAck?.complete(false); descriptorAck = null
         bondAck?.complete(false); bondAck = null
-        session.reset()
-        _channelIdx.value = null
         _connectedName.value = null
+        // Whatever was waiting on this link fails now (FAILED → tap to retry), not never.
+        link.linkDown()
     }
 
     private fun handleDisconnected() {
+        val wasUp = _state.value == ConnState.READY
         teardown()
         _state.value = ConnState.OFF
         // Walked out of range or the radio rebooted: keep trying, the way the Meshtastic side does.
+        if (isPaired) {
+            if (wasUp) _lastError.value = ERROR_CONNECTION_LOST
+            reconnectJob = scope.launch { delay(3_000); reconnectIfPaired() }
+        }
+    }
+
+    /** Pairing or setup went wrong on a radio that was never paired: stop, say why, do not loop. */
+    private fun fail(error: String) {
+        Log.w(TAG, "connection failed: $error")
+        pendingPairId = null
+        teardown()
+        _state.value = ConnState.OFF
+        _lastError.value = error
         if (isPaired) reconnectJob = scope.launch { delay(3_000); reconnectIfPaired() }
     }
 
@@ -320,11 +396,18 @@ class MeshCoreManager private constructor(context: Context) {
                 handleDisconnected(); return
             }
             scope.launch {
-                ensureBonded(g.device)
+                if (!ensureBonded(g.device)) { fail(ERROR_PAIRING_FAILED); return@launch }
                 // Subscribing is what the radio's PIN protects; one retry covers the bond settling.
-                if (!enableNotifications(g, tx)) { delay(2_000); enableNotifications(g, tx) }
-                session.start()
-                pump()
+                if (!enableNotifications(g, tx)) {
+                    delay(2_000)
+                    // Still refused: Android holds a bond the radio no longer has (reflashed, PIN changed).
+                    if (!enableNotifications(g, tx)) { fail(ERROR_PAIRING_FAILED); return@launch }
+                }
+                link.linkUp()
+                setupWatchdog = scope.launch {
+                    delay(SETUP_TIMEOUT_MS)
+                    if (!link.chatReady.value) fail(ERROR_NO_ANSWER)
+                }
             }
         }
 
@@ -351,13 +434,18 @@ class MeshCoreManager private constructor(context: Context) {
      * MeshCore companion firmware protects its UART with a PIN. Bonding up front shows Android's own PIN
      * prompt once; after that the stack re-encrypts on every reconnect by itself.
      */
-    private suspend fun ensureBonded(device: BluetoothDevice) {
-        if (device.bondState == BluetoothDevice.BOND_BONDED) return
+    private suspend fun ensureBonded(device: BluetoothDevice): Boolean {
+        if (device.bondState == BluetoothDevice.BOND_BONDED) return true
         val ack = CompletableDeferred<Boolean>()
         bondAck = ack
-        if (device.bondState == BluetoothDevice.BOND_NONE && !device.createBond()) { bondAck = null; return }
-        withTimeoutOrNull(BOND_TIMEOUT_MS) { ack.await() }
+        _awaitingPin.value = true
+        // createBond() refusing outright is not a verdict: some radios bond on the first encrypted write instead.
+        if (device.bondState == BluetoothDevice.BOND_NONE && !device.createBond()) { bondAck = null; _awaitingPin.value = false; return true }
+        val ok = withTimeoutOrNull(BOND_TIMEOUT_MS) { ack.await() }
         bondAck = null
+        _awaitingPin.value = false
+        // BONDING → NONE is a wrong PIN or a cancelled prompt; a timeout is the prompt left unanswered.
+        return ok == true
     }
 
     private suspend fun enableNotifications(g: BluetoothGatt, c: BluetoothGattCharacteristic): Boolean =
@@ -403,50 +491,18 @@ class MeshCoreManager private constructor(context: Context) {
         }
     }
 
-    // ─────────────────────────── Companion request queue ───────────────────────────
+    private fun handleFrame(f: ByteArray) = link.onFrame(f)
 
-    /** Write the next companion request if none is waiting for its reply. Called from BLE and IO threads. */
-    @Synchronized
-    private fun pump() {
-        val cmd = session.nextCommand() ?: return
-        val n = ++requestsWritten
-        scope.launch {
-            if (!gattWrite(cmd)) {
-                session.writeFailed()
-                if (gatt != null) pump()
-                return@launch
-            }
-            delay(REPLY_TIMEOUT_MS)
-            if (repliesSeen < n && requestsWritten == n && gatt != null) {
-                Log.w(TAG, "companion request ${cmd.firstOrNull()} unanswered; moving on")
-                session.writeFailed()
-                pump()
-            }
-        }
-    }
-
-    private fun handleFrame(f: ByteArray) {
-        if (f.isNotEmpty() && (f[0].toInt() and 0xFF) < 0x80) repliesSeen = requestsWritten
-        for (e in session.onFrame(f)) {
-            when (e) {
-                is MeshCoreSession.Event.Ready -> becomeReady()
-                is MeshCoreSession.Event.NoFreeChannel -> {
-                    _lastError.value = ERROR_NO_FREE_CHANNEL
-                    Log.i(TAG, "every channel slot is in use; OSHI cannot add #oshi-bridge")
-                }
-                is MeshCoreSession.Event.Frame -> receive(e)
-            }
-        }
-        _channelIdx.value = session.channelIdx
-        pump()
+    private fun markPaired() {
+        // The handshake completed: NOW this radio is genuinely paired (same rule as the Meshtastic side).
+        pendingPairId?.let { prefs.edit().putString(PAIRED_KEY, it).putString(PAIRED_NAME_KEY, _connectedName.value).apply(); pendingPairId = null }
     }
 
     private fun becomeReady() {
         _state.value = ConnState.READY
-        _lastError.value = null
-        // The handshake completed: NOW this radio is genuinely paired (same rule as the Meshtastic side).
-        pendingPairId?.let { prefs.edit().putString(PAIRED_KEY, it).apply(); pendingPairId = null }
-        Log.i(TAG, "ready, #oshi-bridge in slot ${session.channelIdx}, id ${session.nodeId.toString(16)}")
+        if (_lastError.value != ERROR_NO_FREE_CHANNEL) _lastError.value = null
+        markPaired()
+        Log.i(TAG, "ready, #oshi-bridge in slot ${link.session.channelIdx}, id ${link.session.nodeId.toString(16)}")
         startDatagramPump()
     }
 
@@ -462,7 +518,7 @@ class MeshCoreManager private constructor(context: Context) {
         if (message.carriesMedia && !mediaOk) return false
         val body = OshiMeshProtocol.encodeBody(message.toWireJson())
         val frames = OshiMeshProtocol.dataFrames(
-            Random.nextInt(1, Int.MAX_VALUE).toUInt(), CrossBridgeDedup.BROADCAST, body, origin = session.nodeId,
+            Random.nextInt(1, Int.MAX_VALUE).toUInt(), CrossBridgeDedup.BROADCAST, body, origin = link.session.nodeId,
         )
         if (frames == null || frames.size > LoRaEnvelope.MAX_CHUNKS) return false
         frames.forEach { sendFrame(it) }
@@ -473,7 +529,7 @@ class MeshCoreManager private constructor(context: Context) {
     /** One OMP frame onto MeshCore under our envelope. Also what the cross-network bridge calls. */
     fun sendFrame(frame: ByteArray) {
         if (!isReady) return
-        session.channelDatagrams(frame).forEach { datagrams.trySend(it) }
+        link.session.channelDatagrams(frame).forEach { datagrams.trySend(it) }
     }
 
     private fun startDatagramPump() {
@@ -481,17 +537,38 @@ class MeshCoreManager private constructor(context: Context) {
         datagramJob = scope.launch {
             while (true) {
                 val cmd = datagrams.receive()
-                session.enqueue(cmd)
-                pump()
+                link.enqueue(cmd)
                 _framesSent.value += 1
                 delay(SEND_GAP_MS)
             }
         }
     }
 
+    // ─────────────────────────── MeshCore users (plain MeshCore, not OSHI) ───────────────────────────
+
+    /** MeshCore users can be written to right now. */
+    val isChatReady: Boolean get() = _state.value == ConnState.READY && link.isChatReady
+
+    fun channelSlotFor(channelKey: String): Int? = link.channelSlotFor(channelKey)
+
+    fun joinHashtagChannel(name: String): MeshCoreLink.JoinResult = link.joinHashtagChannel(name)
+
+    fun joinPrivateChannel(name: String, secret: ByteArray): MeshCoreLink.JoinResult = link.joinPrivateChannel(name, secret)
+
+    fun refreshContacts() = link.refreshContacts()
+
+    /** Announce this radio so MeshCore users nearby can add it. */
+    fun sendSelfAdvert(): Boolean = link.sendSelfAdvert()
+
+    /** List [key] among the person's chats under [name] (MessageRepository creates the row). */
+    fun requestConversation(key: String, name: String) {
+        _conversationRequests.tryEmit(key to name)
+    }
+
     // ─────────────────────────── Receiving ───────────────────────────
 
     private fun receive(e: MeshCoreSession.Event.Frame) {
+        if (!link.isUp) return
         LoRaCrossBridge.heardOnMeshCore(e.frame, e.parsed)
         val body = reassembler.accept(e.parsed) ?: return
         val json = OshiMeshProtocol.decodeBody(body) ?: return

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">所有聊天的預設桌布。每個聊天仍可單獨設定。</string>
+    <string name="wallpaper_tone_settings_title">桌布色調</string>
+    <string name="wallpaper_personal_note">只有你能在這台裝置上看到此桌布。</string>
+</resources>

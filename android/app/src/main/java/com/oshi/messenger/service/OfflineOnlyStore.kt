@@ -119,10 +119,12 @@ object OfflineOnlyStore {
     fun applyIncoming(req: OfflineOnlyRequest, conversationId: String) {
         val key = canonical(conversationId)
         val existing = _states.value[key]
+        // __OFFLINE_ONLY_FUTURE_CLAMP_2026_11_20__ the peer's clock, bounded by ours.
+        val at = OfflineOnlyRequest.clampedAt(req.atUnixSeconds, System.currentTimeMillis() / 1000.0)
         // Mesh delivery is not ordered, so an older request arriving late is
         // ordinary rather than an error.
-        if (existing != null && existing.changedAtUnixSeconds > req.atUnixSeconds) return
-        _states.value = _states.value + (key to State(req.on, req.atUnixSeconds, emptySet()))
+        if (existing != null && existing.changedAtUnixSeconds > at) return
+        _states.value = _states.value + (key to State(req.on, at, emptySet()))
         scheduleSave()
     }
 

@@ -59,8 +59,12 @@ struct GroupSettingsSections: View {
             // __GROUP_COMMENTS_2026_11_21__ §2.12.6 row 5b: admins, channel mode only
             // (hidden otherwise; the value is kept and re-emitted either way).
             if isAdmin && settings.postPolicy == .admins { commentsSection }
+            // __CHANNEL_WEB_2026_11_26__ public web preview (channels only; admins edit).
+            ChannelWebSection(groupId: groupId)
             if settings.welcome.isEmpty == false || isAdmin { welcomeSection }
             dmSection(group)
+            // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ any member, not admin-only.
+            AdvancedPrivacyGroupSection(groupId: groupId)
             if GroupAutoTranslate.isAvailable { translateSection }
         }
     }
@@ -410,6 +414,7 @@ struct GroupRecentEventsView: View {
         case "post_policy_changed": return setting("gs_who_can_post")
         case "admin_dms_changed": return setting("gs_admin_dms")
         case "comments_changed": return setting("gs_comments")
+        case "web_preview_changed": return setting("cw_title")
         case "joined_via_link": return String(format: "gs_ev_joined_link".localized, actor)
         case "dissolved": return String(format: "gs_ev_dissolved".localized, actor)
         default: return setting(e.kind)

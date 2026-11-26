@@ -281,7 +281,14 @@ enum RatchetHealSignal {
         /// Ce que CETTE build annonce. Toute capacite ajoutee ici doit etre
         /// reellement implementee: un pair qui nous croit capable nous enverra
         /// ce que nous aurons annonce savoir lire.
-        static let mine: Int = resendList | groupV2 | padding | mediaPadding
+        /// __ADVANCED_CHAT_PRIVACY_2026_11_26__ Lit `🛡ADV_PRIVACY🛡` (le réglage
+        /// « confidentialité avancée » d'une conversation, AdvancedChatPrivacy.swift)
+        /// et l'applique. Un pair qui ne l'annonce pas — et ne nous en a jamais
+        /// envoyé un — ne le reçoit pas: iOS 1.0.43 l'afficherait en JSON brut.
+        /// Android/Desktop doivent annoncer le MÊME bit.
+        static let advancedPrivacy: Int = 1 << 4
+
+        static let mine: Int = resendList | groupV2 | padding | mediaPadding | advancedPrivacy
 
         static func has(_ caps: Int, _ flag: Int) -> Bool { (caps & flag) != 0 }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Komentar</string>
+    <string name="gs_comments_footer">Anggota dapat berkomentar di setiap postingan. Hanya admin yang memposting.</string>
+    <string name="cm_leave_comment">Tulis komentar</string>
+    <string name="cm_thread_title">Komentar</string>
+    <string name="cm_empty">Belum ada komentar.</string>
+    <string name="cm_composer_hint">Komentar…</string>
+    <string name="cm_replying_to">Membalas %1$s</string>
+    <string name="cm_disabled">Komentar dinonaktifkan.</string>
+    <string name="cm_post_unavailable">Postingan ini tidak tersedia lagi.</string>
+    <string name="cm_too_fast">Anda berkomentar terlalu cepat. Tunggu sebentar.</string>
+    <string name="cm_notif_reply">%1$s membalas komentar Anda</string>
+    <string name="cm_delete_comment">Hapus komentar</string>
+    <plurals name="cm_comments_count">
+        <item quantity="other">%d komentar</item>
+    </plurals>
+</resources>

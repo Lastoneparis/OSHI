@@ -637,3 +637,53 @@ final class SealedCancelOnlyTests: XCTestCase {
         XCTAssertTrue(src.contains("pollCallSignalsForCancelPush()"))
     }
 }
+
+// MARK: - __CALL_WAKE_2026_11_22__ caller-side reach (GET /call-reach) and the ringing report
+
+final class CallReachTests: XCTestCase {
+
+    func testServerStatesMapAndUnknownIsNil() {
+        XCTAssertEqual(CallReach(server: "ringing"), .ringing)
+        XCTAssertEqual(CallReach(server: "delivered"), .delivered)
+        XCTAssertEqual(CallReach(server: "pushed"), .pushed)
+        XCTAssertEqual(CallReach(server: "unreachable"), .unreachable)
+        XCTAssertEqual(CallReach(server: "calling"), .calling)
+        XCTAssertNil(CallReach(server: "online"))
+        XCTAssertNil(CallReach(server: nil))
+    }
+
+    func testReachNeverStepsBackAndUnreachableIsOvertaken() {
+        XCTAssertEqual(CallReach.merge(.ringing, .calling), .ringing)
+        XCTAssertEqual(CallReach.merge(.ringing, .pushed), .ringing)
+        XCTAssertEqual(CallReach.merge(.unreachable, .delivered), .delivered)
+        XCTAssertEqual(CallReach.merge(.calling, .unreachable), .unreachable)
+        XCTAssertEqual(CallReach.merge(.pushed, .unreachable), .pushed)
+        XCTAssertEqual(CallReach.merge(nil, .pushed), .pushed)
+        XCTAssertEqual(CallReach.merge(.pushed, nil), .pushed)
+    }
+
+    func testOutgoingLabelKeepsRingingOnOldServerAndWaitsSixSecondsForUnreachable() {
+        XCTAssertEqual(CallReach.outgoingLabel(nil, ringingFor: 0), .ringing)
+        XCTAssertEqual(CallReach.outgoingLabel(.calling, ringingFor: 20), .calling)
+        XCTAssertEqual(CallReach.outgoingLabel(.pushed, ringingFor: 20), .calling)
+        XCTAssertEqual(CallReach.outgoingLabel(.delivered, ringingFor: 1), .ringing)
+        XCTAssertEqual(CallReach.outgoingLabel(.ringing, ringingFor: 1), .ringing)
+        XCTAssertEqual(CallReach.outgoingLabel(.unreachable, ringingFor: 5.9), .calling)
+        XCTAssertEqual(CallReach.outgoingLabel(.unreachable, ringingFor: 6), .unreachable)
+    }
+
+    func testRingingWireFormMatchesTheServer() {
+        XCTAssertEqual(CallReachWire.ringingType, "callRinging")
+        XCTAssertFalse(CallReachWire.ringingPlaceholder.isEmpty)
+    }
+
+    func testUnreachableIsLocalizedInEveryLanguageThatHasRinging() throws {
+        let bundle = Bundle(for: VoiceCallManager.self)
+        for loc in bundle.localizations where loc != "Base" {
+            guard let path = bundle.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: loc),
+                  let dict = NSDictionary(contentsOfFile: path) as? [String: String],
+                  dict["call.state.ringing"] != nil else { continue }
+            XCTAssertNotNil(dict["call.state.unreachable"], "missing call.state.unreachable in \(loc)")
+        }
+    }
+}

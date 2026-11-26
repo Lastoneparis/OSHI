@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">명령어</string>
+    <string name="bot_cmd_send_a11y">%1$s 보내기</string>
+    <string name="bot_cmd_sheet_title">봇 명령어</string>
+    <string name="bot_cmd_tap_to_send">명령어를 탭하면 바로 보내집니다.</string>
+    <string name="bot_cmd_empty_none_title">아직 봇이 없어요</string>
+    <string name="bot_cmd_empty_none_body">봇을 만들어 이 그룹에 추가하세요. 봇의 명령어가 여기와 / 를 입력할 때 나타납니다.</string>
+    <string name="bot_cmd_empty_bot">이 봇에는 아직 명령어가 없어요.</string>
+    <string name="bot_cmd_setup">명령어 설정</string>
+    <string name="bot_cmd_section">명령어</string>
+    <string name="bot_cmd_section_hint">봇이 있는 그룹의 멤버는 / 를 입력하거나 ‘명령어’를 탭하면 이 목록을 봅니다.</string>
+    <string name="bot_cmd_add">추가</string>
+    <string name="bot_cmd_add_title">새 명령어</string>
+    <string name="bot_cmd_edit_title">명령어 수정</string>
+    <string name="bot_cmd_field_name">명령어</string>
+    <string name="bot_cmd_field_description">설명(메뉴에 표시)</string>
+    <string name="bot_cmd_field_reply">답장</string>
+    <string name="bot_cmd_field_reply_hint">봇이 답하는 내용. {{input}}, {{bot_name}}, {{date}} 를 쓸 수 있어요.</string>
+    <string name="bot_cmd_webhook_note">웹훅으로 보내지고, 웹훅이 답합니다.</string>
+    <string name="bot_cmd_empty_owner">아직 명령어가 없어요. /start 나 /help 같은 명령어를 추가해 이 봇이 무엇을 하는지 알려 주세요.</string>
+    <string name="bot_cmd_err_empty">명령어 이름을 입력하세요.</string>
+    <string name="bot_cmd_err_invalid">영문 소문자, 숫자, _ 만 쓸 수 있어요.</string>
+    <string name="bot_cmd_err_too_long">최대 32자.</string>
+    <string name="bot_cmd_err_duplicate">이 봇에 이미 같은 명령어가 있어요.</string>
+    <string name="bot_cmd_err_too_many">봇의 명령어는 최대 100개입니다.</string>
+    <string name="bot_cmd_err_description">설명이 너무 길어요(최대 256자).</string>
+    <string name="bot_cmd_sync_local">봇을 실행하는 이 휴대폰에 저장했어요.</string>
+    <string name="bot_cmd_sync_syncing">서버 업데이트 중…</string>
+    <string name="bot_cmd_sync_synced">서버의 메뉴를 업데이트했어요.</string>
+    <string name="bot_cmd_sync_failed">서버를 업데이트하지 못했어요. 명령어는 이 휴대폰에 저장되어 있어요.</string>
+    <string name="bot_profile_edit">프로필 수정</string>
+    <string name="bot_profile_name">이름</string>
+    <string name="bot_profile_description">설명</string>
+    <string name="bot_profile_avatar">아바타</string>
+    <string name="bot_profile_err_name_empty">봇 이름을 정해 주세요.</string>
+    <string name="bot_profile_err_name_long">이름이 너무 길어요(최대 64자).</string>
+    <string name="bot_profile_err_desc_long">설명이 너무 길어요(최대 512자).</string>
+    <string name="bot_connect_title">연결 방식</string>
+    <string name="bot_connect_local">이 봇은 이 휴대폰에서 실행돼요. OSHI를 지우지 말고 봇을 켜 두세요. 그룹에 추가하면 멤버들이 그곳에서 명령어를 쓸 수 있어요.</string>
+    <string name="bot_connect_webhook">각 명령어는 웹훅 URL로 보내지고, 서버는 JSON {\"text\": \"…\"} 으로 답합니다. 서버는 아래 토큰을 OSHI 봇 API와 함께 쓸 수도 있어요.</string>
+    <string name="bot_connect_token_warning">토큰은 비밀로 지키세요. 토큰을 가진 사람은 누구나 봇인 척 말할 수 있어요.</string>
+    <string name="bot_connect_groups">그룹: %1$s</string>
+    <string name="bot_connect_no_groups">아직 어느 그룹에도 없어서 아무도 명령어를 쓸 수 없어요.</string>
+</resources>

@@ -334,6 +334,9 @@ class PeersViewModel @Inject constructor(
      */
     fun onScreenResumed() {
         crossPlatformMesh.retryBleIfPermitted()
+        // __WIFI_AWARE_2026_11_25__ A permission granted in the dialog that just
+        // closed (or in app settings) has no broadcast: look again now.
+        meshManager.refreshWifiAware()
     }
 
     /**

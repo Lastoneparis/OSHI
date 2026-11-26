@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">コマンド</string>
+    <string name="bot_cmd_send_a11y">%1$s を送信</string>
+    <string name="bot_cmd_sheet_title">ボットのコマンド</string>
+    <string name="bot_cmd_tap_to_send">コマンドをタップすると送信されます。</string>
+    <string name="bot_cmd_empty_none_title">まだボットがいません</string>
+    <string name="bot_cmd_empty_none_body">ボットを作成してこのグループに追加しましょう。コマンドがここと、/ を入力したときに表示されます。</string>
+    <string name="bot_cmd_empty_bot">このボットにはまだコマンドがありません。</string>
+    <string name="bot_cmd_setup">コマンドを設定</string>
+    <string name="bot_cmd_section">コマンド</string>
+    <string name="bot_cmd_section_hint">ボットのグループのメンバーは、/ を入力するか「コマンド」をタップすると表示されます。</string>
+    <string name="bot_cmd_add">追加</string>
+    <string name="bot_cmd_add_title">新しいコマンド</string>
+    <string name="bot_cmd_edit_title">コマンドを編集</string>
+    <string name="bot_cmd_field_name">コマンド</string>
+    <string name="bot_cmd_field_description">説明（メニューに表示）</string>
+    <string name="bot_cmd_field_reply">返信</string>
+    <string name="bot_cmd_field_reply_hint">ボットの返信内容。{{input}}、{{bot_name}}、{{date}} を使えます。</string>
+    <string name="bot_cmd_webhook_note">Webhook に送られ、そこから返信されます。</string>
+    <string name="bot_cmd_empty_owner">まだコマンドがありません。/start や /help などを追加して、このボットにできることを伝えましょう。</string>
+    <string name="bot_cmd_err_empty">コマンド名を入力してください。</string>
+    <string name="bot_cmd_err_invalid">小文字の英字・数字・_ のみ使えます。</string>
+    <string name="bot_cmd_err_too_long">32 文字以内。</string>
+    <string name="bot_cmd_err_duplicate">このボットにはすでに同じコマンドがあります。</string>
+    <string name="bot_cmd_err_too_many">ボットのコマンドは最大 100 個です。</string>
+    <string name="bot_cmd_err_description">説明が長すぎます（256 文字以内）。</string>
+    <string name="bot_cmd_sync_local">ボットを動かしているこのスマートフォンに保存しました。</string>
+    <string name="bot_cmd_sync_syncing">サーバーを更新中…</string>
+    <string name="bot_cmd_sync_synced">サーバーのメニューを更新しました。</string>
+    <string name="bot_cmd_sync_failed">サーバーを更新できませんでした。コマンドはこのスマートフォンに保存されています。</string>
+    <string name="bot_profile_edit">プロフィールを編集</string>
+    <string name="bot_profile_name">名前</string>
+    <string name="bot_profile_description">説明</string>
+    <string name="bot_profile_avatar">アバター</string>
+    <string name="bot_profile_err_name_empty">ボットに名前を付けてください。</string>
+    <string name="bot_profile_err_name_long">名前が長すぎます（64 文字以内）。</string>
+    <string name="bot_profile_err_desc_long">説明が長すぎます（512 文字以内）。</string>
+    <string name="bot_connect_title">接続のしくみ</string>
+    <string name="bot_connect_local">このボットはこのスマートフォンで動いています。OSHI をアンインストールせず、ボットを有効のままにしてください。グループに追加すると、メンバーがそこでコマンドを使えます。</string>
+    <string name="bot_connect_webhook">各コマンドは Webhook の URL に送られ、サーバーは JSON {\"text\": \"…\"} で返信します。サーバーは下のトークンを OSHI ボット API でも使えます。</string>
+    <string name="bot_connect_token_warning">トークンは秘密にしてください。持っている人は誰でもボットとして発言できます。</string>
+    <string name="bot_connect_groups">グループ: %1$s</string>
+    <string name="bot_connect_no_groups">まだどのグループにも入っていないため、誰もコマンドを使えません。</string>
+</resources>

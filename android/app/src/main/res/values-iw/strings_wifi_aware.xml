@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware (קישור מהיר לקרבה)</string>
+    <string name="settings_wifi_aware_subtitle">קישור ישיר לטלפונים של OSHI בקרבת מקום, ללא נתב. ה-Wi-Fi שלך נשאר מחובר.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

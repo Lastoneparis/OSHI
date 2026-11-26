@@ -20,6 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.oshi.wearbridge.WearNet
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +37,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.Button
@@ -48,13 +56,16 @@ import com.oshi.wearbridge.WearConversation
 @Composable
 fun ConversationListScreen(session: WearSession, onOpen: (WearConversation) -> Unit) {
     val state by session.list.collectAsState()
+    val net by session.net.collectAsState()
     val listState = rememberScalingLazyListState()
     ScreenScaffold(scrollState = listState) { padding ->
         when (val s = state) {
             is Load.Loading -> Loading()
-            is Load.Failed -> StatusPanel(s.reason, onRetry = { session.refreshList() })
+            // The panels scroll in the SAME state the scaffold watches, so the
+            // scroll indicator shows on them too (Wear quality: "show the scrollbar").
+            is Load.Failed -> StatusPanel(s.reason, listState, padding, onRetry = { session.refreshList() })
             is Load.Ready -> if (s.value.isEmpty()) {
-                EmptyPanel()
+                EmptyPanel(listState, padding)
             } else {
                 ScalingLazyColumn(
                     state = listState,
@@ -70,6 +81,7 @@ fun ConversationListScreen(session: WearSession, onOpen: (WearConversation) -> U
                             )
                         }
                     }
+                    net?.let { n -> item(key = "net") { NetStatus(n) } }
                     items(s.value, key = { it.kind.wire + it.id }) { c -> ConversationRow(c) { onOpen(c) } }
                 }
             }
@@ -80,6 +92,9 @@ fun ConversationListScreen(session: WearSession, onOpen: (WearConversation) -> U
 @Composable
 private fun ConversationRow(c: WearConversation, onClick: () -> Unit) {
     val shape = RoundedCornerShape(26.dp)
+    val pinnedLabel = stringResource(R.string.pinned)
+    val context = LocalContext.current
+    val time = remember(c.timestamp) { rowTime(context, c.timestamp) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,14 +107,21 @@ private fun ConversationRow(c: WearConversation, onClick: () -> Unit) {
         Avatar(key = c.avatarKey, name = c.name, size = 34.dp)
         Spacer(Modifier.width(8.dp))
         Column(Modifier.weight(1f)) {
-            Text(
-                c.name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = OshiColors.TextPrimary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (c.pinned) {
+                    PinGlyph(Modifier.semantics { contentDescription = pinnedLabel })
+                    Spacer(Modifier.width(3.dp))
+                }
+                Text(
+                    c.name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = OshiColors.TextPrimary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false),
+                )
+            }
             val preview = if (c.lastFromMe && c.preview.isNotBlank()) stringResource(R.string.you_prefix, c.preview) else c.preview
             Text(
                 preview,
@@ -109,10 +131,52 @@ private fun ConversationRow(c: WearConversation, onClick: () -> Unit) {
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (c.unread > 0) {
-            Spacer(Modifier.width(6.dp))
-            UnreadBadge(c.unread)
+        Spacer(Modifier.width(6.dp))
+        Column(horizontalAlignment = Alignment.End) {
+            if (time.isNotEmpty()) {
+                Text(
+                    time, fontSize = 10.sp, maxLines = 1,
+                    color = if (c.unread > 0) OshiColors.BrandInk else OshiColors.TextSecondary,
+                )
+            }
+            if (c.unread > 0) {
+                Spacer(Modifier.height(2.dp))
+                UnreadBadge(c.unread)
+            }
         }
+    }
+}
+
+/**
+ * __WEAR_POLISH_2026_11_25__ How the PHONE reaches people right now — the
+ * thing only OSHI has: internet, nearby phones over the mesh, a LoRa radio.
+ * When none is up, it says plainly that messages wait on the phone.
+ */
+@Composable
+fun NetStatus(net: WearNet, modifier: Modifier = Modifier) {
+    val parts = buildList {
+        if (net.internet) add(stringResource(R.string.net_internet))
+        if (net.meshPeers > 0) add(stringResource(R.string.net_nearby, net.meshPeers))
+        if (net.lora) add(stringResource(R.string.net_lora))
+    }
+    val offline = net.isOffline
+    val text = if (offline) stringResource(R.string.net_offline) else parts.joinToString(" · ")
+    val dot = when {
+        offline -> OfflineAmber
+        net.internet -> Color(0xFF4ADE80)
+        else -> OshiColors.BrandInk // mesh / LoRa only: OSHI still delivers
+    }
+    Row(
+        modifier = modifier.fillMaxWidth().padding(horizontal = 14.dp).semantics(mergeDescendants = true) {},
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(Modifier.size(7.dp).clip(CircleShape).background(dot))
+        Spacer(Modifier.width(5.dp))
+        Text(
+            text, fontSize = 11.sp, textAlign = TextAlign.Center, maxLines = 3,
+            color = if (offline) OfflineAmber else OshiColors.TextSecondary,
+        )
     }
 }
 
@@ -144,19 +208,21 @@ fun Loading() {
 }
 
 @Composable
-private fun EmptyPanel() {
-    Column(
-        Modifier.fillMaxSize().padding(horizontal = 22.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Image(painterResource(R.drawable.mascot_wave), contentDescription = null, modifier = Modifier.size(64.dp))
-        Spacer(Modifier.height(6.dp))
-        Text(stringResource(R.string.empty_title), fontWeight = FontWeight.Bold, fontSize = 14.sp, textAlign = TextAlign.Center)
-        Text(
-            stringResource(R.string.empty_body), fontSize = 12.sp, color = OshiColors.TextSecondary,
-            textAlign = TextAlign.Center,
-        )
+private fun EmptyPanel(listState: ScalingLazyListState, contentPadding: PaddingValues) {
+    ScalingLazyColumn(state = listState, contentPadding = contentPadding, modifier = Modifier.fillMaxSize()) {
+        item { Image(painterResource(R.drawable.mascot_wave), contentDescription = null, modifier = Modifier.size(64.dp)) }
+        item {
+            Text(
+                stringResource(R.string.empty_title), fontWeight = FontWeight.Bold, fontSize = 14.sp,
+                textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 22.dp),
+            )
+        }
+        item {
+            Text(
+                stringResource(R.string.empty_body), fontSize = 12.sp, color = OshiColors.TextSecondary,
+                textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 22.dp),
+            )
+        }
     }
 }
 
@@ -166,6 +232,15 @@ private fun EmptyPanel() {
  */
 @Composable
 fun StatusPanel(reason: Reason, onRetry: () -> Unit) {
+    // Standalone (no caller scaffold): give it its own scaffold so the scroll
+    // indicator is shown while the person scrolls.
+    val listState = rememberScalingLazyListState()
+    ScreenScaffold(scrollState = listState) { padding -> StatusPanel(reason, listState, padding, onRetry) }
+}
+
+/** Inside a caller's [ScreenScaffold] that watches [listState]. */
+@Composable
+fun StatusPanel(reason: Reason, listState: ScalingLazyListState, contentPadding: PaddingValues, onRetry: () -> Unit) {
     val (title, body) = when (reason) {
         Reason.DISABLED -> R.string.status_disabled_title to R.string.status_disabled_body
         Reason.LOCKED -> R.string.status_locked_title to R.string.status_locked_body
@@ -178,8 +253,7 @@ fun StatusPanel(reason: Reason, onRetry: () -> Unit) {
         Reason.LOCKED, Reason.DISABLED -> R.drawable.mascot_sleep
         else -> R.drawable.mascot_cry
     }
-    val listState = rememberScalingLazyListState()
-    ScalingLazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
+    ScalingLazyColumn(state = listState, contentPadding = contentPadding, modifier = Modifier.fillMaxSize()) {
         item { Image(painterResource(mascot), contentDescription = null, modifier = Modifier.size(44.dp)) }
         item {
             Text(

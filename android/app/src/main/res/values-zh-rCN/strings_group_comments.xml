@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">评论</string>
+    <string name="gs_comments_footer">成员可以在每条帖子下评论。仅管理员可以发帖。</string>
+    <string name="cm_leave_comment">发表评论</string>
+    <string name="cm_thread_title">评论</string>
+    <string name="cm_empty">还没有评论。</string>
+    <string name="cm_composer_hint">评论…</string>
+    <string name="cm_replying_to">回复 %1$s</string>
+    <string name="cm_disabled">评论已关闭。</string>
+    <string name="cm_post_unavailable">此帖子已不可用。</string>
+    <string name="cm_too_fast">你评论得太快了，请稍等。</string>
+    <string name="cm_notif_reply">%1$s 回复了你的评论</string>
+    <string name="cm_delete_comment">删除评论</string>
+    <plurals name="cm_comments_count">
+        <item quantity="other">%d 条评论</item>
+    </plurals>
+</resources>

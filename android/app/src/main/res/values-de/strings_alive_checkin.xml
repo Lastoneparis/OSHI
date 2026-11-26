@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Check-in bestätigt</string>
+    <string name="alive_a11y_neutral">Kein Check-in eingerichtet</string>
+    <string name="alive_a11y_overdue">Check-in überfällig</string>
+    <string name="alive_action_im_alive">Ich lebe</string>
+    <string name="alive_action_message_them">Schreiben</string>
+    <string name="alive_bar_open_settings">Check-in-Einstellungen</string>
+    <string name="alive_channel_description">Erinnerungen an deine eigenen Check-ins und Hinweise, wenn jemand, den du im Blick hast, nicht geantwortet hat.</string>
+    <string name="alive_channel_name">Sicherheits-Check-ins</string>
+    <string name="alive_confirmed_toast">Check-in gesendet</string>
+    <string name="alive_duration_days_hours">%1$d T. %2$d Std.</string>
+    <string name="alive_duration_hours_minutes">%1$d Std. %2$d Min.</string>
+    <string name="alive_duration_minutes">%1$d Min.</string>
+    <string name="alive_duration_now">unter einer Minute</string>
+    <string name="alive_interval_24h">Alle 24 Stunden</string>
+    <string name="alive_interval_48h">Alle 48 Stunden</string>
+    <string name="alive_interval_72h">Alle 72 Stunden</string>
+    <string name="alive_interval_custom">Benutzerdefiniert</string>
+    <string name="alive_interval_custom_hours">Alle %1$d Stunden</string>
+    <string name="alive_interval_every">alle %1$s</string>
+    <string name="alive_lane_you">Du</string>
+    <string name="alive_note_delivery">Erinnerungen und Hinweise hängen von deinem Netz und der Mitteilungsberechtigung ab. Ein verpasster Check-in bedeutet nur, dass keine Bestätigung angekommen ist – nicht mehr.</string>
+    <string name="alive_note_no_location">Es wird kein Standort geteilt. Ein Check-in enthält nur einen Zeitstempel, sonst nichts.</string>
+    <string name="alive_notification_mine_due_body">Bestätige, dass du lebst, damit %1$s nicht wartet.</string>
+    <string name="alive_notification_mine_due_title">Dein Check-in ist fällig</string>
+    <string name="alive_notification_overdue_body">Der Check-in war vor %1$s fällig. Das heißt nur, dass keine Bestätigung angekommen ist.</string>
+    <string name="alive_notification_overdue_title">Kein Check-in von %1$s</string>
+    <string name="alive_sheet_explainer">Bestätige regelmäßig, dass du lebst. %1$s sieht deinen Countdown und wird benachrichtigt, wenn er ohne Antwort abläuft.</string>
+    <string name="alive_sheet_interval">Wie oft</string>
+    <string name="alive_sheet_mine_switch">Check-in bei %1$s</string>
+    <string name="alive_sheet_stop">Check-in beenden</string>
+    <string name="alive_sheet_their_next">Nächster erwartet %1$s</string>
+    <string name="alive_sheet_their_none">%1$s hat hier keinen Check-in eingerichtet.</string>
+    <string name="alive_sheet_their_section">Check-in von %1$s</string>
+    <string name="alive_state_confirmed_ago">vor %1$s bestätigt</string>
+    <string name="alive_state_due_in">fällig in %1$s</string>
+    <string name="alive_state_not_set">nicht eingerichtet</string>
+    <string name="alive_state_overdue_by">seit %1$s keine Antwort</string>
+    <string name="alive_summary_confirmed">Hat bestätigt, am Leben zu sein</string>
+    <string name="alive_summary_started">Sicherheits-Check-in gestartet</string>
+    <string name="alive_summary_stopped">Sicherheits-Check-in beendet</string>
+    <string name="alive_title">Sicherheits-Check-in</string>
+    <string name="alive_unknown_peer">dieser Kontakt</string>
+</resources>

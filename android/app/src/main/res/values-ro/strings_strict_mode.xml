@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Mod de securitate strictă</string>
+    <string name="strict_status_on">Activat: fără copiere, fără capturi de ecran, ascuns de aplicațiile de citire a ecranului</string>
+    <string name="strict_status_off">Dezactivat. Blochează OSHI când telefonul ar putea fi urmărit</string>
+    <string name="strict_hero_on">Modul de securitate strictă este activat</string>
+    <string name="strict_intro">Pentru când un telefon ar putea fi urmărit. Un singur comutator blochează OSHI: nimic nu poate fi copiat, ecranul nu poate fi capturat, iar aplicațiile care citesc ecranul, inclusiv agenții AI, nu văd nimic.</string>
+    <string name="strict_section_switch">Mod</string>
+    <string name="strict_toggle_title">Mod de securitate strictă</string>
+    <string name="strict_toggle_on">Activat pe acest dispozitiv</string>
+    <string name="strict_toggle_off">Dezactivat</string>
+    <string name="strict_block_paste_title">Blochează și lipirea</string>
+    <string name="strict_block_paste_subtitle">Nici în OSHI nu se poate lipi nimic</string>
+    <string name="strict_hide_presence_title">Ascunde confirmările de citire și scrierea</string>
+    <string name="strict_hide_presence_subtitle">Ceilalți nu văd când citești sau scrii</string>
+    <string name="strict_forced_subtitle">Setat de modul de securitate strictă</string>
+    <string name="strict_blocked_toast">Blocat de modul de securitate strictă</string>
+    <string name="strict_unlock_title">Dezactivează modul de securitate strictă</string>
+    <string name="strict_unlock_subtitle">Confirmă că ești tu</string>
+    <string name="strict_threats_title">Aplicații care pot citi sau controla ecranul</string>
+    <string name="strict_threats_none">Nu s-a găsit niciuna pe acest telefon.</string>
+    <string name="strict_threat_a11y">Serviciu de accesibilitate care nu este un instrument de asistență</string>
+    <string name="strict_threat_remote">Aplicație de control de la distanță sau de oglindire a ecranului</string>
+    <string name="strict_threats_open">Verifică</string>
+    <string name="strict_threats_explainer">OSHI nu poate opri o altă aplicație. Dacă nu recunoști una dintre ele, oprește-o din Setări Android › Accesibilitate sau dezinstaleaz-o.</string>
+    <string name="strict_banner_title">Unele aplicații pot citi sau controla acest ecran</string>
+    <string name="strict_banner_body">%1$s. Modul de securitate strictă ascunde OSHI de ele acolo unde Android permite.</string>
+    <string name="strict_banner_dismiss">Închide</string>
+    <string name="strict_does_title">Ce face</string>
+    <string name="strict_does_copy">Fără copiere, decupare, redirecționare, partajare sau salvare a mesajelor. Textul nu poate fi selectat, iar tot ce a pus OSHI în clipboard este șters.</string>
+    <string name="strict_does_paste">Lipirea în OSHI este blocată când „Blochează și lipirea” este activat, inclusiv comanda de lipire a tastaturii.</string>
+    <string name="strict_does_screen">Capturile de ecran, înregistrarea și partajarea ecranului arată un ecran negru. Previzualizarea aplicațiilor recente este ascunsă.</string>
+    <string name="strict_does_agents">Aplicațiile care citesc ecranul prin Accesibilitate, inclusiv agenții AI, nu văd niciun conținut OSHI (Android 14 și versiunile ulterioare). Atingerile pe care le simulează sunt ignorate.</string>
+    <string name="strict_does_overlays">Atingerile sunt ignorate cât timp o altă aplicație desenează peste OSHI.</string>
+    <string name="strict_does_notifications">Notificările spun doar „Mesaj nou”: fără nume, fără poză, fără text.</string>
+    <string name="strict_does_lock">Blocarea aplicației la fiecare revenire în OSHI (dacă telefonul are blocare a ecranului).</string>
+    <string name="strict_does_keyboard">Tastatură incognito: tastaturii i se cere să nu învețe ce scrii.</string>
+    <string name="strict_does_network">Fără previzualizări de linkuri și fără căutare GIPHY: nu se descarcă nimic de pe site-uri terțe.</string>
+    <string name="strict_does_presence">Confirmările de citire și indicatoarele de scriere sunt dezactivate (dacă ai ales să le ascunzi).</string>
+    <string name="strict_does_relay">Releu de confidențialitate activat când există unul disponibil.</string>
+    <string name="strict_does_restore">Setările anterioare revin când dezactivezi modul.</string>
+    <string name="strict_cannot_title">Ce nu poate face</string>
+    <string name="strict_cannot_malware">Nicio aplicație nu te poate proteja complet de programe malware sau de un telefon compromis (cu root).</string>
+    <string name="strict_cannot_keyboard">Tastatura ta vede în continuare ce scrii. O sugestie din clipboard pe care o scrie pentru tine nu se deosebește de scrierea normală.</string>
+    <string name="strict_cannot_readers">Cititoarele de ecran pentru persoane nevăzătoare sau cu vedere slabă continuă să funcționeze, dar alte aplicații de accesibilitate nu pot citi OSHI cât timp modul este activat.</string>
+    <string name="strict_cannot_old">Pe Android 13 și versiunile mai vechi, OSHI nu își poate ascunde conținutul de aplicațiile de accesibilitate. Te poate doar avertiza despre ele.</string>
+    <string name="strict_cannot_camera">Cineva poate totuși fotografia ecranul cu alt dispozitiv.</string>
+    <string name="strict_cannot_recipient">Protejează doar acest telefon, nu și telefoanele persoanelor cărora le scrii.</string>
+    <string name="strict_auto_lock_immediate">Imediat (Mod de securitate strictă)</string>
+</resources>

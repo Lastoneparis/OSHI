@@ -12,6 +12,17 @@
                 <action android:name="com.oshi.messenger.debug.SEED" />
                 <action android:name="com.oshi.messenger.debug.INCOMING" />
                 <action android:name="com.oshi.messenger.debug.AVATARS" />
+                <action android:name="com.oshi.messenger.debug.COMMENTS" />
+                <action android:name="com.oshi.messenger.debug.MEDIA" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".debug.DebugFakeUpdateReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver"
+            xmlns:tools="http://schemas.android.com/tools">
+            <intent-filter>
+                <action android:name="com.oshi.messenger.debug.FAKE_UPDATE" />
             </intent-filter>
         </receiver>
         <activity

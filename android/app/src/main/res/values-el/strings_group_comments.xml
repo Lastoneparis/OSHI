@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Σχόλια</string>
+    <string name="gs_comments_footer">Τα μέλη μπορούν να σχολιάζουν κάθε ανάρτηση. Αναρτούν μόνο οι διαχειριστές.</string>
+    <string name="cm_leave_comment">Γράψτε σχόλιο</string>
+    <string name="cm_thread_title">Σχόλια</string>
+    <string name="cm_empty">Δεν υπάρχουν σχόλια ακόμα.</string>
+    <string name="cm_composer_hint">Σχόλιο…</string>
+    <string name="cm_replying_to">Απάντηση σε %1$s</string>
+    <string name="cm_disabled">Τα σχόλια είναι απενεργοποιημένα.</string>
+    <string name="cm_post_unavailable">Αυτή η ανάρτηση δεν είναι πλέον διαθέσιμη.</string>
+    <string name="cm_too_fast">Σχολιάζετε πολύ γρήγορα. Περιμένετε λίγο.</string>
+    <string name="cm_notif_reply">Ο/Η %1$s απάντησε στο σχόλιό σας</string>
+    <string name="cm_delete_comment">Διαγραφή σχολίου</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d σχόλιο</item>
+        <item quantity="other">%d σχόλια</item>
+    </plurals>
+</resources>

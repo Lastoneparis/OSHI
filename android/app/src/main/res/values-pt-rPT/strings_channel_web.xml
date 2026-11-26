@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Pré-visualização pública na web</string>
+    <string name="cw_toggle">Publicar publicações na web</string>
+    <string name="cw_footer">As novas publicações também são publicadas como página web pública em oshi-messenger.com/c/%1$s. Qualquer pessoa as pode ler, incluindo motores de pesquisa e pré-visualizações de ligações. A encriptação ponto a ponto não se aplica à cópia web.</string>
+    <string name="cw_needs_link">Primeiro atribua a este canal uma ligação pública: a pré-visualização web usa o seu identificador.</string>
+    <string name="cw_create_link">Criar ligação pública</string>
+    <string name="cw_enable_title">Publicar publicações na web?</string>
+    <string name="cw_enable_confirm">As publicações deste canal ficarão visíveis para qualquer pessoa na web em oshi-messenger.com/c/%1$s. Apenas publicações novas. As pré-visualizações de ligações (WhatsApp, X, Telegram…) também as podem ler, e a encriptação ponto a ponto não se aplica à cópia web.</string>
+    <string name="cw_enable_action">Publicar</string>
+    <string name="cw_disable_title">Desativar a pré-visualização web?</string>
+    <string name="cw_disable_confirm">Todas as publicações e imagens publicadas em oshi-messenger.com/c/%1$s serão removidas da web. As suas publicações na app mantêm-se.</string>
+    <string name="cw_disable_action">Desativar</string>
+    <string name="cw_indexing">Permitir motores de pesquisa</string>
+    <string name="cw_indexing_footer">Desativado, as páginas pedem aos motores de pesquisa que não as indexem.</string>
+    <string name="cw_embed_code">Código de incorporação</string>
+    <string name="cw_embed_title">Incorporar esta publicação</string>
+    <string name="cw_embed_hint">Cole este código no seu site onde a publicação deve aparecer.</string>
+    <string name="cw_embed_dark">Tema escuro</string>
+    <string name="cw_copy_code">Copiar código</string>
+    <string name="cw_code_copied">Código copiado</string>
+    <string name="cw_not_on_web">Esta publicação não está na web. Só são publicadas as publicações enviadas depois de ativar a pré-visualização web.</string>
+    <string name="cw_error">Não foi possível alterar a pré-visualização web. Verifique a ligação e tente novamente.</string>
+</resources>

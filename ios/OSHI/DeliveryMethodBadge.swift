@@ -227,6 +227,9 @@ struct DeliveryMethodIcon: View {
 struct DeliveryBadgeMinimal: View {
     let method: DeliveryMethod?
     let isOutgoing: Bool
+    /// __MESHCORE_INTEROP_2026_11_25__ A MeshCore text: named for its network, without the warning triangle
+    /// (the note above the composer says who can read the thread).
+    var meshCore: Bool = false
 
     var body: some View {
         // __CHAT_POLISH_2026_09_24__ A capsule chip in the same shape as
@@ -251,6 +254,7 @@ struct DeliveryBadgeMinimal: View {
     }
 
     private var iconName: String {
+        if meshCore { return "dot.radiowaves.left.and.right" }
         guard let method = method else { return "cloud.fill" }
         switch method {
         case .mesh:
@@ -270,6 +274,7 @@ struct DeliveryBadgeMinimal: View {
         // 🔤 User-facing labels — never expose implementation jargon ("IPFS").
         // The two real transports are the internet relay ("Internet") and the
         // offline Bluetooth/Wi-Fi mesh ("Mesh").
+        if meshCore { return "MeshCore" }
         guard let method = method else { return "Internet" }
         switch method {
         case .mesh:
@@ -286,6 +291,7 @@ struct DeliveryBadgeMinimal: View {
     }
 
     private var color: Color {
+        if meshCore { return ChatPalette.transportInk(.lora) }
         guard let method = method else { return ChatPalette.transportInk(.internet) }
         switch method {
         case .mesh:

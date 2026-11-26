@@ -3,6 +3,7 @@ package com.oshi.messenger.ui.screens
 import com.oshi.messenger.ui.theme.thenIf
 import com.oshi.messenger.ui.theme.OshiCard
 import com.oshi.messenger.ui.theme.glassHairline
+import com.oshi.messenger.ui.theme.glassLift
 import com.oshi.messenger.ui.theme.glassGlow
 import com.oshi.messenger.ui.theme.glassEdge
 import com.oshi.messenger.ui.components.bubbleClickable
@@ -34,6 +35,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
@@ -49,6 +52,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.platform.testTag
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -97,6 +101,7 @@ import com.oshi.messenger.data.model.BotCallbackAnswer
 import com.oshi.messenger.data.model.BotInlineButton
 import com.oshi.messenger.data.model.BotReplyMarkupParser
 import com.oshi.messenger.ui.components.BotInlineKeyboard
+import com.oshi.messenger.ui.components.slashPickerKeys
 import com.oshi.messenger.ui.components.BotWebAppDialog
 import com.oshi.messenger.data.model.GroupMessage
 import com.oshi.messenger.data.model.MediaType
@@ -111,13 +116,19 @@ import com.oshi.messenger.ui.components.OshiEmptyState
 import com.oshi.messenger.ui.theme.brandInk
 import com.oshi.messenger.ui.theme.isDarkScheme
 import com.oshi.messenger.ui.theme.Oshi
+import com.oshi.messenger.ui.media.bleed
+import com.oshi.messenger.ui.media.MediaTimePill
 import com.oshi.messenger.service.GroupManager
+import com.oshi.messenger.service.GroupComments
 import com.oshi.messenger.service.MessageActionsManager
 import com.oshi.messenger.ui.components.swipeToReply
 import com.oshi.messenger.ui.viewmodel.GroupChatViewModel
 import com.oshi.messenger.ui.viewmodel.GroupsViewModel
 import com.oshi.messenger.ui.viewmodel.NLPViewModel
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.ui.platform.LocalDensity
+import com.oshi.messenger.ui.components.frostedBackdropSource
+import com.oshi.messenger.ui.components.extendUp
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -163,6 +174,8 @@ import java.util.*
 private val BrandColor = OSHIPurple
 
 private fun saveMediaToGallery(context: android.content.Context, mediaData: ByteArray, mediaType: MediaType?): Boolean {
+    // 🛡 __STRICT_MODE_2026_11_22__ nothing decrypted leaves OSHI while strict mode is on.
+    if (!com.oshi.messenger.security.StrictModeGate.mediaExportAllowed) return false
     return try {
         val isVideo = mediaType == MediaType.VIDEO
         val mimeType = if (isVideo) "video/mp4" else "image/jpeg"
@@ -226,11 +239,20 @@ fun groupDocumentLabel(mediaFileName: String?, content: String): String? {
 @Composable
 fun GroupChatScreen(
     groupId: String,
+    /** __CHAT_BACKDROP_BLUR_2026_11_21__ the status-bar strip the host padded us out of. */
+    statusBarUnderlap: androidx.compose.ui.unit.Dp = 0.dp,
     onBack: () -> Unit,
     onGroupInfo: () -> Unit,
     onNavigateToChat: (String) -> Unit = {},
     onNavigateToMap: () -> Unit = {},
     onNavigateToAIChat: () -> Unit = {},
+    /** __BOT_COMMANDS_2026_11_24__ open a bot's settings (owner's "Set up commands"). */
+    onOpenBot: (String) -> Unit = {},
+    /**
+     * __BOTS_PHASE1_2026_11_24__ "Add a bot" › "Create a bot" › where it runs: this phone
+     * (local wizard) or a server (BotFather).
+     */
+    onCreateBot: (com.oshi.messenger.ui.bots.BotHosting) -> Unit = {},
     viewModel: GroupChatViewModel = hiltViewModel(),
     nlpViewModel: NLPViewModel = hiltViewModel(),
     // Group membership / rename / typing actions live here because GroupChatViewModel has no
@@ -245,11 +267,31 @@ fun GroupChatScreen(
     val groupMediaScope = rememberCoroutineScope()
     // __GROUP_E2E_V2_2026_09_23__ GROUP_E2E_V2_SPEC §6 — members who must update.
     val unreachableByGroup by viewModel.unreachableMembers.collectAsState()
+    // __GROUP_RESEND_2026_11_25__ own messages some members have not received yet.
+    val pendingDeliveries by viewModel.pendingDeliveries.collectAsState()
+    var pendingDetailsFor by remember { mutableStateOf<String?>(null) }
     val messages by viewModel.messages.collectAsState()
     val messagesLoaded by viewModel.messagesLoaded.collectAsState()
     val myPublicKey by viewModel.myPublicKey.collectAsState()
+    val autoTranslateGroups by groupsViewModel.autoTranslateGroups.collectAsState()
+    val autoTranslateOn = groupId.uppercase() in autoTranslateGroups
+    val autoTranslations by viewModel.autoTranslations.collectAsState()
+    // __GROUP_SETTINGS_2026_11_20__ a reaction the group does not allow
+    val reactionNotice by viewModel.reactionNotice.collectAsState()
+    LaunchedEffect(reactionNotice) {
+        reactionNotice?.let { Toast.makeText(context, context.getString(it), Toast.LENGTH_SHORT).show(); viewModel.consumeReactionNotice() }
+    }
     // __BOT_IN_THE_PIPELINE_2026_11_09__ bot commands in the `/` menu + the one-time no-bot hint.
     val botCommands by viewModel.botCommands.collectAsState()
+    // __BOT_COMMANDS_2026_11_24__ the "Commands" menu button + sheet.
+    val botsHere by viewModel.botsHere.collectAsState()
+    var showBotCommands by remember { mutableStateOf(false) }
+    // __BOTS_PHASE1_2026_11_24__ "Add a bot" sheet (search, my bots, create).
+    var showAddBot by remember { mutableStateOf(false) }
+    var showBotHostingChoice by remember { mutableStateOf(false) }
+    if (showBotHostingChoice) {
+        com.oshi.messenger.ui.bots.BotKindChoiceSheet(onDismiss = { showBotHostingChoice = false }) { onCreateBot(it) }
+    }
     val showNoBotHint by viewModel.noBotHint.collectAsState()
     val contactsMap by viewModel.contactsMap.collectAsState()
     // __REACTION_WHO_SHEET_2026_11_16__ a member who is not a contact is named from the
@@ -262,11 +304,49 @@ fun GroupChatScreen(
     // location read "Location shared" in all 34 languages.
     val controlLabels = remember(context) { OSHIControlPayload.labels(context) }
     val youLabel = stringResource(R.string.chat_you)
+    // __GROUP_COMMENTS_2026_11_21__ (spec §2.12) bars under posts + the thread dialog.
+    val gsAllForComments by groupsViewModel.groupSettings.collectAsState()
+    val commentsActiveHere = group?.let { gsAllForComments[it.id.uppercase()]?.commentsActive } == true
+    // __BUBBLE_MEDIA_2026_11_21__ channel mode (only admins post): posts render as cards.
+    val isChannelHere = group?.let {
+        gsAllForComments[it.id.uppercase()]?.postPolicy == com.oshi.messenger.data.model.GroupSettings.PostPolicy.ADMINS
+    } == true
+    val commentsByPost by viewModel.comments.collectAsState()
+    var openCommentsFor by remember { mutableStateOf<String?>(null) }
+    var channelEmbedFor by remember { mutableStateOf<Pair<String, Int>?>(null) }
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchResults by viewModel.searchResults.collectAsState()
     val isSearchActive by viewModel.isSearchActive.collectAsState()
     val typingText by viewModel.typingText.collectAsState()
     var messageText by remember { mutableStateOf("") }
+    if (showBotCommands) {
+        com.oshi.messenger.ui.components.BotCommandsSheet(
+            bots = botsHere,
+            commands = com.oshi.messenger.util.SlashCommandCatalog.botOnly(botCommands),
+            onSend = { entry ->
+                showBotCommands = false
+                viewModel.sendBotCommand(entry)
+            },
+            onSetUp = { id ->
+                showBotCommands = false
+                onOpenBot(id)
+            },
+            onDismiss = { showBotCommands = false },
+            onInsert = { completion ->
+                showBotCommands = false
+                messageText = completion
+            },
+        )
+    }
+    group?.let { g ->
+        if (showAddBot) {
+            com.oshi.messenger.ui.bots.AddBotSheet(
+                group = g,
+                onDismiss = { showAddBot = false },
+                onCreateBot = { showAddBot = false; showBotHostingChoice = true },
+            )
+        }
+    }
     /**
      * __CASHU_2026_10_25__ A token the user is about to put in front of the whole
      * group, held for one confirmation.
@@ -282,6 +362,7 @@ fun GroupChatScreen(
     val mentionsVersion by viewModel.mentionsVersion.collectAsState()
     var showEmojiPicker by remember { mutableStateOf(false) }
     var showGroupInfoSheet by remember { mutableStateOf(false) }
+    var showGroupSettings by remember { mutableStateOf(false) }
     // __REPORT_OUTCOME_2026_09_23__ group report dialog (reuses the contact dialog).
     var showReportGroupDialog by remember { mutableStateOf(false) }
     if (showReportGroupDialog) {
@@ -634,8 +715,13 @@ fun GroupChatScreen(
         }
     }
 
+    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Observed: any member's change flips every
+    // gate below (AI, save, FLAG_SECURE) without reopening the group.
+    val advPrivacy = com.oshi.messenger.ui.components.rememberAdvancedChatPrivacy(groupId)
+    com.oshi.messenger.ui.components.AdvancedChatPrivacyWindowGuard(groupId, advPrivacy)
+
     // Build conversation context for AI (group messages)
-    val conversationContext = remember(messages.size) {
+    val conversationContext = remember(messages.size, advPrivacy) {
         // F-16: the group screen had NO control-payload filter at all, so every
         // sentinel body (locations, receipts, reaction payloads) went verbatim
         // into the on-device LLM prompt. One catalog, same question as 1:1 -
@@ -648,11 +734,16 @@ fun GroupChatScreen(
             }
             .takeLast(5)
             .map { Pair(it.isFromMe, it.content) }
-        nlpViewModel.buildConversationContext(readableMessages)
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ nothing from a protected group reaches the model.
+        nlpViewModel.buildConversationContext(
+            com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.aiReadable(advPrivacy, readableMessages)
+        )
     }
 
     // Trigger smart replies on new group message from others
     LaunchedEffect(messages.size) {
+        // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ (the clear-on-switch effect is just below)
+        if (!com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.aiAllowed(advPrivacy)) return@LaunchedEffect
         // H-5. The CONTEXT builder above was fixed by F-16 and this trigger, two
         // lines below it, was not: a shared location or a call summary went into
         // the on-device LLM prompt verbatim (`NLPManager.kt:1124-1126`, `:1192`).
@@ -664,6 +755,13 @@ fun GroupChatScreen(
         if (lastMsg != null && !lastMsg.isFromMe && lastMsg.content.isNotBlank() && messageText.isEmpty()) {
             nlpViewModel.generateSmartReplies(lastMsg.content)
             nlpViewModel.suggestToneForLastMessage(lastMsg.content)
+        }
+    }
+
+    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ suggestions already on screen go the moment it is switched on.
+    LaunchedEffect(advPrivacy) {
+        if (!com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.aiAllowed(advPrivacy)) {
+            nlpViewModel.clearSmartReplies()
         }
     }
 
@@ -774,6 +872,19 @@ fun GroupChatScreen(
         }
         openSettled = true
     }
+    // __CHANNEL_WEB_2026_11_26__ (PUBLIC_CHANNEL_WEB_SPEC §9.8) land on post n when we were opened
+    // by a /c/<handle>/<n> link. Merely reading a channel never contacts the web server.
+    val channelWebOn = group?.let { gsAllForComments[it.id.uppercase()]?.webActive } == true
+    LaunchedEffect(groupId, channelWebOn) {
+        if (!channelWebOn) return@LaunchedEffect
+        val n = com.oshi.messenger.service.channelweb.ChannelWebDeepLinks.take(groupId) ?: return@LaunchedEffect
+        val id = viewModel.channelWebMessageFor(n) ?: return@LaunchedEffect
+        val index = kotlinx.coroutines.withTimeoutOrNull(5_000L) {
+            snapshotFlow { messages.indexOfFirst { it.id == id } }.first { it >= 0 }
+        } ?: return@LaunchedEffect
+        followNewest.value = false
+        listState.scrollToItem(index)
+    }
     val lastIsMine = messages.lastOrNull()?.isFromMe == true
     val lastMessageId = messages.lastOrNull()?.id
     var seenLastMessageId by remember(groupId) { mutableStateOf<String?>(null) }
@@ -831,7 +942,10 @@ fun GroupChatScreen(
         }
     }
 
-    CompositionLocalProvider(LocalBubbleAppearance provides bubbleAppearance) {
+    CompositionLocalProvider(
+        LocalBubbleAppearance provides bubbleAppearance,
+        com.oshi.messenger.ui.components.LocalAdvancedChatPrivacy provides advPrivacy,
+    ) {
     // __CASHU_2026_10_25__ One confirmation before money reaches a room.
     // A dialog rather than making the user retype the message with the word
     // `public`: the point is that they UNDERSTAND what is about to happen, not
@@ -885,10 +999,59 @@ fun GroupChatScreen(
             onDismiss = { viewModel.dismissBotWebApp() }
         )
     }
+    // __WALLPAPER_PERSIST_2026_11_21__ Groups and channels had no wallpaper of
+    // their own: only the image an admin can push to every member (group
+    // settings), and no way in from the chat. Now: this user's choice for this
+    // group (⋮ → Chat Wallpaper, this device only), else the admin's shared one,
+    // else the app-wide default, exactly as a 1:1 chat falls back to it.
+    val personalWallpaper by viewModel.personalWallpaper.collectAsState()
+    val chosenDefaultWallpaper by viewModel.chosenDefaultWallpaper.collectAsState()
+    val syncedGroupWallpaper = remember(group?.groupWallpaperData) {
+        group?.groupWallpaperData?.takeIf { it.isNotEmpty() }
+            ?.let { com.oshi.messenger.ui.components.chatWallpaperFromBytes(it) }
+    }
+    val groupWallpaper: com.oshi.messenger.ui.components.ChatWallpaper? =
+        personalWallpaper ?: syncedGroupWallpaper ?: chosenDefaultWallpaper
+    var showWallpaperPicker by remember { mutableStateOf(false) }
+    // __CHAT_BACKDROP_BLUR_2026_11_21__ live frost of the thread under the bars.
+    val liveBackdrop = com.oshi.messenger.ui.components.rememberLiveChatBackdrop()
+    // The thread in the wallpaper's tone, one scheme for the whole screen
+    // (__ONE_SCHEME_FOR_THE_WHOLE_CHAT_2026_11_07__, as in the 1:1 chat).
+    val groupToneContext = LocalContext.current
+    val groupChatDark = groupWallpaper?.let {
+        com.oshi.messenger.ui.components.WallpaperToneResolver.resolve(
+            it,
+            com.oshi.messenger.ui.components.WallpaperTonePrefs.tone(groupToneContext, groupId),
+            isDarkScheme()
+        ).contentDark
+    } ?: isDarkScheme()
+    if (showWallpaperPicker) {
+        com.oshi.messenger.ui.components.WallpaperPickerSheet(
+            conversationId = groupId,
+            currentWallpaper = groupWallpaper ?: com.oshi.messenger.ui.components.ChatWallpaper.Default,
+            onSelectWallpaper = { viewModel.setPersonalWallpaper(it) },
+            onDismiss = { showWallpaperPicker = false },
+            note = stringResource(R.string.wallpaper_personal_note),
+            onReset = if (personalWallpaper != null) { { viewModel.clearPersonalWallpaper() } } else null,
+        )
+    }
+    com.oshi.messenger.ui.components.WithChatScheme(dark = groupChatDark) {
     Scaffold(
+        modifier = Modifier.extendUp(statusBarUnderlap),
         snackbarHost = { SnackbarHost(botSnackbarHost) },
         topBar = {
+            // __CHAT_BACKDROP_BLUR_2026_11_21__ The bar, the search field and the
+            // banners (search count, "must update", pinned post) are one frosted
+            // band the thread scrolls under — as in the 1:1 chat.
+            Box {
+            com.oshi.messenger.ui.components.FrostedChatBarBackdrop(
+                wallpaper = groupWallpaper,
+                scrimColor = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.matchParentSize(),
+                live = liveBackdrop
+            )
             Column {
+                Spacer(modifier = Modifier.height(statusBarUnderlap))
                 GroupChatTopBar(
                     group = group,
                     typingText = typingText,
@@ -897,8 +1060,15 @@ fun GroupChatScreen(
                     onToggleMute = { viewModel.toggleMute() },
                     onReport = { showReportGroupDialog = true },
                     onSearchToggle = { viewModel.setSearchActive(!isSearchActive) },
+                    searchActive = isSearchActive,
                     onNavigateToMap = onNavigateToMap,
-                    onNavigateToAIChat = onNavigateToAIChat
+                    onNavigateToAIChat = onNavigateToAIChat,
+                    onWallpaper = { showWallpaperPicker = true },
+                    // __BOTS_PHASE1_2026_11_24__ admins add bots (with rights) to their group / channel.
+                    onAddBot = if (group != null && groupsViewModel.isGroupAdmin(group!!.id)) ({ showAddBot = true }) else null,
+                    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ any member, not only admins.
+                    advPrivacy = advPrivacy,
+                    onToggleAdvPrivacy = { on -> viewModel.setAdvancedChatPrivacy(on) }
                 )
                 // Search bar with slide animation
                 AnimatedVisibility(
@@ -944,15 +1114,149 @@ fun GroupChatScreen(
                         )
                     }
                 }
+                // Search results count
+                if (isSearchActive && searchQuery.isNotEmpty()) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            // Was an inline "add an s unless the count is
+                            // exactly 1" - English grammar hardcoded into a
+                            // 34-language app. No other plural rule in the
+                            // world works that way; Arabic has six forms.
+                            text = pluralStringResource(
+                                R.plurals.search_results_found,
+                                searchResults.size,
+                                searchResults.size
+                            ),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    }
+                }
+            // Pinned message banner (task 3.8.4)
+            val pinnedId = group?.pinnedMessageId
+            // Case-insensitive, same reason as the reply-quote lookup below: an iPhone's
+            // `pinnedMessageId` comes out of `UUID.uuidString`, i.e. UPPERCASE, while an
+            // Android-originated message id is stored lowercase.
+            val pinnedMessage = if (pinnedId != null) {
+                messages.find { it.id.equals(pinnedId, ignoreCase = true) }
+            } else null
+            val myPubKey = myPublicKey
+            val isAdmin = group?.let { g ->
+                myPubKey == g.creatorPublicKey || g.adminPublicKeys.contains(myPubKey)
+            } ?: false
+            val mustUpdate = group?.let { g ->
+                unreachableByGroup.entries.firstOrNull { it.key.equals(g.id, ignoreCase = true) }?.value
+            }.orEmpty()
+            if (mustUpdate.isNotEmpty()) {
+                val names = mustUpdate.joinToString(", ") { k -> contactsMap[k]?.takeIf { it.isNotBlank() } ?: (k.take(8) + "…") }
+                Surface(
+                    color = MaterialTheme.colorScheme.errorContainer,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.group_member_must_update, names),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    )
+                }
+            }
+            if (pinnedMessage != null) {
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.PushPin,
+                            contentDescription = null,
+                            // NOT the brand, and not even the lightened brand.
+                            // This banner's ground is a SATURATED brand
+                            // container (`primaryContainer` = OSHIPurpleDark
+                            // #4410D9 in dark), and #5616EC on #4410D9 is
+                            // **1.35:1** — the two hexes are 8 % apart, so the
+                            // pin was a brand shape on a brand ground. The
+                            // container has an `onPrimaryContainer` for exactly
+                            // this, and it is what the label beside it already
+                            // used: 10.4:1.
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = pinnedMessage.content.take(80),
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            maxLines = 1,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f)
+                        )
+                        if (isAdmin) {
+                            IconButton(
+                                onClick = { viewModel.unpinMessage() },
+                                modifier = Modifier.size(24.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Close,
+                                    contentDescription = stringResource(R.string.accessibility_unpin),
+                                    modifier = Modifier.size(16.dp),
+                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            }
             }
         },
         bottomBar = {
-            Column(modifier = Modifier.navigationBarsPadding().imePadding()) {
+            Box {
+            com.oshi.messenger.ui.components.FrostedChatBarBackdrop(
+                wallpaper = groupWallpaper,
+                scrimColor = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.matchParentSize(),
+                edgeOnTop = true,
+                live = liveBackdrop
+            )
+            // __BOTS_PHASE1_2026_11_24__ ↑ ↓ Return Tab Esc drive the `/` picker on a hardware keyboard.
+            val slashState = com.oshi.messenger.ui.components.rememberSlashPickerState()
+            val slashSend: (com.oshi.messenger.util.SlashCommandCatalog.Entry) -> Unit = { entry ->
+                viewModel.sendBotCommand(entry)
+                messageText = ""
+                groupsViewModel.sendGroupTyping(groupId, false)
+            }
+            Column(modifier = Modifier.navigationBarsPadding().imePadding().slashPickerKeys(
+                text = messageText,
+                botCommands = botCommands,
+                state = slashState,
+                onSend = slashSend,
+                onInsert = { messageText = it },
+            )) {
                 // __KEYBOARD_PRIVACY_2026_10_01__ Third-party keyboard warning: it can read
                 // what is typed here before OSHI encrypts it. Renders nothing when trusted.
                 com.oshi.messenger.ui.keyboard.ThirdPartyKeyboardBanner()
-                // Smart Replies Bar
-                if (messageText.isEmpty()) {
+                // 🛡 __STRICT_MODE_2026_11_22__ strict mode on + an app that can read/drive the screen.
+                StrictModeThreatBanner()
+                val gsAll by groupsViewModel.groupSettings.collectAsState()
+                val gsHere = group?.let { gsAll[it.id.uppercase()] }
+                val composerBlockedBy: Int? = when {
+                    gsHere?.dissolved == true -> R.string.gs_dissolved_banner
+                    gsHere != null && group != null && !gsHere.mayPost(groupsViewModel.isGroupAdmin(group!!.id)) -> R.string.gs_only_admins_banner
+                    else -> null
+                }
+                // Smart Replies Bar. __INTEROP_2026_11_21__ not offered to someone who may not
+                // post here (a channel member saw "AI Quick Replies" above the admins-only banner).
+                if (messageText.isEmpty() && composerBlockedBy == null && !advPrivacy) {
                     SmartRepliesBar(
                         replies = nlpState.smartReplies,
                         onReplySelected = { reply ->
@@ -961,7 +1265,7 @@ fun GroupChatScreen(
                         }
                     )
                 }
-                AIQuickBar(
+                if (composerBlockedBy == null) AIQuickBar(
                     messageText = messageText,
                     isProcessing = aiProcessingAction != null && nlpState.isLoading,
                     onCorrect = {
@@ -1007,7 +1311,7 @@ fun GroupChatScreen(
                                     maxLines = 1
                                 )
                                 Text(
-                                    text = replyToMessage!!.content,
+                                    text = com.oshi.messenger.util.MessageFormatting.strip(replyToMessage!!.content),
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     maxLines = 1,
@@ -1079,9 +1383,30 @@ fun GroupChatScreen(
                 com.oshi.messenger.ui.components.SlashCommandBar(
                     text = messageText,
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    botCommands = botCommands
+                    botCommands = botCommands,
+                    // __BOT_COMMANDS_2026_11_24__ a bot command is sent on tap, as in Telegram.
+                    onSend = slashSend,
+                    state = slashState,
                 ) { completion -> messageText = completion }
-                GroupMessageInput(
+                // __BOT_COMMANDS_2026_11_24__ "Commands" pill: shown while the composer is
+                // empty in a conversation that has a bot, so the menu is findable without
+                // knowing to type `/`.
+                if (botsHere.isNotEmpty() && messageText.isEmpty() && composerBlockedBy == null) {
+                    com.oshi.messenger.ui.components.BotCommandsButton(
+                        onClick = { showBotCommands = true },
+                        modifier = Modifier.padding(start = 12.dp, bottom = 4.dp)
+                    )
+                }
+                // __GROUP_SETTINGS_2026_11_20__ channel mode / dissolved group (spec §2.4, §2.9):
+                // the composer is replaced by a banner for anyone the group does not let post
+                // (composerBlockedBy is computed at the top of this bottom bar).
+                if (composerBlockedBy != null) {
+                    Surface(color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier.fillMaxWidth().testTag("group_composer_blocked")) {
+                        Text(stringResource(composerBlockedBy), modifier = Modifier.padding(16.dp),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                    }
+                } else GroupMessageInput(
                     messageText = messageText,
                     mentionHighlight = if (pickedMentions.isEmpty()) null
                         else com.oshi.messenger.ui.components.MentionHighlight(pickedMentions, BrandColor),
@@ -1209,94 +1534,50 @@ fun GroupChatScreen(
                     // sheet now; this bar's slot is the camera (`onCamera`).
                 )
             }
+            }
         }
     ) { padding ->
-        Column(
+        // __CHAT_BACKDROP_BLUR_2026_11_21__ The thread fills the screen, under both
+        // bars; `padding` becomes the list's content padding.
+        val density = LocalDensity.current
+        val barTopPx = with(density) { padding.calculateTopPadding().toPx() }
+        val barBottomPx = with(density) { padding.calculateBottomPadding().toPx() }
+        val imeInsets = WindowInsets.ime
+        val navInsets = WindowInsets.navigationBars
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            // Pinned message banner (task 3.8.4)
-            val pinnedId = group?.pinnedMessageId
-            // Case-insensitive, same reason as the reply-quote lookup below: an iPhone's
-            // `pinnedMessageId` comes out of `UUID.uuidString`, i.e. UPPERCASE, while an
-            // Android-originated message id is stored lowercase.
-            val pinnedMessage = if (pinnedId != null) {
-                messages.find { it.id.equals(pinnedId, ignoreCase = true) }
-            } else null
-            val myPubKey = myPublicKey
-            val isAdmin = group?.let { g ->
-                myPubKey == g.creatorPublicKey || g.adminPublicKeys.contains(myPubKey)
-            } ?: false
-            val mustUpdate = group?.let { g ->
-                unreachableByGroup.entries.firstOrNull { it.key.equals(g.id, ignoreCase = true) }?.value
-            }.orEmpty()
-            if (mustUpdate.isNotEmpty()) {
-                val names = mustUpdate.joinToString(", ") { k -> contactsMap[k]?.takeIf { it.isNotBlank() } ?: (k.take(8) + "…") }
-                Surface(
-                    color = MaterialTheme.colorScheme.errorContainer,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(R.string.group_member_must_update, names),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                    )
-                }
-            }
-            if (pinnedMessage != null) {
-                Surface(
-                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.PushPin,
-                            contentDescription = null,
-                            // NOT the brand, and not even the lightened brand.
-                            // This banner's ground is a SATURATED brand
-                            // container (`primaryContainer` = OSHIPurpleDark
-                            // #4410D9 in dark), and #5616EC on #4410D9 is
-                            // **1.35:1** — the two hexes are 8 % apart, so the
-                            // pin was a brand shape on a brand ground. The
-                            // container has an `onPrimaryContainer` for exactly
-                            // this, and it is what the label beside it already
-                            // used: 10.4:1.
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = pinnedMessage.content.take(80),
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            maxLines = 1,
-                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
-                        )
-                        if (isAdmin) {
-                            IconButton(
-                                onClick = { viewModel.unpinMessage() },
-                                modifier = Modifier.size(24.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.Close,
-                                    contentDescription = stringResource(R.string.accessibility_unpin),
-                                    modifier = Modifier.size(16.dp),
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            }
-                        }
+                .frostedBackdropSource(
+                    enabled = liveBackdrop,
+                    topPx = { barTopPx },
+                    bottomPx = { barBottomPx },
+                    bottomCoveredPx = {
+                        (imeInsets.getBottom(density) - navInsets.getBottom(density)).toFloat().coerceAtLeast(0f)
                     }
-                }
+                )
+                .fillMaxSize()
+        ) {
+            // __BUBBLE_MEDIA_2026_11_21__ (BUBBLE_MEDIA_SPEC §2) the conversation
+            // ground the 1:1 thread already has: a soft lavender ramp in light,
+            // neutral near-black in dark, flat black in OLED.
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        androidx.compose.ui.graphics.Brush.verticalGradient(
+                            Oshi.Chat.groundColors(isDarkScheme(), com.oshi.messenger.ui.theme.isOledScheme())
+                        )
+                    )
+            )
+            // __WALLPAPER_PERSIST_2026_11_21__ The wallpaper: this user's own choice for
+            // the group, else the one an admin set for everyone, else the app-wide
+            // default once the user has chosen one. Drawn under the empty state too
+            // (it used to exist only once there were messages).
+            groupWallpaper?.let { wp ->
+                com.oshi.messenger.ui.components.ChatWallpaperBackground(
+                    wallpaper = wp,
+                    modifier = Modifier.fillMaxSize()
+                )
             }
-
             if (messagesLoaded && messages.isEmpty()) {
                 // Was a 64 dp glyph at 50% alpha over two paragraphs of default
                 // body text, while the 1:1 thread three metres away had a glyph
@@ -1307,63 +1588,14 @@ fun GroupChatScreen(
                     icon = Icons.Default.Group,
                     title = stringResource(R.string.group_chat_empty),
                     subtitle = stringResource(R.string.group_chat_start),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize().padding(padding)
                 )
             } else {
-                // Search results count
-                if (isSearchActive && searchQuery.isNotEmpty()) {
-                    Surface(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            // Was an inline "add an s unless the count is
-                            // exactly 1" - English grammar hardcoded into a
-                            // 34-language app. No other plural rule in the
-                            // world works that way; Arabic has six forms.
-                            text = pluralStringResource(
-                                R.plurals.search_results_found,
-                                searchResults.size,
-                                searchResults.size
-                            ),
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                    }
-                }
 
                 // Messages list (show search results when searching, otherwise all messages)
                 val displayMessages = if (isSearchActive && searchQuery.isNotEmpty()) searchResults else messages
                 val scrollCoroutineScope = rememberCoroutineScope()
                 Box(modifier = Modifier.fillMaxSize()) {
-                    // Group wallpaper (synced from creator/admin via wallpaper_changed envelope).
-                    // Falls back to no background if null. Per-user wallpaper would render here
-                    // under the same Box if/when GroupChatViewModel exposes one.
-                    val groupWallpaperBytes = group?.groupWallpaperData
-                    if (groupWallpaperBytes != null && groupWallpaperBytes.isNotEmpty()) {
-                        // PERF: decode wallpaper off Main thread.
-                        var wallpaperBitmap by remember(groupWallpaperBytes) {
-                            mutableStateOf<android.graphics.Bitmap?>(null)
-                        }
-                        LaunchedEffect(groupWallpaperBytes) {
-                            wallpaperBitmap = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
-                                try {
-                                    BitmapFactory.decodeByteArray(
-                                        groupWallpaperBytes, 0, groupWallpaperBytes.size
-                                    )
-                                } catch (_: Exception) { null }
-                            }
-                        }
-                        wallpaperBitmap?.let {
-                            Image(
-                                bitmap = it.asImageBitmap(),
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-                    }
                     // ✅ PERF: precompute the "show date header" boolean per index ONCE per
                     // displayMessages change, instead of inside the LazyColumn lambda where it
                     // re-ran on every recomposition. With thousands of messages, the previous
@@ -1414,7 +1646,10 @@ fun GroupChatScreen(
                             .graphicsLayer { alpha = if (openSettled || messages.isEmpty()) 1f else 0f }
                             .padding(horizontal = 8.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp),
-                        contentPadding = PaddingValues(vertical = 8.dp)
+                        contentPadding = PaddingValues(
+                            top = 8.dp + padding.calculateTopPadding(),
+                            bottom = 8.dp + padding.calculateBottomPadding()
+                        )
                     ) {
                         // ✅ PERF: itemsIndexed with stable `key` lets LazyColumn skip
                         // composing off-screen items entirely. Content type lets it reuse
@@ -1435,7 +1670,18 @@ fun GroupChatScreen(
                                 if (message.id == unreadDividerId) {
                                     UnreadMessagesDivider()
                                 }
-                                if (message.senderPublicKey == "system") {
+                                if (OSHIControlPayload.matchedPrefix(message.content) == OSHIControlPayload.ADV_PRIVACY) {
+                                    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ centred notice naming the member.
+                                    val change = remember(message.content) {
+                                        com.oshi.messenger.data.model.AdvancedChatPrivacyChange.fromMessageString(message.content)
+                                    }
+                                    com.oshi.messenger.ui.components.AdvancedChatPrivacyNotice(
+                                        on = change?.on ?: true,
+                                        actorName = if (message.isFromMe) null
+                                            else message.senderName.takeIf { it.isNotBlank() && it != "Me" }
+                                                ?: message.senderPublicKey.take(8)
+                                    )
+                                } else if (message.senderPublicKey == "system") {
                                     // F-4: the catalog answers first, localized, exactly as
                                     // ChatScreen does. MessageSanitizer stays as the residual
                                     // net for what it knows and the catalog does not.
@@ -1459,6 +1705,8 @@ fun GroupChatScreen(
                                         message = message,
                                         isOwnMessage = message.senderPublicKey == myPublicKey,
                                         myPublicKey = myPublicKey,
+                                        pendingDelivery = pendingDeliveries[message.id],
+                                        onPendingTap = { pendingDetailsFor = message.id },
                                         allMessages = messages,
                                         mentions = remember(message.id, mentionsVersion) { viewModel.mentionsFor(message.id) },
                                         controlLabels = controlLabels,
@@ -1508,8 +1756,29 @@ fun GroupChatScreen(
                                         onLoadMedia = { id -> viewModel.loadMediaBytes(id) },
                                         highlightQuery = if (isSearchActive && searchQuery.isNotEmpty()) searchQuery else null,
                                         isTail = index >= tailFlags.size || tailFlags[index],
-                                        botSealCaption = if (message.id == lastBotMessageId) botSealCaption else null
+                                        botSealCaption = if (message.id == lastBotMessageId) botSealCaption else null,
+                                        isChannel = isChannelHere,
+                                        // __GROUP_COMMENTS_2026_11_21__ the comments bar under an
+                                        // admin's post — now INSIDE the post card (BUBBLE_MEDIA_SPEC §2).
+                                        footer = if (commentsActiveHere && !message.isDeleted &&
+                                            viewModel.isAdminKey(message.senderPublicKey)) {
+                                            {
+                                                CommentsBar(
+                                                    count = commentsByPost[message.id.lowercase()]?.count { !it.isDeleted } ?: 0,
+                                                ) { openCommentsFor = message.id }
+                                            }
+                                        } else null
                                     )
+                                    }
+                                    // __GROUP_SETTINGS_2026_11_20__ auto-translate (local, spec §2.10)
+                                    if (autoTranslateOn && message.senderPublicKey != myPublicKey && message.mediaType == null &&
+                                        !message.isDeleted && message.displayContent.isNotBlank()) {
+                                        LaunchedEffect(message.id) { viewModel.ensureAutoTranslation(message.id, message.displayContent) }
+                                        autoTranslations[message.id]?.let { t ->
+                                            Text(t, fontSize = 13.sp, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                modifier = Modifier.padding(start = 56.dp, end = 16.dp, bottom = 4.dp).testTag("group_auto_translation"))
+                                        }
                                     }
                                 }
                             }
@@ -1540,7 +1809,7 @@ fun GroupChatScreen(
                         exit = fadeOut(animationSpec = tween(300)),
                         modifier = Modifier
                             .align(Alignment.TopCenter)
-                            .padding(top = 8.dp)
+                            .padding(top = 8.dp + padding.calculateTopPadding())
                     ) {
                         Surface(
                             color = Color.Black.copy(alpha = 0.6f),
@@ -1575,6 +1844,7 @@ fun GroupChatScreen(
                             shape = CircleShape,
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
+                                .padding(bottom = padding.calculateBottomPadding())
                                 .padding(16.dp)
                                 .size(44.dp)
                         ) {
@@ -1588,6 +1858,34 @@ fun GroupChatScreen(
                 }
             }
         }
+    }
+    } // WithChatScheme(groupChatDark)
+
+    // __GROUP_COMMENTS_2026_11_21__ the comment thread of one post (spec §2.12.6).
+    openCommentsFor?.let { postId ->
+        val post = messages.firstOrNull { it.id.equals(postId, ignoreCase = true) }
+        GroupCommentsThread(
+            post = post,
+            comments = commentsByPost[postId.lowercase()].orEmpty(),
+            active = commentsActiveHere,
+            myPublicKey = myPublicKey,
+            iAmAdmin = group?.let { groupsViewModel.isGroupAdmin(it.id) } == true,
+            controlLabels = controlLabels,
+            nameFor = { key ->
+                when {
+                    key.isEmpty() -> ""
+                    key.equals(myPublicKey, ignoreCase = true) -> youLabel
+                    else -> com.oshi.messenger.data.model.PeerNickname.lookupSender(contactsMap, key)
+                        ?: group?.id?.let { gid -> groupsViewModel.memberDisplayName(gid, key, listMemberNameInputs) }
+                        ?: key.take(8)
+                }
+            },
+            onReact = { id, emoji -> viewModel.toggleReaction(id, emoji) },
+            allowedReactions = group?.let { gsAllForComments[it.id.uppercase()]?.pickerReactions },
+            onDelete = { id -> viewModel.deleteMessage(id, forEveryone = true) },
+            onSend = { text, replyTo -> viewModel.sendComment(postId, text, replyTo) },
+            onDismiss = { openCommentsFor = null },
+        )
     }
 
     // Group Info Bottom Sheet
@@ -1608,7 +1906,34 @@ fun GroupChatScreen(
                 showMediaGallery = true
             },
             onRename = { newName -> groupsViewModel.renameGroup(group!!.id, newName) },
-            onAddMember = { key -> groupsViewModel.addMemberToGroup(group!!.id, key) }
+            onAddMember = { key -> groupsViewModel.addMemberToGroup(group!!.id, key) },
+            // __GROUP_SETTINGS_2026_11_20__
+            inviteLink = groupsViewModel.inviteLink(group!!.id),
+            onOpenSettings = { showGroupInfoSheet = false; showGroupSettings = true },
+            // __GROUP_HEADER_ISLAND_2026_11_24__ the old ⋯ menu's actions, now that the
+            // bar shows the group's picture where the ⋯ was.
+            quickActions = GroupInfoQuickActions(
+                onToggleMute = { viewModel.toggleMute() },
+                onWallpaper = { showGroupInfoSheet = false; showWallpaperPicker = true },
+                onReport = { showGroupInfoSheet = false; showReportGroupDialog = true },
+                onMap = { showGroupInfoSheet = false; onNavigateToMap() },
+                onAI = { showGroupInfoSheet = false; onNavigateToAIChat() },
+            ),
+            advPrivacy = advPrivacy,
+            onToggleAdvPrivacy = { on -> viewModel.setAdvancedChatPrivacy(on) },
+            advPrivacyOlderCount = remember(group, advPrivacy) { viewModel.advancedPrivacyNonReaderCount() }
+        )
+    }
+    // __GROUP_SETTINGS_2026_11_20__ Telegram-style settings page (GROUP_INFO_SETTINGS_SPEC §5)
+    if (showGroupSettings && group != null) {
+        val memberNameInputs by groupsViewModel.memberNameInputs.collectAsState()
+        GroupSettingsScreen(
+            group = group!!,
+            groupsViewModel = groupsViewModel,
+            memberName = { key -> groupsViewModel.memberDisplayName(group!!.id, key, memberNameInputs) },
+            onDismiss = { showGroupSettings = false },
+            onOpenChat = { key -> showGroupSettings = false; onNavigateToChat(key) },
+            onGroupGone = { showGroupSettings = false; onBack() }
         )
     }
 
@@ -1628,7 +1953,9 @@ fun GroupChatScreen(
             mediaData = data,
             mediaType = type,
             caption = caption,
-            onBack = { galleryViewerMedia = null }
+            onBack = { galleryViewerMedia = null },
+            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ the gallery does not know who sent it.
+            allowSave = !advPrivacy
         )
     }
 
@@ -1824,6 +2151,44 @@ fun GroupChatScreen(
         )
     }
 
+    // __GROUP_RESEND_2026_11_25__ "Sent to X of Y": who is still waiting, and Retry now.
+    pendingDetailsFor?.let { id ->
+        val entry = pendingDeliveries[id]
+        if (entry == null) { pendingDetailsFor = null } else {
+            val names = entry.pending.map { key ->
+                com.oshi.messenger.data.model.PeerNickname.lookupSender(contactsMap, key)
+                    ?: group?.id?.let { gid -> groupsViewModel.memberDisplayName(gid, key, listMemberNameInputs) }
+                    ?: key.take(8)
+            }.sorted()
+            OshiAlertDialog(
+                onDismissRequest = { pendingDetailsFor = null },
+                title = { Text(stringResource(R.string.group_sent_partial, entry.delivered, entry.total)) },
+                text = {
+                    Column {
+                        Text(
+                            if (entry.gaveUp) stringResource(R.string.group_sent_partial_gave_up, entry.pending.size)
+                            else stringResource(R.string.group_sent_partial_body, entry.pending.size)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            names.take(20).joinToString(", ") + if (names.size > 20) " …" else "",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { viewModel.retryPendingDelivery(id); pendingDetailsFor = null }) {
+                        Text(stringResource(R.string.group_retry_now))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { pendingDetailsFor = null }) { Text(stringResource(R.string.ok)) }
+                }
+            )
+        }
+    }
+
     // Message Actions Dialog
     // __GROUP_RECEIPTS_2026_11_02__ (N8) Who received and who read this one.
     receiptsFor?.let { m ->
@@ -1877,8 +2242,36 @@ fun GroupChatScreen(
         context.dataStore.data.map { it[SettingsViewModel.KEY_BLOCK_FORWARD_COPY] ?: false }
     }.collectAsState(initial = false)
 
+        // __CHANNEL_WEB_2026_11_26__ n is resolved on tap (admin map, else the public feed).
+        val webHandle = viewModel.channelWebHandle()
+        val webPost = webHandle != null && !actionMessage.isDeleted &&
+            actionMessage.mediaType != MediaType.LOCATION && actionMessage.mediaType != MediaType.CONTACT &&
+            !OSHIControlPayload.isControl(actionMessage.content) && !actionMessage.senderPublicKey.startsWith("bot:")
+        fun withWebN(action: (String, Int) -> Unit): (() -> Unit)? = if (!webPost) null else {
+            {
+                val id = actionMessage.id
+                showMessageActions = false
+                selectedMessage = null
+                groupMediaScope.launch {
+                    val n = viewModel.resolveChannelWebN(id)
+                    if (n == null) Toast.makeText(context, context.getString(R.string.cw_not_on_web), Toast.LENGTH_LONG).show()
+                    else action(webHandle!!, n)
+                }
+            }
+        }
         GroupMessageActionsDialog(
+            onWebCopyLink = withWebN { h, n ->
+                clipboardManager.setText(AnnotatedString(com.oshi.messenger.service.channelweb.ChannelWebLinks.postUrl(h, n)))
+                Toast.makeText(context, context.getString(R.string.gs_link_copied), Toast.LENGTH_SHORT).show()
+            },
+            onWebShareLink = withWebN { h, n ->
+                val i = android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain")
+                    .putExtra(android.content.Intent.EXTRA_TEXT, com.oshi.messenger.service.channelweb.ChannelWebLinks.postUrl(h, n))
+                context.startActivity(android.content.Intent.createChooser(i, null))
+            },
+            onWebEmbed = withWebN { h, n -> channelEmbedFor = h to n },
             blockForwardCopy = blockForwardCopy,
+            allowedReactions = group?.let { gsAllForComments[it.id.uppercase()]?.pickerReactions },
             message = actionMessage,
             isOwnMessage = actionMessage.senderPublicKey == myPublicKey,
             myPublicKey = myPublicKey,
@@ -1917,8 +2310,8 @@ fun GroupChatScreen(
                     OSHIControlPayload.previewText(actionMessage.content, controlLabels)
                 if (displayContent.isNotEmpty()) {
                     // __CLIPBOARD_HYGIENE_2026_10_01__ decrypted message ⇒ sensitive clip, cleared after 60 s.
-                    com.oshi.messenger.security.SensitiveClipboard.copy(context, displayContent)
-                    Toast.makeText(context, context.getString(R.string.copied), Toast.LENGTH_SHORT).show()
+                    if (com.oshi.messenger.security.SensitiveClipboard.copyMessageText(context, displayContent))
+                        Toast.makeText(context, context.getString(R.string.copied), Toast.LENGTH_SHORT).show()
                 }
                 showMessageActions = false
                 selectedMessage = null
@@ -1936,7 +2329,11 @@ fun GroupChatScreen(
                 showMessageActions = false
                 selectedMessage = null
             },
-            onSave = selectedMessage?.let { msg ->
+            onSave = selectedMessage?.takeIf {
+                com.oshi.messenger.security.StrictModeGate.mediaExportAllowed &&  // 🛡 __STRICT_MODE_2026_11_22__
+                    // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ others' media stays in OSHI.
+                    com.oshi.messenger.data.model.AdvancedChatPrivacyPolicy.mediaSaveAllowed(advPrivacy, it.isFromMe)
+            }?.let { msg ->
                 val mediaData = msg.mediaData
                 if (mediaData != null && (msg.mediaType == MediaType.IMAGE || msg.mediaType == MediaType.VIDEO)) {
                     {
@@ -1977,13 +2374,16 @@ fun GroupChatScreen(
             // RP-2 · Translate, sanitised through the control-payload catalog first —
             // the same guard iOS applies at `GroupViews.swift:4431` so a shared location
             // never asks the model to translate its own coordinate JSON.
-            onTranslate = {
+            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ translation is on-device AI: hidden in a protected group.
+            onTranslate = if (advPrivacy) null else {
+                {
                 translateMessageContent =
                     OSHIControlPayload.previewText(actionMessage.content, controlLabels)
                 viewModel.translateMessage(translateMessageContent)
                 showTranslateSheet = true
                 showMessageActions = false
                 selectedMessage = null
+                }
             },
             // ✏️ RP-4, second half · Edit for everyone. Offered only when the SENDER's
             // own predicate agrees, so the menu can never present an action
@@ -2003,6 +2403,10 @@ fun GroupChatScreen(
                 selectedMessage = null
             }
         )
+    }
+
+    channelEmbedFor?.let { (h, n) ->
+        ChannelEmbedDialog(handle = h, n = n, onDismiss = { channelEmbedFor = null })
     }
 
     // ✏️ Edit dialog (RP-4, second half)
@@ -2042,8 +2446,8 @@ fun GroupChatScreen(
             onRetry = { viewModel.translateMessage(translateMessageContent) },
             onCopy = if (blockTranslationCopy) null else { translated ->
                 // __CLIPBOARD_HYGIENE_2026_10_01__ a translation is the message in clear ⇒ same hygiene.
-                com.oshi.messenger.security.SensitiveClipboard.copy(context, translated)
-                Toast.makeText(context, context.getString(R.string.copied), Toast.LENGTH_SHORT).show()
+                if (com.oshi.messenger.security.SensitiveClipboard.copyMessageText(context, translated))
+                    Toast.makeText(context, context.getString(R.string.copied), Toast.LENGTH_SHORT).show()
             },
             onDismiss = {
                 showTranslateSheet = false
@@ -2228,69 +2632,56 @@ private fun GroupChatTopBar(
     onToggleMute: () -> Unit = {},
     onReport: () -> Unit = {},
     onSearchToggle: () -> Unit = {},
+    searchActive: Boolean = false,
     onNavigateToMap: () -> Unit = {},
-    onNavigateToAIChat: () -> Unit = {}
+    onNavigateToAIChat: () -> Unit = {},
+    onWallpaper: () -> Unit = {},
+    onAddBot: (() -> Unit)? = null,
+    advPrivacy: Boolean = false,
+    onToggleAdvPrivacy: (Boolean) -> Unit = {}
 ) {
     var showOverflow by remember { mutableStateOf(false) }
-    TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.accessibility_back_button))
-            }
-        },
-        title = {
-            Row(
-                modifier = Modifier
-                    .clickable { onGroupInfo() }
-                    .padding(end = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                GroupAvatar(group = group, size = 36.dp)
-
-                Spacer(modifier = Modifier.width(10.dp))
-
-                Column(modifier = Modifier.weight(1f, fill = false)) {
-                    Text(
-                        text = group?.name ?: stringResource(R.string.group_chat_group_fallback),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    val memberCount = group?.memberPublicKeys?.size ?: 0
-                    val membersText = pluralStringResource(R.plurals.group_members_count_plural, memberCount, memberCount)
-                    if (!typingText.isNullOrBlank()) {
-                        Text(
-                            text = typingText,
-                            fontSize = 12.sp,
-                            color = brandInk(),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    } else {
-                        Text(
-                            text = membersText,
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                }
-            }
-        },
-        actions = {
-            IconButton(onClick = onSearchToggle) {
-                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.accessibility_search_messages))
-            }
-            IconButton(onClick = { showOverflow = true }) {
-                Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.group_chat_more_actions))
-            }
+    // __GROUP_HEADER_ISLAND_2026_11_24__ back + search, the floating name island,
+    // the group's picture on the right (tap = info, long-press = the old ⋯ menu).
+    // The frosted backdrop behind the bar (FrostedChatBarBackdrop in the
+    // Scaffold's topBar) is still the band the pieces float on.
+    val memberCount = group?.memberPublicKeys?.size ?: 0
+    val countText = if (group?.effectiveGroupType == com.oshi.messenger.data.model.GroupType.ADMIN_ONLY) {
+        pluralStringResource(R.plurals.group_header_subscribers, memberCount, memberCount)
+    } else {
+        pluralStringResource(R.plurals.group_members_count_plural, memberCount, memberCount)
+    }
+    val typing = typingText?.takeIf { it.isNotBlank() }
+    com.oshi.messenger.ui.components.GroupHeaderBar(
+        title = group?.name ?: stringResource(R.string.group_chat_group_fallback),
+        subtitle = typing ?: countText,
+        subtitleIsActivity = typing != null,
+        searchActive = searchActive,
+        onBack = onBack,
+        onSearch = onSearchToggle,
+        onInfo = onGroupInfo,
+        onAvatarLongPress = { showOverflow = true },
+        avatar = { size -> GroupAvatar(group = group, size = size) },
+        menu = {
             OshiDropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.group_chat_info)) },
                     leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
                     onClick = { showOverflow = false; onGroupInfo() }
+                )
+                if (onAddBot != null) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.botf_add_bot)) },
+                        leadingIcon = { Icon(Icons.Default.SmartToy, contentDescription = null) },
+                        onClick = { showOverflow = false; onAddBot() }
+                    )
+                }
+                // __WALLPAPER_PERSIST_2026_11_21__ the way in, from the chat itself,
+                // as in the 1:1 chat's ⋯ sheet.
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.wallpaper_title)) },
+                    leadingIcon = { Icon(Icons.Default.Wallpaper, contentDescription = null) },
+                    onClick = { showOverflow = false; onWallpaper() }
                 )
                 DropdownMenuItem(
                     text = {
@@ -2324,11 +2715,82 @@ private fun GroupChatTopBar(
                     leadingIcon = { Icon(Icons.Default.Psychology, contentDescription = null, tint = OSHIPurple) },
                     onClick = { showOverflow = false; onNavigateToAIChat() }
                 )
+                // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__
+                com.oshi.messenger.ui.components.AdvancedChatPrivacyToggle(
+                    on = advPrivacy,
+                    onToggle = { on -> showOverflow = false; onToggleAdvPrivacy(on) },
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp).widthIn(max = 300.dp)
+                )
             }
         },
-        // __OLED_GLASS_2026_11_16__ the lit hairline where the bar meets the thread.
-        modifier = Modifier.thenIf(com.oshi.messenger.ui.theme.glassOn()) { glassEdge(top = false) }
     )
+}
+
+/**
+ * __GROUP_HEADER_ISLAND_2026_11_24__ What the group chat's ⋯ menu used to hold,
+ * as a row of tiles at the top of the info sheet (Telegram's info buttons).
+ * "Info" itself is the sheet; long-press on the header's avatar still opens
+ * the old menu.
+ */
+private class GroupInfoQuickActions(
+    val onToggleMute: () -> Unit,
+    val onWallpaper: () -> Unit,
+    val onReport: () -> Unit,
+    val onMap: () -> Unit,
+    val onAI: () -> Unit,
+)
+
+@Composable
+private fun GroupInfoQuickActionRow(isMuted: Boolean, actions: GroupInfoQuickActions) {
+    Row(
+        modifier = Modifier.fillMaxWidth().testTag("group_info_quick_actions"),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        GroupInfoQuickTile(
+            icon = if (isMuted) Icons.Default.NotificationsOff else Icons.Default.Notifications,
+            label = stringResource(if (isMuted) R.string.group_chat_unmute else R.string.group_chat_mute),
+            onClick = actions.onToggleMute,
+        )
+        GroupInfoQuickTile(Icons.Default.Wallpaper, stringResource(R.string.wallpaper_title), actions.onWallpaper)
+        GroupInfoQuickTile(Icons.Default.Map, stringResource(R.string.accessibility_map_button), actions.onMap)
+        GroupInfoQuickTile(Icons.Default.Psychology, stringResource(R.string.accessibility_ai_button), actions.onAI)
+        GroupInfoQuickTile(Icons.Default.Flag, stringResource(R.string.chat_report_group), actions.onReport, destructive = true)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RowScope.GroupInfoQuickTile(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    onClick: () -> Unit,
+    destructive: Boolean = false,
+) {
+    val ink = if (destructive) MaterialTheme.colorScheme.error else brandInk()
+    Surface(
+        onClick = onClick,
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        shape = RoundedCornerShape(14.dp),
+        modifier = Modifier.weight(1f).heightIn(min = 64.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 4.dp, vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(icon, contentDescription = null, tint = ink, modifier = Modifier.size(22.dp))
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = label,
+                fontSize = 11.sp,
+                lineHeight = 13.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                color = if (destructive) ink else MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
 }
 
 @Composable
@@ -2446,7 +2908,21 @@ private fun GroupMessageBubble(
      * __GROUP_MEDIA_MEMORY_2026_11_11__ Reads a large document/video that is kept on disk
      * (`mediaData == null`). Called on tap only.
      */
-    onLoadMedia: (suspend (String) -> ByteArray?)? = null
+    onLoadMedia: (suspend (String) -> ByteArray?)? = null,
+    /**
+     * __BUBBLE_MEDIA_2026_11_21__ (BUBBLE_MEDIA_SPEC §1-2) A channel post (only admins
+     * post) is a CARD, not a chat line: received surface for everyone (own posts too),
+     * no tail, left-aligned, up to 90 % of the chat.
+     */
+    isChannel: Boolean = false,
+    /** Drawn INSIDE the card under a hairline — the channel comments bar. */
+    footer: (@Composable () -> Unit)? = null,
+    /**
+     * __GROUP_RESEND_2026_11_25__ members this own message has not reached yet; non-null replaces
+     * the Sent tick with a clock + "X/Y" that opens the details ([onPendingTap]).
+     */
+    pendingDelivery: com.oshi.messenger.service.GroupPendingDeliveryStore.Entry? = null,
+    onPendingTap: () -> Unit = {}
 ) {
     val isBot = message.senderPublicKey.startsWith("bot:")
     val mediaScope = rememberCoroutineScope()
@@ -2458,12 +2934,16 @@ private fun GroupMessageBubble(
         }
     }
     val canOpen: (ByteArray?) -> Boolean = { it != null || onLoadMedia != null }
-    val alignment = if (isOwnMessage) Alignment.End else Alignment.Start
+    val alignment = if (isOwnMessage && !isChannel) Alignment.End else Alignment.Start
+    // A channel post paints like a received bubble whoever wrote it.
+    val outgoingLook = isOwnMessage && !isChannel
+    val darkNow = isDarkScheme()
+    val accentNow = LocalBubbleAppearance.current.accent
     // Received: the brand blended INTO the system surface rather than Material's
     // default grey, so a group thread reads as this app
     // (BubbleStyleManager.swift:250-268). Opaque, because a translucent bubble
     // over an animated wallpaper shimmers.
-    val backgroundColor = if (isOwnMessage) BrandColor
+    val backgroundColor = if (outgoingLook) BrandColor
         else if (isBot) Color(0xFF1A1A2E)
         else Oshi.Bubble.received(isDarkScheme(), com.oshi.messenger.ui.theme.isOledScheme())
     // __INK_FROM_THE_SAME_SOURCE_AS_THE_PAINT_2026_11_07__ The outgoing bubble
@@ -2473,9 +2953,17 @@ private fun GroupMessageBubble(
     // The bot bubble keeps its own white: it is painted with a fixed colour, not
     // with the accent.
     val textColor = when {
-        isOwnMessage -> LocalBubbleAppearance.current.accent.onAccent
+        outgoingLook -> accentNow.ink(darkNow)
         isBot -> Color.White
         else -> MaterialTheme.colorScheme.onSurface
+    }
+    // Timestamp / edited / tick ink inside the bubble, measured per surface
+    // (BubbleContrastTest): the tonal outgoing ramp has its own, the received
+    // surface takes the conversation's meta ink.
+    val metaColor = when {
+        outgoingLook -> accentNow.metaInk(darkNow)
+        isBot -> Color.White.copy(alpha = 0.7f)
+        else -> Oshi.Chat.metaInk(darkNow)
     }
 
     // ✏️ An edited message draws its NEW text. iOS puts the same test first in
@@ -2574,17 +3062,107 @@ private fun GroupMessageBubble(
         // Only the last bubble of a run is tailed, and the tail is on the BOTTOM
         // corner — see BubbleStyle.bubbleShape. `isTail` is passed in by the
         // thread, which is the only thing that can see a bubble's neighbours.
-        val bubbleShape = bubbleStyle.bubbleShape(isFromMe = isOwnMessage, isTail = isTail)
-        val bubbleBrush = if (isOwnMessage) appearance.accent.brush else SolidColor(backgroundColor)
+        val bubbleShape = if (isChannel) Oshi.Radius.lgShape
+            else bubbleStyle.bubbleShape(isFromMe = isOwnMessage, isTail = isTail)
+        val bubbleBrush = if (outgoingLook) appearance.accent.surfaceBrush(darkScheme) else SolidColor(backgroundColor)
+        val tonal = outgoingLook && appearance.accent.isTonal(darkScheme)
         // The rim is what keeps a pale bubble from dissolving into a photo
         // wallpaper. It reached the screen only through the silhouette markings
         // until 2026-08-23, i.e. never, for anyone on the default style.
-        val bubbleRim = Oshi.Bubble.rimInk(outgoing = isOwnMessage || isBot, darkTheme = darkScheme)
+        val bubbleRim = Oshi.Bubble.rimInk(outgoing = outgoingLook || isBot, darkTheme = darkScheme, tonal = tonal)
         // Telegram-style width: a group bubble may run up to ~82% of the screen
         // (iOS raised this from the old ~55%), so a paragraph no longer wraps into
         // a narrow column. Computed from the live screen width rather than a flat
         // dp so it tracks tablets and landscape.
-        val maxBubbleWidth = (LocalConfiguration.current.screenWidthDp.dp * 0.82f)
+        // __BUBBLE_MEDIA_2026_11_21__ one rule with the 1:1 thread (75 %, cap 420);
+        // a channel card 90 %, cap 560 (MediaBubbleSizing).
+        val maxBubbleWidth = Oshi.Bubble.maxWidth(LocalConfiguration.current.screenWidthDp, isChannel)
+        // __BUBBLE_MEDIA_2026_11_21__ A photo SIZES the bubble (BUBBLE_MEDIA_SPEC §1).
+        // Before: `fillMaxWidth().heightIn(max = 250.dp)` inside a 12 dp-padded column —
+        // the bubble was always the full max width, every picture was cropped to a
+        // ≤ 250 dp-tall strip (a 1080×1920 portrait lost 60 % of its height) and the
+        // padding left a band of bubble colour on both sides of it. Now the picture's
+        // own aspect decides the box, the bubble is exactly that wide, and the picture
+        // bleeds over the padding to the bubble's edges.
+        val edgeMediaBytes = message.mediaData?.takeIf {
+            message.mediaType == MediaType.IMAGE && it.isNotEmpty() && !message.isDeleted &&
+                appearance.silhouette == null
+        }
+        val mediaSize = edgeMediaBytes?.let { bytes ->
+            val natural = remember(message.id, bytes.size) {
+                com.oshi.messenger.ui.media.MediaNaturalSize.read(message.id, bytes)
+            }
+            com.oshi.messenger.ui.media.rememberBubbleMediaSize(natural, isChannel)
+        }
+        val mediaCaption = if (mediaSize != null && message.content.isNotBlank() && !message.content.startsWith("[")) {
+            OSHIControlPayload.displaySummary(message.content, controlLabels)
+                ?: MessageSanitizer.sanitizeForDisplay(message.content)
+        } else ""
+        val mediaOnly = mediaSize != null && mediaCaption.isBlank()
+        val hasHeader = (!isOwnMessage && !isBot) || forwardInfo != null || message.replyToId != null
+        // The edited marker, the time and (own messages) the tick — once, for the
+        // in-bubble row and for the pill over a picture.
+        val editedLabel = stringResource(R.string.message_edited).lowercase()
+        val readLabel = stringResource(R.string.message_read)
+        val sentLabel = stringResource(R.string.message_sent)
+        val groupMetaContent: @Composable (Color, Boolean) -> Unit = { ink, onPill ->
+            // ✏️ iOS draws the marker off `editedAt != nil`, immediately before the
+            // timestamp (`OSHI/GroupViews.swift:2761-2763`). A live location moves by
+            // edits; that is not a user edit. __EDITED_MARKER_CASE_2026_11_05__ lowercase
+            // (locale-independent) like the 1:1 bubble and iOS.
+            if (message.isEdited && !displayContent.startsWith(OSHIControlPayload.LOCATION)) {
+                Text(
+                    text = editedLabel,
+                    fontSize = 10.sp,
+                    fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                    color = ink
+                )
+            }
+            Text(
+                text = formatMessageTime(message.timestamp),
+                fontSize = if (onPill) 11.sp else 10.sp,
+                color = ink
+            )
+            if (isOwnMessage && pendingDelivery != null) {
+                // __GROUP_RESEND_2026_11_25__ not "Sent" while members are still owed it.
+                val partialLabel = stringResource(R.string.group_sent_partial, pendingDelivery.delivered, pendingDelivery.total)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable(onClickLabel = partialLabel, onClick = onPendingTap)
+                        .semantics { contentDescription = partialLabel }
+                ) {
+                    Icon(
+                        imageVector = if (pendingDelivery.gaveUp) Icons.Default.ErrorOutline else Icons.Default.Schedule,
+                        contentDescription = null,
+                        modifier = Modifier.size(if (onPill) 13.dp else 12.dp),
+                        tint = ink
+                    )
+                    Text(
+                        text = "${pendingDelivery.delivered}/${pendingDelivery.total}",
+                        fontSize = if (onPill) 11.sp else 10.sp,
+                        color = ink,
+                        modifier = Modifier.padding(start = 2.dp)
+                    )
+                }
+            } else if (isOwnMessage) {
+                Icon(
+                    imageVector = if (message.isRead) Icons.Default.DoneAll else Icons.Default.Done,
+                    contentDescription = if (message.isRead) readLabel else sentLabel,
+                    modifier = Modifier.size(if (onPill) 13.dp else 12.dp),
+                    // Was a fixed #4FC3F7 — 1.5:1 on the lavender bubble. Read is the
+                    // conversation's read-tick token, measured per surface.
+                    tint = when {
+                        !message.isRead -> ink
+                        // On the photo pill the double tick itself says "read";
+                        // green on a 55 % black pill would be 2:1.
+                        onPill -> ink
+                        outgoingLook && !tonal -> ink
+                        else -> Oshi.Chat.readTick(darkScheme)
+                    }
+                )
+            }
+        }
         // __VIDEO_NOTE_2026_09_24__ Round video note (docs/VIDEO_NOTE_SPEC.md §4): the
         // circle replaces the bubble; sender line above, time below, reactions as usual.
         if (message.isVideoNote && message.mediaType == MediaType.VIDEO && !message.isDeleted) {
@@ -2616,19 +3194,25 @@ private fun GroupMessageBubble(
             )
         } else Box(
             modifier = Modifier
-                .widthIn(max = maxBubbleWidth)
+                .then(
+                    if (mediaSize != null) Modifier.width(mediaSize.widthDp.dp)
+                    else Modifier.widthIn(max = maxBubbleWidth)
+                )
                 .bubbleSurface(
                     silhouette = appearance.silhouette,
                     brush = bubbleBrush,
                     fallbackShape = bubbleShape,
                     rim = bubbleRim,
                     rimAlpha = Oshi.Bubble.rimAlpha(
-                        outgoing = isOwnMessage || isBot,
-                        darkTheme = darkScheme
+                        outgoing = outgoingLook || isBot,
+                        darkTheme = darkScheme,
+                        tonal = tonal
                     ),
-                    gloss = isOwnMessage,
-                    glass = !isOwnMessage && !isBot && com.oshi.messenger.ui.theme.isOledScheme()
+                    gloss = outgoingLook,
+                    glass = !outgoingLook && !isBot && com.oshi.messenger.ui.theme.oledGlassOn()
                 )
+                // Media and the comments bar reach the edges; the shape keeps them inside.
+                .then(if (appearance.silhouette == null) Modifier.clip(bubbleShape) else Modifier)
                 .combinedClickable(
                     onClick = { },
                     onDoubleClick = onDoubleTapReact,
@@ -2689,11 +3273,14 @@ private fun GroupMessageBubble(
                         // quote to the bare "Reply to" label.
                         allMessages.firstOrNull { it.id.equals(replyId, ignoreCase = true) }
                     }
+                    // __BUBBLE_MEDIA_2026_11_21__ (BUBBLE_MEDIA_SPEC §2) a tint of the
+                    // bubble's own ink, and a 3 dp bar + author line in the QUOTED
+                    // person's name colour (their ink on your own bubble, where a name
+                    // palette tuned for the received surface is not measured).
+                    val quotedInk = if (outgoingLook || isBot || quoted == null) textColor
+                        else com.oshi.messenger.ui.theme.AvatarNameColors.forKey(quoted.senderPublicKey, darkScheme)
                     Surface(
-                        color = if (isOwnMessage)
-                            Color.White.copy(alpha = 0.2f)
-                        else
-                            BrandColor.copy(alpha = 0.1f),
+                        color = textColor.copy(alpha = 0.07f),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         if (quoted == null) {
@@ -2710,7 +3297,7 @@ private fun GroupMessageBubble(
                                         .width(3.dp)
                                         .height(30.dp)
                                         .clip(RoundedCornerShape(1.5.dp))
-                                        .background(textColor.copy(alpha = 0.6f))
+                                        .background(quotedInk)
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Column {
@@ -2719,7 +3306,7 @@ private fun GroupMessageBubble(
                                             .ifEmpty { quoted.senderName },
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = textColor.copy(alpha = 0.9f),
+                                        color = quotedInk,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
@@ -2727,8 +3314,8 @@ private fun GroupMessageBubble(
                                         // Same rule as 1:1: quote what the catalog
                                         // says, so a quoted call summary reads
                                         // "Outgoing call - 1:23", not a sentinel.
-                                        text = OSHIControlPayload
-                                            .previewText(quoted.content, controlLabels)
+                                        text = com.oshi.messenger.util.MessageFormatting.strip(OSHIControlPayload
+                                            .previewText(quoted.content, controlLabels))
                                             .take(80),
                                         fontSize = 11.sp,
                                         color = textColor.copy(alpha = 0.7f),
@@ -2762,7 +3349,35 @@ private fun GroupMessageBubble(
                             val isGif = remember(message.id, mediaBytes.size) {
                                 com.oshi.messenger.service.media.GifBytes.isGif(mediaBytes)
                             }
-                            com.oshi.messenger.ui.media.BubbleAsyncImage(
+                            if (mediaSize != null) {
+                                if (hasHeader) Spacer(modifier = Modifier.height(4.dp))
+                                com.oshi.messenger.ui.media.MediaBox(
+                                    size = mediaSize,
+                                    modifier = Modifier
+                                        .bleed(
+                                            start = 12.dp, end = 12.dp,
+                                            top = if (hasHeader) 0.dp else 8.dp,
+                                            bottom = if (mediaOnly && footer == null) 8.dp else 0.dp
+                                        )
+                                        .bubbleClickable { showFullscreen = true }
+                                ) {
+                                    com.oshi.messenger.ui.media.BubbleAsyncImage(
+                                        messageId = message.id,
+                                        data = mediaBytes,
+                                        contentDescription = stringResource(R.string.group_chat_image),
+                                        modifier = Modifier.fillMaxSize(),
+                                        // The box already has the picture's aspect; Crop only
+                                        // bites when MediaBubbleSizing clamped it. A GIF keeps
+                                        // Fit so a transparent sticker is never trimmed.
+                                        contentScale = if (isGif) ContentScale.Fit else ContentScale.Crop
+                                    )
+                                    if (mediaOnly) {
+                                        MediaTimePill {
+                                            groupMetaContent(Oshi.Bubble.mediaPillInk, true)
+                                        }
+                                    }
+                                }
+                            } else com.oshi.messenger.ui.media.BubbleAsyncImage(
                                 messageId = message.id,
                                 data = mediaBytes,
                                 contentDescription = stringResource(R.string.group_chat_image),
@@ -2804,8 +3419,12 @@ private fun GroupMessageBubble(
                             val sanitized = OSHIControlPayload.displaySummary(message.content, controlLabels)
                                 ?: MessageSanitizer.sanitizeForDisplay(message.content)
                             if (sanitized.isNotBlank()) {
-                                Spacer(modifier = Modifier.height(4.dp))
-                                LinkifyText(text = sanitized, color = textColor)
+                                Spacer(modifier = Modifier.height(if (mediaSize != null) 6.dp else 4.dp))
+                                LinkifyText(
+                                    text = sanitized,
+                                    color = textColor,
+                                    linkColor = if (outgoingLook) accentNow.linkInk(darkNow) else null
+                                )
                             }
                         }
                     }
@@ -2996,13 +3615,15 @@ private fun GroupMessageBubble(
                                         fontSize = 16.sp
                                     )
                                 } else if (mentions.isNotEmpty() &&
-                                    com.oshi.messenger.util.MentionWire.spans(sanitized, mentions).isNotEmpty()) {
+                                    com.oshi.messenger.util.MentionWire.spans(
+                                        com.oshi.messenger.ui.components.BodyMarkup.render(sanitized).text, mentions
+                                    ).isNotEmpty()) {
                                     // __MENTIONS_2026_09_23__ picked members highlighted; a tap names them.
                                     com.oshi.messenger.ui.components.MentionText(
                                         text = sanitized,
                                         mentions = mentions,
                                         color = textColor,
-                                        tint = if (isOwnMessage) Color.White else BrandColor,
+                                        tint = if (outgoingLook) accentNow.linkInk(darkNow) else brandInk(),
                                         style = androidx.compose.ui.text.TextStyle(
                                             fontSize = 16.sp,
                                             fontWeight = if (appearance.boldText) FontWeight.SemiBold else null
@@ -3012,7 +3633,8 @@ private fun GroupMessageBubble(
                                     LinkifyText(
                                         text = sanitized,
                                         color = textColor,
-                                        fontWeight = if (appearance.boldText) FontWeight.SemiBold else null
+                                        fontWeight = if (appearance.boldText) FontWeight.SemiBold else null,
+                                        linkColor = if (outgoingLook) accentNow.linkInk(darkNow) else null
                                     )
                                 }
 
@@ -3050,48 +3672,27 @@ private fun GroupMessageBubble(
                 }
 
                 // Timestamp + read indicator — task 1.3.4
-                Spacer(modifier = Modifier.height(4.dp))
-                Row(
-                    modifier = Modifier.align(Alignment.End),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    // ✏️ iOS draws the marker off `editedAt != nil`, immediately before
-                    // the timestamp (`OSHI/GroupViews.swift:2761-2763`). `message_edited`
-                    // is the same key the 1:1 bubble uses and already ships in all 34
-                    // locales.
-                    // A live location moves by edits; that is not a user edit.
-                    if (message.isEdited && !displayContent.startsWith(OSHIControlPayload.LOCATION)) {
-                        Text(
-                            // __EDITED_MARKER_CASE_2026_11_05__ `.lowercase()`
-                            // to match the 1:1 bubble and both iOS surfaces,
-                            // which all render "edited". This one showed
-                            // "Edited" from the raw resource, so the same marker
-                            // was capitalised differently in a group and in a
-                            // direct chat on the same screen session.
-                            //
-                            // Kotlin's no-arg `lowercase()` is locale-INDEPENDENT
-                            // (Unicode default), which is what we want here: a
-                            // locale-aware fold would hit the Turkish dotless-i
-                            // rule on a string that is not Turkish input.
-                            text = stringResource(R.string.message_edited).lowercase(),
-                            fontSize = 10.sp,
-                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                            color = textColor.copy(alpha = 0.6f)
+                // __BUBBLE_MEDIA_2026_11_21__ a media-only bubble carries it on the
+                // picture instead (MediaTimePill), not on a strip of bubble under it.
+                if (!mediaOnly) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Row(
+                        modifier = Modifier.align(Alignment.End),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    ) { groupMetaContent(metaColor, false) }
+                }
+                // __BUBBLE_MEDIA_2026_11_21__ channel comments bar, inside the card under
+                // a hairline (BUBBLE_MEDIA_SPEC §2), edge to edge.
+                if (footer != null) {
+                    Column(modifier = Modifier.bleed(start = 12.dp, end = 12.dp, bottom = 8.dp).padding(top = if (mediaOnly) 0.dp else 6.dp)) {
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(0.5.dp)
+                                .background(Oshi.Bubble.rimInk(false, darkScheme).copy(alpha = 0.14f))
                         )
-                    }
-                    Text(
-                        text = formatMessageTime(message.timestamp),
-                        fontSize = 10.sp,
-                        color = textColor.copy(alpha = 0.6f)
-                    )
-                    if (isOwnMessage) {
-                        Icon(
-                            imageVector = if (message.isRead) Icons.Default.DoneAll else Icons.Default.Done,
-                            contentDescription = if (message.isRead) stringResource(R.string.message_read) else stringResource(R.string.message_sent),
-                            modifier = Modifier.size(12.dp),
-                            tint = if (message.isRead) Color(0xFF4FC3F7) else textColor.copy(alpha = 0.6f)
-                        )
+                        footer()
                     }
                 }
             }
@@ -3184,6 +3785,18 @@ private fun GroupMessageBubble(
                         color = Color(0xFF9BA4E8),
                         fontWeight = FontWeight.Medium
                     )
+                    // __BOTS_PHASE1_2026_11_24__ the BOT badge on every bot post (groups and channels).
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = stringResource(R.string.botf_badge),
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.6.sp,
+                        color = Color(0xFF1A1A2E),
+                        modifier = Modifier
+                            .background(Color(0xFF9BA4E8), RoundedCornerShape(4.dp))
+                            .padding(horizontal = 4.dp)
+                    )
                 }
             }
             if (botSealCaption != null) {
@@ -3220,11 +3833,12 @@ private fun GroupMessageInput(
     // __OLED_GLASS_2026_11_16__ Under OLED black the composer is a glass bar: a
     // near-black fill, a lit hairline along its top edge, no drop shadow (a
     // shadow on #000000 is invisible and only costs a layer).
+    // __CHAT_BACKDROP_BLUR_2026_11_21__ Transparent: the composer sits on the
+    // frosted bottom band (FrostedChatBarBackdrop in the Scaffold's bottomBar),
+    // which carries the fill, the glass rim and the fallback opacity.
     val glass = com.oshi.messenger.ui.theme.glassOn()
     Surface(
-        color = if (glass) com.oshi.messenger.ui.theme.GlassTier.Bar.opaque else MaterialTheme.colorScheme.surface,
-        shadowElevation = if (glass) 0.dp else 8.dp,
-        modifier = Modifier.thenIf(glass) { glassEdge(top = true) }
+        color = Color.Transparent,
     ) {
         if (isRecording) {
             // Recording UI: timer + cancel + send
@@ -3289,6 +3903,9 @@ private fun GroupMessageInput(
                 // Single "+" entry — opens the group attachment menu (camera, schedule,
                 // location etc. live there). Frees the text field to span the row,
                 // matching the 1:1 ChatScreen composer.
+                // __COMPOSER_PILL_2026_11_23__ "+", field, emoji and camera share ONE pill
+                // (Google-app style); mic / send is the round button beside it.
+                com.oshi.messenger.ui.components.ComposerPill(glass = glass, modifier = Modifier.weight(1f)) {
                 ComposerShortcut(visible = shortcutsVisible) {
                     IconButton(onClick = onAttach, modifier = Modifier.size(48.dp)) {
                         Icon(
@@ -3298,22 +3915,23 @@ private fun GroupMessageInput(
                         )
                     }
                 }
-                if (!shortcutsVisible) Spacer(modifier = Modifier.width(4.dp))
+                if (!shortcutsVisible) Spacer(modifier = Modifier.width(10.dp))
 
                 // Text field
+                // __TEXT_FORMATTING_2026_11_24__ Bold / Underline in the selection menu.
+                com.oshi.messenger.ui.components.FormattingComposerField(
+                    text = messageText,
+                    onTextChange = onMessageChange,
+                ) { fieldValue, onFieldValueChange ->
                 OutlinedTextField(
-                    value = messageText,
-                    onValueChange = onMessageChange,
+                    value = fieldValue,
+                    onValueChange = onFieldValueChange,
                     visualTransformation = mentionHighlight ?: androidx.compose.ui.text.input.VisualTransformation.None,
                     placeholder = { Text(stringResource(R.string.message_placeholder)) },
-                    modifier = Modifier.weight(1f)
-                        .thenIf(glass) { glassHairline(RoundedCornerShape(24.dp)) },
-                    shape = RoundedCornerShape(24.dp),
-                    colors = if (glass) com.oshi.messenger.ui.theme.glassTextFieldColors()
-                    else OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-                        focusedBorderColor = BrandColor
-                    ),
+                    modifier = Modifier.weight(1f),
+                    shape = com.oshi.messenger.ui.components.ComposerPillDefaults.Shape,
+                    // The pill carries fill, outline and glass; the field is bare.
+                    colors = com.oshi.messenger.ui.components.composerPillFieldColors(),
                     trailingIcon = {
                         IconButton(onClick = onEmoji) {
                             Icon(
@@ -3327,6 +3945,7 @@ private fun GroupMessageInput(
                     keyboardActions = KeyboardActions(onSend = { onSend() }),
                     maxLines = com.oshi.messenger.service.media.ComposerShortcuts.maxLines(messageText)
                 )
+                }
 
                 // (N17, Anatole 13/11) Take a PHOTO — where nearly every messenger
                 // puts the camera, beside the mic. This slot used to open the round
@@ -3341,31 +3960,23 @@ private fun GroupMessageInput(
                         )
                     }
                 }
+                } // __COMPOSER_PILL_2026_11_23__ end pill
 
                 Spacer(modifier = Modifier.width(8.dp))
 
                 // Send (text) or Mic (empty) button
                 if (messageText.isNotBlank()) {
-                    FloatingActionButton(
-                        onClick = onSend,
-                        modifier = Modifier.size(48.dp).thenIf(glass) { glassGlow(RoundedCornerShape(16.dp)) },
-                        containerColor = BrandColor
+                    com.oshi.messenger.ui.components.ComposerRoundButton(
+                        onClick = onSend, primary = true, glass = glass
                     ) {
                         Icon(
                             imageVector = Icons.Default.Send,
                             contentDescription = stringResource(R.string.accessibility_send_button),
-                            tint = Color.White
                         )
                     }
                 } else {
-                    FloatingActionButton(
-                        onClick = onStartRecording,
-                        modifier = Modifier.size(48.dp)
-                            .thenIf(glass) { glassHairline(RoundedCornerShape(16.dp)) },
-                        containerColor = if (glass) com.oshi.messenger.ui.theme.GlassTier.Chip.opaque
-                            else MaterialTheme.colorScheme.surfaceVariant,
-                        elevation = if (glass) FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
-                            else FloatingActionButtonDefaults.elevation()
+                    com.oshi.messenger.ui.components.ComposerRoundButton(
+                        onClick = onStartRecording, primary = false, glass = glass
                     ) {
                         Icon(
                             imageVector = Icons.Default.Mic,
@@ -3406,7 +4017,14 @@ private fun GroupChatInfoSheet(
     memberName: (String) -> String? = { null },
     onOpenGallery: () -> Unit = {},
     onRename: (String) -> Boolean = { false },
-    onAddMember: (String) -> Boolean = { false }
+    onAddMember: (String) -> Boolean = { false },
+    inviteLink: String? = null,
+    onOpenSettings: () -> Unit = {},
+    quickActions: GroupInfoQuickActions? = null,
+    advPrivacy: Boolean = false,
+    onToggleAdvPrivacy: ((Boolean) -> Unit)? = null,
+    /** Other members whose build will not apply the switch (no cap bit 16, never sent one). */
+    advPrivacyOlderCount: Int = 0
 ) {
     val context = LocalContext.current
     var isEditingName by remember(group.id) { mutableStateOf(false) }
@@ -3614,7 +4232,57 @@ private fun GroupChatInfoSheet(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            // __GROUP_SETTINGS_2026_11_20__ description (synced on every platform) + settings entry
+            if (group.description.isNotBlank()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(group.description, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            if (quickActions != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                GroupInfoQuickActionRow(isMuted = group.isMuted, actions = quickActions)
+            }
+            // 🛡 __ADV_CHAT_PRIVACY_2026_11_26__ Any member may switch it (WhatsApp parity).
+            if (onToggleAdvPrivacy != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Surface(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    com.oshi.messenger.ui.components.AdvancedChatPrivacyToggle(
+                        on = advPrivacy,
+                        onToggle = onToggleAdvPrivacy,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+                // Same footer as iOS: the switch is not sent to them, so say so.
+                if (advPrivacyOlderCount > 0) {
+                    Text(
+                        stringResource(R.string.adv_privacy_older_members, advPrivacyOlderCount),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp)
+                            .testTag("adv_privacy_older_members")
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth().clickable { onOpenSettings() }
+                    .testTag("group_info_open_settings")
+            ) {
+                Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Settings, contentDescription = null, tint = brandInk(), modifier = Modifier.size(18.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(stringResource(R.string.gs_open_settings), fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                    Icon(Icons.Default.ChevronRight, contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), modifier = Modifier.size(16.dp))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Media gallery entry (P2 #20)
             Surface(
@@ -3790,7 +4458,10 @@ private fun GroupChatInfoSheet(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    val inviteLink = "oshi://group/${group.id}"
+                    // __GROUP_SETTINGS_2026_11_20__ the real invite link (https, parsed by every
+                    // platform, carries `t` once reset) — `oshi://group/<id>` had no inviter, so
+                    // the joiner had nobody to ask.
+                    val inviteLink = inviteLink ?: "oshi://group/${group.id}"
                     val qrBitmap = remember(group.id) {
                         generateGroupQRCode(inviteLink)
                     }
@@ -3958,7 +4629,16 @@ private fun GroupMessageActionsDialog(
      * the sender: this device knows nothing about a message it did not send,
      * and a row that opened an always-empty sheet would be a lie.
      */
-    onInfo: (() -> Unit)? = null
+    onInfo: (() -> Unit)? = null,
+    /** __INTEROP_2026_11_21__ §2.3: null = every reaction, empty = none, else only these. */
+    allowedReactions: List<String>? = null,
+    /**
+     * __CHANNEL_WEB_2026_11_26__ Public web copy of a channel post (spec §9.7): null unless
+     * the channel's web preview is on and this message is a publishable post.
+     */
+    onWebCopyLink: (() -> Unit)? = null,
+    onWebShareLink: (() -> Unit)? = null,
+    onWebEmbed: (() -> Unit)? = null,
 ) {
     OshiAlertDialog(
         onDismissRequest = onDismiss,
@@ -3993,6 +4673,7 @@ private fun GroupMessageActionsDialog(
                 com.oshi.messenger.ui.components.ReactionPicker(
                     currentReaction = currentReaction,
                     onPick = { emoji -> onReactWith(emoji); onDismiss() },
+                    restrictTo = allowedReactions,
                 )
                 Divider(modifier = Modifier.padding(bottom = 4.dp))
                 // Reply
@@ -4017,6 +4698,20 @@ private fun GroupMessageActionsDialog(
                             Icon(Icons.Default.Forward, contentDescription = null)
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(stringResource(R.string.message_forward))
+                        }
+                    }
+                }
+                // __CHANNEL_WEB_2026_11_26__ Telegram-style public link + embed code.
+                listOfNotNull(
+                    onWebCopyLink?.let { Triple(Icons.Default.Link, R.string.gs_copy_link, it) },
+                    onWebShareLink?.let { Triple(Icons.Default.Share, R.string.gs_share_link, it) },
+                    onWebEmbed?.let { Triple(Icons.Default.Code, R.string.cw_embed_code, it) },
+                ).forEach { (icon, label, action) ->
+                    TextButton(onClick = { onDismiss(); action() }, modifier = Modifier.fillMaxWidth().testTag("cw_menu_$label")) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
+                            Icon(icon, contentDescription = null)
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(stringResource(label))
                         }
                     }
                 }
@@ -4984,4 +5679,248 @@ private fun rememberFollowNewest(
         }
     }
     return follow
+}
+
+
+// =============================================================================
+// __GROUP_COMMENTS_2026_11_21__ Comments under channel posts (GROUP_INFO_SETTINGS_SPEC §2.12.6)
+// =============================================================================
+
+@Composable
+private fun CommentsBar(count: Int, onClick: () -> Unit) {
+    val label = if (count == 0) stringResource(R.string.cm_leave_comment)
+    else pluralStringResource(R.plurals.cm_comments_count, count, count)
+    // __BUBBLE_MEDIA_2026_11_21__ The bottom row of the post card (the card clips it to
+    // its corners): OSHI O mark, the count in brand INK (raw BrandColor was 2.0:1 on the
+    // dark card), a chevron. Was a separate grey pill offset 48/64 dp from the post.
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 10.dp)
+            .testTag("group_comments_bar"),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        com.oshi.messenger.ui.components.OshiOMark(size = 20.dp)
+        Spacer(Modifier.width(10.dp))
+        Text(label, Modifier.weight(1f), fontSize = 14.sp, fontWeight = FontWeight.Medium, color = brandInk())
+        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = Oshi.Chat.metaInk(isDarkScheme()))
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun GroupCommentsThread(
+    post: GroupMessage?,
+    comments: List<GroupMessage>,
+    active: Boolean,
+    myPublicKey: String,
+    iAmAdmin: Boolean,
+    controlLabels: OSHIControlPayload.Labels,
+    nameFor: (String) -> String,
+    onReact: (String, String) -> Unit,
+    onDelete: (String) -> Unit,
+    onSend: (String, GroupMessage?) -> GroupManager.CommentSendResult,
+    onDismiss: () -> Unit,
+    /** __INTEROP_2026_11_21__ §2.3: null = the default row, empty = none, else only these. */
+    allowedReactions: List<String>? = null,
+) {
+    val context = LocalContext.current
+    var draft by remember { mutableStateOf("") }
+    var replyTo by remember { mutableStateOf<GroupMessage?>(null) }
+    var actionsFor by remember { mutableStateOf<GroupMessage?>(null) }
+    val listState = rememberLazyListState()
+    val visible = remember(comments, post?.id) {
+        // A top-level comment quotes the post on the wire (old builds); here it quotes nothing.
+        // Deleted comments are not drawn (they were an empty bubble with ticks).
+        GroupComments.threadRows(comments, post?.id)
+    }
+    val quoteable = remember(visible) { visible }
+    LaunchedEffect(visible.size) { if (visible.isNotEmpty()) listState.animateScrollToItem(visible.size + 1) }
+
+    // An in-tree overlay, not a Dialog: a full-width Dialog window is measured at display
+    // height but placed below the status bar, which pushed the composer off-screen.
+    androidx.activity.compose.BackHandler(onBack = onDismiss)
+    run {
+        Surface(Modifier.fillMaxSize().testTag("group_comments_thread"), color = MaterialTheme.colorScheme.background) {
+            Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars).imePadding()) {
+                TopAppBar(
+                    windowInsets = WindowInsets(0, 0, 0, 0),
+                    title = { Text(stringResource(R.string.cm_thread_title)) },
+                    navigationIcon = {
+                        IconButton(onClick = onDismiss) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.cm_thread_title))
+                        }
+                    }
+                )
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    item(key = "post") {
+                        if (post == null || post.isDeleted) {
+                            Text(stringResource(R.string.cm_post_unavailable), Modifier.fillMaxWidth().padding(24.dp),
+                                textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        } else {
+                            GroupMessageBubble(
+                                message = post,
+                                isChannel = true,
+                                isOwnMessage = post.senderPublicKey == myPublicKey,
+                                myPublicKey = myPublicKey,
+                                controlLabels = controlLabels,
+                                resolvedSenderName = nameFor(post.senderPublicKey),
+                                senderNameFor = nameFor,
+                                onReact = { e -> onReact(post.id, e) },
+                                onLongPress = {},
+                            )
+                        }
+                    }
+                    item(key = "divider") {
+                        Column(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                            Divider()
+                            Text(
+                                if (visible.isEmpty()) stringResource(R.string.cm_empty)
+                                else pluralStringResource(R.plurals.cm_comments_count, visible.size, visible.size),
+                                Modifier.fillMaxWidth().padding(top = 8.dp),
+                                textAlign = TextAlign.Center, fontSize = 13.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    items(visible, key = { it.id }) { c ->
+                        Box(Modifier.testTag("group_comment_row")) {
+                            GroupMessageBubble(
+                                message = c,
+                                isOwnMessage = c.senderPublicKey == myPublicKey,
+                                myPublicKey = myPublicKey,
+                                allMessages = quoteable,
+                                controlLabels = controlLabels,
+                                resolvedSenderName = nameFor(c.senderPublicKey),
+                                senderNameFor = nameFor,
+                                onReact = { e -> onReact(c.id, e) },
+                                onLongPress = { if (!c.isDeleted) actionsFor = c },
+                            )
+                        }
+                    }
+                }
+                if (!active) {
+                    Text(stringResource(R.string.cm_disabled), Modifier.fillMaxWidth().padding(16.dp),
+                        textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } else if (post != null && !post.isDeleted) {
+                    replyTo?.let { r ->
+                        Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Column(Modifier.weight(1f)) {
+                                Text(stringResource(R.string.cm_replying_to, nameFor(r.senderPublicKey)), fontSize = 12.sp,
+                                    color = BrandColor, fontWeight = FontWeight.SemiBold)
+                                Text(r.displayContent, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            IconButton(onClick = { replyTo = null }) { Icon(Icons.Default.Close, contentDescription = null) }
+                        }
+                    }
+                    Row(Modifier.fillMaxWidth().padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        OutlinedTextField(
+                            value = draft,
+                            onValueChange = { draft = it.take(GroupComments.MAX_LENGTH) },
+                            modifier = Modifier.weight(1f).testTag("group_comment_input"),
+                            placeholder = { Text(stringResource(R.string.cm_composer_hint)) },
+                            maxLines = 5,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        IconButton(
+                            onClick = {
+                                when (onSend(draft, replyTo)) {
+                                    GroupManager.CommentSendResult.SENT -> { draft = ""; replyTo = null }
+                                    GroupManager.CommentSendResult.TOO_FAST ->
+                                        android.widget.Toast.makeText(context, R.string.cm_too_fast, android.widget.Toast.LENGTH_SHORT).show()
+                                    GroupManager.CommentSendResult.INACTIVE ->
+                                        android.widget.Toast.makeText(context, R.string.cm_disabled, android.widget.Toast.LENGTH_SHORT).show()
+                                    GroupManager.CommentSendResult.NO_POST ->
+                                        android.widget.Toast.makeText(context, R.string.cm_post_unavailable, android.widget.Toast.LENGTH_SHORT).show()
+                                    GroupManager.CommentSendResult.EMPTY -> Unit
+                                }
+                            },
+                            enabled = draft.isNotBlank(),
+                            modifier = Modifier.testTag("group_comment_send")
+                        ) { Icon(Icons.Default.Send, contentDescription = null, tint = BrandColor) }
+                    }
+                }
+            }
+        }
+    }
+
+    actionsFor?.let { c ->
+        val mine = c.senderPublicKey == myPublicKey
+        OshiAlertDialog(
+            onDismissRequest = { actionsFor = null },
+            confirmButton = {
+                TextButton(onClick = { replyTo = c; actionsFor = null }) { Text(stringResource(R.string.message_reply)) }
+            },
+            dismissButton = if (mine || iAmAdmin) {
+                {
+                    TextButton(onClick = { onDelete(c.id); actionsFor = null }) {
+                        Text(stringResource(R.string.cm_delete_comment), color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            } else null,
+            text = {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    (allowedReactions ?: listOf("👍", "❤️", "🔥", "😂", "😮", "🙏")).forEach { e ->
+                        Text(e, fontSize = 26.sp, modifier = Modifier.clickable { onReact(c.id, e); actionsFor = null }.padding(4.dp))
+                    }
+                }
+            }
+        )
+    }
+}
+
+
+/**
+ * __CHANNEL_WEB_2026_11_26__ "Embed code" sheet (PUBLIC_CHANNEL_WEB_SPEC §8): the one-line
+ * widget snippet for a post, a dark-theme switch (adds `data-dark="1"`), and Copy.
+ */
+@Composable
+internal fun ChannelEmbedDialog(handle: String, n: Int, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val clipboard = LocalClipboardManager.current
+    var dark by remember { mutableStateOf(false) }
+    val code = com.oshi.messenger.service.channelweb.ChannelWebLinks.embedSnippet(handle, n, dark)
+    OshiAlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.cw_embed_title)) },
+        text = {
+            Column {
+                Text(stringResource(R.string.cw_embed_hint), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(Modifier.height(10.dp))
+                androidx.compose.foundation.text.selection.SelectionContainer {
+                    Text(
+                        code,
+                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                        fontSize = 12.sp,
+                        modifier = Modifier.fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(8.dp))
+                            .padding(10.dp)
+                            .testTag("cw_embed_code")
+                    )
+                }
+                Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.cw_embed_dark), Modifier.weight(1f))
+                    Switch(checked = dark, onCheckedChange = { dark = it }, modifier = Modifier.testTag("cw_embed_dark"))
+                }
+                Text(
+                    com.oshi.messenger.service.channelweb.ChannelWebLinks.postUrl(handle, n),
+                    fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                clipboard.setText(AnnotatedString(code))
+                Toast.makeText(context, context.getString(R.string.cw_code_copied), Toast.LENGTH_SHORT).show()
+            }, modifier = Modifier.testTag("cw_embed_copy")) { Text(stringResource(R.string.cw_copy_code)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } }
+    )
 }

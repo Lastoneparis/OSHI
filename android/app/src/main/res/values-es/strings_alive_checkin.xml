@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Comprobación confirmada</string>
+    <string name="alive_a11y_neutral">Ninguna comprobación configurada</string>
+    <string name="alive_a11y_overdue">Comprobación vencida</string>
+    <string name="alive_action_im_alive">Estoy vivo</string>
+    <string name="alive_action_message_them">Escribir</string>
+    <string name="alive_bar_open_settings">Ajustes de comprobación</string>
+    <string name="alive_channel_description">Recordatorios de tus propias comprobaciones y avisos cuando alguien a quien sigues no ha respondido a las suyas.</string>
+    <string name="alive_channel_name">Comprobaciones de seguridad</string>
+    <string name="alive_confirmed_toast">Comprobación enviada</string>
+    <string name="alive_duration_days_hours">%1$d d %2$d h</string>
+    <string name="alive_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="alive_duration_minutes">%1$d min</string>
+    <string name="alive_duration_now">menos de un minuto</string>
+    <string name="alive_interval_24h">Cada 24 horas</string>
+    <string name="alive_interval_48h">Cada 48 horas</string>
+    <string name="alive_interval_72h">Cada 72 horas</string>
+    <string name="alive_interval_custom">Personalizado</string>
+    <string name="alive_interval_custom_hours">Cada %1$d horas</string>
+    <string name="alive_interval_every">cada %1$s</string>
+    <string name="alive_lane_you">Tú</string>
+    <string name="alive_note_delivery">Los recordatorios y avisos dependen de tu red y del permiso de notificaciones. Una comprobación perdida significa que no llegó ninguna confirmación, nada más.</string>
+    <string name="alive_note_no_location">No se comparte ninguna ubicación. Una comprobación solo lleva una marca de tiempo.</string>
+    <string name="alive_notification_mine_due_body">Confirma que estás vivo para que %1$s no se quede esperando.</string>
+    <string name="alive_notification_mine_due_title">Te toca confirmar</string>
+    <string name="alive_notification_overdue_body">Su comprobación vencía hace %1$s. Esto solo significa que no ha llegado ninguna confirmación.</string>
+    <string name="alive_notification_overdue_title">Sin comprobación de %1$s</string>
+    <string name="alive_sheet_explainer">Confirma que estás vivo de forma periódica. %1$s ve tu cuenta atrás y recibe un aviso si termina sin respuesta.</string>
+    <string name="alive_sheet_interval">Con qué frecuencia</string>
+    <string name="alive_sheet_mine_switch">Confirmar a %1$s</string>
+    <string name="alive_sheet_stop">Dejar de confirmar</string>
+    <string name="alive_sheet_their_next">Próxima esperada %1$s</string>
+    <string name="alive_sheet_their_none">%1$s no ha configurado una comprobación aquí.</string>
+    <string name="alive_sheet_their_section">Comprobación de %1$s</string>
+    <string name="alive_state_confirmed_ago">confirmó hace %1$s</string>
+    <string name="alive_state_due_in">vence en %1$s</string>
+    <string name="alive_state_not_set">sin configurar</string>
+    <string name="alive_state_overdue_by">sin respuesta desde hace %1$s</string>
+    <string name="alive_summary_confirmed">Confirmó que está vivo</string>
+    <string name="alive_summary_started">Comprobación de seguridad iniciada</string>
+    <string name="alive_summary_stopped">Comprobación de seguridad detenida</string>
+    <string name="alive_title">Comprobación de seguridad</string>
+    <string name="alive_unknown_peer">este contacto</string>
+</resources>

@@ -381,7 +381,7 @@ final class WatchBridgeService {
         let media = media(for: m.mediaType, hasAttachment: m.mediaAttachment != nil)
         if m.isViewOnce { return ("", media, true) }
         let raw = m.editedContent ?? m.plaintextContent ?? ""
-        let text = raw.isEmpty ? "" : OSHIControlPayload.previewText(for: raw)
+        let text = raw.isEmpty ? "" : InlineMarkup.stripped(OSHIControlPayload.previewText(for: raw))
         return (text.trimmingCharacters(in: .whitespacesAndNewlines), media, false)
     }
 
@@ -389,7 +389,7 @@ final class WatchBridgeService {
         let media = media(for: m.mediaType)
         var raw = m.editedContent ?? m.plaintextContent ?? ""
         if raw.isEmpty, media == nil { raw = String(data: m.encryptedContent, encoding: .utf8) ?? "" }
-        let text = raw.isEmpty ? "" : OSHIControlPayload.previewText(for: raw)
+        let text = raw.isEmpty ? "" : InlineMarkup.stripped(OSHIControlPayload.previewText(for: raw))
         return (text.trimmingCharacters(in: .whitespacesAndNewlines), media, false)
     }
 

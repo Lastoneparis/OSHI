@@ -33,7 +33,27 @@ object SlashCommandCatalog {
         val argumentHintRes: Int?,
         val descriptionText: String? = null,
         val botLabel: String? = null,
-    )
+        /**
+         * __BOT_COMMANDS_2026_11_24__ The answering bot's emoji avatar, drawn as the row's
+         * leading badge; null for a built-in.
+         */
+        val botEmoji: String? = null,
+        /**
+         * The PUBLIC id of a platform bot this device does not run (see `GroupMessage.botId`).
+         * Non-null means sending this command must also be dispatched to the server, since
+         * that bot cannot read the group's encrypted traffic. Null for built-ins and for
+         * bots that run on this device.
+         */
+        val remoteBotId: String? = null,
+    ) {
+        /**
+         * A bot command is SENT when tapped, as in Telegram; a built-in takes an argument and
+         * is inserted. __BOTS_PHASE1_2026_11_24__ so is a bot command whose description
+         * carries a `<placeholder>` (contract §4.4): it needs arguments.
+         */
+        val sendsOnPick: Boolean get() = botLabel != null && argumentHintRes == null &&
+            !BotCommandArgs.takesArguments(descriptionText)
+    }
 
     /** One bot's `command` triggers, as [botEntries] needs them. */
     data class BotCommandSource(
@@ -41,6 +61,13 @@ object SlashCommandCatalog {
         val botEmoji: String,
         val description: String,
         val commandConditions: List<String>,
+        /**
+         * __BOT_COMMANDS_2026_11_24__ Per-command descriptions, keyed by the normalised name
+         * (no slash, lower case). A command without one falls back to [description].
+         */
+        val commandDescriptions: Map<String, String> = emptyMap(),
+        /** See [Entry.remoteBotId]. */
+        val remoteBotId: String? = null,
     )
 
     /**
@@ -68,7 +95,9 @@ object SlashCommandCatalog {
         val q = query(text) ?: return emptyList()
         val all = if (botCommands.isEmpty()) builtIns() else merged(botCommands)
         if (q.isEmpty()) return all
-        return all.filter { it.command.removePrefix("/").lowercase().startsWith(q) }
+        // __BOT_COMMANDS_2026_11_24__ prefix matches first, then names that contain the
+        // query (Telegram's picker finds `/help` from `/elp` too).
+        return BotCommandSyntax.rank(q, all) { it.command }
     }
 
     /**
@@ -90,8 +119,11 @@ object SlashCommandCatalog {
                     command = "/$name",
                     descriptionRes = null,
                     argumentHintRes = null,
-                    descriptionText = src.description,
+                    descriptionText = src.commandDescriptions[name.lowercase()]
+                        ?.takeIf { it.isNotBlank() } ?: src.description,
                     botLabel = "${src.botEmoji} ${src.botName}".trim(),
+                    botEmoji = src.botEmoji.takeIf { it.isNotBlank() },
+                    remoteBotId = src.remoteBotId,
                 )
             }
         }
@@ -130,4 +162,42 @@ object SlashCommandCatalog {
      * leave the list hanging over the keyboard.
      */
     fun completion(entry: Entry): String = entry.command + " "
+
+    /**
+     * __BOT_COMMANDS_2026_11_24__ The text a tap SENDS for a bot command: the bare
+     * command, no trailing space (it is a message, not a draft).
+     */
+    fun sendText(entry: Entry): String = entry.command
+
+    /** Only the bots' rows (the commands menu button lists these, not `/pay`). */
+    fun botOnly(entries: List<Entry>): List<Entry> = entries.filter { it.botLabel != null }
+
+    /**
+     * __BOTS_PHASE1_2026_11_24__ Hardware keyboard over the `/` picker (contract §4.4):
+     * ↑/↓ move the highlight, Return/Enter does what a tap does (send, or insert for a
+     * command that takes arguments), Tab / → insert `/name `, Esc closes the picker.
+     * Pure, so the mapping is tested without a window.
+     */
+    enum class Key { UP, DOWN, ENTER, TAB, RIGHT, ESCAPE, OTHER }
+
+    sealed interface KeyAction {
+        data class Move(val index: Int) : KeyAction
+        data class Pick(val entry: Entry) : KeyAction
+        data class Insert(val entry: Entry) : KeyAction
+        data object Close : KeyAction
+        data object None : KeyAction
+    }
+
+    fun onKey(key: Key, matches: List<Entry>, selected: Int): KeyAction {
+        if (matches.isEmpty()) return KeyAction.None
+        val i = selected.coerceIn(0, matches.lastIndex)
+        return when (key) {
+            Key.UP -> KeyAction.Move(if (i == 0) matches.lastIndex else i - 1)
+            Key.DOWN -> KeyAction.Move(if (i == matches.lastIndex) 0 else i + 1)
+            Key.ENTER -> KeyAction.Pick(matches[i])
+            Key.TAB, Key.RIGHT -> KeyAction.Insert(matches[i])
+            Key.ESCAPE -> KeyAction.Close
+            Key.OTHER -> KeyAction.None
+        }
+    }
 }

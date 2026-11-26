@@ -618,3 +618,107 @@ struct ChatUnreadDividerTracker: ViewModifier {
             .onDisappear { tracker.unreadDividerMinY = nil }
     }
 }
+
+// MARK: - __COMPOSER_PILL_2026_11_23__ Google-style composer pill
+
+/// The chat composer drawn like the Google app's search bar (user request,
+/// 23/11; Android 99c1844d): ONE rounded pill holds "+", the text field and the
+/// capture shortcuts, and the mic / send button is a separate circle of the
+/// same height beside it.
+///
+/// The pill carries the fill and a hairline outline that turns brand-coloured
+/// while the field has focus; the field inside has no fill or border of its
+/// own. Under a glass theme the pill keeps the glass edge the field used to
+/// carry. Shared by the 1:1 and group composers (and the Mac, which is the
+/// Catalyst build of the same views).
+enum ComposerPillMetrics {
+    /// Pill height = round-button diameter, so the two line up. Scaled with
+    /// Dynamic Type through `@ScaledMetric` at the call sites.
+    static let height: CGFloat = 48
+    static let outlineOpacity: Double = 0.45
+}
+
+/// The pill's fill: the field background the composer always used.
+private struct ComposerPillFill: View {
+    @Environment(\.colorScheme) private var colorScheme
+    var body: some View {
+        colorScheme == .dark ? Color(.systemGray6) : Color(.systemGray5)
+    }
+}
+
+struct ComposerPill<Content: View>: View {
+    let focused: Bool
+    let tint: Color
+    @ViewBuilder let content: () -> Content
+
+    @ScaledMetric(relativeTo: .body) private var height: CGFloat = ComposerPillMetrics.height
+    @Environment(\.glassStyle) private var glassStyle
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var shape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: height / 2, style: .continuous)
+    }
+
+    private var outline: Color {
+        if focused { return tint }
+        if glassStyle.isGlass { return .clear }  // the glass edge is the outline
+        return Color(.systemGray).opacity(ComposerPillMetrics.outlineOpacity)
+    }
+
+    var body: some View {
+        // Bottom-aligned: as the field grows to several lines, "+" and the
+        // shortcuts stay on its last line, as in the Google bar.
+        HStack(alignment: .bottom, spacing: 0) {
+            content()
+        }
+        .padding(.horizontal, 4)
+        .frame(minHeight: height)
+        .background(ComposerPillFill().clipShape(shape))
+        .oledGlassEdge(shape)  // __OLED_GLASS_2026_11_16__ moved from the field to the pill
+        .overlay(shape.strokeBorder(outline, lineWidth: 1).allowsHitTesting(false))
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: focused)
+    }
+}
+
+/// The round button beside the pill. `primary` = the brand-filled send;
+/// otherwise the quiet tonal mic circle with a hairline outline. `recording`
+/// turns the circle red (the mic doubles as stop while a voice note records).
+struct ComposerRoundButtonFace: View {
+    let systemImage: String
+    let primary: Bool
+    var recording: Bool = false
+    var tint: Color = Theme.brand
+    var enabled: Bool = true
+
+    @ScaledMetric(relativeTo: .body) private var size: CGFloat = ComposerPillMetrics.height
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.glassStyle) private var glassStyle
+
+    private var filled: Bool { primary || recording }
+
+    var body: some View {
+        ZStack {
+            if filled {
+                Circle()
+                    .fill(recording ? Color.red : (enabled ? tint : Color.gray))
+                    .oledFocusGlow(tint)  // __OLED_GLASS_2026_11_16__ the one lit thing in the bar
+            } else {
+                ComposerPillFill()
+                    .clipShape(Circle())
+                    .oledGlassEdge(Circle())
+                    .overlay(
+                        Circle()
+                            .strokeBorder(glassStyle.isGlass ? Color.clear
+                                          : Color(.systemGray).opacity(ComposerPillMetrics.outlineOpacity),
+                                          lineWidth: 1)
+                    )
+            }
+            Image(systemName: systemImage)
+                .font(.system(size: size * 0.42, weight: primary ? .bold : .medium))
+                .foregroundStyle(filled ? Color.white : (enabled ? Color.primary : Color.gray))
+                .contentTransition(.opacity)
+        }
+        .frame(width: size, height: size)
+        .contentShape(Circle())
+    }
+}

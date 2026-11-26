@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Speciális csevegési adatvédelem</string>
+    <string name="adv_privacy_subtitle">Megakadályozza, hogy a csevegésben bárki médiát mentsen, exportálja a csevegést vagy MI-t használjon az üzenetein</string>
+    <string name="adv_privacy_learn_more">További információ</string>
+    <string name="adv_privacy_notice_on">%1$s bekapcsolta a speciális csevegési adatvédelmet. Senki sem menthet automatikusan médiát, exportálhatja a csevegést, és nem használhat MI-t a csevegés üzenetein.</string>
+    <string name="adv_privacy_notice_off">%1$s kikapcsolta a speciális csevegési adatvédelmet. A médiamentés, a csevegés exportálása és az MI-funkciók újra elérhetők.</string>
+    <string name="adv_privacy_notice_on_you">Bekapcsoltad a speciális csevegési adatvédelmet. Senki sem menthet automatikusan médiát, exportálhatja a csevegést, és nem használhat MI-t a csevegés üzenetein.</string>
+    <string name="adv_privacy_notice_off_you">Kikapcsoltad a speciális csevegési adatvédelmet. A médiamentés, a csevegés exportálása és az MI-funkciók újra elérhetők.</string>
+    <string name="adv_privacy_summary_on">Speciális csevegési adatvédelem bekapcsolva</string>
+    <string name="adv_privacy_summary_off">Speciális csevegési adatvédelem kikapcsolva</string>
+    <string name="adv_privacy_sheet_intro">Ha bárki bekapcsolja, a csevegés minden résztvevőjére érvényes:</string>
+    <string name="adv_privacy_sheet_point_save">A csevegés médiafájljai nem menthetők a galériába vagy a Letöltések mappába.</string>
+    <string name="adv_privacy_sheet_point_export">Ez a csevegés kimarad a csevegésexportokból.</string>
+    <string name="adv_privacy_sheet_point_ai">Az OSHI eszközön futó MI-je nem olvashatja ezt a csevegést: nincs válaszjavaslat, fordítás és környezet az írássegédnek.</string>
+    <string name="adv_privacy_sheet_point_screen">A csevegésről készülő képernyőképek és képernyőfelvételek le vannak tiltva.</string>
+    <string name="adv_privacy_sheet_limits">A csevegésben bárki be- vagy kikapcsolhatja. Nem akadályozza meg, hogy valaki lefényképezze a képernyőt, és nem érinti a régebbi OSHI-verziót használókat.</string>
+    <string name="adv_privacy_blocked_toast">Ebben a csevegésben be van kapcsolva a speciális adatvédelem</string>
+    <string name="adv_privacy_older_members">Régebbi OSHI-verziót használó tagok, akik csak frissítés után alkalmazzák: %1$d</string>
+</resources>

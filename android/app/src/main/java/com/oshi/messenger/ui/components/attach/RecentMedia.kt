@@ -4,11 +4,14 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
+import android.database.ContentObserver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.util.LruCache
@@ -23,7 +26,7 @@ import kotlinx.coroutines.withContext
  * __ATTACH_PANEL_2027_2026_11_16__ The device gallery for the attachment panel.
  *
  * Read in PAGES ([AttachmentPanelLogic.PAGE_SIZE]) from MediaStore's files table,
- * newest first, photos and videos together — no full scan of a 40 000-item library to
+ * newest first (by capture time, [AttachmentPanelLogic.SQL_SORT_ORDER]), photos and videos together — no full scan of a 40 000-item library to
  * draw the first fifteen squares. Thumbnails come from the platform thumbnail cache
  * (`ContentResolver.loadThumbnail`, API 29+; the legacy `Thumbnails` tables below),
  * decoded off the main thread and kept in a small memory LRU. Nothing is written to
@@ -53,13 +56,24 @@ object RecentMedia {
                 .getOrDefault(emptyList())
         }
 
-    private fun query(cr: ContentResolver, offset: Int, limit: Int): List<RecentMediaItem> {
+    private fun query(cr: ContentResolver, offset: Int, limit: Int): List<RecentMediaItem> =
+        try {
+            query(cr, offset, limit, AttachmentPanelLogic.SQL_SORT_ORDER)
+        } catch (e: IllegalArgumentException) {
+            // A provider build that refuses the COALESCE expression: index-time order,
+            // still newest first, rather than an empty grid.
+            Log.w(TAG, "capture-time order refused, falling back to date_added: ${e.message}")
+            query(cr, offset, limit, AttachmentPanelLogic.SQL_SORT_ORDER_FALLBACK)
+        }
+
+    private fun query(cr: ContentResolver, offset: Int, limit: Int, sortOrder: String): List<RecentMediaItem> {
         val files = MediaStore.Files.getContentUri("external")
         val projection = arrayOf(
             MediaStore.Files.FileColumns._ID,
             MediaStore.Files.FileColumns.MEDIA_TYPE,
             MediaStore.Files.FileColumns.MIME_TYPE,
             MediaStore.Files.FileColumns.DATE_ADDED,
+            DATE_TAKEN,
             "duration",
         )
         val selection = "${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?, ?)"
@@ -67,19 +81,21 @@ object RecentMedia {
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(),
         )
+        // __RECENT_PHOTOS_ORDER_2026_11_21__ The order is a literal SQL clause with a
+        // direction on EVERY term. Never QUERY_ARG_SORT_COLUMNS + QUERY_ARG_SORT_DIRECTION
+        // for more than one column: the platform appends the direction once, after the
+        // last column, and `date_added, _id DESC` is OLDEST first.
         val cursor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val qa = Bundle().apply {
                 putString(ContentResolver.QUERY_ARG_SQL_SELECTION, selection)
                 putStringArray(ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS, args)
-                putStringArray(ContentResolver.QUERY_ARG_SORT_COLUMNS, arrayOf(MediaStore.Files.FileColumns.DATE_ADDED, MediaStore.Files.FileColumns._ID))
-                putInt(ContentResolver.QUERY_ARG_SORT_DIRECTION, ContentResolver.QUERY_SORT_DIRECTION_DESCENDING)
+                putString(ContentResolver.QUERY_ARG_SQL_SORT_ORDER, sortOrder)
                 putInt(ContentResolver.QUERY_ARG_LIMIT, limit)
                 putInt(ContentResolver.QUERY_ARG_OFFSET, offset)
             }
             cr.query(files, projection, qa, null)
         } else {
-            cr.query(files, projection, selection, args,
-                "${MediaStore.Files.FileColumns.DATE_ADDED} DESC, ${MediaStore.Files.FileColumns._ID} DESC LIMIT $limit OFFSET $offset")
+            cr.query(files, projection, selection, args, "$sortOrder LIMIT $limit OFFSET $offset")
         }
         val out = ArrayList<RecentMediaItem>(limit)
         cursor?.use { c ->
@@ -87,6 +103,7 @@ object RecentMedia {
             val iType = c.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
             val iMime = c.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE)
             val iDate = c.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED)
+            val iTaken = c.getColumnIndex(DATE_TAKEN)
             val iDur = c.getColumnIndex("duration")
             while (c.moveToNext()) {
                 val id = c.getLong(iId)
@@ -99,10 +116,32 @@ object RecentMedia {
                     mimeType = c.getString(iMime),
                     durationMs = if (isVideo && iDur >= 0 && !c.isNull(iDur)) c.getLong(iDur) else 0L,
                     dateAddedSec = c.getLong(iDate),
+                    dateTakenMs = if (iTaken >= 0 && !c.isNull(iTaken)) c.getLong(iTaken) else null,
                 )
             }
         }
         return out
+    }
+
+    /** `datetaken` — a MediaColumns constant only from API 29, the column itself far older. */
+    private const val DATE_TAKEN = "datetaken"
+
+    /**
+     * Calls [onChange] (on the main thread) whenever MediaStore's external volume changes
+     * — a photo taken, a screenshot, a download, a deletion — while the panel is open.
+     * Returns the unregister action.
+     */
+    fun observe(context: Context, onChange: () -> Unit): () -> Unit {
+        val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean) = onChange()
+        }
+        val cr = context.contentResolver
+        return runCatching {
+            cr.registerContentObserver(MediaStore.Files.getContentUri("external"), true, observer)
+            cr.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, observer)
+            cr.registerContentObserver(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, true, observer)
+            ({ runCatching { cr.unregisterContentObserver(observer) }; Unit })
+        }.getOrDefault({})
     }
 
     // ── Thumbnails ────────────────────────────────────────────────────────

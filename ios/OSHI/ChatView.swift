@@ -295,6 +295,8 @@ struct ChatView: View {
     // ✅ Wallpaper support
     @ObservedObject private var wallpaperManager = ChatWallpaperManager.shared
     @State private var showWallpaperPicker = false
+    /// Bumped after a menu action whose source is not observed (profile links).
+    @State private var overflowMenuRefresh = 0
     @State private var wallpaperRefreshId = UUID()  // 🔧 FIX: Force refresh on wallpaper sync
     
     // ✅ Blocking functionality
@@ -466,6 +468,19 @@ struct ChatView: View {
     /// menu label has to flip the moment the switch moves, including when the
     /// move came from the other side as an incoming request.
     @ObservedObject private var offlineOnlyStore = OfflineOnlyStore.shared
+    /// 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ Observed: the switch can be flipped
+    /// by the other side, and the AI gates, the menu row and the capture shield
+    /// all have to follow at once.
+    @ObservedObject private var advancedPrivacyStore = AdvancedChatPrivacyStore.shared
+    private var isAdvancedPrivacyOn: Bool {
+        advancedPrivacyStore.isOn(conversation.participantPublicKey)
+    }
+    private func toggleAdvancedPrivacy() {
+        messageManager.setAdvancedChatPrivacy(!isAdvancedPrivacyOn,
+                                              forContact: conversation.participantPublicKey,
+                                              identityManager: identityManager,
+                                              meshManager: meshManager)
+    }
     /// 💓 __ALIVE_CHECK_IN_2026_11_04__ Observed, not read once: the peer's
     /// half of the check-in arrives on the receive path and has to appear here
     /// without this screen asking for it.
@@ -612,15 +627,22 @@ struct ChatView: View {
     /// __SHARED_NICKNAME_2026_09_22__ Le pseudo que ce contact a partage, s'il
     /// en a un. Distinct de l'alias: montre dans l'editeur d'alias comme indice.
     private var sharedNickname: String? {
-        SharedNickname.nickname(for: conversation.participantPublicKey,
-                                in: SharedNickname.decode(sharedNicknamesData))
+        SharedNickname.table(sharedNicknamesData).nickname(for: conversation.participantPublicKey)
     }
 
     /// Nom affiche: alias local > pseudo partage > adresse courte.
     private var currentAlias: String {
         SharedNickname.resolve(alias: contactAliases[conversation.participantPublicKey],
                                nickname: sharedNickname)
+            ?? MeshCoreInterop.threadTitle(forKey: conversation.participantPublicKey)
             ?? formatAddress(conversation.participantAddress)
+    }
+
+    /// __MESHCORE_INTEROP_2026_11_25__ A MeshCore person (`meshcore!`) or channel (`mcchan!`): plain
+    /// MeshCore text through the MeshCore radio, never OSHI end-to-end encryption.
+    private var isMeshCoreThread: Bool {
+        let key = conversation.participantPublicKey
+        return MeshCoreInterop.isContactKey(key) || MeshCoreInterop.isChannelKey(key)
     }
 
     /// Ce que l'editeur d'alias pre-remplit: l'alias REEL seulement. Pre-remplir
@@ -641,6 +663,23 @@ struct ChatView: View {
         LoRaNodeIdentityMap.isFallbackConversationKey(conversation.participantPublicKey)
     }
     
+    /// __MENU_SCROLL_RESET_2026_11_21__ Everything the "…" menu shows, as
+    /// plain values. The menu re-renders when THIS changes, and only then.
+    private var overflowMenuState: ChatOverflowMenu.MenuState {
+        let key = conversation.participantPublicKey
+        let links = ProfileLinksManager.shared
+        return ChatOverflowMenu.MenuState(
+            searchShown: showSearch,
+            sharingLinks: links.myLinks.hasAnyLink ? links.isSharingEnabled(for: key) : nil,
+            peerLinksHidden: links.getVisibleLinks(for: key)?.hasAnyLink == true
+                ? links.isLinksHiddenFor(conversationKey: key) : nil,
+            offlineOnly: offlineOnlyStore.isOfflineOnly(key),
+            advancedPrivacy: advancedPrivacyStore.isOn(key),
+            blocked: isContactBlocked,
+            darkChrome: chatScheme == .dark,
+            refresh: overflowMenuRefresh)
+    }
+
     private var isContactBlocked: Bool {
         blockedManager.isBlocked(conversation.participantPublicKey)
     }
@@ -664,6 +703,10 @@ struct ChatView: View {
     /// Conversation context for AI: last 5 human-readable messages (filtered, cleaned).
     /// Media JSON, base64 blobs and signal envelopes are stripped so the LLM sees natural language.
     private var conversationContextForAI: String? {
+        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ nothing from a protected chat
+        // reaches an AI feature: not smart replies, not the AI shortcuts, not
+        // the scheduled-message generator — they all read this one property.
+        guard AdvancedChatPrivacyPolicy.allowsAI(protected: isAdvancedPrivacyOn) else { return nil }
         // Was a 9-prefix copy of the catalog; a control payload it did not know
         // about went straight into the LLM prompt.
         let readableMessages = loadedMessages.filter { msg in
@@ -1076,6 +1119,10 @@ struct ChatView: View {
             // chain is already at the edge — `MessageBubble` carries the same
             // warning in its own header — so anything new here goes in beside the
             // other two modifiers, where each one is a single opaque type.
+            // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ Same reason it sits here: tells
+            // the media viewers, the gallery and the notice rows that this chat is
+            // protected, and covers the thread while the screen is captured.
+            .advancedChatPrivacy(isOn: isAdvancedPrivacyOn, toggle: toggleAdvancedPrivacy)
             .modifier(AliveCheckInSheetModifier(
                 isPresented: $showingAliveSheet,
                 peerName: currentAlias,
@@ -1555,6 +1602,10 @@ struct ChatView: View {
 
     private var chatViewWithNavigation: some View {
         mainContent
+            // __CHAT_CHROME_BLUR_2026_11_21__ the header is a frosted pane over
+            // the wallpaper (was the system's opaque bar). Inside the scheme
+            // override, so the frost takes the wallpaper's tone.
+            .chatTopBarBackdrop()
             .environment(\.colorScheme, chatScheme)
             // A `lora!` thread gets the title suffix instead of the normal
             // "🔒 E2E" claim nowhere else in this view makes anyway: this is
@@ -1563,10 +1614,9 @@ struct ChatView: View {
             // ordinary, verified OSHI conversation.
             .navigationTitle(isLoRaInteropThread
                 ? "\(currentAlias) · \("lora.interop.unverified".localized)"
-                : currentAlias)
+                : isMeshCoreThread ? "\(currentAlias) · MeshCore" : currentAlias)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(chatScheme, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
             .onChange(of: searchText) { _, _ in
                 handleSearchChange()
             }
@@ -2006,10 +2056,23 @@ struct ChatView: View {
                         ComposerDraftReader(draft: composerDraft) { text in
                             let commands = slashCommandSuggestions(for: text.wrappedValue)
                             if !commands.isEmpty && !isContactBlocked {
+                                // __BOTS_PHASE1_2026_11_24__ The same picker
+                                // everywhere (contract §4.4): tap sends a bot
+                                // command, the arrow inserts `/name `, and a
+                                // command that takes `<arg>` (or `/pay`) fills.
                                 SlashCommandBar(commands: commands,
-                                                tint: Theme.brand) { cmd in
+                                                tint: Theme.brand,
+                                                onInsert: { cmd in
                                     messageText = SlashCommands.completion(for: cmd)
-                                }
+                                },
+                                                onPick: { cmd in
+                                    if cmd.sendsOnPick {
+                                        messageText = cmd.command
+                                        sendMessage()
+                                    } else {
+                                        messageText = SlashCommands.completion(for: cmd)
+                                    }
+                                })
                                 .padding(.horizontal, 12)
                                 .padding(.bottom, 6)
                             }
@@ -2029,6 +2092,7 @@ struct ChatView: View {
                         // everything else, right before the composer it is warning
                         // about.
                         loRaInteropBanner
+                        meshCoreBanner
 
                         // ✅ Input with INSTANT visual feedback
                         ComposerDraftReader(draft: composerDraft) { text in
@@ -2039,6 +2103,7 @@ struct ChatView: View {
                                 recordingMode: $recordingMode,
                                 showRecordingHint: $showRecordingHint,
                                 handoffKey: handoffKey,
+                                textOnly: isMeshCoreThread,
                                 handoffToken: handoffToken,
                                 onComposerFocused: {
                                     // __KEYBOARD_LANDING_2026_11_16__ Only a reader who
@@ -2091,7 +2156,8 @@ struct ChatView: View {
                                     replyingToMessage = nil
                                     replyingToMessageId = nil
                                 },
-                                aiReplyContext: conversationContextForAI
+                                aiReplyContext: conversationContextForAI,
+                                aiAllowed: AdvancedChatPrivacyPolicy.allowsAI(protected: isAdvancedPrivacyOn)
                             )
                             // __SMART_REPLIES_COVER_2026_11_16__ The suggestion bar
                             // arrives a beat AFTER an incoming message and shrinks
@@ -3092,6 +3158,15 @@ struct ChatView: View {
         }
     }
 
+    /// __MESHCORE_INTEROP_2026_11_25__ What a MeshCore thread is, above the composer: who can read it, whether
+    /// the radio can send now, and the counter near the one-message limit (`MeshCoreThreadBanner`).
+    @ViewBuilder
+    private var meshCoreBanner: some View {
+        if isMeshCoreThread && !isContactBlocked {
+            MeshCoreThreadBanner(conversationKey: conversation.participantPublicKey, draft: composerDraft)
+        }
+    }
+
     // MARK: - Smart Replies Section
 
     /// Les commandes proposees pour le texte courant. Vide = pas de barre.
@@ -3109,6 +3184,11 @@ struct ChatView: View {
             SmartRepliesView(replies: nlpManager.smartReplies) { reply in
                 messageText = reply
             }
+            // __CHAT_CHROME_BLUR_2026_11_21__ on the same frost as the composer
+            // under it: its grey "Quick Replies" caption sat straight on the
+            // wallpaper and vanished on a dark one.
+            .padding(.top, 6)
+            .oledAwareBackground(.ultraThinMaterial)
             .transition(.move(edge: .bottom).combined(with: .opacity))
         }
     }
@@ -3165,10 +3245,27 @@ struct ChatView: View {
     /// supply.
     private var headerTitleButton: some View {
         Button {
-            showContactProfile = true
+            // A MeshCore person or channel has no OSHI profile to open.
+            if !isMeshCoreThread { showContactProfile = true }
         } label: {
             HStack(spacing: 8) {
                 contactHeaderAvatar
+                if isMeshCoreThread {
+                    // __MESHCORE_INTEROP_2026_11_25__ Name over "MeshCore", the antenna green while the radio
+                    // can send. No presence dot: a MeshCore user has no OSHI presence to show.
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(currentAlias)
+                            .font(.system(.headline, design: .default).weight(.bold))
+                            .foregroundColor(.primary)
+                            .lineLimit(1)
+                        HStack(spacing: 3) {
+                            Image(systemName: "dot.radiowaves.left.and.right")
+                            Text("MeshCore")
+                        }
+                        .font(.caption2)
+                        .foregroundColor(MeshCoreManager.shared.isTextReady ? .green : .secondary)
+                    }
+                } else {
                 Text(currentAlias)
                     .font(.system(.headline, design: .default).weight(.bold))
                     .foregroundColor(.primary)
@@ -3178,6 +3275,7 @@ struct ChatView: View {
                     .fill(isConnected ? Color.green : Color.gray)
                     .frame(width: 8, height: 8)
                     .accessibilityHidden(true)
+                }
                 // __MESH_ONLY_UX_2026_11_03__ In a mesh-only conversation, say
                 // so here and say whether the radio path to this person is
                 // alive. Until now the switch was invisible once set: the menu
@@ -3285,187 +3383,69 @@ struct ChatView: View {
         ToolbarItemGroup(placement: .navigationBarTrailing) {
                 // 📞 One tap to call — video first, then voice, closest to the
                 // thumb on the right like the platform's own apps.
-                headerCallButton(symbol: "video.fill", label: "chat.video_call".localized, video: true)
-                headerCallButton(symbol: "phone.fill", label: "chat.voice_call".localized, video: false)
+                // A MeshCore person or channel has no OSHI identity to call.
+                if !isMeshCoreThread {
+                    headerCallButton(symbol: "video.fill", label: "chat.video_call".localized, video: true)
+                    headerCallButton(symbol: "phone.fill", label: "chat.voice_call".localized, video: false)
+                }
 
-                Menu {
-                    Button {
-                        showCreateScheduledCall = true
-                    } label: {
-                        Label("chat.schedule_call".localized, systemImage: "calendar.badge.plus")
-                    }
-                    Button {
-                        withAnimation { showSearch.toggle(); if !showSearch { searchText = "" } }
-                    } label: {
-                        Label(showSearch ? "chat.close_search".localized : "chat.search".localized,
-                              systemImage: showSearch ? "xmark" : "magnifyingglass")
-                    }
-
-                    Divider()
-
-                    // 👤 Contact profile — picture (tap to enlarge), the public
-                    // key in full with a copy affordance, and the links they
-                    // shared. See ContactProfileView.swift.
-                    Button {
-                        showContactProfile = true
-                    } label: {
-                        Label("profile.contact_profile".localized, systemImage: "person.crop.circle")
-                    }
-
-                    Button {
-                        showingAliasEditor = true
-                    } label: {
-                        Label("chat.set_alias".localized, systemImage: "person.text.rectangle")
-                    }
-
-                    // 🔧 REMOVED: Manual contact photo setting
-                    // Contact's profile picture should come from THEM, not be set manually
-                    // This is WhatsApp behavior - you see the profile picture your contact chose
-
-                    // ✅ Wallpaper option (WhatsApp style)
-                    Button {
-                        showWallpaperPicker = true
-                    } label: {
-                        Label("wallpaper.title".localized, systemImage: "photo.artframe")
-                    }
-
-                    // 🔗 Profile Links sharing toggle
-                    if ProfileLinksManager.shared.myLinks.hasAnyLink {
-                        let isSharing = ProfileLinksManager.shared.isSharingEnabled(for: conversation.participantPublicKey)
-                        Button {
-                            let newValue = !isSharing
-                            ProfileLinksManager.shared.setSharingEnabled(newValue, for: conversation.participantPublicKey)
-                            let content = ProfileLinksManager.shared.createVisibilityMessage(visible: newValue)
-                            sendSystemMessage(content)
-                        } label: {
-                            Label(
-                                isSharing ? "profile_links.stop_sharing".localized : "profile_links.share_links".localized,
-                                systemImage: isSharing ? "link.circle.fill" : "link.badge.plus"
-                            )
-                        }
-                    }
-
-                    // 🔗 Hide/Show other's profile links
-                    if ProfileLinksManager.shared.getVisibleLinks(for: conversation.participantPublicKey)?.hasAnyLink == true {
-                        let isHidden = ProfileLinksManager.shared.isLinksHiddenFor(conversationKey: conversation.participantPublicKey)
-                        Button {
+        }
+        // __MENU_SCROLL_RESET_2026_11_21__ The "…" menu: see `ChatOverflowMenu`.
+        // Its own item, so the folded-Duo rail keeps one button per control.
+        ToolbarItem(placement: .navigationBarTrailing) {
+            HStack(spacing: 0) {
+                ChatOverflowMenu(
+                    state: overflowMenuState,
+                    actions: ChatOverflowMenu.Actions(
+                        scheduleCall: { showCreateScheduledCall = true },
+                        toggleSearch: {
+                            withAnimation { showSearch.toggle(); if !showSearch { searchText = "" } }
+                        },
+                        openProfile: { showContactProfile = true },
+                        editAlias: { showingAliasEditor = true },
+                        openWallpaper: { showWallpaperPicker = true },
+                        toggleLinkSharing: {
+                            let key = conversation.participantPublicKey
+                            let newValue = !ProfileLinksManager.shared.isSharingEnabled(for: key)
+                            ProfileLinksManager.shared.setSharingEnabled(newValue, for: key)
+                            sendSystemMessage(ProfileLinksManager.shared.createVisibilityMessage(visible: newValue))
+                            overflowMenuRefresh &+= 1
+                        },
+                        togglePeerLinksBar: {
                             ProfileLinksManager.shared.toggleLinksHidden(for: conversation.participantPublicKey)
-                        } label: {
-                            Label(
-                                isHidden ? "profile_links.show_bar".localized : "profile_links.hide_bar".localized,
-                                systemImage: isHidden ? "eye" : "eye.slash"
-                            )
-                        }
-                    }
-                    
-                    Divider()
-
-                    // Per-chat media gallery (P2 #20)
-                    Button {
-                        showMediaGallery = true
-                    } label: {
-                        Label("media_gallery.title".localized, systemImage: "photo.on.rectangle.angled")
-                    }
-
-                    // Copy this contact's public key (for forwarding into group invites etc.)
-                    Button {
-                        UIPasteboard.general.string = conversation.participantPublicKey
-                    } label: {
-                        Label("chat.copy_public_key".localized, systemImage: "doc.on.doc")
-                    }
-
-                    Divider()
-
-                    // __OFFLINE_ONLY_CONVERSATION_2026_10_23__ Take THIS
-                    // conversation off the relay.
-                    //
-                    // A toggle rather than a destructive-looking button: it is
-                    // reversible, and both directions matter — a conversation
-                    // that stayed restricted after someone meant to lift it
-                    // would strand messages with no explanation.
-                    //
-                    // The subtitle counts the peers who confirmed, and says so
-                    // honestly. Nothing can make another phone refuse the
-                    // internet; what this buys is that every peer which
-                    // understands the request stops too, and that the number is
-                    // visible rather than assumed.
-                    Button {
-                        let now = !offlineOnlyStore.isOfflineOnly(conversation.participantPublicKey)
-                        messageManager.setOfflineOnly(now,
-                                                      forContact: conversation.participantPublicKey,
-                                                      identityManager: identityManager,
-                                                      meshManager: meshManager)
-                    } label: {
-                        Label(offlineOnlyStore.isOfflineOnly(conversation.participantPublicKey)
-                                ? "offline_only.menu.off".localized
-                                : "offline_only.menu.on".localized,
-                              systemImage: offlineOnlyStore.isOfflineOnly(conversation.participantPublicKey)
-                                ? "lock.open" : "lock")
-                    }
-
-                    // 💓 __ALIVE_CHECK_IN_2026_11_04__ The only way in while
-                    // nothing is configured, and the way back to the settings
-                    // afterwards.
-                    Button {
-                        showingAliveSheet = true
-                    } label: {
-                        Label("alive.title".localized, systemImage: "heart.text.square")
-                    }
-
-                    Divider()
-
-                    // Reset Session button for encryption resync
-                    Button {
-                        showingResetSessionAlert = true
-                    } label: {
-                        Label("chat.reset_session".localized, systemImage: "arrow.triangle.2.circlepath")
-                    }
-                    
-                    Divider()
-                    
-                    // 🚩 Report (App Store guideline 1.2) — always available,
-                    // including for an already-blocked contact.
-                    Button {
-                        showingReportSheet = true
-                    } label: {
-                        Label("report.contact_title".localized, systemImage: "flag.fill")
-                    }
-
-                    // Block/Unblock button
-                    if isContactBlocked {
-                        Button {
-                            showingUnblockAlert = true
-                        } label: {
-                            Label("chat.unblock_contact".localized, systemImage: "hand.raised.slash")
-                        }
-                    } else {
-                        Button {
-                            showingBlockSheet = true
-                        } label: {
-                            Label("chat.block_contact".localized, systemImage: "hand.raised.fill")
-                        }
-                    }
-
-                    Divider()
-                    
-                    Button(role: .destructive) {
-                        let publicKey = conversation.participantPublicKey
-                        messageManager.deleteConversation(with: publicKey)
-                        // 🔧 FIX R20: Clean up orphaned contact alias on conversation deletion
-                        var aliases = contactAliases
-                        if aliases.removeValue(forKey: publicKey) != nil {
-                            if let data = try? JSONEncoder().encode(aliases) {
-                                contactAliasesData = data
-                                OshiLog.messaging.info("🧹 Cleaned up alias for deleted conversation: \(publicKey.prefix(12))...")
+                            overflowMenuRefresh &+= 1
+                        },
+                        openMediaGallery: { showMediaGallery = true },
+                        copyPublicKey: { UIPasteboard.general.string = conversation.participantPublicKey },
+                        toggleOfflineOnly: {
+                            let now = !offlineOnlyStore.isOfflineOnly(conversation.participantPublicKey)
+                            messageManager.setOfflineOnly(now,
+                                                          forContact: conversation.participantPublicKey,
+                                                          identityManager: identityManager,
+                                                          meshManager: meshManager)
+                        },
+                        toggleAdvancedPrivacy: { toggleAdvancedPrivacy() },
+                        openAlive: { showingAliveSheet = true },
+                        resetSession: { showingResetSessionAlert = true },
+                        report: { showingReportSheet = true },
+                        unblock: { showingUnblockAlert = true },
+                        block: { showingBlockSheet = true },
+                        deleteConversation: {
+                            let publicKey = conversation.participantPublicKey
+                            messageManager.deleteConversation(with: publicKey)
+                            // 🔧 FIX R20: Clean up orphaned contact alias on conversation deletion
+                            var aliases = contactAliases
+                            if aliases.removeValue(forKey: publicKey) != nil {
+                                if let data = try? JSONEncoder().encode(aliases) {
+                                    contactAliasesData = data
+                                    OshiLog.messaging.info("🧹 Cleaned up alias for deleted conversation: \(publicKey.prefix(12))...")
+                                }
                             }
                         }
-                    } label: {
-                        Label("alert.delete_conversation".localized, systemImage: "trash")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .foregroundColor(chatScheme == .dark ? .white : .black)
-                }
+                    )
+                )
+                .equatable()
+            }
         }
     }
     
@@ -3516,7 +3496,9 @@ struct ChatView: View {
     private func triggerSmartRepliesIfNeeded() {
         // __SUGGESTIONS_ARE_A_CHOICE_2026_10_27__ Switched off means the model
         // is not run at all, and anything already computed is dropped.
-        guard smartRepliesEnabled else {
+        guard smartRepliesEnabled,
+              // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ the model never reads a protected chat.
+              AdvancedChatPrivacyPolicy.allowsAI(protected: isAdvancedPrivacyOn) else {
             if !nlpManager.smartReplies.isEmpty { nlpManager.smartReplies = [] }
             return
         }
@@ -3621,6 +3603,7 @@ struct ChatView: View {
         // welcome thread, a LoRa channel or a bare radio node.
         let key = conversation.participantPublicKey
         let hintable = !isWelcomeConversation() && !LoRaChannelThread.isChannelKey(key) && !key.hasPrefix("lora!")
+            && !MeshCoreInterop.isInteropKey(key)
         let messageContent = RestrictedNetworkHint.outgoing(
             text: messageText, replyTo: replyingToMessage,
             coverOn: hintable && CoverTransport.mode != nil,
@@ -4386,6 +4369,9 @@ struct ProfessionalAudioInputView: View {
     /// __FOLDABLE_LAYOUT_2026_11_16__ The thread's `ThreadHandoff` key: the
     /// keyboard state is mirrored there, and a fold / unfold asks for it back.
     var handoffKey: String? = nil
+    /// __MESHCORE_INTEROP_2026_11_25__ A radio-text-only thread (MeshCore): no attach, capture or voice
+    /// buttons, which could only end in "photos and files cannot travel over LoRa".
+    var textOnly: Bool = false
     /// This chat view's hand-off identity: a focus request names the view.
     var handoffToken: UUID? = nil
     /// Called when the field gains focus. The chat scrolls to the bottom.
@@ -4408,6 +4394,9 @@ struct ProfessionalAudioInputView: View {
 
     // AI context: last received message for tone/improvement
     var aiReplyContext: String? = nil
+    /// 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ false in a protected chat: the AI
+    /// assistant button is not offered at all.
+    var aiAllowed: Bool = true
 
     @Environment(\.colorScheme) var colorScheme
     @State private var isPressing = false
@@ -4418,10 +4407,6 @@ struct ProfessionalAudioInputView: View {
     /// already hold focus — so the button still read as dead. This says it.
     @State private var showTypeHint = false
 
-    private var inputBackground: Color {
-        colorScheme == .dark ? Color(.systemGray6) : Color(.systemGray5)
-    }
-    
     private var isEmpty: Bool {
         text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
@@ -4523,186 +4508,178 @@ struct ProfessionalAudioInputView: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
                 }
                 
-                HStack(spacing: 8) {
-                    // __ATTACH_PANEL_2027_2026_11_17__ "+" opens the attachment
-                    // panel: recent photos with multi-select and a caption, and
-                    // the option row (Gallery, Camera, File, GIF, Location,
-                    // Contact, Poll, Check-In, Video note, Cashu, Thinking of
-                    // You) — the same actions the system menu listed here.
-                    Button {
-                        onAttachTap()
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.scaled(22, weight: .medium))
-                            .foregroundColor(appBrandColor)
+                HStack(alignment: .bottom, spacing: 8) {
+                    // __COMPOSER_PILL_2026_11_23__ Google-app style (user request
+                    // 23/11, Android 99c1844d): "+", the field and the capture
+                    // shortcuts share ONE pill; the shortcuts still fold away while
+                    // there is text (`ComposerChrome`).
+                    ComposerPill(focused: isComposerFocused, tint: appBrandColor) {
+                        if !textOnly {
+                        Button {
+                            onAttachTap()
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.scaled(22, weight: .medium))
+                                .foregroundColor(appBrandColor)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .frame(width: 40, height: 44)
+                        .accessibilityLabel(Text("attach.button".localized))
+                        .accessibilityIdentifier("composer.attach")
+                        .disabled(isRecordingAudio)
+                        } else {
+                            Color.clear.frame(width: 8, height: 44)
+                        }
+                
+                    TextField("messages.type_message".localized, text: $text, axis: .vertical)
+                        .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
+                        .accessibilityIdentifier("chat.composer")
+                        .textFieldStyle(.plain)
+                        // __COMPOSER_PILL_2026_11_23__ bare field: the pill around it
+                        // carries the fill, the outline (brand while focused) and the
+                        // glass edge.
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 10)
+                        .lineLimit(ComposerChrome.lineLimit(expanded: !showsCaptureButtons))
+                        .frame(minHeight: 44)
+                        .layoutPriority(1)
+                        .disabled(isRecordingAudio)
+                        // 🔧 FIX (2026-08-09, "the newest message is hidden once the
+                        // keyboard comes up"): `ChatBottomAnchored` applies
+                        // `.defaultScrollAnchor(.bottom, for: .sizeChanges)`, which
+                        // WOULD hold the bottom while the keyboard shrinks the
+                        // scroll view — but that anchor disengages as soon as the
+                        // user has scrolled by hand, which they almost always have
+                        // by the time they tap the field. The list then keeps its
+                        // old offset and the last messages sit behind the keyboard.
+                        //
+                        // Tapping the field is an explicit intent to write, so
+                        // returning to the newest message is what was meant.
+                        .focused($isComposerFocused)
+                        .onChange(of: isComposerFocused) { _, focused in
+                            if let handoffKey { ThreadHandoff.shared.setComposerFocused(handoffKey, focused) }
+                            // Only on GAINING focus. Firing on dismissal too would
+                            // yank a reader back to the bottom every time they close
+                            // the keyboard to scroll up and re-read something.
+                            guard focused else { return }
+                            onComposerFocused?()
+                        }
+                        .onChange(of: text) { _, newValue in
+                            // ⌨️ Notify typing status
+                            let isTyping = !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                            onTypingChanged?(isTyping)
+                        }
+                        // __FOCUS_COMPOSER_2026_08_13__ "Start chat" on a contact card
+                        // that points at the conversation already on screen has nowhere
+                        // to navigate. Rather than look like a dead button, it asks for
+                        // the composer here — the answer to "start a chat" when you are
+                        // already in it is "write your message".
+                        .onReceive(NotificationCenter.default.publisher(
+                            for: ThreadHandoff.restoreComposerFocus)) { note in
+                            // Keyboard was up in the view this one replaced.
+                            guard ThreadHandoff.isComposerFocusRequest(note, key: handoffKey, token: handoffToken) else { return }
+                            isComposerFocused = true
+                        }
+                        .onReceive(NotificationCenter.default.publisher(
+                            for: NSNotification.Name("FocusChatComposer"))) { _ in
+                            isComposerFocused = true
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                showTypeHint = true
+                            }
+                            // Long enough to be read, short enough not to sit on the
+                            // thread. Re-triggering restarts it because the flag is
+                            // simply set true again before this fires.
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                                withAnimation(.easeOut(duration: 0.25)) { showTypeHint = false }
+                            }
+                        }
+                
+                    // __TEXT_FORMATTING_2026_11_24__ Bold / Underline, while writing.
+                    if isComposerFocused {
+                        ComposerFormatMenu(text: $text, tint: appBrandColor) {
+                            isComposerFocused = true
+                        }
+                        .disabled(isRecordingAudio)
+                        .transition(.opacity)
+                    }
+
+                    // AI assistant button (only when text is present)
+                    if !isEmpty && aiAllowed {
+                        Button {
+                            showAIShortcuts = true
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [appBrandColor, Color(red: 0.94, green: 0.28, blue: 0.56)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .frame(width: 32, height: 24)
+                                Text("AI")
+                                    .font(.scaled(12, weight: .black, design: .rounded))
+                                    .foregroundColor(.white)
+                            }
+                            // Same 44 pt row as "+", so it sits centred on the
+                            // pill's last line instead of on its bottom edge.
                             .frame(width: 44, height: 44)
                             .contentShape(Rectangle())
+                        }
+                        .transition(.scale.combined(with: .opacity))
                     }
-                    .frame(width: 36, height: 44)
-                    .accessibilityLabel(Text("attach.button".localized))
-                    .accessibilityIdentifier("composer.attach")
-                    .disabled(isRecordingAudio)
-                
-                if showsCaptureButtons {
-                    // ✅ Camera button - Opens camera directly (WhatsApp style)
-                    Button {
-                        onCameraTap()
-                    } label: {
-                        Image(systemName: "camera.fill")
-                            .font(.scaled(20))
-                            .foregroundColor(appBrandColor)
-                            .frame(width: 36, height: 44)
-                            .contentShape(Rectangle())
-                    }
-                    .accessibilityLabel(Text("camera_permission".localized))
-                    .disabled(isRecordingAudio)
-                    .transition(captureButtonTransition)
 
-                    // __VIDEO_NOTE_2026_09_24__ Opens the ROUND video recorder
-                    // (15 s, OSHI ring) — no longer the full-screen camera.
-                    Button {
-                        onVideoTap()
-                    } label: {
-                        Image(systemName: "video.circle.fill")
-                            .font(.scaled(24))
-                            .foregroundColor(videoNoteAvailable ? appBrandColor : .gray)
-                            .frame(width: 36, height: 44)
-                            .contentShape(Rectangle())
+                    if showsCaptureButtons && !textOnly {
+                        // ✅ Camera button - Opens camera directly (WhatsApp style)
+                        Button {
+                            onCameraTap()
+                        } label: {
+                            Image(systemName: "camera.fill")
+                                .font(.scaled(20))
+                                .foregroundColor(appBrandColor)
+                                .frame(width: 36, height: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .accessibilityLabel(Text("camera_permission".localized))
+                        .disabled(isRecordingAudio)
+                        .transition(captureButtonTransition)
+
+                        // __VIDEO_NOTE_2026_09_24__ Opens the ROUND video recorder
+                        // (15 s, OSHI ring) — no longer the full-screen camera.
+                        Button {
+                            onVideoTap()
+                        } label: {
+                            Image(systemName: "video.circle.fill")
+                                .font(.scaled(24))
+                                .foregroundColor(videoNoteAvailable ? appBrandColor : .gray)
+                                .frame(width: 36, height: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .accessibilityLabel(Text("videonote.button".localized))
+                        .help(videoNoteAvailable ? "videonote.button".localized : "videonote.no_camera".localized)
+                        .disabled(isRecordingAudio || !videoNoteAvailable)
+                        .transition(captureButtonTransition)
                     }
-                    .accessibilityLabel(Text("videonote.button".localized))
-                    .help(videoNoteAvailable ? "videonote.button".localized : "videonote.no_camera".localized)
-                    .disabled(isRecordingAudio || !videoNoteAvailable)
-                    .transition(captureButtonTransition)
-                }
                 
-                TextField("messages.type_message".localized, text: $text, axis: .vertical)
-                    .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
-                    .accessibilityIdentifier("chat.composer")
-                    .textFieldStyle(.plain)
-                    .padding(.horizontal, showsCaptureButtons ? 10 : 14)
-                    .padding(.vertical, 10)
-                    .background(inputBackground)
-                    .cornerRadius(20)
-                    .oledGlassEdge(RoundedRectangle(cornerRadius: 20, style: .continuous))  // __OLED_GLASS_2026_11_16__
-                    // The "grows when you type" cue: a brand rim fades in around the
-                    // field once it owns the row.
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .stroke(LinearGradient(colors: [appBrandColor.opacity(0.75),
-                                                            Color(red: 0.94, green: 0.28, blue: 0.56).opacity(0.75)],
-                                                   startPoint: .leading, endPoint: .trailing),
-                                    lineWidth: 1.25)
-                            .opacity(showsCaptureButtons ? 0 : 1)
-                    )
-                    .lineLimit(ComposerChrome.lineLimit(expanded: !showsCaptureButtons))
-                    .frame(minHeight: 44)
+                    }
                     .layoutPriority(1)
-                    .disabled(isRecordingAudio)
-                    // 🔧 FIX (2026-08-09, "the newest message is hidden once the
-                    // keyboard comes up"): `ChatBottomAnchored` applies
-                    // `.defaultScrollAnchor(.bottom, for: .sizeChanges)`, which
-                    // WOULD hold the bottom while the keyboard shrinks the
-                    // scroll view — but that anchor disengages as soon as the
-                    // user has scrolled by hand, which they almost always have
-                    // by the time they tap the field. The list then keeps its
-                    // old offset and the last messages sit behind the keyboard.
-                    //
-                    // Tapping the field is an explicit intent to write, so
-                    // returning to the newest message is what was meant.
-                    .focused($isComposerFocused)
-                    .onChange(of: isComposerFocused) { _, focused in
-                        if let handoffKey { ThreadHandoff.shared.setComposerFocused(handoffKey, focused) }
-                        // Only on GAINING focus. Firing on dismissal too would
-                        // yank a reader back to the bottom every time they close
-                        // the keyboard to scroll up and re-read something.
-                        guard focused else { return }
-                        onComposerFocused?()
-                    }
-                    .onChange(of: text) { _, newValue in
-                        // ⌨️ Notify typing status
-                        let isTyping = !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                        onTypingChanged?(isTyping)
-                    }
-                    // __FOCUS_COMPOSER_2026_08_13__ "Start chat" on a contact card
-                    // that points at the conversation already on screen has nowhere
-                    // to navigate. Rather than look like a dead button, it asks for
-                    // the composer here — the answer to "start a chat" when you are
-                    // already in it is "write your message".
-                    .onReceive(NotificationCenter.default.publisher(
-                        for: ThreadHandoff.restoreComposerFocus)) { note in
-                        // Keyboard was up in the view this one replaced.
-                        guard ThreadHandoff.isComposerFocusRequest(note, key: handoffKey, token: handoffToken) else { return }
-                        isComposerFocused = true
-                    }
-                    .onReceive(NotificationCenter.default.publisher(
-                        for: NSNotification.Name("FocusChatComposer"))) { _ in
-                        isComposerFocused = true
-                        withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
-                            showTypeHint = true
-                        }
-                        // Long enough to be read, short enough not to sit on the
-                        // thread. Re-triggering restarts it because the flag is
-                        // simply set true again before this fires.
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                            withAnimation(.easeOut(duration: 0.25)) { showTypeHint = false }
-                        }
-                    }
-                
-                // AI assistant button (only when text is present)
-                if !isEmpty {
-                    Button {
-                        showAIShortcuts = true
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(
-                                    LinearGradient(
-                                        colors: [appBrandColor, Color(red: 0.94, green: 0.28, blue: 0.56)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .frame(width: 32, height: 24)
-                            Text("AI")
-                                .font(.scaled(12, weight: .black, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-                    }
-                    .transition(.scale.combined(with: .opacity))
-                }
 
+                // __COMPOSER_PILL_2026_11_23__ mic / send: a separate circle of
+                // the pill's height beside it.
                 if !isEmpty {
                     Button {
                         // Crisp send haptic — the signature "message sent" moment.
                         UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         onSend()
                     } label: {
-                        ZStack {
-                            // The send button is the screen's hero CTA: an iridescent
-                            // brand gradient (violet→pink, matching the AI accent) with
-                            // a soft neon halo, so it reads as the app's "futuristic"
-                            // signature while everything around it stays quiet.
-                            Circle()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [appBrandColor, Color(red: 0.94, green: 0.28, blue: 0.56)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .frame(width: 44, height: 44)
-                                .neonGlow(appBrandColor, radius: 11, opacity: 0.6)
-
-                            Image(systemName: "arrow.up")
-                                .font(.scaled(20, weight: .bold))
-                                .foregroundColor(.white)
-                        }
+                        ComposerRoundButtonFace(systemImage: "arrow.up", primary: true, tint: appBrandColor)
                     }
                     .buttonStyle(PressScaleButtonStyle())
-                    .frame(width: 44, height: 44)
                     .accessibilityLabel(Text("general.send".localized))
                     .transition(.scale.combined(with: .opacity))
-                } else {
+                } else if !textOnly {
                     audioRecordButton
                         .transition(.scale.combined(with: .opacity))
                 }
@@ -4718,7 +4695,7 @@ struct ProfessionalAudioInputView: View {
         // 02/11 (N12); iOS never got the composer half.
         //
         // `.ultraThinMaterial` lets the wallpaper run under the bar, softened.
-        // The TEXT FIELD keeps its own opaque `inputBackground`, so the blur
+        // The composer PILL keeps its own opaque fill, so the blur
         // stays strictly behind it — "sauf dans la case de texte", which is the
         // distinction he actually drew.
         // __OLED_BLACK_2026_11_16__ solid black under OLED black.
@@ -4737,27 +4714,23 @@ struct ProfessionalAudioInputView: View {
     }
     
     private var audioRecordButton: some View {
-        ZStack {
+        // __COMPOSER_PILL_2026_11_23__ the Google bar's voice button: a quiet
+        // tonal circle beside the pill; red with a stop glyph while recording.
+        ComposerRoundButtonFace(systemImage: isRecordingAudio ? "stop.fill" : "mic.fill",
+                                primary: false,
+                                recording: isRecordingAudio,
+                                tint: appBrandColor)
+            .animation(.easeInOut(duration: 0.15), value: isRecordingAudio)
+            .scaleEffect(isPressing ? 1.1 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressing)
             // Expanding pulse ring while recording — radiates "live" energy.
-            if isRecordingAudio {
-                PulsingRing(color: .red)
-                    .frame(width: 44, height: 44)
+            .background {
+                if isRecordingAudio { PulsingRing(color: .red) }
             }
-
-            Circle()
-                .fill(isRecordingAudio ? Color.red : appBrandColor)
-                .frame(width: 44, height: 44)
-                .scaleEffect(isPressing ? 1.1 : 1.0)
-                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressing)
-
-            Image(systemName: isRecordingAudio ? "stop.circle.fill" : "mic.fill")
-                .font(.scaled(22))
-                .foregroundColor(.white)
-                .contentTransition(.opacity)
-                .animation(.easeInOut(duration: 0.15), value: isRecordingAudio)
-        }
-        .frame(width: 44, height: 44)
         .contentShape(Circle())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(isRecordingAudio ? "audio.recording".localized : "audio.hold_to_record".localized))
+        .accessibilityAddTraits(.isButton)
         .allowsHitTesting(true)  // ✅ Explicitly enable hit testing for iPad
         .onTapGesture {
             if !isRecordingAudio {
@@ -5497,6 +5470,11 @@ struct MessageBubble: View {
                 // radio too, but unauthenticated, and the status line is read
                 // by people deciding whether to trust what they are looking at.
                 case .loraPlaintext:
+                    // __MESHCORE_INTEROP_2026_11_25__ The thread's note says who can read it; the bubble only
+                    // names the network, without the alarm a triangle on every line would sound.
+                    if message.encryptedContent.signature == MeshCoreInterop.signature {
+                        return "📡 " + "meshcore.bubble".localized
+                    }
                     return "⚠️ LoRa · " + "delivery_lora_unverified".localized
                 case .ipfs:
                     return "☁️ " + "chat.delivery_cloud".localized
@@ -5631,7 +5609,7 @@ struct MessageBubble: View {
                 HStack(spacing: 2) {
                     Image(systemName: "exclamationmark.circle.fill")
                         .font(.scaled(10))
-                    Text("message.tap_to_retry".localized)
+                    Text(failedRetryText)
                         .font(.caption2)
                 }
                 .foregroundColor(.red)
@@ -5640,9 +5618,26 @@ struct MessageBubble: View {
         }
     }
 
+    /// __MESHCORE_INTEROP_2026_11_25__ A MeshCore DM that went unanswered says "out of range?".
+    private var failedRetryText: String {
+        guard message.encryptedContent.signature == MeshCoreInterop.signature else {
+            return "message.tap_to_retry".localized
+        }
+        return MeshCoreUI.failedTextKey(recipientKey: message.recipientPublicKey,
+                                        radioReady: MeshCoreManager.shared.isTextReady).localized
+    }
+
     // 📱 Retry sending a failed message
     private func retryMessage() {
         OshiLog.messaging.info("📱 Retrying failed message: \(message.id)")
+
+        // __MESHCORE_INTEROP_2026_11_25__ A MeshCore text goes back to the radio as the SAME row: never deleted
+        // and re-sent, which lost the text whenever the radio was away at the moment of the tap.
+        if message.encryptedContent.signature == MeshCoreInterop.signature {
+            let outcome = messageManager.retryMeshCoreText(messageId: message.id)
+            UINotificationFeedbackGenerator().notificationOccurred(outcome.didSend ? .success : .error)
+            return
+        }
 
         let contentToSend = decryptedText ?? message.plaintextContent ?? ""
         let hasMedia = message.mediaAttachment != nil || message.originalMediaData != nil
@@ -5782,6 +5777,17 @@ struct MessageBubble: View {
             return AnyView(EmptyView())
         }
         
+        // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ "X turned on advanced chat
+        // privacy…" — a centred notice with "Learn more", never a bubble.
+        if let change = AdvancedPrivacyChange.fromMessageString(textToCheck) {
+            return AnyView(AdvancedPrivacyNoticeRow(
+                change: change,
+                actorName: isFromCurrentUser ? nil : (contactName ?? String(message.senderPublicKey.prefix(10))),
+                timestamp: message.timestamp))
+        } else if OSHIControlPayload.isQuietNotice(textToCheck) {
+            return AnyView(EmptyView())   // unreadable body: never print the raw sentinel
+        }
+
         // 🔧 Display profile/wallpaper updates as centered WhatsApp-style bubbles
         if isSystemInfoMessage {
             return AnyView(
@@ -6230,9 +6236,12 @@ struct MessageBubble: View {
                                        alignment: isFromCurrentUser ? .trailing : .leading)
                         }
                     }
-                    .onAppear {
+                    // __GROUP_OPEN_HITCH_2026_11_22__ `.task` so the scan runs
+                    // off the main thread (LinkDetection), not in the open's layout.
+                    .task(id: text) {
                         // Detect URL when message appears (for already-decrypted messages)
-                        if detectedURL == nil, let url = text.detectFirstURL() {
+                        if detectedURL == nil, let url = await LinkDetection.firstURLAsync(in: text),
+                           detectedURL == nil {
                             OshiLog.messaging.info("🔗 MessageBubble.onAppear: URL detected: \(url)")
                             detectedURL = url
                             // __LEAK_FIX_2026_09_25__ network only for our own links
@@ -6330,7 +6339,8 @@ struct MessageBubble: View {
                            message.deliveryStatus == .sent || message.deliveryStatus == .delivered {
                             DeliveryBadgeMinimal(
                                 method: method,
-                                isOutgoing: isFromCurrentUser
+                                isOutgoing: isFromCurrentUser,
+                                meshCore: message.encryptedContent.signature == MeshCoreInterop.signature
                             )
                         }
 
@@ -7881,6 +7891,241 @@ struct CallSummaryBubble: View {
     /// output identical.
     private func formatTime(_ date: Date) -> String {
         return OshiRowFormatters.string(date, dateStyle: .none, timeStyle: .short)
+    }
+}
+
+
+
+// MARK: - Conversation "…" menu  __MENU_SCROLL_RESET_2026_11_21__
+//
+// « sur les 3 points dans une discussion iOS le menu lorsqu'on baisse la liste
+// semble remonter tout seul après quelques secondes. »
+//
+// Cause, measured (UIKit spy on the menu's list, seeded 1:1 thread, iOS 26.2
+// simulator): the menu was a SwiftUI `Menu` in the chat toolbar. ChatView
+// re-renders about twice a second in a live thread (it observes MessageManager,
+// the mesh manager, presence, peer versions…), and each pass let SwiftUI's
+// `UpdateContextMenuInteraction` call `updateVisibleMenuWithBlock:` on the OPEN
+// menu. UIKit answers that by swapping the menu's list view for a new one, at
+// scroll offset 0: the list "goes back up by itself". Only a menu tall enough
+// to scroll shows it, i.e. this one (16 rows) and the group one at large text.
+//
+// Fix, two layers:
+//  1. the menu is its own view compared by value (`MenuState`, `.equatable()`),
+//     so a chat re-render no longer re-evaluates it at all;
+//  2. the UIMenu itself is built and owned in UIKit (`StableMenuButton`) and
+//     replaced only when what it shows changes. Layer 1 alone fixed the group
+//     menu but not this one: SwiftUI still refreshed the open UIMenu on graph
+//     updates without re-running the menu's body.
+// Regression test: OSHIUITests/ChatMenuScrollUITests.
+struct ChatOverflowMenu: View, Equatable {
+    struct MenuState: Equatable {
+        var searchShown: Bool
+        /// nil: I have no links to share, so no row.
+        var sharingLinks: Bool?
+        /// nil: they shared no links, so no row.
+        var peerLinksHidden: Bool?
+        var offlineOnly: Bool
+        /// 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__
+        var advancedPrivacy: Bool = false
+        var blocked: Bool
+        var darkChrome: Bool
+        var refresh: Int = 0
+    }
+
+    struct Actions {
+        var scheduleCall: () -> Void
+        var toggleSearch: () -> Void
+        var openProfile: () -> Void
+        var editAlias: () -> Void
+        var openWallpaper: () -> Void
+        var toggleLinkSharing: () -> Void
+        var togglePeerLinksBar: () -> Void
+        var openMediaGallery: () -> Void
+        var copyPublicKey: () -> Void
+        var toggleOfflineOnly: () -> Void
+        var toggleAdvancedPrivacy: () -> Void
+        var openAlive: () -> Void
+        var resetSession: () -> Void
+        var report: () -> Void
+        var unblock: () -> Void
+        var block: () -> Void
+        var deleteConversation: () -> Void
+    }
+
+    let state: MenuState
+    let actions: Actions
+
+    static func == (lhs: ChatOverflowMenu, rhs: ChatOverflowMenu) -> Bool {
+        lhs.state == rhs.state
+    }
+
+    /// What the menu shows, as values: the identity of the UIMenu.
+    var sections: [[OverflowMenuItem]] {
+        var profile: [OverflowMenuItem] = [
+            .init(id: "profile", title: "profile.contact_profile".localized, symbol: "person.crop.circle"),
+            .init(id: "alias", title: "chat.set_alias".localized, symbol: "person.text.rectangle"),
+            // ✅ Wallpaper (WhatsApp style)
+            .init(id: "wallpaper", title: "wallpaper.title".localized, symbol: "photo.artframe"),
+        ]
+        // 🔗 Profile Links sharing toggle
+        if let sharing = state.sharingLinks {
+            profile.append(.init(id: "links",
+                                 title: sharing ? "profile_links.stop_sharing".localized : "profile_links.share_links".localized,
+                                 symbol: sharing ? "link.circle.fill" : "link.badge.plus"))
+        }
+        // 🔗 Hide/Show other's profile links
+        if let hidden = state.peerLinksHidden {
+            profile.append(.init(id: "peerLinks",
+                                 title: hidden ? "profile_links.show_bar".localized : "profile_links.hide_bar".localized,
+                                 symbol: hidden ? "eye" : "eye.slash"))
+        }
+        return [
+            [.init(id: "schedule", title: "chat.schedule_call".localized, symbol: "calendar.badge.plus"),
+             .init(id: "search",
+                   title: state.searchShown ? "chat.close_search".localized : "chat.search".localized,
+                   symbol: state.searchShown ? "xmark" : "magnifyingglass")],
+            profile,
+            // Per-chat media gallery (P2 #20); the key, for group invites etc.
+            [.init(id: "media", title: "media_gallery.title".localized, symbol: "photo.on.rectangle.angled"),
+             .init(id: "copyKey", title: "chat.copy_public_key".localized, symbol: "doc.on.doc")],
+            // __OFFLINE_ONLY_CONVERSATION_2026_10_23__ a reversible toggle, and
+            // 💓 __ALIVE_CHECK_IN_2026_11_04__ the only way in to the check-in.
+            [.init(id: "offline",
+                   title: state.offlineOnly ? "offline_only.menu.off".localized : "offline_only.menu.on".localized,
+                   symbol: state.offlineOnly ? "lock.open" : "lock"),
+             .init(id: "alive", title: "alive.title".localized, symbol: "heart.text.square"),
+             // 🛡 __ADVANCED_CHAT_PRIVACY_2026_11_26__ a toggle (checkmark) with
+             // the one-line explanation under it, as in WhatsApp.
+             AdvancedChatPrivacyMenu.item(isOn: state.advancedPrivacy)],
+            // Reset Session button for encryption resync
+            [.init(id: "reset", title: "chat.reset_session".localized, symbol: "arrow.triangle.2.circlepath")],
+            // 🚩 Report (App Store guideline 1.2) — always available, including
+            // for an already-blocked contact.
+            [.init(id: "report", title: "report.contact_title".localized, symbol: "flag.fill"),
+             state.blocked
+                ? .init(id: "unblock", title: "chat.unblock_contact".localized, symbol: "hand.raised.slash")
+                : .init(id: "block", title: "chat.block_contact".localized, symbol: "hand.raised.fill")],
+            [.init(id: "delete", title: "alert.delete_conversation".localized, symbol: "trash", destructive: true)],
+        ]
+    }
+
+    private func perform(_ id: String) {
+        switch id {
+        case "schedule": actions.scheduleCall()
+        case "search": actions.toggleSearch()
+        case "profile": actions.openProfile()
+        case "alias": actions.editAlias()
+        case "wallpaper": actions.openWallpaper()
+        case "links": actions.toggleLinkSharing()
+        case "peerLinks": actions.togglePeerLinksBar()
+        case "media": actions.openMediaGallery()
+        case "copyKey": actions.copyPublicKey()
+        case "offline": actions.toggleOfflineOnly()
+        case AdvancedChatPrivacyMenu.itemId: actions.toggleAdvancedPrivacy()
+        case "alive": actions.openAlive()
+        case "reset": actions.resetSession()
+        case "report": actions.report()
+        case "unblock": actions.unblock()
+        case "block": actions.block()
+        case "delete": actions.deleteConversation()
+        default: break
+        }
+    }
+
+    var body: some View {
+        StableMenuButton(sections: sections,
+                         tint: state.darkChrome ? .white : .black,
+                         identifier: "chat_overflow_menu",
+                         onSelect: perform)
+    }
+}
+
+// MARK: - A menu SwiftUI cannot replace while it is open
+
+/// One row of an overflow menu, as a value.
+struct OverflowMenuItem: Equatable {
+    let id: String
+    let title: String
+    let symbol: String
+    var destructive = false
+    /// __ADVANCED_CHAT_PRIVACY_2026_11_26__ Second line under the title.
+    var subtitle: String? = nil
+    /// nil: a plain action; true/false: a toggle drawn with / without a checkmark.
+    var isOn: Bool? = nil
+}
+
+/// __MENU_SCROLL_RESET_2026_11_21__ The "…" button, with its UIMenu owned here.
+///
+/// Measured with a UIKit spy on the 1:1 thread: with a SwiftUI `Menu`, every few seconds SwiftUI's own
+/// `UpdateContextMenuInteraction` rule called
+/// `-[UIContextMenuInteraction updateVisibleMenuWithBlock:]`, which swaps the
+/// OPEN menu's list view for a new one — scroll offset 0 — even when the menu's
+/// SwiftUI body had not been re-evaluated at all (`.equatable()` was honoured;
+/// the rule fires on graph updates of the hosting toolbar). The menu re-appeared
+/// at its top "after a few seconds", exactly as reported.
+///
+/// Here the UIMenu is built in UIKit and REPLACED ONLY WHEN WHAT IT SHOWS
+/// CHANGES (`sections`, a value). Nothing else ever touches the visible menu.
+/// The handlers read the latest `onSelect` through the coordinator, so the
+/// actions are never stale.
+struct StableMenuButton: UIViewRepresentable {
+    let sections: [[OverflowMenuItem]]
+    var symbol = "ellipsis.circle"
+    var tint: UIColor? = nil
+    let identifier: String
+    let onSelect: (String) -> Void
+
+    final class Coordinator {
+        var onSelect: (String) -> Void = { _ in }
+        var shown: [[OverflowMenuItem]] = []
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    func makeUIView(context: Context) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: symbol,
+                                withConfiguration: UIImage.SymbolConfiguration(textStyle: .body, scale: .large)),
+                        for: .normal)
+        button.showsMenuAsPrimaryAction = true
+        button.accessibilityIdentifier = identifier
+        button.accessibilityLabel = "a11y.more_options".localized
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentHuggingPriority(.required, for: .vertical)
+        context.coordinator.onSelect = onSelect
+        context.coordinator.shown = sections
+        button.menu = Self.menu(sections, coordinator: context.coordinator)
+        if let tint { button.tintColor = tint }
+        return button
+    }
+
+    func updateUIView(_ button: UIButton, context: Context) {
+        context.coordinator.onSelect = onSelect
+        if let tint, button.tintColor != tint { button.tintColor = tint }
+        guard context.coordinator.shown != sections else { return }
+        context.coordinator.shown = sections
+        button.menu = Self.menu(sections, coordinator: context.coordinator)
+    }
+
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UIButton, context: Context) -> CGSize? {
+        let size = uiView.intrinsicContentSize
+        return CGSize(width: max(size.width, 30), height: max(size.height, 30))
+    }
+
+    private static func menu(_ sections: [[OverflowMenuItem]], coordinator: Coordinator) -> UIMenu {
+        UIMenu(children: sections.map { section in
+            UIMenu(options: .displayInline, children: section.map { item in
+                let action = UIAction(title: item.title,
+                                      subtitle: item.subtitle,
+                                      image: UIImage(systemName: item.symbol),
+                                      attributes: item.destructive ? .destructive : [],
+                                      state: item.isOn == true ? .on : .off) { [weak coordinator] _ in
+                    coordinator?.onSelect(item.id)
+                }
+                return action
+            })
+        })
     }
 }
 

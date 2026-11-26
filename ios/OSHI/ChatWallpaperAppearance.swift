@@ -430,3 +430,42 @@ struct ChatWallpaperSettingsView: View {
         .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
     }
 }
+
+// MARK: - Frosted top bar over the wallpaper  __CHAT_CHROME_BLUR_2026_11_21__
+//
+// « un effet flou pour la barre du haut avec la photo de profil, le nom etc.
+// pour avoir le fond sur tout l'écran » — asked for 1:1, groups and channels.
+//
+// The conversation's navigation bar used to be either the system's opaque bar
+// (1:1: `.toolbarBackground(.visible)`), cutting the wallpaper off under the
+// header, or fully transparent (group), where the name and the call buttons sat
+// directly on top of passing bubbles. Now the system background is hidden and
+// this draws the bar's ground itself: the thread's wallpaper and the messages
+// scrolling under the header show through, frosted, edge to edge.
+//
+// The surface is the same as the composer's (`oledGlassBar`): `.ultraThinMaterial`
+// with the glass option off; the smoked / milky glass with its lit hairline when
+// "Glass effect" (or OLED black) is on. Reduce Transparency and Increase
+// Contrast give the opaque bar (the modifiers already switch to solid), so the
+// header always reads.
+struct ChatTopBarBackdrop: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .toolbarBackground(.hidden, for: .navigationBar)
+            .overlay(alignment: .top) {
+                // A zero-height strip at the top of the safe area: its
+                // background extends up through the bar and the status bar.
+                Color.clear
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 0)
+                    .oledGlassBar(fallback: .ultraThinMaterial, edge: .bottom)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
+    }
+}
+
+extension View {
+    /// The conversation header as a frosted pane over the wallpaper.
+    func chatTopBarBackdrop() -> some View { modifier(ChatTopBarBackdrop()) }
+}

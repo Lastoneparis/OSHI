@@ -123,6 +123,162 @@ final class CrossProcessLock {
     /// process one. Neither is sufficient alone.
     private let localQueue: DispatchQueue
 
+    // MARK: - 0xdead10cc — never be suspended holding this lock
+    //
+    // 🔴 __DEAD10CC_2026_11_26__ 16 kills on the owner's iPhone (05/11 → 24/11,
+    // builds 187 → 206), EVERY one `EXC_CRASH SIGKILL`, namespace RUNNINGBOARD,
+    // code 0xdead10cc. In all 16 reports the only thread inside OSHI code is the
+    // serial queue `com.oshi.xproclock.v2_session_<hash>` — i.e. THIS class's
+    // `localQueue` — frozen in `KeychainHelper.save/load` (securityd XPC) under
+    // `V2SessionStore.saveSession/loadSession` inside `withPeerSession`. iOS
+    // suspended the app with the `flock` taken on `locks/v2_session_*.lock` in the
+    // App Group container, and RunningBoard kills any process suspended while it
+    // holds a file lock in a shared container (TN2151 / "0xdead10cc").
+    //
+    // The hold is normally milliseconds; what was missing is that NOTHING told the
+    // system "do not suspend me for those milliseconds". The app is often running
+    // in the background (pull timer, BLE/Multipeer, VoIP), so a suspension landing
+    // in the middle of a ratchet save was a matter of time — the "app closes by
+    // itself after a few hours".
+    //
+    // Fix, per Apple's guidance:
+    //   1. Every hold runs under a background-execution assertion
+    //      (`UIApplication.beginBackgroundTask` in the app — installed by the app
+    //      delegate — `ProcessInfo.performExpiringActivity` in extensions). If the
+    //      system will not grant one (we are already being suspended), the lock is
+    //      NOT taken: `withLock` throws `.suspending`, exactly like a timeout, and
+    //      callers already handle that (send fails visibly, receive stays parked).
+    //   2. If the assertion EXPIRES while the lock is held, the expiration handler
+    //      drops the `flock` itself (`LOCK_UN`) before the process is suspended, and
+    //      marks the hold REVOKED. A revoked hold no longer serialises anything, so
+    //      `throwIfHoldRevoked()` — called by `V2SessionStore.saveSession` right
+    //      before it writes — refuses the write. The ratchet in the keychain stays at
+    //      its pre-hold state: the message is retried, never written from a stale
+    //      read. That keeps the cross-process guarantee the lock exists for.
+    //   3. The descriptor is opened per hold and closed when it ends (unchanged);
+    //      nothing in the App Group stays open between holds, so there is nothing
+    //      to close on `didEnterBackground`.
+    //
+    // ⚠️ The `locks/*.lock` files themselves are left in place on purpose. They are
+    // empty and hold nothing unless a descriptor is open on them. Deleting one is
+    // NOT safe: a process that already opened the old inode would `flock` it while
+    // the other process creates and locks a NEW inode at the same path — both would
+    // "hold" the lock. One empty file per contact is the price of that guarantee.
+
+    /// A background-execution assertion covering one lock hold.
+    struct HoldAssertion {
+        let end: () -> Void
+    }
+
+    /// Begins a background-execution assertion for a hold on `name`.
+    ///
+    /// - Returns: nil when the process cannot be kept running (it is being
+    ///   suspended); the lock is then NOT taken.
+    /// - Parameter onExpire: must be called (from any thread) if the assertion
+    ///   expires before `end` is called. It drops the kernel lock.
+    typealias AssertionProvider = (_ name: String, _ onExpire: @escaping () -> Void) -> HoldAssertion?
+
+    private static let providerGuard = NSLock()
+    private static var _assertionProvider: AssertionProvider = CrossProcessLock.expiringActivityAssertion
+
+    /// The app replaces this at launch with a `UIApplication.beginBackgroundTask`
+    /// provider (extensions cannot reference `UIApplication.shared`, so this file
+    /// cannot). Extensions keep the `ProcessInfo` default. Tests inject fakes.
+    static var assertionProvider: AssertionProvider {
+        get { providerGuard.lock(); defer { providerGuard.unlock() }; return _assertionProvider }
+        set { providerGuard.lock(); _assertionProvider = newValue; providerGuard.unlock() }
+    }
+
+    /// Default provider, valid in the app AND in extensions:
+    /// `ProcessInfo.performExpiringActivity`. Its block runs on a system queue;
+    /// the assertion lasts as long as that block has not returned, so the block
+    /// parks until `end` (or expiration) releases it.
+    static func expiringActivityAssertion(name: String,
+                                          onExpire: @escaping () -> Void) -> HoldAssertion? {
+        final class Activity {
+            let lock = NSLock()
+            var granted = false
+            var finished = false      // `end` called, or caller gave up
+            var expired = false
+            let started = DispatchSemaphore(value: 0)
+            let release = DispatchSemaphore(value: 0)
+        }
+        let a = Activity()
+        ProcessInfo.processInfo.performExpiringActivity(withReason: "OSHI lock \(name)") { expired in
+            if expired {
+                a.lock.lock()
+                let wasGranted = a.granted && !a.finished
+                a.expired = true
+                a.lock.unlock()
+                if wasGranted { onExpire() }
+                a.started.signal()   // a caller still waiting to start must give up
+                a.release.signal()   // let the parked first invocation return
+                return
+            }
+            a.lock.lock()
+            if a.finished || a.expired { a.lock.unlock(); return }
+            a.granted = true
+            a.lock.unlock()
+            a.started.signal()
+            a.release.wait()   // hold the assertion until `end`
+        }
+        _ = a.started.wait(timeout: .now() + 2)
+        a.lock.lock()
+        let ok = a.granted && !a.expired
+        if !ok { a.finished = true }
+        a.lock.unlock()
+        guard ok else {
+            a.release.signal()
+            return nil
+        }
+        return HoldAssertion {
+            a.lock.lock()
+            let first = !a.finished
+            a.finished = true
+            a.lock.unlock()
+            if first { a.release.signal() }
+        }
+    }
+
+    // State of the CURRENT hold, readable from the expiration handler while the
+    // holder thread is busy inside `body` (so it cannot live on `localQueue`).
+    private let stateGuard = NSLock()
+    private var heldFD: Int32 = -1          // set once `flock` succeeded
+    private var holdRevoked = false
+    private var holderThread: pthread_t?
+    /// Bumped per hold, so a late expiration of an ENDED hold's assertion can
+    /// never revoke the next one.
+    private var holdGeneration: UInt64 = 0
+
+    /// Called by the assertion's expiration handler, on any thread.
+    private func revokeCurrentHold(generation: UInt64) {
+        stateGuard.lock()
+        defer { stateGuard.unlock() }
+        // No hold in progress, or a different one.
+        guard holderThread != nil, holdGeneration == generation else { return }
+        holdRevoked = true
+        if heldFD >= 0 {
+            // Drop the kernel lock NOW, before the system suspends us. The fd
+            // itself is closed by the holder thread; closing it here could close
+            // a recycled descriptor number.
+            flock(heldFD, LOCK_UN)
+            os_log("🔒 CrossProcessLock '%{public}@' revoked: background time expired during the hold",
+                   log: .default, type: .error, name)
+        }
+    }
+
+    /// Throws `.revoked` when the calling thread is inside a hold of this lock
+    /// whose background time expired — the `flock` has been dropped, so a write
+    /// based on what was read under it may race the other process. Callers that
+    /// persist state read under the lock call this right before the write.
+    func throwIfHoldRevoked() throws {
+        stateGuard.lock()
+        defer { stateGuard.unlock() }
+        if holdRevoked, let holder = holderThread, pthread_equal(holder, pthread_self()) != 0 {
+            throw LockError.revoked
+        }
+    }
+
     /// - Parameter directory: where the lock file lives. Defaults to the shared
     ///   App Group container, which is the only place two processes can both see.
     ///
@@ -151,6 +307,13 @@ final class CrossProcessLock {
         case unavailable(String)
         /// Another process held the lock for longer than the caller allowed.
         case timedOut(after: TimeInterval)
+        /// The system would not keep the process running for the hold (it is
+        /// being suspended). Taking the lock now is what produced 0xdead10cc.
+        case suspending
+        /// Background time expired during the hold; the `flock` was dropped so
+        /// the process could be suspended without being killed. Anything read
+        /// under the lock must not be written back.
+        case revoked
     }
 
     /// Runs `body` while holding the lock exclusively across every process that
@@ -176,15 +339,47 @@ final class CrossProcessLock {
                 withIntermediateDirectories: true)
 
             // O_CREAT so the first caller on a fresh install makes the file.
-            let fd = open(lockURL.path, O_RDWR | O_CREAT, 0o644)
+            // O_CLOEXEC: never let a lock descriptor outlive the hold in a child.
+            let fd = open(lockURL.path, O_RDWR | O_CREAT | O_CLOEXEC, 0o644)
             guard fd >= 0 else {
                 throw LockError.unavailable("open(\(lockURL.lastPathComponent)) errno=\(errno)")
             }
-            defer { close(fd) }   // closing also drops the flock
+            defer { close(fd) }   // closing also drops the flock — runs LAST
+
+            // 🔴 __DEAD10CC_2026_11_26__ Keep the process running for the whole
+            // hold, BEFORE the lock exists. No assertion, no lock.
+            stateGuard.lock()
+            holdGeneration &+= 1
+            let generation = holdGeneration
+            holderThread = pthread_self()
+            holdRevoked = false
+            heldFD = -1
+            stateGuard.unlock()
+            defer {
+                stateGuard.lock()
+                holderThread = nil
+                heldFD = -1
+                holdRevoked = false
+                stateGuard.unlock()
+            }
+
+            guard let assertion = CrossProcessLock.assertionProvider(name, { [weak self] in
+                self?.revokeCurrentHold(generation: generation)
+            }) else {
+                os_log("🔒 CrossProcessLock '%{public}@' refused: process is being suspended",
+                       log: .default, type: .error, name)
+                throw LockError.suspending
+            }
+            defer { assertion.end() }   // after LOCK_UN (defers run in reverse)
 
             let deadline = Date().addingTimeInterval(timeout)
             var acquired = false
             while true {
+                stateGuard.lock()
+                let revokedWhileWaiting = holdRevoked
+                stateGuard.unlock()
+                if revokedWhileWaiting { throw LockError.suspending }
+
                 if flock(fd, LOCK_EX | LOCK_NB) == 0 { acquired = true; break }
                 if errno != EWOULDBLOCK {
                     throw LockError.unavailable("flock errno=\(errno)")
@@ -201,7 +396,22 @@ final class CrossProcessLock {
                 throw LockError.timedOut(after: timeout)
             }
 
-            defer { flock(fd, LOCK_UN) }
+            stateGuard.lock()
+            if holdRevoked {
+                // Expired between the successful flock and here: give it back.
+                flock(fd, LOCK_UN)
+                stateGuard.unlock()
+                throw LockError.suspending
+            }
+            heldFD = fd
+            stateGuard.unlock()
+
+            defer {
+                stateGuard.lock()
+                heldFD = -1
+                stateGuard.unlock()
+                flock(fd, LOCK_UN)
+            }
             return try body()
         }
     }

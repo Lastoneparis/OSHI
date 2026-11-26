@@ -48,4 +48,27 @@
     <string name="qr_no">아니요</string>
     <string name="qr_busy">지금 통화 못 해요</string>
     <string name="end_to_end">휴대폰에서 종단간 암호화됨</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">고정됨</string>
+    <string name="net_internet">인터넷</string>
+    <string name="net_nearby">주변 %1$d</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">휴대폰 오프라인 · 메시지가 휴대폰에서 대기 중</string>
+    <string name="net_offline_short">휴대폰 오프라인</string>
+    <string name="voice_message">음성 메시지</string>
+    <string name="voice_send">음성 메시지 보내기</string>
+    <string name="voice_cancel">취소</string>
+    <string name="voice_permission">음성 메시지를 녹음하려면 마이크를 허용하세요. 워치에는 아무것도 저장되지 않습니다.</string>
+    <string name="voice_mic_busy">마이크가 사용 중입니다. 다시 시도하세요.</string>
+    <string name="voice_too_short">너무 짧습니다. 조금 더 길게 말하세요.</string>
+    <string name="voice_not_sent">전송 실패. 휴대폰을 가까이 두고 다시 시도하세요.</string>
+    <string name="send_emoji">이모티콘 보내기</string>
+    <string name="delivery_sending">보내는 중</string>
+    <string name="delivery_sent">보냄</string>
+    <string name="delivery_delivered">전달됨</string>
+    <string name="delivery_read">읽음</string>
+    <string name="delivery_failed">전달 안 됨</string>
+    <string name="complication_none">읽지 않은 메시지 없음</string>
+    <string name="tile_reply_to">%1$s에게 답장</string>
+    <string name="tile_chat_unread">%1$s, 읽지 않음 %2$d개</string>
 </resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Hozzászólások</string>
+    <string name="gs_comments_footer">A tagok minden bejegyzéshez hozzászólhatnak. Csak az adminok posztolhatnak.</string>
+    <string name="cm_leave_comment">Hozzászólás írása</string>
+    <string name="cm_thread_title">Hozzászólások</string>
+    <string name="cm_empty">Még nincs hozzászólás.</string>
+    <string name="cm_composer_hint">Hozzászólás…</string>
+    <string name="cm_replying_to">Válasz neki: %1$s</string>
+    <string name="cm_disabled">A hozzászólások ki vannak kapcsolva.</string>
+    <string name="cm_post_unavailable">Ez a bejegyzés már nem érhető el.</string>
+    <string name="cm_too_fast">Túl gyorsan írsz hozzászólást. Várj egy kicsit.</string>
+    <string name="cm_notif_reply">%1$s válaszolt a hozzászólásodra</string>
+    <string name="cm_delete_comment">Hozzászólás törlése</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d hozzászólás</item>
+        <item quantity="other">%d hozzászólás</item>
+    </plurals>
+</resources>

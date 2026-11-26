@@ -48,4 +48,27 @@
     <string name="qr_no">Ні</string>
     <string name="qr_busy">Не можу говорити</string>
     <string name="end_to_end">Наскрізне шифрування на вашому телефоні</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Закріплено</string>
+    <string name="net_internet">Інтернет</string>
+    <string name="net_nearby">%1$d поруч</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Телефон не в мережі · повідомлення чекають на телефоні</string>
+    <string name="net_offline_short">Телефон не в мережі</string>
+    <string name="voice_message">Голосове повідомлення</string>
+    <string name="voice_send">Надіслати голосове</string>
+    <string name="voice_cancel">Скасувати</string>
+    <string name="voice_permission">Дозвольте мікрофон, щоб записувати голосові. На годиннику нічого не зберігається.</string>
+    <string name="voice_mic_busy">Мікрофон зайнятий. Спробуйте ще раз.</string>
+    <string name="voice_too_short">Надто коротко. Говоріть трохи довше.</string>
+    <string name="voice_not_sent">Не надіслано. Тримайте телефон поруч і спробуйте ще раз.</string>
+    <string name="send_emoji">Надіслати емодзі</string>
+    <string name="delivery_sending">Надсилання</string>
+    <string name="delivery_sent">Надіслано</string>
+    <string name="delivery_delivered">Доставлено</string>
+    <string name="delivery_read">Прочитано</string>
+    <string name="delivery_failed">Не доставлено</string>
+    <string name="complication_none">Немає непрочитаних</string>
+    <string name="tile_reply_to">Відповісти: %1$s</string>
+    <string name="tile_chat_unread">%1$s, непрочитаних: %2$d</string>
 </resources>

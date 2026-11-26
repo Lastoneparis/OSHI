@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="lora_node_card_dbm">%1$d dBm</string>
+    <string name="lora_node_card_direct">โดยตรง</string>
+    <string name="lora_node_card_from_you">จากคุณ</string>
+    <string name="lora_node_card_heard_day">ได้ยินเมื่อ %1$d วันที่แล้ว</string>
+    <string name="lora_node_card_heard_hour">ได้ยินเมื่อ %1$d ชม. ที่แล้ว</string>
+    <string name="lora_node_card_heard_min">ได้ยินเมื่อ %1$d นาทีที่แล้ว</string>
+    <string name="lora_node_card_heard_now">เพิ่งได้ยิน</string>
+    <string name="lora_node_card_hops">%1$d ฮอป</string>
+    <string name="lora_node_card_in_range">อยู่ในระยะ</string>
+    <string name="lora_node_card_km">%1$.1f กม.</string>
+    <string name="lora_node_card_metres">%1$d ม.</string>
+    <string name="lora_node_card_never_heard">ไม่เคยได้ยิน</string>
+    <string name="lora_node_card_not_heard">ยังไม่ได้ยิน</string>
+    <string name="lora_node_card_relayed">ส่งต่อ</string>
+</resources>

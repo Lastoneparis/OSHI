@@ -1151,6 +1151,8 @@ struct NotificationSettingsView: View {
     @AppStorage("notificationPreview") private var notificationPreview = true
     @AppStorage("notificationVibrate") private var notificationVibrate = true
     @AppStorage("inAppSounds") private var inAppSounds = true
+    /// __STRICT_SECURITY_MODE_2026_11_22__ re-renders the lock when the mode flips.
+    @AppStorage(StrictSecurityMode.enabledKey) private var strictMode = false
 
     var body: some View {
         List {
@@ -1179,10 +1181,13 @@ struct NotificationSettingsView: View {
                         Label("settings.notifications.preview".localized, systemImage: "eye.fill")
                     }
                     .tint(settingsBrandColor)
+                    .disabled(StrictSecurityMode.isForcing(MessageBannerPolicy.showNamesKey))
                     // __NOTIFICATION_NAMES_HIDDEN_2026_11_20__ the extension reads the App Group.
                     .onChange(of: notificationPreview) { _, _ in MessageBannerPolicy.mirrorShowsNames() }
                 } header: {
                     Text("settings.notifications.section.alerts".localized)
+                } footer: {
+                    if strictMode { StrictLockedNote() }
                 }
 
                 Section {
@@ -1649,7 +1654,7 @@ struct PrivacyRelaySection: View {
                 }
             }
             .tint(settingsBrandColor)
-            .disabled(!configured)
+            .disabled(!configured || StrictSecurityMode.isForcing(OHTTPSettings.enabledKey))
             .accessibilityIdentifier("privacy.ohttpRelay")
         } header: {
             Text("settings.privacy.section.network".localized)
@@ -1682,14 +1687,22 @@ struct PrivacySettingsView: View {
     @AppStorage(KeyboardPrivacy.blockThirdPartyKeyboardsKey) private var blockThirdPartyKeyboards = true
     @AppStorage(KeyboardPrivacy.privateKeyboardKey) private var privateKeyboard = false
     @State private var showingKeyboardPrivacyInfo = false
+    /// __STRICT_SECURITY_MODE_2026_11_22__ re-renders the locks when the mode flips.
+    @AppStorage(StrictSecurityMode.enabledKey) private var strictMode = false
+    @AppStorage(StrictSecurityMode.hideReceiptsKey) private var strictHideReceipts = true
 
     var body: some View {
         List {
+            // __STRICT_SECURITY_MODE_2026_11_22__
+            StrictSecurityModeEntrySection()
+
             Section {
                 Toggle("settings.privacy.readReceipts".localized, isOn: $readReceipts).tint(settingsBrandColor)
+                    .disabled(StrictSecurityMode.isForcing(StrictSecurityMode.readReceiptsKey))
                 Toggle("settings.privacy.lastSeen".localized, isOn: $lastSeen).tint(settingsBrandColor)
                 Toggle("settings.privacy.profilePhoto".localized, isOn: $profilePhoto).tint(settingsBrandColor)
                 Toggle("settings.privacy.typing".localized, isOn: $typingIndicators).tint(settingsBrandColor)
+                    .disabled(StrictSecurityMode.isForcing(StrictSecurityMode.typingIndicatorsKey))
             } header: {
                 Text("settings.privacy.section.visibility".localized)
             } footer: {
@@ -1699,6 +1712,7 @@ struct PrivacySettingsView: View {
             Section {
                 Toggle("settings.privacy.blockForwardCopy".localized, isOn: $blockForwardAndCopy)
                     .tint(settingsBrandColor)
+                    .disabled(StrictSecurityMode.isForcing(MessagePrivacy.blockForwardAndCopyKey))
                 // __SUGGESTIONS_ARE_A_CHOICE_2026_10_27__ Reporter's N1. The key
                 // comes from SmartReplyPreference rather than a literal, so this
                 // switch and the one ChatView reads cannot drift apart.
@@ -1732,6 +1746,7 @@ struct PrivacySettingsView: View {
                 }
                 Toggle("settings.privacy.blockThirdPartyKeyboards".localized, isOn: $blockThirdPartyKeyboards)
                     .tint(settingsBrandColor)
+                    .disabled(StrictSecurityMode.isForcing(KeyboardPrivacy.blockThirdPartyKeyboardsKey))
                     .accessibilityIdentifier("kbd.blockThirdParty")
                 Toggle(isOn: $privateKeyboard) {
                     VStack(alignment: .leading, spacing: 2) {
@@ -1742,6 +1757,7 @@ struct PrivacySettingsView: View {
                     }
                 }
                 .tint(settingsBrandColor)
+                .disabled(StrictSecurityMode.isForcing(KeyboardPrivacy.privateKeyboardKey))
                 .accessibilityIdentifier("kbd.privateTyping")
                 Button {
                     showingKeyboardPrivacyInfo = true
@@ -1752,7 +1768,10 @@ struct PrivacySettingsView: View {
             } header: {
                 Text("settings.privacy.section.keyboard".localized)
             } footer: {
-                Text("settings.privacy.keyboard.footer".localized)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("settings.privacy.keyboard.footer".localized)
+                    if strictMode { StrictLockedNote() }
+                }
             }
 
             // __OHTTP_PRIVACY_RELAY_2026_11_09__ hide the IP from OSHI's server.
@@ -1881,9 +1900,14 @@ struct SecuritySettingsView: View {
     @AppStorage(PrivacyCoverController.defaultsKey) private var privacyCover = true
     /// __ANATOLE_1311_IOS__ (N6) Triple-tap wipe on the OSHI title, opt-in.
     @AppStorage(PanicGesture.enabledDefaultsKey) private var panicWipeArmed = false
+    /// __STRICT_SECURITY_MODE_2026_11_22__ re-renders the locks when the mode flips.
+    @AppStorage(StrictSecurityMode.enabledKey) private var strictMode = false
 
     var body: some View {
         List {
+            // __STRICT_SECURITY_MODE_2026_11_22__
+            StrictSecurityModeEntrySection()
+
             Section {
                 Toggle("settings.security.panicWipe".localized, isOn: $panicWipeArmed)
                     .tint(settingsBrandColor)
@@ -1896,6 +1920,7 @@ struct SecuritySettingsView: View {
             Section {
                 Toggle("settings.security.privacyCover".localized, isOn: $privacyCover)
                     .tint(settingsBrandColor)
+                    .disabled(StrictSecurityMode.isForcing(PrivacyCoverController.defaultsKey))
             } footer: {
                 Text("settings.security.privacyCover.footer".localized)
             }
@@ -1903,8 +1928,10 @@ struct SecuritySettingsView: View {
 
             Section {
                 Toggle("settings.security.biometric".localized, isOn: $biometricEnabled)
+                    .disabled(StrictSecurityMode.isForcing(StrictSecurityMode.biometricKey))
                 if biometricEnabled {
                     Toggle("settings.security.autoLock".localized, isOn: $autoLock)
+                        .disabled(StrictSecurityMode.isForcing(StrictSecurityMode.autoLockKey))
                 }
             } header: {
                 Text("settings.security.section.authentication".localized)

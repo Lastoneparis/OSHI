@@ -4,10 +4,7 @@
     <string name="app_tagline">پیام‌رسان مش امن</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">به OSHI خوش آمدید</string>
-    <string name="onboarding_description">پیام‌رسانی رمزنگاری شده سرتاسری که حتی بدون اینترنت کار می‌کند</string>
     <string name="onboarding_create_identity">ایجاد هویت</string>
-    <string name="onboarding_restore_identity">بازیابی هویت</string>
 
     <!-- Messages -->
     <string name="messages_title">پیام‌ها</string>
@@ -61,6 +58,8 @@
     <string name="settings_theme_dark">تاریک</string>
     <string name="settings_theme_oled_black">مشکی OLED</string>
     <string name="settings_theme_oled_black_desc">پس‌زمینه‌های کاملاً مشکی برای صفحه‌های OLED. هر زمان پوستهٔ تیره فعال باشد اعمال می‌شود.</string>
+    <string name="appearance_glass_effect">جلوه شیشه</string>
+    <string name="appearance_glass_effect_footer">نوارها، کارت‌ها و منوهای نیمه‌شفاف مانند شیشه مات. با حالت روشن، تاریک و مشکی OLED کار می‌کند.</string>
     <string name="settings_backup">پشتیبان‌گیری کلیدها</string>
     <string name="settings_about">درباره</string>
     <string name="settings_version">نسخه %s</string>
@@ -385,22 +384,9 @@
     <string name="video_switch_to_voice">تغییر به صوتی</string>
 
     <!-- Onboarding - Additional -->
-    <string name="onboarding_subtitle">پیام‌رسانی امن و خصوصی که حتی بدون اینترنت کار می‌کند</string>
-    <string name="onboarding_key_features">ویژگی‌های کلیدی</string>
-    <string name="onboarding_e2e_title">رمزنگاری سرتاسری</string>
-    <string name="onboarding_e2e_desc">همه پیام‌ها رمزنگاری شده‌اند. فقط شما و گیرنده می‌توانید آنها را بخوانید.</string>
-    <string name="onboarding_mesh_title">شبکه مش</string>
-    <string name="onboarding_mesh_desc">پیام‌ها را مستقیماً به کاربران نزدیک ارسال کنید، حتی بدون اینترنت.</string>
-    <string name="onboarding_calls_title">تماس‌های امن</string>
-    <string name="onboarding_calls_desc">تماس‌های صوتی و تصویری با رمزنگاری کامل.</string>
-    <string name="onboarding_cross_platform_title">چندسکویی</string>
-    <string name="onboarding_cross_platform_desc">با دستگاه‌های iOS و اندروید بدون مشکل کار می‌کند.</string>
-    <string name="onboarding_create_your_identity">هویت خود را بسازید</string>
-    <string name="onboarding_choose_display_name">یک نام نمایشی برای مخاطبین خود انتخاب کنید</string>
     <string name="onboarding_display_name">نام نمایشی</string>
     <string name="onboarding_key_info">یک جفت کلید رمزنگاری منحصر به فرد برای شما ایجاد خواهد شد. حتماً بعداً از کلیدها پشتیبان بگیرید.</string>
     <string name="onboarding_back">بازگشت</string>
-    <string name="onboarding_next">بعدی</string>
     <string name="onboarding_creating">در حال ایجاد…</string>
     <string name="onboarding_error_create">ایجاد هویت ناموفق: %s</string>
 
@@ -820,8 +806,6 @@
     <string name="faq_q6_answer">به پیام جدید بروید و کد QR مخاطب را اسکن کنید، کد QR خود را به اشتراک بگذارید، یا کلید عمومی آنها را بچسبانید.</string>
 
     <!-- Onboarding Disclaimer -->
-    <string name="onboarding_disclaimer_title">اطلاعیه مهم</string>
-    <string name="onboarding_disclaimer_subtitle">لطفاً قبل از استفاده از OSHI بخوانید</string>
     <string name="onboarding_disclaimer_audit_title">هنوز ممیزی امنیتی نشده</string>
     <string name="onboarding_disclaimer_audit_desc">این برنامه هنوز تحت ممیزی امنیتی حرفه‌ای قرار نگرفته. اگرچه از رمزنگاری قوی استفاده می‌کنیم، با صلاحدید خود استفاده کنید.</string>
     <string name="onboarding_disclaimer_anonymous_title">حریم خصوصی در اولویت</string>
@@ -2147,24 +2131,10 @@
     <string name="new_message_sent">پیام ارسال شد!</string>
     <string name="onboarding_conduct_subtitle">OSHI بر پایه اعتماد و احترام ساخته شده است. لطفاً این راهنماها را دنبال کنید:</string>
     <string name="onboarding_conduct_title">راهنمای جامعه</string>
-    <string name="onboarding_message_description">با اسکن کد QR یا وارد کردن کلید عمومی با کسی متصل شوید.</string>
-    <string name="onboarding_message_title">اولین پیام خود را ارسال کنید</string>
-    <string name="onboarding_method_paste_title">روش ۲: کپی/پیست کلید عمومی</string>
-    <string name="onboarding_method_qr_title">روش ۱: اسکن کد QR</string>
     <string name="onboarding_reach_disclaimer">شبکه مش آفلاین برد کوتاهی دارد. هر دو گوشی باید OSHI را باز داشته باشند تا یکدیگر را پیدا کنند، در فضای باز حدود ۱۰۰ متر و از پشت دیوار بسیار کمتر. تنها زمانی دورتر می‌رود که افراد دیگری در نزدیکی هم OSHI را باز داشته باشند تا پیام را منتقل کنند. اگر کسی در محدوده نباشد، OSHI پیام را از طریق اینترنت می‌فرستد.</string>
-    <string name="onboarding_reach_offline_body">اینترنت ندارید؟ پیام‌ها از گوشی به گوشی از طریق افراد نزدیک که OSHI را باز دارند منتقل می‌شوند.</string>
-    <string name="onboarding_reach_offline_title">آفلاین (مش)</string>
-    <string name="onboarding_reach_online_body">با اینترنت، فوراً به هرکسی در جهان می‌رسید.</string>
-    <string name="onboarding_reach_online_title">آنلاین</string>
     <string name="onboarding_reach_range1_dist">~100 m</string>
-    <string name="onboarding_reach_range1_label">مستقیم، گوشی به گوشی</string>
     <string name="onboarding_reach_range2_dist">~500 m</string>
-    <string name="onboarding_reach_range2_label">دورتر، وقتی دیگران در میانه بازپخش می‌کنند</string>
     <string name="onboarding_reach_range3_dist">~30 km</string>
-    <string name="onboarding_reach_range3_label">با رادیوی LoRa مش‌تستیک از طریق بلوتوث</string>
-    <string name="onboarding_reach_subtitle">OSHI به دو صورت کار می‌کند — با یا بدون اینترنت.</string>
-    <string name="onboarding_reach_tip">حالت آفلاین به افراد نزدیک با OSHI باز نیاز دارد. هرچه افراد بیشتر، پیام شما دورتر می‌رود.</string>
-    <string name="onboarding_reach_title">پیام‌های شما چگونه منتقل می‌شوند</string>
     <string name="onboarding_rule_backup">از کلیدهای خود به صورت امن پشتیبان بگیرید</string>
     <string name="onboarding_rule_no_abuse">بدون آزار یا سوءاستفاده</string>
     <string name="onboarding_rule_no_illegal">بدون محتوای غیرقانونی</string>
@@ -2579,6 +2549,7 @@
     <string name="gif_picker_title">GIF و برچسب</string>
     <string name="gif_tab_gifs">GIF</string>
     <string name="gif_tab_stickers">برچسب‌ها</string>
+    <string name="gif_oshi_hint">استیکرهای متحرک OSHI — یکی را برای ارسال انتخاب کنید</string>
     <string name="linked_device_alert_body">هم‌اکنون دستگاهی به حساب OSHI شما متصل شد. اگر شما نبوده‌اید، «دستگاه‌های متصل» را باز کنید و همین حالا آن را حذف کنید.</string>
     <string name="linked_device_alert_body_plural">هم‌اکنون %1$d دستگاه به حساب OSHI شما متصل شد. اگر شما نبوده‌اید، «دستگاه‌های متصل» را باز کنید و همین حالا آن‌ها را حذف کنید.</string>
     <string name="linked_device_alert_title">دستگاه جدیدی به حساب شما متصل شد</string>
@@ -2787,4 +2758,64 @@
     <string name="settings_animated_reactions">واکنش‌های متحرک OSHI</string>
     <string name="settings_animated_reactions_desc">خاموش: ایموجی معمولی</string>
     <string name="reactions_new_hint">جدید: آیفون‌هایی با نسخهٔ قدیمی‌تر ممکن است این‌ها را 👍 نشان دهند</string>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="accessibility_updates">به‌روزرسانی و نگهداری</string>
+    <string name="ai_download_failed_network">دانلود ناموفق بود — اتصال خود را بررسی کنید و روی «تلاش دوباره» بزنید.</string>
+    <string name="ai_download_failed_server">سرور دانلود پاسخ نداد. روی «تلاش دوباره» بزنید یا بعداً امتحان کنید.</string>
+    <string name="chat_welcome_creator_notice">نوشته OSHI است و به Hugo، سازنده‌اش، می‌رسد. او پاسخ‌ها را می‌خواند.</string>
+    <string name="conversation_pin">سنجاق به بالا</string>
+    <string name="conversation_unpin">برداشتن سنجاق</string>
+    <string name="group_block_member">مسدود کردن این عضو</string>
+    <string name="group_member_blocked">مسدود شد. پیام‌های او در این گروه دیگر به شما نمی‌رسد.</string>
+    <string name="group_member_unblocked">رفع مسدودیت شد.</string>
+    <string name="group_report_member">گزارش این عضو</string>
+    <string name="group_unblock_member">رفع مسدودیت این عضو</string>
+    <string name="groups_show_fewer_members">نمایش کمتر</string>
+    <string name="lora_error_channel_unknown">این کانال روی رادیوی متصل وجود ندارد — ممکن است تغییر نام یافته، جابه‌جا یا حذف شده باشد. چیزی ارسال نشد.</string>
+    <string name="lora_node_message">پیام به این گره</string>
+    <string name="map_pois_hide">پنهان کردن مکان‌ها</string>
+    <string name="map_pois_show">نمایش مکان‌ها</string>
+    <string name="map_regions_insufficient_space">فضای خالی کافی روی این دستگاه برای نصب این منطقه وجود ندارد.</string>
+    <string name="markup_done">انجام شد</string>
+    <string name="markup_draw">رسم</string>
+    <string name="markup_undo">واگرد</string>
+    <string name="mesh_blocked_bluetooth">Bluetooth خاموش است</string>
+    <string name="mesh_blocked_permission">مجوز دستگاه‌های نزدیک خاموش است</string>
+    <string name="mesh_blocked_wifi">Wi‑Fi خاموش است</string>
+    <string name="new_message_fab">جدید</string>
+    <string name="peers_connect_already">%1$s از قبل متصل است</string>
+    <string name="peers_connect_dialing">در حال اتصال به %1$s…</string>
+    <string name="peers_connect_searching">هنوز نشانی‌ای برای %1$s نیست — جستجوی دوباره…</string>
+    <string name="report_member_already_filed">شما قبلاً این عضو را گزارش کرده‌اید.</string>
+    <string name="report_member_dialog_title">گزارش این عضو</string>
+    <string name="updates_available">نسخه جدیدتری از OSHI در دسترس است.</string>
+    <string name="updates_checking">در حال بررسی نسخه جدیدتر…</string>
+    <string name="updates_current_version">شما OSHI %1$s را اجرا می‌کنید</string>
+    <string name="updates_news_action">خواندن یادداشت‌های انتشار</string>
+    <string name="updates_news_body">ویژگی‌های جدید، اصلاحات و اطلاعیه‌های نگهداری با هر انتشار منتشر می‌شوند.</string>
+    <string name="updates_title">به‌روزرسانی و نگهداری</string>
+    <string name="updates_up_to_date">شما آخرین نسخه‌ای را دارید که ما می‌شناسیم.</string>
+    <string name="inapp_update_title">به‌روزرسانی موجود است</string>
+    <string name="inapp_update_body">نسخهٔ جدیدی از OSHI در Google Play منتشر شده است. در پس‌زمینه دانلود می‌شود و می‌توانید به استفاده از برنامه ادامه دهید.</string>
+    <string name="inapp_update_now">به‌روزرسانی</string>
+    <string name="inapp_update_later">بعداً</string>
+    <string name="inapp_update_ready">به‌روزرسانی آماده است</string>
+    <string name="inapp_update_restart">راه‌اندازی مجدد</string>
+    <!-- __CALL_WAKE_2026_11_22__ -->
+    <string name="call_state_calling">در حال تماس…</string>
+    <string name="call_reach_unreachable">در حال حاضر در دسترس نیست</string>
+    <string name="call_readiness_title">ممکن است تماس‌های ورودی زنگ نزنند</string>
+    <string name="call_readiness_notifications">اعلان‌های OSHI خاموش است — برای اجازه دادن ضربه بزنید</string>
+    <string name="call_readiness_channel">اعلان‌های «تماس‌های ورودی» خاموش است — برای روشن کردن ضربه بزنید</string>
+    <string name="call_readiness_full_screen">هشدارهای تماس تمام‌صفحه مجاز نیست — برای اجازه دادن ضربه بزنید</string>
+    <string name="call_readiness_background">Android برنامه OSHI را در پس‌زمینه محدود می‌کند — ضربه بزنید و باتری را روی «نامحدود» بگذارید</string>
+    <string name="composer_format_bold">پررنگ</string>
+    <string name="composer_format_underline">زیرخط</string>
+    <!-- __GROUP_HEADER_ISLAND_2026_11_24__ floating group header -->
+    <string name="group_header_info_a11y">اطلاعات گروه، %1$s</string>
+    <string name="group_header_search_a11y">جستجو در گفتگو</string>
+    <plurals name="group_header_subscribers">
+        <item quantity="one">%1$d مشترک</item>
+        <item quantity="other">%1$d مشترک</item>
+    </plurals>
 </resources>

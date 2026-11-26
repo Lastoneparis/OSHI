@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Pomiń</string>
+    <string name="ob27_continue">Dalej</string>
+    <string name="ob27_page_of">Strona %1$d z %2$d</string>
+    <string name="ob27_private_title">Tylko ty i oni</string>
+    <string name="ob27_private_body">Wiadomości i połączenia są szyfrowane end-to-end na twoim telefonie. Nikt po drodze ich nie przeczyta — nawet OSHI.</string>
+    <string name="ob27_offline_title">Działa bez internetu</string>
+    <string name="ob27_offline_body">Brak sieci? Wiadomości przeskakują z telefonu na telefon przez osoby w pobliżu, które mają otwarte OSHI. Radio LoRa niesie je jeszcze dalej.</string>
+    <string name="ob27_range_direct">bezpośrednio</string>
+    <string name="ob27_range_relayed">przez innych</string>
+    <string name="ob27_range_lora">radio LoRa</string>
+    <string name="ob27_anon_title">Bez numeru telefonu</string>
+    <string name="ob27_anon_body">Bez konta, e-maila i numeru do rejestracji. Twoja tożsamość to klucz utworzony na tym telefonie.</string>
+    <string name="ob27_together_title">Zaproś swoich</string>
+    <string name="ob27_together_body">Rozmawiaj we dwoje lub w grupach. Dodaj kogoś, skanując jego kod QR lub wysyłając link z zaproszeniem.</string>
+    <string name="ob27_rules_title">Zanim zaczniesz</string>
+    <string name="ob27_rules_subtitle">Kilka zasad oraz to, co OSHI już potrafi, a czego jeszcze nie.</string>
+    <string name="ob27_rules_do">Co robić</string>
+    <string name="ob27_rules_dont">Nigdy</string>
+    <string name="ob27_good_to_know">Dobrze wiedzieć</string>
+    <string name="ob27_show_details">Pokaż szczegóły</string>
+    <string name="ob27_hide_details">Ukryj szczegóły</string>
+    <string name="ob27_agree">Rozumiem</string>
+    <string name="ob27_notif_title">Nie przegap wiadomości</string>
+    <string name="ob27_notif_body">Zezwól na powiadomienia, aby widzieć nowe wiadomości i połączenia. Możesz je wyłączyć w każdej chwili w Ustawieniach.</string>
+    <string name="ob27_notif_allow">Zezwól na powiadomienia</string>
+    <string name="ob27_not_now">Nie teraz</string>
+    <string name="ob27_identity_title">Wybierz nazwę</string>
+    <string name="ob27_identity_body">Tę nazwę widzą twoje kontakty. Możesz ją później zmienić.</string>
+    <string name="ob27_already">Już używasz OSHI?</string>
+</resources>

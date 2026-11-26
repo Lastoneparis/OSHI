@@ -48,4 +48,27 @@
     <string name="qr_no">Ei</string>
     <string name="qr_busy">En voi puhua nyt</string>
     <string name="end_to_end">Puhelimesi salaa päästä päähän</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Kiinnitetty</string>
+    <string name="net_internet">Internet</string>
+    <string name="net_nearby">%1$d lähellä</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Puhelin offline · viestit odottavat puhelimessa</string>
+    <string name="net_offline_short">Puhelin offline</string>
+    <string name="voice_message">Ääniviesti</string>
+    <string name="voice_send">Lähetä ääniviesti</string>
+    <string name="voice_cancel">Peruuta</string>
+    <string name="voice_permission">Salli mikrofoni ääniviestien tallentamiseen. Kelloon ei tallenneta mitään.</string>
+    <string name="voice_mic_busy">Mikrofoni on varattu. Yritä uudelleen.</string>
+    <string name="voice_too_short">Liian lyhyt. Puhu vähän pidempään.</string>
+    <string name="voice_not_sent">Ei lähetetty. Pidä puhelin lähellä ja yritä uudelleen.</string>
+    <string name="send_emoji">Lähetä emoji</string>
+    <string name="delivery_sending">Lähetetään</string>
+    <string name="delivery_sent">Lähetetty</string>
+    <string name="delivery_delivered">Toimitettu</string>
+    <string name="delivery_read">Luettu</string>
+    <string name="delivery_failed">Ei toimitettu</string>
+    <string name="complication_none">Ei lukemattomia viestejä</string>
+    <string name="tile_reply_to">Vastaa: %1$s</string>
+    <string name="tile_chat_unread">%1$s, lukematta: %2$d</string>
 </resources>

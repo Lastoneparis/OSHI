@@ -101,6 +101,9 @@ class SettingsViewModel @Inject constructor(
         // __OLED_BLACK_2026_11_16__ Modifier of the dark theme ("OLED black").
         // Absent = OFF. Applies whenever the resolved theme is dark.
         val KEY_OLED_BLACK = booleanPreferencesKey("oled_black")
+        // __GLASS_ALL_THEMES_2026_11_21__ « Effet verre » in every theme.
+        // Absent = never touched: each ground's GlassDefaults applies.
+        val KEY_GLASS_EFFECT = booleanPreferencesKey("glass_effect")
         val KEY_FONT_SIZE = floatPreferencesKey("font_size")
         val KEY_BUBBLE_STYLE = stringPreferencesKey("bubble_style")  // "Modern", "Classic", "Minimal"
 
@@ -204,6 +207,10 @@ class SettingsViewModel @Inject constructor(
 
     private val _oledBlack = MutableStateFlow(false)
     val oledBlack: StateFlow<Boolean> = _oledBlack.asStateFlow()
+
+    /** __GLASS_ALL_THEMES_2026_11_21__ null = never touched (per-theme default). */
+    private val _glassEffect = MutableStateFlow<Boolean?>(null)
+    val glassEffect: StateFlow<Boolean?> = _glassEffect.asStateFlow()
 
     /**
      * __OLED_SPLASH_2026_11_16__ True once [theme] / [oledBlack] hold the stored
@@ -397,12 +404,15 @@ class SettingsViewModel @Inject constructor(
                 // Appearance
                 _theme.value = preferences[KEY_THEME] ?: "system"
                 _oledBlack.value = preferences[KEY_OLED_BLACK] ?: false
+                _glassEffect.value = preferences[KEY_GLASS_EFFECT]
                 // __OLED_SPLASH_2026_11_16__ keep the synchronous mirror the cold
                 // start reads (ThemeBoot) in step with DataStore.
                 val bootTheme = _theme.value
                 val bootOled = _oledBlack.value
+                val bootGlass = _glassEffect.value
                 withContext(Dispatchers.IO) {
                     com.oshi.messenger.ui.theme.ThemeBoot.write(context, bootTheme, bootOled)
+                    com.oshi.messenger.ui.theme.ThemeBoot.writeGlass(context, bootGlass)
                 }
                 _appearanceLoaded.value = true
                 _fontSize.value = preferences[KEY_FONT_SIZE] ?: 1.0f
@@ -776,6 +786,22 @@ class SettingsViewModel @Inject constructor(
             }
             withContext(Dispatchers.IO) {
                 com.oshi.messenger.ui.theme.ThemeBoot.write(context, _theme.value, enabled)
+            }
+        }
+    }
+
+    /**
+     * __GLASS_ALL_THEMES_2026_11_21__ Same rule as [setOledBlack]: the state
+     * flips first so the app re-themes on the switch's frame.
+     */
+    fun setGlassEffect(enabled: Boolean) {
+        _glassEffect.value = enabled
+        viewModelScope.launch {
+            context.dataStore.edit { preferences ->
+                preferences[KEY_GLASS_EFFECT] = enabled
+            }
+            withContext(Dispatchers.IO) {
+                com.oshi.messenger.ui.theme.ThemeBoot.writeGlass(context, enabled)
             }
         }
     }
@@ -1204,6 +1230,89 @@ class SettingsViewModel @Inject constructor(
             context.dataStore.edit { it[KEY_STEGANOGRAPHY_CARRIER_SOURCE] = source }
             _steganographyCarrierSource.value = source
         }
+    }
+
+    // =========================================================================
+    // 🛡 __STRICT_MODE_2026_11_22__ STRICT SECURITY MODE
+    // Forces existing settings through their own setters (so each one persists and
+    // applies exactly as when the person flips it), and restores them when turned
+    // off. Rules: security/StrictModePolicy.kt. State: security/StrictModeStore.
+    // =========================================================================
+
+    val strictStore: com.oshi.messenger.security.StrictModeStore =
+        com.oshi.messenger.security.StrictModeStore.get(context)
+    val strictModeActive: StateFlow<Boolean> = strictStore.active
+    val strictOptions: StateFlow<com.oshi.messenger.security.StrictOptions> = strictStore.options
+
+    private fun currentGuarded() = com.oshi.messenger.security.StrictGuardedSettings(
+        appLock = _biometricEnabled.value,
+        screenshotProtection = _screenshotProtection.value,
+        incognitoKeyboard = com.oshi.messenger.ui.keyboard.KeyboardPrivacyStore.get(context).isIncognitoEnabled,
+        notificationPreview = _notificationPreview.value,
+        readReceipts = _readReceipts.value,
+        typingIndicators = _typingIndicators.value,
+        privacyRelay = _privacyRelayEnabled.value,
+        blockForwardCopy = _blockForwardCopy.value,
+    )
+
+    private fun applyGuarded(target: com.oshi.messenger.security.StrictGuardedSettings) {
+        val now = currentGuarded()
+        if (target.appLock != now.appLock) setBiometricEnabled(target.appLock)
+        if (target.screenshotProtection != now.screenshotProtection) setScreenshotProtection(target.screenshotProtection)
+        if (target.incognitoKeyboard != now.incognitoKeyboard)
+            com.oshi.messenger.ui.keyboard.KeyboardPrivacyStore.get(context).setIncognito(target.incognitoKeyboard)
+        if (target.notificationPreview != now.notificationPreview) setNotificationPreview(target.notificationPreview)
+        if (target.readReceipts != now.readReceipts) setReadReceipts(target.readReceipts)
+        if (target.typingIndicators != now.typingIndicators) setTypingIndicators(target.typingIndicators)
+        if (target.privacyRelay != now.privacyRelay) setPrivacyRelayEnabled(target.privacyRelay)
+        if (target.blockForwardCopy != now.blockForwardCopy) setBlockForwardCopy(target.blockForwardCopy)
+    }
+
+    /**
+     * Turning OFF is gated by the caller (device authentication when a lock exists);
+     * this function only does the switching.
+     */
+    fun setStrictMode(enabled: Boolean) {
+        val options = strictStore.options.value
+        val lockAvailable = _biometricAvailable.value
+        val relayAvailable = privacyRelayAvailable
+        if (enabled) {
+            if (!strictStore.isActive) strictStore.activate(currentGuarded())
+            val snapshot = strictStore.snapshot() ?: currentGuarded()
+            applyGuarded(com.oshi.messenger.security.StrictModePolicy.forced(snapshot, options, lockAvailable, relayAvailable))
+            com.oshi.messenger.security.SensitiveClipboard.clearOursNow(context)
+        } else {
+            val now = currentGuarded()
+            val snapshot = strictStore.deactivate() ?: return
+            applyGuarded(com.oshi.messenger.security.StrictModePolicy.restore(snapshot, now, options, lockAvailable, relayAvailable))
+        }
+        screenshotProtectionManager.reapplyAll()
+        Log.d(TAG, "Strict security mode: $enabled")
+    }
+
+    fun setStrictOptions(options: com.oshi.messenger.security.StrictOptions) {
+        val old = strictStore.options.value
+        strictStore.setOptions(options)
+        if (!strictStore.isActive) return
+        val snapshot = strictStore.snapshot() ?: return
+        val lockAvailable = _biometricAvailable.value
+        val relayAvailable = privacyRelayAvailable
+        // Sub-switch flipped while ON: release what the old options forced, then force
+        // what the new ones ask for — from the person's own values, never from the
+        // forced ones.
+        val released = com.oshi.messenger.security.StrictModePolicy.restore(snapshot, currentGuarded(), old, lockAvailable, relayAvailable)
+        applyGuarded(
+            com.oshi.messenger.security.StrictModePolicy.forced(snapshot, options, lockAvailable, relayAvailable).let { f ->
+                // Only the presence fields depend on the options.
+                released.copy(
+                    appLock = f.appLock, screenshotProtection = f.screenshotProtection,
+                    incognitoKeyboard = f.incognitoKeyboard, notificationPreview = f.notificationPreview,
+                    privacyRelay = f.privacyRelay, blockForwardCopy = f.blockForwardCopy,
+                    readReceipts = if (options.hidePresence) false else released.readReceipts,
+                    typingIndicators = if (options.hidePresence) false else released.typingIndicators,
+                )
+            }
+        )
     }
 
     fun setPrivacyRelayEnabled(enabled: Boolean) {

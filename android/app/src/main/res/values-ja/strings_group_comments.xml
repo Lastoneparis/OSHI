@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">コメント</string>
+    <string name="gs_comments_footer">メンバーは各投稿にコメントできます。投稿できるのは管理者のみです。</string>
+    <string name="cm_leave_comment">コメントする</string>
+    <string name="cm_thread_title">コメント</string>
+    <string name="cm_empty">まだコメントはありません。</string>
+    <string name="cm_composer_hint">コメント…</string>
+    <string name="cm_replying_to">%1$sさんに返信</string>
+    <string name="cm_disabled">コメントはオフです。</string>
+    <string name="cm_post_unavailable">この投稿はもう利用できません。</string>
+    <string name="cm_too_fast">コメントの間隔が短すぎます。少し待ってください。</string>
+    <string name="cm_notif_reply">%1$sさんがあなたのコメントに返信しました</string>
+    <string name="cm_delete_comment">コメントを削除</string>
+    <plurals name="cm_comments_count">
+        <item quantity="other">%d件のコメント</item>
+    </plurals>
+</resources>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · tidak terenkripsi end-to-end oleh OSHI</string>
+    <string name="meshcore_error_not_connected">Tidak ada radio MeshCore yang terhubung</string>
+    <string name="meshcore_channels_title">Kanal MeshCore</string>
+    <string name="meshcore_channel_public">Publik · dapat dibaca siapa pun yang tahu namanya</string>
+    <string name="meshcore_channel_private">Privat · kunci rahasia</string>
+    <string name="meshcore_join_hashtag">Gabung ke kanal hashtag</string>
+    <string name="meshcore_join_private">Gabung ke kanal privat</string>
+    <string name="meshcore_contacts_title">Kontak MeshCore</string>
+    <string name="meshcore_refresh_contacts">Muat ulang kontak</string>
+    <string name="meshcore_join_refused">Radio menolak kanal ini.</string>
+    <string name="meshcore_join_no_slot">Tidak ada slot kanal kosong di radio ini.</string>
+    <string name="meshcore_join_bad_name">Masukkan nama kanal yang valid (maks. 31 byte, tanpa spasi untuk kanal hashtag).</string>
+    <string name="meshcore_join_bad_secret">Rahasia harus 16 byte: 32 karakter heksadesimal atau base64.</string>
+    <string name="meshcore_hashtag_hint">Kunci diturunkan dari nama: siapa pun yang tahu namanya dapat membaca kanal ini.</string>
+    <string name="meshcore_private_hint">Masukkan nama kanal dan rahasia yang dibagikan para anggotanya.</string>
+    <string name="meshcore_channel_name">Nama kanal</string>
+    <string name="meshcore_channel_secret">Rahasia (hex atau base64)</string>
+    <string name="meshcore_join">Gabung</string>
+    <string name="meshcore_note_dm">Dienkripsi oleh MeshCore antar-radio, bukan end-to-end oleh OSHI.</string>
+    <string name="meshcore_note_public">Saluran publik: siapa pun yang tahu namanya dapat membacanya.</string>
+    <string name="meshcore_note_private">Saluran privat: siapa pun yang punya rahasianya dapat membacanya.</string>
+    <string name="meshcore_radio_offline">Radio MeshCore tidak terhubung. Pesan menunggu di sini sebagai belum terkirim.</string>
+    <string name="meshcore_connect">Hubungkan</string>
+    <string name="meshcore_parts">%1$d pesan</string>
+    <string name="meshcore_sending">Menunggu radio</string>
+    <string name="meshcore_failed_dm">Tidak ada jawaban dari radio mereka (di luar jangkauan?). Ketuk untuk mencoba lagi.</string>
+    <string name="meshcore_error_pairing">Penyandingan gagal. Periksa PIN lalu coba lagi. Jika radio direset, hapus dulu di setelan Bluetooth Android.</string>
+    <string name="meshcore_error_no_answer">Radio tidak menjawab. Pastikan radio menjalankan firmware MeshCore companion untuk Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Koneksi terputus. Menghubungkan lagi saat radio kembali dalam jangkauan…</string>
+    <string name="meshcore_state_pin">Ketik PIN radio di dialog Android</string>
+    <string name="meshcore_state_reading">Membaca kontak dan saluran…</string>
+    <string name="meshcore_state_connecting">Menghubungkan…</string>
+    <string name="meshcore_seen_as">Terhubung · pengguna MeshCore melihat Anda sebagai %1$s</string>
+    <string name="meshcore_connected">Terhubung</string>
+    <string name="meshcore_footer_users">Mengobrol dengan pengguna MeshCore (pesan langsung dan saluran) dan kirim pesan OSHI lewat repeater MeshCore. Memerlukan firmware MeshCore companion untuk Bluetooth. OSHI menambahkan satu saluran, #oshi-bridge, di slot kosong dan tidak pernah mengubah saluran Anda yang lain.</string>
+    <string name="meshcore_scan_below">Radio MeshCore muncul di bawah pada Radio di sekitar, ditandai MeshCore.</string>
+    <string name="meshcore_contacts_footer">Ketuk seseorang untuk menulis kepadanya. Pesan dienkripsi oleh MeshCore, bukan end-to-end oleh OSHI.</string>
+    <string name="meshcore_no_contacts">Belum ada yang terdengar. Pengguna MeshCore muncul di sini saat radio mereka mengumumkan diri. Umumkan radio Anda agar mereka menemukan Anda.</string>
+    <string name="meshcore_heard">Terdengar %1$s</string>
+    <string name="meshcore_announce">Umumkan saya</string>
+    <string name="meshcore_announce_done">Diumumkan. Pengguna MeshCore dalam jangkauan kini dapat menambahkan dan menulis kepada Anda.</string>
+    <string name="meshcore_announce_failed">Radio tidak dapat mengirim pengumuman.</string>
+    <string name="meshcore_channels_footer">Ketuk saluran untuk membukanya. Saluran publik dan tagar dapat dibaca siapa pun yang tahu namanya.</string>
+    <string name="meshcore_pin_title">Sandingkan dengan %1$s</string>
+    <string name="meshcore_pin_body">Android sekarang akan meminta PIN radio. Jika radio punya layar, PIN ditampilkan di sana.</string>
+    <string name="meshcore_pin_default">Tidak ada layar? PIN-nya 123456, kecuali sudah diubah di aplikasi MeshCore.</string>
+    <string name="meshcore_pin_continue">Lanjutkan</string>
+    <string name="meshcore_no_free_channel_chat">Ke-8 slot saluran sudah terpakai. Anda tetap bisa mengobrol dengan pengguna MeshCore; kosongkan satu slot di aplikasi MeshCore agar pesan OSHI dapat memakai #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">Pengguna MeshCore</string>
+    <string name="meshcore_too_long">Terlalu panjang: maks. %1$d pesan</string>
+</resources>

@@ -48,4 +48,27 @@
     <string name="qr_no">No</string>
     <string name="qr_busy">No puedo hablar</string>
     <string name="end_to_end">Cifrado de extremo a extremo por tu teléfono</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">Fijado</string>
+    <string name="net_internet">Internet</string>
+    <string name="net_nearby">%1$d cerca</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">Teléfono sin conexión · los mensajes esperan en tu teléfono</string>
+    <string name="net_offline_short">Sin conexión</string>
+    <string name="voice_message">Mensaje de voz</string>
+    <string name="voice_send">Enviar mensaje de voz</string>
+    <string name="voice_cancel">Cancelar</string>
+    <string name="voice_permission">Permite el micrófono para grabar mensajes de voz. No se guarda nada en el reloj.</string>
+    <string name="voice_mic_busy">El micrófono está ocupado. Inténtalo de nuevo.</string>
+    <string name="voice_too_short">Demasiado corto. Habla un poco más.</string>
+    <string name="voice_not_sent">No enviado. Mantén el teléfono cerca e inténtalo de nuevo.</string>
+    <string name="send_emoji">Enviar un emoji</string>
+    <string name="delivery_sending">Enviando</string>
+    <string name="delivery_sent">Enviado</string>
+    <string name="delivery_delivered">Entregado</string>
+    <string name="delivery_read">Leído</string>
+    <string name="delivery_failed">No entregado</string>
+    <string name="complication_none">No hay mensajes sin leer</string>
+    <string name="tile_reply_to">Responder a %1$s</string>
+    <string name="tile_chat_unread">%1$s, %2$d sin leer</string>
 </resources>

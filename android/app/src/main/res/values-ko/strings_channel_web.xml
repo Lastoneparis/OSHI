@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">공개 웹 미리보기</string>
+    <string name="cw_toggle">게시물을 웹에 게시</string>
+    <string name="cw_footer">새 게시물은 oshi-messenger.com/c/%1$s에 공개 웹페이지로도 게시됩니다. 검색 엔진과 링크 미리보기를 포함해 누구나 읽을 수 있습니다. 웹 사본에는 종단간 암호화가 적용되지 않습니다.</string>
+    <string name="cw_needs_link">먼저 이 채널에 공개 링크를 만드세요. 웹 미리보기는 그 이름을 사용합니다.</string>
+    <string name="cw_create_link">공개 링크 만들기</string>
+    <string name="cw_enable_title">게시물을 웹에 게시할까요?</string>
+    <string name="cw_enable_confirm">이 채널의 게시물은 oshi-messenger.com/c/%1$s에서 웹의 누구에게나 표시됩니다. 새 게시물만 해당됩니다. 링크 미리보기(WhatsApp, X, Telegram 등)도 읽을 수 있으며 웹 사본에는 종단간 암호화가 적용되지 않습니다.</string>
+    <string name="cw_enable_action">게시</string>
+    <string name="cw_disable_title">웹 미리보기를 끌까요?</string>
+    <string name="cw_disable_confirm">oshi-messenger.com/c/%1$s에 게시된 모든 게시물과 이미지가 웹에서 삭제됩니다. 앱 안의 게시물은 그대로 유지됩니다.</string>
+    <string name="cw_disable_action">끄기</string>
+    <string name="cw_indexing">검색 엔진 허용</string>
+    <string name="cw_indexing_footer">끄면 페이지가 검색 엔진에 색인하지 말라고 요청합니다.</string>
+    <string name="cw_embed_code">삽입 코드</string>
+    <string name="cw_embed_title">이 게시물 삽입</string>
+    <string name="cw_embed_hint">게시물이 표시될 위치에 이 코드를 웹사이트에 붙여 넣으세요.</string>
+    <string name="cw_embed_dark">어두운 테마</string>
+    <string name="cw_copy_code">코드 복사</string>
+    <string name="cw_code_copied">코드가 복사됨</string>
+    <string name="cw_not_on_web">이 게시물은 웹에 없습니다. 웹 미리보기를 켠 후에 보낸 게시물만 게시됩니다.</string>
+    <string name="cw_error">웹 미리보기를 변경할 수 없습니다. 연결을 확인하고 다시 시도하세요.</string>
+</resources>

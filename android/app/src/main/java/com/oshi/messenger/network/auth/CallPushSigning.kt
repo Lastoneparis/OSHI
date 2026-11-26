@@ -45,7 +45,27 @@ object CallPushSigning {
     /** Called first thing in `OSHIApplication.onCreate`. */
     fun init(context: Context) {
         appContext = context.applicationContext
+        // __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ the persisted clock offset, so the first
+        // signed request of this process (FCM token registration, the first poll) already
+        // uses server time. A seed only: the first fresh response replaces it.
+        runCatching {
+            val prefs = context.applicationContext.getSharedPreferences(CLOCK_PREFS, Context.MODE_PRIVATE)
+            ServerClock.install(object : ServerClock.Store {
+                override fun load(): Long? =
+                    if (prefs.contains(KEY_CLOCK_OFFSET)) prefs.getLong(KEY_CLOCK_OFFSET, 0L) else null
+                override fun save(offsetMs: Long) {
+                    prefs.edit().putLong(KEY_CLOCK_OFFSET, offsetMs).apply()
+                }
+            }) { Log.w("ServerClock", it) }
+            val seeded = ServerClock.rawOffsetMs()
+            if (kotlin.math.abs(seeded) > ServerClock.LOG_THRESHOLD_MS) {
+                Log.w("ServerClock", "restored clock offset ${seeded} ms (server - local)")
+            }
+        }
     }
+
+    private const val CLOCK_PREFS = "oshi_server_clock"
+    private const val KEY_CLOCK_OFFSET = "offset_ms"
 
     val interceptor: Interceptor = CallPushAuthInterceptor(
         CallPushAuth.userAgent(BuildConfig.VERSION_NAME)
@@ -63,7 +83,6 @@ object CallPushSigning {
             method = method,
             path = path,
             body = body,
-            timestampMs = System.currentTimeMillis(),
             signingPublicKey = cm.getSigningPublicKey(),
             sign = { cm.sign(it) },
         )

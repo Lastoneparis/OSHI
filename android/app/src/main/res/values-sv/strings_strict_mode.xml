@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Strikt säkerhetsläge</string>
+    <string name="strict_status_on">På: ingen kopiering, inga skärmdumpar, dolt för skärmläsarappar</string>
+    <string name="strict_status_off">Av. Låser OSHI när din telefon kan vara övervakad</string>
+    <string name="strict_hero_on">Strikt säkerhetsläge är på</string>
+    <string name="strict_intro">För när en telefon kan vara övervakad. Ett enda reglage låser OSHI: inget kan kopieras ut, skärmen kan inte spelas in och appar som läser skärmen, även AI-agenter, ser ingenting.</string>
+    <string name="strict_section_switch">Läge</string>
+    <string name="strict_toggle_title">Strikt säkerhetsläge</string>
+    <string name="strict_toggle_on">På för den här enheten</string>
+    <string name="strict_toggle_off">Av</string>
+    <string name="strict_block_paste_title">Blockera även inklistring</string>
+    <string name="strict_block_paste_subtitle">Inget kan heller klistras in i OSHI</string>
+    <string name="strict_hide_presence_title">Dölj läskvitton och skrivindikator</string>
+    <string name="strict_hide_presence_subtitle">Andra ser inte när du läser eller skriver</string>
+    <string name="strict_forced_subtitle">Inställt av strikt säkerhetsläge</string>
+    <string name="strict_blocked_toast">Blockerat av strikt säkerhetsläge</string>
+    <string name="strict_unlock_title">Stäng av strikt säkerhetsläge</string>
+    <string name="strict_unlock_subtitle">Bekräfta att det är du</string>
+    <string name="strict_threats_title">Appar som kan läsa eller styra din skärm</string>
+    <string name="strict_threats_none">Inga hittades på den här telefonen.</string>
+    <string name="strict_threat_a11y">Tillgänglighetstjänst som inte är ett hjälpmedel</string>
+    <string name="strict_threat_remote">App för fjärrstyrning eller skärmspegling</string>
+    <string name="strict_threats_open">Granska</string>
+    <string name="strict_threats_explainer">OSHI kan inte stänga av en annan app. Känner du inte igen någon av dem, stäng av den i Androids inställningar › Tillgänglighet eller avinstallera den.</string>
+    <string name="strict_banner_title">Appar kan läsa eller styra den här skärmen</string>
+    <string name="strict_banner_body">%1$s. Strikt säkerhetsläge döljer OSHI för dem där Android tillåter det.</string>
+    <string name="strict_banner_dismiss">Avfärda</string>
+    <string name="strict_does_title">Vad det gör</string>
+    <string name="strict_does_copy">Ingen kopiering, urklippning, vidarebefordran, delning eller sparande av meddelanden. Text kan inte markeras och allt OSHI lagt i urklipp rensas.</string>
+    <string name="strict_does_paste">Inklistring i OSHI blockeras när ”Blockera även inklistring” är på, även tangentbordets klistra in-kommando.</string>
+    <string name="strict_does_screen">Skärmdumpar, skärminspelning och skärmdelning visar en svart skärm. Förhandsvisningen bland senaste appar är dold.</string>
+    <string name="strict_does_agents">Appar som läser skärmen via Tillgänglighet, även AI-agenter, ser inget OSHI-innehåll (Android 14 och senare). Tryck de skickar in ignoreras.</string>
+    <string name="strict_does_overlays">Tryck ignoreras medan en annan app ritar över OSHI.</string>
+    <string name="strict_does_notifications">Aviseringar säger bara ”Nytt meddelande”: inget namn, inget foto, ingen text.</string>
+    <string name="strict_does_lock">Applås varje gång du kommer tillbaka till OSHI (om din telefon har skärmlås).</string>
+    <string name="strict_does_keyboard">Inkognitotangentbord: tangentbordet ombeds att inte lära sig vad du skriver.</string>
+    <string name="strict_does_network">Inga länkförhandsvisningar och ingen GIPHY-sökning: inget hämtas från tredjepartssajter.</string>
+    <string name="strict_does_presence">Läskvitton och skrivindikatorer av (om du valt att dölja dem).</string>
+    <string name="strict_does_relay">Integritetsrelä slås på när ett finns tillgängligt.</string>
+    <string name="strict_does_restore">Dina tidigare inställningar kommer tillbaka när du stänger av läget.</string>
+    <string name="strict_cannot_title">Vad det inte kan göra</string>
+    <string name="strict_cannot_malware">Ingen app kan skydda dig helt från skadlig kod eller från en komprometterad (rootad) telefon.</string>
+    <string name="strict_cannot_keyboard">Ditt tangentbord ser fortfarande vad du skriver. Ett urklippsförslag som det skriver åt dig går inte att skilja från att skriva.</string>
+    <string name="strict_cannot_readers">Skärmläsare för blinda och synskadade fungerar fortfarande, men andra tillgänglighetsappar kan inte läsa OSHI medan läget är på.</string>
+    <string name="strict_cannot_old">På Android 13 och äldre kan OSHI inte dölja sitt innehåll för tillgänglighetsappar. Det kan bara varna dig för dem.</string>
+    <string name="strict_cannot_camera">Någon kan fortfarande fotografera skärmen med en annan enhet.</string>
+    <string name="strict_cannot_recipient">Det skyddar bara den här telefonen, inte telefonerna hos dem du skriver till.</string>
+    <string name="strict_auto_lock_immediate">Direkt (Strikt säkerhetsläge)</string>
+</resources>

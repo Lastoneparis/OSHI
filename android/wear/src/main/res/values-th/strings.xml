@@ -48,4 +48,27 @@
     <string name="qr_no">ไม่</string>
     <string name="qr_busy">ตอนนี้คุยไม่ได้</string>
     <string name="end_to_end">เข้ารหัสต้นทางถึงปลายทางโดยโทรศัพท์ของคุณ</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">ปักหมุดแล้ว</string>
+    <string name="net_internet">อินเทอร์เน็ต</string>
+    <string name="net_nearby">%1$d ใกล้เคียง</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">โทรศัพท์ออฟไลน์ · ข้อความรออยู่ในโทรศัพท์</string>
+    <string name="net_offline_short">โทรศัพท์ออฟไลน์</string>
+    <string name="voice_message">ข้อความเสียง</string>
+    <string name="voice_send">ส่งข้อความเสียง</string>
+    <string name="voice_cancel">ยกเลิก</string>
+    <string name="voice_permission">อนุญาตไมโครโฟนเพื่อบันทึกข้อความเสียง ไม่มีสิ่งใดเก็บไว้ในนาฬิกา</string>
+    <string name="voice_mic_busy">ไมโครโฟนไม่ว่าง ลองอีกครั้ง</string>
+    <string name="voice_too_short">สั้นเกินไป พูดให้นานขึ้นอีกนิด</string>
+    <string name="voice_not_sent">ส่งไม่สำเร็จ วางโทรศัพท์ไว้ใกล้ ๆ แล้วลองอีกครั้ง</string>
+    <string name="send_emoji">ส่งอีโมจิ</string>
+    <string name="delivery_sending">กำลังส่ง</string>
+    <string name="delivery_sent">ส่งแล้ว</string>
+    <string name="delivery_delivered">ถึงแล้ว</string>
+    <string name="delivery_read">อ่านแล้ว</string>
+    <string name="delivery_failed">ส่งไม่ถึง</string>
+    <string name="complication_none">ไม่มีข้อความที่ยังไม่อ่าน</string>
+    <string name="tile_reply_to">ตอบกลับ %1$s</string>
+    <string name="tile_chat_unread">%1$s, ยังไม่อ่าน %2$d</string>
 </resources>

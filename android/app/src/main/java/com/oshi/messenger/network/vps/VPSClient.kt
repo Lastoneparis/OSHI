@@ -143,6 +143,18 @@ class VPSClient @Inject constructor(
     var groupEnvelopeV4Opener: ((envelope: JSONObject) -> String?)? = null
     // Called when a group envelope is successfully decrypted
     var onGroupEnvelopeDecrypted: ((senderKey: String, groupMessageContent: String) -> Unit)? = null
+
+    /** __BOTS_PHASE1_2026_11_24__ a bot edited / deleted / pinned its own group post (wired to GroupManager). */
+    var onBotPostUpdate: ((com.oshi.messenger.service.BotPostUpdate) -> Unit)? = null
+
+    /**
+     * __BOTS_PHASE1_2026_11_24__ S7: is this a group/channel I am in? Wired to GroupManager.
+     * Unwired (null) = allow, so nothing changes for a build that never sets it.
+     */
+    var isMemberOfGroup: ((String) -> Boolean)? = null
+
+    private fun isBotGroupAllowed(groupId: String): Boolean =
+        runCatching { isMemberOfGroup?.invoke(groupId) }.getOrNull() ?: true
     // Internal flag: was the last group envelope handled via callback (true) or failed decryption (false)?
     private var lastGroupEnvelopeHandled: Boolean = false
     // Called to try decrypting an iOS-format delivery receipt {"encrypted":"base64..."}
@@ -168,6 +180,20 @@ class VPSClient @Inject constructor(
     @Volatile
     var serverSupportsBinary: Boolean = false
         private set
+    /**
+     * __EGRESS_STALL_2026_11_23__ The call server refused this socket's register (contract
+     * §4: `registered` success:false, then close 4403). Cleared by the next connect.
+     */
+    @Volatile
+    var callWebSocketAuthRefused: Boolean = false
+        private set
+    /** __EGRESS_STALL_2026_11_23__ last time the HTTP fallback (POST /audio) was accepted. */
+    @Volatile
+    var lastCallAudioPostOkAtMs: Long = 0L
+        private set
+    /** __EGRESS_STALL_2026_11_23__ bytes queued in OkHttp, not yet handed to the network. */
+    val callWebSocketQueuedBytes: Long
+        get() = try { callWebSocket?.queueSize() ?: 0L } catch (_: Exception) { 0L }
     private var callWebSocketReconnectJob: Job? = null
     // Callback for audio packets received via WebSocket
     var onCallAudioReceived: ((ByteArray) -> Unit)? = null
@@ -1276,15 +1302,16 @@ class VPSClient @Inject constructor(
         }
         val (payload, sealKind) = opened
 
-        if (payload.optString("type", "") == "bot_callback_answer") {
+        if (payload.optString("type", "") == "bot_callback_answer" ||
+            com.oshi.messenger.service.BotPostUpdate.isUpdateType(payload.optString("type", ""))) {
             handleBotPlatformItem(payload)
             ackBotEnvelope(messageId, envelope)
             return
         }
 
         val groupId = payload.optString("groupId", "")
-        if (groupId.isEmpty()) {
-            Log.w(TAG, "🤖 Bot envelope missing groupId, skipping")
+        if (groupId.isEmpty() || !isBotGroupAllowed(groupId)) {
+            Log.w(TAG, "🤖 Bot envelope missing groupId or not for a group I am in, skipping")
             ackBotEnvelope(messageId, envelope)
             return
         }
@@ -1339,6 +1366,17 @@ class VPSClient @Inject constructor(
      * `groupId`, which the callers check — a shape that gains a key must not stop an
      * existing phone from showing the message.
      */
+    /** The `bot:` sender key of a bot item — see [routeBotMessage] for the three sources. */
+    private fun botSenderKeyFor(json: JSONObject): String {
+        val botTokenPrefix = json.optString("botToken", "")
+        val botId = json.optString("botId", "")
+        return when {
+            botTokenPrefix.isNotEmpty() -> "bot:${botTokenPrefix.take(8)}"
+            botId.isNotEmpty() -> "bot:${botId.take(8)}"
+            else -> "bot:${stableBotKey(json.optString("botName", "Bot"))}"
+        }
+    }
+
     private fun routeBotMessage(json: JSONObject, fallbackMessageId: String) {
         val botName = json.optString("botName", "Bot")
         val content = json.optString("content", "")
@@ -1363,11 +1401,7 @@ class VPSClient @Inject constructor(
         // well they identify the bot: the public `botId`, then a stable digest of the
         // display name. All three keep the `bot:` prefix, so every downstream
         // `startsWith("bot:")` test keeps working.
-        val senderKey = when {
-            botTokenPrefix.isNotEmpty() -> "bot:${botTokenPrefix.take(8)}"
-            botId.isNotEmpty() -> "bot:${botId.take(8)}"
-            else -> "bot:${stableBotKey(botName)}"
-        }
+        val senderKey = botSenderKeyFor(json)
 
         // Build a GroupMessage JSON matching the iOS GroupMessage struct
         val groupMessageJson = JSONObject().apply {
@@ -1420,7 +1454,8 @@ class VPSClient @Inject constructor(
      */
     private fun handleBotPlatformItem(item: JSONObject): Boolean {
         val type = item.optString("type", "")
-        if (type != "bot_message" && type != "bot_callback_answer") return false
+        if (type != "bot_message" && type != "bot_callback_answer" &&
+            !com.oshi.messenger.service.BotPostUpdate.isUpdateType(type)) return false
         // __BOT_E2E_2026_09_23__ A sealed item that cannot be opened is consumed (the
         // caller acks it) and never shown.
         val (json, sealKind) = openBotPayloadIfSealed(
@@ -1431,6 +1466,10 @@ class VPSClient @Inject constructor(
                 val groupId = json.optString("groupId", "")
                 if (groupId.isEmpty()) {
                     Log.w(TAG, "🤖 bot_message without groupId — dropping")
+                } else if (!isBotGroupAllowed(groupId)) {
+                    // __BOTS_PHASE1_2026_11_24__ S7: rosters given to addToGroup are not
+                    // verifiable server-side (groups are E2E) — the client drops the rest.
+                    Log.w(TAG, "🤖 bot_message for a group I am not in — dropping")
                 } else {
                     routeBotMessage(json, fallbackMessageId = java.util.UUID.randomUUID().toString())
                     com.oshi.messenger.network.bot.BotSealStatus.record(appContext, groupId, sealKind)
@@ -1442,8 +1481,11 @@ class VPSClient @Inject constructor(
                 val text = json.optString("text", "")
                 // An answer with neither an id to match nor a word to say is nothing to
                 // show; publishing it would pop an empty snackbar over the thread.
+                val answerGroup = json.optString("groupId", "")
                 if (callbackQueryId.isEmpty() && text.isBlank()) {
                     Log.w(TAG, "🤖 empty bot_callback_answer — dropping")
+                } else if (answerGroup.isNotEmpty() && !isBotGroupAllowed(answerGroup)) {
+                    Log.w(TAG, "🤖 bot_callback_answer for a group I am not in — dropping")
                 } else {
                     com.oshi.messenger.service.BotCallbackAnswers.publish(
                         com.oshi.messenger.data.model.BotCallbackAnswer(
@@ -1455,6 +1497,18 @@ class VPSClient @Inject constructor(
                         )
                     )
                     Log.d(TAG, "🤖 bot_callback_answer published (alert=${json.optBoolean("showAlert", false)})")
+                }
+                true
+            }
+            // __BOTS_PHASE1_2026_11_24__ a bot edits or deletes ITS OWN post in place
+            // (live vote counts, "Registered ✓"). Applied only to a row that bot wrote.
+            com.oshi.messenger.service.BotPostUpdate.TYPE -> {
+                val outerBotId = item.optString("botId", "").takeIf { it.isNotEmpty() }
+                val update = com.oshi.messenger.service.BotPostUpdate.parse(json, outerBotId)
+                when {
+                    update == null -> Log.w(TAG, "🤖 malformed bot_message_action — dropping")
+                    !isBotGroupAllowed(update.groupId) -> Log.w(TAG, "🤖 bot action for a group I am not in — dropping")
+                    else -> onBotPostUpdate?.invoke(update)
                 }
                 true
             }
@@ -1540,29 +1594,59 @@ class VPSClient @Inject constructor(
      * Send call signal through VPS (uses port 8083)
      * Same API as iOS VoiceCallManager
      */
+    /** __LATE_ACCEPT_2026_11_23__ What the call server said to a signal POST. */
+    data class CallSignalPostResult(val delivered: Boolean, val callEnded: Boolean)
+
+    /**
+     * __LATE_ACCEPT_2026_11_23__ [sendCallSignal], keeping the server's answer: used for
+     * `callAccept`, whose reply may say the call is already over (HTTP 410 or an ended
+     * marker, [com.oshi.messenger.service.LateAcceptPolicy.acceptReplySaysEnded]). Same
+     * body, same client (signature / clock re-sign interceptors) as [sendCallSignal].
+     */
+    suspend fun sendCallSignalForResult(
+        recipientPublicKey: String,
+        signal: CallSignal
+    ): CallSignalPostResult {
+        return try {
+            val json = callSignalJson(recipientPublicKey, signal)
+            val (code, body) = postJsonToCallServerRaw(ENDPOINT_CALL_SIGNAL, json)
+                ?: return CallSignalPostResult(delivered = false, callEnded = false)
+            val ended = com.oshi.messenger.service.LateAcceptPolicy.acceptReplySaysEnded(code, body)
+            if (ended) Log.w(TAG, "📞 Call server: call ${signal.callId.take(8)} is already over (HTTP $code)")
+            CallSignalPostResult(delivered = code in 200..299, callEnded = ended)
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Send call signal failed: ${e.message}")
+            CallSignalPostResult(delivered = false, callEnded = false)
+        }
+    }
+
+    private fun callSignalJson(recipientPublicKey: String, signal: CallSignal): JSONObject {
+        val recipientBase64url = publicKeyToBase64url(recipientPublicKey)
+        val senderBase64url = publicKeyToBase64url(myPublicKey)
+        return JSONObject().apply {
+            put("sender", senderBase64url)
+            put("senderPublicKey", senderBase64url)  // 🔧 iOS compatibility
+            put("recipient", recipientBase64url)
+            put("recipientPublicKey", recipientBase64url)  // 🔧 iOS compatibility
+            put("callId", signal.callId)
+            put("type", signal.wireType ?: CallSignal.wireTypeOf(signal.type))
+            put("payload", Base64.encodeToString(signal.payload, Base64.NO_WRAP))
+            put("signal", Base64.encodeToString(signal.payload, Base64.NO_WRAP))  // 🔧 iOS compatibility
+            put("timestamp", System.currentTimeMillis() / 1000.0)
+            put("senderDeviceId", com.oshi.messenger.service.FCMService.getDeviceId(appContext))
+            put("privacy_mode", signal.privacyMode)  // 🔒 Call privacy negotiation (Phase 4)
+        }
+    }
+
     suspend fun sendCallSignal(
         recipientPublicKey: String,
         signal: CallSignal
     ): Boolean {
         return try {
-            val recipientBase64url = publicKeyToBase64url(recipientPublicKey)
-            val senderBase64url = publicKeyToBase64url(myPublicKey)
-            val json = JSONObject().apply {
-                put("sender", senderBase64url)
-                put("senderPublicKey", senderBase64url)  // 🔧 iOS compatibility
-                put("recipient", recipientBase64url)
-                put("recipientPublicKey", recipientBase64url)  // 🔧 iOS compatibility
-                put("callId", signal.callId)
-                put("type", signal.wireType ?: CallSignal.wireTypeOf(signal.type))
-                put("payload", Base64.encodeToString(signal.payload, Base64.NO_WRAP))
-                put("signal", Base64.encodeToString(signal.payload, Base64.NO_WRAP))  // 🔧 iOS compatibility
-                put("timestamp", System.currentTimeMillis() / 1000.0)
-                // 📱 MULTI-DEVICE: lets the server drop our own echo
-                // (vps_voip_server.js:50) instead of handing every signal back to
-                // the device that sent it. iOS: VoiceCallManager.swift:7700.
-                put("senderDeviceId", com.oshi.messenger.service.FCMService.getDeviceId(appContext))
-                put("privacy_mode", signal.privacyMode)  // 🔒 Call privacy negotiation (Phase 4)
-            }
+            // 📱 MULTI-DEVICE: `senderDeviceId` (in [callSignalJson]) lets the server drop
+            // our own echo (vps_voip_server.js:50) instead of handing every signal back to
+            // the device that sent it. iOS: VoiceCallManager.swift:7700.
+            val json = callSignalJson(recipientPublicKey, signal)
 
             // Use message server (port 8083) for call signals
             val response = postJsonToCallServer(ENDPOINT_CALL_SIGNAL, json)
@@ -1570,6 +1654,46 @@ class VPSClient @Inject constructor(
         } catch (e: Exception) {
             Log.e(TAG, "❌ Send call signal failed: ${e.message}")
             false
+        }
+    }
+
+    /**
+     * __CALL_WAKE_2026_11_22__ Tell the call server this phone is RINGING for [callId]
+     * (callee side). The server records it for the caller's `GET /call-reach` and never
+     * forwards it: an old client would read an unknown sealed signal as an offer. The
+     * `signal` field is a placeholder (the route requires one), nothing secret.
+     */
+    suspend fun sendCallRinging(callerPublicKey: String, callId: String): Boolean {
+        if (callId.isEmpty() || callerPublicKey.isEmpty()) return false
+        return try {
+            val json = JSONObject().apply {
+                put("sender", publicKeyToBase64url(myPublicKey))
+                put("recipient", publicKeyToBase64url(callerPublicKey))
+                put("callId", callId)
+                put("type", com.oshi.messenger.service.CallReachWire.RINGING_TYPE)
+                put("signal", com.oshi.messenger.service.CallReachWire.RINGING_PLACEHOLDER)
+            }
+            postJsonToCallServer(ENDPOINT_CALL_SIGNAL, json) != null
+        } catch (e: Exception) {
+            Log.w(TAG, "callRinging not sent: ${e.message}")
+            false
+        }
+    }
+
+    /**
+     * __CALL_WAKE_2026_11_22__ Caller side: has the callee's phone got the call?
+     * null when the server does not know the route (404 before the deploy, or the call
+     * is unknown to it) — the screen then keeps its old wording.
+     */
+    suspend fun fetchCallReach(callId: String): com.oshi.messenger.service.CallReach? {
+        if (callId.isEmpty()) return null
+        return try {
+            val me = java.net.URLEncoder.encode(publicKeyToBase64url(myPublicKey), "UTF-8")
+            val id = java.net.URLEncoder.encode(callId, "UTF-8")
+            val response = getFromCallServer("/call-reach/$id?me=$me") ?: return null
+            com.oshi.messenger.service.CallReach.fromServer(response.optString("state", ""))
+        } catch (e: Exception) {
+            null
         }
     }
 
@@ -1804,7 +1928,11 @@ class VPSClient @Inject constructor(
 
                 for (i in 0 until signalsArray.length()) {
                     val sigJson = signalsArray.getJSONObject(i)
-                    signals.add(CallSignal.fromJson(sigJson))
+                    val parsed = CallSignal.fromJson(sigJson)
+                    // __CALL_CLOCK_SKEW_2026_11_21__ `timestamp` here is the SERVER's
+                    // Date.now(); the 60 s staleness check compares it with the LOCAL
+                    // clock. Rebase it so a phone whose clock is fast still rings.
+                    signals.add(parsed.copy(timestamp = com.oshi.messenger.network.auth.ServerClock.serverToLocal(parsed.timestamp)))
                 }
 
                 if (signals.isNotEmpty()) {
@@ -1835,6 +1963,7 @@ class VPSClient @Inject constructor(
 
             // POST /audio on port 8083 — matches VPS vps_voip_server.js
             val response = postJsonToCallServer(ENDPOINT_CALL_AUDIO, json)
+            if (response != null) lastCallAudioPostOkAtMs = System.currentTimeMillis()  // __EGRESS_STALL_2026_11_23__
             response != null
         } catch (e: Exception) {
             Log.e(TAG, "❌ Send call audio failed: ${e.message}")
@@ -2156,6 +2285,7 @@ class VPSClient @Inject constructor(
         // A call is being set up: pin the signal poll at PollBackoff.CALL_ACTIVE_MS
         // until the socket is torn down, independent of the signal-seen window.
         com.oshi.messenger.service.AppPollState.setCallSessionOpen(true)
+        callWebSocketAuthRefused = false  // __EGRESS_STALL_2026_11_23__
 
         // Reset diagnostic counters for new call
         diagWsBinaryAudio = 0
@@ -2216,6 +2346,7 @@ class VPSClient @Inject constructor(
                             // answers success:false (+ reason) then closes 4403. Logged only —
                             // the close path does not reconnect, so no tighter loop than today.
                             if (json.has("success") && !json.optBoolean("success", true)) {
+                                callWebSocketAuthRefused = true  // __EGRESS_STALL_2026_11_23__
                                 Log.e(TAG, "🔌 Call WebSocket register REFUSED: error=${json.optString("error")} reason=${json.optString("reason")}")
                             } else {
                                 Log.d(TAG, "✅ Call WebSocket JSON registration confirmed (auth=${json.optString("auth", "?")})")
@@ -2307,7 +2438,10 @@ class VPSClient @Inject constructor(
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-                if (code == 4403) Log.e(TAG, "🔌 Call WebSocket closed 4403 (register auth refused): $reason")
+                if (code == 4403) {
+                    callWebSocketAuthRefused = true  // __EGRESS_STALL_2026_11_23__
+                    Log.e(TAG, "🔌 Call WebSocket closed 4403 (register auth refused): $reason")
+                }
                 Log.d(TAG, "🔌 Call WebSocket closed: $reason")
                 isCallWebSocketConnected = false
                 serverSupportsBinary = false
@@ -2736,6 +2870,29 @@ class VPSClient @Inject constructor(
                 } else {
                     // Don't log 404 for polling - it's expected when no signals
                     null
+                }
+            } catch (e: IOException) {
+                null
+            }
+        }
+    }
+
+    /**
+     * __LATE_ACCEPT_2026_11_23__ [postJsonToCallServer] that keeps the status code and the
+     * raw body (a 410 must be told apart from a network failure). null = no HTTP answer.
+     */
+    private suspend fun postJsonToCallServerRaw(endpoint: String, json: JSONObject): Pair<Int, String?>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val payload = json.toString().toByteArray(Charsets.UTF_8)  // serialized ONCE (signature)
+                val request = Request.Builder()
+                    .url("$callServerUrl$endpoint")
+                    .post(payload.toRequestBody("application/json".toMediaType()))
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("X-OSHI-Platform", "android")
+                    .build()
+                httpClient.newCall(request).execute().use { response ->
+                    response.code to response.body?.string()
                 }
             } catch (e: IOException) {
                 null

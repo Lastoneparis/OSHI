@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">דלג</string>
+    <string name="ob27_continue">המשך</string>
+    <string name="ob27_page_of">עמוד %1$d מתוך %2$d</string>
+    <string name="ob27_private_title">רק אתה והם</string>
+    <string name="ob27_private_body">ההודעות והשיחות מוצפנות מקצה לקצה בטלפון שלך. אף אחד באמצע לא יכול לקרוא אותן — אפילו לא OSHI.</string>
+    <string name="ob27_offline_title">עובד בלי אינטרנט</string>
+    <string name="ob27_offline_body">אין רשת? ההודעות עוברות מטלפון לטלפון דרך אנשים בסביבה ש־OSHI פתוח אצלם. רדיו LoRa מעביר אותן רחוק יותר.</string>
+    <string name="ob27_range_direct">ישיר</string>
+    <string name="ob27_range_relayed">בממסר</string>
+    <string name="ob27_range_lora">רדיו LoRa</string>
+    <string name="ob27_anon_title">בלי מספר טלפון</string>
+    <string name="ob27_anon_body">בלי חשבון, בלי אימייל, בלי מספר להרשמה. הזהות שלך היא מפתח שנוצר בטלפון הזה.</string>
+    <string name="ob27_together_title">הבא את האנשים שלך</string>
+    <string name="ob27_together_body">שוחח אחד על אחד או בקבוצות. הוסף מישהו בסריקת קוד ה־QR שלו או בשליחת קישור הזמנה.</string>
+    <string name="ob27_rules_title">לפני שמתחילים</string>
+    <string name="ob27_rules_subtitle">כמה כללי בית, ומה OSHI כבר יודע לעשות ומה עדיין לא.</string>
+    <string name="ob27_rules_do">כן לעשות</string>
+    <string name="ob27_rules_dont">אף פעם</string>
+    <string name="ob27_good_to_know">טוב לדעת</string>
+    <string name="ob27_show_details">הצג פרטים</string>
+    <string name="ob27_hide_details">הסתר פרטים</string>
+    <string name="ob27_agree">הבנתי</string>
+    <string name="ob27_notif_title">לא לפספס הודעות</string>
+    <string name="ob27_notif_body">אפשר התראות כדי לראות הודעות ושיחות חדשות. אפשר לכבות אותן בכל עת בהגדרות.</string>
+    <string name="ob27_notif_allow">אפשר התראות</string>
+    <string name="ob27_not_now">לא עכשיו</string>
+    <string name="ob27_identity_title">בחר שם</string>
+    <string name="ob27_identity_body">זה השם שאנשי הקשר שלך רואים. אפשר לשנות אותו אחר כך.</string>
+    <string name="ob27_already">כבר יש לך OSHI?</string>
+</resources>

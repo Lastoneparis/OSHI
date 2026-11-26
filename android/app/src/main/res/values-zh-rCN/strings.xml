@@ -4,10 +4,7 @@
     <string name="app_tagline">安全网状通讯</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome">欢迎使用 OSHI</string>
-    <string name="onboarding_description">端对端加密消息，即使没有网络也能运行</string>
     <string name="onboarding_create_identity">创建身份</string>
-    <string name="onboarding_restore_identity">恢复身份</string>
 
     <!-- Messages -->
     <string name="messages_title">消息</string>
@@ -61,6 +58,8 @@
     <string name="settings_theme_dark">深色</string>
     <string name="settings_theme_oled_black">OLED 纯黑</string>
     <string name="settings_theme_oled_black_desc">为 OLED 屏幕使用纯黑背景。在深色主题开启时生效。</string>
+    <string name="appearance_glass_effect">玻璃效果</string>
+    <string name="appearance_glass_effect_footer">如磨砂玻璃般半透明的栏、卡片和菜单。适用于浅色、深色和 OLED 纯黑。</string>
     <string name="settings_backup">备份密钥</string>
     <string name="settings_about">关于</string>
     <string name="settings_version">版本 %s</string>
@@ -385,22 +384,9 @@
     <string name="video_switch_to_voice">切换到语音</string>
 
     <!-- Onboarding - Additional -->
-    <string name="onboarding_subtitle">安全私密的即时通讯，即使没有网络也能使用</string>
-    <string name="onboarding_key_features">主要功能</string>
-    <string name="onboarding_e2e_title">端对端加密</string>
-    <string name="onboarding_e2e_desc">所有消息都经过加密。只有您和收件人可以阅读。</string>
-    <string name="onboarding_mesh_title">网状网络</string>
-    <string name="onboarding_mesh_desc">即使没有网络，也可以直接向附近用户发送消息。</string>
-    <string name="onboarding_calls_title">安全通话</string>
-    <string name="onboarding_calls_desc">语音和视频通话均采用全程加密。</string>
-    <string name="onboarding_cross_platform_title">跨平台</string>
-    <string name="onboarding_cross_platform_desc">无缝兼容iOS和Android设备。</string>
-    <string name="onboarding_create_your_identity">创建您的身份</string>
-    <string name="onboarding_choose_display_name">为您的联系人选择一个显示名称</string>
     <string name="onboarding_display_name">显示名称</string>
     <string name="onboarding_key_info">系统将为您生成唯一的加密密钥对。请务必稍后备份您的密钥。</string>
     <string name="onboarding_back">返回</string>
-    <string name="onboarding_next">下一步</string>
     <string name="onboarding_creating">创建中…</string>
     <string name="onboarding_error_create">创建身份失败：%s</string>
 
@@ -820,8 +806,6 @@
     <string name="faq_q6_answer">前往新消息，扫描联系人的二维码、分享您的二维码或粘贴对方的公钥。</string>
 
     <!-- Onboarding Disclaimer -->
-    <string name="onboarding_disclaimer_title">重要提示</string>
-    <string name="onboarding_disclaimer_subtitle">使用OSHI前请阅读</string>
     <string name="onboarding_disclaimer_audit_title">尚未进行安全审计</string>
     <string name="onboarding_disclaimer_audit_desc">此应用尚未接受专业安全审计。虽然我们使用强加密，但请自行判断使用。</string>
     <string name="onboarding_disclaimer_anonymous_title">隐私优先</string>
@@ -2147,24 +2131,10 @@
     <string name="new_message_sent">消息已发送！</string>
     <string name="onboarding_conduct_subtitle">OSHI 建立在信任和尊重之上。请遵循以下准则：</string>
     <string name="onboarding_conduct_title">社区准则</string>
-    <string name="onboarding_message_description">通过扫描他们的二维码或输入他们的公钥与某人连接。</string>
-    <string name="onboarding_message_title">发送您的第一条消息</string>
-    <string name="onboarding_method_paste_title">方法 2：复制/粘贴公钥</string>
-    <string name="onboarding_method_qr_title">方法 1：扫描二维码</string>
     <string name="onboarding_reach_disclaimer">离线网状网络的范围很短。两部手机都需要打开 OSHI 才能互相发现，空旷处大约相距 100 米，隔墙则要近得多。只有当附近其他人也打开 OSHI 来转发消息时，传输距离才会更远。如果范围内没有其他人，OSHI 会改用互联网发送。</string>
-    <string name="onboarding_reach_offline_body">没有网络？消息会通过附近打开 OSHI 的人在手机之间接力传递。</string>
-    <string name="onboarding_reach_offline_title">离线（网状网络）</string>
-    <string name="onboarding_reach_online_body">有网络时，可即时联系全世界任何人。</string>
-    <string name="onboarding_reach_online_title">在线</string>
     <string name="onboarding_reach_range1_dist">~100 m</string>
-    <string name="onboarding_reach_range1_label">手机之间，直连</string>
     <string name="onboarding_reach_range2_dist">~500 m</string>
-    <string name="onboarding_reach_range2_label">当中间有人接力时，可传得更远</string>
     <string name="onboarding_reach_range3_dist">~30 km</string>
-    <string name="onboarding_reach_range3_label">通过蓝牙连接 Meshtastic LoRa 无线电</string>
-    <string name="onboarding_reach_subtitle">OSHI 有两种工作方式——有网或无网都能用。</string>
-    <string name="onboarding_reach_tip">离线模式需要附近有其他人打开 OSHI。人越多，消息传得越远。</string>
-    <string name="onboarding_reach_title">你的消息如何传递</string>
     <string name="onboarding_rule_backup">安全备份您的密钥</string>
     <string name="onboarding_rule_no_abuse">禁止骚扰或滥用</string>
     <string name="onboarding_rule_no_illegal">禁止非法内容</string>
@@ -2579,6 +2549,7 @@
     <string name="gif_picker_title">GIF 与贴纸</string>
     <string name="gif_tab_gifs">GIF</string>
     <string name="gif_tab_stickers">贴纸</string>
+    <string name="gif_oshi_hint">OSHI 动态贴纸 — 选择一个即可发送</string>
     <string name="linked_device_alert_body">刚刚有一台设备关联到你的 OSHI 账户。如果不是你本人操作，请打开“已关联设备”并立即移除。</string>
     <string name="linked_device_alert_body_plural">刚刚有 %1$d 台设备关联到你的 OSHI 账户。如果不是你本人操作，请打开“已关联设备”并立即移除。</string>
     <string name="linked_device_alert_title">新设备已关联到你的账户</string>
@@ -2787,4 +2758,63 @@
     <string name="settings_animated_reactions">OSHI 动画回应</string>
     <string name="settings_animated_reactions_desc">关闭：标准表情</string>
     <string name="reactions_new_hint">新：旧版本的 iPhone 可能会将其显示为 👍</string>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="accessibility_updates">更新与维护</string>
+    <string name="ai_download_failed_network">下载失败——请检查网络连接后点按“重试”。</string>
+    <string name="ai_download_failed_server">下载服务器没有响应。请点按“重试”，或稍后再试。</string>
+    <string name="chat_welcome_creator_notice">由 OSHI 撰写，会发送给创建它的 Hugo。他会阅读回复。</string>
+    <string name="conversation_pin">置顶</string>
+    <string name="conversation_unpin">取消置顶</string>
+    <string name="group_block_member">屏蔽此成员</string>
+    <string name="group_member_blocked">已屏蔽。你将不再收到此人在本群中的消息。</string>
+    <string name="group_member_unblocked">已取消屏蔽。</string>
+    <string name="group_report_member">举报此成员</string>
+    <string name="group_unblock_member">取消屏蔽此成员</string>
+    <string name="groups_show_fewer_members">收起</string>
+    <string name="lora_error_channel_unknown">已连接的电台上没有此信道，可能已被重命名、移动或删除。未发送任何内容。</string>
+    <string name="lora_node_message">给此节点发消息</string>
+    <string name="map_pois_hide">隐藏地点</string>
+    <string name="map_pois_show">显示地点</string>
+    <string name="map_regions_insufficient_space">此设备的可用空间不足，无法安装该区域。</string>
+    <string name="markup_done">完成</string>
+    <string name="markup_draw">绘制</string>
+    <string name="markup_undo">撤销</string>
+    <string name="mesh_blocked_bluetooth">蓝牙已关闭</string>
+    <string name="mesh_blocked_permission">附近设备权限已关闭</string>
+    <string name="mesh_blocked_wifi">Wi‑Fi 已关闭</string>
+    <string name="new_message_fab">新建</string>
+    <string name="peers_connect_already">%1$s 已连接</string>
+    <string name="peers_connect_dialing">正在连接 %1$s…</string>
+    <string name="peers_connect_searching">尚无 %1$s 的地址——正在重新搜索…</string>
+    <string name="report_member_already_filed">你已举报过此成员。</string>
+    <string name="report_member_dialog_title">举报此成员</string>
+    <string name="updates_available">OSHI 有新版本可用。</string>
+    <string name="updates_checking">正在检查新版本…</string>
+    <string name="updates_current_version">你正在使用 OSHI %1$s</string>
+    <string name="updates_news_action">阅读版本说明</string>
+    <string name="updates_news_body">每次发布都会附上新功能、修复和维护通知。</string>
+    <string name="updates_title">更新与维护</string>
+    <string name="updates_up_to_date">你使用的是我们已知的最新版本。</string>
+    <string name="inapp_update_title">有可用更新</string>
+    <string name="inapp_update_body">OSHI 新版本已在 Google Play 上线。更新会在后台下载，你可以继续使用应用。</string>
+    <string name="inapp_update_now">更新</string>
+    <string name="inapp_update_later">稍后</string>
+    <string name="inapp_update_ready">更新已就绪</string>
+    <string name="inapp_update_restart">重新启动</string>
+    <!-- __CALL_WAKE_2026_11_22__ -->
+    <string name="call_state_calling">正在呼叫…</string>
+    <string name="call_reach_unreachable">暂时无法接通</string>
+    <string name="call_readiness_title">来电可能不会响铃</string>
+    <string name="call_readiness_notifications">OSHI 的通知已关闭 — 点按以允许</string>
+    <string name="call_readiness_channel">“来电”通知已关闭 — 点按以开启</string>
+    <string name="call_readiness_full_screen">不允许全屏来电提醒 — 点按以允许</string>
+    <string name="call_readiness_background">Android 正在限制 OSHI 后台运行 — 点按并将电池设为“无限制”</string>
+    <string name="composer_format_bold">粗体</string>
+    <string name="composer_format_underline">下划线</string>
+    <!-- __GROUP_HEADER_ISLAND_2026_11_24__ floating group header -->
+    <string name="group_header_info_a11y">群组信息，%1$s</string>
+    <string name="group_header_search_a11y">在对话中搜索</string>
+    <plurals name="group_header_subscribers">
+        <item quantity="other">%1$d 位订阅者</item>
+    </plurals>
 </resources>

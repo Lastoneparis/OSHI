@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Atla</string>
+    <string name="ob27_continue">Devam</string>
+    <string name="ob27_page_of">Sayfa %1$d / %2$d</string>
+    <string name="ob27_private_title">Yalnızca siz ve onlar</string>
+    <string name="ob27_private_body">Mesajlar ve aramalar telefonunuzda uçtan uca şifrelenir. Aradaki hiç kimse onları okuyamaz — OSHI bile.</string>
+    <string name="ob27_offline_title">İnternetsiz çalışır</string>
+    <string name="ob27_offline_body">Ağ yok mu? Mesajlar, yakındaki OSHI’si açık kişiler üzerinden telefondan telefona atlar. Bir LoRa telsiz onları daha da uzağa taşır.</string>
+    <string name="ob27_range_direct">doğrudan</string>
+    <string name="ob27_range_relayed">aktarmalı</string>
+    <string name="ob27_range_lora">LoRa telsiz</string>
+    <string name="ob27_anon_title">Telefon numarası gerekmez</string>
+    <string name="ob27_anon_body">Kaydolmak için hesap, e-posta ya da numara yok. Kimliğiniz bu telefonda oluşturulan bir anahtardır.</string>
+    <string name="ob27_together_title">Yakınlarınızı davet edin</string>
+    <string name="ob27_together_body">Birebir ya da grup halinde sohbet edin. Birini QR kodunu tarayarak veya ona davet bağlantısı göndererek ekleyin.</string>
+    <string name="ob27_rules_title">Başlamadan önce</string>
+    <string name="ob27_rules_subtitle">Birkaç ev kuralı ve OSHI’nin neleri yapabildiği, neleri henüz yapamadığı.</string>
+    <string name="ob27_rules_do">Lütfen yapın</string>
+    <string name="ob27_rules_dont">Asla</string>
+    <string name="ob27_good_to_know">Bilmekte fayda var</string>
+    <string name="ob27_show_details">Ayrıntıları göster</string>
+    <string name="ob27_hide_details">Ayrıntıları gizle</string>
+    <string name="ob27_agree">Anladım</string>
+    <string name="ob27_notif_title">Mesajları kaçırmayın</string>
+    <string name="ob27_notif_body">Yeni mesajları ve aramaları görmek için bildirimlere izin verin. İstediğiniz zaman Ayarlar’dan kapatabilirsiniz.</string>
+    <string name="ob27_notif_allow">Bildirimlere izin ver</string>
+    <string name="ob27_not_now">Şimdi değil</string>
+    <string name="ob27_identity_title">Bir ad seçin</string>
+    <string name="ob27_identity_body">Kişileriniz bunu görür. Daha sonra değiştirebilirsiniz.</string>
+    <string name="ob27_already">Zaten OSHI kullanıyor musunuz?</string>
+</resources>

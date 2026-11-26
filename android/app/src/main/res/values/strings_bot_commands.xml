@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">Commands</string>
+    <string name="bot_cmd_send_a11y">Send %1$s</string>
+    <string name="bot_cmd_sheet_title">Bot commands</string>
+    <string name="bot_cmd_tap_to_send">Tap a command to send it.</string>
+    <string name="bot_cmd_empty_none_title">No bots here yet</string>
+    <string name="bot_cmd_empty_none_body">Create a bot and add it to this group. Its commands will show up here and when you type /.</string>
+    <string name="bot_cmd_empty_bot">This bot has no commands yet.</string>
+    <string name="bot_cmd_setup">Set up commands</string>
+    <string name="bot_cmd_section">Commands</string>
+    <string name="bot_cmd_section_hint">People in the bot’s groups see these when they type / or tap Commands.</string>
+    <string name="bot_cmd_add">Add</string>
+    <string name="bot_cmd_add_title">New command</string>
+    <string name="bot_cmd_edit_title">Edit command</string>
+    <string name="bot_cmd_field_name">Command</string>
+    <string name="bot_cmd_field_description">Description (shown in the menu)</string>
+    <string name="bot_cmd_field_reply">Reply</string>
+    <string name="bot_cmd_field_reply_hint">What the bot answers. You can use {{input}}, {{bot_name}} and {{date}}.</string>
+    <string name="bot_cmd_webhook_note">Sent to your webhook, which answers.</string>
+    <string name="bot_cmd_empty_owner">No commands yet. Add one, like /start or /help, so people know what this bot can do.</string>
+    <string name="bot_cmd_err_empty">Enter a command name.</string>
+    <string name="bot_cmd_err_invalid">Use lowercase letters, digits and _ only.</string>
+    <string name="bot_cmd_err_too_long">32 characters at most.</string>
+    <string name="bot_cmd_err_duplicate">This bot already has this command.</string>
+    <string name="bot_cmd_err_too_many">A bot can have 100 commands at most.</string>
+    <string name="bot_cmd_err_description">Description too long (256 characters at most).</string>
+    <string name="bot_cmd_sync_local">Saved on this phone, which runs the bot.</string>
+    <string name="bot_cmd_sync_syncing">Updating the server…</string>
+    <string name="bot_cmd_sync_synced">Menu updated on the server.</string>
+    <string name="bot_cmd_sync_failed">Couldn’t update the server. Your commands are saved on this phone.</string>
+    <string name="bot_profile_edit">Edit profile</string>
+    <string name="bot_profile_name">Name</string>
+    <string name="bot_profile_description">Description</string>
+    <string name="bot_profile_avatar">Avatar</string>
+    <string name="bot_profile_err_name_empty">Give your bot a name.</string>
+    <string name="bot_profile_err_name_long">Name too long (64 characters at most).</string>
+    <string name="bot_profile_err_desc_long">Description too long (512 characters at most).</string>
+    <string name="bot_connect_title">How it connects</string>
+    <string name="bot_connect_local">This bot runs on this phone: keep OSHI installed and the bot enabled. Add it to a group and its members can use its commands there.</string>
+    <string name="bot_connect_webhook">Each command is sent to your webhook URL and your server replies with JSON {\"text\": \"…\"}. Your server can also use the token below with the OSHI bot API.</string>
+    <string name="bot_connect_token_warning">Keep the token secret: anyone who has it can speak as your bot.</string>
+    <string name="bot_connect_groups">Groups: %1$s</string>
+    <string name="bot_connect_no_groups">Not in any group yet, so nobody can use its commands.</string>
+</resources>

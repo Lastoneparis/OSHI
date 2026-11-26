@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · ikke ende-til-ende-kryptert av OSHI</string>
+    <string name="meshcore_error_not_connected">Ingen MeshCore-radio tilkoblet</string>
+    <string name="meshcore_channels_title">MeshCore-kanaler</string>
+    <string name="meshcore_channel_public">Offentlig · lesbar for alle som kjenner navnet</string>
+    <string name="meshcore_channel_private">Privat · hemmelig nøkkel</string>
+    <string name="meshcore_join_hashtag">Bli med i en hashtag-kanal</string>
+    <string name="meshcore_join_private">Bli med i en privat kanal</string>
+    <string name="meshcore_contacts_title">MeshCore-kontakter</string>
+    <string name="meshcore_refresh_contacts">Oppdater kontakter</string>
+    <string name="meshcore_join_refused">Radioen avviste denne kanalen.</string>
+    <string name="meshcore_join_no_slot">Ingen ledig kanalplass på denne radioen.</string>
+    <string name="meshcore_join_bad_name">Skriv inn et gyldig kanalnavn (maks. 31 byte, ingen mellomrom for en hashtag-kanal).</string>
+    <string name="meshcore_join_bad_secret">Hemmeligheten må være 16 byte: 32 heks-tegn eller base64.</string>
+    <string name="meshcore_hashtag_hint">Nøkkelen utledes fra navnet: alle som kjenner navnet, kan lese kanalen.</string>
+    <string name="meshcore_private_hint">Skriv inn kanalnavnet og hemmeligheten medlemmene deler.</string>
+    <string name="meshcore_channel_name">Kanalnavn</string>
+    <string name="meshcore_channel_secret">Hemmelighet (heks eller base64)</string>
+    <string name="meshcore_join">Bli med</string>
+    <string name="meshcore_note_dm">Kryptert av MeshCore mellom radioene, ikke ende-til-ende av OSHI.</string>
+    <string name="meshcore_note_public">Offentlig kanal: alle som kjenner navnet, kan lese den.</string>
+    <string name="meshcore_note_private">Privat kanal: alle med hemmeligheten kan lese den.</string>
+    <string name="meshcore_radio_offline">MeshCore-radio ikke tilkoblet. Meldinger venter her som ikke levert.</string>
+    <string name="meshcore_connect">Koble til</string>
+    <string name="meshcore_parts">%1$d meldinger</string>
+    <string name="meshcore_sending">Venter på radioen</string>
+    <string name="meshcore_failed_dm">Ikke noe svar fra radioen deres (utenfor rekkevidde?). Trykk for å prøve igjen.</string>
+    <string name="meshcore_error_pairing">Sammenkoblingen mislyktes. Sjekk PIN-koden og prøv igjen. Hvis radioen er tilbakestilt, fjern den først i Bluetooth-innstillingene i Android.</string>
+    <string name="meshcore_error_no_answer">Radioen svarte ikke. Sjekk at den kjører MeshCore companion-fastvare for Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Forbindelsen ble brutt. Kobler til igjen når radioen er innen rekkevidde…</string>
+    <string name="meshcore_state_pin">Skriv inn radioens PIN-kode i Android-dialogen</string>
+    <string name="meshcore_state_reading">Leser kontakter og kanaler…</string>
+    <string name="meshcore_state_connecting">Kobler til…</string>
+    <string name="meshcore_seen_as">Tilkoblet · MeshCore-brukere ser deg som %1$s</string>
+    <string name="meshcore_connected">Tilkoblet</string>
+    <string name="meshcore_footer_users">Chat med MeshCore-brukere (direktemeldinger og kanaler), og send OSHI-meldinger via MeshCore-repeatere. Krever MeshCore companion-fastvare for Bluetooth. OSHI legger til én kanal, #oshi-bridge, på en ledig plass og endrer aldri de andre kanalene dine.</string>
+    <string name="meshcore_scan_below">MeshCore-radioer vises nedenfor under Radioer i nærheten, merket MeshCore.</string>
+    <string name="meshcore_contacts_footer">Trykk på en person for å skrive til dem. Meldinger krypteres av MeshCore, ikke ende-til-ende av OSHI.</string>
+    <string name="meshcore_no_contacts">Ingen hørt ennå. MeshCore-brukere vises her når radioen deres annonserer seg. Annonser din slik at de finner deg.</string>
+    <string name="meshcore_heard">Hørt %1$s</string>
+    <string name="meshcore_announce">Annonser meg</string>
+    <string name="meshcore_announce_done">Annonsert. MeshCore-brukere innen rekkevidde kan nå legge deg til og skrive til deg.</string>
+    <string name="meshcore_announce_failed">Radioen kunne ikke sende annonseringen.</string>
+    <string name="meshcore_channels_footer">Trykk på en kanal for å åpne den. Offentlige kanaler og emneknagg-kanaler kan leses av alle som kjenner navnet.</string>
+    <string name="meshcore_pin_title">Koble til %1$s</string>
+    <string name="meshcore_pin_body">Android ber nå om radioens PIN-kode. Hvis radioen har skjerm, vises PIN-koden der.</string>
+    <string name="meshcore_pin_default">Ingen skjerm? PIN-koden er 123456, med mindre den er endret i MeshCore-appen.</string>
+    <string name="meshcore_pin_continue">Fortsett</string>
+    <string name="meshcore_no_free_channel_chat">Alle 8 kanalplassene er i bruk. Du kan fortsatt chatte med MeshCore-brukere; frigjør en plass i MeshCore-appen slik at OSHI-meldinger kan bruke #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">MeshCore-bruker</string>
+    <string name="meshcore_too_long">For lang: maks %1$d meldinger</string>
+</resources>

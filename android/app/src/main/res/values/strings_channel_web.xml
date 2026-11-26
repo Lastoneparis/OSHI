@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Public web preview</string>
+    <string name="cw_toggle">Publish posts on the web</string>
+    <string name="cw_footer">New posts are also published as a public web page at oshi-messenger.com/c/%1$s. Anyone can read them, including search engines and link previews. End-to-end encryption does not apply to the web copy.</string>
+    <string name="cw_needs_link">Give this channel a public link first: the web preview uses its handle.</string>
+    <string name="cw_create_link">Create public link</string>
+    <string name="cw_enable_title">Publish posts on the web?</string>
+    <string name="cw_enable_confirm">Posts in this channel will be visible to anyone on the web at oshi-messenger.com/c/%1$s. New posts only. Link previews (WhatsApp, X, Telegram…) can read them too, and end-to-end encryption does not apply to the web copy.</string>
+    <string name="cw_enable_action">Publish</string>
+    <string name="cw_disable_title">Turn off the web preview?</string>
+    <string name="cw_disable_confirm">Every post and image published at oshi-messenger.com/c/%1$s will be removed from the web. Your posts in the app stay as they are.</string>
+    <string name="cw_disable_action">Turn off</string>
+    <string name="cw_indexing">Allow search engines</string>
+    <string name="cw_indexing_footer">When off, the pages ask search engines not to list them.</string>
+    <string name="cw_embed_code">Embed code</string>
+    <string name="cw_embed_title">Embed this post</string>
+    <string name="cw_embed_hint">Paste this code into your website where the post should appear.</string>
+    <string name="cw_embed_dark">Dark theme</string>
+    <string name="cw_copy_code">Copy code</string>
+    <string name="cw_code_copied">Code copied</string>
+    <string name="cw_not_on_web">This post is not on the web. Only posts sent after the web preview was turned on are published.</string>
+    <string name="cw_error">Couldn\'t update the web preview. Check your connection and try again.</string>
+</resources>

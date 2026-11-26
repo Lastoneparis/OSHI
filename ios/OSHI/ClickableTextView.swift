@@ -50,6 +50,10 @@ struct ClickableTextView: View, Equatable {
     /// is unchanged; the chat passes the user's choice from BubbleStyleManager.
     let weight: Font.Weight
 
+    /// The background scan's answer, tagged with the text it belongs to so a
+    /// reused view never shows another message's links.
+    @State private var lateDetection: (text: String, result: LinkDetection.Result)?
+
     init(text: String, textColor: Color = .primary, linkColor: Color = .blue,
          weight: Font.Weight = .regular) {
         self.text = text
@@ -101,6 +105,13 @@ struct ClickableTextView: View, Equatable {
     private var core: some View {
         Text(attributedText)
             .fontWeight(weight)
+            .strictWritingToolsOptOut()  // __STRICT_SECURITY_MODE_2026_11_22__
+            .task(id: text) {
+                guard LinkDetection.cached(text: text) == nil else { return }
+                let current = text
+                let result = await LinkDetection.resolve(text: current)
+                lateDetection = (current, result)
+            }
             // __CANNOT_COPY_ON_THE_MAC_2026_10_19__ Message text was a plain
             // `Text` with selection never enabled, so on the Mac you could not
             // select a word of it — drag did nothing and there is no long-press
@@ -192,102 +203,34 @@ struct ClickableTextView: View, Equatable {
         }
     }
     
+    /// __GROUP_OPEN_HITCH_2026_11_22__ No detector runs here any more.
+    ///
+    /// The `.equatable()` fix above stopped REPEATED body evaluations from
+    /// re-scanning; it could not help the FIRST one, and opening a group
+    /// materialises dozens of bubbles at once — each paid two synchronous
+    /// `NSDataDetector` passes (plus building the detectors) inside `body`.
+    /// On the owner's iPhone that was ~180 ms of a 598 ms main-thread stall.
+    ///
+    /// Now: the detector result comes from `LinkDetection`'s cache, or from a
+    /// background scan started by `.task` below; until it arrives the bubble
+    /// shows the same text, same formatting, same font — only the link
+    /// attributes are added when it lands, which moves no glyph.
     private var attributedText: AttributedString {
-        // Inline formatting is stripped from the string BEFORE URL detection, so
-        // ranges are computed against the text the user actually sees. Doing it
-        // the other way round shifts every link by the number of markers removed.
-        let (plain, spans) = InlineMarkup.parse(text)
+        LinkDetection.compose(text: text, textColor: textColor, linkColor: linkColor,
+                              detected: detection)
+    }
 
-        var attributedString = AttributedString(plain)
+    /// Known detector result for the CURRENT text: the shared cache first,
+    /// then this view's own late arrival (which the cache may have evicted).
+    private var detection: LinkDetection.Result? {
+        if let known = LinkDetection.cached(text: text) { return known }
+        if let late = lateDetection, late.text == text { return late.result }
+        return nil
+    }
 
-        // Set base text color
-        attributedString.foregroundColor = textColor
-
-        // Apply *bold*, _italic_, ~strike~ and `code`.
-        for span in spans {
-            guard let r = Range(NSRange(location: span.location, length: span.length),
-                                in: attributedString) else { continue }
-            switch span.kind {
-            case .bold:
-                attributedString[r].inlinePresentationIntent = .stronglyEmphasized
-            case .italic:
-                attributedString[r].inlinePresentationIntent = .emphasized
-            case .strikethrough:
-                attributedString[r].strikethroughStyle = .single
-            case .code:
-                attributedString[r].inlinePresentationIntent = .code
-            }
-        }
-
-        // Stock tickers: `@AAPL` → a tappable `$AAPL` pointing at TradingView.
-        //
-        // Applied LAST-BUT-ONE, and walked in REVERSE, because replacing the
-        // token shortens the string by one character (the sigil goes, the `$`
-        // arrives): editing back-to-front keeps every earlier range valid. The
-        // formatting spans above were already applied, so they move with the
-        // text rather than being computed against a string that no longer
-        // matches.
-        //
-        // The sigil is required — see TickerLinks. Detecting bare uppercase
-        // words would turn "OK", "USA" and "OSHI" into stock links.
-        for ticker in TickerLinks.matches(in: plain).reversed() {
-            guard let r = Range(NSRange(ticker.range, in: plain), in: attributedString),
-                  let url = ticker.url else { continue }
-            var chip = AttributedString(ticker.display)
-            chip.link = url
-            chip.foregroundColor = linkColor
-            chip.inlinePresentationIntent = .stronglyEmphasized
-            attributedString.replaceSubrange(r, with: chip)
-        }
-
-        // Detect URLs — against `plain`, not the original.
-        let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-        let nsRange = NSRange(plain.startIndex..., in: plain)
-        let matches = detector?.matches(in: plain, options: [], range: nsRange)
-
-        matches?.forEach { match in
-            guard let range = Range(match.range, in: plain) else { return }
-            let urlString = String(plain[range])
-            
-            // Create proper URL
-            var url: URL?
-            if let directURL = URL(string: urlString), directURL.scheme != nil {
-                url = directURL
-            } else if urlString.hasPrefix("www.") {
-                url = URL(string: "https://\(urlString)")
-            } else if !urlString.contains("://") {
-                url = URL(string: "https://\(urlString)")
-            }
-            
-            if let finalURL = url, let attrRange = Range(match.range, in: attributedString) {
-                // Style the link
-                attributedString[attrRange].foregroundColor = linkColor
-                attributedString[attrRange].underlineStyle = .single
-                attributedString[attrRange].link = finalURL
-                
-                OshiLog.messaging.info("🔗 Detected URL: \(urlString) → \(finalURL.absoluteString)")
-            }
-        }
-        
-        // Street addresses → a tappable link that MapOpener opens with the
-        // app chosen in Settings › Maps. Skipped where a URL already sits.
-        if let addressDetector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.address.rawValue) {
-            for match in addressDetector.matches(in: plain, options: [], range: nsRange) {
-                guard let range = Range(match.range, in: plain),
-                      let attrRange = Range(match.range, in: attributedString),
-                      !attributedString[attrRange].runs.contains(where: { $0.link != nil }) else { continue }
-                var comps = URLComponents()
-                comps.scheme = MapOpener.addressScheme
-                comps.host = "open"
-                comps.queryItems = [URLQueryItem(name: "q", value: String(plain[range]))]
-                guard let url = comps.url else { continue }
-                attributedString[attrRange].foregroundColor = linkColor
-                attributedString[attrRange].underlineStyle = .single
-                attributedString[attrRange].link = url
-            }
-        }
-
-        return attributedString
+    static func == (lhs: ClickableTextView, rhs: ClickableTextView) -> Bool {
+        lhs.text == rhs.text && lhs.textColor == rhs.textColor
+            && lhs.linkColor == rhs.linkColor && lhs.weight == rhs.weight
     }
 }
 

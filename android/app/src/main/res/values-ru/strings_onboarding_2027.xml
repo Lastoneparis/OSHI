@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Пропустить</string>
+    <string name="ob27_continue">Далее</string>
+    <string name="ob27_page_of">Страница %1$d из %2$d</string>
+    <string name="ob27_private_title">Только вы и они</string>
+    <string name="ob27_private_body">Сообщения и звонки защищены сквозным шифрованием прямо на вашем телефоне. Никто посередине не сможет их прочитать — даже OSHI.</string>
+    <string name="ob27_offline_title">Работает без интернета</string>
+    <string name="ob27_offline_body">Нет сети? Сообщения передаются с телефона на телефон через людей рядом, у которых открыт OSHI. Радио LoRa передаёт их ещё дальше.</string>
+    <string name="ob27_range_direct">напрямую</string>
+    <string name="ob27_range_relayed">по цепочке</string>
+    <string name="ob27_range_lora">радио LoRa</string>
+    <string name="ob27_anon_title">Номер не нужен</string>
+    <string name="ob27_anon_body">Ни аккаунта, ни почты, ни номера для регистрации. Ваша личность — это ключ, созданный на этом телефоне.</string>
+    <string name="ob27_together_title">Позовите своих</string>
+    <string name="ob27_together_body">Общайтесь вдвоём или в группах. Добавьте человека, отсканировав его QR-код или отправив ссылку-приглашение.</string>
+    <string name="ob27_rules_title">Перед началом</string>
+    <string name="ob27_rules_subtitle">Несколько правил и что OSHI уже умеет, а что пока нет.</string>
+    <string name="ob27_rules_do">Что делать</string>
+    <string name="ob27_rules_dont">Никогда</string>
+    <string name="ob27_good_to_know">Полезно знать</string>
+    <string name="ob27_show_details">Показать подробности</string>
+    <string name="ob27_hide_details">Скрыть подробности</string>
+    <string name="ob27_agree">Понятно</string>
+    <string name="ob27_notif_title">Не пропустите сообщения</string>
+    <string name="ob27_notif_body">Разрешите уведомления, чтобы видеть новые сообщения и звонки. Их можно отключить в любой момент в настройках.</string>
+    <string name="ob27_notif_allow">Разрешить уведомления</string>
+    <string name="ob27_not_now">Не сейчас</string>
+    <string name="ob27_identity_title">Выберите имя</string>
+    <string name="ob27_identity_body">Это имя увидят ваши контакты. Его можно изменить позже.</string>
+    <string name="ob27_already">Уже пользуетесь OSHI?</string>
+</resources>

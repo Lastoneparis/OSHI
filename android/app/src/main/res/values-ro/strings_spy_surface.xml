@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">Aplicații care pot citi OSHI</string>
+    <string name="spy_surface_dialog_body">Aceste aplicații de pe telefon pot citi ce apare pe ecran sau în notificări, inclusiv mesajele tale după ce OSHI le-a decriptat:\n\n%1$s\n\nDacă nu ai instalat sau permis tu una dintre ele, poate fi un program spion. Dezactivează-i permisiunea în Setările Android sau dezinstaleaz-o. OSHI nu a blocat nimic.</string>
+    <string name="spy_surface_power_accessibility">ecran și tastare (accesibilitate)</string>
+    <string name="spy_surface_power_notifications">notificări</string>
+    <string name="spy_surface_power_admin">administrator dispozitiv</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Comentarii</string>
+    <string name="gs_comments_footer">Membrii pot comenta la fiecare postare. Doar adminii publică.</string>
+    <string name="cm_leave_comment">Lasă un comentariu</string>
+    <string name="cm_thread_title">Comentarii</string>
+    <string name="cm_empty">Încă nu există comentarii.</string>
+    <string name="cm_composer_hint">Comentează…</string>
+    <string name="cm_replying_to">Răspuns către %1$s</string>
+    <string name="cm_disabled">Comentariile sunt dezactivate.</string>
+    <string name="cm_post_unavailable">Această postare nu mai este disponibilă.</string>
+    <string name="cm_too_fast">Comentezi prea repede. Așteaptă puțin.</string>
+    <string name="cm_notif_reply">%1$s a răspuns la comentariul tău</string>
+    <string name="cm_delete_comment">Șterge comentariul</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d comentariu</item>
+        <item quantity="few">%d comentarii</item>
+        <item quantity="other">%d de comentarii</item>
+    </plurals>
+</resources>

@@ -23,6 +23,21 @@ object OhttpConfig {
     const val RELAY_URL = ""
 
     /**
+     * __RELAY_FALLBACK_2026_11_19__ OSHI-operated relays used ONLY as the blocked-host
+     * fallback ([RelayFallback]), tried IN ORDER (next one on failure): other IPs and
+     * unrelated hostnames, so a block of oshi-messenger.com does not block them. Not offered
+     * as the "Privacy relay" default (same operator as the gateway). Wire contract = an
+     * RFC 9458 relay resource: POST message/ohttp-req; anything else answers 404.
+     *  1. foodies.agency — 213.199.60.210, Contabo (same provider as the main server).
+     *  2. __RELAY_LIST_CH1_2026_11_19__ CH-1 Gland — 84.75.255.200, UP-NETWORK AS213929
+     *     (Switzerland, NOT Contabo): survives a block of foodies.agency or of Contabo ranges.
+     */
+    val FALLBACK_RELAY_URLS: List<String> = listOf(
+        "https://foodies.agency/api/v1/batch",
+        "https://static-84-75-255-200.sslip.io/api/v1/batch",
+    )
+
+    /**
      * The gateway's key configuration(s), PINNED, in RFC 9540 `application/ohttp-keys`
      * form (2-byte length || RFC 9458 key config), hex. Pinning — instead of fetching
      * [KEYS_URL] through the relay — stops a malicious gateway from handing each user a

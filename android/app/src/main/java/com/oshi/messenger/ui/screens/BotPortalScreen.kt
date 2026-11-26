@@ -54,10 +54,27 @@ fun BotPortalScreen(
     onNavigateToDiscoverChannels: () -> Unit = {},
     onNavigateToChat: (String) -> Unit = {},
     onBack: (() -> Unit)? = null,
+    /**
+     * __BOTS_PHASE1_2026_11_24__ "Create a bot" first asks WHERE it runs: this phone (the
+     * local wizard below, works offline) or a server ([onCreateBot] = BotFather). Null =
+     * straight to the local wizard, as before.
+     */
+    onCreateBot: (() -> Unit)? = null,
+    /** Open the local (on-phone) wizard right away — the "Runs on this phone" choice from a group. */
+    openLocalWizard: Boolean = false,
     viewModel: BotPortalViewModel = hiltViewModel()
 ) {
     val portalState by viewModel.portalState.collectAsState()
-    var showCreateSheet by remember { mutableStateOf(false) }
+    var showCreateSheet by remember { mutableStateOf(openLocalWizard) }
+    var showHostingChoice by remember { mutableStateOf(false) }
+    if (showHostingChoice) {
+        com.oshi.messenger.ui.bots.BotKindChoiceSheet(onDismiss = { showHostingChoice = false }) { choice ->
+            when (choice) {
+                com.oshi.messenger.ui.bots.BotHosting.LOCAL -> showCreateSheet = true
+                com.oshi.messenger.ui.bots.BotHosting.SERVER -> onCreateBot?.invoke()
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -81,7 +98,7 @@ fun BotPortalScreen(
         floatingActionButton = {
             if (portalState.selectedTab == BotPortalViewModel.PortalTab.BOTS) {
                 FloatingActionButton(
-                    onClick = { showCreateSheet = true },
+                    onClick = { if (onCreateBot != null) showHostingChoice = true else showCreateSheet = true },
                     containerColor = Color(0xFF5616EC)
                 ) {
                     Icon(Icons.Default.Add, contentDescription = stringResource(R.string.bot_portal_create_bot), tint = Color.White)

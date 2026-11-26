@@ -108,6 +108,9 @@ struct MailView: View {
     @StateObject private var mail = OSHIMailClient.shared
     @State private var isLoading = true
     @State private var loadError: String?
+    /// The server answered `no-mailbox` on the last account fetch — the only thing
+    /// that may show `MailSetupView`.
+    @State private var confirmedNoMailbox = false
     @State private var showCompose = false
     @State private var showSettings = false
 
@@ -164,11 +167,19 @@ struct MailView: View {
     var body: some View {
         NavigationStack(path: mailPath) {
             SwiftUI.Group {
-                if isLoading {
+                // __MAIL_OFFLINE_NOT_SETUP_2026_11_25__ The claim-an-address form is
+                // shown ONLY after the server said "no-mailbox". Offline / timeout /
+                // 5xx with no cached account is "can't reach mail", not "no mailbox".
+                switch MailScreenState.resolve(isLoading: isLoading,
+                                               hasAccount: mail.account != nil,
+                                               confirmedNoMailbox: confirmedNoMailbox) {
+                case .loading:
                     ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if mail.account == nil {
+                case .setup:
                     MailSetupView { await load() }
-                } else {
+                case .unreachable:
+                    mailUnreachable
+                case .mailbox:
                     VStack(spacing: 0) {
                         freshnessBadge
                         inbox
@@ -177,6 +188,9 @@ struct MailView: View {
             }
             .sidebarColumnContent(splitActive)
             .navigationTitle(mail.account.map { _ in "mail.title".localized } ?? "")
+            // __MAIL_LIQUID_GLASS_2026_11_25__ inline, like the Messages list and a
+            // group: the title is the floating island below, not a large title.
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // __MAIL_CLOSE_WAS_A_DEAD_BUTTON_2026_11_06__ A leading
                 // `xmark.circle.fill` used to sit here, next to the account
@@ -199,12 +213,25 @@ struct MailView: View {
                 // the user leaves the mailbox. If MailView is ever presented
                 // modally again, it needs a way out added back — see
                 // `MailCloseAffordanceTests`.
-                if mail.account != nil {
+                if let account = mail.account {
+                    // __MAIL_LIQUID_GLASS_2026_11_25__ (account)  ( Mail / address )  (compose),
+                    // the group header's layout. The island opens the mailbox settings too.
+                    ToolbarItem(placement: .principal) {
+                        GroupHeaderIsland(
+                            name: "mail.title".localized,
+                            subtitle: account.address,
+                            accessibilityLabelText: "mail.account.title".localized,
+                            identifier: "mail.header.island",
+                            onTap: { showSettings = true })
+                    }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button { showCompose = true } label: { Image(systemName: "square.and.pencil") }
+                            .accessibilityLabel("mail.compose.title".localized)
+                            .accessibilityIdentifier("mail.compose")
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button { showSettings = true } label: { Image(systemName: "person.crop.circle") }
+                            .accessibilityLabel("mail.account.title".localized)
                     }
                     if !searchText.isEmpty {
                         ToolbarItem(placement: .navigationBarTrailing) {
@@ -219,7 +246,20 @@ struct MailView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showCompose) { MailComposeView() }
+            .sheet(isPresented: $showCompose) {
+                #if DEBUG
+                // `-OSHIMailDemoCompose`: a reply-shaped composer for screenshots.
+                if ProcessInfo.processInfo.arguments.contains("-OSHIMailDemoCompose") {
+                    MailComposeView(to: "Léa Martin <lea@example.org>, sofia@example.it",
+                                    subject: "Re: Trip to Lisbon — final plan",
+                                    messageBody: "Sounds perfect! Friday works for me.\n\nSee you at the airport,\nHugo")
+                } else {
+                    MailComposeView()
+                }
+                #else
+                MailComposeView()
+                #endif
+            }
             .sheet(isPresented: $showSettings) { MailAccountView().environmentObject(identityManager) }
             .sheet(item: $draftPrefill) { prefill in
                 MailComposeView(to: prefill.to, subject: prefill.subject,
@@ -259,6 +299,12 @@ struct MailView: View {
             // Cold-launch / just-switched-to-Email: a pending id is already set when
             // this view first mounts, so .onChange won't fire — consume it here.
             consumeMailDeepLink()
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-OSHIMailDemoCompose") {
+                try? await Task.sleep(nanoseconds: 800_000_000)
+                showCompose = true
+            }
+            #endif
         }
         // Warm path: MailView already mounted (user on the Email segment) when a new tap
         // lands and updates the binding.
@@ -317,77 +363,50 @@ struct MailView: View {
         return f == .inbox ? rows.filter { !$0.seen }.count : rows.count
     }
 
+    /// __MAIL_LIQUID_GLASS_2026_11_25__ Glass capsules, the selected one solid brand.
     private var folderPicker: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(MailFolder.allCases) { f in
-                    let count = folderCount(f)
-                    Button { folder = f } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: f.icon)
-                            Text(f.title)
-                            if count > 0 {
-                                Text("\(count)")
-                                    .font(.caption2.bold())
-                                    .padding(.horizontal, 5).padding(.vertical, 1)
-                                    .background(folder == f ? Color.white.opacity(0.25) : Theme.brand.opacity(0.15),
-                                               in: Capsule())
-                            }
+            MailGlassGroup(spacing: 8) {
+                HStack(spacing: 8) {
+                    ForEach(MailFolder.allCases) { f in
+                        MailFolderChip(folder: f, count: folderCount(f), selected: folder == f) {
+                            folder = f
                         }
-                        .font(.caption.weight(.medium))
-                        .padding(.horizontal, 10).padding(.vertical, 6)
-                        .background(folder == f ? Theme.brand : Color.secondary.opacity(0.12), in: Capsule())
-                        .foregroundStyle(folder == f ? .white : .primary)
                     }
-                    .buttonStyle(.plain)
                 }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 6)
             }
-            .padding(.horizontal)
-            .padding(.vertical, 6)
         }
     }
 
+    /// __MAIL_LIQUID_GLASS_2026_11_25__ Content first, like the conversation list:
+    /// folders, then the messages; the address, the quotas and the drive (which
+    /// used to fill the first screen) follow the messages.
     private var inbox: some View {
         List {
-            if let account = mail.account {
-                Section {
-                    MailQuotaRow(account: account, mail: mail)
-                        .oledGlassListRow()  // __OLED_GLASS_2026_11_16__
-                } header: {
-                    Text(account.address).textCase(nil).font(.footnote.monospaced())
-                }
-            }
-
-            Section {
-                NavigationLink { MailDriveView() } label: {
-                    HStack {
-                        Image(systemName: "folder").foregroundStyle(Theme.brand)
-                        Text("mail.drive.title".localized)
-                        Spacer()
-                        if let drive = mail.account?.drive {
-                            Text("\(drive.files) file\(drive.files == 1 ? "" : "s")")
-                                .font(.caption).foregroundStyle(.secondary)
-                        }
-                    }
-                }
-                .oledGlassListRow()  // __OLED_GLASS_2026_11_16__
-            }
-
             Section {
                 folderPicker
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
             }
 
-            Section(folder.title) {
+            Section {
                 if filteredMessages.isEmpty {
-                    Text(searchText.isEmpty ? "Nothing here yet." : "No message matches that search.")
-                        .foregroundStyle(.secondary)
-                        .font(.callout)
+                    MailStateCard(icon: searchText.isEmpty ? folder.icon : "magnifyingglass",
+                                  message: searchText.isEmpty ? MailChromeText.emptyFolder : MailChromeText.emptySearch,
+                                  identifier: "mail.empty")
+                        .frame(minHeight: 240)
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                 } else {
                     let messages = filteredMessages
                     ForEach(messages) { message in
                         row(for: message)
+                            .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
+                            .alignmentGuide(.listRowSeparatorLeading) { _ in 56 }
                             .oledGlassListRow(first: message.id == messages.first?.id)  // __OLED_GLASS_2026_11_16__
                     }
                 }
@@ -396,7 +415,28 @@ struct MailView: View {
             if let loadError {
                 Text(loadError).font(.footnote).foregroundStyle(.red)
             }
+
+            if let account = mail.account {
+                Section {
+                    MailQuotaRow(account: account, mail: mail)
+                        .oledGlassListRow()  // __OLED_GLASS_2026_11_16__
+                    NavigationLink { MailDriveView() } label: {
+                        HStack {
+                            Image(systemName: "folder").foregroundStyle(Theme.brand)
+                            Text("mail.drive.title".localized)
+                            Spacer()
+                            if let drive = mail.account?.drive {
+                                Text("\(drive.files) file\(drive.files == 1 ? "" : "s")")
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                } header: {
+                    Text(account.address).textCase(nil).font(.footnote.monospaced())
+                }
+            }
         }
+        .listSectionSpacing(.compact)
         .searchable(text: $searchText, prompt: "Search mail")
         .refreshable { await load() }
     }
@@ -477,15 +517,42 @@ struct MailView: View {
 
     private func load() async {
         loadError = nil
+        #if DEBUG
+        // `-OSHIScreens -OSHIMailDemo -OSHIMailDemoOffline`: no account, no network —
+        // the "can't reach mail" state, without touching any server.
+        if ProcessInfo.processInfo.arguments.contains("-OSHIMailDemoOffline") {
+            loadError = URLError(.notConnectedToInternet).localizedDescription
+            isLoading = false
+            return
+        }
+        #endif
         do {
             _ = try await mail.refreshAccount()
+            confirmedNoMailbox = false
             _ = try await mail.refreshInbox()
         } catch OSHIMailError.noMailbox {
-            // Not an error — this identity simply has no address yet.
+            // Not an error — this identity simply has no address yet. The client has
+            // dropped its cached account; this is the one path to the setup form.
+            confirmedNoMailbox = true
         } catch {
+            // Offline / timeout / 5xx: says nothing about whether a mailbox exists.
+            // A cached account keeps the mailbox on screen (badge: "Could not refresh").
             loadError = error.localizedDescription
         }
         isLoading = false
+    }
+
+    /// No known account and the server could not be reached: never the setup form.
+    private var mailUnreachable: some View {
+        MailStateCard(icon: "wifi.exclamationmark",
+                      message: "mail.unreachable".localized,
+                      actionTitle: "common.retry".localized,
+                      action: {
+                          isLoading = true
+                          Task { await load() }
+                      },
+                      identifier: "mail.unreachable")
+            .background(Color(.systemGroupedBackground).ignoresSafeArea())
     }
 }
 
@@ -513,44 +580,71 @@ struct MailRow: View {
     let message: OSHIMailMessage
     @Environment(\.dynamicTypeSize) private var typeSize
 
-    var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Circle()
-                .fill(message.seen ? Color.clear : Theme.brand)
-                .frame(width: 8, height: 8)
-                .padding(.top, 6)
+    /// Sent and Drafts are outgoing: who it went TO is the useful fact, not who it
+    /// went from (that's always this mailbox).
+    private var outgoing: Bool { message.folder == "sent" || message.folder == "draft" }
 
-            VStack(alignment: .leading, spacing: 3) {
+    private var correspondent: String? {
+        guard let e = message.envelope else { return nil }
+        return outgoing ? (e.to.isEmpty ? nil : e.to) : e.from
+    }
+
+    var body: some View {
+        // __MAIL_LIQUID_GLASS_2026_11_25__ Drawn like a conversation row: the
+        // correspondent's avatar, name and date on the first line, then subject
+        // and preview; unread = bold name, brand date and a brand dot.
+        HStack(alignment: .top, spacing: 12) {
+            if !typeSize.isAccessibilitySize {
+                SwiftUI.Group {
+                    if let who = correspondent {
+                        MailSenderAvatar(header: who, size: 44)
+                    } else {
+                        Image(systemName: message.envelope == nil ? "lock.fill" : "envelope")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 44, height: 44)
+                            .background(Color.secondary.opacity(0.12), in: Circle())
+                            .accessibilityHidden(true)
+                    }
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
                 // At accessibility text sizes a trailing date column squeezes the sender
                 // and subject to a few letters; the markers and date get their own line.
                 if typeSize.isAccessibilitySize { meta }
                 if let envelope = message.envelope {
-                    // Sent and Drafts are outgoing: who it went TO is the useful fact,
-                    // not who it went from (that's always this mailbox).
-                    let outgoing = message.folder == "sent" || message.folder == "draft"
-                    Text(outgoing
-                        ? (envelope.to.isEmpty ? "(no recipient)" : MailMessageParser.displayName(from: envelope.to))
-                        : MailMessageParser.displayName(from: envelope.from))
-                        .font(.subheadline.weight(message.seen ? .regular : .semibold))
-                        .lineLimit(1)
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text(outgoing
+                            ? (envelope.to.isEmpty ? "(no recipient)" : MailMessageParser.displayName(from: envelope.to))
+                            : MailMessageParser.displayName(from: envelope.from))
+                            .font(.body.weight(message.seen ? .regular : .semibold))
+                            .lineLimit(1)
+                        Spacer(minLength: 4)
+                        if !typeSize.isAccessibilitySize { meta }
+                    }
                     // Primary when a snippet follows, so subject and preview read as two lines.
                     Text(envelope.subject.isEmpty ? "(no subject)" : envelope.subject)
-                        .font(.footnote)
+                        .font(.subheadline.weight(message.seen ? .regular : .medium))
                         .foregroundStyle(envelope.snippet == nil ? Color.secondary : Color.primary)
                         .lineLimit(1)
                     // Sealed list preview from the server; old mail has none and shows none.
                     if let snippet = envelope.snippet {
                         Text(snippet)
-                            .font(.footnote)
+                            .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .lineLimit(2)
                     }
                 } else {
-                    // The envelope is sealed to a key this device does not hold.
-                    Text("mail.msg.sealedOther".localized)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .italic()
+                    HStack(alignment: .firstTextBaseline) {
+                        // The envelope is sealed to a key this device does not hold.
+                        Text("mail.msg.sealedOther".localized)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .italic()
+                        Spacer(minLength: 4)
+                        if !typeSize.isAccessibilitySize { meta }
+                    }
                 }
 
                 // Only show the alias when it is not the primary address — that is the
@@ -560,37 +654,38 @@ struct MailRow: View {
                    message.deliveredTo != primary {
                     Text(String(format: "mail.msg.via".localized, message.deliveredTo))
                         .font(.caption2)
-                        .foregroundStyle(Theme.brand)
+                        .foregroundStyle(MailMessageView.linkColor)
                 }
             }
-
-            Spacer(minLength: 4)
-
-            if !typeSize.isAccessibilitySize { meta }
         }
-        .padding(.vertical, 2)
         .accessibilityElement(children: .combine)
         .accessibilityValue(Self.attachmentDescription(message.envelope))
     }
 
     /// Attachment / image markers right before the date, like every mail app. SF Symbols
-    /// at the caption2 text style scale with Dynamic Type.
+    /// at the caption text style scale with Dynamic Type. Unread: brand date + dot.
     private var meta: some View {
-        HStack(spacing: 3) {
+        HStack(spacing: 4) {
             if message.envelope?.hasImages == true {
                 Image(systemName: "photo")
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
             if (message.envelope?.attachmentCount ?? 0) > 0 {
                 Image(systemName: "paperclip")
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
             Text(message.receivedAt, format: .dateTime.day().month(.abbreviated))
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+                .font(.caption)
+                .foregroundStyle(message.seen ? Color.secondary : MailMessageView.linkColor)
                 .lineLimit(1)
+            if !message.seen {
+                Circle()
+                    .fill(Theme.brand)
+                    .frame(width: 9, height: 9)
+                    .accessibilityHidden(true)
+            }
         }
         .fixedSize()
     }
@@ -815,6 +910,9 @@ struct MailMessageView: View {
     @State private var htmlHeight: CGFloat = 60
     @State private var allowRemote = false
     @State private var remoteContent = false
+    /// __MAIL_LIQUID_GLASS_2026_11_25__ the header island toggles the full headers.
+    @State private var showDetails = false
+    @State private var forwardDraft: ForwardDraft?
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.mailSelection) private var mailSelection
@@ -936,24 +1034,10 @@ struct MailMessageView: View {
     var body: some View {
         ScrollViewReader { proxy in
         ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 12) {
                 if let envelope = message.envelope {
-                    Text(envelope.subject.isEmpty ? "(no subject)" : envelope.subject)
-                        .font(.title3.bold())
-                    VStack(alignment: .leading, spacing: 2) {
-                        let name = MailMessageParser.displayName(from: envelope.from)
-                        let address = MailMessageParser.emailAddress(from: envelope.from)
-                        Text(name).font(.subheadline.weight(.semibold))
-                        if address != name {
-                            Text(address).font(.caption).foregroundStyle(.secondary)
-                        }
-                        Text(String(format: "mail.msg.to".localized, envelope.to)).font(.caption).foregroundStyle(.secondary)
-                        Text(message.receivedAt, format: .dateTime)
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
+                    headerCard(envelope)
                 }
-
-                Divider()
 
                 if let parsed {
                     if let html = parsed.htmlBody, !html.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -970,42 +1054,52 @@ struct MailMessageView: View {
                             // A newsletter that paints its own (light) colours keeps them
                             // in dark mode; give it a card so it does not bleed into the
                             // black background edge to edge.
-                            .padding(styled && colorScheme == .dark ? 6 : 0)
-                            .background(styled ? Color.white : Color.clear,
-                                        in: RoundedRectangle(cornerRadius: 10))
+                            .padding(styled ? (colorScheme == .dark ? 6 : 0) : 10)
+                            .background(styled ? Color.white : Color(.secondarySystemGroupedBackground),
+                                        in: RoundedRectangle(cornerRadius: styled ? 10 : 20, style: .continuous))
                     } else {
                         // Links in the body are made tappable so a reader can open one
                         // directly instead of copying it out. Detection is local
                         // (NSDataDetector); nothing about the message leaves the device.
-                        if parsed.textBody.isEmpty {
-                            Text("(empty message)").foregroundStyle(.secondary)
-                        } else {
-                            MailPlainTextBody(text: parsed.textBody)
+                        SwiftUI.Group {
+                            if parsed.textBody.isEmpty {
+                                Text("(empty message)").foregroundStyle(.secondary)
+                            } else {
+                                MailPlainTextBody(text: parsed.textBody)
+                            }
                         }
+                        .mailCard(padding: 16)
                     }
 
                     let files = visibleAttachments(parsed)
                     if !files.isEmpty {
-                        Divider()
-                        MailAttachmentsSection(attachments: files, savingAttachment: savingAttachment) { a in
-                            Task { await saveAttachmentToDrive(a) }
+                        VStack(alignment: .leading, spacing: 8) {
+                            MailAttachmentsSection(attachments: files, savingAttachment: savingAttachment) { a in
+                                Task { await saveAttachmentToDrive(a) }
+                            }
+                            if let attachmentNote {
+                                Text(attachmentNote)
+                                    .font(.caption)
+                                    .foregroundStyle(attachmentNoteIsError ? .red : .green)
+                            }
                         }
-                        if let attachmentNote {
-                            Text(attachmentNote)
-                                .font(.caption)
-                                .foregroundStyle(attachmentNoteIsError ? .red : .green)
-                        }
+                        .mailCard()
                     }
                 } else if let error {
                     Text(error).foregroundStyle(.red).font(.footnote)
+                        .mailCard()
                 } else {
                     ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
                 }
                 Color.clear.frame(height: 1).id("mail.bottom")
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
         }
+        .background(Color(.systemGroupedBackground).ignoresSafeArea())
         #if DEBUG
         // Fixture harness: `-OSHIMailScrollTo bottom` to capture the end of a message.
         .task(id: "\(parsed != nil)-\(htmlHeight)") {
@@ -1015,51 +1109,26 @@ struct MailMessageView: View {
         }
         #endif
         }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button { showReply = true } label: { Image(systemName: "arrowshape.turn.up.left") }
-                    .disabled(message.envelope == nil)
+        // __MAIL_LIQUID_GLASS_2026_11_25__ (back)  ( sender / subject )  (avatar), the
+        // group header; reply / forward / move / delete in the composer-style bar.
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { readerToolbar }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            MailReaderActionBar(
+                replyName: replyName,
+                canReply: message.envelope != nil,
+                canForward: parsed != nil,
+                deleteLabel: currentFolder == "trash"
+                    ? "mail.action.deleteForever".localized : "common.delete".localized,
+                onReply: { showReply = true },
+                onForward: { forwardDraft = makeForward() },
+                onDelete: deleteTapped) {
+                moveMenuItems
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
-                    if currentFolder == "trash" {
-                        Button {
-                            Task { try? await mail.move(id: message.id, to: "inbox"); close() }
-                        } label: {
-                            Label("mail.action.restore".localized, systemImage: "tray.and.arrow.down")
-                        }
-                        Button(role: .destructive) { confirmPermanentDelete = true } label: {
-                            Label("mail.action.deleteForever".localized, systemImage: "trash")
-                        }
-                    } else {
-                        if currentFolder == "archive" {
-                            Button {
-                                Task { try? await mail.move(id: message.id, to: "inbox"); close() }
-                            } label: {
-                                Label("mail.action.restoreInbox".localized, systemImage: "tray.and.arrow.down")
-                            }
-                        } else if currentFolder != "sent" && currentFolder != "draft" {
-                            Button {
-                                Task { try? await mail.move(id: message.id, to: "archive"); close() }
-                            } label: {
-                                Label("mail.action.archive".localized, systemImage: "archivebox")
-                            }
-                        }
-                        Button {
-                            Task { try? await mail.markSeen(id: message.id, seen: false); close() }
-                        } label: {
-                            Label("mail.action.markUnread".localized, systemImage: "envelope.badge")
-                        }
-                        Button(role: .destructive) {
-                            Task { _ = try? await mail.delete(id: message.id); close() }
-                        } label: {
-                            Label("common.delete".localized, systemImage: "trash")
-                        }
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                }
-            }
+        }
+        .sheet(item: $forwardDraft) { draft in
+            MailComposeView(to: draft.to, subject: draft.subject, messageBody: draft.body,
+                            attachments: draft.attachments)
         }
         .confirmationDialog(
             "mail.confirm.deleteForever".localized,
@@ -1078,6 +1147,199 @@ struct MailMessageView: View {
             }
         }
         .task { await load() }
+    }
+
+    // MARK: __MAIL_LIQUID_GLASS_2026_11_25__ Header, bar, actions
+
+    private var senderName: String {
+        guard let from = message.envelope?.from else { return "mail.msg.sealedOther".localized }
+        return MailMessageParser.displayName(from: from)
+    }
+
+    private var replyName: String {
+        // First name only when there is one, as a chat reply line would say it.
+        let name = senderName
+        if name.contains("@") { return name }
+        return name.split(separator: " ").first.map(String.init) ?? name
+    }
+
+    private var subjectLine: String {
+        guard let e = message.envelope else { return "" }
+        return e.subject.isEmpty ? "(no subject)" : e.subject
+    }
+
+    @ToolbarContentBuilder
+    private var readerToolbar: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            GroupHeaderIsland(
+                name: senderName,
+                subtitle: subjectLine,
+                accessibilityLabelText: senderName,
+                accessibilityHintText: MailChromeText.detailsHint,
+                identifier: "mail.reader.island",
+                onTap: { withAnimation(.easeInOut(duration: 0.2)) { showDetails.toggle() } })
+        }
+        if let from = message.envelope?.from {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                GroupHeaderAvatarButton(
+                    name: senderName,
+                    sections: [[
+                        OverflowMenuItem(id: "copy", title: MailChromeText.copyAddress, symbol: "doc.on.doc"),
+                        OverflowMenuItem(id: "write", title: MailChromeText.newEmail, symbol: "square.and.pencil"),
+                    ]],
+                    onTap: { withAnimation(.easeInOut(duration: 0.2)) { showDetails.toggle() } },
+                    onSelect: { id in
+                        let address = MailMessageParser.emailAddress(from: from)
+                        if id == "copy" {
+                            UIPasteboard.general.string = address
+                        } else if id == "write" {
+                            forwardDraft = ForwardDraft(to: address, subject: "", body: "", attachments: [])
+                        }
+                    },
+                    accessibilityLabelText: senderName,
+                    identifier: "mail.reader.avatar") {
+                    MailSenderAvatar(header: from, size: 38)
+                }
+            }
+        }
+    }
+
+    /// Subject, then who sent it (avatar, name, address) and when; the island or
+    /// the avatar shows the full To / Cc / date.
+    private func headerCard(_ envelope: OSHIMailMessage.Envelope) -> some View {
+        let name = MailMessageParser.displayName(from: envelope.from)
+        let address = MailMessageParser.emailAddress(from: envelope.from)
+        return VStack(alignment: .leading, spacing: 12) {
+            Text(envelope.subject.isEmpty ? "(no subject)" : envelope.subject)
+                .font(.title3.bold())
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+            HStack(alignment: .center, spacing: 12) {
+                if !dynamicTypeSize.isAccessibilitySize {
+                    MailSenderAvatar(header: envelope.from, size: 40)
+                }
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(name).font(.subheadline.weight(.semibold))
+                    if address != name {
+                        Text(address).font(.caption).foregroundStyle(.secondary)
+                            .lineLimit(showDetails ? nil : 1)
+                            .truncationMode(.middle)
+                    }
+                }
+                Spacer(minLength: 4)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text(message.receivedAt, format: .dateTime.day().month(.abbreviated))
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+            }
+            .accessibilityElement(children: .combine)
+            if showDetails || dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(String(format: "mail.msg.to".localized, envelope.to))
+                    if let cc = envelope.cc, !cc.isEmpty {
+                        Text("Cc: \(cc)")
+                    }
+                    Text(message.receivedAt, format: .dateTime)
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .transition(.opacity)
+            } else {
+                Text(String(format: "mail.msg.to".localized, envelope.to))
+                    .font(.caption).foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+        }
+        .mailCard(padding: 16)
+    }
+
+    /// What the old ⋯ menu offered, minus Delete (its own button now).
+    @ViewBuilder
+    private var moveMenuItems: some View {
+        if currentFolder == "trash" {
+            Button {
+                Task { try? await mail.move(id: message.id, to: "inbox"); close() }
+            } label: {
+                Label("mail.action.restore".localized, systemImage: "tray.and.arrow.down")
+            }
+        } else {
+            if currentFolder == "archive" {
+                Button {
+                    Task { try? await mail.move(id: message.id, to: "inbox"); close() }
+                } label: {
+                    Label("mail.action.restoreInbox".localized, systemImage: "tray.and.arrow.down")
+                }
+            } else if currentFolder != "sent" && currentFolder != "draft" {
+                Button {
+                    Task { try? await mail.move(id: message.id, to: "archive"); close() }
+                } label: {
+                    Label("mail.action.archive".localized, systemImage: "archivebox")
+                }
+            }
+            Button {
+                Task { try? await mail.markSeen(id: message.id, seen: false); close() }
+            } label: {
+                Label("mail.action.markUnread".localized, systemImage: "envelope.badge")
+            }
+        }
+    }
+
+    private func deleteTapped() {
+        if currentFolder == "trash" {
+            confirmPermanentDelete = true
+        } else {
+            Task { _ = try? await mail.delete(id: message.id); close() }
+        }
+    }
+
+    struct ForwardDraft: Identifiable {
+        let id = UUID()
+        var to: String = ""
+        let subject: String
+        let body: String
+        let attachments: [OSHIMailClient.Attachment]
+    }
+
+    /// Forward = a new message: "Fwd:" subject, the original quoted as text under
+    /// a header block, and the attachments the reader lists (within the send cap).
+    /// Built from what this device already decrypted; nothing new is fetched.
+    private func makeForward() -> ForwardDraft? {
+        guard let parsed else { return nil }
+        let e = message.envelope
+        let subject = e?.subject ?? parsed.subject
+        let fwdSubject = subject.lowercased().hasPrefix("fwd:") || subject.lowercased().hasPrefix("fw:")
+            ? subject : "Fwd: \(subject)"
+        var text = parsed.textBody
+        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, let html = parsed.htmlBody {
+            text = Self.plainText(fromHTML: html)
+        }
+        var header = "\n\n---------- \("mail.forward.header".localized) ----------\n"
+        header += "From: \(e?.from ?? parsed.from)\n"
+        header += "Date: \(message.receivedAt.formatted(date: .abbreviated, time: .shortened))\n"
+        header += "Subject: \(subject)\n"
+        header += "To: \(e?.to ?? parsed.to)\n\n"
+        var files: [OSHIMailClient.Attachment] = []
+        var total = 0
+        for a in visibleAttachments(parsed) {
+            guard total + a.data.count <= OSHIMailClient.maxAttachmentTotalBytes else { continue }
+            total += a.data.count
+            files.append(.init(filename: a.filename, mimeType: a.mimeType, data: a.data))
+        }
+        return ForwardDraft(subject: fwdSubject, body: header + text, attachments: files)
+    }
+
+    /// Tags stripped by a regex — never `NSAttributedString(html:)`, which would
+    /// fetch the remote images this reader blocks.
+    static func plainText(fromHTML html: String) -> String {
+        var s = html.replacingOccurrences(of: #"(?is)<(script|style|head)\b.*?</\1>"#, with: "", options: .regularExpression)
+        s = s.replacingOccurrences(of: #"(?i)<br\s*/?>|</p>|</div>|</tr>|</h[1-6]>|</li>"#, with: "\n", options: .regularExpression)
+        s = s.replacingOccurrences(of: #"<[^>]+>"#, with: "", options: .regularExpression)
+        for (entity, char) in [("&nbsp;", " "), ("&amp;", "&"), ("&lt;", "<"), ("&gt;", ">"), ("&quot;", "\""), ("&#39;", "'")] {
+            s = s.replacingOccurrences(of: entity, with: char)
+        }
+        s = s.replacingOccurrences(of: #"\n{3,}"#, with: "\n\n", options: .regularExpression)
+        return s.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func load() async {
@@ -1130,116 +1392,234 @@ struct MailComposeView: View {
     // MARK: Address book — suggestions built locally from decrypted envelopes
     @State private var toSuggestions: [OSHIMailClient.MailContact] = []
 
+    @FocusState private var toFocused: Bool
+    @FocusState private var subjectFocused: Bool
+    @FocusState private var bodyFocused: Bool
+    @ScaledMetric(relativeTo: .body) private var bodyMinHeight: CGFloat = 220
+
+    /// Every recipient, chips and what is still being typed.
+    private var recipients: [String] { MailRecipientField.recipients(to) }
+
     /// Explicit init so a caller can prefill To/Subject/Body (reply, or reopening a
     /// draft) while the fields stay `@State` — `State(initialValue:)` is only honoured
     /// the first time the view is constructed, exactly like SwiftUI expects.
     init(to: String = "", subject: String = "", messageBody: String = "",
-         inReplyTo: String? = nil, draftId: String? = nil) {
-        _to = State(initialValue: to)
+         inReplyTo: String? = nil, draftId: String? = nil,
+         attachments: [OSHIMailClient.Attachment] = []) {
+        // __MAIL_LIQUID_GLASS_2026_11_25__ A prefilled recipient (reply, draft) opens
+        // as a chip: every part before the last comma is one (`MailRecipientField`).
+        let trimmedTo = to.trimmingCharacters(in: .whitespaces)
+        _to = State(initialValue: trimmedTo.isEmpty || trimmedTo.hasSuffix(",") ? trimmedTo : trimmedTo + ", ")
+        _attachments = State(initialValue: attachments)
         _subject = State(initialValue: subject)
         _messageBody = State(initialValue: messageBody)
         self.inReplyTo = inReplyTo
         _draftId = State(initialValue: draftId)
     }
 
-    var body: some View {
-        NavigationStack {
-            Form {
-                if let account = mail.account, !account.aliases.isEmpty {
-                    Picker("From", selection: Binding(
-                        get: { selectedFrom ?? account.address },
-                        set: { selectedFrom = $0 })) {
-                        Text(account.address).tag(account.address)
-                        ForEach(account.aliases, id: \.self) { alias in
-                            Text(alias).tag(alias)
-                        }
+    private var fromAddress: String? {
+        guard let account = mail.account else { return nil }
+        return selectedFrom ?? account.address
+    }
+
+    /// __MAIL_LIQUID_GLASS_2026_11_25__ The island: « New message / from-address ».
+    /// With aliases it is the From picker (a menu); otherwise a plain title.
+    @ViewBuilder
+    private var composeIsland: some View {
+        let label = HeaderIslandLabel(name: "mail.compose.title".localized, subtitle: fromAddress ?? "")
+        if let account = mail.account, !account.aliases.isEmpty {
+            Menu {
+                Picker(MailChromeText.from, selection: Binding(
+                    get: { selectedFrom ?? account.address },
+                    set: { selectedFrom = $0 })) {
+                    Text(account.address).tag(account.address)
+                    ForEach(account.aliases, id: \.self) { alias in
+                        Text(alias).tag(alias)
                     }
                 }
+            } label: { label }
+            .buttonStyle(.plain)
+            .accessibilityLabel(MailChromeText.from)
+            .accessibilityValue(fromAddress ?? "")
+            .accessibilityIdentifier("mail.compose.from")
+        } else {
+            label
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isHeader)
+        }
+    }
 
-                Section {
-                    TextField("mail.compose.to".localized, text: $to)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.emailAddress)
-                        .onChange(of: to) { _, new in
-                            updateSuggestions(new)
-                            scheduleDraftSave()
-                        }
-
-                    if !toSuggestions.isEmpty {
-                        ForEach(toSuggestions) { contact in
-                            Button {
-                                applySuggestion(contact.address)
-                            } label: {
-                                HStack {
-                                    Image(systemName: "person.crop.circle").foregroundStyle(Theme.brand)
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        if !contact.name.isEmpty {
-                                            Text(contact.name).font(.callout)
-                                        }
-                                        Text(contact.address)
-                                            .font(contact.name.isEmpty ? .callout : .caption)
-                                            .foregroundStyle(contact.name.isEmpty ? .primary : .secondary)
-                                    }
-                                    Spacer()
-                                }
+    private var suggestionsList: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(toSuggestions) { contact in
+                Button {
+                    applySuggestion(contact.address)
+                } label: {
+                    HStack(spacing: 10) {
+                        MailSenderAvatar(header: contact.name.isEmpty ? contact.address : "\(contact.name) <\(contact.address)>",
+                                         size: 30)
+                        VStack(alignment: .leading, spacing: 1) {
+                            if !contact.name.isEmpty {
+                                Text(contact.name).font(.callout)
                             }
+                            Text(contact.address)
+                                .font(contact.name.isEmpty ? .callout : .caption)
+                                .foregroundStyle(contact.name.isEmpty ? .primary : .secondary)
+                        }
+                        Spacer()
+                    }
+                    .padding(.vertical, 6)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private var fieldsCard: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            MailRecipientField(to: $to, focus: $toFocused)
+                .padding(.vertical, 8)
+                .onChange(of: to) { _, new in
+                    updateSuggestions(new)
+                    scheduleDraftSave()
+                }
+            if !toSuggestions.isEmpty {
+                Divider()
+                suggestionsList.padding(.vertical, 4)
+            }
+            Divider()
+            TextField("mail.compose.subject".localized, text: $subject, axis: .vertical)
+                .font(.body.weight(.semibold))
+                .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
+                .focused($subjectFocused)
+                .padding(.vertical, 12)
+                .onChange(of: subject) { _, _ in scheduleDraftSave() }
+                .accessibilityIdentifier("mail.compose.subject")
+            Divider()
+            TextEditor(text: $messageBody)
+                .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
+                .focused($bodyFocused)
+                .scrollContentBackground(.hidden)
+                .frame(minHeight: bodyMinHeight)
+                .padding(.horizontal, -5)
+                .padding(.vertical, 6)
+                .onChange(of: messageBody) { _, _ in scheduleDraftSave() }
+                .accessibilityIdentifier("mail.compose.body")
+        }
+        .mailCard(padding: 14)
+    }
+
+    private var attachmentsCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ForEach(Array(attachments.enumerated()), id: \.offset) { index, attachment in
+                HStack(spacing: 10) {
+                    Image(systemName: "paperclip").foregroundStyle(Theme.brand)
+                        .accessibilityHidden(true)
+                    Text(attachment.filename).lineLimit(1).truncationMode(.middle)
+                    Spacer()
+                    Text(ByteCountFormatter.string(fromByteCount: Int64(attachment.data.count), countStyle: .file))
+                        .font(.caption).foregroundStyle(.secondary)
+                    Button { attachments.remove(at: index) } label: {
+                        Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary)
+                            .frame(minWidth: 32, minHeight: 32)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(MailChromeText.removeRecipient(attachment.filename))
+                }
+                .font(.footnote)
+            }
+            let total = attachments.reduce(0) { $0 + $1.data.count }
+            Text(String(format: "mail.compose.attached".localized, ByteCountFormatter.string(fromByteCount: Int64(total), countStyle: .file), ByteCountFormatter.string(fromByteCount: Int64(OSHIMailClient.maxAttachmentTotalBytes), countStyle: .file)))
+                .font(.caption2).foregroundStyle(.secondary)
+        }
+        .mailCard()
+    }
+
+    /// The composer pill of a conversation: attach (file, drive) inside the pill
+    /// with the monthly allowance, Send as the brand circle beside it.
+    private var composeBar: some View {
+        HStack(alignment: .bottom, spacing: 8) {
+            ComposerPill(focused: false, tint: Theme.brand) {
+                Button { showFilePicker = true } label: {
+                    Image(systemName: "paperclip")
+                        .font(.body.weight(.medium))
+                        .foregroundStyle(MailMessageView.linkColor)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("mail.compose.attachFile".localized)
+                .accessibilityIdentifier("mail.compose.attachFile")
+                Button { showDrivePicker = true } label: {
+                    Image(systemName: "folder")
+                        .font(.body.weight(.medium))
+                        .foregroundStyle(MailMessageView.linkColor)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("mail.compose.attachDrive".localized)
+                .accessibilityIdentifier("mail.compose.attachDrive")
+                Spacer(minLength: 4)
+                // The status line gives way (rather than truncating) when it does not fit.
+                ViewThatFits(in: .horizontal) {
+                    SwiftUI.Group {
+                        if let draftStatus {
+                            Text(draftStatus)
+                        } else if let account = mail.account {
+                            Text(String(format: "mail.quota.messages".localized, account.sending.remaining, account.sending.quota))
+                                .foregroundStyle(account.sending.remaining == 0 ? Color.red : Color.secondary)
                         }
                     }
-
-                    TextField("mail.compose.subject".localized, text: $subject)
-                        .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
-                        .onChange(of: subject) { _, _ in scheduleDraftSave() }
-
-                    TextEditor(text: $messageBody)
-                        .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
-                        .frame(minHeight: 200)
-                        .onChange(of: messageBody) { _, _ in scheduleDraftSave() }
-                } footer: {
-                    if let draftStatus {
-                        Text(draftStatus).font(.caption2)
-                    }
+                    .fixedSize()
+                    Color.clear.frame(width: 0, height: 0)
                 }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(minHeight: 44)
+                .padding(.trailing, 12)
+            }
+            .layoutPriority(1)
 
-                Section {
-                    ForEach(Array(attachments.enumerated()), id: \.offset) { index, attachment in
-                        HStack {
-                            Image(systemName: "paperclip").foregroundStyle(Theme.brand)
-                            Text(attachment.filename).lineLimit(1)
-                            Spacer()
-                            Text(ByteCountFormatter.string(fromByteCount: Int64(attachment.data.count), countStyle: .file))
-                                .font(.caption).foregroundStyle(.secondary)
-                            Button { attachments.remove(at: index) } label: {
-                                Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                        .font(.footnote)
-                    }
-
-                    Button { showFilePicker = true } label: {
-                        Label("mail.compose.attachFile".localized, systemImage: "paperclip")
-                    }
-                    Button { showDrivePicker = true } label: {
-                        Label("mail.compose.attachDrive".localized, systemImage: "folder")
-                    }
-                } footer: {
-                    let total = attachments.reduce(0) { $0 + $1.data.count }
-                    if total > 0 {
-                        Text(String(format: "mail.compose.attached".localized, ByteCountFormatter.string(fromByteCount: Int64(total), countStyle: .file), ByteCountFormatter.string(fromByteCount: Int64(OSHIMailClient.maxAttachmentTotalBytes), countStyle: .file)))
-                    }
-                }
-
-                if let account = mail.account {
-                    Text(String(format: "mail.quota.messages".localized, account.sending.remaining, account.sending.quota))
-                        .font(.caption)
-                        .foregroundStyle(account.sending.remaining == 0 ? .red : .secondary)
-                }
-
-                if let error {
-                    Text(error).font(.footnote).foregroundStyle(.red)
+            Button { Task { await send() } } label: {
+                if sending {
+                    ProgressView()
+                        .frame(width: 48, height: 48)
+                } else {
+                    ComposerRoundButtonFace(systemImage: "arrow.up", primary: true,
+                                            enabled: !recipients.isEmpty)
                 }
             }
+            .buttonStyle(PressScaleButtonStyle())
+            .disabled(recipients.isEmpty || sending)
+            .accessibilityLabel("common.send".localized)
+            .accessibilityIdentifier("mail.compose.send")
+        }
+        .padding(.horizontal)
+        .padding(.top, 10)
+        .padding(.bottom, 8)
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)  // chrome, see MailReaderActionBar
+        .oledGlassBar(fallback: .ultraThinMaterial)
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    fieldsCard
+                    if !attachments.isEmpty { attachmentsCard }
+                    if let error {
+                        Text(error).font(.footnote).foregroundStyle(.red)
+                            .mailCard()
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .background(Color(.systemGroupedBackground).ignoresSafeArea())
+            .safeAreaInset(edge: .bottom, spacing: 0) { composeBar }
             .fileImporter(isPresented: $showFilePicker, allowedContentTypes: [.item], allowsMultipleSelection: true) { result in
                 addFiles(result)
             }
@@ -1255,10 +1635,13 @@ struct MailComposeView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("common.cancel".localized) { cancelAndSaveDraft() }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("common.send".localized) { Task { await send() } }
-                        .disabled(to.isEmpty || sending)
-                }
+                ToolbarItem(placement: .principal) { composeIsland }
+            }
+            // The lifted violet: the brand itself is too dark for "Cancel" on dark glass.
+            .tint(MailMessageView.linkColor)
+            .onAppear {
+                // Straight to what is missing: the address, or (reply) the text.
+                if recipients.isEmpty { toFocused = true } else if !subject.isEmpty { bodyFocused = true }
             }
         }
         // Covers interactive (swipe-down) dismissal too, which the Cancel button's
@@ -1284,10 +1667,11 @@ struct MailComposeView: View {
         var parts = to.split(separator: ",", omittingEmptySubsequences: false)
             .map { $0.trimmingCharacters(in: .whitespaces) }
         if parts.isEmpty {
-            to = address
+            to = address + ", "
         } else {
             parts[parts.count - 1] = address
-            to = parts.joined(separator: ", ")
+            // Trailing ", ": the picked address becomes a chip, the field is free again.
+            to = parts.joined(separator: ", ") + ", "
         }
         toSuggestions = []
     }
@@ -1309,7 +1693,8 @@ struct MailComposeView: View {
     private func saveDraftNow(silent: Bool) async -> Bool {
         guard !(to.isEmpty && subject.isEmpty && messageBody.isEmpty) else { return false }
         do {
-            let id = try await mail.saveDraft(id: draftId, to: to, subject: subject, body: messageBody)
+            let id = try await mail.saveDraft(id: draftId, to: recipients.joined(separator: ", "),
+                                              subject: subject, body: messageBody)
             draftId = id
             if !silent { draftStatus = "Draft saved" }
             return true
@@ -1369,9 +1754,7 @@ struct MailComposeView: View {
         sending = true
         error = nil
         // One address per comma; a stray space around them is the user's, not an error.
-        let recipients = to.split(separator: ",")
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
+        let recipients = self.recipients
         do {
             _ = try await mail.sendMail(to: recipients,
                                         subject: subject,
@@ -1516,15 +1899,20 @@ extension MailView {
                      text: "mail.refresh_failed".localized,
                      tint: .orange)
         } else if let at = mail.lastSyncedAt {
-            let fmt = RelativeDateTimeFormatter()
             badgeRow(icon: "checkmark.circle.fill",
-                     text: "mail.up_to_date".localized + " · "
-                         + fmt.localizedString(for: at, relativeTo: Date()),
+                     text: "mail.up_to_date".localized + " · " + Self.relative(at),
                      tint: .green)
         }
         // Never synced in this session: nothing. A badge that says "up to
         // date" before the first successful round trip is the failure mode
         // this exists to remove, not a friendlier empty state.
+    }
+
+    /// "now", not "in 0 seconds", right after a refresh.
+    static func relative(_ date: Date) -> String {
+        let fmt = RelativeDateTimeFormatter()
+        fmt.dateTimeStyle = .named
+        return fmt.localizedString(for: min(date, Date()), relativeTo: Date())
     }
 
     private func badgeRow(icon: String, text: String, tint: Color) -> some View {
@@ -2195,7 +2583,7 @@ enum MailDemoFixture {
             envelope.snippet = row.3
             messages.append(OSHIMailMessage(
                 id: id, receivedAt: date, bytes: raw.utf8.count, seen: i >= 2, folder: "inbox",
-                deliveredTo: "me@mail.oshi-messenger.com", envelope: envelope))
+                deliveredTo: "me", envelope: envelope))
         }
         let json = #"{"address":"me@mail.oshi-messenger.com","localpart":"me","aliases":[],"aliasLimit":5,"createdAt":"2026-01-01T00:00:00Z","storage":{"used":12,"quota":100,"remaining":88,"messages":5},"sending":{"sent":3,"quota":10,"remaining":7,"month":"2026-11"},"drive":{"used":0,"quota":10,"remaining":10,"files":0},"tier":"free","premiumUntil":null}"#
         if let account = try? JSONDecoder().decode(OSHIMailAccount.self, from: Data(json.utf8)) {

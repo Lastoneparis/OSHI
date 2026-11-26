@@ -48,4 +48,27 @@
     <string name="qr_no">لا</string>
     <string name="qr_busy">لا أستطيع التحدث الآن</string>
     <string name="end_to_end">مشفّر من طرف إلى طرف بواسطة هاتفك</string>
+    <!-- __WEAR_POLISH_2026_11_25__ -->
+    <string name="pinned">مثبّتة</string>
+    <string name="net_internet">الإنترنت</string>
+    <string name="net_nearby">%1$d بالقرب</string>
+    <string name="net_lora">LoRa</string>
+    <string name="net_offline">الهاتف غير متصل · الرسائل تنتظر على هاتفك</string>
+    <string name="net_offline_short">الهاتف غير متصل</string>
+    <string name="voice_message">رسالة صوتية</string>
+    <string name="voice_send">إرسال الرسالة الصوتية</string>
+    <string name="voice_cancel">إلغاء</string>
+    <string name="voice_permission">اسمح بالميكروفون لتسجيل الرسائل الصوتية. لا يُحفظ شيء على الساعة.</string>
+    <string name="voice_mic_busy">الميكروفون مشغول. حاول مجددًا.</string>
+    <string name="voice_too_short">قصيرة جدًا. تحدّث لمدة أطول قليلًا.</string>
+    <string name="voice_not_sent">لم تُرسل. أبقِ هاتفك قريبًا وحاول مجددًا.</string>
+    <string name="send_emoji">إرسال رمز تعبيري</string>
+    <string name="delivery_sending">جارٍ الإرسال</string>
+    <string name="delivery_sent">تم الإرسال</string>
+    <string name="delivery_delivered">تم التسليم</string>
+    <string name="delivery_read">مقروءة</string>
+    <string name="delivery_failed">لم تُسلَّم</string>
+    <string name="complication_none">لا رسائل غير مقروءة</string>
+    <string name="tile_reply_to">الرد على %1$s</string>
+    <string name="tile_chat_unread">%1$s، غير مقروءة: %2$d</string>
 </resources>

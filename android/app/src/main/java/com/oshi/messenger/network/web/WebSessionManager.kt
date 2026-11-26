@@ -207,6 +207,14 @@ class WebSessionManager @Inject constructor(
          * iOS (`WebSessionManager.swift`): the field separator is the two literal
          * characters backslash-n — NOT a newline — so all three sides agree.
          */
+        /**
+         * __SERVER_CLOCK_EVERY_SIGNER_2026_11_23__ The `mobile_auth` timestamp is checked
+         * for freshness by the relay: server time, like every other signed timestamp.
+         */
+        @JvmStatic
+        fun authTimestamp(): String =
+            com.oshi.messenger.network.auth.ServerClock.signingNowMs().toString()
+
         @JvmStatic
         fun canonicalMobileAuth(publicKey: String, timestamp: String, nonce: String): String =
             "OSHI-MOBILE-AUTH-V1\\n1\\n$publicKey\\n$timestamp\\n$nonce\\n/ws"
@@ -425,6 +433,7 @@ class WebSessionManager @Inject constructor(
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val client = OkHttpClient.Builder()
+        .addInterceptor(com.oshi.messenger.network.auth.ServerClock.interceptor)
         .pingInterval(PING_INTERVAL, java.util.concurrent.TimeUnit.MILLISECONDS)
         .build()
 
@@ -739,7 +748,7 @@ class WebSessionManager @Inject constructor(
             Log.w(TAG, "No public key — cannot authenticate the web relay socket")
             return
         }
-        val timestamp = System.currentTimeMillis().toString()
+        val timestamp = authTimestamp()
         val nonce = UUID.randomUUID().toString().replace("-", "")
         try {
             val signingPublicKey = Base64.getEncoder().encodeToString(cryptoManager.getSigningPublicKey())

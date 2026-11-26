@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">תצוגה מקדימה ציבורית ברשת</string>
+    <string name="cw_toggle">פרסום פוסטים ברשת</string>
+    <string name="cw_footer">פוסטים חדשים מתפרסמים גם כדף אינטרנט ציבורי בכתובת oshi-messenger.com/c/%1$s. כל אחד יכול לקרוא אותם, כולל מנועי חיפוש ותצוגות מקדימות של קישורים. ההצפנה מקצה לקצה לא חלה על העותק ברשת.</string>
+    <string name="cw_needs_link">קודם יש לתת לערוץ קישור ציבורי: התצוגה ברשת משתמשת בשם שלו.</string>
+    <string name="cw_create_link">יצירת קישור ציבורי</string>
+    <string name="cw_enable_title">לפרסם פוסטים ברשת?</string>
+    <string name="cw_enable_confirm">הפוסטים בערוץ הזה יהיו גלויים לכולם ברשת בכתובת oshi-messenger.com/c/%1$s. פוסטים חדשים בלבד. גם תצוגות מקדימות של קישורים (WhatsApp, X, Telegram…) יכולות לקרוא אותם, וההצפנה מקצה לקצה לא חלה על העותק ברשת.</string>
+    <string name="cw_enable_action">פרסום</string>
+    <string name="cw_disable_title">לכבות את התצוגה ברשת?</string>
+    <string name="cw_disable_confirm">כל הפוסטים והתמונות שפורסמו בכתובת oshi-messenger.com/c/%1$s יוסרו מהרשת. הפוסטים שלך באפליקציה לא ישתנו.</string>
+    <string name="cw_disable_action">כיבוי</string>
+    <string name="cw_indexing">לאפשר מנועי חיפוש</string>
+    <string name="cw_indexing_footer">כשהאפשרות כבויה, הדפים מבקשים ממנועי חיפוש לא לאנדקס אותם.</string>
+    <string name="cw_embed_code">קוד הטמעה</string>
+    <string name="cw_embed_title">הטמעת הפוסט</string>
+    <string name="cw_embed_hint">יש להדביק את הקוד באתר במקום שבו הפוסט צריך להופיע.</string>
+    <string name="cw_embed_dark">ערכת נושא כהה</string>
+    <string name="cw_copy_code">העתקת הקוד</string>
+    <string name="cw_code_copied">הקוד הועתק</string>
+    <string name="cw_not_on_web">הפוסט הזה לא נמצא ברשת. מתפרסמים רק פוסטים שנשלחו אחרי הפעלת התצוגה ברשת.</string>
+    <string name="cw_error">לא ניתן היה לשנות את התצוגה ברשת. יש לבדוק את החיבור ולנסות שוב.</string>
+</resources>

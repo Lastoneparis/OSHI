@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi Aware lane. See values/strings_wifi_aware.xml. -->
+<resources>
+    <string name="settings_wifi_aware_title">Wi-Fi Aware(빠른 근거리 연결)</string>
+    <string name="settings_wifi_aware_subtitle">라우터 없이 근처 OSHI 휴대폰과 직접 연결합니다. Wi-Fi 연결은 그대로 유지됩니다.</string>
+    <string name="peers_tag_wifi_aware">Wi-Fi Aware</string>
+</resources>

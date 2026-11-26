@@ -128,7 +128,9 @@ fun PeersScreen(
     ) { grants ->
         // An EMPTY result map means no dialog was shown at all, which is the
         // permanently-denied case — see MeshPermissionPolicy.resultIsRefusal.
-        if (MeshPermissionPolicy.resultIsRefusal(grants)) permissionEpoch++
+        // The Wi-Fi Aware ride-along is not what this card is about: judge the
+        // Bluetooth answer alone (an empty map still counts as a refusal).
+        if (MeshPermissionPolicy.resultIsRefusal(grants.filterKeys { it != MeshPermissionPolicy.NEARBY_WIFI_DEVICES })) permissionEpoch++
         // Bring BLE up straight away rather than waiting up to 30 s for the next
         // ensureBleRunning() tick — the window in which a user decides the
         // feature does not work.
@@ -229,8 +231,11 @@ fun PeersScreen(
                             else {
                                 // Record the ask BEFORE launching: this is the fact
                                 // `shouldShowRequestPermissionRationale` cannot supply.
-                                MeshPermissionRequests.recordAsked(context, needed)
-                                permissionLauncher.launch(needed.toTypedArray())
+                                // __WIFI_AWARE_2026_11_25__ + NEARBY_WIFI_DEVICES on 13+,
+                                // same "Nearby devices" dialog — no extra prompt.
+                                val ask = (needed + MeshPermissionRequests.wifiAwareRideAlong(context)).distinct()
+                                MeshPermissionRequests.recordAsked(context, ask)
+                                permissionLauncher.launch(ask.toTypedArray())
                             }
                         },
                         onOpenSettings = {
@@ -872,6 +877,21 @@ private fun PeerRow(
                             style = MaterialTheme.typography.labelSmall,
                             fontSize = 9.sp,
                             color = Color(0xFF007AFF)
+                        )
+                    }
+                }
+                // __WIFI_AWARE_2026_11_25__ Same badge, for the Wi-Fi Aware lane.
+                if (peer.connectionType == ConnectionType.WIFI_AWARE) {
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = OSHIGreen.copy(alpha = 0.15f)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.peers_tag_wifi_aware),
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontSize = 9.sp,
+                            color = OSHIGreen
                         )
                     }
                 }

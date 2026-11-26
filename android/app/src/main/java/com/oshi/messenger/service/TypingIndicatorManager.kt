@@ -238,6 +238,8 @@ class TypingIndicatorManager @Inject constructor(
         isTyping: Boolean,
         groupId: String? = null
     ) {
+        // __MESHCORE_INTEROP_2026_11_25__ No typing pings to a MeshCore user (no OSHI key, nothing to show it).
+        if (com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(recipientPublicKey)) return
         scope.launch {
             // Respect the Typing Indicators privacy setting (previously ignored —
             // the toggle persisted but nothing consumed it, so a user who turned

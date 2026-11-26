@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">公開網頁預覽</string>
+    <string name="cw_toggle">將貼文發布到網頁</string>
+    <string name="cw_footer">新貼文也會以公開網頁的形式發布在 oshi-messenger.com/c/%1$s。任何人都能閱讀，包括搜尋引擎和連結預覽。網頁副本不受端對端加密保護。</string>
+    <string name="cw_needs_link">請先為此頻道建立公開連結：網頁預覽會使用它的名稱。</string>
+    <string name="cw_create_link">建立公開連結</string>
+    <string name="cw_enable_title">將貼文發布到網頁？</string>
+    <string name="cw_enable_confirm">此頻道的貼文將在 oshi-messenger.com/c/%1$s 上對所有人顯示。僅限新貼文。連結預覽（WhatsApp、X、Telegram…）也能讀取，且網頁副本不受端對端加密保護。</string>
+    <string name="cw_enable_action">發布</string>
+    <string name="cw_disable_title">關閉網頁預覽？</string>
+    <string name="cw_disable_confirm">在 oshi-messenger.com/c/%1$s 發布的所有貼文和圖片都會從網頁上移除。你在應用程式中的貼文保持不變。</string>
+    <string name="cw_disable_action">關閉</string>
+    <string name="cw_indexing">允許搜尋引擎</string>
+    <string name="cw_indexing_footer">關閉時，頁面會要求搜尋引擎不要將其編入索引。</string>
+    <string name="cw_embed_code">嵌入程式碼</string>
+    <string name="cw_embed_title">嵌入此貼文</string>
+    <string name="cw_embed_hint">將此程式碼貼到你網站中要顯示貼文的位置。</string>
+    <string name="cw_embed_dark">深色主題</string>
+    <string name="cw_copy_code">複製程式碼</string>
+    <string name="cw_code_copied">已複製程式碼</string>
+    <string name="cw_not_on_web">此貼文不在網頁上。只有開啟網頁預覽後傳送的貼文才會發布。</string>
+    <string name="cw_error">無法變更網頁預覽。請檢查網路連線後再試一次。</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __BOT_COMMANDS_2026_11_24__ Telegram-style bot command menu + owner configuration. -->
+<resources>
+    <string name="bot_cmd_menu">פקודות</string>
+    <string name="bot_cmd_send_a11y">שליחת %1$s</string>
+    <string name="bot_cmd_sheet_title">פקודות הבוט</string>
+    <string name="bot_cmd_tap_to_send">הקישו על פקודה כדי לשלוח אותה.</string>
+    <string name="bot_cmd_empty_none_title">עדיין אין כאן בוטים</string>
+    <string name="bot_cmd_empty_none_body">צרו בוט והוסיפו אותו לקבוצה הזו. הפקודות שלו יופיעו כאן וכשתקלידו /.</string>
+    <string name="bot_cmd_empty_bot">לבוט הזה עדיין אין פקודות.</string>
+    <string name="bot_cmd_setup">הגדרת פקודות</string>
+    <string name="bot_cmd_section">פקודות</string>
+    <string name="bot_cmd_section_hint">חברי הקבוצות של הבוט רואים אותן כשהם מקלידים / או מקישים על „פקודות”.</string>
+    <string name="bot_cmd_add">הוספה</string>
+    <string name="bot_cmd_add_title">פקודה חדשה</string>
+    <string name="bot_cmd_edit_title">עריכת פקודה</string>
+    <string name="bot_cmd_field_name">פקודה</string>
+    <string name="bot_cmd_field_description">תיאור (מוצג בתפריט)</string>
+    <string name="bot_cmd_field_reply">תשובה</string>
+    <string name="bot_cmd_field_reply_hint">מה הבוט עונה. אפשר להשתמש ב־{{input}}, {{bot_name}} ו־{{date}}.</string>
+    <string name="bot_cmd_webhook_note">נשלחת ל־webhook שלכם, והוא עונה.</string>
+    <string name="bot_cmd_empty_owner">עדיין אין פקודות. הוסיפו אחת, כמו /start או /help, כדי שכולם יידעו מה הבוט עושה.</string>
+    <string name="bot_cmd_err_empty">הזינו שם פקודה.</string>
+    <string name="bot_cmd_err_invalid">רק אותיות לטיניות קטנות, ספרות ו־_.</string>
+    <string name="bot_cmd_err_too_long">עד 32 תווים.</string>
+    <string name="bot_cmd_err_duplicate">לבוט הזה כבר יש את הפקודה הזו.</string>
+    <string name="bot_cmd_err_too_many">לבוט יכולות להיות עד 100 פקודות.</string>
+    <string name="bot_cmd_err_description">התיאור ארוך מדי (עד 256 תווים).</string>
+    <string name="bot_cmd_sync_local">נשמר בטלפון הזה, שמריץ את הבוט.</string>
+    <string name="bot_cmd_sync_syncing">מעדכן את השרת…</string>
+    <string name="bot_cmd_sync_synced">התפריט עודכן בשרת.</string>
+    <string name="bot_cmd_sync_failed">לא ניתן היה לעדכן את השרת. הפקודות שלכם שמורות בטלפון הזה.</string>
+    <string name="bot_profile_edit">עריכת פרופיל</string>
+    <string name="bot_profile_name">שם</string>
+    <string name="bot_profile_description">תיאור</string>
+    <string name="bot_profile_avatar">אווטאר</string>
+    <string name="bot_profile_err_name_empty">תנו לבוט שלכם שם.</string>
+    <string name="bot_profile_err_name_long">השם ארוך מדי (עד 64 תווים).</string>
+    <string name="bot_profile_err_desc_long">התיאור ארוך מדי (עד 512 תווים).</string>
+    <string name="bot_connect_title">איך הוא מחובר</string>
+    <string name="bot_connect_local">הבוט הזה רץ בטלפון הזה: השאירו את OSHI מותקן ואת הבוט פעיל. הוסיפו אותו לקבוצה וחבריה יוכלו להשתמש בפקודות שלו שם.</string>
+    <string name="bot_connect_webhook">כל פקודה נשלחת לכתובת ה־webhook שלכם והשרת שלכם עונה ב־JSON ‏{\"text\": \"…\"}. השרת שלכם יכול גם להשתמש באסימון שלמטה עם ה־API של בוטי OSHI.</string>
+    <string name="bot_connect_token_warning">שמרו את האסימון בסוד: כל מי שיש לו אותו יכול לדבר בשם הבוט שלכם.</string>
+    <string name="bot_connect_groups">קבוצות: %1$s</string>
+    <string name="bot_connect_no_groups">עדיין לא בשום קבוצה, ולכן אף אחד לא יכול להשתמש בפקודות שלו.</string>
+</resources>

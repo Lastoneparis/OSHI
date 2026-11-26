@@ -509,7 +509,17 @@ struct VoiceCallView: View {
         case .ringing:
             // __CONNECTING_FIRST_2026_06_21__ show "Connecting…" during the wake window, then "Ringing…"
             if voiceCallManager.isOutgoingCall {
-                return voiceCallManager.isOutgoingConnecting ? "call.state.connecting".localized : "call.state.ringing".localized
+                if voiceCallManager.isOutgoingConnecting { return "call.state.connecting".localized }
+                // __CALL_WAKE_2026_11_22__ "Ringing…" once the callee's phone has the call
+                // (server /call-reach); "Connecting…" while only a push left; "Not
+                // reachable" when there is no push device and no socket. Unknown (old
+                // server) keeps "Ringing…".
+                let since = voiceCallManager.outgoingRingingSince.map { Date().timeIntervalSince($0) } ?? 0
+                switch CallReach.outgoingLabel(voiceCallManager.calleeReach, ringingFor: since) {
+                case .ringing: return "call.state.ringing".localized
+                case .calling: return "call.state.connecting".localized
+                case .unreachable: return "call.state.unreachable".localized
+                }
             }
             return "call.state.incoming".localized
         case .connecting: return "call.state.connecting".localized

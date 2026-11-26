@@ -145,6 +145,22 @@ object OSHIControlPayload {
      * `OfflineOnlyConversation.swift`.
      */
     const val OFFLINE_ONLY = "🔒OFFLINE_ONLY🔒"          // 🔒OFFLINE_ONLY🔒
+
+    /**
+     * __ADV_CHAT_PRIVACY_2026_11_26__ "Advanced chat privacy" switched on or off
+     * in this conversation. Body: [AdvancedChatPrivacyChange] JSON.
+     *
+     * Two spellings, one entry. The WIRE spelling (what we send, agreed with iOS)
+     * is the bare shield `🛡ADV_PRIVACY🛡`. The CATALOG key carries U+FE0F, so the
+     * derived U+FE0F-stripped twin (see `variants`) matches the bare wire form AND
+     * an emoji-picker spelling with the selector still matches — a Swift literal
+     * typed from a keyboard usually has it.
+     *
+     * RENDERED (a centred notice naming who switched it) but never a banner and
+     * never unread — see [renderedButNotWorthWaking] and the receive handlers.
+     */
+    const val ADV_PRIVACY = "🛡️ADV_PRIVACY🛡️"   // 🛡️ADV_PRIVACY🛡️
+    const val ADV_PRIVACY_WIRE = "🛡ADV_PRIVACY🛡"         // 🛡ADV_PRIVACY🛡
     const val MEDIA = "MEDIA|||"
 
     /**
@@ -198,6 +214,7 @@ object OSHIControlPayload {
         Entry(BLOCKED_NOTICE, Kind.RENDERED),
         Entry(POLL, Kind.RENDERED),
         Entry(OFFLINE_ONLY, Kind.RENDERED),
+        Entry(ADV_PRIVACY, Kind.RENDERED),
         Entry(MEDIA, Kind.RENDERED),
 
         Entry(REPLY, Kind.ENVELOPE),
@@ -263,7 +280,18 @@ object OSHIControlPayload {
      * (`OSHIControlPayload.swift:257-259`).
      */
     private val renderedButNotWorthWaking =
-        setOf(PROFILE_UPDATE, WALLPAPER_UPDATE, BLOCKED_NOTICE)
+        setOf(PROFILE_UPDATE, WALLPAPER_UPDATE, BLOCKED_NOTICE, ADV_PRIVACY)
+
+    /**
+     * __ADV_CHAT_PRIVACY_2026_11_26__ Rendered in the thread, but NEVER a local
+     * banner either (not just "no push"): a settings change is not a message, and
+     * a banner reading "X turned on advanced chat privacy" on the lock screen
+     * would itself be a leak of the conversation's existence.
+     */
+    private val renderedButNeverNotifies = setOf(ADV_PRIVACY)
+
+    /** True when [text] gets a row in the thread but must never raise a banner nor count as unread. */
+    fun neverNotifies(text: String): Boolean = matchedPrefix(text) in renderedButNeverNotifies
 
     /**
      * Sending this payload must wake NOBODY — the peer picks it up on its next poll.
@@ -593,6 +621,9 @@ object OSHIControlPayload {
         // restrictive reading: claiming a conversation is open when we cannot
         // tell is the error that costs something.
         OFFLINE_ONLY -> "🔒 " + (if (offlineOnlyIsOn(body)) labels.offlineOnlyOn else labels.offlineOnlyOff)
+        // __ADV_CHAT_PRIVACY_2026_11_26__ The row / list line. The thread itself
+        // draws a richer notice that names who switched it.
+        ADV_PRIVACY -> "🛡 " + (if (offlineOnlyIsOn(body)) labels.advPrivacyOn else labels.advPrivacyOff)
         MEDIA -> mediaMarkerSummary(body, labels)
         // Unreachable while every RENDERED entry is handled above; a new catalog
         // entry that forgets its branch degrades to "hide it" rather than to
@@ -920,6 +951,9 @@ object OSHIControlPayload {
          */
         val offlineOnlyOn: String = "This conversation is now offline only",
         val offlineOnlyOff: String = "This conversation can use the internet again",
+        /** __ADV_CHAT_PRIVACY_2026_11_26__ One line each way, no name (the row says who). */
+        val advPrivacyOn: String = "Advanced chat privacy turned on",
+        val advPrivacyOff: String = "Advanced chat privacy turned off",
         /** "You", for naming this device's owner in a poll's voter list. */
         val you: String = "You",
         /**
@@ -1001,6 +1035,9 @@ object OSHIControlPayload {
         // __OFFLINE_ONLY_CONVERSATION_2026_10_23__
         offlineOnlyOn = context.getString(R.string.offline_only_summary_on),
         offlineOnlyOff = context.getString(R.string.offline_only_summary_off),
+        // __ADV_CHAT_PRIVACY_2026_11_26__
+        advPrivacyOn = context.getString(R.string.adv_privacy_summary_on),
+        advPrivacyOff = context.getString(R.string.adv_privacy_summary_off),
         you = context.getString(R.string.you),
         blockedByContact = context.getString(R.string.chat_blocked_by_contact),
         mediaImage = context.getString(R.string.chat_photo),

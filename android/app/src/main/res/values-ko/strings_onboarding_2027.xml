@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">건너뛰기</string>
+    <string name="ob27_continue">계속</string>
+    <string name="ob27_page_of">%2$d페이지 중 %1$d페이지</string>
+    <string name="ob27_private_title">나와 상대방만</string>
+    <string name="ob27_private_body">메시지와 통화는 휴대전화에서 종단간 암호화됩니다. 중간에서는 누구도 읽을 수 없습니다. OSHI도 마찬가지입니다.</string>
+    <string name="ob27_offline_title">인터넷 없이도 작동</string>
+    <string name="ob27_offline_body">네트워크가 없나요? 메시지는 OSHI를 켜 둔 주변 사람들의 휴대전화를 거쳐 전달됩니다. LoRa 무선기를 쓰면 더 멀리 갑니다.</string>
+    <string name="ob27_range_direct">직접</string>
+    <string name="ob27_range_relayed">중계</string>
+    <string name="ob27_range_lora">LoRa 무선</string>
+    <string name="ob27_anon_title">전화번호 필요 없음</string>
+    <string name="ob27_anon_body">계정도, 이메일도, 가입용 번호도 필요 없습니다. 내 신원은 이 휴대전화에서 만든 키입니다.</string>
+    <string name="ob27_together_title">사람들을 초대하세요</string>
+    <string name="ob27_together_body">1:1 또는 그룹으로 대화하세요. 상대의 QR 코드를 스캔하거나 초대 링크를 보내 추가할 수 있습니다.</string>
+    <string name="ob27_rules_title">시작하기 전에</string>
+    <string name="ob27_rules_subtitle">몇 가지 규칙과, OSHI가 할 수 있는 것과 아직 못 하는 것.</string>
+    <string name="ob27_rules_do">이렇게 해 주세요</string>
+    <string name="ob27_rules_dont">절대 금지</string>
+    <string name="ob27_good_to_know">알아두면 좋아요</string>
+    <string name="ob27_show_details">세부정보 보기</string>
+    <string name="ob27_hide_details">세부정보 숨기기</string>
+    <string name="ob27_agree">이해했습니다</string>
+    <string name="ob27_notif_title">메시지를 놓치지 마세요</string>
+    <string name="ob27_notif_body">알림을 허용하면 새 메시지와 통화를 확인할 수 있습니다. 설정에서 언제든지 끌 수 있습니다.</string>
+    <string name="ob27_notif_allow">알림 허용</string>
+    <string name="ob27_not_now">나중에</string>
+    <string name="ob27_identity_title">이름을 정하세요</string>
+    <string name="ob27_identity_body">연락처에 표시되는 이름입니다. 나중에 바꿀 수 있습니다.</string>
+    <string name="ob27_already">이미 OSHI를 사용 중인가요?</string>
+</resources>

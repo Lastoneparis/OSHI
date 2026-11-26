@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Tjek-ind bekræftet</string>
+    <string name="alive_a11y_neutral">Intet tjek-ind sat op</string>
+    <string name="alive_a11y_overdue">Tjek-ind forsinket</string>
+    <string name="alive_action_im_alive">Jeg er i live</string>
+    <string name="alive_action_message_them">Skriv</string>
+    <string name="alive_bar_open_settings">Indstillinger for tjek-ind</string>
+    <string name="alive_channel_description">Påmindelser om dine egne tjek-ind, og besked når en, du holder øje med, ikke har svaret på sit.</string>
+    <string name="alive_channel_name">Sikkerhedstjek</string>
+    <string name="alive_confirmed_toast">Tjek-ind sendt</string>
+    <string name="alive_duration_days_hours">%1$d d %2$d t</string>
+    <string name="alive_duration_hours_minutes">%1$d t %2$d min</string>
+    <string name="alive_duration_minutes">%1$d min</string>
+    <string name="alive_duration_now">under et minut</string>
+    <string name="alive_interval_24h">Hver 24. time</string>
+    <string name="alive_interval_48h">Hver 48. time</string>
+    <string name="alive_interval_72h">Hver 72. time</string>
+    <string name="alive_interval_custom">Tilpasset</string>
+    <string name="alive_interval_custom_hours">Hver %1$d. time</string>
+    <string name="alive_interval_every">hver %1$s</string>
+    <string name="alive_lane_you">Dig</string>
+    <string name="alive_note_delivery">Påmindelser og beskeder afhænger af dit netværk og af tilladelsen til notifikationer. Et manglende tjek-ind betyder kun, at der ikke kom nogen bekræftelse, intet andet.</string>
+    <string name="alive_note_no_location">Der deles ingen placering. Et tjek-ind indeholder ét tidsstempel og intet andet.</string>
+    <string name="alive_notification_mine_due_body">Bekræft, at du er i live, så %1$s ikke står og venter.</string>
+    <string name="alive_notification_mine_due_title">Tid til dit tjek-ind</string>
+    <string name="alive_notification_overdue_body">Deres tjek-ind skulle have været for %1$s siden. Det betyder kun, at der ikke er kommet nogen bekræftelse.</string>
+    <string name="alive_notification_overdue_title">Intet tjek-ind fra %1$s</string>
+    <string name="alive_sheet_explainer">Bekræft efter en tidsplan, at du er i live. %1$s ser din nedtælling og får besked, hvis den udløber uden svar.</string>
+    <string name="alive_sheet_interval">Hvor ofte</string>
+    <string name="alive_sheet_mine_switch">Tjek ind hos %1$s</string>
+    <string name="alive_sheet_stop">Stop tjek-ind</string>
+    <string name="alive_sheet_their_next">Næste ventes %1$s</string>
+    <string name="alive_sheet_their_none">%1$s har ikke sat et tjek-ind op her.</string>
+    <string name="alive_sheet_their_section">Tjek-ind fra %1$s</string>
+    <string name="alive_state_confirmed_ago">bekræftet for %1$s siden</string>
+    <string name="alive_state_due_in">om %1$s</string>
+    <string name="alive_state_not_set">ikke sat op</string>
+    <string name="alive_state_overdue_by">intet svar i %1$s</string>
+    <string name="alive_summary_confirmed">Bekræftede at være i live</string>
+    <string name="alive_summary_started">Sikkerhedstjek startet</string>
+    <string name="alive_summary_stopped">Sikkerhedstjek stoppet</string>
+    <string name="alive_title">Sikkerhedstjek</string>
+    <string name="alive_unknown_peer">denne kontakt</string>
+</resources>

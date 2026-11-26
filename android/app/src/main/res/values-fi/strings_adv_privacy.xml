@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Keskustelun lisäyksityisyys</string>
+    <string name="adv_privacy_subtitle">Estää kaikkia tässä keskustelussa tallentamasta mediaa, viemästä keskustelua tai käyttämästä tekoälyä sen viesteihin</string>
+    <string name="adv_privacy_learn_more">Lue lisää</string>
+    <string name="adv_privacy_notice_on">%1$s otti käyttöön keskustelun lisäyksityisyyden. Kukaan ei voi tallentaa mediaa automaattisesti, viedä keskustelua tai käyttää tekoälyä tämän keskustelun viesteihin.</string>
+    <string name="adv_privacy_notice_off">%1$s poisti keskustelun lisäyksityisyyden käytöstä. Median tallennus, keskustelun vienti ja tekoälytoiminnot ovat taas käytettävissä.</string>
+    <string name="adv_privacy_notice_on_you">Otit käyttöön keskustelun lisäyksityisyyden. Kukaan ei voi tallentaa mediaa automaattisesti, viedä keskustelua tai käyttää tekoälyä tämän keskustelun viesteihin.</string>
+    <string name="adv_privacy_notice_off_you">Poistit keskustelun lisäyksityisyyden käytöstä. Median tallennus, keskustelun vienti ja tekoälytoiminnot ovat taas käytettävissä.</string>
+    <string name="adv_privacy_summary_on">Keskustelun lisäyksityisyys käytössä</string>
+    <string name="adv_privacy_summary_off">Keskustelun lisäyksityisyys pois käytöstä</string>
+    <string name="adv_privacy_sheet_intro">Kun joku ottaa sen käyttöön, se koskee kaikkia tässä keskustelussa:</string>
+    <string name="adv_privacy_sheet_point_save">Tämän keskustelun mediaa ei voi tallentaa galleriaan eikä Lataukset-kansioon.</string>
+    <string name="adv_privacy_sheet_point_export">Tämä keskustelu jätetään pois keskustelujen viennistä.</string>
+    <string name="adv_privacy_sheet_point_ai">OSHIn laitteella toimiva tekoäly ei voi lukea tätä keskustelua: ei vastausehdotuksia, ei käännöksiä, ei kontekstia kirjoitusavustajalle.</string>
+    <string name="adv_privacy_sheet_point_screen">Tämän keskustelun kuvakaappaukset ja näytön tallennus on estetty.</string>
+    <string name="adv_privacy_sheet_limits">Kuka tahansa keskustelussa voi ottaa sen käyttöön tai poistaa sen. Se ei estä ketään valokuvaamasta näyttöä, eikä se koske OSHIn vanhempaa versiota käyttäviä.</string>
+    <string name="adv_privacy_blocked_toast">Lisäyksityisyys on käytössä tässä keskustelussa</string>
+    <string name="adv_privacy_older_members">Jäsenet, joilla on OSHIn vanhempi versio eivätkä ota sitä käyttöön ennen päivitystä: %1$d</string>
+</resources>

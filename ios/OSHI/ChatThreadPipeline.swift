@@ -83,6 +83,14 @@ enum ChatThreadPipeline {
         }
         var out: [SecureMessage] = []
         out.reserveCapacity(min(source.count, 4096))
+        // __MESHCORE_INTEROP_2026_11_25__ A radio channel (LoRa room, MeshCore channel) is a room: its rows
+        // are stored with the CHANNEL as recipient and whoever spoke as sender, so the two-party rule below
+        // kept only our own lines and every other speaker vanished from the open thread (the list and
+        // `MessageManager.getMessages` showed them). In a room, the recipient decides.
+        if LoRaChannelThread.isChannelKey(peerKey) {
+            for message in source where canonical(message.recipientPublicKey) == peer { out.append(message) }
+            return sortedByTimestamp(out)
+        }
         for message in source {
             let sender = canonical(message.senderPublicKey)
             if sender != peer && sender != me { continue }

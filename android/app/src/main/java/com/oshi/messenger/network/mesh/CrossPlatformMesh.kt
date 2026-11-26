@@ -1260,6 +1260,12 @@ class CrossPlatformMesh @Inject constructor(
     private fun connectToPeer(peer: CrossPlatformPeer) {
         if (peer.ipAddress == null || peer.port == null) return
         if (peer.publicKey.isEmpty()) return
+        // __MESH_DIAL_LAN_ONLY_2026_11_20__ never dial a non-local address handed to us
+        // by an unauthenticated announcement (see MeshDialPolicy).
+        if (!MeshDialPolicy.isDialable(peer.ipAddress)) {
+            Log.w(TAG, "Refusing to dial non-local mesh address from an announcement")
+            return
+        }
         if (hasLiveConnection(peer.publicKey)) return
         // `add` returns false when the key is already there: one dial per peer
         // at a time, however many callers ask. The sweep, the discovery

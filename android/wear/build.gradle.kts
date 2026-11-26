@@ -24,8 +24,8 @@ android {
         // Wear APKs share the phone's version-code space on Play. The phone is
         // in the hundreds; the watch lives in its own band so the two can never
         // collide (and the phone versionCode is never touched by the watch).
-        versionCode = 2_000_002
-        versionName = "1.6.99-wear"
+        versionCode = 2_000_004
+        versionName = "1.7.4-wear"
         // Real data by default; the debug-only sample data is opted into with
         // `-PwearFakeData` (screenshots, emulator without a paired phone).
         buildConfigField("boolean", "FAKE_DATA", "false")
@@ -74,12 +74,21 @@ android {
         buildConfig = true
     }
 
-    testOptions { unitTests { isReturnDefaultValues = true } }
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+            // Robolectric screen tests read the real resources (strings, drawables).
+            isIncludeAndroidResources = true
+        }
+    }
 
     // Cross-platform avatar vectors are read from ../docs at test time.
     tasks.withType<Test>().configureEach {
         val spec = rootProject.file("../docs/avatar-palette.json")
         if (spec.exists()) inputs.file(spec).withPropertyName("avatarPaletteSpec").withPathSensitivity(PathSensitivity.RELATIVE)
+        // `-PwearShots` writes the screen PNGs (build/outputs/roborazzi); without it the
+        // screen tests still render and assert, they just save nothing.
+        if (project.hasProperty("wearShots")) systemProperty("roborazzi.test.record", "true")
     }
 }
 
@@ -109,8 +118,17 @@ dependencies {
     implementation("androidx.wear.tiles:tiles:1.5.0")
     implementation("androidx.wear.protolayout:protolayout:1.3.0")
     implementation("androidx.wear.protolayout:protolayout-expression:1.3.0")
+    // Material 3 Expressive tile layouts (primaryLayout, edge button, avatar buttons).
+    implementation("androidx.wear.protolayout:protolayout-material3:1.3.0")
     implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
 
     testImplementation("junit:junit:4.13.2")
+    // Screenshot / UI tests of the screens on round 192 dp and 227 dp watches (Robolectric).
+    testImplementation("org.robolectric:robolectric:4.13")
+    testImplementation("androidx.compose.ui:ui-test-junit4:1.8.2")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.8.2")
+    testImplementation("io.github.takahirom.roborazzi:roborazzi:1.46.1")
+    testImplementation("io.github.takahirom.roborazzi:roborazzi-compose:1.46.1")
+    testImplementation("androidx.test.ext:junit:1.2.1")
     testImplementation("org.json:json:20231013")
 }

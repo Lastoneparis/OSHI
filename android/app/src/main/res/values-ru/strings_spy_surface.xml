@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">Приложения, которые могут читать OSHI</string>
+    <string name="spy_surface_dialog_body">Эти приложения на телефоне могут читать содержимое экрана и уведомлений, включая ваши сообщения после того, как OSHI их расшифровал:\n\n%1$s\n\nЕсли вы сами не устанавливали или не разрешали какое-то из них, это может быть шпионская программа. Отключите его разрешение в настройках Android или удалите его. OSHI ничего не блокировал.</string>
+    <string name="spy_surface_power_accessibility">экран и ввод текста (спец. возможности)</string>
+    <string name="spy_surface_power_notifications">уведомления</string>
+    <string name="spy_surface_power_admin">администратор устройства</string>
+</resources>

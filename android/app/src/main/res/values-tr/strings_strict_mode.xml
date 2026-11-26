@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🛡 __STRICT_MODE_2026_11_22__ Strict security mode (Settings › Privacy & Security).
+     Same strict_ prefix as iOS/desktop. -->
+<resources>
+    <string name="strict_title">Sıkı güvenlik modu</string>
+    <string name="strict_status_on">Açık: kopyalama yok, ekran görüntüsü yok, ekran okuyan uygulamalardan gizli</string>
+    <string name="strict_status_off">Kapalı. Telefon izleniyor olabilirse OSHI\'yi kilitler</string>
+    <string name="strict_hero_on">Sıkı güvenlik modu açık</string>
+    <string name="strict_intro">Telefonun izlenebileceği durumlar için. Tek bir anahtar OSHI\'yi kilitler: hiçbir şey kopyalanamaz, ekran yakalanamaz ve ekranı okuyan uygulamalar, yapay zeka ajanları dahil, hiçbir şey göremez.</string>
+    <string name="strict_section_switch">Mod</string>
+    <string name="strict_toggle_title">Sıkı güvenlik modu</string>
+    <string name="strict_toggle_on">Bu cihazda açık</string>
+    <string name="strict_toggle_off">Kapalı</string>
+    <string name="strict_block_paste_title">Yapıştırmayı da engelle</string>
+    <string name="strict_block_paste_subtitle">OSHI\'ye de hiçbir şey yapıştırılamaz</string>
+    <string name="strict_hide_presence_title">Okundu bilgisini ve yazıyor göstergesini gizle</string>
+    <string name="strict_hide_presence_subtitle">Başkaları ne zaman okuduğunuzu veya yazdığınızı görmez</string>
+    <string name="strict_forced_subtitle">Sıkı güvenlik modu tarafından ayarlandı</string>
+    <string name="strict_blocked_toast">Sıkı güvenlik modu tarafından engellendi</string>
+    <string name="strict_unlock_title">Sıkı güvenlik modunu kapat</string>
+    <string name="strict_unlock_subtitle">Siz olduğunuzu doğrulayın</string>
+    <string name="strict_threats_title">Ekranınızı okuyabilen veya kontrol edebilen uygulamalar</string>
+    <string name="strict_threats_none">Bu telefonda hiçbiri bulunamadı.</string>
+    <string name="strict_threat_a11y">Yardımcı araç olmayan erişilebilirlik hizmeti</string>
+    <string name="strict_threat_remote">Uzaktan kontrol veya ekran yansıtma uygulaması</string>
+    <string name="strict_threats_open">İncele</string>
+    <string name="strict_threats_explainer">OSHI başka bir uygulamayı kapatamaz. Bunlardan birini tanımıyorsanız Android Ayarlar › Erişilebilirlik bölümünden kapatın veya kaldırın.</string>
+    <string name="strict_banner_title">Uygulamalar bu ekranı okuyabilir veya kontrol edebilir</string>
+    <string name="strict_banner_body">%1$s. Sıkı güvenlik modu, Android\'in izin verdiği yerlerde OSHI\'yi bunlardan gizler.</string>
+    <string name="strict_banner_dismiss">Kapat</string>
+    <string name="strict_does_title">Ne yapar</string>
+    <string name="strict_does_copy">Mesajlar kopyalanamaz, kesilemez, iletilemez, paylaşılamaz veya kaydedilemez. Metin seçilemez ve OSHI\'nin panoya koyduğu her şey silinir.</string>
+    <string name="strict_does_paste">"Yapıştırmayı da engelle" açıkken OSHI\'ye yapıştırma engellenir; klavyenin yapıştır komutu da dahildir.</string>
+    <string name="strict_does_screen">Ekran görüntüleri, ekran kaydı ve ekran paylaşımı siyah ekran gösterir. Son uygulamalar önizlemesi gizlenir.</string>
+    <string name="strict_does_agents">Ekranı erişilebilirlik üzerinden okuyan uygulamalar, yapay zeka ajanları dahil, OSHI içeriğini göremez (Android 14 ve üzeri). Bunların gönderdiği dokunuşlar yok sayılır.</string>
+    <string name="strict_does_overlays">Başka bir uygulama OSHI\'nin üzerine çizim yaparken dokunuşlar yok sayılır.</string>
+    <string name="strict_does_notifications">Bildirimlerde yalnızca "Yeni mesaj" yazar: ad, fotoğraf veya metin yok.</string>
+    <string name="strict_does_lock">OSHI\'ye her döndüğünüzde uygulama kilidi (telefonunuzda ekran kilidi varsa).</string>
+    <string name="strict_does_keyboard">Gizli klavye: klavyeden yazdıklarınızı öğrenmemesi istenir.</string>
+    <string name="strict_does_network">Bağlantı önizlemesi ve GIPHY araması yok: üçüncü taraf sitelerden hiçbir şey çekilmez.</string>
+    <string name="strict_does_presence">Okundu bilgisi ve yazıyor göstergeleri kapalı (gizlemeyi seçtiyseniz).</string>
+    <string name="strict_does_relay">Gizlilik rölesi, varsa açılır.</string>
+    <string name="strict_does_restore">Modu kapattığınızda önceki ayarlarınız geri gelir.</string>
+    <string name="strict_cannot_title">Ne yapamaz</string>
+    <string name="strict_cannot_malware">Hiçbir uygulama sizi kötü amaçlı yazılımdan veya ele geçirilmiş (root\'lu) bir telefondan tamamen koruyamaz.</string>
+    <string name="strict_cannot_keyboard">Klavyeniz yazdıklarınızı görmeye devam eder. Sizin yerinize yazdığı pano önerisi, normal yazmadan ayırt edilemez.</string>
+    <string name="strict_cannot_readers">Görme engelliler ve az görenler için ekran okuyucular çalışmaya devam eder, ancak mod açıkken diğer erişilebilirlik uygulamaları OSHI\'yi okuyamaz.</string>
+    <string name="strict_cannot_old">Android 13 ve öncesinde OSHI, içeriğini erişilebilirlik uygulamalarından gizleyemez. Yalnızca sizi onlara karşı uyarabilir.</string>
+    <string name="strict_cannot_camera">Biri yine de ekranı başka bir cihazla fotoğraflayabilir.</string>
+    <string name="strict_cannot_recipient">Yalnızca bu telefonu korur; yazdığınız kişilerin telefonlarını korumaz.</string>
+    <string name="strict_auto_lock_immediate">Hemen (Sıkı güvenlik modu)</string>
+</resources>

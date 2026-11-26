@@ -123,7 +123,9 @@ extension MessageGroupManager {
         let old = g.settings ?? GroupSettings()
         guard let raw = handle else {
             if let h = old.handle, old.visibility == .public { await GroupHandleRegistry.unregister(h) }
-            updateGroupSettings(groupId) { $0.visibility = .private; $0.showPreview = false }
+            // __CHANNEL_WEB_2026_11_26__ releasing the handle purges the web copy server-side
+            // (spec §7.1); the switch goes off with it.
+            updateGroupSettings(groupId) { $0.visibility = .private; $0.showPreview = false; $0.webPreview = false }
             return .ok
         }
         guard let h = GroupSettings.normalizedHandle(raw) else { return .invalid }

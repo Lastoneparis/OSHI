@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __WALLPAPER_PERSIST_2026_11_21__ Settings → Chat wallpaper (global picker), tone row, group note. -->
+<resources>
+    <string name="wallpaper_settings_desc">Implicit pentru toate conversațiile. Fiecare conversație poate avea și propriul fundal.</string>
+    <string name="wallpaper_tone_settings_title">Tonul fundalului</string>
+    <string name="wallpaper_personal_note">Doar tu vezi acest fundal, pe acest dispozitiv.</string>
+</resources>

@@ -300,7 +300,7 @@ internal fun ReaderHeader(subject: String, from: String, to: String, date: Strin
     var expanded by remember { mutableStateOf(false) }
     val name = com.oshi.messenger.mail.MailMime.displayName(from)
     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-        SelectionContainer {
+        StrictSelectionContainer {
             Text(subject, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(vertical = 12.dp))
         }
         Row(
@@ -332,7 +332,7 @@ internal fun ReaderHeader(subject: String, from: String, to: String, date: Strin
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
             ) {
-                SelectionContainer {
+                StrictSelectionContainer {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         DetailLine("From", from)
                         if (to.isNotBlank()) DetailLine("To", to)

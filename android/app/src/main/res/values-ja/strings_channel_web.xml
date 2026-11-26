@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">ウェブ公開プレビュー</string>
+    <string name="cw_toggle">投稿をウェブに公開</string>
+    <string name="cw_footer">新しい投稿は oshi-messenger.com/c/%1$s の公開ウェブページとしても公開されます。検索エンジンやリンクプレビューを含め、誰でも読むことができます。ウェブ上のコピーにはエンドツーエンド暗号化は適用されません。</string>
+    <string name="cw_needs_link">まずこのチャンネルに公開リンクを設定してください。ウェブプレビューはそのハンドルを使います。</string>
+    <string name="cw_create_link">公開リンクを作成</string>
+    <string name="cw_enable_title">投稿をウェブに公開しますか？</string>
+    <string name="cw_enable_confirm">このチャンネルの投稿は oshi-messenger.com/c/%1$s でウェブ上の誰でも見られるようになります。対象は新しい投稿のみです。リンクプレビュー（WhatsApp、X、Telegram など）も読み取ることができ、ウェブ上のコピーにはエンドツーエンド暗号化は適用されません。</string>
+    <string name="cw_enable_action">公開</string>
+    <string name="cw_disable_title">ウェブプレビューをオフにしますか？</string>
+    <string name="cw_disable_confirm">oshi-messenger.com/c/%1$s で公開されたすべての投稿と画像がウェブから削除されます。アプリ内の投稿はそのまま残ります。</string>
+    <string name="cw_disable_action">オフにする</string>
+    <string name="cw_indexing">検索エンジンを許可</string>
+    <string name="cw_indexing_footer">オフのとき、ページは検索エンジンにインデックスしないよう求めます。</string>
+    <string name="cw_embed_code">埋め込みコード</string>
+    <string name="cw_embed_title">この投稿を埋め込む</string>
+    <string name="cw_embed_hint">投稿を表示したい場所に、このコードをウェブサイトへ貼り付けてください。</string>
+    <string name="cw_embed_dark">ダークテーマ</string>
+    <string name="cw_copy_code">コードをコピー</string>
+    <string name="cw_code_copied">コードをコピーしました</string>
+    <string name="cw_not_on_web">この投稿はウェブにありません。ウェブプレビューをオンにした後に送信された投稿だけが公開されます。</string>
+    <string name="cw_error">ウェブプレビューを変更できませんでした。接続を確認してもう一度お試しください。</string>
+</resources>

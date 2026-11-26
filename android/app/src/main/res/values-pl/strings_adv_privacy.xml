@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ADV_CHAT_PRIVACY_2026_11_26__ Advanced chat privacy (per conversation). "OSHI" is never translated. -->
+<resources>
+    <string name="adv_privacy_title">Zaawansowana prywatność czatu</string>
+    <string name="adv_privacy_subtitle">Uniemożliwia wszystkim w tym czacie zapisywanie multimediów, eksport czatu i używanie AI do jego wiadomości</string>
+    <string name="adv_privacy_learn_more">Dowiedz się więcej</string>
+    <string name="adv_privacy_notice_on">%1$s włącza zaawansowaną prywatność czatu. Nikt nie może automatycznie zapisywać multimediów, eksportować czatu ani używać AI do wiadomości w tym czacie.</string>
+    <string name="adv_privacy_notice_off">%1$s wyłącza zaawansowaną prywatność czatu. Zapisywanie multimediów, eksport czatu i funkcje AI są znów dostępne.</string>
+    <string name="adv_privacy_notice_on_you">Włączono zaawansowaną prywatność czatu. Nikt nie może automatycznie zapisywać multimediów, eksportować czatu ani używać AI do wiadomości w tym czacie.</string>
+    <string name="adv_privacy_notice_off_you">Wyłączono zaawansowaną prywatność czatu. Zapisywanie multimediów, eksport czatu i funkcje AI są znów dostępne.</string>
+    <string name="adv_privacy_summary_on">Zaawansowana prywatność czatu włączona</string>
+    <string name="adv_privacy_summary_off">Zaawansowana prywatność czatu wyłączona</string>
+    <string name="adv_privacy_sheet_intro">Gdy ktokolwiek ją włączy, obowiązuje wszystkich w tym czacie:</string>
+    <string name="adv_privacy_sheet_point_save">Multimediów z tego czatu nie można zapisać w galerii ani w Pobranych.</string>
+    <string name="adv_privacy_sheet_point_export">Ten czat jest pomijany przy eksporcie czatów.</string>
+    <string name="adv_privacy_sheet_point_ai">AI OSHI działająca na urządzeniu nie może czytać tego czatu: brak sugerowanych odpowiedzi, tłumaczenia i kontekstu dla asystenta pisania.</string>
+    <string name="adv_privacy_sheet_point_screen">Zrzuty ekranu i nagrywanie ekranu tego czatu są zablokowane.</string>
+    <string name="adv_privacy_sheet_limits">Każdy w czacie może ją włączyć lub wyłączyć. Nie powstrzyma nikogo przed sfotografowaniem ekranu i nie dotyczy osób ze starszą wersją OSHI.</string>
+    <string name="adv_privacy_blocked_toast">Zaawansowana prywatność jest włączona w tym czacie</string>
+    <string name="adv_privacy_older_members">Członkowie ze starszą wersją OSHI, którzy zastosują ją dopiero po aktualizacji: %1$d</string>
+</resources>

@@ -1134,7 +1134,7 @@ final class ShareSheetE2EUITests: XCTestCase {
 /// 402x874 pt): ~52 pt of row pitch carrying a title plus up to two more lines.
 final class RowDensityUITests: XCTestCase {
 
-    private let shotsDir = "screenshots/row-density"
+    private let shotsDir = "/Users/HUGOMORICEAU/Documents/Genesis/screenshots/row-density"
 
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_app_language">Lingua</string>
+    <string name="settings_app_language_system">Lingua di sistema</string>
+</resources>

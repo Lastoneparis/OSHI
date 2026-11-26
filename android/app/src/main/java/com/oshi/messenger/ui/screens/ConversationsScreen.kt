@@ -2,7 +2,9 @@ package com.oshi.messenger.ui.screens
 
 import com.oshi.messenger.ui.theme.avatarFill
 import com.oshi.messenger.ui.theme.GlassTier
+import com.oshi.messenger.ui.theme.glassOpaque
 import com.oshi.messenger.ui.theme.glassHairline
+import com.oshi.messenger.ui.theme.glassLift
 import com.oshi.messenger.ui.theme.glassGlow
 import com.oshi.messenger.ui.theme.glassOn
 import com.oshi.messenger.ui.theme.thenIf
@@ -25,6 +27,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextAlign
 import com.oshi.messenger.ui.theme.OSHIPurple
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Hub
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -391,7 +394,7 @@ fun ConversationsScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 12.dp, vertical = 6.dp)
                         // __OLED_GLASS_2026_11_16__ OLED black: a glass pill.
-                        .thenIf(glassOn()) { glassHairline(RoundedCornerShape(percent = 50)) },
+                        .thenIf(glassOn()) { glassLift(RoundedCornerShape(percent = 50), spread = 6.dp).glassHairline(RoundedCornerShape(percent = 50)) },
                     colors = if (glassOn()) com.oshi.messenger.ui.theme.glassTextFieldColors()
                         else OutlinedTextFieldDefaults.colors(),
                     // __SEARCH_ON_ONE_LINE_2026_11_13__ (Anatole N1) "Rechercher des
@@ -483,7 +486,8 @@ fun ConversationsScreen(
         val key = conv.participantPublicKey
         val pinned = com.oshi.messenger.data.model.ConversationPinOrder.isPinned(key, pinnedConversations)
         val muted = viewModel.isMuted(key, mutedConversations)
-        val isRadioThread = com.oshi.messenger.service.lora.LoRaChannelThread.isChannelKey(key)
+        val isRadioThread = com.oshi.messenger.service.lora.LoRaChannelThread.isChannelKey(key) ||
+            com.oshi.messenger.service.lora.MeshCoreThread.isChannelKey(key)
         com.oshi.messenger.ui.components.ChatOverflowSheet(onDismissRequest = { sheetFor = null }) {
             Text(
                 text = conv.participantAlias,
@@ -526,7 +530,8 @@ fun ConversationsScreen(
         val callable = remember(conversations) {
             conversations.filter {
                 !com.oshi.messenger.service.lora.LoRaChannelThread.isChannelKey(it.participantPublicKey) &&
-                    !it.participantPublicKey.startsWith("lora!")
+                    !it.participantPublicKey.startsWith("lora!") &&
+                    !com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(it.participantPublicKey)
             }
         }
         com.oshi.messenger.ui.components.ChatOverflowSheet(onDismissRequest = { pickContactForCall = null }) {
@@ -703,7 +708,7 @@ private fun FabMenuItem(label: String, icon: androidx.compose.ui.graphics.vector
         Surface(
             onClick = onClick,
             shape = RoundedCornerShape(percent = 50),
-            color = if (glass) GlassTier.Menu.opaque else MaterialTheme.colorScheme.surface,
+            color = if (glass) glassOpaque(GlassTier.Menu) else MaterialTheme.colorScheme.surface,
             tonalElevation = if (glass) 0.dp else 3.dp,
             shadowElevation = 3.dp,
             modifier = Modifier.thenIf(glass) { glassHairline(RoundedCornerShape(percent = 50)) },
@@ -917,6 +922,17 @@ internal fun ConversationItem(
                 // long alias can never push the marker off the row.
                 if (aliveStatus != com.oshi.messenger.data.model.AliveCheckInPolicy.Status.NEUTRAL) {
                     com.oshi.messenger.ui.components.AliveRowMarker(aliveStatus)
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
+                // __MESHCORE_INTEROP_2026_11_25__ a MeshCore user or channel: the radio mark before the
+                // name, so it is never mistaken for an OSHI contact (no OSHI end-to-end encryption there).
+                if (com.oshi.messenger.service.lora.MeshCoreThread.isMeshCoreKey(conversation.participantPublicKey)) {
+                    Icon(
+                        Icons.Default.Hub,
+                        contentDescription = "MeshCore",
+                        modifier = Modifier.size(13.dp),
+                        tint = meshCoreAccent(),
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
                 }
                 Text(
@@ -1411,7 +1427,8 @@ private fun formatPreviewText(
     // `listPreview`, localized, so every row and every banner gets the same
     // answer — which is the entire reason this file stopped keeping its own
     // 18-prefix list in the first place.
-    return OSHIControlPayload.listPreview(content, labels)
+    // __TEXT_FORMATTING_2026_11_24__ a row shows `**bold**` as plain "bold".
+    return com.oshi.messenger.util.MessageFormatting.strip(OSHIControlPayload.listPreview(content, labels))
 }
 
 /**

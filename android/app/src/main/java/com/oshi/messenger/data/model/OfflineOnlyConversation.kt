@@ -67,6 +67,18 @@ data class OfflineOnlyRequest(
     companion object {
         const val CURRENT_VERSION = 1
 
+        /** __OFFLINE_ONLY_FUTURE_CLAMP_2026_11_20__ how far ahead of our clock a peer's `at` may be. */
+        const val MAX_FUTURE_SKEW_SECONDS = 300.0
+
+        /**
+         * 🔒 __OFFLINE_ONLY_FUTURE_CLAMP_2026_11_20__ The `at` of an incoming request is the
+         * PEER's clock and decides which change wins (newest). Unbounded, a contact could
+         * send `on:true, at:<year 3000>` and no later change — theirs or ours — would ever
+         * be newer: the conversation stays off the relay for good. Clamp to now + 5 min.
+         */
+        fun clampedAt(atUnixSeconds: Double, nowUnixSeconds: Double): Double =
+            if (atUnixSeconds.isNaN()) 0.0 else minOf(atUnixSeconds, nowUnixSeconds + MAX_FUTURE_SKEW_SECONDS)
+
         fun create(on: Boolean, atMillis: Long = System.currentTimeMillis()) =
             OfflineOnlyRequest(on = on, atUnixSeconds = atMillis / 1000.0)
 

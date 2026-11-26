@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Offentlig webvisning</string>
+    <string name="cw_toggle">Udgiv opslag på nettet</string>
+    <string name="cw_footer">Nye opslag udgives også som en offentlig webside på oshi-messenger.com/c/%1$s. Alle kan læse dem, også søgemaskiner og linkforhåndsvisninger. End-to-end-kryptering gælder ikke for webkopien.</string>
+    <string name="cw_needs_link">Giv først denne kanal et offentligt link: webvisningen bruger dens navn.</string>
+    <string name="cw_create_link">Opret offentligt link</string>
+    <string name="cw_enable_title">Udgiv opslag på nettet?</string>
+    <string name="cw_enable_confirm">Opslag i denne kanal bliver synlige for alle på nettet på oshi-messenger.com/c/%1$s. Kun nye opslag. Linkforhåndsvisninger (WhatsApp, X, Telegram…) kan også læse dem, og end-to-end-kryptering gælder ikke for webkopien.</string>
+    <string name="cw_enable_action">Udgiv</string>
+    <string name="cw_disable_title">Slå webvisningen fra?</string>
+    <string name="cw_disable_confirm">Alle opslag og billeder udgivet på oshi-messenger.com/c/%1$s fjernes fra nettet. Dine opslag i appen forbliver uændrede.</string>
+    <string name="cw_disable_action">Slå fra</string>
+    <string name="cw_indexing">Tillad søgemaskiner</string>
+    <string name="cw_indexing_footer">Når det er slået fra, beder siderne søgemaskiner om ikke at indeksere dem.</string>
+    <string name="cw_embed_code">Indlejringskode</string>
+    <string name="cw_embed_title">Indlejr dette opslag</string>
+    <string name="cw_embed_hint">Indsæt denne kode på dit websted, hvor opslaget skal vises.</string>
+    <string name="cw_embed_dark">Mørkt tema</string>
+    <string name="cw_copy_code">Kopiér kode</string>
+    <string name="cw_code_copied">Kode kopieret</string>
+    <string name="cw_not_on_web">Dette opslag er ikke på nettet. Kun opslag sendt efter webvisningen blev slået til, udgives.</string>
+    <string name="cw_error">Webvisningen kunne ikke ændres. Tjek din forbindelse, og prøv igen.</string>
+</resources>

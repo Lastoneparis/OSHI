@@ -175,6 +175,16 @@ void *oshi_opus_enc_create(int32_t bitrate, int32_t complexity) {
     return e;
 }
 
+void *oshi_opus_enc_create_fec(int32_t bitrate, int32_t complexity, int32_t loss_pct) {
+    OpusEncoder *e = (OpusEncoder *)oshi_opus_enc_create(bitrate, complexity);
+    if (!e) return NULL;
+    if (loss_pct > 0) {
+        opus_encoder_ctl(e, OPUS_SET_INBAND_FEC(1));
+        opus_encoder_ctl(e, OPUS_SET_PACKET_LOSS_PERC(loss_pct > 100 ? 100 : loss_pct));
+    }
+    return e;
+}
+
 void oshi_opus_enc_destroy(void *enc) { if (enc) opus_encoder_destroy((OpusEncoder *)enc); }
 
 int32_t oshi_opus_encode(void *enc, const int16_t *pcm, int32_t frame_samples,
@@ -196,4 +206,11 @@ int32_t oshi_opus_decode(void *dec, const uint8_t *data, int32_t len,
     if (!dec || !pcm) return -1;
     if (!data || len <= 0) return opus_decode((OpusDecoder *)dec, NULL, 0, pcm, max_samples, 0);
     return opus_decode((OpusDecoder *)dec, data, len, pcm, max_samples, 0);
+}
+
+int32_t oshi_opus_decode_fec(void *dec, const uint8_t *data, int32_t len,
+                             int16_t *pcm, int32_t frame_samples) {
+    if (!dec || !pcm) return -1;
+    if (!data || len <= 0) return opus_decode((OpusDecoder *)dec, NULL, 0, pcm, frame_samples, 0);
+    return opus_decode((OpusDecoder *)dec, data, len, pcm, frame_samples, 1);
 }

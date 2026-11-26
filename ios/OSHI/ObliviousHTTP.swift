@@ -650,6 +650,15 @@ nonisolated enum OHTTPTransport {
 /// NEVER retried directly.
 nonisolated enum V2Transport {
     static func data(for request: URLRequest, session: URLSession) async throws -> (Data, URLResponse) {
+        // __CALL_CLOCK_SKEW_2026_11_21__ every v2 response's `Date` teaches ServerClock
+        // the server–device offset (the v2 signer reads it back).
+        let sentAt = Date()
+        let result = try await route(request, session: session)
+        ServerClock.observe(response: result.1, sentAt: sentAt)
+        return result
+    }
+
+    private static func route(_ request: URLRequest, session: URLSession) async throws -> (Data, URLResponse) {
         if OHTTPSettings.isActive,
            let url = request.url,
            OHTTPSettings.isRoutable(path: URLComponents(url: url, resolvingAgainstBaseURL: false)?.percentEncodedPath ?? url.path) {

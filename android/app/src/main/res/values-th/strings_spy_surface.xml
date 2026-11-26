@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ANTI_STALKERWARE_2026_11_20__ SpySurfaceHost -->
+<resources>
+    <string name="spy_surface_dialog_title">แอปที่อ่าน OSHI ได้</string>
+    <string name="spy_surface_dialog_body">แอปเหล่านี้ในโทรศัพท์เครื่องนี้สามารถอ่านสิ่งที่อยู่บนหน้าจอหรือในการแจ้งเตือนของคุณได้ รวมถึงข้อความของคุณหลังจาก OSHI ถอดรหัสแล้ว:\n\n%1$s\n\nหากคุณไม่ได้ติดตั้งหรืออนุญาตแอปใดด้วยตัวเอง แอปนั้นอาจเป็นสปายแวร์ ปิดสิทธิ์ในการตั้งค่า Android หรือถอนการติดตั้ง OSHI ไม่ได้บล็อกสิ่งใด</string>
+    <string name="spy_surface_power_accessibility">หน้าจอและการพิมพ์ (การช่วยเหลือพิเศษ)</string>
+    <string name="spy_surface_power_notifications">การแจ้งเตือน</string>
+    <string name="spy_surface_power_admin">ผู้ดูแลระบบอุปกรณ์</string>
+</resources>

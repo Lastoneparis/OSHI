@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- __ANDROID_I18N_COMPLETE_2026_11_20__ backfilled keys -->
+    <string name="alive_a11y_confirmed">Durum bildirimi onaylandı</string>
+    <string name="alive_a11y_neutral">Durum bildirimi ayarlanmadı</string>
+    <string name="alive_a11y_overdue">Durum bildirimi gecikti</string>
+    <string name="alive_action_im_alive">İyiyim</string>
+    <string name="alive_action_message_them">Mesaj gönder</string>
+    <string name="alive_bar_open_settings">Durum bildirimi ayarları</string>
+    <string name="alive_channel_description">Kendi durum bildirimlerin için hatırlatmalar ve takip ettiğin biri kendi bildirimine yanıt vermediğinde uyarılar.</string>
+    <string name="alive_channel_name">Güvenlik durum bildirimleri</string>
+    <string name="alive_confirmed_toast">Durum bildirimi gönderildi</string>
+    <string name="alive_duration_days_hours">%1$d g %2$d sa</string>
+    <string name="alive_duration_hours_minutes">%1$d sa %2$d dk</string>
+    <string name="alive_duration_minutes">%1$d dk</string>
+    <string name="alive_duration_now">bir dakikadan az</string>
+    <string name="alive_interval_24h">24 saatte bir</string>
+    <string name="alive_interval_48h">48 saatte bir</string>
+    <string name="alive_interval_72h">72 saatte bir</string>
+    <string name="alive_interval_custom">Özel</string>
+    <string name="alive_interval_custom_hours">%1$d saatte bir</string>
+    <string name="alive_interval_every">her %1$s</string>
+    <string name="alive_lane_you">Sen</string>
+    <string name="alive_note_delivery">Hatırlatmalar ve uyarılar ağına ve bildirim iznine bağlıdır. Kaçırılan bir durum bildirimi yalnızca hiçbir onayın gelmediği anlamına gelir, fazlası değil.</string>
+    <string name="alive_note_no_location">Konum paylaşılmaz. Bir durum bildirimi yalnızca bir zaman damgası taşır, başka hiçbir şey değil.</string>
+    <string name="alive_notification_mine_due_body">%1$s beklemede kalmasın diye iyi olduğunu onayla.</string>
+    <string name="alive_notification_mine_due_title">Durum bildirimi zamanı geldi</string>
+    <string name="alive_notification_overdue_body">Durum bildiriminin %1$s önce gelmesi gerekiyordu. Bu yalnızca henüz onay gelmediği anlamına gelir.</string>
+    <string name="alive_notification_overdue_title">%1$s durum bildirmedi</string>
+    <string name="alive_sheet_explainer">Belirli aralıklarla iyi olduğunu onayla. %1$s geri sayımını görür ve yanıt gelmeden süre dolarsa bilgilendirilir.</string>
+    <string name="alive_sheet_interval">Ne sıklıkla</string>
+    <string name="alive_sheet_mine_switch">%1$s ile durum bildirimi</string>
+    <string name="alive_sheet_stop">Durum bildirimini durdur</string>
+    <string name="alive_sheet_their_next">Sonraki beklenen: %1$s</string>
+    <string name="alive_sheet_their_none">%1$s burada durum bildirimi ayarlamadı.</string>
+    <string name="alive_sheet_their_section">%1$s durum bildirimi</string>
+    <string name="alive_state_confirmed_ago">%1$s önce onaylandı</string>
+    <string name="alive_state_due_in">%1$s içinde bekleniyor</string>
+    <string name="alive_state_not_set">ayarlanmadı</string>
+    <string name="alive_state_overdue_by">%1$s boyunca yanıt yok</string>
+    <string name="alive_summary_confirmed">İyi olduğunu onayladı</string>
+    <string name="alive_summary_started">Güvenlik durum bildirimi başladı</string>
+    <string name="alive_summary_stopped">Güvenlik durum bildirimi durduruldu</string>
+    <string name="alive_title">Güvenlik durum bildirimi</string>
+    <string name="alive_unknown_peer">bu kişi</string>
+</resources>

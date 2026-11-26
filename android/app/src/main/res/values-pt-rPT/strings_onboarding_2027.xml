@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Ignorar</string>
+    <string name="ob27_continue">Continuar</string>
+    <string name="ob27_page_of">Página %1$d de %2$d</string>
+    <string name="ob27_private_title">Só entre vocês</string>
+    <string name="ob27_private_body">As mensagens e chamadas são encriptadas ponto a ponto no seu telemóvel. Ninguém pelo meio as consegue ler — nem mesmo o OSHI.</string>
+    <string name="ob27_offline_title">Funciona sem Internet</string>
+    <string name="ob27_offline_body">Sem rede? As mensagens saltam de telemóvel em telemóvel através de pessoas por perto que têm o OSHI aberto. Um rádio LoRa leva-as mais longe.</string>
+    <string name="ob27_range_direct">direto</string>
+    <string name="ob27_range_relayed">via outros</string>
+    <string name="ob27_range_lora">rádio LoRa</string>
+    <string name="ob27_anon_title">Sem número de telefone</string>
+    <string name="ob27_anon_body">Sem conta, sem e-mail, sem número para se registar. A sua identidade é uma chave criada neste telemóvel.</string>
+    <string name="ob27_together_title">Traga a sua gente</string>
+    <string name="ob27_together_body">Converse a dois ou em grupo. Adicione alguém lendo o código QR da pessoa ou enviando-lhe uma ligação de convite.</string>
+    <string name="ob27_rules_title">Antes de começar</string>
+    <string name="ob27_rules_subtitle">Algumas regras da casa e o que o OSHI já consegue e ainda não consegue fazer.</string>
+    <string name="ob27_rules_do">O que fazer</string>
+    <string name="ob27_rules_dont">Nunca</string>
+    <string name="ob27_good_to_know">É bom saber</string>
+    <string name="ob27_show_details">Mostrar detalhes</string>
+    <string name="ob27_hide_details">Ocultar detalhes</string>
+    <string name="ob27_agree">Compreendo</string>
+    <string name="ob27_notif_title">Saiba quando lhe escrevem</string>
+    <string name="ob27_notif_body">Permita as notificações para ver novas mensagens e chamadas. Pode desativá-las a qualquer momento nas Definições.</string>
+    <string name="ob27_notif_allow">Permitir notificações</string>
+    <string name="ob27_not_now">Agora não</string>
+    <string name="ob27_identity_title">Escolha um nome</string>
+    <string name="ob27_identity_body">É o que os seus contactos veem. Pode alterá-lo mais tarde.</string>
+    <string name="ob27_already">Já usa o OSHI?</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Offentlig webbförhandsvisning</string>
+    <string name="cw_toggle">Publicera inlägg på webben</string>
+    <string name="cw_footer">Nya inlägg publiceras också som en offentlig webbsida på oshi-messenger.com/c/%1$s. Alla kan läsa dem, även sökmotorer och länkförhandsvisningar. Totalsträckskryptering gäller inte för webbkopian.</string>
+    <string name="cw_needs_link">Ge först kanalen en offentlig länk: webbförhandsvisningen använder dess namn.</string>
+    <string name="cw_create_link">Skapa offentlig länk</string>
+    <string name="cw_enable_title">Publicera inlägg på webben?</string>
+    <string name="cw_enable_confirm">Inlägg i den här kanalen blir synliga för alla på webben på oshi-messenger.com/c/%1$s. Endast nya inlägg. Länkförhandsvisningar (WhatsApp, X, Telegram…) kan också läsa dem, och totalsträckskryptering gäller inte för webbkopian.</string>
+    <string name="cw_enable_action">Publicera</string>
+    <string name="cw_disable_title">Stäng av webbförhandsvisningen?</string>
+    <string name="cw_disable_confirm">Alla inlägg och bilder som publicerats på oshi-messenger.com/c/%1$s tas bort från webben. Dina inlägg i appen förblir som de är.</string>
+    <string name="cw_disable_action">Stäng av</string>
+    <string name="cw_indexing">Tillåt sökmotorer</string>
+    <string name="cw_indexing_footer">När det är avstängt ber sidorna sökmotorer att inte indexera dem.</string>
+    <string name="cw_embed_code">Inbäddningskod</string>
+    <string name="cw_embed_title">Bädda in det här inlägget</string>
+    <string name="cw_embed_hint">Klistra in koden på din webbplats där inlägget ska visas.</string>
+    <string name="cw_embed_dark">Mörkt tema</string>
+    <string name="cw_copy_code">Kopiera kod</string>
+    <string name="cw_code_copied">Koden har kopierats</string>
+    <string name="cw_not_on_web">Det här inlägget finns inte på webben. Bara inlägg som skickats efter att webbförhandsvisningen slogs på publiceras.</string>
+    <string name="cw_error">Det gick inte att ändra webbförhandsvisningen. Kontrollera anslutningen och försök igen.</string>
+</resources>

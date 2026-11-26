@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · fără criptare end-to-end OSHI</string>
+    <string name="meshcore_error_not_connected">Niciun radio MeshCore conectat</string>
+    <string name="meshcore_channels_title">Canale MeshCore</string>
+    <string name="meshcore_channel_public">Public · poate fi citit de oricine știe numele</string>
+    <string name="meshcore_channel_private">Privat · cheie secretă</string>
+    <string name="meshcore_join_hashtag">Intră într-un canal hashtag</string>
+    <string name="meshcore_join_private">Intră într-un canal privat</string>
+    <string name="meshcore_contacts_title">Contacte MeshCore</string>
+    <string name="meshcore_refresh_contacts">Reîmprospătează contactele</string>
+    <string name="meshcore_join_refused">Radioul a refuzat acest canal.</string>
+    <string name="meshcore_join_no_slot">Niciun slot de canal liber pe acest radio.</string>
+    <string name="meshcore_join_bad_name">Introdu un nume de canal valid (max. 31 de octeți, fără spații pentru un canal hashtag).</string>
+    <string name="meshcore_join_bad_secret">Secretul trebuie să aibă 16 octeți: 32 de caractere hexazecimale sau base64.</string>
+    <string name="meshcore_hashtag_hint">Cheia este derivată din nume: oricine știe numele poate citi canalul.</string>
+    <string name="meshcore_private_hint">Introdu numele canalului și secretul partajat de membri.</string>
+    <string name="meshcore_channel_name">Numele canalului</string>
+    <string name="meshcore_channel_secret">Secret (hex sau base64)</string>
+    <string name="meshcore_join">Intră</string>
+    <string name="meshcore_note_dm">Criptat de MeshCore între stații, nu end-to-end de OSHI.</string>
+    <string name="meshcore_note_public">Canal public: oricine îi știe numele îl poate citi.</string>
+    <string name="meshcore_note_private">Canal privat: oricine are secretul lui îl poate citi.</string>
+    <string name="meshcore_radio_offline">Stația MeshCore nu este conectată. Mesajele așteaptă aici ca nelivrate.</string>
+    <string name="meshcore_connect">Conectează</string>
+    <string name="meshcore_parts">%1$d mesaje</string>
+    <string name="meshcore_sending">Se așteaptă stația</string>
+    <string name="meshcore_failed_dm">Niciun răspuns de la stația lor (în afara razei?). Atinge pentru a reîncerca.</string>
+    <string name="meshcore_error_pairing">Asocierea a eșuat. Verifică PIN-ul și încearcă din nou. Dacă stația a fost resetată, elimin-o mai întâi din setările Bluetooth ale Android.</string>
+    <string name="meshcore_error_no_answer">Stația nu a răspuns. Verifică dacă rulează firmware-ul MeshCore companion pentru Bluetooth.</string>
+    <string name="meshcore_state_reconnecting">Conexiune pierdută. Reconectare când stația revine în rază…</string>
+    <string name="meshcore_state_pin">Introdu PIN-ul stației în fereastra Android</string>
+    <string name="meshcore_state_reading">Se citesc contactele și canalele…</string>
+    <string name="meshcore_state_connecting">Se conectează…</string>
+    <string name="meshcore_seen_as">Conectat · utilizatorii MeshCore te văd ca %1$s</string>
+    <string name="meshcore_connected">Conectat</string>
+    <string name="meshcore_footer_users">Discută cu utilizatori MeshCore (mesaje directe și canale) și trimite mesaje OSHI prin repetoarele MeshCore. Necesită firmware-ul MeshCore companion pentru Bluetooth. OSHI adaugă un canal, #oshi-bridge, într-un loc liber și nu îți modifică niciodată celelalte canale.</string>
+    <string name="meshcore_scan_below">Stațiile MeshCore apar mai jos în Stații din apropiere, marcate MeshCore.</string>
+    <string name="meshcore_contacts_footer">Atinge o persoană ca să-i scrii. Mesajele sunt criptate de MeshCore, nu end-to-end de OSHI.</string>
+    <string name="meshcore_no_contacts">Nimeni auzit încă. Utilizatorii MeshCore apar aici când stația lor se anunță. Anunță-ți-o pe a ta ca să te găsească.</string>
+    <string name="meshcore_heard">Auzit %1$s</string>
+    <string name="meshcore_announce">Anunță-mă</string>
+    <string name="meshcore_announce_done">Anunțat. Utilizatorii MeshCore din rază te pot adăuga acum și îți pot scrie.</string>
+    <string name="meshcore_announce_failed">Stația nu a putut trimite anunțul.</string>
+    <string name="meshcore_channels_footer">Atinge un canal ca să-l deschizi. Canalele publice și hashtag pot fi citite de oricine le știe numele.</string>
+    <string name="meshcore_pin_title">Asociază cu %1$s</string>
+    <string name="meshcore_pin_body">Android îți va cere acum PIN-ul stației. Dacă stația are ecran, PIN-ul apare pe el.</string>
+    <string name="meshcore_pin_default">Fără ecran? PIN-ul este 123456, dacă nu a fost schimbat în aplicația MeshCore.</string>
+    <string name="meshcore_pin_continue">Continuă</string>
+    <string name="meshcore_no_free_channel_chat">Toate cele 8 locuri de canal sunt ocupate. Poți discuta în continuare cu utilizatori MeshCore; eliberează un loc în aplicația MeshCore ca mesajele OSHI să poată folosi #oshi-bridge.</string>
+    <string name="meshcore_contact_kind">Utilizator MeshCore</string>
+    <string name="meshcore_too_long">Prea lung: max. %1$d mesaje</string>
+</resources>

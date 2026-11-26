@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Veřejný náhled na webu</string>
+    <string name="cw_toggle">Zveřejňovat příspěvky na webu</string>
+    <string name="cw_footer">Nové příspěvky se zveřejňují také jako veřejná webová stránka na adrese oshi-messenger.com/c/%1$s. Číst je může kdokoli, včetně vyhledávačů a náhledů odkazů. Na webovou kopii se nevztahuje koncové šifrování.</string>
+    <string name="cw_needs_link">Nejdřív dejte tomuto kanálu veřejný odkaz: webový náhled používá jeho název.</string>
+    <string name="cw_create_link">Vytvořit veřejný odkaz</string>
+    <string name="cw_enable_title">Zveřejňovat příspěvky na webu?</string>
+    <string name="cw_enable_confirm">Příspěvky v tomto kanálu uvidí kdokoli na webu na adrese oshi-messenger.com/c/%1$s. Pouze nové příspěvky. Číst je mohou i náhledy odkazů (WhatsApp, X, Telegram…) a na webovou kopii se nevztahuje koncové šifrování.</string>
+    <string name="cw_enable_action">Zveřejnit</string>
+    <string name="cw_disable_title">Vypnout webový náhled?</string>
+    <string name="cw_disable_confirm">Všechny příspěvky a obrázky zveřejněné na oshi-messenger.com/c/%1$s budou z webu odstraněny. Vaše příspěvky v aplikaci zůstanou beze změny.</string>
+    <string name="cw_disable_action">Vypnout</string>
+    <string name="cw_indexing">Povolit vyhledávače</string>
+    <string name="cw_indexing_footer">Když je vypnuto, stránky žádají vyhledávače, aby je neindexovaly.</string>
+    <string name="cw_embed_code">Kód pro vložení</string>
+    <string name="cw_embed_title">Vložit tento příspěvek</string>
+    <string name="cw_embed_hint">Vložte tento kód na svůj web tam, kde se má příspěvek zobrazit.</string>
+    <string name="cw_embed_dark">Tmavý motiv</string>
+    <string name="cw_copy_code">Kopírovat kód</string>
+    <string name="cw_code_copied">Kód zkopírován</string>
+    <string name="cw_not_on_web">Tento příspěvek není na webu. Zveřejňují se jen příspěvky odeslané po zapnutí webového náhledu.</string>
+    <string name="cw_error">Webový náhled se nepodařilo změnit. Zkontrolujte připojení a zkuste to znovu.</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Δημόσια προεπισκόπηση στο web</string>
+    <string name="cw_toggle">Δημοσίευση αναρτήσεων στο web</string>
+    <string name="cw_footer">Οι νέες αναρτήσεις δημοσιεύονται επίσης ως δημόσια ιστοσελίδα στο oshi-messenger.com/c/%1$s. Μπορεί να τις διαβάσει οποιοσδήποτε, και οι μηχανές αναζήτησης και οι προεπισκοπήσεις συνδέσμων. Η διατερματική κρυπτογράφηση δεν ισχύει για το αντίγραφο στο web.</string>
+    <string name="cw_needs_link">Δώστε πρώτα σε αυτό το κανάλι έναν δημόσιο σύνδεσμο: η προεπισκόπηση web χρησιμοποιεί το όνομά του.</string>
+    <string name="cw_create_link">Δημιουργία δημόσιου συνδέσμου</string>
+    <string name="cw_enable_title">Δημοσίευση αναρτήσεων στο web;</string>
+    <string name="cw_enable_confirm">Οι αναρτήσεις αυτού του καναλιού θα είναι ορατές σε όλους στο web στο oshi-messenger.com/c/%1$s. Μόνο νέες αναρτήσεις. Οι προεπισκοπήσεις συνδέσμων (WhatsApp, X, Telegram…) μπορούν επίσης να τις διαβάσουν και η διατερματική κρυπτογράφηση δεν ισχύει για το αντίγραφο στο web.</string>
+    <string name="cw_enable_action">Δημοσίευση</string>
+    <string name="cw_disable_title">Απενεργοποίηση της προεπισκόπησης web;</string>
+    <string name="cw_disable_confirm">Όλες οι αναρτήσεις και οι εικόνες που δημοσιεύτηκαν στο oshi-messenger.com/c/%1$s θα αφαιρεθούν από το web. Οι αναρτήσεις σας στην εφαρμογή δεν αλλάζουν.</string>
+    <string name="cw_disable_action">Απενεργοποίηση</string>
+    <string name="cw_indexing">Να επιτρέπονται οι μηχανές αναζήτησης</string>
+    <string name="cw_indexing_footer">Όταν είναι ανενεργό, οι σελίδες ζητούν από τις μηχανές αναζήτησης να μην τις ευρετηριάζουν.</string>
+    <string name="cw_embed_code">Κώδικας ενσωμάτωσης</string>
+    <string name="cw_embed_title">Ενσωμάτωση ανάρτησης</string>
+    <string name="cw_embed_hint">Επικολλήστε αυτόν τον κώδικα στον ιστότοπό σας εκεί όπου πρέπει να εμφανίζεται η ανάρτηση.</string>
+    <string name="cw_embed_dark">Σκούρο θέμα</string>
+    <string name="cw_copy_code">Αντιγραφή κώδικα</string>
+    <string name="cw_code_copied">Ο κώδικας αντιγράφηκε</string>
+    <string name="cw_not_on_web">Αυτή η ανάρτηση δεν είναι στο web. Δημοσιεύονται μόνο αναρτήσεις που στάλθηκαν μετά την ενεργοποίηση της προεπισκόπησης web.</string>
+    <string name="cw_error">Δεν ήταν δυνατή η αλλαγή της προεπισκόπησης web. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.</string>
+</resources>

@@ -111,6 +111,12 @@ class OpusCallEncoder(
     bitrate: Int = 32_000,
     complexity: Int = 10,
     private val redundancy: Int = OpusWire.MAX_REDUNDANT,
+    /**
+     * __CALL_FLUIDITY_2026_11_21__ Opus in-band FEC (LBRR) with this packet-loss hint, 0 = off.
+     * Inside the Opus bitstream: every decoder plays such a frame normally and ignores the
+     * FEC unless asked for it, so turning it on never breaks a peer.
+     */
+    inbandFecLossPct: Int = 0,
 ) {
     private val enc = OpusEncoder(OpusWire.SAMPLE_RATE, 1, OpusApplication.OPUS_APPLICATION_VOIP).apply {
         setBitrate(bitrate)
@@ -118,7 +124,8 @@ class OpusCallEncoder(
         setSignalType(OpusSignal.OPUS_SIGNAL_VOICE)
         setUseVBR(true)
         setUseConstrainedVBR(true)
-        setUseInbandFEC(false)
+        setUseInbandFEC(inbandFecLossPct > 0)
+        if (inbandFecLossPct > 0) setPacketLossPercent(inbandFecLossPct.coerceIn(0, 100))
         setUseDTX(false)
     }
     private var fifo = ShortArray(OpusWire.FRAME_SAMPLES * 4)
@@ -262,5 +269,83 @@ class OpusCallDecoder {
     private fun conceal(offset: Int, out: MutableList<Frame>) {
         val n = try { dec.decode(null, 0, 0, buf, 0, OpusWire.FRAME_SAMPLES, false) } catch (_: Throwable) { -1 }
         out.add(Frame(offset, if (n > 0) buf.copyOf(n) else ShortArray(OpusWire.FRAME_SAMPLES)))
+    }
+}
+
+/**
+ * __CALL_FLUIDITY_2026_11_21__ The Opus half of [AdaptiveJitterBuffer]: frames are queued
+ * ENCODED and decoded here at playout time, in playout order, so the decoder's state always
+ * follows what the speaker actually plays.
+ *
+ * Concealment of a missing frame: when the NEXT frame is already queued, it is decoded with
+ * `decode_fec = true` — if the sender put in-band FEC (LBRR) in it, that recovers the lost
+ * frame; if not, libopus/Concentus fall back to their own PLC, so this is never worse than
+ * plain PLC. With nothing queued, plain Opus PLC.
+ */
+class OpusPlayoutDecoder : AdaptiveJitterBuffer.FrameDecoder {
+    private var dec = OpusDecoder(OpusWire.SAMPLE_RATE, 1)
+    private val buf = ShortArray(5760)
+
+    /** Concealed frames that came from the next frame's in-band FEC path. Diagnostic. */
+    var fecDecodes = 0L; private set
+
+    override fun decode(frame: ByteArray): ShortArray {
+        val n = try { dec.decode(frame, 0, frame.size, buf, 0, buf.size, false) } catch (_: Throwable) { -1 }
+        return if (n > 0) buf.copyOf(n) else ShortArray(0)
+    }
+
+    override fun conceal(next: ByteArray?): ShortArray? {
+        val n = try {
+            if (next != null) dec.decode(next, 0, next.size, buf, 0, OpusWire.FRAME_SAMPLES, true).also { if (it > 0) fecDecodes++ }
+            else dec.decode(null, 0, 0, buf, 0, OpusWire.FRAME_SAMPLES, false)
+        } catch (_: Throwable) { -1 }
+        return if (n > 0) buf.copyOf(n) else null
+    }
+
+    override fun reset() { dec = OpusDecoder(OpusWire.SAMPLE_RATE, 1) }
+
+    companion object {
+        /**
+         * Queue every frame a 0x19 payload carries (the newest and its redundant copies) in
+         * [jb], keyed by the codec's own 20 ms counter unwrapped against [unwrap]. Returns
+         * false for a payload that does not parse.
+         */
+        fun file(payload: ByteArray, jb: AdaptiveJitterBuffer, unwrap: SeqUnwrapper): Boolean {
+            val p = OpusWire.unpack(payload) ?: return false
+            // Several transports deliver on their own threads: one packet is filed atomically.
+            synchronized(jb) {
+                val newest = unwrap.unwrap(p.seq)
+                val n = p.frames.size
+                for (i in 0 until n) jb.put(newest - (n - 1 - i), p.frames[i])
+            }
+            return true
+        }
+    }
+}
+
+/**
+ * 16-bit codec seq → monotonic Long, relative to the last one seen.
+ *
+ * __SEQ_ORIGIN_2026_11_22__ The first seq maps to [ORIGIN] + seq16, not seq16: a stream first
+ * heard at seq 0 or 1 (or right after the 16-bit wrap) filed its redundant copies under −1,
+ * −2, and −1 is [AdaptiveJitterBuffer]'s "nothing yet" mark — the first frames were lost.
+ * Only differences between keys matter to the buffer, so the offset changes nothing else.
+ * Same constant as iOS `SeqUnwrapper.origin` (OSHI/OshiCodec.swift) — keep them equal.
+ */
+class SeqUnwrapper {
+    private var last = -1
+    private var base = 0L
+    @Synchronized
+    fun unwrap(seq16: Int): Long {
+        if (last < 0) { last = seq16; base = ORIGIN + seq16; return base }
+        base += OpusWire.dist(seq16, last)
+        last = seq16
+        return base
+    }
+    @Synchronized
+    fun reset() { last = -1; base = 0L }
+
+    companion object {
+        const val ORIGIN = 1L shl 32
     }
 }

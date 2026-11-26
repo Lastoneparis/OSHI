@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __ONBOARDING_2027__ first-launch onboarding. No Tor, no superlatives. -->
+<resources>
+    <string name="ob27_skip">Overslaan</string>
+    <string name="ob27_continue">Doorgaan</string>
+    <string name="ob27_page_of">Pagina %1$d van %2$d</string>
+    <string name="ob27_private_title">Alleen jij en zij</string>
+    <string name="ob27_private_body">Berichten en gesprekken worden op je telefoon end-to-end versleuteld. Niemand ertussen kan ze lezen – zelfs OSHI niet.</string>
+    <string name="ob27_offline_title">Werkt zonder internet</string>
+    <string name="ob27_offline_body">Geen netwerk? Berichten springen van telefoon naar telefoon via mensen in de buurt die OSHI open hebben. Een LoRa-radio brengt ze nog verder.</string>
+    <string name="ob27_range_direct">direct</string>
+    <string name="ob27_range_relayed">via anderen</string>
+    <string name="ob27_range_lora">LoRa-radio</string>
+    <string name="ob27_anon_title">Geen telefoonnummer nodig</string>
+    <string name="ob27_anon_body">Geen account, geen e-mail, geen nummer om je aan te melden. Je identiteit is een sleutel die op deze telefoon is gemaakt.</string>
+    <string name="ob27_together_title">Haal je mensen erbij</string>
+    <string name="ob27_together_body">Chat één op één of in groepen. Voeg iemand toe door de QR-code te scannen of een uitnodigingslink te sturen.</string>
+    <string name="ob27_rules_title">Voordat je begint</string>
+    <string name="ob27_rules_subtitle">Een paar huisregels, en wat OSHI wel en nog niet kan.</string>
+    <string name="ob27_rules_do">Graag wel</string>
+    <string name="ob27_rules_dont">Nooit</string>
+    <string name="ob27_good_to_know">Goed om te weten</string>
+    <string name="ob27_show_details">Details tonen</string>
+    <string name="ob27_hide_details">Details verbergen</string>
+    <string name="ob27_agree">Begrepen</string>
+    <string name="ob27_notif_title">Mis geen berichten</string>
+    <string name="ob27_notif_body">Sta meldingen toe om nieuwe berichten en oproepen te zien. Je kunt ze altijd uitzetten in Instellingen.</string>
+    <string name="ob27_notif_allow">Meldingen toestaan</string>
+    <string name="ob27_not_now">Niet nu</string>
+    <string name="ob27_identity_title">Kies een naam</string>
+    <string name="ob27_identity_body">Dit zien je contacten. Je kunt het later wijzigen.</string>
+    <string name="ob27_already">Gebruik je OSHI al?</string>
+</resources>

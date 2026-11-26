@@ -83,8 +83,12 @@ object ForcedUpdateManager {
             val manager = AppUpdateManagerFactory.create(activity)
             manager.appUpdateInfo
                 .addOnSuccessListener { info ->
+                    // __UPDATE_PROMPT_ANDROID_2026_11_21__ Play reports a FLEXIBLE
+                    // download the user accepted with this same value; that one is
+                    // not ours to turn into a full-screen wall.
                     if (info.updateAvailability() ==
-                        UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
+                        UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS &&
+                        !FlexibleUpdateManager.flexibleOwnsInProgress(activity)
                     ) {
                         launchImmediate(manager, info, launcher)
                     }
@@ -101,22 +105,20 @@ object ForcedUpdateManager {
             val manager = AppUpdateManagerFactory.create(activity)
             manager.appUpdateInfo
                 .addOnSuccessListener { info ->
-                    val state = when {
-                        info.updateAvailability() ==
-                            UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS ->
-                            ForcedUpdatePolicy.PlayState.IN_PROGRESS
-
-                        // Both halves matter. `UPDATE_AVAILABLE` says a newer
-                        // build exists; `isUpdateTypeAllowed` says THIS device
-                        // can actually run the immediate flow — it is false on
-                        // devices where Play cannot self-install, and launching
-                        // anyway throws.
-                        info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                            info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) ->
-                            ForcedUpdatePolicy.PlayState.AVAILABLE
-
-                        else -> ForcedUpdatePolicy.PlayState.NOT_AVAILABLE
-                    }
+                    // Both halves of "available" matter. `UPDATE_AVAILABLE` says a
+                    // newer build exists; `isUpdateTypeAllowed` says THIS device can
+                    // actually run the immediate flow — it is false on devices where
+                    // Play cannot self-install, and launching anyway throws.
+                    // __UPDATE_PROMPT_ANDROID_2026_11_21__ An in-progress FLEXIBLE
+                    // download we started is NOT an interrupted immediate update;
+                    // see FlexibleUpdatePolicy.forcedPlayState.
+                    val state = FlexibleUpdatePolicy.forcedPlayState(
+                        inProgress = info.updateAvailability() ==
+                            UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS,
+                        updateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE,
+                        immediateAllowed = info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE),
+                        flexibleOwnsInProgress = FlexibleUpdateManager.flexibleOwnsInProgress(activity),
+                    )
 
                     val decision = ForcedUpdatePolicy.decide(
                         currentVersion = BuildConfig.VERSION_NAME,

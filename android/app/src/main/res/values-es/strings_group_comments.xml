@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __GROUP_COMMENTS_2026_11_21__ GROUP_INFO_SETTINGS_SPEC §2.12.8 -->
+<resources>
+    <string name="gs_comments">Comentarios</string>
+    <string name="gs_comments_footer">Los miembros pueden comentar en cada publicación. Solo los admins publican.</string>
+    <string name="cm_leave_comment">Dejar un comentario</string>
+    <string name="cm_thread_title">Comentarios</string>
+    <string name="cm_empty">Aún no hay comentarios.</string>
+    <string name="cm_composer_hint">Comentar…</string>
+    <string name="cm_replying_to">Respondiendo a %1$s</string>
+    <string name="cm_disabled">Los comentarios están desactivados.</string>
+    <string name="cm_post_unavailable">Esta publicación ya no está disponible.</string>
+    <string name="cm_too_fast">Estás comentando demasiado rápido. Espera un momento.</string>
+    <string name="cm_notif_reply">%1$s respondió a tu comentario</string>
+    <string name="cm_delete_comment">Eliminar comentario</string>
+    <plurals name="cm_comments_count">
+        <item quantity="one">%d comentario</item>
+        <item quantity="many">%d comentarios</item>
+        <item quantity="other">%d comentarios</item>
+    </plurals>
+</resources>

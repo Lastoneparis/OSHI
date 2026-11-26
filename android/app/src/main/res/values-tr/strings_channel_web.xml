@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- __CHANNEL_WEB_2026_11_26__ public channel web preview (PUBLIC_CHANNEL_WEB_SPEC §9). -->
+<resources>
+    <string name="cw_title">Herkese açık web önizlemesi</string>
+    <string name="cw_toggle">Gönderileri web\'de yayımla</string>
+    <string name="cw_footer">Yeni gönderiler oshi-messenger.com/c/%1$s adresinde herkese açık bir web sayfası olarak da yayımlanır. Arama motorları ve bağlantı önizlemeleri dahil herkes okuyabilir. Uçtan uca şifreleme web kopyası için geçerli değildir.</string>
+    <string name="cw_needs_link">Önce bu kanala herkese açık bir bağlantı verin: web önizlemesi onun adını kullanır.</string>
+    <string name="cw_create_link">Herkese açık bağlantı oluştur</string>
+    <string name="cw_enable_title">Gönderiler web\'de yayımlansın mı?</string>
+    <string name="cw_enable_confirm">Bu kanaldaki gönderiler web\'de oshi-messenger.com/c/%1$s adresinde herkese görünür olacak. Yalnızca yeni gönderiler. Bağlantı önizlemeleri (WhatsApp, X, Telegram…) de okuyabilir ve uçtan uca şifreleme web kopyası için geçerli değildir.</string>
+    <string name="cw_enable_action">Yayımla</string>
+    <string name="cw_disable_title">Web önizlemesi kapatılsın mı?</string>
+    <string name="cw_disable_confirm">oshi-messenger.com/c/%1$s adresinde yayımlanan tüm gönderiler ve görseller web\'den kaldırılacak. Uygulamadaki gönderileriniz olduğu gibi kalır.</string>
+    <string name="cw_disable_action">Kapat</string>
+    <string name="cw_indexing">Arama motorlarına izin ver</string>
+    <string name="cw_indexing_footer">Kapalıyken sayfalar arama motorlarından kendilerini dizine eklememelerini ister.</string>
+    <string name="cw_embed_code">Yerleştirme kodu</string>
+    <string name="cw_embed_title">Bu gönderiyi yerleştir</string>
+    <string name="cw_embed_hint">Bu kodu web sitenizde gönderinin görüneceği yere yapıştırın.</string>
+    <string name="cw_embed_dark">Koyu tema</string>
+    <string name="cw_copy_code">Kodu kopyala</string>
+    <string name="cw_code_copied">Kod kopyalandı</string>
+    <string name="cw_not_on_web">Bu gönderi web\'de değil. Yalnızca web önizlemesi açıldıktan sonra gönderilenler yayımlanır.</string>
+    <string name="cw_error">Web önizlemesi değiştirilemedi. Bağlantınızı kontrol edip tekrar deneyin.</string>
+</resources>

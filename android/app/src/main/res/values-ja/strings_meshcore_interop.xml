@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MeshCore users and channels (MeshCoreThread.kt, MeshCoreSection.kt, ChatScreen). __MESHCORE_INTEROP_2026_11_25__ -->
+<resources>
+    <string name="meshcore_not_e2e">MeshCore · OSHI のエンドツーエンド暗号化ではありません</string>
+    <string name="meshcore_error_not_connected">MeshCore 無線機が接続されていません</string>
+    <string name="meshcore_channels_title">MeshCore チャンネル</string>
+    <string name="meshcore_channel_public">公開 · 名前を知っている人なら誰でも読めます</string>
+    <string name="meshcore_channel_private">非公開 · 秘密鍵</string>
+    <string name="meshcore_join_hashtag">ハッシュタグチャンネルに参加</string>
+    <string name="meshcore_join_private">非公開チャンネルに参加</string>
+    <string name="meshcore_contacts_title">MeshCore の連絡先</string>
+    <string name="meshcore_refresh_contacts">連絡先を更新</string>
+    <string name="meshcore_join_refused">無線機がこのチャンネルを拒否しました。</string>
+    <string name="meshcore_join_no_slot">この無線機に空きチャンネルスロットがありません。</string>
+    <string name="meshcore_join_bad_name">有効なチャンネル名を入力してください（最大 31 バイト、ハッシュタグチャンネルは空白なし）。</string>
+    <string name="meshcore_join_bad_secret">シークレットは 16 バイトにしてください：16 進 32 文字または base64。</string>
+    <string name="meshcore_hashtag_hint">鍵は名前から生成されます：名前を知っている人は誰でもチャンネルを読めます。</string>
+    <string name="meshcore_private_hint">チャンネル名とメンバーが共有するシークレットを入力してください。</string>
+    <string name="meshcore_channel_name">チャンネル名</string>
+    <string name="meshcore_channel_secret">シークレット（hex または base64）</string>
+    <string name="meshcore_join">参加</string>
+    <string name="meshcore_note_dm">無線機間で MeshCore により暗号化されます。OSHI のエンドツーエンド暗号化ではありません。</string>
+    <string name="meshcore_note_public">公開チャンネル：名前を知っている人なら誰でも読めます。</string>
+    <string name="meshcore_note_private">プライベートチャンネル：シークレットを持つ人なら誰でも読めます。</string>
+    <string name="meshcore_radio_offline">MeshCore 無線機が接続されていません。メッセージは未配信としてここで待機します。</string>
+    <string name="meshcore_connect">接続</string>
+    <string name="meshcore_parts">%1$d 件のメッセージ</string>
+    <string name="meshcore_sending">無線機を待っています</string>
+    <string name="meshcore_failed_dm">相手の無線機から応答がありません（圏外？）。タップして再試行。</string>
+    <string name="meshcore_error_pairing">ペアリングに失敗しました。PIN を確認してもう一度お試しください。無線機をリセットした場合は、先に Android の Bluetooth 設定から削除してください。</string>
+    <string name="meshcore_error_no_answer">無線機が応答しませんでした。Bluetooth 用の MeshCore companion ファームウェアか確認してください。</string>
+    <string name="meshcore_state_reconnecting">接続が切れました。無線機が圏内に戻ったら再接続します…</string>
+    <string name="meshcore_state_pin">Android の画面で無線機の PIN を入力してください</string>
+    <string name="meshcore_state_reading">連絡先とチャンネルを読み込み中…</string>
+    <string name="meshcore_state_connecting">接続中…</string>
+    <string name="meshcore_seen_as">接続済み · MeshCore ユーザーには %1$s と表示されます</string>
+    <string name="meshcore_connected">接続済み</string>
+    <string name="meshcore_footer_users">MeshCore ユーザーとチャット（ダイレクトメッセージとチャンネル）し、OSHI のメッセージを MeshCore リピーター経由で送れます。Bluetooth 用の MeshCore companion ファームウェアが必要です。OSHI は空きスロットに #oshi-bridge チャンネルを 1 つ追加するだけで、ほかのチャンネルは変更しません。</string>
+    <string name="meshcore_scan_below">MeshCore 無線機は下の「近くの無線機」に MeshCore の印付きで表示されます。</string>
+    <string name="meshcore_contacts_footer">相手をタップしてメッセージを書きます。暗号化は MeshCore によるもので、OSHI のエンドツーエンド暗号化ではありません。</string>
+    <string name="meshcore_no_contacts">まだ誰も受信していません。MeshCore ユーザーは無線機が自身を告知するとここに表示されます。見つけてもらうため、あなたの無線機も告知しましょう。</string>
+    <string name="meshcore_heard">受信 %1$s</string>
+    <string name="meshcore_announce">自分を告知</string>
+    <string name="meshcore_announce_done">告知しました。圏内の MeshCore ユーザーがあなたを追加してメッセージを送れるようになりました。</string>
+    <string name="meshcore_announce_failed">無線機は告知を送信できませんでした。</string>
+    <string name="meshcore_channels_footer">チャンネルをタップして開きます。公開チャンネルとハッシュタグチャンネルは名前を知っている人なら誰でも読めます。</string>
+    <string name="meshcore_pin_title">%1$s とペアリング</string>
+    <string name="meshcore_pin_body">Android が無線機の PIN を求めます。無線機に画面がある場合は、そこに PIN が表示されます。</string>
+    <string name="meshcore_pin_default">画面がない場合：MeshCore アプリで変更していなければ PIN は 123456 です。</string>
+    <string name="meshcore_pin_continue">続行</string>
+    <string name="meshcore_no_free_channel_chat">8 つのチャンネルスロットがすべて使用中です。MeshCore ユーザーとのチャットは引き続き可能です。OSHI のメッセージで #oshi-bridge を使うには、MeshCore アプリでスロットを 1 つ空けてください。</string>
+    <string name="meshcore_contact_kind">MeshCore ユーザー</string>
+    <string name="meshcore_too_long">長すぎます：最大 %1$d 件</string>
+</resources>

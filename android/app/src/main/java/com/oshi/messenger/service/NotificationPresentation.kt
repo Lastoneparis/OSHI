@@ -94,6 +94,8 @@ object NotificationPresentation {
 
         // The ONE question, asked on the RAW string.
         if (OSHIControlPayload.isSilent(raw)) return Decision.Suppress
+        // __ADV_CHAT_PRIVACY_2026_11_26__ a row in the thread, never a banner.
+        if (OSHIControlPayload.neverNotifies(raw)) return Decision.Suppress
 
         // 📍 …and the one payload the catalog cannot answer for.
         //
@@ -121,7 +123,8 @@ object NotificationPresentation {
         // so fall back rather than drop.
         if (body.isBlank()) return Decision.Show(attachmentBody)
 
-        return Decision.Show(body)
+        // __TEXT_FORMATTING_2026_11_24__ a banner is plain text: no `**` / `__`.
+        return Decision.Show(com.oshi.messenger.util.MessageFormatting.strip(body))
     }
 
     /** Longest body a banner carries; the rest is elided. Matches the two existing call sites. */

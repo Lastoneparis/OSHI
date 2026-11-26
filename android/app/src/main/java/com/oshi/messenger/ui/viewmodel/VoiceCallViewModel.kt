@@ -32,6 +32,9 @@ class VoiceCallViewModel @Inject constructor(
     val duration: StateFlow<Long> = callManager.callDuration
     val connectionQuality: StateFlow<NetworkQuality> = callManager.connectionQuality
     val connectionType: StateFlow<ConnectionType> = callManager.connectionType
+    /** __CALL_WAKE_2026_11_22__ did the callee's phone get the call (outgoing ring only). */
+    val calleeReach: StateFlow<com.oshi.messenger.service.CallReach?> = callManager.calleeReach
+    val outgoingRingingSince: StateFlow<Long> = callManager.outgoingRingingSince
     val jitterStats: StateFlow<JitterBufferStats?> = callManager.jitterBufferStats
 
     /**

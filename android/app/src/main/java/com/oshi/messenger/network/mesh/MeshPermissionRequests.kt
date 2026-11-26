@@ -59,6 +59,44 @@ object MeshPermissionRequests {
         }
     }
 
+    /**
+     * __WIFI_AWARE_2026_11_25__ What Wi-Fi Aware adds to a Bluetooth request that
+     * is being made anyway: `NEARBY_WIFI_DEVICES`, Android 13+ only, and only when
+     * the phone has Wi-Fi Aware, the mesh and the Aware switch are on, and it is
+     * not already held.
+     *
+     * On Android 13+ it belongs to the same "Nearby devices" permission group as
+     * BLUETOOTH_SCAN / _ADVERTISE / _CONNECT, so it rides in the SAME dialog the
+     * user is already being shown, and a phone that already holds that group
+     * gets it without a dialog. Below 13 Aware needs location, which is a
+     * different dialog — so nothing is added there; Aware then simply runs if
+     * location was granted for another feature, and stays off otherwise.
+     *
+     * Never part of [missingForBleLanes]: the Peers card must not start nagging
+     * about a permission the iOS lane does not use.
+     */
+    fun wifiAwareRideAlong(context: Context): List<String> {
+        if (Build.VERSION.SDK_INT < MeshPermissionPolicy.SDK_TIRAMISU) return emptyList()
+        if (!com.oshi.messenger.network.mesh.wifiaware.WifiAwarePrefs.isSupported(context)) return emptyList()
+        if (!com.oshi.messenger.network.mesh.wifiaware.WifiAwarePrefs.isEnabled(context)) return emptyList()
+        if (!MeshPrefs.isEnabled(context)) return emptyList()
+        return MeshPermissionPolicy.wifiAwarePermissions(Build.VERSION.SDK_INT).filter {
+            ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    /**
+     * The Bluetooth set is already held, so the "Nearby devices" group is granted:
+     * asking for [wifiAwareRideAlong] now is answered by the system without a
+     * dialog. Asked at most once ever ([everAsked]), so even a system that did
+     * show one would show it a single time.
+     */
+    fun silentWifiAwareAsk(context: Context): List<String> {
+        if (missingForBleLanes(context).isNotEmpty()) return emptyList()
+        val asked = everAsked(context)
+        return wifiAwareRideAlong(context).filter { it !in asked }
+    }
+
     /** Assert the literals in [MeshPermissionPolicy] really are the platform's. */
     internal fun platformNamesAgree(): Boolean =
         MeshPermissionPolicy.BLUETOOTH_SCAN == Manifest.permission.BLUETOOTH_SCAN &&
