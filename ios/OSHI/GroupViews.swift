@@ -5307,7 +5307,7 @@ struct GroupChatView: View {
                         .transition(.opacity)
                 }
 
-                TextField("placeholder_message".localized, text: $messageText, axis: .vertical)
+                TextField("composer.placeholder_short".localized, text: $messageText, axis: .vertical)
                     .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
                     .textFieldStyle(.plain)
                     // __COMPOSER_PILL_2026_11_23__ bare field: the pill carries fill,

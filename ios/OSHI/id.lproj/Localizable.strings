@@ -6053,3 +6053,6 @@
 "cw_embed_dark" = "Tema gelap";
 "cw_copy_code" = "Salin kode";
 "cw_embed_footer" = "Tempel kode ini di halaman web mana pun untuk menampilkan postingan. Kode mengikuti suntingan dan hilang jika postingan dihapus.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Ketik…";

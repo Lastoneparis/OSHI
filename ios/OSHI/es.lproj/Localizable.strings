@@ -6110,3 +6110,6 @@ Los mensajes y grupos de tu identidad actual se borrarán.";
 "cw_embed_dark" = "Tema oscuro";
 "cw_copy_code" = "Copiar código";
 "cw_embed_footer" = "Pega este código en cualquier página web para mostrar la publicación. Refleja las ediciones y desaparece si se elimina la publicación.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Escribe…";

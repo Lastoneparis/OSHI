@@ -6054,3 +6054,6 @@
 "cw_embed_dark" = "어두운 테마";
 "cw_copy_code" = "코드 복사";
 "cw_embed_footer" = "이 코드를 웹 페이지에 붙여 넣으면 게시물이 표시됩니다. 수정 사항이 반영되며 게시물이 삭제되면 사라집니다.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "메시지";

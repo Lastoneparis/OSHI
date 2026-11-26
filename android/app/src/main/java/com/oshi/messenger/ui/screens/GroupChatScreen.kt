@@ -3927,7 +3927,7 @@ private fun GroupMessageInput(
                     value = fieldValue,
                     onValueChange = onFieldValueChange,
                     visualTransformation = mentionHighlight ?: androidx.compose.ui.text.input.VisualTransformation.None,
-                    placeholder = { Text(stringResource(R.string.message_placeholder)) },
+                    placeholder = { Text(stringResource(R.string.composer_placeholder), maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) },
                     modifier = Modifier.weight(1f),
                     shape = com.oshi.messenger.ui.components.ComposerPillDefaults.Shape,
                     // The pill carries fill, outline and glass; the field is bare.

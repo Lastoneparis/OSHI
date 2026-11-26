@@ -4532,7 +4532,7 @@ struct ProfessionalAudioInputView: View {
                             Color.clear.frame(width: 8, height: 44)
                         }
                 
-                    TextField("messages.type_message".localized, text: $text, axis: .vertical)
+                    TextField("composer.placeholder_short".localized, text: $text, axis: .vertical)
                         .privateTypingComposer()  // __KEYBOARD_PRIVACY_2026_10_01__ no autocorrect learning when Private typing is on
                         .accessibilityIdentifier("chat.composer")
                         .textFieldStyle(.plain)

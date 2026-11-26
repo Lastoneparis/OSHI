@@ -6054,3 +6054,6 @@
 "cw_embed_dark" = "Σκούρο θέμα";
 "cw_copy_code" = "Αντιγραφή κώδικα";
 "cw_embed_footer" = "Επικολλήστε αυτόν τον κώδικα σε οποιαδήποτε ιστοσελίδα για να εμφανιστεί η ανάρτηση. Ακολουθεί τις επεξεργασίες και εξαφανίζεται αν διαγραφεί η ανάρτηση.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Γράψτε…";

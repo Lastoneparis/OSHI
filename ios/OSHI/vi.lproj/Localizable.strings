@@ -6053,3 +6053,6 @@
 "cw_embed_dark" = "Giao diện tối";
 "cw_copy_code" = "Sao chép mã";
 "cw_embed_footer" = "Dán mã này vào bất kỳ trang web nào để hiển thị bài đăng. Mã cập nhật theo chỉnh sửa và biến mất nếu bài bị xóa.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Nhập…";

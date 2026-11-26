@@ -6003,3 +6003,6 @@ As mensagens e grupos da sua identidade atual serão apagados.";
 "cw_embed_dark" = "Tema escuro";
 "cw_copy_code" = "Copiar código";
 "cw_embed_footer" = "Cole este código em qualquer página web para mostrar a publicação. Acompanha as edições e desaparece se a publicação for eliminada.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Escreva…";

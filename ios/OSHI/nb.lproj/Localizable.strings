@@ -6053,3 +6053,6 @@
 "cw_embed_dark" = "Mørkt tema";
 "cw_copy_code" = "Kopier kode";
 "cw_embed_footer" = "Lim inn koden på en hvilken som helst nettside for å vise innlegget. Den følger endringer og forsvinner hvis innlegget slettes.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Skriv…";

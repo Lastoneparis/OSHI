@@ -6055,3 +6055,6 @@ Els missatges i grups de la teva identitat actual s’esborraran.";
 "cw_embed_dark" = "Tema fosc";
 "cw_copy_code" = "Copia el codi";
 "cw_embed_footer" = "Enganxa aquest codi a qualsevol pàgina web per mostrar la publicació. Segueix les edicions i desapareix si s’elimina la publicació.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Escriu…";

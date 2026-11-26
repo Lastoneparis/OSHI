@@ -6053,3 +6053,6 @@
 "cw_embed_dark" = "Koyu tema";
 "cw_copy_code" = "Kodu kopyala";
 "cw_embed_footer" = "Gönderiyi göstermek için bu kodu herhangi bir web sayfasına yapıştırın. Düzenlemeleri izler ve gönderi silinirse kaybolur.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Yaz…";

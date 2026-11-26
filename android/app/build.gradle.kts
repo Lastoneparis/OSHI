@@ -101,7 +101,7 @@ android {
         applicationId = "com.oshi.messenger"
         minSdk = 26
         targetSdk = 36
-        versionCode = 145
+        versionCode = 146
         versionName = "1.7.4"
 
         // Include arm64-v8a native libs for llama.cpp

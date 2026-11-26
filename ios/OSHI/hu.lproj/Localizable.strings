@@ -6054,3 +6054,6 @@ Az aktuális identitásához tartozó üzenetek és csoportok törlődnek.";
 "cw_embed_dark" = "Sötét téma";
 "cw_copy_code" = "Kód másolása";
 "cw_embed_footer" = "Illeszd be ezt a kódot bármely weboldalba a bejegyzés megjelenítéséhez. Követi a szerkesztéseket, és eltűnik, ha a bejegyzést törlik.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Írj…";

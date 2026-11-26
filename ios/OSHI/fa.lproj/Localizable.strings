@@ -6650,3 +6650,6 @@
 "cw_embed_dark" = "پوستهٔ تیره";
 "cw_copy_code" = "کپی کد";
 "cw_embed_footer" = "این کد را در هر صفحهٔ وبی بچسبانید تا پست نمایش داده شود. ویرایش‌ها را دنبال می‌کند و اگر پست حذف شود ناپدید می‌شود.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "بنویسید…";

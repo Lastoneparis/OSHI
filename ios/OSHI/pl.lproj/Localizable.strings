@@ -6962,3 +6962,6 @@ Wiadomości i grupy z Twojej bieżącej tożsamości zostaną usunięte.";
 "cw_embed_dark" = "Ciemny motyw";
 "cw_copy_code" = "Kopiuj kod";
 "cw_embed_footer" = "Wklej ten kod na dowolną stronę, aby wyświetlić post. Uwzględnia edycje i znika, jeśli post zostanie usunięty.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Napisz…";

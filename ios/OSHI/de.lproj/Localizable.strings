@@ -6020,3 +6020,6 @@ Nachrichten und Gruppen deiner aktuellen Identität werden gelöscht.";
 "cw_embed_dark" = "Dunkles Design";
 "cw_copy_code" = "Code kopieren";
 "cw_embed_footer" = "Füge diesen Code in eine beliebige Webseite ein, um den Beitrag anzuzeigen. Er übernimmt Änderungen und verschwindet, wenn der Beitrag gelöscht wird.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Schreiben…";

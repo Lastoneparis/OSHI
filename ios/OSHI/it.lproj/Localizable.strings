@@ -5998,3 +5998,6 @@ I messaggi e i gruppi della tua identità attuale verranno eliminati.";
 "cw_embed_dark" = "Tema scuro";
 "cw_copy_code" = "Copia codice";
 "cw_embed_footer" = "Incolla questo codice in qualsiasi pagina web per mostrare il post. Segue le modifiche e scompare se il post viene eliminato.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Scrivi…";

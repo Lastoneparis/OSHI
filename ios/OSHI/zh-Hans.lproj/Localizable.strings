@@ -6366,3 +6366,6 @@
 "cw_embed_dark" = "深色主题";
 "cw_copy_code" = "复制代码";
 "cw_embed_footer" = "将此代码粘贴到任意网页即可显示该帖子。它会随编辑更新，帖子删除后会消失。";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "输入…";

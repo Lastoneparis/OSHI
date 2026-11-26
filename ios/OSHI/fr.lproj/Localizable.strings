@@ -6239,3 +6239,6 @@ Les messages et groupes de votre identité actuelle seront effacés.";
 "cw_embed_dark" = "Thème sombre";
 "cw_copy_code" = "Copier le code";
 "cw_embed_footer" = "Collez ce code dans n’importe quelle page web pour afficher le message. Il suit les modifications et disparaît si le message est supprimé.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Écrire…";

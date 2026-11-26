@@ -6542,3 +6542,6 @@
 "cw_embed_dark" = "Темна тема";
 "cw_copy_code" = "Копіювати код";
 "cw_embed_footer" = "Вставте цей код на будь-яку веб-сторінку, щоб показати допис. Він враховує редагування й зникає, якщо допис видалено.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Повідомлення";

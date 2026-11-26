@@ -6054,3 +6054,6 @@ Správy a skupiny z vašej aktuálnej identity budú vymazané.";
 "cw_embed_dark" = "Tmavý motív";
 "cw_copy_code" = "Kopírovať kód";
 "cw_embed_footer" = "Vložte tento kód na ľubovoľnú webovú stránku a zobrazí sa príspevok. Sleduje úpravy a zmizne, ak sa príspevok odstráni.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Napísať…";

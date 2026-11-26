@@ -6058,3 +6058,6 @@ Berichten en groepen van je huidige identiteit worden gewist.";
 "cw_embed_dark" = "Donker thema";
 "cw_copy_code" = "Code kopiëren";
 "cw_embed_footer" = "Plak deze code in een webpagina om het bericht te tonen. Bewerkingen worden overgenomen en het verdwijnt als het bericht wordt verwijderd.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Typ…";

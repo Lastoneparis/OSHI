@@ -3175,7 +3175,7 @@ fun ChatScreen(
                             OutlinedTextField(
                                 value = fieldValue,
                                 onValueChange = onFieldValueChange,
-                                placeholder = { Text(stringResource(R.string.message_placeholder)) },
+                                placeholder = { Text(stringResource(R.string.composer_placeholder), maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) },
                                 modifier = Modifier
                                     .weight(1f)
                                     .focusRequester(textFieldFocusRequester),

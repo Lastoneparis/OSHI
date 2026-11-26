@@ -5937,3 +5937,6 @@
 "cw_embed_dark" = "Тёмная тема";
 "cw_copy_code" = "Копировать код";
 "cw_embed_footer" = "Вставьте этот код на любую веб-страницу, чтобы показать пост. Он учитывает правки и исчезает, если пост удалён.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Сообщение";

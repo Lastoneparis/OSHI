@@ -6215,3 +6215,6 @@ Messages and groups from your current identity will be cleared.";
 "cw_embed_dark" = "Dark theme";
 "cw_copy_code" = "Copy code";
 "cw_embed_footer" = "Paste this code into any web page to show the post. It follows edits and disappears if the post is deleted.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Message";

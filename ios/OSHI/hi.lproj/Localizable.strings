@@ -5993,3 +5993,6 @@
 "cw_embed_dark" = "डार्क थीम";
 "cw_copy_code" = "कोड कॉपी करें";
 "cw_embed_footer" = "पोस्ट दिखाने के लिए यह कोड किसी भी वेब पेज में चिपकाएँ। यह संपादनों के साथ अपडेट होता है और पोस्ट हटाए जाने पर गायब हो जाता है।";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "लिखें…";

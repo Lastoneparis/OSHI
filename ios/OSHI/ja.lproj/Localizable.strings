@@ -6339,3 +6339,6 @@
 "cw_embed_dark" = "ダークテーマ";
 "cw_copy_code" = "コードをコピー";
 "cw_embed_footer" = "このコードを任意のWebページに貼り付けると投稿が表示されます。編集が反映され、投稿が削除されると消えます。";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "メッセージ";

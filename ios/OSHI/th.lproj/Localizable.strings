@@ -6054,3 +6054,6 @@
 "cw_embed_dark" = "ธีมมืด";
 "cw_copy_code" = "คัดลอกโค้ด";
 "cw_embed_footer" = "วางโค้ดนี้ในหน้าเว็บใดก็ได้เพื่อแสดงโพสต์ โค้ดจะอัปเดตตามการแก้ไขและหายไปหากโพสต์ถูกลบ";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "พิมพ์…";

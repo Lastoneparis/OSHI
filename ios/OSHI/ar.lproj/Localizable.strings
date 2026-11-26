@@ -6032,3 +6032,6 @@
 "cw_embed_dark" = "المظهر الداكن";
 "cw_copy_code" = "نسخ الرمز";
 "cw_embed_footer" = "الصق هذا الرمز في أي صفحة ويب لعرض المنشور. يتبع التعديلات ويختفي إذا حُذف المنشور.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "اكتب…";

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Short composer hint: one line on narrow phones / large fonts (2026-11-26) -->
+    <string name="composer_placeholder">Escriu…</string>
+</resources>

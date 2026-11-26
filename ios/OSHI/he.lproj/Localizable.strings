@@ -6026,3 +6026,6 @@
 "cw_embed_dark" = "ערכת נושא כהה";
 "cw_copy_code" = "העתקת קוד";
 "cw_embed_footer" = "הדביקו את הקוד בכל דף אינטרנט כדי להציג את הפוסט. הוא מתעדכן בעריכות ונעלם אם הפוסט נמחק.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "כתוב…";

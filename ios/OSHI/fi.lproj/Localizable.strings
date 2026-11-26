@@ -6051,3 +6051,6 @@
 "cw_embed_dark" = "Tumma teema";
 "cw_copy_code" = "Kopioi koodi";
 "cw_embed_footer" = "Liitä koodi mille tahansa verkkosivulle näyttääksesi julkaisun. Se seuraa muokkauksia ja katoaa, jos julkaisu poistetaan.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Kirjoita…";

@@ -6054,3 +6054,6 @@
 "cw_embed_dark" = "深色主題";
 "cw_copy_code" = "複製程式碼";
 "cw_embed_footer" = "將此程式碼貼到任何網頁即可顯示該貼文。它會隨編輯更新，貼文刪除後會消失。";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "輸入…";

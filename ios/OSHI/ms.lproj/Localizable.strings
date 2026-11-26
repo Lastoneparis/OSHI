@@ -6053,3 +6053,6 @@
 "cw_embed_dark" = "Tema gelap";
 "cw_copy_code" = "Salin kod";
 "cw_embed_footer" = "Tampal kod ini pada mana-mana halaman web untuk memaparkan siaran. Ia mengikut suntingan dan hilang jika siaran dipadam.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Taip…";

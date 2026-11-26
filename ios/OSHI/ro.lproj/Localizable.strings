@@ -6054,3 +6054,6 @@ Mesajele și grupurile din identitatea ta curentă vor fi șterse.";
 "cw_embed_dark" = "Temă întunecată";
 "cw_copy_code" = "Copiază codul";
 "cw_embed_footer" = "Lipește acest cod în orice pagină web pentru a afișa postarea. Urmează editările și dispare dacă postarea este ștearsă.";
+
+/* Short composer hint, one line on narrow phones / large text (2026-11-26) */
+"composer.placeholder_short" = "Scrie…";
